@@ -1,0 +1,96 @@
+{
+  "mascotas": {
+    "titulo": "Pet Management",
+    "subtitulo": "Manage and search all pets in the system",
+    "nueva": "New Pet",
+    "total": "Total",
+    "filtros": {
+      "buscar": "Search Pets",
+      "buscar_placeholder": "Pet name...",
+      "especie": "Species",
+      "estado": "Status",
+      "fundacion": "Foundation",
+      "todos_estados": "All statuses",
+      "todas_especies": "All species",
+      "todas_fundaciones": "All foundations",
+      "filtrar": "Search",
+      "limpiar": "Clear"
+    },
+    "estadisticas": {
+      "en_adopcion": "For Adoption",
+      "adoptados": "Adopted",
+      "rescatados": "Rescued",
+      "total_sistema": "Total in System"
+    },
+    "estados": {
+      "en_adopcion": "For Adoption",
+      "adoptado": "Adopted",
+      "rescatada": "Rescued",
+      "en_acogida": "In Foster"
+    },
+    "card": {
+      "ver_detalles": "View Details",
+      "editar": "Edit",
+      "necesita_hogar": "Needs foster home",
+      "años": "years",
+      "sin_imagen": "No Image"
+    },
+    "mensajes": {
+      "no_encontradas": "No pets found",
+      "ajustar_filtros": "Try adjusting the search filters or create a new pet.",
+      "error_cargar": "Error loading pets",
+      "cargando": "Loading..."
+    }
+  },
+  "nueva_mascota": {
+    "titulo": "Register New Pet",
+    "subtitulo": "Help a pet find a loving home",
+    "formulario": "Registration Form",
+    "secciones": {
+      "info_basica": "Basic Information",
+      "ubicacion_descripcion": "Location and Description",
+      "salud_vacunas": "Health and Vaccines",
+      "galeria_fotos": "Photo Gallery",
+      "fechas_organizacion": "Dates and Organization"
+    },
+    "campos": {
+      "nombre": "Pet Name",
+      "especie": "Species",
+      "razas": "Breeds",
+      "edad": "Approximate Age (years)",
+      "genero": "Gender",
+      "estado": "Current Status",
+      "lugar": "Location",
+      "descripcion": "Description",
+      "condiciones": "Special Conditions",
+      "vacunas": "Applied Vaccines",
+      "foto_principal": "Main Photo",
+      "galeria": "Photo Gallery",
+      "fecha_ingreso": "Admission Date",
+      "fecha_salida": "Departure Date (if applicable)",
+      "fundacion": "Foundation"
+    },
+    "opciones": {
+      "selecciona_especie": "Select a species",
+      "perro": "Dog",
+      "gato": "Cat",
+      "conejo": "Rabbit",
+      "otro": "Other",
+      "macho": "Male",
+      "hembra": "Female",
+      "desconocido": "Unknown"
+    },
+    "botones": {
+      "guardar": "Register Pet",
+      "guardando": "Saving...",
+      "cancelar": "Cancel"
+    },
+    "mensajes": {
+      "creada_exito": "✅ Pet created successfully",
+      "error_crear": "❌ Error creating pet",
+      "foto_obligatoria": "Main photo is required",
+      "imagen_muy_grande": "Image cannot exceed 2MB",
+      "archivo_invalido": "File must be an image"
+    }
+  }
+}

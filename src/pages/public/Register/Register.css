@@ -1,0 +1,436 @@
+/* src/pages/public/Register/Register.css */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.register-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+  z-index: 1;
+}
+
+.register-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.6s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.register-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.register-card::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.register-card::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-logo-wrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+  }
+}
+
+.register-logo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  position: absolute;
+  top: 8.8%;
+  left: 49.5%;
+  transform: translate(-50%, -50%);
+}
+
+.register-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  background: linear-gradient(135deg, #fff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.register-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Selector de tipo de cuenta */
+.account-type-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 0.5rem;
+}
+
+.type-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.type-btn i {
+  font-size: 1rem;
+}
+
+.type-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.type-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Formulario */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Estilos para Input */
+.register-form .form-group {
+  margin-bottom: 0;
+}
+
+.register-form .form-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.register-form .form-input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  font-size: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.register-form .form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.register-form .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Password wrapper */
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  transition: color 0.3s;
+  z-index: 10;
+}
+
+.password-toggle:hover {
+  color: #667eea;
+}
+
+/* Servicios checkboxes */
+.services-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border-radius: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+}
+
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.checkbox-label:hover {
+  color: white;
+}
+
+/* Error general */
+.error-general {
+  background: rgba(255, 71, 87, 0.15);
+  border: 1px solid #ff4757;
+  color: #ff6b81;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Botón de registro */
+.register-button {
+  width: 100%;
+  margin-top: 1rem;
+  height: 52px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.register-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Enlace de login */
+.login-link {
+  text-align: center;
+  margin: 1.5rem 0 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.login-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.login-link a:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+/* Decoración */
+.register-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+  animation: float 8s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  left: -50px;
+  animation-delay: 2s;
+}
+
+.circle-3 {
+  width: 150px;
+  height: 150px;
+  bottom: 30%;
+  right: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 1rem;
+  }
+  
+  .register-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .register-title {
+    font-size: 1.5rem;
+  }
+  
+  .account-type-selector {
+    gap: 0.5rem;
+  }
+  
+  .type-btn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .services-checkboxes {
+    gap: 0.5rem;
+  }
+  
+  .checkbox-label {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    padding: 1rem;
+  }
+  
+  .account-type-selector {
+    flex-direction: column;
+  }
+  
+  .type-btn {
+    justify-content: center;
+  }
+}

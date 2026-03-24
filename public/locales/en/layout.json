@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "reportar_rescate": "Report Rescue",
+    "iniciar_sesion": "Login",
+    "registrarse": "Register",
+    "cerrar_sesion": "Logout",
+    "mi_perfil": "My Profile",
+    "administrador": "Administrator",
+    "usuario": "User",
+    "invitado": "Guest",
+    "bienvenido": "Welcome"
+  },
+  "sidebar": {
+    "acciones_principales": "MAIN ACTIONS",
+    "reportar_emergencia": "Report Emergency",
+    "rescates_activos": "Active Rescues",
+    "adopcion": "ADOPTION",
+    "mascotas_adopcion": "Pets for Adoption",
+    "mis_solicitudes": "My Requests",
+    "apadrinar": "Sponsor",
+    "colaborar": "COLLABORATE",
+    "donar": "Donate",
+    "eventos": "Events",
+    "comunidad": "COMMUNITY",
+    "fundaciones": "Foundations",
+    "veterinarias": "Veterinarians",
+    "notificaciones": "Notifications",
+    "ayuda": "Help"
+  },
+  "footer": {
+    "titulo_contacto": "Contact",
+    "telefono": "+57 304 884 234",
+    "email": "rmforever@org",
+    "direccion": "Calle 6 # 234 - CC y S",
+    "ciudad": "Popayán",
+    "pais": "Colombia",
+    "titulo_formularios": "Forms",
+    "adopcion": "Adoption",
+    "rescates": "Rescues",
+    "rescatistas": "Rescuers",
+    "titulo_servicios": "Services",
+    "proceso_adopcion": "Adoption Process",
+    "donacion_suministros": "Supply Donation",
+    "donaciones": "Donations",
+    "eventos": "Events",
+    "calificacion": "Rating",
+    "titulo_siguenos": "Follow Us",
+    "redes": {
+      "facebook": "Facebook",
+      "whatsapp": "WhatsApp",
+      "instagram": "Instagram",
+      "youtube": "YouTube",
+      "tiktok": "TikTok"
+    },
+    "mision": "Healing their story.",
+    "copyright": "Rescatando Mascotas Forever. All rights reserved.",
+    "privacidad": "Privacy Policy",
+    "terminos": "Terms and Conditions",
+    "cookies": "Cookie Policy",
+    "derechos": "All rights reserved"
+  }
+}

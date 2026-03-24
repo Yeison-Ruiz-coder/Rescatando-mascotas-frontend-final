@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "title": "Rescuing Pets",
+    "subtitle": "Find your new best friend",
+    "cta": "View pets",
+    "urgent": "Report emergency"
+  },
+  "features": {
+    "adopcion": {
+      "title": "Adoption",
+      "description": "Thousands of pets waiting for a home"
+    },
+    "rescates": {
+      "title": "Rescues",
+      "description": "Report and help in animal rescues"
+    },
+    "donaciones": {
+      "title": "Donations",
+      "description": "Help foundations with your donation"
+    }
+  },
+  "stats": {
+    "rescates": "Rescues made",
+    "adopciones": "Successful adoptions",
+    "fundaciones": "Partner foundations",
+    "veterinarias": "Partner veterinarians"
+  }
+}

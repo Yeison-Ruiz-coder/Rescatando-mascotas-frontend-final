@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "title": "Rescatando Mascotas",
+    "subtitle": "Encuentra a tu nuevo mejor amigo",
+    "cta": "Ver mascotas",
+    "urgent": "Reportar emergencia"
+  },
+  "features": {
+    "adopcion": {
+      "title": "Adopción",
+      "description": "Miles de mascotas esperan por un hogar"
+    },
+    "rescates": {
+      "title": "Rescates",
+      "description": "Reporta y ayuda en rescates de animales"
+    },
+    "donaciones": {
+      "title": "Donaciones",
+      "description": "Ayuda a las fundaciones con tu donación"
+    }
+  },
+  "stats": {
+    "rescates": "Rescates realizados",
+    "adopciones": "Adopciones exitosas",
+    "fundaciones": "Fundaciones aliadas",
+    "veterinarias": "Veterinarias partners"
+  }
+}

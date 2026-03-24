@@ -1,0 +1,10 @@
+{
+  "titulo": "Pets for Adoption",
+  "buscar": "Search pets...",
+  "filtros": "Filters",
+  "especie": "Species",
+  "raza": "Breed",
+  "edad": "Age",
+  "verDetalle": "View details",
+  "adoptar": "Request adoption"
+}

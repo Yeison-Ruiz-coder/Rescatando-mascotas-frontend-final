@@ -1,0 +1,560 @@
+/* src/pages/admin/Usuarios/UsuariosPendientes.css */
+
+/* Contenedor principal */
+.pendientes-container {
+  padding: 1.5rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* ========== HEADER CON FONDO ========== */
+.pendientes-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.pendientes-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #fff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.pendientes-header h1 i {
+  font-size: 2.2rem;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pendientes-header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #667eea, #764ba2, #667eea, transparent);
+  border-radius: 3px;
+}
+
+.pendientes-header p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  margin-top: 0.75rem;
+}
+
+/* Badge de contador */
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: white;
+  padding: 0.4rem 1rem;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-left: 0.75rem;
+}
+
+.header-badge i {
+  font-size: 0.85rem;
+  background: none !important;
+  -webkit-text-fill-color: #2d3748 !important;
+  color: #2d3748 !important;
+}
+
+/* ========== GRID DE TARJETAS ========== */
+.pendientes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ========== TARJETA ========== */
+.pendiente-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pendiente-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* Header de la tarjeta */
+.pendiente-header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+}
+
+/* Avatar */
+.pendiente-avatar {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 1.8rem;
+  color: white;
+  backdrop-filter: blur(4px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Badge de tipo */
+.pendiente-tipo-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(4px);
+  padding: 0.25rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Información */
+.pendiente-info {
+  padding: 1rem;
+}
+
+.pendiente-info h3 {
+  margin: 0 0 0.75rem 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.6rem;
+}
+
+/* Contacto */
+.contacto {
+  margin: 0.5rem 0;
+  color: #4a5568;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  word-break: break-all;
+}
+
+.contacto i {
+  width: 18px;
+  font-size: 0.8rem;
+  color: #667eea;
+}
+
+/* Secciones de información */
+.info-section {
+  margin: 0.5rem 0;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed #eef2f6;
+}
+
+.info-section strong {
+  display: block;
+  color: #4a5568;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.15rem;
+}
+
+.info-section strong i {
+  margin-right: 0.3rem;
+  font-size: 0.65rem;
+}
+
+.info-section p {
+  margin: 0;
+  color: #2d3748;
+  font-size: 0.85rem;
+  padding-left: 1.2rem;
+}
+
+.info-section.registro strong i {
+  color: #9f7aea;
+}
+
+.info-section.capacidad strong i {
+  color: #f6ad55;
+}
+
+.info-section.fecha {
+  background: #f7fafc;
+  border-radius: 10px;
+  padding: 0.5rem;
+  margin-top: 0.6rem;
+  border-bottom: none;
+}
+
+.info-section.fecha strong {
+  font-size: 0.65rem;
+}
+
+.info-section.fecha p {
+  font-size: 0.75rem;
+  color: #718096;
+  padding-left: 0;
+}
+
+/* Servicios */
+.servicios {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eef2f6;
+}
+
+.servicios strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #4a5568;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.servicios strong i {
+  margin-right: 0.3rem;
+}
+
+.servicios-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.servicio-tag {
+  background: linear-gradient(135deg, #f0f4ff, #e9eef9);
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #667eea;
+}
+
+/* Footer botones */
+.pendiente-footer {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem 1rem;
+  border-top: 1px solid #eef2f6;
+  background: #fafbfc;
+}
+
+.pendiente-footer button {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-aprobar {
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  color: white;
+}
+
+.btn-aprobar:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+}
+
+.btn-rechazar {
+  background: linear-gradient(135deg, #fc8181, #f56565);
+  color: white;
+}
+
+.btn-rechazar:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(245, 101, 101, 0.3);
+}
+
+.pendiente-footer button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========== EMPTY STATE ========== */
+.pendientes-empty {
+  text-align: center;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  backdrop-filter: blur(10px);
+  border-radius: 28px;
+  max-width: 450px;
+  margin: 3rem auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.empty-icon i {
+  font-size: 2.5rem;
+  color: white;
+}
+
+.pendientes-empty h2 {
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pendientes-empty p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+.btn-volver {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 40px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-volver:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* ========== LOADING ========== */
+.pendientes-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-spinner-custom {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== PAGINACIÓN ========== */
+.pagination-wrapper {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.pagination-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-number {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.page-number:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.page-number.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .pendientes-container {
+    padding: 1rem;
+  }
+  
+  .pendientes-header {
+    padding: 1.2rem;
+  }
+  
+  .pendientes-header h1 {
+    font-size: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pendientes-header h1 i {
+    font-size: 1.5rem;
+  }
+  
+  .header-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    margin-left: 0.3rem;
+  }
+  
+  .pendientes-header p {
+    font-size: 0.85rem;
+  }
+  
+  .pendientes-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pendiente-header {
+    padding: 0.8rem;
+  }
+  
+  .pendiente-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .pendiente-info {
+    padding: 0.8rem;
+  }
+  
+  .pendiente-info h3 {
+    font-size: 1rem;
+  }
+  
+  .contacto {
+    font-size: 0.75rem;
+  }
+  
+  .info-section p {
+    font-size: 0.8rem;
+  }
+  
+  .servicio-tag {
+    font-size: 0.65rem;
+  }
+  
+  .pendiente-footer button {
+    padding: 0.4rem;
+    font-size: 0.7rem;
+  }
+  
+  .pagination-controls {
+    gap: 0.4rem;
+  }
+  
+  .page-btn, .page-number {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pendientes-header h1 {
+    font-size: 1.3rem;
+    flex-direction: column;
+  }
+  
+  .header-badge {
+    margin-left: 0;
+    margin-top: 0.3rem;
+  }
+  
+  .pendiente-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pendiente-footer button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "mascotas": {
+    "titulo": "Gestión de Mascotas",
+    "subtitulo": "Administra y busca todas las mascotas del sistema",
+    "nueva": "Nueva Mascota",
+    "total": "Total",
+    "filtros": {
+      "buscar": "Buscar Mascotas",
+      "buscar_placeholder": "Nombre de la mascota...",
+      "especie": "Especie",
+      "estado": "Estado",
+      "fundacion": "Fundación",
+      "todos_estados": "Todos los estados",
+      "todas_especies": "Todas las especies",
+      "todas_fundaciones": "Todas las fundaciones",
+      "filtrar": "Buscar",
+      "limpiar": "Limpiar"
+    },
+    "estadisticas": {
+      "en_adopcion": "En Adopción",
+      "adoptados": "Adoptados",
+      "rescatados": "Rescatadas",
+      "total_sistema": "Total en Sistema"
+    },
+    "estados": {
+      "en_adopcion": "En adopción",
+      "adoptado": "Adoptado",
+      "rescatada": "Rescatada",
+      "en_acogida": "En acogida"
+    },
+    "card": {
+      "ver_detalles": "Ver Detalles",
+      "editar": "Editar",
+      "necesita_hogar": "Necesita hogar temporal",
+      "años": "años",
+      "sin_imagen": "Sin Imagen"
+    },
+    "mensajes": {
+      "no_encontradas": "No se encontraron mascotas",
+      "ajustar_filtros": "Intenta ajustar los filtros de búsqueda o crear una nueva mascota.",
+      "error_cargar": "Error al cargar las mascotas",
+      "cargando": "Cargando..."
+    }
+  },
+  "nueva_mascota": {
+    "titulo": "Registrar Nueva Mascota",
+    "subtitulo": "Ayuda a una mascota a encontrar un hogar lleno de amor",
+    "formulario": "Formulario de Registro",
+    "secciones": {
+      "info_basica": "Información Básica",
+      "ubicacion_descripcion": "Ubicación y Descripción",
+      "salud_vacunas": "Salud y Vacunas",
+      "galeria_fotos": "Galería de Fotos",
+      "fechas_organizacion": "Fechas y Organización"
+    },
+    "campos": {
+      "nombre": "Nombre de la Mascota",
+      "especie": "Especie",
+      "razas": "Razas",
+      "edad": "Edad Aproximada (años)",
+      "genero": "Género",
+      "estado": "Estado Actual",
+      "lugar": "Lugar donde se encuentra",
+      "descripcion": "Descripción",
+      "condiciones": "Condiciones Especiales",
+      "vacunas": "Vacunas Aplicadas",
+      "foto_principal": "Foto Principal",
+      "galeria": "Galería de Fotos",
+      "fecha_ingreso": "Fecha de Ingreso",
+      "fecha_salida": "Fecha de Salida (si aplica)",
+      "fundacion": "Fundación"
+    },
+    "opciones": {
+      "selecciona_especie": "Selecciona una especie",
+      "perro": "Perro",
+      "gato": "Gato",
+      "conejo": "Conejo",
+      "otro": "Otro",
+      "macho": "Macho",
+      "hembra": "Hembra",
+      "desconocido": "Desconocido"
+    },
+    "botones": {
+      "guardar": "Registrar Mascota",
+      "guardando": "Guardando...",
+      "cancelar": "Cancelar"
+    },
+    "mensajes": {
+      "creada_exito": "✅ Mascota creada exitosamente",
+      "error_crear": "❌ Error al crear la mascota",
+      "foto_obligatoria": "La foto principal es obligatoria",
+      "imagen_muy_grande": "La imagen no puede superar los 2MB",
+      "archivo_invalido": "El archivo debe ser una imagen"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+/* src/layouts/AdminLayout.css */
+
+.admin-main-content {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 70px; /* Ajusta según la altura de tu navbar */
+  padding: 20px 32px;
+  background: transparent;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 70px);
+}
+
+.admin-main-content.shifted {
+  margin-left: 280px;
+}
+
+@media (max-width: 992px) {
+  .admin-main-content.shifted {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main-content {
+    margin-top: 60px;
+    padding: 16px;
+  }
+}
