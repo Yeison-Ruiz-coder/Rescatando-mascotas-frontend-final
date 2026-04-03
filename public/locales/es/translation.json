@@ -1,0 +1,55 @@
+{
+  "home": {
+    "hero": {
+      "title": "Encuentra a tu compañero perfecto",
+      "welcome": "BIENVENIDOS A RESCATANDO MASCOTAS FOREVER!!",
+      "description": "Dale una segunda oportunidad a un animal que lo necesita. Miles de mascotas esperan un hogar lleno de amor.",
+      "adopt_now": "Adoptar Ahora",
+      "know_process": "Conocer el Proceso",
+      "family_with_pet": "Familia con mascota"
+    },
+    "stats": {
+      "rescued_pets": "Mascotas Rescatadas",
+      "successful_adoptions": "Adopciones Exitosas",
+      "active_volunteers": "Voluntarios Activos",
+      "years_experience": "Años de Experiencia"
+    },
+    "pets": {
+      "available_title": "Mascotas Disponibles para Adoptar",
+      "available_subtitle": "Conoce a nuestros amigos que buscan un hogar lleno de amor y cuidado.",
+      "know_more": "Conocer más",
+      "adopt": "Adoptar",
+      "no_pets": "Pronto tendremos mascotas disponibles para adopción.",
+      "view_all": "Ver Todas las Mascotas"
+    },
+    "process": {
+      "title": "Proceso de Adopción",
+      "subtitle": "Seguimos un proceso cuidadoso para asegurar que cada mascota encuentre el hogar perfecto.",
+      "knowledge": "Conocimiento",
+      "knowledge_desc": "Conoce a la mascota y asegúrate de que es compatible con tu estilo de vida.",
+      "request": "Solicitud",
+      "request_desc": "Completa nuestro formulario de adopción con tus datos y preferencias.",
+      "interview": "Entrevista",
+      "interview_desc": "Conversamos contigo para conocer mejor tus expectativas y capacidades.",
+      "adoption": "¡Adopción!",
+      "adoption_desc": "Firmamos los documentos y te llevas a tu nuevo miembro de la familia.",
+      "start": "Iniciar Proceso de Adopción"
+    },
+    "testimonials": {
+      "title": "Historias de Éxito",
+      "subtitle": "Conoce las experiencias de familias que han adoptado con nosotros.",
+      "adopted": "Adoptó a",
+      "ago": "hace",
+      "maria_text": "La experiencia de adopción fue maravillosa. El equipo fue muy profesional y Luna se ha adaptado perfectamente a nuestra familia. ¡No podríamos estar más felices!",
+      "carlos_text": "Rocky ha cambiado nuestra vida por completo. Es el compañero perfecto para mis hijos y ha traído tanta alegría a nuestro hogar. Gracias por hacer posible esta adopción.",
+      "ana_text": "El proceso fue muy claro y me sentí acompañada en todo momento. Simba es un gato maravilloso y estoy muy agradecida por la oportunidad de darle un hogar."
+    },
+    "cta": {
+      "title": "¿Listo para cambiar una vida?",
+      "description": "Cada adopción no solo salva una vida, sino que crea espacio para que podamos rescatar a otro animal necesitado.",
+      "adopt": "Adoptar una Mascota",
+      "report": "Reportar Rescate",
+      "donate": "Hacer Donación"
+    }
+  }
+}

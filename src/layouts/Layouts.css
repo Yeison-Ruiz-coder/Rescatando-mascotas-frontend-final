@@ -1,51 +1,45 @@
+/* src/layouts/Layouts.css */
+
 .app-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: transparent;
+  width: 100%;
 }
 
+/* 🔥 MAIN CONTENT - Con padding-top para compensar el navbar fixed */
 .main-content {
   flex: 1;
-  margin-top: 80px;
-  padding: 30px 20px;
   background: transparent;
   transition: margin-left 0.3s ease;
+  overflow: visible;
+  min-height: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  /* 🔥 IMPORTANTE: Padding-top igual a la altura del navbar */
+  padding-top: 70px; /* Ajusta según la altura real de tu navbar */
 }
 
 .main-content.shifted {
   margin-left: 320px;
 }
 
+/* Contenedor para páginas normales */
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 30px;
   background: transparent;
-}
-
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1040;
-  backdrop-filter: blur(3px);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .main-content {
-    padding: 20px 15px;
-    margin-top: 70px;
-  }
-  
-  .main-content.shifted {
-    margin-left: 0;
-  }
-  
-  .container {
-    padding: 0 20px;
+    padding-top: 60px; /* Altura del navbar en móvil */
   }
 }

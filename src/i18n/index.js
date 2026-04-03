@@ -16,7 +16,19 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
-    ns: ['common', 'layout', 'home', 'mascotas', 'auth'], // Agregamos 'layout'
+    detection: {
+      // Mapear variantes de español a 'es'
+      convertDetectedLanguage: (lng) => {
+        if (lng.startsWith('es-')) {
+          return 'es';
+        }
+        return lng;
+      },
+      // Opciones de detección
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+    },
+    ns: ['common', 'layout', 'home', 'mascotas', 'auth'],
     defaultNS: 'common',
   });
 

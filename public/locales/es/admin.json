@@ -92,5 +92,32 @@
       "imagen_muy_grande": "La imagen no puede superar los 2MB",
       "archivo_invalido": "El archivo debe ser una imagen"
     }
-  }
+  },
+
+
+
+
+  "pendientes_titulo": "Solicitudes Pendientes",
+  "pendientes_descripcion": "Revisa y aprueba las solicitudes de fundaciones y veterinarias",
+  "sin_solicitudes": "No hay solicitudes pendientes",
+  "sin_solicitudes_desc": "Todas las fundaciones y veterinarias han sido revisadas",
+  "actualizar": "Actualizar",
+  "cargando": "Cargando solicitudes pendientes...",
+  "mostrando": "Mostrando",
+  "de": "de",
+  "solicitudes": "solicitudes",
+  "fundacion": "Fundación",
+  "veterinaria": "Veterinaria",
+  "representante": "Representante",
+  "documento": "Documento",
+  "fecha_solicitud": "Fecha de solicitud",
+  "aprobar": "Aprobar",
+  "rechazar": "Rechazar",
+  "aprobado_exito": "Usuario aprobado exitosamente",
+  "rechazado_exito": "Usuario rechazado",
+  "error_carga": "Error al cargar usuarios pendientes",
+  "error_aprobar": "Error al aprobar usuario",
+  "error_rechazar": "Error al rechazar usuario",
+  "capacidad": "Capacidad máxima",
+  "servicios_ofrecidos": "Servicios ofrecidos"
 }

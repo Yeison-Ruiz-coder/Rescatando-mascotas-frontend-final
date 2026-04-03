@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  margin: 80px 12rem 80px 12rem;
   position: relative;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   background-image: url('https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');

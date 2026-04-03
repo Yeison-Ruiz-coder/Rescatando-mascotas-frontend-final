@@ -79,7 +79,7 @@ const Login = () => {
             <img src="/img/logo-claro.png" alt="Logo" className="login-logo" />
           </div>
           <h1 className="login-title">{t('login.title')}</h1>
-          <p className="login-subtitle">Bienvenido de vuelta</p>
+          <p className="login-subtitle">{t('welcome_back')}</p>
         </div>
         
         <form onSubmit={handleSubmit} className="login-form">
@@ -123,7 +123,7 @@ const Login = () => {
           <div className="login-options">
             <label className="remember-me">
               <input type="checkbox" />
-              <span>{t('remember') || 'Recordarme'}</span>
+              <span>{t('remember')}</span>
             </label>
             <Link to="/forgot-password" className="forgot-link">
               {t('forgot_password')}
@@ -146,7 +146,7 @@ const Login = () => {
             {loading ? (
               <>
                 <i className="fas fa-spinner fa-spin"></i>
-                Cargando...
+                {t('loading')}
               </>
             ) : (
               <>
@@ -157,7 +157,7 @@ const Login = () => {
         </form>
         
         <div className="login-divider">
-          <span>¿No tienes cuenta?</span>
+          <span>{t('no_account')}</span>
         </div>
         
         <Link to="/register" className="register-button">

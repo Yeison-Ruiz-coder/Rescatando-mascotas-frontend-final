@@ -34,15 +34,14 @@ const VeterinariaSidebar = () => {
 
   return (
     <aside className={`sidebar vet-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
-      {/* Header */}
       <div className="sidebar-header vet-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar vet-avatar">
             <i className="fas fa-clinic-medical"></i>
           </div>
           <div className="sidebar-user-info">
-            <h5>{user?.nombre || 'Veterinaria'}</h5>
-            <span className="sidebar-user-role">Clínica Veterinaria</span>
+            <h5>{user?.nombre || t("veterinaria")}</h5>
+            <span className="sidebar-user-role">{t("veterinaria")}</span>
           </div>
         </div>
         <button className="sidebar-close" onClick={closePublicSidebar}>
@@ -51,76 +50,71 @@ const VeterinariaSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
-        {/* Dashboard */}
         <div className="sidebar-section">
           <Link to="/veterinaria/dashboard" className={`sidebar-item ${isActive('/veterinaria/dashboard') ? 'active' : ''}`} onClick={closePublicSidebar}>
             <i className="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <span>{t("dashboard")}</span>
           </Link>
         </div>
 
-        {/* RESCATES - Prioridad alta para veterinarias */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu rescue-highlight ${isActive('/veterinaria/rescates') ? 'active' : ''}`}
             onClick={() => toggleSection('rescates')}
           >
             <i className="fas fa-ambulance"></i>
-            <span>Rescates</span>
-            <span className="sidebar-badge urgent">Urgentes</span>
+            <span>{t("rescates")}</span>
+            <span className="sidebar-badge urgent">{t("urgentes")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
             <Link to="/veterinaria/rescates/disponibles" className={`submenu-item ${isActive('/veterinaria/rescates/disponibles') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-map-marker-alt"></i> Rescates cerca de mí
+              <i className="fas fa-map-marker-alt"></i> {t("rescates_cerca")}
             </Link>
             <Link to="/veterinaria/rescates/mis-rescates" className={`submenu-item ${isActive('/veterinaria/rescates/mis-rescates') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-clipboard-list"></i> Mis rescates asignados
+              <i className="fas fa-clipboard-list"></i> {t("mis_rescates")}
             </Link>
           </div>
         </div>
 
-        {/* ATENCIONES MÉDICAS */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/veterinaria/atenciones') ? 'active' : ''}`}
             onClick={() => toggleSection('atenciones')}
           >
             <i className="fas fa-stethoscope"></i>
-            <span>Atenciones médicas</span>
+            <span>{t("atenciones_medicas")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.atenciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.atenciones ? 'open' : ''}`}>
             <Link to="/veterinaria/atenciones" className={`submenu-item ${isActive('/veterinaria/atenciones') && !isActive('/veterinaria/atenciones/nueva') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-list"></i> Historial de atenciones
+              <i className="fas fa-list"></i> {t("historial_atenciones")}
             </Link>
             <Link to="/veterinaria/atenciones/nueva" className={`submenu-item ${isActive('/veterinaria/atenciones/nueva') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-plus-circle"></i> Nueva atención
+              <i className="fas fa-plus-circle"></i> {t("nueva_atencion")}
             </Link>
           </div>
         </div>
 
-        {/* MASCOTAS */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/veterinaria/mascotas') ? 'active' : ''}`}
             onClick={() => toggleSection('mascotas')}
           >
             <i className="fas fa-paw"></i>
-            <span>Mascotas</span>
+            <span>{t("mascotas")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
             <Link to="/veterinaria/mascotas" className={`submenu-item ${isActive('/veterinaria/mascotas') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-list"></i> Mascotas atendidas
+              <i className="fas fa-list"></i> {t("mascotas_atendidas")}
             </Link>
             <Link to="/veterinaria/vacunas" className={`submenu-item ${isActive('/veterinaria/vacunas') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-syringe"></i> Control de vacunas
+              <i className="fas fa-syringe"></i> {t("control_vacunas")}
             </Link>
           </div>
         </div>
       </nav>
-
     </aside>
   );
 };

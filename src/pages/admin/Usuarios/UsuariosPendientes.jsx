@@ -1,16 +1,16 @@
 // src/pages/admin/Usuarios/UsuariosPendientes.jsx
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import adminService from "../../../services/adminService";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import { toast } from "react-toastify";
 import "./UsuariosPendientes.css";
 
 const UsuariosPendientes = () => {
+  const { t } = useTranslation("admin");
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState({});
-  
-  // Estados para paginación
   const [pagination, setPagination] = useState({
     current_page: 1,
     last_page: 1,
@@ -31,7 +31,6 @@ const UsuariosPendientes = () => {
         page: currentPage,
         per_page: 12
       });
-      console.log("📦 Respuesta completa:", response);
 
       let usuariosData = [];
       let paginationData = {
@@ -63,12 +62,11 @@ const UsuariosPendientes = () => {
         }
       }
 
-      console.log("✅ Usuarios pendientes:", usuariosData);
       setUsuarios(usuariosData);
       setPagination(paginationData);
     } catch (error) {
-      console.error("❌ Error:", error);
-      toast.error("Error al cargar usuarios pendientes");
+      console.error("Error:", error);
+      toast.error(t("error_carga"));
       setUsuarios([]);
     } finally {
       setLoading(false);
@@ -79,10 +77,10 @@ const UsuariosPendientes = () => {
     setProcessing((prev) => ({ ...prev, [id]: true }));
     try {
       await adminService.cambiarEstadoUsuario(id, "activo");
-      toast.success("✅ Usuario aprobado exitosamente. Ya puede iniciar sesión.");
+      toast.success(t("aprobado_exito"));
       fetchPendientes();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error al aprobar usuario");
+      toast.error(error.response?.data?.message || t("error_aprobar"));
     } finally {
       setProcessing((prev) => ({ ...prev, [id]: false }));
     }
@@ -92,10 +90,10 @@ const UsuariosPendientes = () => {
     setProcessing((prev) => ({ ...prev, [id]: true }));
     try {
       await adminService.cambiarEstadoUsuario(id, "inactivo");
-      toast.warning("❌ Usuario rechazado. Se le notificará por email.");
+      toast.warning(t("rechazado_exito"));
       fetchPendientes();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error al rechazar usuario");
+      toast.error(error.response?.data?.message || t("error_rechazar"));
     } finally {
       setProcessing((prev) => ({ ...prev, [id]: false }));
     }
@@ -128,7 +126,7 @@ const UsuariosPendientes = () => {
     return (
       <div className="pendientes-loading">
         <div className="loading-spinner-custom"></div>
-        <p>Cargando solicitudes pendientes...</p>
+        <p>{t("cargando")}</p>
       </div>
     );
   }
@@ -139,10 +137,10 @@ const UsuariosPendientes = () => {
         <div className="empty-icon">
           <i className="fas fa-check-circle"></i>
         </div>
-        <h2>✨ No hay solicitudes pendientes</h2>
-        <p>Todas las fundaciones y veterinarias han sido revisadas</p>
+        <h2>{t("sin_solicitudes")}</h2>
+        <p>{t("sin_solicitudes_desc")}</p>
         <button onClick={() => window.location.reload()} className="btn-volver">
-          <i className="fas fa-sync-alt"></i> Actualizar
+          <i className="fas fa-sync-alt"></i> {t("actualizar")}
         </button>
       </div>
     );
@@ -153,12 +151,12 @@ const UsuariosPendientes = () => {
       <div className="pendientes-header">
         <h1>
           <i className="fas fa-clock"></i> 
-          Solicitudes Pendientes
+          {t("pendientes_titulo")}
           <span className="header-badge">
             <i className="fas fa-users"></i> {pagination.total}
           </span>
         </h1>
-        <p>Revisa y aprueba las solicitudes de fundaciones y veterinarias</p>
+        <p>{t("pendientes_descripcion")}</p>
       </div>
 
       <div className="pendientes-grid">
@@ -173,14 +171,13 @@ const UsuariosPendientes = () => {
                 )}
               </div>
               <div className="pendiente-tipo-badge">
-                {usuario.tipo === "fundacion" ? "🏛️ Fundación" : "🏥 Veterinaria"}
+                {usuario.tipo === "fundacion" ? `🏛️ ${t("fundacion")}` : `🏥 ${t("veterinaria")}`}
               </div>
             </div>
 
             <div className="pendiente-info">
               <h3>{usuario.nombre_entidad || usuario.nombre}</h3>
 
-              {/* Datos de contacto */}
               <p className="contacto">
                 <i className="fas fa-envelope"></i> {usuario.email}
               </p>
@@ -197,21 +194,19 @@ const UsuariosPendientes = () => {
                 </p>
               )}
 
-              {/* Datos del representante */}
               <div className="info-section">
                 <strong>
-                  <i className="fas fa-user-tie"></i> Representante:
+                  <i className="fas fa-user-tie"></i> {t("representante")}:
                 </strong>
                 <p>
                   {usuario.nombre} {usuario.apellidos || ""}
                 </p>
               </div>
 
-              {/* Documentos */}
               {usuario.tipo_documento && usuario.numero_documento && (
                 <div className="info-section">
                   <strong>
-                    <i className="fas fa-id-card"></i> Documento:
+                    <i className="fas fa-id-card"></i> {t("documento")}:
                   </strong>
                   <p>
                     {usuario.tipo_documento}: {usuario.numero_documento}
@@ -219,32 +214,29 @@ const UsuariosPendientes = () => {
                 </div>
               )}
 
-              {/* Registro sanitario / NIT */}
               {usuario.registro_sanitario && (
                 <div className="info-section registro">
                   <strong>
                     <i className="fas fa-certificate"></i>
-                    {usuario.tipo === "fundacion" ? "NIT / Registro:" : "Registro Sanitario:"}
+                    {usuario.tipo === "fundacion" ? t("nit") : t("registro_sanitario")}:
                   </strong>
                   <p>{usuario.registro_sanitario}</p>
                 </div>
               )}
 
-              {/* Capacidad (solo fundación) */}
               {usuario.tipo === "fundacion" && usuario.capacidad_maxima && (
                 <div className="info-section capacidad">
                   <strong>
-                    <i className="fas fa-home"></i> Capacidad máxima:
+                    <i className="fas fa-home"></i> {t("capacidad")}:
                   </strong>
-                  <p>{usuario.capacidad_maxima} mascotas</p>
+                  <p>{usuario.capacidad_maxima} {t("mascotas")}</p>
                 </div>
               )}
 
-              {/* Servicios (solo veterinaria) */}
               {usuario.tipo === "veterinaria" && usuario.servicios && (
                 <div className="servicios">
                   <strong>
-                    <i className="fas fa-stethoscope"></i> Servicios:
+                    <i className="fas fa-stethoscope"></i> {t("servicios_ofrecidos")}:
                   </strong>
                   <div className="servicios-lista">
                     {(() => {
@@ -260,15 +252,11 @@ const UsuariosPendientes = () => {
                         Array.isArray(servicios) &&
                         servicios.map((servicio, idx) => (
                           <span key={idx} className="servicio-tag">
-                            {servicio === "urgencias"
-                              ? "🚨 Urgencias 24h"
-                              : servicio === "cirugia"
-                              ? "🔪 Cirugía"
-                              : servicio === "vacunacion"
-                              ? "💉 Vacunación"
-                              : servicio === "hospitalizacion"
-                              ? "🏥 Hospitalización"
-                              : servicio}
+                            {servicio === "urgencias" ? "🚨 " + t("urgencias") :
+                             servicio === "cirugia" ? "🔪 " + t("cirugia") :
+                             servicio === "vacunacion" ? "💉 " + t("vacunacion") :
+                             servicio === "hospitalizacion" ? "🏥 " + t("hospitalizacion") :
+                             servicio}
                           </span>
                         ))
                       );
@@ -277,10 +265,9 @@ const UsuariosPendientes = () => {
                 </div>
               )}
 
-              {/* Fecha de registro */}
               <div className="info-section fecha">
                 <strong>
-                  <i className="fas fa-calendar-alt"></i> Fecha de solicitud:
+                  <i className="fas fa-calendar-alt"></i> {t("fecha_solicitud")}:
                 </strong>
                 <p>
                   {new Date(usuario.created_at).toLocaleDateString("es-ES", {
@@ -305,7 +292,7 @@ const UsuariosPendientes = () => {
                 ) : (
                   <i className="fas fa-check"></i>
                 )}
-                Aprobar
+                {t("aprobar")}
               </button>
               <button
                 onClick={() => rechazarUsuario(usuario.id)}
@@ -317,18 +304,17 @@ const UsuariosPendientes = () => {
                 ) : (
                   <i className="fas fa-times"></i>
                 )}
-                Rechazar
+                {t("rechazar")}
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Paginación */}
       {pagination.last_page > 1 && (
         <div className="pagination-wrapper">
           <div className="pagination-info">
-            Mostrando {usuarios.length} de {pagination.total} solicitudes
+            {t("mostrando")} {usuarios.length} {t("de")} {pagination.total} {t("solicitudes")}
           </div>
           <div className="pagination-controls">
             <button

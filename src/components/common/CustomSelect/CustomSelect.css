@@ -1,0 +1,121 @@
+/* src/components/common/CustomSelect/CustomSelect.css */
+
+.custom-select-container {
+  width: 100%;
+}
+
+.custom-select-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.custom-select-label i {
+  margin-right: 0.5rem;
+  color: #667eea;
+}
+
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-trigger {
+  background: white;
+  border: #4a556820 1px solid;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: #2d3748;
+}
+
+.custom-select-trigger:hover {
+  border: 1px solid #ff8c42; /* Borde sapote */
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.custom-select-trigger.open {
+  border-color: #667eea; /* Morado cuando está abierto */
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.custom-select-value {
+  flex: 1;
+}
+
+.custom-select-trigger i {
+  color: #ff8c42; /* Icono sapote */
+  transition: transform 0.3s ease;
+}
+
+.custom-select-trigger.open i {
+  color: #667eea; /* Icono morado cuando está abierto */
+}
+
+.custom-select-options {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-select-option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #2d3748;
+}
+
+.custom-select-option:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2); /* Morado */
+  color: white;
+}
+
+.custom-select-option:hover i {
+  color: white;
+}
+
+.custom-select-option.selected {
+  background: linear-gradient(135deg, #667eea, #764ba2); /* Morado */
+  color: white;
+}
+
+.custom-select-option.selected i {
+  color: white;
+}
+
+.custom-select-option i {
+  font-size: 0.8rem;
+  color: #667eea; /* Morado */
+}

@@ -1,3 +1,4 @@
+// src/layouts/FundacionLayout.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import PublicNavbar from '../components/layout/Navbar/PublicNavbar';
@@ -15,9 +16,10 @@ const FundacionLayout = () => {
       <FundacionSidebar />
       {isPublicSidebarOpen && <div className="sidebar-overlay" />}
       <main className={`main-content ${isPublicSidebarOpen ? 'shifted' : ''}`}>
-        <div className="container">
-          <Outlet />
-        </div>
+        {/* 🔥 ELIMINADO: El container que limitaba el contenido */}
+        {/* <div className="container"> */}
+        <Outlet />
+        {/* </div> */}
       </main>
       <Footer />
     </div>

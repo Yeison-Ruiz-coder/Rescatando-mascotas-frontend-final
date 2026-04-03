@@ -1,10 +1,55 @@
 {
   "titulo": "Pets for Adoption",
-  "buscar": "Search pets...",
-  "filtros": "Filters",
+  "subtitulo": "Find your new best friend",
+  "mensaje_bienvenida": "We have {{total}} pets waiting for a home",
+  
   "especie": "Species",
-  "raza": "Breed",
-  "edad": "Age",
-  "verDetalle": "View details",
-  "adoptar": "Request adoption"
+  "todas_especies": "All species",
+  "perro": "Dog",
+  "gato": "Cat",
+  "conejo": "Rabbit",
+  "ave": "Bird",
+  "otro": "Other",
+  
+
+  "buscar_placeholder": "Search...",
+  "buscar": "Search",
+  "limpiar": "Clear",
+
+
+  "genero": "Gender",
+  "todos_generos": "All",
+  "macho": "Male",
+  "hembra": "Female",
+  
+  "edad_min": "Min age",
+  "edad_max": "Max age",
+  "edad_años": "{{edad}} years",
+  
+  "ordenar_por": "Sort by",
+  "mas_recientes": "Most recent",
+  "nombre_asc": "Name (A-Z)",
+  "edad_asc": "Age (youngest first)",
+  "edad_desc": "Age (oldest first)",
+  
+  "aplicar_filtros": "Apply filters",
+  "limpiar_filtros": "Clear",
+  "filtros": "Filters",
+  
+  "mostrando": "Showing",
+  "de": "of",
+  "mascotas": "pets",
+  
+  "sin_resultados": "No pets found",
+  "sin_resultados_desc": "Try different filters or clear the search",
+  
+  "cargando": "Loading pets...",
+  "error_carga": "Error loading pets",
+  "reintentar": "Retry",
+  "filtrar": "Search",
+  "conocer_mas": "Learn more",
+  "adoptar": "Adopt",
+  "rescatado_por": "Rescued by",
+  "sin_descripcion": "No description available",
+  "sin_imagen": "No image"
 }

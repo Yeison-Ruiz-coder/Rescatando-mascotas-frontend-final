@@ -5,14 +5,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider } from './contexts/AuthContext';
 import { SidebarProvider } from './contexts/SidebarContext';
+import { FiltrosProvider } from './contexts/FiltrosContext'; // <-- IMPORTAR
 import router from './routes';
 
 function App() {
   return (
     <AuthProvider>
       <SidebarProvider>
-        <RouterProvider router={router} />
-        <ToastContainer position="top-right" autoClose={3000} />
+        <FiltrosProvider>  {/* <-- Aquí está bien */}
+          <RouterProvider router={router} />
+          <ToastContainer position="top-right" autoClose={3000} />
+        </FiltrosProvider>
       </SidebarProvider>
     </AuthProvider>
   );

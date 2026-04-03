@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { useAuth } from "../../../contexts/AuthContext";
 import "./Footer.css";
 
@@ -31,14 +31,14 @@ const Footer = () => {
     if (!isAuthenticated) {
       return {
         servicios: [
-          { label: "Adopción", path: "/adopciones" },
-          { label: "Rescates", path: "/rescates/reportar" },
-          { label: "Donaciones", path: "/donaciones" },
+          { label: t("footer.links.adopcion"), path: "/adopciones" },
+          { label: t("footer.links.rescates"), path: "/rescates/reportar" },
+          { label: t("footer.links.donaciones"), path: "/donaciones" },
         ],
         comunidad: [
-          { label: "Fundaciones", path: "/fundaciones" },
-          { label: "Veterinarias", path: "/veterinarias" },
-          { label: "Eventos", path: "/eventos" },
+          { label: t("footer.links.fundaciones"), path: "/fundaciones" },
+          { label: t("footer.links.veterinarias"), path: "/veterinarias" },
+          { label: t("footer.links.eventos"), path: "/eventos" },
         ],
       };
     }
@@ -47,60 +47,60 @@ const Footer = () => {
       case "admin":
         return {
           servicios: [
-            { label: "Dashboard", path: "/dashboard" },
-            { label: "Usuarios", path: "/usuarios" },
-            { label: "Mascotas", path: "/mascotas" },
-            { label: "Adopciones", path: "/adopciones" },
+            { label: t("footer.links.dashboard"), path: "/dashboard" },
+            { label: t("footer.links.usuarios"), path: "/usuarios" },
+            { label: t("footer.links.mascotas"), path: "/mascotas" },
+            { label: t("footer.links.adopciones"), path: "/adopciones" },
           ],
           comunidad: [
-            { label: "Fundaciones", path: "/fundaciones" },
-            { label: "Veterinarias", path: "/veterinarias" },
-            { label: "Reportes", path: "/reportes" },
+            { label: t("footer.links.fundaciones"), path: "/fundaciones" },
+            { label: t("footer.links.veterinarias"), path: "/veterinarias" },
+            { label: t("footer.links.reportes"), path: "/reportes" },
           ],
         };
 
       case "veterinaria":
         return {
           servicios: [
-            { label: "Dashboard", path: "/dashboard" },
-            { label: "Atenciones", path: "/atenciones" },
-            { label: "Mascotas", path: "/mascotas" },
-            { label: "Vacunas", path: "/vacunas" },
+            { label: t("footer.links.dashboard"), path: "/dashboard" },
+            { label: t("footer.links.atenciones"), path: "/atenciones" },
+            { label: t("footer.links.mascotas"), path: "/mascotas" },
+            { label: t("footer.links.vacunas"), path: "/vacunas" },
           ],
           comunidad: [
-            { label: "Rescates", path: "/rescates" },
-            { label: "Fundaciones", path: "/fundaciones" },
-            { label: "Contacto", path: "/contacto" },
+            { label: t("footer.links.rescates"), path: "/rescates" },
+            { label: t("footer.links.fundaciones"), path: "/fundaciones" },
+            { label: t("footer.links.contacto"), path: "/contacto" },
           ],
         };
 
       case "fundacion":
         return {
           servicios: [
-            { label: "Dashboard", path: "/dashboard" },
-            { label: "Mis Mascotas", path: "/mascotas" },
-            { label: "Solicitudes", path: "/solicitudes" },
-            { label: "Rescates", path: "/rescates" },
+            { label: t("footer.links.dashboard"), path: "/dashboard" },
+            { label: t("footer.links.mis_mascotas"), path: "/mascotas" },
+            { label: t("footer.links.solicitudes"), path: "/solicitudes" },
+            { label: t("footer.links.rescates"), path: "/rescates" },
           ],
           comunidad: [
-            { label: "Eventos", path: "/eventos" },
-            { label: "Donaciones", path: "/donaciones" },
-            { label: "Voluntarios", path: "/voluntarios" },
+            { label: t("footer.links.eventos"), path: "/eventos" },
+            { label: t("footer.links.donaciones"), path: "/donaciones" },
+            { label: t("footer.links.voluntarios"), path: "/voluntarios" },
           ],
         };
 
       default:
         return {
           servicios: [
-            { label: "Mi Panel", path: "/dashboard" },
-            { label: "Mis Solicitudes", path: "/mis-solicitudes" },
-            { label: "Mis Donaciones", path: "/donaciones" },
-            { label: "Mi Perfil", path: "/perfil" },
+            { label: t("footer.links.mi_panel"), path: "/dashboard" },
+            { label: t("footer.links.mis_solicitudes"), path: "/mis-solicitudes" },
+            { label: t("footer.links.mis_donaciones"), path: "/donaciones" },
+            { label: t("footer.links.mi_perfil"), path: "/perfil" },
           ],
           comunidad: [
-            { label: "Fundaciones", path: "/fundaciones" },
-            { label: "Veterinarias", path: "/veterinarias" },
-            { label: "Eventos", path: "/eventos" },
+            { label: t("footer.links.fundaciones"), path: "/fundaciones" },
+            { label: t("footer.links.veterinarias"), path: "/veterinarias" },
+            { label: t("footer.links.eventos"), path: "/eventos" },
           ],
         };
     }
@@ -147,33 +147,33 @@ const Footer = () => {
         <div className="row">
           {/* Columna 1: Logo */}
           <div className="footer-col">
-            <img src="/img/logo-claro.png" alt="Logo" className="footer-logo" />
-            <img src="/img/texto-logo-claro.png" alt="Logo" className="footer-logo" />
+            <img src="/img/logo-claro.png" alt={t("footer.logo_alt")} className="footer-logo" />
+            <img src="/img/texto-logo-claro.png" alt={t("footer.logo_text_alt")} className="footer-logo" />
           </div>
 
           {/* Columna 2: Contacto */}
           <div className="footer-col">
-            <h4 className="footer-heading">Contacto</h4>
+            <h4 className="footer-heading">{t("footer.contacto.titulo")}</h4>
             <ul className="footer-links">
               <li>
-                <i className="fas fa-phone-alt"></i> +57 304 884 234
+                <i className="fas fa-phone-alt"></i> {t("footer.contacto.telefono")}
               </li>
               <li>
-                <i className="fas fa-envelope"></i> rmforever@org
+                <i className="fas fa-envelope"></i> {t("footer.contacto.email")}
               </li>
               <li>
-                <i className="fas fa-map-marker-alt"></i> Calle 6 # 234 - CC y S
+                <i className="fas fa-map-marker-alt"></i> {t("footer.contacto.direccion")}
               </li>
               <li>
-                <i className="fas fa-city"></i> Popayán, Colombia
+                <i className="fas fa-city"></i> {t("footer.contacto.ciudad")}
               </li>
             </ul>
           </div>
 
-          {/* Columna 3: Servicios */}
+          {/* Columna 3: Servicios / Mis Acciones */}
           <div className="footer-col">
             <h4 className="footer-heading">
-              {isAuthenticated ? "Mis Acciones" : "Servicios"}
+              {isAuthenticated ? t("footer.mis_acciones") : t("footer.servicios")}
             </h4>
             <ul className="footer-links">
               {links.servicios.map((link, index) => (
@@ -188,7 +188,7 @@ const Footer = () => {
 
           {/* Columna 4: Comunidad */}
           <div className="footer-col">
-            <h4 className="footer-heading">Comunidad</h4>
+            <h4 className="footer-heading">{t("footer.comunidad.titulo")}</h4>
             <ul className="footer-links">
               {links.comunidad.map((link, index) => (
                 <li key={index}>
@@ -200,9 +200,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Columna 5: Síguenos - Más grande */}
+          {/* Columna 5: Síguenos */}
           <div className="footer-col footer-social">
-            <h4 className="footer-heading">Síguenos</h4>
+            <h4 className="footer-heading">{t("footer.siguenos.titulo")}</h4>
             <div className="social-icons-wrapper">
               {socialLinks.map((social, index) => (
                 <a
@@ -225,25 +225,24 @@ const Footer = () => {
           <div className="row">
             <div className="col-md-6 text-center text-md-start">
               <p className="copyright">
-                &copy; {currentYear} Rescatando Mascotas Forever. Todos los
-                derechos reservados.
+                {t("footer.copyright", { year: currentYear })}
               </p>
             </div>
             <div className="col-md-6 text-center text-md-end">
               <ul className="legal-links">
                 <li>
                   <a href="#" onClick={handleLinkClick("/privacidad")}>
-                    Privacidad
+                    {t("footer.legal.privacidad")}
                   </a>
                 </li>
                 <li>
                   <a href="#" onClick={handleLinkClick("/terminos")}>
-                    Términos
+                    {t("footer.legal.terminos")}
                   </a>
                 </li>
                 <li>
                   <a href="#" onClick={handleLinkClick("/cookies")}>
-                    Cookies
+                    {t("footer.legal.cookies")}
                   </a>
                 </li>
               </ul>

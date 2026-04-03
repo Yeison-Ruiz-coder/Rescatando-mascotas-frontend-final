@@ -20,18 +20,15 @@ const PublicSidebar = () => {
   };
 
   return (
-    <aside
-      className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}
-    >
-      {/* Header */}
+    <aside className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}>
       <div className="sidebar-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar">
             <i className="fas fa-user"></i>
           </div>
           <div className="sidebar-user-info">
-            <h5>{isAuthenticated ? user?.nombre : "Invitado"}</h5>
-            <span className="sidebar-user-role">Bienvenido</span>
+            <h5>{isAuthenticated ? user?.nombre : t("invitado")}</h5>
+            <span className="sidebar-user-role">{t("bienvenido")}</span>
           </div>
         </div>
         <button className="sidebar-close" onClick={closePublicSidebar}>
@@ -39,22 +36,20 @@ const PublicSidebar = () => {
         </button>
       </div>
 
-      {isAuthenticated && (
+      <nav className="sidebar-nav">
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-home me-1"></i> Navegación
+            <i className="fas fa-home me-1"></i> {t("navegacion")}
           </div>
           <Link to="/" className="sidebar-item" onClick={closePublicSidebar}>
             <i className="fas fa-home"></i>
-            <span>Inicio</span>
+            <span>{t("inicio")}</span>
           </Link>
         </div>
-      )}
-      <nav className="sidebar-nav">
-        {/* ADOPCIÓN */}
+
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-dog me-1"></i> Adopción
+            <i className="fas fa-dog me-1"></i> {t("adopcion")}
           </div>
           <Link
             to="/mascotas"
@@ -62,14 +57,13 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-paw"></i>
-            <span>Mascotas en adopción</span>
+            <span>{t("mascotas_adopcion")}</span>
           </Link>
         </div>
 
-        {/* RESCATE - URGENTE */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-ambulance me-1"></i> Urgente
+            <i className="fas fa-ambulance me-1"></i> {t("urgente")}
           </div>
           <Link
             to="/rescates/reportar"
@@ -77,15 +71,14 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-exclamation-triangle"></i>
-            <span>Reportar rescate</span>
-            <span className="sidebar-badge urgent">URGENTE</span>
+            <span>{t("reportar_rescate")}</span>
+            <span className="sidebar-badge urgent">{t("urgente").toUpperCase()}</span>
           </Link>
         </div>
 
-        {/* COMUNIDAD */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-users me-1"></i> Comunidad
+            <i className="fas fa-users me-1"></i> {t("comunidad")}
           </div>
           <Link
             to="/fundaciones"
@@ -93,7 +86,7 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-building"></i>
-            <span>Fundaciones</span>
+            <span>{t("fundaciones")}</span>
           </Link>
           <Link
             to="/veterinarias"
@@ -101,14 +94,13 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-clinic-medical"></i>
-            <span>Veterinarias</span>
+            <span>{t("veterinarias")}</span>
           </Link>
         </div>
 
-        {/* EVENTOS */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-calendar-alt me-1"></i> Eventos
+            <i className="fas fa-calendar-alt me-1"></i> {t("eventos")}
           </div>
           <Link
             to="/eventos"
@@ -116,14 +108,13 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-calendar-alt"></i>
-            <span>Próximos eventos</span>
+            <span>{t("eventos_proximos")}</span>
           </Link>
         </div>
 
-        {/* DONACIONES */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-hand-holding-heart me-1"></i> Colaborar
+            <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
           </div>
           <Link
             to="/donaciones"
@@ -131,15 +122,14 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-donate"></i>
-            <span>Donaciones</span>
+            <span>{t("donaciones")}</span>
           </Link>
         </div>
 
-        {/* MIS COSAS (solo autenticado) */}
         {isAuthenticated && (
           <div className="sidebar-section">
             <div className="section-title">
-              <i className="fas fa-user me-1"></i> Mi cuenta
+              <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
             </div>
             <Link
               to="/mis-solicitudes"
@@ -147,13 +137,15 @@ const PublicSidebar = () => {
               onClick={closePublicSidebar}
             >
               <i className="fas fa-clipboard-list"></i>
-              <span>Mis solicitudes</span>
+              <span>{t("mis_solicitudes")}</span>
             </Link>
+            <button onClick={handleLogout} className="sidebar-item logout-item">
+              <i className="fas fa-sign-out-alt"></i>
+              <span>{t("cerrar_sesion")}</span>
+            </button>
           </div>
         )}
       </nav>
-
-      {/* Footer */}
     </aside>
   );
 };

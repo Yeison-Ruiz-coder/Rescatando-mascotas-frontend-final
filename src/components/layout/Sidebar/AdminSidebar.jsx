@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/AdminSidebar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -20,6 +20,27 @@ const AdminSidebar = () => {
     adopciones: false,
     eventos: false
   });
+
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    const fetchPendingCount = async () => {
+      try {
+        const response = await fetch('/api/admin/usuarios/pendientes/count', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+          }
+        });
+        const data = await response.json();
+        if (data.success) {
+          setPendingCount(data.count);
+        }
+      } catch (error) {
+        console.error('Error fetching pending count:', error);
+      }
+    };
+    fetchPendingCount();
+  }, []);
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({
@@ -42,41 +63,16 @@ const AdminSidebar = () => {
     return `/storage/${user.avatar}`;
   };
 
-  // Contar usuarios pendientes (esto debería venir de una API)
-  const [pendingCount, setPendingCount] = useState(0);
-  
-  // Opcional: cargar el conteo desde la API
-  React.useEffect(() => {
-    const fetchPendingCount = async () => {
-      try {
-        // Esto asume que tienes un endpoint para contar pendientes
-        const response = await fetch('/api/admin/usuarios/pendientes/count', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-          }
-        });
-        const data = await response.json();
-        if (data.success) {
-          setPendingCount(data.count);
-        }
-      } catch (error) {
-        console.error('Error fetching pending count:', error);
-      }
-    };
-    fetchPendingCount();
-  }, []);
-
   return (
     <aside className={`sidebar admin-sidebar ${isAdminSidebarOpen ? 'open' : ''}`}>
-      {/* Header */}
       <div className="sidebar-header admin-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar admin-avatar">
             <img src={getAvatarUrl()} alt={user?.nombre} />
           </div>
           <div className="sidebar-user-info">
-            <h5>{user?.nombre || 'Administrador'}</h5>
-            <span className="sidebar-user-role">Administrador</span>
+            <h5>{user?.nombre || t('admin')}</h5>
+            <span className="sidebar-user-role">{t('administrador')}</span>
           </div>
         </div>
         <button className="sidebar-close" onClick={closeAdminSidebar}>
@@ -85,156 +81,147 @@ const AdminSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
-        {/* Dashboard */}
         <div className="sidebar-section">
           <Link to="/admin/dashboard" className={`sidebar-item ${isActive('/admin/dashboard') ? 'active' : ''}`} onClick={closeAdminSidebar}>
             <i className="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <span>{t("dashboard")}</span>
           </Link>
         </div>
 
-        {/* RESCATES - Prioridad alta */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/admin/rescates') ? 'active' : ''}`}
             onClick={() => toggleSection('rescates')}
           >
             <i className="fas fa-ambulance"></i>
-            <span>Rescates</span>
+            <span>{t("rescates")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
             <Link to="/admin/rescates" className={`submenu-item ${isActive('/admin/rescates') && !isActive('/admin/rescates/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-list"></i> Todos los rescates
+              <i className="fas fa-list"></i> {t("todos_rescates")}
             </Link>
             <Link to="/admin/rescates/pendientes" className={`submenu-item ${isActive('/admin/rescates/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-clock"></i> Pendientes
+              <i className="fas fa-clock"></i> {t("pendientes")}
               <span className="sidebar-badge urgent">!</span>
             </Link>
             <Link to="/admin/rescates/mapa" className={`submenu-item ${isActive('/admin/rescates/mapa') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-map-marker-alt"></i> Mapa de rescates
+              <i className="fas fa-map-marker-alt"></i> {t("mapa_rescates")}
             </Link>
           </div>
         </div>
 
-        {/* MASCOTAS */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/admin/mascotas') ? 'active' : ''}`}
             onClick={() => toggleSection('mascotas')}
           >
             <i className="fas fa-paw"></i>
-            <span>Mascotas</span>
+            <span>{t("mascotas")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
             <Link to="/admin/mascotas" className={`submenu-item ${isActive('/admin/mascotas') && !isActive('/admin/mascotas/nueva') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-list"></i> Todas las mascotas
+              <i className="fas fa-list"></i> {t("todas_mascotas")}
             </Link>
             <Link to="/admin/mascotas/nueva" className={`submenu-item ${isActive('/admin/mascotas/nueva') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-plus-circle"></i> Registrar mascota
+              <i className="fas fa-plus-circle"></i> {t("registrar_mascota")}
             </Link>
             <Link to="/admin/razas" className={`submenu-item ${isActive('/admin/razas') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-dna"></i> Catálogo de razas
+              <i className="fas fa-dna"></i> {t("catalogo_razas")}
             </Link>
           </div>
         </div>
 
-        {/* USUARIOS */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/admin/usuarios') ? 'active' : ''}`}
             onClick={() => toggleSection('usuarios')}
           >
             <i className="fas fa-users"></i>
-            <span>Usuarios</span>
+            <span>{t("usuarios")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.usuarios ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.usuarios ? 'open' : ''}`}>
             <Link to="/admin/usuarios" className={`submenu-item ${isActive('/admin/usuarios') && !isActive('/admin/usuarios/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-users"></i> Todos los usuarios
+              <i className="fas fa-users"></i> {t("todos_usuarios")}
             </Link>
-            {/* 🔥 NUEVO: Usuarios Pendientes */}
             <Link to="/admin/usuarios/pendientes" className={`submenu-item ${isActive('/admin/usuarios/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-clock"></i> Pendientes de aprobación
+              <i className="fas fa-clock"></i> {t("pendientes_aprobacion")}
               {pendingCount > 0 && (
                 <span className="sidebar-badge urgent">{pendingCount}</span>
               )}
             </Link>
             <Link to="/admin/usuarios/fundaciones" className={`submenu-item ${isActive('/admin/usuarios/fundaciones') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-building"></i> Fundaciones
+              <i className="fas fa-building"></i> {t("fundaciones")}
             </Link>
             <Link to="/admin/usuarios/veterinarias" className={`submenu-item ${isActive('/admin/usuarios/veterinarias') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-clinic-medical"></i> Veterinarias
+              <i className="fas fa-clinic-medical"></i> {t("veterinarias")}
             </Link>
           </div>
         </div>
 
-        {/* ADOPCIONES */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/admin/adopciones') ? 'active' : ''}`}
             onClick={() => toggleSection('adopciones')}
           >
             <i className="fas fa-heart"></i>
-            <span>Adopciones</span>
+            <span>{t("adopciones")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.adopciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.adopciones ? 'open' : ''}`}>
             <Link to="/admin/adopciones" className={`submenu-item ${isActive('/admin/adopciones') && !isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-list"></i> Todas las adopciones
+              <i className="fas fa-list"></i> {t("todas_adopciones")}
             </Link>
             <Link to="/admin/adopciones/solicitudes" className={`submenu-item ${isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-clipboard-list"></i> Solicitudes pendientes
+              <i className="fas fa-clipboard-list"></i> {t("solicitudes_pendientes")}
               <span className="sidebar-badge">5</span>
             </Link>
             <Link to="/admin/adopciones/seguimientos" className={`submenu-item ${isActive('/admin/adopciones/seguimientos') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-chart-line"></i> Seguimientos
+              <i className="fas fa-chart-line"></i> {t("seguimientos")}
             </Link>
           </div>
         </div>
 
-        {/* EVENTOS */}
         <div className="sidebar-section">
           <div 
             className={`sidebar-item has-submenu ${isActive('/admin/eventos') ? 'active' : ''}`}
             onClick={() => toggleSection('eventos')}
           >
             <i className="fas fa-calendar-alt"></i>
-            <span>Eventos</span>
+            <span>{t("eventos")}</span>
             <i className={`fas fa-chevron-right arrow ${openSections.eventos ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.eventos ? 'open' : ''}`}>
             <Link to="/admin/eventos" className={`submenu-item ${isActive('/admin/eventos') && !isActive('/admin/eventos/crear') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-list"></i> Todos los eventos
+              <i className="fas fa-list"></i> {t("todos_eventos")}
             </Link>
             <Link to="/admin/eventos/crear" className={`submenu-item ${isActive('/admin/eventos/crear') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-plus-circle"></i> Crear evento
+              <i className="fas fa-plus-circle"></i> {t("crear_evento")}
             </Link>
             <Link to="/admin/eventos/calendario" className={`submenu-item ${isActive('/admin/eventos/calendario') ? 'active' : ''}`} onClick={closeAdminSidebar}>
-              <i className="fas fa-calendar-week"></i> Calendario
+              <i className="fas fa-calendar-week"></i> {t("calendario")}
             </Link>
           </div>
         </div>
 
-        {/* DONACIONES */}
         <div className="sidebar-section">
           <Link to="/admin/donaciones" className={`sidebar-item ${isActive('/admin/donaciones') ? 'active' : ''}`} onClick={closeAdminSidebar}>
             <i className="fas fa-hand-holding-heart"></i>
-            <span>Donaciones</span>
+            <span>{t("donaciones")}</span>
           </Link>
         </div>
       </nav>
 
-      {/* Footer */}
       <div className="sidebar-footer">
         <Link to="/admin/perfil" className="sidebar-item" onClick={closeAdminSidebar}>
           <i className="fas fa-user-shield"></i>
-          <span>Mi Perfil</span>
+          <span>{t("mi_perfil")}</span>
         </Link>
         <button onClick={handleLogout} className="sidebar-item logout-item">
           <i className="fas fa-sign-out-alt"></i>
-          <span>Cerrar Sesión</span>
+          <span>{t("cerrar_sesion")}</span>
         </button>
       </div>
     </aside>

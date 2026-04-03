@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://rescatando-mascotas-forever.test/api';
+// En desarrollo usar rutas relativas para que el proxy de Vite funcione
+// En producción usar la URL completa
+const API_URL = import.meta.env.DEV ? '/api' : (import.meta.env.VITE_API_URL || 'http://rescatando-mascotas-forever.test/api');
 
 // Cliente para rutas que NO necesitan autenticación
 export const publicApi = axios.create({

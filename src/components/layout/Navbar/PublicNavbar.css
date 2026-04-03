@@ -13,7 +13,7 @@
   right: 0;
   height: 70px;
   background: var(--navbar-bg);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: #3333333a 1px solid;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -275,6 +275,7 @@
 .language-selector {
   position: relative;
   margin-left: 1rem;
+  
 }
 
 .language-selector-btn {
@@ -327,7 +328,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  z-index: 1000;
+  z-index: 1001;
   animation: dropdownFadeIn 0.2s ease;
 }
 

@@ -92,5 +92,30 @@
       "imagen_muy_grande": "Image cannot exceed 2MB",
       "archivo_invalido": "File must be an image"
     }
-  }
+  },
+
+  "pendientes_titulo": "Pending Requests",
+  "pendientes_descripcion": "Review and approve foundation and veterinary requests",
+  "sin_solicitudes": "No pending requests",
+  "sin_solicitudes_desc": "All foundations and veterinary clinics have been reviewed",
+  "actualizar": "Refresh",
+  "cargando": "Loading pending requests...",
+  "mostrando": "Showing",
+  "de": "of",
+  "solicitudes": "requests",
+  "fundacion": "Foundation",
+  "veterinaria": "Veterinary",
+  "representante": "Representative",
+  "documento": "Document",
+  "fecha_solicitud": "Request date",
+  "aprobar": "Approve",
+  "rechazar": "Reject",
+  "aprobado_exito": "User successfully approved",
+  "rechazado_exito": "User rejected",
+  "error_carga": "Error loading pending users",
+  "error_aprobar": "Error approving user",
+  "error_rechazar": "Error rejecting user",
+  "capacidad": "Maximum capacity",
+  "servicios_ofrecidos": "Services offered"
+
 }

@@ -9,6 +9,7 @@ export default defineConfig({
       '/api': {
         target: 'http://rescatando-mascotas-forever.test',
         changeOrigin: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
