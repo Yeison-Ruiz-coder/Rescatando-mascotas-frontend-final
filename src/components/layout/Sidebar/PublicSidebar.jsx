@@ -132,17 +132,13 @@ const PublicSidebar = () => {
               <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
             </div>
             <Link
-              to="/mis-solicitudes"
-              className={`sidebar-item ${isActive("/mis-solicitudes") ? "active" : ""}`}
+              to="/user/mis-solicitudes"
+              className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
               onClick={closePublicSidebar}
             >
               <i className="fas fa-clipboard-list"></i>
               <span>{t("mis_solicitudes")}</span>
             </Link>
-            <button onClick={handleLogout} className="sidebar-item logout-item">
-              <i className="fas fa-sign-out-alt"></i>
-              <span>{t("cerrar_sesion")}</span>
-            </button>
           </div>
         )}
       </nav>

@@ -93,7 +93,7 @@ const Footer = () => {
         return {
           servicios: [
             { label: t("footer.links.mi_panel"), path: "/dashboard" },
-            { label: t("footer.links.mis_solicitudes"), path: "/mis-solicitudes" },
+            { label: t("footer.links.mis_solicitudes"), path: "/user/mis-solicitudes" },
             { label: t("footer.links.mis_donaciones"), path: "/donaciones" },
             { label: t("footer.links.mi_perfil"), path: "/perfil" },
           ],

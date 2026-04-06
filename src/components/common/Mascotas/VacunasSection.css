@@ -1,0 +1,151 @@
+/* src/components/common/Mascotas/VacunasSection.css */
+
+.vacunas-section-compact {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+
+/* Estado de vacunas */
+.estado-vacunas {
+  margin-bottom: 8px;
+}
+
+.vacunas-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vacunas-header i {
+  font-size: 20px;
+  color: var(--color-primary, #667eea);
+  width: 32px;
+}
+
+.vacunas-header div {
+  flex: 1;
+}
+
+.vacunas-header small {
+  display: block;
+  font-size: 11px;
+  color: #718096;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vacunas-header strong {
+  font-size: 14px;
+  color: var(--color-primary, #667eea);
+}
+
+/* Lista de vacunas */
+.vacunas-lista {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Tarjeta de cada vacuna */
+.vacuna-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: white;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.vacuna-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Colores por tipo de vacuna */
+.vacuna-card.rabia {
+  border-left: 3px solid #e74c3c;
+}
+
+.vacuna-card.parvovirus {
+  border-left: 3px solid #f39c12;
+}
+
+.vacuna-card.moquillo {
+  border-left: 3px solid #3498db;
+}
+
+.vacuna-card.default {
+  border-left: 3px solid var(--color-primary, #667eea);
+}
+
+/* Icono de la vacuna */
+.vacuna-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.vacuna-icon i {
+  font-size: 16px;
+  color: var(--color-primary, #667eea);
+}
+
+/* Información de la vacuna */
+.vacuna-info {
+  flex: 1;
+}
+
+.vacuna-info strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 4px;
+}
+
+.vacuna-fecha, .vacuna-proxima {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #718096;
+  margin-right: 12px;
+}
+
+.vacuna-fecha i, .vacuna-proxima i {
+  font-size: 10px;
+  color: var(--color-primary, #667eea);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vacunas-section-compact {
+    padding: 10px 12px;
+  }
+  
+  .vacuna-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .vacuna-icon {
+    margin-bottom: 4px;
+  }
+  
+  .vacuna-fecha, .vacuna-proxima {
+    display: block;
+    margin: 4px 0;
+  }
+}

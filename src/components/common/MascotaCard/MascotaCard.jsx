@@ -64,16 +64,10 @@ const MascotaCard = ({
         
         <div className="card-buttons">
           <Link
-            to={`/mascotas/${id}`}
+            to={`/mascota/${id}`}
             className="btn-card btn-card-outline"
           >
             <i className="fas fa-heart"></i> {t('conocer_mas')}
-          </Link>
-          <Link
-            to={`/solicitar-adopcion/${id}`}
-            className="btn-card btn-card-primary"
-          >
-            <i className="fas fa-home"></i> {t('adoptar')}
           </Link>
         </div>
       </div>

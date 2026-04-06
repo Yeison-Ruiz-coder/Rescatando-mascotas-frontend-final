@@ -1,0 +1,268 @@
+/* src/components/common/Mascotas/ModalFundacion.css */
+
+.modal-overlay-fundacion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-container-fundacion {
+  background: white;
+  border-radius: 32px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow: hidden;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header-fundacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.modal-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-titulo i {
+  font-size: 24px;
+}
+
+.modal-titulo h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modal-close-fundacion {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.modal-close-fundacion:hover {
+  transform: scale(1.1);
+}
+
+.modal-body-fundacion {
+  padding: 24px;
+  overflow-y: auto;
+  max-height: calc(85vh - 130px);
+}
+
+.fundacion-banner {
+  width: 100%;
+  height: 150px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.fundacion-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fundacion-descripcion-modal,
+.fundacion-mision-vision,
+.contacto-detallado,
+.redes-sociales {
+  margin-bottom: 24px;
+}
+
+.fundacion-descripcion-modal h3,
+.contacto-detallado h3,
+.redes-sociales h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.fundacion-mision-vision {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mision, .vision {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 16px;
+}
+
+.mision h4, .vision h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: var(--color-primary);
+}
+
+.mision p, .vision p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.contacto-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contacto-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contacto-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateX(4px);
+}
+
+.contacto-item i {
+  width: 24px;
+  font-size: 18px;
+  color: var(--color-primary);
+}
+
+.contacto-item strong {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.contacto-item p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.redes-lista {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.red-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.red-link.facebook {
+  background: #1877f2;
+  color: white;
+}
+
+.red-link.instagram {
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  color: white;
+}
+
+.red-link.twitter {
+  background: #1da1f2;
+  color: white;
+}
+
+.red-link.whatsapp {
+  background: #25d366;
+  color: white;
+}
+
+.red-link:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.modal-footer-fundacion {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border);
+  background: #f8fafc;
+}
+
+.btn-cerrar, .btn-llamar {
+  flex: 1;
+  padding: 12px;
+  border-radius: 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cerrar {
+  background: white;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-llamar {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+}
+
+.btn-llamar:hover, .btn-cerrar:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .modal-container-fundacion {
+    width: 95%;
+  }
+  
+  .fundacion-mision-vision {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-header-fundacion {
+    padding: 16px;
+  }
+  
+  .modal-body-fundacion {
+    padding: 16px;
+  }
+}

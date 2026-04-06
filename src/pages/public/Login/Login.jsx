@@ -45,7 +45,7 @@ const Login = () => {
       case 'fundacion':
         return '/fundacion/dashboard';
       default:
-        return '/user/dashboard';
+        return '/';
     }
   };
 

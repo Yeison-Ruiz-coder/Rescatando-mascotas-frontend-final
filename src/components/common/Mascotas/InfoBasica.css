@@ -1,0 +1,157 @@
+/* src/components/common/Mascotas/InfoBasica.css */
+
+.info-basica {
+  margin-bottom: 24px;
+}
+
+.estado-badge {
+  margin-bottom: 16px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.badge.adopcion { 
+  background: linear-gradient(135deg, #2ecc71, #27ae60); 
+  color: white; 
+}
+
+.badge.adoptado { 
+  background: #95a5a6; 
+  color: white; 
+}
+
+.badge.rescatada { 
+  background: linear-gradient(135deg, #ff8c42, #ff6b9d); 
+  color: white; 
+}
+
+.badge.acogida { 
+  background: linear-gradient(135deg, #667eea, #764ba2); 
+  color: white; 
+}
+
+.nombre-mascota {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.info-resumen {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.info-item i {
+  color: var(--color-primary);
+  width: 20px;
+  font-size: 16px;
+}
+
+.descripcion {
+  margin-bottom: 24px;
+}
+
+.descripcion h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.descripcion p {
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.lugar-rescate {
+  margin-bottom: 24px;
+}
+
+.lugar-rescate h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.fechas {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 16px;
+  margin-top: 16px;
+}
+
+.fecha-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.fecha-item i {
+  color: var(--color-primary);
+}
+
+.razas-section {
+  margin-bottom: 24px;
+}
+
+.razas-section h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.razas-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.raza-tag {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .nombre-mascota {
+    font-size: 24px;
+  }
+  
+  .info-resumen {
+    gap: 16px;
+  }
+  
+  .fechas {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

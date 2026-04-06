@@ -19,8 +19,16 @@ import FundacionRoute from './FundacionRoute';
 // =============================================================
 import Home from '../pages/public/Home/Home';
 import Login from '../pages/public/Login/Login';
+import MascotaDetalle from '../pages/public/MascotaDetalle/MascotaDetalle';
 import Register from '../pages/public/Register/Register';
 import Mascotas from '../pages/public/Mascotas/Mascotas';
+import SolicitarAdopcion from '../pages/public/SolicitarAdopcion/SolicitarAdopcion';
+import SolicitudExitosa from '../pages/public/SolicitarAdopcion/SolicitudExitosa';
+
+// =============================================================
+// PÁGINAS DE USUARIO
+// =============================================================
+import Solicitudes from '../pages/user/Solicitudes/Solicitudes';
 
 // =============================================================
 // PÁGINAS ADMIN (LAS QUE YA TIENES CREADAS)
@@ -91,7 +99,6 @@ const ReportarRescate = () => <div style={{ color: 'white', padding: '2rem' }}>R
 // Placeholders para usuario
 const UserDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Usuario - Próximamente</div>;
 const UserProfile = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Perfil - Próximamente</div>;
-const UserSolicitudes = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Solicitudes - Próximamente</div>;
 const UserCarrito = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Carrito - Próximamente</div>;
 const UserPedidos = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Pedidos - Próximamente</div>;
 const UserDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Donaciones - Próximamente</div>;
@@ -131,8 +138,13 @@ const NotFound = () => {
 
   const goHome = () => {
     if (isAuthenticated) {
-      // Si está autenticado, va a su dashboard según rol
-      navigate(getDashboardPath());
+      // Si es admin, veterinaria o fundacion, va a su dashboard
+      if (user?.tipo === 'admin' || user?.tipo === 'veterinaria' || user?.tipo === 'fundacion') {
+        navigate(getDashboardPath());
+      } else {
+        // Si es usuario normal, va al home público
+        navigate('/');
+      }
     } else {
       // Si no está autenticado, va al home público
       navigate('/');
@@ -142,12 +154,10 @@ const NotFound = () => {
   // Determinar el texto del botón según el rol
   const getButtonText = () => {
     if (!isAuthenticated) return 'Volver al inicio';
-    switch(user?.tipo) {
-      case 'admin': return 'Ir al Panel Admin';
-      case 'veterinaria': return 'Ir a mi Clínica';
-      case 'fundacion': return 'Ir a mi Fundación';
-      default: return 'Ir a mi Panel';
-    }
+    if (user?.tipo === 'admin') return 'Ir al Panel Admin';
+    if (user?.tipo === 'veterinaria') return 'Ir a mi Clínica';
+    if (user?.tipo === 'fundacion') return 'Ir a mi Fundación';
+    return 'Volver al inicio';
   };
 
   return (
@@ -231,6 +241,9 @@ const router = createBrowserRouter([
       { path: 'adopciones', element: <Adopciones /> },
       { path: 'fundaciones', element: <Fundaciones /> },
       { path: 'veterinarias', element: <Veterinarias /> },
+      { path: 'mascota/:id', element: <MascotaDetalle /> },
+      { path: 'solicitar-adopcion/:id', element: <SolicitarAdopcion /> },
+      { path: 'adopcion-exitosa/:id', element: <SolicitudExitosa /> },
       { path: 'eventos', element: <Eventos /> },
       { path: 'tienda', element: <Tienda /> },
       { path: 'rescates/reportar', element: <ReportarRescate /> },
@@ -249,7 +262,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="/user/dashboard" replace /> },
           { path: 'dashboard', element: <UserDashboard /> },
           { path: 'perfil', element: <UserProfile /> },
-          { path: 'mis-solicitudes', element: <UserSolicitudes /> },
+          { path: 'mis-solicitudes', element: <Solicitudes /> },
           { path: 'carrito', element: <UserCarrito /> },
           { path: 'pedidos', element: <UserPedidos /> },
           { path: 'donaciones', element: <UserDonaciones /> },
