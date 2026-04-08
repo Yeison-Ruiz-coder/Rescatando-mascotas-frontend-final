@@ -49,5 +49,9 @@
   "mascotas_disponibles": "Mascotas Disponibles",
   "mascotas_subtitle": "Conoce las mascotas esperando su hogar para siempre",
   "sin_mascotas": "No hay mascotas disponibles en este momento. ¡Vuelve pronto!",
-  "ver_todas": "Ver Todas las Mascotas"
+  "ver_todas": "Ver Todas las Mascotas",
+
+  
+  "proceso.title": "Nuestro Proceso de Adopción",
+  "proceso.subtitle": "Pasos simples para encontrar tu nuevo mejor amigo"
 }

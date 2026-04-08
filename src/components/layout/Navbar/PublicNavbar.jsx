@@ -48,18 +48,16 @@ const PublicNavbar = () => {
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
-  // Determinar qué dashboard mostrar según el rol
   const getDashboardPath = () => {
     if (!user) return '/';
     switch(user.tipo) {
       case 'admin': return '/admin/dashboard';
       case 'veterinaria': return '/veterinaria/dashboard';
       case 'fundacion': return '/fundacion/dashboard';
-      default: return '/user/dashboard';
+      default: return '/';
     }
   };
 
-  // Determinar la ruta de configuración según el rol
   const getConfigPath = () => {
     if (!user) return '/';
     switch(user.tipo) {
@@ -70,7 +68,6 @@ const PublicNavbar = () => {
     }
   };
 
-  // Determinar la ruta de perfil según el rol
   const getProfilePath = () => {
     if (!user) return '/';
     switch(user.tipo) {
@@ -81,47 +78,41 @@ const PublicNavbar = () => {
     }
   };
 
-  // Determinar la ruta de inicio según el rol (para el logo)
   const getHomePath = () => {
     if (!isAuthenticated) return '/';
     return getDashboardPath();
   };
 
-  // Determinar qué badge mostrar
   const getRoleBadge = () => {
     if (!user) return null;
     switch(user.tipo) {
-      case 'admin': return { text: 'Admin', path: '/admin/dashboard', color: '#ff4757' };
+      case 'admin': return { text: t('navbar.admin'), path: '/admin/dashboard', color: '#ff4757' };
       default: return null;
     }
   };
 
   const roleBadge = getRoleBadge();
 
-  // Manejar clic en el logo
   const handleLogoClick = (e) => {
     e.preventDefault();
-    const homePath = getHomePath();
-    navigate(homePath);
+    navigate(getHomePath());
   };
 
-  // Determinar si debe mostrar el botón de reportar rescate
   const showReportButton = () => {
     if (!isAuthenticated) return true;
     if (user?.tipo === 'user') return true;
     return false;
   };
 
-  // Obtener las opciones del menú de perfil según el rol
   const getProfileMenuItems = () => {
     const items = [
-      { icon: 'fas fa-user', label: 'Mi Perfil', path: getProfilePath() },
-      { icon: 'fas fa-tachometer-alt', label: 'Mi Panel', path: getDashboardPath() },
-      { icon: 'fas fa-cog', label: 'Configuración', path: getConfigPath() }  // 🔥 NUEVO: Configuración
+      { icon: 'fas fa-user', label: t('navbar.profile'), path: getProfilePath() },
+      { icon: 'fas fa-tachometer-alt', label: t('navbar.dashboard'), path: getDashboardPath() },
+      { icon: 'fas fa-cog', label: t('navbar.settings'), path: getConfigPath() }
     ];
     
     if (user?.tipo === 'admin') {
-      items.push({ icon: 'fas fa-shield-alt', label: 'Administración', path: '/admin/dashboard' });
+      items.push({ icon: 'fas fa-shield-alt', label: t('navbar.admin_panel'), path: '/admin/dashboard' });
     }
     
     return items;
@@ -147,7 +138,12 @@ const PublicNavbar = () => {
           style={{ cursor: 'pointer' }}
         >
           <img src="/img/logo-oscuro.png" alt="Logo" className="public-navbar-logo" />
-          <img src="/img/texto-logo-oscuro.png" alt="Rescatando Mascotas" className="public-navbar-logo-texto" />
+
+          {/* 🔥 TEXTO DINÁMICO EN VEZ DE IMAGEN */}
+          <div className="public-navbar-logo-texto">
+            <span className="logo-title">{t('navbar.logo_title')}</span>
+            <span className="logo-subtitle">{t('navbar.logo_subtitle')}</span>
+          </div>
         </div>
 
         {/* Botón de reportar rescate */}
@@ -166,7 +162,7 @@ const PublicNavbar = () => {
           </Link>
         )}
 
-        {/* Perfil de usuario con menú desplegable */}
+        {/* Perfil */}
         {isAuthenticated ? (
           <div className="profile-menu" ref={profileMenuRef}>
             <button 
@@ -179,9 +175,9 @@ const PublicNavbar = () => {
               <div className="public-profile-info">
                 <span className="public-profile-name">{user?.nombre}</span>
                 <span className="public-profile-role">
-                  {user?.tipo === 'admin' ? 'Administrador' : 
-                   user?.tipo === 'veterinaria' ? 'Veterinaria' :
-                   user?.tipo === 'fundacion' ? 'Fundación' : 'Usuario'}
+                  {user?.tipo === 'admin' ? t('navbar.role_admin') : 
+                   user?.tipo === 'veterinaria' ? t('navbar.role_vet') :
+                   user?.tipo === 'fundacion' ? t('navbar.role_foundation') : t('navbar.role_user')}
                 </span>
               </div>
               <i className={`fas fa-chevron-down profile-arrow ${isProfileMenuOpen ? 'open' : ''}`}></i>
@@ -203,7 +199,7 @@ const PublicNavbar = () => {
                 <div className="dropdown-divider"></div>
                 <button onClick={handleLogout} className="profile-dropdown-item logout-item">
                   <i className="fas fa-sign-out-alt"></i>
-                  <span>Cerrar Sesión</span>
+                  <span>{t('navbar.logout')}</span>
                 </button>
               </div>
             )}
@@ -218,7 +214,7 @@ const PublicNavbar = () => {
           </Link>
         )}
 
-        {/* Selector de idioma */}
+        {/* Idioma */}
         <div className="language-selector" ref={languageMenuRef}>
           <button className="language-selector-btn" onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}>
             <span className={`fi fi-${currentLanguage.flag}`}></span>
@@ -232,7 +228,6 @@ const PublicNavbar = () => {
                 <button key={lang.code} onClick={() => toggleLanguage(lang.code)} className={`language-dropdown-item ${i18n.language === lang.code ? 'active' : ''}`}>
                   <span className={`fi fi-${lang.flag}`}></span>
                   <span className="language-name">{lang.name}</span>
-                  {i18n.language === lang.code && <i className="fas fa-check language-check"></i>}
                 </button>
               ))}
             </div>

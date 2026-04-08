@@ -214,16 +214,6 @@ const AdminSidebar = () => {
         </div>
       </nav>
 
-      <div className="sidebar-footer">
-        <Link to="/admin/perfil" className="sidebar-item" onClick={closeAdminSidebar}>
-          <i className="fas fa-user-shield"></i>
-          <span>{t("mi_perfil")}</span>
-        </Link>
-        <button onClick={handleLogout} className="sidebar-item logout-item">
-          <i className="fas fa-sign-out-alt"></i>
-          <span>{t("cerrar_sesion")}</span>
-        </button>
-      </div>
     </aside>
   );
 };

@@ -8,7 +8,19 @@
     "administrador": "Administrador",
     "usuario": "Usuario",
     "invitado": "Invitado",
-    "bienvenido": "Bienvenido"
+    "bienvenido": "Bienvenido",
+    "logo_title": "Rescatando Mascotas Forever",
+    "logo_subtitle": "Sanando su historia.",
+    "profile": "Mi Perfil",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión",
+    "dashboard": "Mi Panel",
+    "admin_panel": "Administración",
+    "admin": "Admin",
+    "role_admin": "Administrador",
+    "role_vet": "Veterinaria",
+    "role_foundation": "Fundación",
+    "role_user": "Usuario"
   },
   "sidebar": {
     "acciones_principales": "ACCIONES PRINCIPALES",
@@ -75,7 +87,7 @@
     "logo_alt": "Logo de Rescatando Mascotas Forever",
     "logo_text_alt": "Rescatando Mascotas Forever - Salvando vidas"
   },
-
+  
 
   "dashboard": "Dashboard",
   "rescates": "Rescates",
@@ -127,5 +139,32 @@
   "mi_cuenta": "Mi cuenta",
   "mis_solicitudes": "Mis solicitudes",
   "bienvenido": "Bienvenido",
-  "invitado": "Invitado"
+  "invitado": "Invitado",
+
+
+
+
+  "admin_navbar": {
+    "brand_title": "Rescatando",
+    "brand_subtitle": "Panel Admin",
+    "language_selector": {
+      "spanish": "Español",
+      "english": "Inglés"
+    },
+    "user_menu": {
+      "my_profile": "Mi Perfil",
+      "settings": "Configuración",
+      "logout": "Cerrar Sesión",
+      "admin_role": "Administrador",
+      "foundation_role": "Fundación",
+      "veterinary_role": "Veterinaria",
+      "user_role": "Administrador"
+    },
+    "aria": {
+      "toggle_menu": "Abrir/cerrar menú",
+      "select_language": "Seleccionar idioma",
+      "user_menu": "Menú de usuario"
+    }
+  }
+
 }

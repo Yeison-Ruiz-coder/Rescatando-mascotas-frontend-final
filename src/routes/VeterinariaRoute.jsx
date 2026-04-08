@@ -2,6 +2,7 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner/LoadingSpinner';
+import DebugAuth from '../components/common/DebugAuth';
 
 const VeterinariaRoute = () => {
   const { isAuthenticated, user, loading } = useAuth();
@@ -17,6 +18,7 @@ const VeterinariaRoute = () => {
       }}>
         <LoadingSpinner />
         <p style={{ marginLeft: '10px', color: '#fff' }}>Cargando...</p>
+        <DebugAuth />
       </div>
     );
   }

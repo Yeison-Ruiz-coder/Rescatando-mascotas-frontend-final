@@ -1,0 +1,344 @@
+/* src/components/fundacion/MascotaCardFundacion/MascotaCardFundacion.css */
+
+.mascota-card-fundacion {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mascota-card-fundacion:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge de estado */
+.estado-badge-fundacion {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.estado-badge-fundacion i {
+  font-size: 0.6rem;
+}
+
+.estado-adopcion {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+}
+
+.estado-adoptado {
+  background: rgba(158, 158, 158, 0.9);
+  color: white;
+}
+
+.estado-rescatada {
+  background: rgba(255, 152, 0, 0.9);
+  color: white;
+}
+
+.estado-acogida {
+  background: rgba(33, 150, 243, 0.9);
+  color: white;
+}
+
+/* Imagen */
+.card-image-fundacion {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  flex-shrink: 0;
+}
+
+.card-image-fundacion img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.mascota-card-fundacion:hover .card-image-fundacion img {
+  transform: scale(1.05);
+}
+
+.image-placeholder-fundacion {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.8);
+  gap: 6px;
+}
+
+.image-placeholder-fundacion i {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+.image-placeholder-fundacion span {
+  font-size: 0.7rem;
+}
+
+/* Overlay */
+.image-overlay-fundacion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.card-image-fundacion:hover .image-overlay-fundacion {
+  opacity: 1;
+}
+
+.overlay-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #667eea;
+}
+
+.overlay-btn:hover {
+  transform: scale(1.1);
+  background: #667eea;
+  color: white;
+}
+
+.overlay-btn.delete:hover {
+  background: #f44336;
+  color: white;
+}
+
+/* Contenido - Se expande para llenar */
+.card-content-fundacion {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header-fundacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.card-title-fundacion {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.card-id-fundacion {
+  font-size: 0.6rem;
+  color: #999;
+  font-family: monospace;
+}
+
+/* Detalles */
+.card-details-fundacion {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.detail-item i {
+  width: 16px;
+  color: #667eea;
+  font-size: 0.65rem;
+}
+
+.detail-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Descripción */
+.card-description-fundacion {
+  color: #666;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Selector de estado */
+.estado-selector-fundacion {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  position: relative;
+}
+
+.estado-selector-fundacion label {
+  display: block;
+  font-size: 0.6rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.estado-select-fundacion {
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.estado-select-fundacion:hover {
+  border-color: #667eea;
+}
+
+.estado-select-fundacion:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.estado-loading {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #667eea;
+  font-size: 0.7rem;
+}
+
+/* Botones de acción */
+.card-actions-fundacion {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.action-btn-fundacion {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.action-btn-fundacion.view {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.action-btn-fundacion.edit {
+  background: #ff9800;
+  color: white;
+}
+
+.action-btn-fundacion.delete {
+  background: #f44336;
+  color: white;
+}
+
+.action-btn-fundacion:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
+
+.action-btn-fundacion:active {
+  transform: translateY(0);
+}
+
+.action-btn-fundacion:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-image-fundacion {
+    height: 180px;
+  }
+  
+  .card-details-fundacion {
+    grid-template-columns: 1fr;
+  }
+  
+  .card-actions-fundacion {
+    flex-direction: column;
+  }
+  
+  .action-btn-fundacion {
+    padding: 0.5rem;
+  }
+}

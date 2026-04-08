@@ -1,12 +1,9 @@
 import api from './api';
 
 const authService = {
-  // Login (sin CSRF)
+  // Login
   login: async (credentials) => {
     try {
-      // Comenta o elimina esta línea si no tienes la ruta
-      // await api.get('/sanctum/csrf-cookie');
-      
       const response = await api.post('/auth/login', credentials);
       
       if (response.data.success && response.data.data.token) {
@@ -35,12 +32,9 @@ const authService = {
     }
   },
 
-  // Register (sin CSRF)
+  // Register
   register: async (userData) => {
     try {
-      // Comenta o elimina esta línea si no tienes la ruta
-      // await api.get('/sanctum/csrf-cookie');
-      
       const response = await api.post('/auth/register', userData);
       
       if (response.data.success && response.data.data.token) {
@@ -84,6 +78,13 @@ const authService = {
     }
   },
 
+  // 👇 MÉTODOS FALTANTES 👇
+  
+  // Obtener el token actual
+  getToken: () => {
+    return localStorage.getItem('auth_token');
+  },
+
   // Obtener usuario actual
   getCurrentUser: () => {
     const userStr = localStorage.getItem('user');
@@ -93,6 +94,20 @@ const authService = {
   // Verificar si está autenticado
   isAuthenticated: () => {
     return !!localStorage.getItem('auth_token');
+  },
+
+  // Verificar token con el backend
+  verifyToken: async () => {
+    const token = authService.getToken();
+    if (!token) return false;
+    
+    try {
+      const response = await api.get('/user/profile');
+      return response.data.success;
+    } catch (error) {
+      console.error('Error verifying token:', error);
+      return false;
+    }
   }
 };
 

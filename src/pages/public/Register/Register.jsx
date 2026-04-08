@@ -1,10 +1,9 @@
 // src/pages/public/Register/Register.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
 import Button from "../../../components/common/Button/Button";
-import Input from "../../../components/common/Input/Input";
 import { toast } from "react-toastify";
 import "./Register.css";
 
@@ -32,66 +31,181 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [selectedType, setSelectedType] = useState("user");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
-  const validateStep = () => {
-    const newErrors = {};
+  // Validación de email en tiempo real con API
+  const checkEmailExists = async (email) => {
+    if (!email || !validateEmail(email)) return false;
+    
+    try {
+      const response = await fetch(`http://localhost:8000/api/auth/check-email?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      return data.exists;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
+  };
 
-    switch (currentStep) {
-      case 1:
-        break;
-      case 2:
-        if (!formData.nombre.trim()) {
-          newErrors.nombre = t("nombre_requerido");
-        }
-        if (!formData.email.trim()) {
-          newErrors.email = t("email_requerido");
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = t("email_invalido");
-        }
-        break;
-      case 3:
-        if (!formData.password) {
-          newErrors.password = t("contraseña_requerida");
-        } else if (formData.password.length < 8) {
-          newErrors.password = t("contraseña_corta");
-        }
-        if (formData.password !== formData.password_confirmation) {
-          newErrors.password_confirmation = t("contraseñas_no_coinciden");
-        }
-        break;
-      case 4:
-        if (selectedType === "fundacion" || selectedType === "veterinaria") {
-          if (!formData.nombre_entidad && !formData.nombre) {
-            newErrors.nombre_entidad = t("nombre_entidad_requerido");
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone) => {
+    if (!phone) return true;
+    const phoneRegex = /^[0-9]{7,15}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // Efecto para validar email en tiempo real
+  useEffect(() => {
+    if (touched.email && formData.email) {
+      const timeoutId = setTimeout(async () => {
+        if (!validateEmail(formData.email)) {
+          setErrors(prev => ({ ...prev, email: t('email_invalido') }));
+        } else {
+          setIsCheckingEmail(true);
+          const exists = await checkEmailExists(formData.email);
+          setIsCheckingEmail(false);
+          if (exists) {
+            setErrors(prev => ({ ...prev, email: t('email_registrado') }));
+          } else {
+            setErrors(prev => ({ ...prev, email: "" }));
           }
-          if (!formData.direccion) {
-            newErrors.direccion = t("direccion_requerida");
-          }
-          if (!formData.registro_sanitario) {
-            newErrors.registro_sanitario = selectedType === "fundacion" 
-              ? t("nit_requerido") 
-              : t("registro_sanitario_requerido");
-          }
+        }
+      }, 500);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [formData.email]);
+
+  useEffect(() => {
+    if (touched.password && formData.password) {
+      validateField("password", formData.password);
+    }
+    if (touched.password_confirmation && formData.password_confirmation) {
+      validateField("password_confirmation", formData.password_confirmation);
+    }
+  }, [formData.password, formData.password_confirmation]);
+
+  const validateField = (field, value) => {
+    let error = "";
+    
+    switch (field) {
+      case "nombre":
+        if (!value.trim()) {
+          error = t('nombre_requerido');
+        } else if (value.length < 2) {
+          error = t('nombre_minimo');
+        }
+        break;
+      case "email":
+        if (!value.trim()) {
+          error = t('email_requerido');
+        } else if (!validateEmail(value)) {
+          error = t('email_invalido');
+        }
+        break;
+      case "telefono":
+        if (value && !validatePhone(value)) {
+          error = t('telefono_invalido');
+        }
+        break;
+      case "password":
+        if (!value) {
+          error = t('contraseña_requerida');
+        } else if (value.length < 8) {
+          error = t('contraseña_corta');
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+          error = t('contraseña_invalida');
+        }
+        break;
+      case "password_confirmation":
+        if (value !== formData.password) {
+          error = t('contraseñas_no_coinciden');
+        }
+        break;
+      case "nombre_entidad":
+        if (!value.trim()) {
+          error = selectedType === "fundacion" ? t('nombre_fundacion_requerido') : t('nombre_veterinaria_requerido');
+        }
+        break;
+      case "direccion":
+        if (!value.trim()) {
+          error = t('direccion_requerida');
+        }
+        break;
+      case "registro_sanitario":
+        if (!value.trim()) {
+          error = selectedType === "fundacion" ? t('nit_requerido_error') : t('registro_sanitario_requerido_error');
+        } else if (value.length < 3) {
+          error = selectedType === "fundacion" ? t('nit_minimo') : t('registro_sanitario_minimo');
         }
         break;
       default:
         break;
     }
+    
+    setErrors(prev => ({ ...prev, [field]: error }));
+    return !error;
+  };
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleBlur = (field) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    validateField(field, formData[field]);
+  };
+
+  const validateStep = () => {
+    let isValid = true;
+    const fieldsToValidate = [];
+    
+    switch (currentStep) {
+      case 1:
+        if (!selectedType) {
+          toast.error(t('error_tipo_cuenta'));
+          isValid = false;
+        }
+        break;
+      case 2:
+        fieldsToValidate.push("nombre", "email");
+        if (formData.telefono) fieldsToValidate.push("telefono");
+        break;
+      case 3:
+        fieldsToValidate.push("password", "password_confirmation");
+        break;
+      case 4:
+        if (selectedType === "fundacion" || selectedType === "veterinaria") {
+          fieldsToValidate.push("nombre_entidad", "direccion", "registro_sanitario");
+        }
+        break;
+    }
+    
+    fieldsToValidate.forEach(field => {
+      setTouched(prev => ({ ...prev, [field]: true }));
+      if (!validateField(field, formData[field])) {
+        isValid = false;
+      }
+    });
+    
+    if (!isValid) {
+      toast.error(t('error_general'));
+    }
+    
+    return isValid;
   };
 
   const nextStep = () => {
     if (validateStep()) {
       if (currentStep < totalSteps) {
         setCurrentStep(currentStep + 1);
-        setErrors({});
-        document.querySelector('.register-card')?.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   };
@@ -99,36 +213,38 @@ const Register = () => {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      setErrors({});
-      document.querySelector('.register-card')?.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    if (errors[e.target.name]) {
-      setErrors({
-        ...errors,
-        [e.target.name]: null,
-      });
+    let value = e.target.value;
+    const field = e.target.name;
+    
+    if (field === "telefono") {
+      value = value.replace(/[^0-9]/g, "");
+    }
+    
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    if (touched[field]) {
+      validateField(field, value);
     }
   };
 
   const handleTypeChange = (tipo) => {
     setSelectedType(tipo);
-    setFormData((prev) => ({ ...prev, tipo }));
+    setFormData(prev => ({ ...prev, tipo }));
     setErrors({});
+    setTouched({});
   };
 
   const handleServiceChange = (service, checked) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       servicios: checked
         ? [...prev.servicios, service]
-        : prev.servicios.filter((s) => s !== service),
+        : prev.servicios.filter(s => s !== service),
     }));
   };
 
@@ -165,35 +281,99 @@ const Register = () => {
       const result = await register(dataToSend);
 
       if (result.success) {
-        if (result.data?.requiere_aprobacion) {
-          toast.success(t("exito_mensaje"), { position: "top-center", autoClose: 5000 });
-          navigate("/login");
+        let message = "";
+        if (selectedType === "fundacion") {
+          message = t('exito_mensaje_fundacion');
+        } else if (selectedType === "veterinaria") {
+          message = t('exito_mensaje_veterinaria');
         } else {
-          const dashboardPath = getDashboardPathByRole(result.user);
-          toast.success(t("exito_registro"));
-          navigate(dashboardPath);
+          message = t('exito_mensaje_user');
         }
+        
+        setSuccessMessage(message);
+        setRegistrationSuccess(true);
       } else {
-        setErrors({ general: result.message });
-        toast.error(result.message || t("error_registro"));
+        let errorMsg = "";
+        
+        if (result.message?.includes("email") && result.message?.includes("already taken")) {
+          errorMsg = t('error_email_duplicado');
+          setErrors(prev => ({ ...prev, email: t('email_registrado') }));
+          setTouched(prev => ({ ...prev, email: true }));
+          setCurrentStep(2);
+        } else if (result.message?.includes("registro_sanitario")) {
+          errorMsg = t('error_registro_sanitario_duplicado');
+          setErrors(prev => ({ ...prev, registro_sanitario: t('registro_sanitario_registrado') }));
+          setTouched(prev => ({ ...prev, registro_sanitario: true }));
+        } else {
+          errorMsg = result.message || t('error_registro_general');
+        }
+        
+        if (errorMsg) {
+          toast.error(errorMsg, { autoClose: 5000 });
+        }
       }
     } catch (error) {
       console.error("Error en registro:", error);
-      setErrors({ general: t("error_conexion") });
+      let errorMsg = t('error_conexion');
+      
+      if (error.response?.data?.errors) {
+        const backendErrors = error.response.data.errors;
+        if (backendErrors.email) {
+          errorMsg = "❌ " + backendErrors.email[0];
+          setErrors(prev => ({ ...prev, email: backendErrors.email[0] }));
+          setTouched(prev => ({ ...prev, email: true }));
+          setCurrentStep(2);
+        } else if (backendErrors.registro_sanitario) {
+          errorMsg = "❌ " + backendErrors.registro_sanitario[0];
+          setErrors(prev => ({ ...prev, registro_sanitario: backendErrors.registro_sanitario[0] }));
+          setTouched(prev => ({ ...prev, registro_sanitario: true }));
+        } else {
+          errorMsg = "❌ " + Object.values(backendErrors).flat()[0];
+        }
+      }
+      
+      toast.error(errorMsg, { autoClose: 5000 });
     } finally {
       setLoading(false);
     }
   };
 
-  const getDashboardPathByRole = (user) => {
-    if (!user) return "/login";
-    switch (user.tipo) {
-      case "admin": return "/admin/dashboard";
-      case "veterinaria": return "/veterinaria/dashboard";
-      case "fundacion": return "/fundacion/dashboard";
-      default: return "/user/dashboard";
-    }
-  };
+  // Pantalla de éxito
+  if (registrationSuccess) {
+    return (
+      <div className="register-success-fullscreen">
+        <div className="register-success-card">
+          <div className="success-icon">
+            <i className="fas fa-check-circle"></i>
+          </div>
+          <h2>{t('exito_titulo')}</h2>
+          <div className="success-message">
+            {successMessage.split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+          {(selectedType === "fundacion" || selectedType === "veterinaria") && (
+            <div className="success-info">
+              <i className="fas fa-info-circle"></i>
+              <p>{selectedType === "fundacion" ? t('exito_info_fundacion') : t('exito_info_veterinaria')}</p>
+            </div>
+          )}
+          <div className="success-buttons">
+            <Link to="/" className="btn-success-primary">
+              <i className="fas fa-home"></i>
+              {t('exito_boton_inicio')}
+            </Link>
+            {selectedType === "user" && (
+              <Link to="/" className="btn-success-secondary">
+                <i className="fas fa-paw"></i>
+                {t('exito_boton_explorar')}
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const renderStep = () => {
     switch (currentStep) {
@@ -203,7 +383,7 @@ const Register = () => {
             <div className="step-icon">
               <i className="fas fa-user-plus"></i>
             </div>
-            <h3 className="step-title">{t("tipo_cuenta")}</h3>
+            <h3 className="step-title">{t('tipo_cuenta')}</h3>
             <div className="account-type-selector">
               <button
                 type="button"
@@ -211,8 +391,8 @@ const Register = () => {
                 onClick={() => handleTypeChange("user")}
               >
                 <i className="fas fa-user"></i>
-                <span>{t("usuario_particular")}</span>
-                <small>{t("usuario_desc")}</small>
+                <span>{t('usuario_particular')}</span>
+                <small>{t('usuario_desc')}</small>
               </button>
               <button
                 type="button"
@@ -220,8 +400,8 @@ const Register = () => {
                 onClick={() => handleTypeChange("fundacion")}
               >
                 <i className="fas fa-building"></i>
-                <span>{t("fundacion")}</span>
-                <small>{t("fundacion_desc")}</small>
+                <span>{t('fundacion')}</span>
+                <small>{t('fundacion_desc')}</small>
               </button>
               <button
                 type="button"
@@ -229,8 +409,8 @@ const Register = () => {
                 onClick={() => handleTypeChange("veterinaria")}
               >
                 <i className="fas fa-clinic-medical"></i>
-                <span>{t("veterinaria")}</span>
-                <small>{t("veterinaria_desc")}</small>
+                <span>{t('veterinaria')}</span>
+                <small>{t('veterinaria_desc')}</small>
               </button>
             </div>
           </div>
@@ -242,64 +422,89 @@ const Register = () => {
             <div className="step-icon">
               <i className="fas fa-id-card"></i>
             </div>
-            <h3 className="step-title">{t("datos_personales")}</h3>
+            <h3 className="step-title">{t('datos_personales')}</h3>
+            
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">
+                {t('nombre_completo')} <span className="required">*</span>
+              </label>
+              <div className={`input-wrapper ${errors.nombre && touched.nombre ? "error" : ""}`}>
                 <i className="fas fa-user input-icon"></i>
-                <Input
-                  label={t("nombre_completo")}
+                <input
                   type="text"
                   name="nombre"
+                  className="form-input"
                   value={formData.nombre}
                   onChange={handleChange}
-                  error={errors.nombre}
-                  required
-                  placeholder={t("nombre_placeholder")}
+                  onBlur={() => handleBlur("nombre")}
+                  placeholder="Ej: Juan Pérez"
                 />
               </div>
+              {errors.nombre && touched.nombre && (
+                <div className="field-error">{errors.nombre}</div>
+              )}
             </div>
+
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">{t('apellidos')}</label>
+              <div className="input-wrapper">
                 <i className="fas fa-user-tag input-icon"></i>
-                <Input
-                  label={t("apellidos")}
+                <input
                   type="text"
                   name="apellidos"
+                  className="form-input"
                   value={formData.apellidos}
                   onChange={handleChange}
-                  error={errors.apellidos}
-                  placeholder={t("apellidos_placeholder")}
+                  placeholder={t('apellidos_placeholder')}
                 />
               </div>
             </div>
+
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">
+                {t('email')} <span className="required">*</span>
+              </label>
+              <div className={`input-wrapper ${errors.email && touched.email ? "error" : ""}`}>
                 <i className="fas fa-envelope input-icon"></i>
-                <Input
-                  label={t("email")}
+                <input
                   type="email"
                   name="email"
+                  className="form-input"
                   value={formData.email}
                   onChange={handleChange}
-                  error={errors.email}
-                  required
-                  placeholder={t("email_placeholder")}
+                  onBlur={() => handleBlur("email")}
+                  placeholder={t('email_placeholder')}
                 />
+                {isCheckingEmail && (
+                  <div className="input-loading">
+                    <i className="fas fa-spinner fa-spin"></i>
+                  </div>
+                )}
               </div>
+              {errors.email && touched.email && (
+                <div className="field-error">{errors.email}</div>
+              )}
+              <small className="field-hint">{t('email_hint')}</small>
             </div>
+
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">{t('telefono')}</label>
+              <div className={`input-wrapper ${errors.telefono && touched.telefono ? "error" : ""}`}>
                 <i className="fas fa-phone input-icon"></i>
-                <Input
-                  label={t("telefono")}
+                <input
                   type="tel"
                   name="telefono"
+                  className="form-input"
                   value={formData.telefono}
                   onChange={handleChange}
-                  error={errors.telefono}
-                  placeholder={t("telefono_placeholder")}
+                  onBlur={() => handleBlur("telefono")}
+                  placeholder={t('telefono_placeholder')}
                 />
               </div>
+              {errors.telefono && touched.telefono && (
+                <div className="field-error">{errors.telefono}</div>
+              )}
+              <small className="field-hint">{t('telefono_hint')}</small>
             </div>
           </div>
         );
@@ -310,20 +515,23 @@ const Register = () => {
             <div className="step-icon">
               <i className="fas fa-lock"></i>
             </div>
-            <h3 className="step-title">{t("crear_contraseña")}</h3>
+            <h3 className="step-title">{t('crear_contraseña')}</h3>
+            
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">
+                {t('contraseña')} <span className="required">*</span>
+              </label>
+              <div className={`input-wrapper ${errors.password && touched.password ? "error" : ""}`}>
                 <i className="fas fa-lock input-icon"></i>
                 <div className="password-wrapper">
-                  <Input
-                    label={t("contraseña")}
+                  <input
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    className="form-input"
                     value={formData.password}
                     onChange={handleChange}
-                    error={errors.password}
-                    required
-                    placeholder={t("contraseña_placeholder")}
+                    onBlur={() => handleBlur("password")}
+                    placeholder={t('contraseña_placeholder')}
                   />
                   <button
                     type="button"
@@ -334,20 +542,44 @@ const Register = () => {
                   </button>
                 </div>
               </div>
+              {errors.password && touched.password && (
+                <div className="field-error">{errors.password}</div>
+              )}
+              <div className="password-requirements">
+                <span className={formData.password.length >= 8 ? "valid" : "invalid"}>
+                  <i className={`fas ${formData.password.length >= 8 ? "fa-check-circle" : "fa-circle"}`}></i>
+                  {t('requisitos_longitud')}
+                </span>
+                <span className={/(?=.*[A-Z])/.test(formData.password) ? "valid" : "invalid"}>
+                  <i className={`fas ${/(?=.*[A-Z])/.test(formData.password) ? "fa-check-circle" : "fa-circle"}`}></i>
+                  {t('requisitos_mayuscula')}
+                </span>
+                <span className={/(?=.*[a-z])/.test(formData.password) ? "valid" : "invalid"}>
+                  <i className={`fas ${/(?=.*[a-z])/.test(formData.password) ? "fa-check-circle" : "fa-circle"}`}></i>
+                  {t('requisitos_minuscula')}
+                </span>
+                <span className={/(?=.*\d)/.test(formData.password) ? "valid" : "invalid"}>
+                  <i className={`fas ${/(?=.*\d)/.test(formData.password) ? "fa-check-circle" : "fa-circle"}`}></i>
+                  {t('requisitos_numero')}
+                </span>
+              </div>
             </div>
+
             <div className="form-group">
-              <div className="input-group">
+              <label className="form-label">
+                {t('confirmar_contraseña')} <span className="required">*</span>
+              </label>
+              <div className={`input-wrapper ${errors.password_confirmation && touched.password_confirmation ? "error" : ""}`}>
                 <i className="fas fa-lock input-icon"></i>
                 <div className="password-wrapper">
-                  <Input
-                    label={t("confirmar_contraseña")}
+                  <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="password_confirmation"
+                    className="form-input"
                     value={formData.password_confirmation}
                     onChange={handleChange}
-                    error={errors.password_confirmation}
-                    required
-                    placeholder={t("confirmar_placeholder")}
+                    onBlur={() => handleBlur("password_confirmation")}
+                    placeholder={t('confirmar_placeholder')}
                   />
                   <button
                     type="button"
@@ -358,6 +590,9 @@ const Register = () => {
                   </button>
                 </div>
               </div>
+              {errors.password_confirmation && touched.password_confirmation && (
+                <div className="field-error">{errors.password_confirmation}</div>
+              )}
             </div>
           </div>
         );
@@ -370,83 +605,101 @@ const Register = () => {
             </div>
             <h3 className="step-title">
               {selectedType === "user" 
-                ? t("finalizar_titulo_user")
+                ? t('finalizar_titulo_user')
                 : selectedType === "fundacion" 
-                ? t("finalizar_titulo_fundacion")
-                : t("finalizar_titulo_veterinaria")}
+                ? t('finalizar_titulo_fundacion')
+                : t('finalizar_titulo_veterinaria')}
             </h3>
 
             {(selectedType === "fundacion" || selectedType === "veterinaria") && (
               <>
                 <div className="form-group">
-                  <div className="input-group">
+                  <label className="form-label">
+                    {selectedType === "fundacion" ? t('nombre_fundacion') : t('nombre_veterinaria')} <span className="required">*</span>
+                  </label>
+                  <div className={`input-wrapper ${errors.nombre_entidad && touched.nombre_entidad ? "error" : ""}`}>
                     <i className="fas fa-store input-icon"></i>
-                    <Input
-                      label={selectedType === "fundacion" ? t("nombre_fundacion") : t("nombre_veterinaria")}
+                    <input
                       type="text"
                       name="nombre_entidad"
+                      className="form-input"
                       value={formData.nombre_entidad}
                       onChange={handleChange}
-                      error={errors.nombre_entidad}
-                      required
-                      placeholder={selectedType === "fundacion" ? t("fundacion_placeholder") : t("veterinaria_placeholder")}
+                      onBlur={() => handleBlur("nombre_entidad")}
+                      placeholder={selectedType === "fundacion" ? t('nombre_fundacion_placeholder') : t('nombre_veterinaria_placeholder')}
                     />
                   </div>
+                  {errors.nombre_entidad && touched.nombre_entidad && (
+                    <div className="field-error">{errors.nombre_entidad}</div>
+                  )}
                 </div>
+
                 <div className="form-group">
-                  <div className="input-group">
+                  <label className="form-label">
+                    {t('direccion')} <span className="required">*</span>
+                  </label>
+                  <div className={`input-wrapper ${errors.direccion && touched.direccion ? "error" : ""}`}>
                     <i className="fas fa-map-marker-alt input-icon"></i>
-                    <Input
-                      label={t("direccion")}
+                    <input
                       type="text"
                       name="direccion"
+                      className="form-input"
                       value={formData.direccion}
                       onChange={handleChange}
-                      error={errors.direccion}
-                      required
-                      placeholder={t("direccion_placeholder")}
+                      onBlur={() => handleBlur("direccion")}
+                      placeholder={t('direccion_placeholder')}
                     />
                   </div>
+                  {errors.direccion && touched.direccion && (
+                    <div className="field-error">{errors.direccion}</div>
+                  )}
                 </div>
+
                 <div className="form-group">
-                  <div className="input-group">
+                  <label className="form-label">
+                    {selectedType === "fundacion" ? t('nit') : t('registro_sanitario')} <span className="required">*</span>
+                  </label>
+                  <div className={`input-wrapper ${errors.registro_sanitario && touched.registro_sanitario ? "error" : ""}`}>
                     <i className="fas fa-id-card input-icon"></i>
-                    <Input
-                      label={selectedType === "fundacion" ? t("nit") : t("registro_sanitario")}
+                    <input
                       type="text"
                       name="registro_sanitario"
+                      className="form-input"
                       value={formData.registro_sanitario}
                       onChange={handleChange}
-                      error={errors.registro_sanitario}
-                      required
-                      placeholder={selectedType === "fundacion" ? t("nit_placeholder") : t("registro_placeholder")}
+                      onBlur={() => handleBlur("registro_sanitario")}
+                      placeholder={selectedType === "fundacion" ? t('nit_placeholder') : t('registro_sanitario_placeholder')}
                     />
                   </div>
+                  {errors.registro_sanitario && touched.registro_sanitario && (
+                    <div className="field-error">{errors.registro_sanitario}</div>
+                  )}
                 </div>
               </>
             )}
 
             {selectedType === "fundacion" && (
               <div className="form-group">
-                <div className="input-group">
+                <label className="form-label">{t('capacidad_maxima')}</label>
+                <div className="input-wrapper">
                   <i className="fas fa-home input-icon"></i>
-                  <Input
-                    label={t("capacidad_maxima")}
+                  <input
                     type="number"
                     name="capacidad"
+                    className="form-input"
                     value={formData.capacidad}
                     onChange={handleChange}
-                    error={errors.capacidad}
-                    placeholder={t("capacidad_placeholder")}
+                    placeholder={t('capacidad_placeholder')}
+                    min="1"
                   />
                 </div>
+                <small className="field-hint">{t('capacidad_hint')}</small>
               </div>
             )}
 
             {selectedType === "veterinaria" && (
               <div className="form-group">
-                <i className="fas fa-stethoscope input-icon" style={{ top: '25px' }}></i>
-                <label className="form-label">{t("servicios")}</label>
+                <label className="form-label">{t('servicios')}</label>
                 <div className="services-checkboxes">
                   <label className="checkbox-label">
                     <input
@@ -454,7 +707,7 @@ const Register = () => {
                       checked={formData.servicios.includes("urgencias")}
                       onChange={(e) => handleServiceChange("urgencias", e.target.checked)}
                     />
-                    <span>{t("urgencias")}</span>
+                    <span>{t('servicios_urgencias')}</span>
                   </label>
                   <label className="checkbox-label">
                     <input
@@ -462,7 +715,7 @@ const Register = () => {
                       checked={formData.servicios.includes("cirugia")}
                       onChange={(e) => handleServiceChange("cirugia", e.target.checked)}
                     />
-                    <span>{t("cirugia")}</span>
+                    <span>{t('servicios_cirugia')}</span>
                   </label>
                   <label className="checkbox-label">
                     <input
@@ -470,7 +723,7 @@ const Register = () => {
                       checked={formData.servicios.includes("vacunacion")}
                       onChange={(e) => handleServiceChange("vacunacion", e.target.checked)}
                     />
-                    <span>{t("vacunacion")}</span>
+                    <span>{t('servicios_vacunacion')}</span>
                   </label>
                   <label className="checkbox-label">
                     <input
@@ -478,7 +731,7 @@ const Register = () => {
                       checked={formData.servicios.includes("hospitalizacion")}
                       onChange={(e) => handleServiceChange("hospitalizacion", e.target.checked)}
                     />
-                    <span>{t("hospitalizacion")}</span>
+                    <span>{t('servicios_hospitalizacion')}</span>
                   </label>
                 </div>
               </div>
@@ -487,10 +740,21 @@ const Register = () => {
             {selectedType === "user" && (
               <div className="step-success">
                 <i className="fas fa-heart"></i>
-                <p>{t("mensaje_user")}</p>
-                <p className="step-note">{t("mensaje_revision")}</p>
+                <p>{t('mensaje_user')}</p>
+                <p>{t('mensaje_user_lista')}</p>
+                <ul>
+                  <li>{t('mensaje_user_item1')}</li>
+                  <li>{t('mensaje_user_item2')}</li>
+                  <li>{t('mensaje_user_item3')}</li>
+                  <li>{t('mensaje_user_item4')}</li>
+                </ul>
               </div>
             )}
+
+            <div className="info-box">
+              <i className="fas fa-shield-alt"></i>
+              <p>{t('info_seguridad')}</p>
+            </div>
           </div>
         );
 
@@ -506,11 +770,11 @@ const Register = () => {
       <div className="register-card">
         <div className="register-header">
           <div className="register-logo-wrapper">
-            <img src="/img/logo-claro.png" alt={t("logo_alt")} className="register-logo" />
+            <img src="/img/logo-claro.png" alt="Logo" className="register-logo" />
           </div>
-          <h1 className="register-title">{t("titulo")}</h1>
+          <h1 className="register-title">{t('titulo')}</h1>
           <p className="register-subtitle">
-            {t("paso")} {currentStep} {t("de")} {totalSteps}
+            {t('paso')} {currentStep} {t('de')} {totalSteps}
           </p>
         </div>
 
@@ -523,10 +787,10 @@ const Register = () => {
             >
               <div className="step-dot">{step}</div>
               <span className="step-label">
-                {step === 1 && t("step_tipo")}
-                {step === 2 && t("step_datos")}
-                {step === 3 && t("step_contraseña")}
-                {step === 4 && t("step_finalizar")}
+                {step === 1 && t('step_tipo')}
+                {step === 2 && t('step_datos')}
+                {step === 3 && t('step_contraseña')}
+                {step === 4 && t('step_finalizar')}
               </span>
             </div>
           ))}
@@ -535,52 +799,30 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           {renderStep()}
 
-          {errors.general && (
-            <div className="error-general">
-              <i className="fas fa-exclamation-circle"></i>
-              {errors.general}
-            </div>
-          )}
-
           <div className="step-buttons">
             {currentStep > 1 && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-                className="btn-prev"
-              >
+              <Button type="button" variant="outline" onClick={prevStep} className="btn-prev">
                 <i className="fas fa-arrow-left"></i>
-                {t("anterior")}
+                {t('anterior')}
               </Button>
             )}
             
             {currentStep < totalSteps ? (
-              <Button
-                type="button"
-                variant="primary"
-                onClick={nextStep}
-                className="btn-next"
-              >
-                {t("siguiente")}
+              <Button type="button" variant="primary" onClick={nextStep} className="btn-next">
+                {t('siguiente')}
                 <i className="fas fa-arrow-right"></i>
               </Button>
             ) : (
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={loading}
-                className="btn-submit"
-              >
+              <Button type="submit" variant="primary" disabled={loading} className="btn-submit">
                 {loading ? (
                   <>
                     <i className="fas fa-spinner fa-spin"></i>
-                    {t("registrando")}
+                    {t('registrando')}
                   </>
                 ) : (
                   <>
                     <i className="fas fa-check"></i>
-                    {t("finalizar")}
+                    {t('finalizar')}
                   </>
                 )}
               </Button>
@@ -589,7 +831,7 @@ const Register = () => {
         </form>
 
         <div className="login-link">
-          {t("ya_tienes_cuenta")} <Link to="/login">{t("iniciar_sesion")}</Link>
+          {t('ya_tienes_cuenta')} <Link to="/login">{t('iniciar_sesion')}</Link>
         </div>
       </div>
 

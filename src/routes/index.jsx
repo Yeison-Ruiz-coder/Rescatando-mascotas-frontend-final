@@ -15,7 +15,7 @@ import VeterinariaRoute from './VeterinariaRoute';
 import FundacionRoute from './FundacionRoute';
 
 // =============================================================
-// PÁGINAS PÚBLICAS (EXISTENTES - FUNCIONAN)
+// PÁGINAS PÚBLICAS
 // =============================================================
 import Home from '../pages/public/Home/Home';
 import Login from '../pages/public/Login/Login';
@@ -31,12 +31,23 @@ import SolicitudExitosa from '../pages/public/SolicitarAdopcion/SolicitudExitosa
 import Solicitudes from '../pages/user/Solicitudes/Solicitudes';
 
 // =============================================================
-// PÁGINAS ADMIN (LAS QUE YA TIENES CREADAS)
+// PÁGINAS ADMIN
 // =============================================================
 import Dashboard from '../pages/admin/Dashboard/Dashboard';
 import UsuariosPendientes from '../pages/admin/Usuarios/UsuariosPendientes';
 
-// PLACEHOLDERS PARA PÁGINAS QUE NO TIENES AÚN (pero funcionan)
+// =============================================================
+// PÁGINAS DE FUNDACIÓN (COMPONENTES REALES)
+// =============================================================
+import FundDashboard from '../pages/fundacion/dashboard/Dashboard';
+import FundMascotas from '../pages/fundacion/mascotas/Mascotas';
+import FundNuevaMascota from '../pages/fundacion/mascotas/NuevaMascota';
+
+// =============================================================
+// PLACEHOLDERS PARA PÁGINAS QUE NO TIENES AÚN
+// =============================================================
+
+// Admin placeholders
 const AdminMascotas = () => (
   <div style={{ color: '#333', padding: '2rem', background: 'white', borderRadius: '1rem' }}>
     <h1>Gestión de Mascotas</h1>
@@ -72,7 +83,6 @@ const UsuarioDetail = () => (
   </div>
 );
 
-// Otros placeholders para admin
 const AdminAdopciones = () => <div style={{ color: '#333', padding: '2rem' }}>Adopciones - Próximamente</div>;
 const AdminDonaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Donaciones - Próximamente</div>;
 const AdminEventos = () => <div style={{ color: '#333', padding: '2rem' }}>Eventos - Próximamente</div>;
@@ -87,7 +97,7 @@ const AdminRazas = () => <div style={{ color: '#333', padding: '2rem' }}>Catálo
 const AdminVacunas = () => <div style={{ color: '#333', padding: '2rem' }}>Tipos de Vacunas - Próximamente</div>;
 const AdminCategorias = () => <div style={{ color: '#333', padding: '2rem' }}>Categorías - Próximamente</div>;
 
-// Placeholders para páginas públicas que no tienes
+// Públicas placeholders
 const Adopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Listado de Adopciones - Próximamente</div>;
 const Fundaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Fundaciones - Próximamente</div>;
 const Veterinarias = () => <div style={{ color: 'white', padding: '2rem' }}>Veterinarias - Próximamente</div>;
@@ -96,14 +106,14 @@ const Donaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaci
 const Tienda = () => <div style={{ color: 'white', padding: '2rem' }}>Tienda - Próximamente</div>;
 const ReportarRescate = () => <div style={{ color: 'white', padding: '2rem' }}>Reportar Rescate - Próximamente</div>;
 
-// Placeholders para usuario
+// Usuario placeholders
 const UserDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Usuario - Próximamente</div>;
 const UserProfile = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Perfil - Próximamente</div>;
 const UserCarrito = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Carrito - Próximamente</div>;
 const UserPedidos = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Pedidos - Próximamente</div>;
 const UserDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Donaciones - Próximamente</div>;
 
-// Placeholders para veterinaria
+// Veterinaria placeholders
 const VetDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Veterinaria - Próximamente</div>;
 const VetAtenciones = () => <div style={{ color: 'white', padding: '2rem' }}>Atenciones Médicas - Próximamente</div>;
 const VetHistoriales = () => <div style={{ color: 'white', padding: '2rem' }}>Historiales - Próximamente</div>;
@@ -114,10 +124,7 @@ const VetProductos = () => <div style={{ color: 'white', padding: '2rem' }}>Prod
 const VetPedidos = () => <div style={{ color: 'white', padding: '2rem' }}>Pedidos - Próximamente</div>;
 const VetReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Reportes - Próximamente</div>;
 
-// Placeholders para fundación
-const FundDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Fundación - Próximamente</div>;
-const FundMascotas = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Mascotas - Próximamente</div>;
-const FundMascotaNueva = () => <div style={{ color: 'white', padding: '2rem' }}>Registrar Mascota - Próximamente</div>;
+// Fundación placeholders (SOLO para páginas que NO tienen componente real)
 const FundRescates = () => <div style={{ color: 'white', padding: '2rem' }}>Rescates - Próximamente</div>;
 const FundAdopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Adopciones - Próximamente</div>;
 const FundDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
@@ -126,32 +133,21 @@ const FundVoluntarios = () => <div style={{ color: 'white', padding: '2rem' }}>V
 const FundReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Reportes - Próximamente</div>;
 
 // =============================================================
-// COMPONENTE 404 MEJORADO
+// COMPONENTE 404
 // =============================================================
 const NotFound = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user, getDashboardPath } = useAuth();
 
-  const goBack = () => {
-    navigate(-1);
-  };
-
+  const goBack = () => navigate(-1);
   const goHome = () => {
-    if (isAuthenticated) {
-      // Si es admin, veterinaria o fundacion, va a su dashboard
-      if (user?.tipo === 'admin' || user?.tipo === 'veterinaria' || user?.tipo === 'fundacion') {
-        navigate(getDashboardPath());
-      } else {
-        // Si es usuario normal, va al home público
-        navigate('/');
-      }
+    if (isAuthenticated && (user?.tipo === 'admin' || user?.tipo === 'veterinaria' || user?.tipo === 'fundacion')) {
+      navigate(getDashboardPath());
     } else {
-      // Si no está autenticado, va al home público
       navigate('/');
     }
   };
 
-  // Determinar el texto del botón según el rol
   const getButtonText = () => {
     if (!isAuthenticated) return 'Volver al inicio';
     if (user?.tipo === 'admin') return 'Ir al Panel Admin';
@@ -171,53 +167,14 @@ const NotFound = () => {
       background: 'linear-gradient(135deg, #1a1f2e 0%, #0f1119 100%)',
       color: 'white'
     }}>
-      <h1 style={{ fontSize: '6rem', margin: 0, fontWeight: 'bold' }}>404</h1>
-      <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Página no encontrada</h2>
-      <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.7)', maxWidth: '500px', margin: '0 auto' }}>
-        Lo sentimos, la página que buscas no existe o ha sido movida.
-      </p>
-      <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-        <button 
-          onClick={goBack}
-          style={{ 
-            padding: '12px 30px',
-            background: 'rgba(255,255,255,0.1)',
-            color: 'white',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '50px',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            fontSize: '0.95rem',
-            fontWeight: '500'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-        >
+      <h1 style={{ fontSize: '6rem', margin: 0 }}>404</h1>
+      <h2>Página no encontrada</h2>
+      <p style={{ color: 'rgba(255,255,255,0.7)' }}>Lo sentimos, la página que buscas no existe.</p>
+      <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+        <button onClick={goBack} style={{ padding: '12px 30px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50px', cursor: 'pointer' }}>
           ← Volver atrás
         </button>
-        <button 
-          onClick={goHome}
-          style={{ 
-            padding: '12px 30px',
-            background: 'linear-gradient(135deg, #667eea, #764ba2)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '50px',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            fontSize: '0.95rem',
-            fontWeight: '500',
-            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
-          }}
-        >
+        <button onClick={goHome} style={{ padding: '12px 30px', background: 'linear-gradient(135deg, #667eea, #764ba2)', color: 'white', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
           {getButtonText()} →
         </button>
       </div>
@@ -229,7 +186,7 @@ const NotFound = () => {
 // CONFIGURACIÓN DE RUTAS
 // =============================================================
 const router = createBrowserRouter([
-  // RUTAS PÚBLICAS (cualquiera puede ver)
+  // RUTAS PÚBLICAS
   {
     path: '/',
     element: <PublicLayout />,
@@ -251,7 +208,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE USUARIO (requieren login)
+  // RUTAS DE USUARIO
   {
     path: '/user',
     element: <PrivateRoute />,
@@ -271,7 +228,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE VETERINARIA (requieren login + rol veterinaria)
+  // RUTAS DE VETERINARIA
   {
     path: '/veterinaria',
     element: <VeterinariaRoute />,
@@ -295,7 +252,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE FUNDACIÓN (requieren login + rol fundacion)
+  // RUTAS DE FUNDACIÓN (USANDO COMPONENTES REALES)
   {
     path: '/fundacion',
     element: <FundacionRoute />,
@@ -306,7 +263,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="/fundacion/dashboard" replace /> },
           { path: 'dashboard', element: <FundDashboard /> },
           { path: 'mascotas', element: <FundMascotas /> },
-          { path: 'mascotas/nueva', element: <FundMascotaNueva /> },
+          { path: 'mascotas/nueva', element: <FundNuevaMascota /> },
           { path: 'rescates', element: <FundRescates /> },
           { path: 'adopciones', element: <FundAdopciones /> },
           { path: 'donaciones', element: <FundDonaciones /> },
@@ -319,7 +276,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE ADMIN (requieren login + rol admin)
+  // RUTAS DE ADMIN
   {
     path: '/admin',
     element: <AdminRoute />,
@@ -329,8 +286,6 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           { path: 'dashboard', element: <Dashboard /> },
-          
-          // ===== USUARIOS =====
           {
             path: 'usuarios',
             children: [
@@ -341,8 +296,6 @@ const router = createBrowserRouter([
               { path: ':id/edit', element: <UsuarioForm /> },
             ]
           },
-          
-          // Las demás rutas admin
           { path: 'mascotas', element: <AdminMascotas /> },
           { path: 'mascotas/nueva', element: <AdminMascotasNueva /> },
           { path: 'adopciones', element: <AdminAdopciones /> },
@@ -364,7 +317,6 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTA 404
   { path: '*', element: <NotFound /> }
 ]);
 

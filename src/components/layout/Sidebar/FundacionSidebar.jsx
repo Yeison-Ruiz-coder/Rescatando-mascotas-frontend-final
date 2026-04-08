@@ -95,9 +95,6 @@ const FundacionSidebar = () => {
             <Link to="/fundacion/mascotas/nueva" className={`submenu-item ${isActive('/fundacion/mascotas/nueva') ? 'active' : ''}`} onClick={closePublicSidebar}>
               <i className="fas fa-plus-circle"></i> {t("registrar_mascota")}
             </Link>
-            <Link to="/fundacion/mascotas/rescate" className={`submenu-item ${isActive('/fundacion/mascotas/rescate') ? 'active' : ''}`} onClick={closePublicSidebar}>
-              <i className="fas fa-ambulance"></i> {t("registrar_desde_rescate")}
-            </Link>
           </div>
         </div>
 

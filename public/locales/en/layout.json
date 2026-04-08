@@ -8,7 +8,19 @@
     "administrador": "Administrator",
     "usuario": "User",
     "invitado": "Guest",
-    "bienvenido": "Welcome"
+    "bienvenido": "Welcome",
+    "logo_title": "Rescuing Pets Forever",
+    "logo_subtitle": "Healing their story.",
+    "profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "dashboard": "Dashboard",
+    "admin_panel": "Administration",
+    "admin": "Admin",
+    "role_admin": "Administrator",
+    "role_vet": "Veterinary",
+    "role_foundation": "Foundation",
+    "role_user": "User"
   },
   "sidebar": {
     "acciones_principales": "MAIN ACTIONS",
@@ -126,5 +138,31 @@
   "mi_cuenta": "My account",
   "mis_solicitudes": "My requests",
   "bienvenido": "Welcome",
-  "invitado": "Guest"
+  "invitado": "Guest",
+
+
+
+  "admin_navbar": {
+    "brand_title": "Rescatando",
+    "brand_subtitle": "Admin Panel",
+    "language_selector": {
+      "spanish": "Spanish",
+      "english": "English"
+    },
+    "user_menu": {
+      "my_profile": "My Profile",
+      "settings": "Settings",
+      "logout": "Logout",
+      "admin_role": "Administrator",
+      "foundation_role": "Foundation",
+      "veterinary_role": "Veterinary",
+      "user_role": "Administrator"
+    },
+    "aria": {
+      "toggle_menu": "Toggle menu",
+      "select_language": "Select language",
+      "user_menu": "User menu"
+    }
+  }
+
 }

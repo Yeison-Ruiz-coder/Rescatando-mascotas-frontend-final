@@ -103,5 +103,53 @@
   
   "salud_cuidados": "Health and Care",
   "vacunas_registradas": "Registered vaccines",
-  "en_proceso": "In process"
+  "en_proceso": "In process",
+
+
+
+  "editar_mascota": "Edit Pet",
+  "registrar_mascota": "Register Pet",
+  "formulario_descripcion": "Complete the form to register a new pet for adoption",
+  
+  "informacion_basica": "Basic Information",
+  "ubicacion_descripcion": "Location and Description",
+  "salud_caracteristicas": "Health and Characteristics",
+  "galeria_fotos": "Photo Gallery",
+  "fechas": "Dates",
+  
+  "nombre_mascota": "Pet Name",
+  "nombre_mascota_placeholder": "Eg: Luna, Max, Bella",
+
+  "seleccionar_especie": "Select species",
+
+  "seleccionar_razas": "Select one or more breeds",
+  "edad_aprox": "Approximate Age (years)",
+  "edad_placeholder": "Eg: 2.5",
+
+  "estado": "Current Status",
+  
+
+  "lugar_rescate_placeholder": "Eg: Central Park, Main St #123",
+
+  "descripcion_placeholder": "Describe the pet: personality, behavior, health condition, special needs...",
+
+  "condiciones_placeholder": "Chronic diseases, disabilities, special care...",
+  
+
+  "apto_con_otros_animales": "Good with other animals",
+
+  "seleccionar_vacunas": "Select applied vaccines",
+  
+  "foto_principal": "Main Photo",
+  "agregar_fotos": "Add photos",
+  
+  "cancelar": "Cancel",
+  "actualizar_mascota": "Update Pet",
+  "required_field": "This field is required",
+  
+  "exito_registro": "Pet registered successfully",
+  "exito_actualizacion": "Pet updated successfully",
+  "error_registro": "Error registering pet",
+  "error_actualizacion": "Error updating pet"
+
 }

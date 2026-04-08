@@ -107,5 +107,44 @@
 
   "salud_cuidados": "Salud y Cuidados",
   "vacunas_registradas": "vacunas registradas",
-  "en_proceso": "En proceso"
+  "en_proceso": "En proceso",
+
+
+
+  "editar_mascota": "Editar Mascota",
+  "registrar_mascota": "Registrar Mascota",
+  "formulario_descripcion": "Completa el formulario para registrar una nueva mascota en adopción",
+  
+  "informacion_basica": "Información Básica",
+  "ubicacion_descripcion": "Ubicación y Descripción",
+  "salud_caracteristicas": "Salud y Características",
+  "galeria_fotos": "Galería de Fotos",
+  "fechas": "Fechas",
+  
+  "nombre_mascota": "Nombre de la Mascota",
+  "nombre_mascota_placeholder": "Ej: Luna, Max, Bella",
+  "seleccionar_especie": "Seleccionar especie",
+  "seleccionar_razas": "Selecciona una o más razas",
+  "edad_aprox": "Edad Aproximada (años)",
+  "edad_placeholder": "Ej: 2.5",
+  
+  "lugar_rescate_placeholder": "Ej: Parque Central, Calle Principal #123",
+  "descripcion_placeholder": "Describe a la mascota: carácter, comportamiento, condición de salud, necesidades especiales...",
+  "condiciones_placeholder": "Enfermedades crónicas, discapacidades, cuidados especiales...",
+  
+  "necesita_hogar_temporal": "Necesita hogar temporal",
+  "apto_con_otros_animales": "Apto con otros animales",
+  "seleccionar_vacunas": "Selecciona las vacunas aplicadas",
+  
+  "foto_principal": "Foto Principal",
+  "agregar_fotos": "Agregar fotos",
+  
+  "cancelar": "Cancelar",
+  "actualizar_mascota": "Actualizar Mascota",
+  "required_field": "Este campo es requerido",
+  
+  "exito_registro": "Mascota registrada exitosamente",
+  "exito_actualizacion": "Mascota actualizada exitosamente",
+  "error_registro": "Error al registrar la mascota",
+  "error_actualizacion": "Error al actualizar la mascota"
 }

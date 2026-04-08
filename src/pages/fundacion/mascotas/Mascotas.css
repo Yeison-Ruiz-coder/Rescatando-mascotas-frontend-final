@@ -1,0 +1,272 @@
+/* src/pages/fundacion/mascotas/Mascotas.css */
+
+.mascotas-list-page {
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.page-header h1 i {
+  color: #667eea;
+  margin-right: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.page-subtitle {
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Filtros */
+.filtros-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filtros-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 0.4rem 1rem;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.filtro-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.filtro-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: transparent;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 30px;
+  padding: 0.35rem 0.8rem;
+}
+
+.search-box i {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 0.3rem;
+  width: 220px;
+  background: transparent;
+  font-size: 0.8rem;
+}
+
+/* Grid de mascotas - Responsive que llena el espacio */
+.mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+/* Para pantallas muy grandes, limitar el tamaño máximo de las cards */
+@media (min-width: 1600px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 2000px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 2400px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 20px;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state h3 {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mascotas-list-page {
+    padding: 1rem;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .page-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .filtros-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filtros-buttons {
+    justify-content: center;
+  }
+  
+  .search-box input {
+    width: 100%;
+  }
+  
+  .mascotas-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .empty-state {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .filtro-btn {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+  }
+  
+  .btn-primary {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+}

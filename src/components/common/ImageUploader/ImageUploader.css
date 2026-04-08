@@ -1,0 +1,101 @@
+.image-uploader {
+  margin-bottom: 1rem;
+}
+
+.image-uploader-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.image-uploader-label .required {
+  color: #f56565;
+}
+
+.image-uploader-area {
+  border: 2px dashed #cbd5e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: #f7fafc;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-uploader-area:hover {
+  border-color: #667eea;
+  background: #edf2f7;
+}
+
+.image-uploader-area.dragging {
+  border-color: #667eea;
+  background: #e2e8f0;
+}
+
+.upload-placeholder {
+  text-align: center;
+  padding: 2rem;
+}
+
+.upload-placeholder i {
+  font-size: 2.5rem;
+  color: #a0aec0;
+  margin-bottom: 0.5rem;
+}
+
+.upload-placeholder p {
+  margin: 0;
+  color: #4a5568;
+}
+
+.upload-placeholder small {
+  color: #a0aec0;
+  font-size: 0.75rem;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  height: 150px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-image-btn i {
+  color: white;
+  font-size: 0.8rem;
+}
+
+.remove-image-btn:hover {
+  background: #f56565;
+}
+
+.image-uploader-error {
+  color: #f56565;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}

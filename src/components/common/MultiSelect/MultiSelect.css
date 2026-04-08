@@ -1,0 +1,151 @@
+.multi-select {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.multi-select-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.multi-select-label .required {
+  color: #f56565;
+}
+
+.multi-select-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s;
+  min-height: 42px;
+}
+
+.multi-select-container:hover {
+  border-color: #667eea;
+}
+
+.multi-select-container.disabled {
+  background: #edf2f7;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.multi-select-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.multi-select-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.multi-select-tag button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 0.7rem;
+}
+
+.multi-select-placeholder {
+  color: #a0aec0;
+  font-size: 0.85rem;
+}
+
+.multi-select-container i {
+  color: #a0aec0;
+  transition: transform 0.2s;
+}
+
+.multi-select-container i.open {
+  transform: rotate(180deg);
+}
+
+.multi-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #cbd5e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 300px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.multi-select-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.multi-select-search i {
+  color: #a0aec0;
+}
+
+.multi-select-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.25rem;
+}
+
+.multi-select-options {
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.multi-select-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.multi-select-option:hover {
+  background: #f7fafc;
+}
+
+.multi-select-option.selected {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.multi-select-option i {
+  width: 18px;
+  color: #667eea;
+}
+
+.multi-select-no-results {
+  padding: 1rem;
+  text-align: center;
+  color: #a0aec0;
+}

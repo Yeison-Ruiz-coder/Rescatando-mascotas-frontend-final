@@ -573,3 +573,26 @@
     display: none;
   }
 }
+
+/* ===== LOGO TEXTO DINÁMICO ===== */
+.public-navbar-logo-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 0;
+  height: 65px;
+}
+
+.logo-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #8b5cf6;
+  line-height: 1;
+}
+
+.logo-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b21a8;
+  line-height: 1;
+}
