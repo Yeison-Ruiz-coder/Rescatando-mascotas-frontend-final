@@ -104,7 +104,7 @@ const Veterinarias = () => <div style={{ color: 'white', padding: '2rem' }}>Vete
 const Eventos = () => <div style={{ color: 'white', padding: '2rem' }}>Eventos - Próximamente</div>;
 const Donaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
 const Tienda = () => <div style={{ color: 'white', padding: '2rem' }}>Tienda - Próximamente</div>;
-const ReportarRescate = () => <div style={{ color: 'white', padding: '2rem' }}>Reportar Rescate - Próximamente</div>;
+import ReportarRescate from '../pages/public/ReportarRescate/ReportarRescate';
 
 // Usuario placeholders
 const UserDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Usuario - Próximamente</div>;
@@ -185,6 +185,7 @@ const NotFound = () => {
 // =============================================================
 // CONFIGURACIÓN DE RUTAS
 // =============================================================
+
 const router = createBrowserRouter([
   // RUTAS PÚBLICAS
   {
