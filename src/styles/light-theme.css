@@ -1,0 +1,34 @@
+/* src/styles/light-theme.css */
+:root {
+  /* Fondos */
+  --color-bg-primary: #fffaf5;
+  --color-bg-secondary: #fef3e7;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #ffffff;
+  
+  /* Textos */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+  
+  /* Bordes */
+  --color-border: rgba(0, 0, 0, 0.12);
+  --color-border-strong: rgba(0, 0, 0, 0.2);
+  
+  /* Brand */
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --color-accent: #ff8c42;
+  --color-heart: #ff6b9d;
+  
+  /* Sombras */
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 32px rgba(0,0,0,0.1);
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
