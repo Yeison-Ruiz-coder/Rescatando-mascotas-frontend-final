@@ -1,0 +1,72 @@
+{
+    "titulo_admin": "Eventos Globales",
+    "subtitulo_admin": "Administra todos los eventos del sistema",
+    "cargando": "Cargando eventos globales...",
+    "cargando_evento": "Cargando evento global...",
+    "evento_sin_imagen": "Evento Global",
+    
+    "botones": {
+        "crear_evento": "Crear Evento Global",
+        "crear_primero": "Crear Primer Evento",
+        "crear_evento_global": "Crear Evento Global",
+        "ver_detalles": "Ver detalles",
+        "editar": "Editar",
+        "eliminar": "Eliminar",
+        "cancelar": "Cancelar",
+        "creando": "Creando...",
+        "guardando": "Guardando...",
+        "guardar_cambios": "Guardar Cambios"
+    },
+    
+    "mensajes": {
+        "error_carga": "Error al cargar los eventos",
+        "evento_eliminado": "Evento eliminado correctamente",
+        "error_eliminar": "Error al eliminar el evento",
+        "confirmar_eliminar": "¿Estás seguro de eliminar este evento global?",
+        "error_crear": "Error al crear el evento global",
+        "error_actualizar": "Error al actualizar el evento global"
+    },
+    
+    "errores": {
+        "nombre_requerido": "El nombre es requerido",
+        "lugar_requerido": "El lugar es requerido",
+        "descripcion_requerida": "La descripción es requerida",
+        "fecha_requerida": "La fecha es requerida",
+        "imagen_grande": "El archivo no debe superar los 2MB"
+    },
+    
+    "sin_eventos": {
+        "titulo": "No hay eventos globales",
+        "mensaje": "Crea el primer evento para todo el sistema"
+    },
+    
+    "crear": {
+        "titulo": "Crear Evento Global",
+        "subtitulo": "Este evento será visible para todos los usuarios del sistema",
+        "nombre_evento": "Nombre del Evento",
+        "lugar_evento": "Lugar del Evento",
+        "descripcion": "Descripción",
+        "fecha_evento": "Fecha y Hora",
+        "imagen": "Imagen del Evento",
+        "nombre_placeholder": "Ej: Gran Feria Nacional",
+        "lugar_placeholder": "Ej: Centro de Convenciones",
+        "descripcion_placeholder": "Describe detalladamente el evento...",
+        "seleccionar_imagen": "Seleccionar imagen",
+        "cambiar_imagen": "Cambiar imagen",
+        "vista_previa": "Vista previa",
+        "formatos_imagen": "Formatos: JPEG, PNG, JPG, GIF (Máximo 2MB)"
+    },
+    
+    "editar": {
+        "titulo": "Editar Evento Global",
+        "subtitulo": "Actualiza los datos del evento global"
+    },
+    
+    "ver": {
+        "volver": "Volver a eventos globales",
+        "lugar": "Lugar",
+        "fecha": "Fecha",
+        "descripcion": "Descripción",
+        "creado": "Creado"
+    }
+}
