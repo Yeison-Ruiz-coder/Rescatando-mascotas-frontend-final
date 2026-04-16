@@ -1,61 +1,582 @@
-.public-eventos-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
-.public-eventos-header { text-align: center; margin-bottom: 3rem; }
-.public-eventos-header h1 { font-size: 2.5rem; color: #1B8E95; margin-bottom: 0.5rem; }
-.public-eventos-header p { color: #666; font-size: 1.125rem; }
-.public-eventos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+/* ============================================
+   EVENTOS PÚBLICOS - INDEX (lista de eventos)
+   ============================================ */
 
-.public-evento-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
-.public-evento-card:hover { transform: translateY(-5px); }
-.public-card-img { width: 100%; height: 200px; object-fit: cover; }
-.public-card-placeholder { height: 200px; background: linear-gradient(135deg, #1B8E95, #fd4586); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; gap: 0.5rem; }
-.public-card-body { padding: 1.5rem; }
-.public-card-body h5 { color: #1B8E95; font-size: 1.25rem; margin-bottom: 0.75rem; }
-.public-card-body p { color: #666; line-height: 1.6; margin-bottom: 1rem; }
-.public-event-info { margin-bottom: 1.5rem; }
-.public-event-info div { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #333; margin-bottom: 0.5rem; }
-.public-card-actions { display: flex; gap: 0.5rem; }
+.public-eventos-container { 
+    max-width: 1400px; 
+    margin: 0 auto; 
+    padding: 2rem 1rem; 
+}
 
-.public-btn-view { flex: 1; background: #1B8E95; color: white; text-decoration: none; padding: 0.5rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.875rem; transition: all 0.3s ease; }
-.public-btn-view:hover { background: #156f75; transform: translateY(-2px); }
-.public-btn-like { background: rgba(253, 69, 134, 0.1); color: #fd4586; border: 1px solid #fd4586; padding: 0.5rem; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; font-size: 0.875rem; transition: all 0.3s ease; }
-.public-btn-like.liked { background: #fd4586; color: white; }
-.public-btn-like:hover { transform: translateY(-2px); }
+.public-eventos-header { 
+    text-align: center; 
+    margin-bottom: 3rem; 
+}
 
-.public-eventos-empty { text-align: center; padding: 4rem; background: #f8f9fa; border-radius: 12px; }
-.public-eventos-empty svg { color: #1B8E95; margin-bottom: 1rem; }
+.public-eventos-header h1 { 
+    font-size: 2.5rem; 
+    color: #1B8E95; 
+    margin-bottom: 0.5rem; 
+}
 
-.public-eventos-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; gap: 1rem; }
-.spinner { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: #1B8E95; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.public-eventos-header p { 
+    color: #666; 
+    font-size: 1.125rem; 
+}
 
-.public-detail-container { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem; }
-.public-detail-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-.public-detail-body { padding: 2rem; }
-.public-detail-image { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem; }
-.public-detail-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-.public-detail-title { color: #1B8E95; font-size: 2rem; margin: 0; }
-.public-detail-actions-header { display: flex; gap: 0.5rem; }
-.public-btn-like-detail { background: rgba(253, 69, 134, 0.1); color: #fd4586; border: 1px solid #fd4586; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.3s ease; }
-.public-btn-like-detail.liked { background: #fd4586; color: white; }
-.public-btn-share { background: rgba(27, 142, 149, 0.1); color: #1B8E95; border: 1px solid #1B8E95; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.3s ease; }
-.public-info-section { background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-.public-info-item { display: flex; align-items: center; gap: 0.75rem; }
-.public-info-icon { color: #fd4586; }
-.public-description { margin: 1.5rem 0; }
-.public-description h5 { color: #1B8E95; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.public-description p { background: rgba(27, 142, 149, 0.05); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #fd4586; line-height: 1.7; }
-.public-detail-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; flex-wrap: wrap; gap: 1rem; }
-.public-btn-secondary { background: #f8f9fa; color: #333; text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 0.5rem; }
-.public-publish-date { display: inline-flex; align-items: center; gap: 0.5rem; color: #666; font-size: 0.875rem; }
+/* Grid: 4 cards por línea en desktop */
+.public-eventos-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1.5rem; 
+}
 
+.public-evento-card { 
+    background: white; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+    transition: transform 0.3s ease; 
+    position: relative;
+}
+
+.public-evento-card:hover { 
+    transform: translateY(-5px); 
+}
+
+.public-card-img { 
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+}
+
+.public-card-placeholder { 
+    height: 200px; 
+    background: linear-gradient(135deg, #1B8E95, #fd4586); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    color: white; 
+    gap: 0.5rem; 
+}
+
+.public-card-body { 
+    padding: 1.5rem; 
+}
+
+.public-card-body h5 { 
+    color: #1B8E95; 
+    font-size: 1.25rem; 
+    margin-bottom: 0.75rem; 
+}
+
+.public-card-body p { 
+    color: #666; 
+    line-height: 1.6; 
+    margin-bottom: 1rem; 
+}
+
+.public-event-info { 
+    margin-bottom: 1.5rem; 
+}
+
+.public-event-info div { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    font-size: 0.875rem; 
+    color: #333; 
+    margin-bottom: 0.5rem; 
+}
+
+.public-card-actions { 
+    display: flex; 
+    gap: 0.5rem; 
+}
+
+.public-btn-view { 
+    flex: 1; 
+    background: #1B8E95; 
+    color: white; 
+    text-decoration: none; 
+    padding: 0.5rem; 
+    border-radius: 8px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 0.5rem; 
+    font-size: 0.875rem; 
+    transition: all 0.3s ease; 
+}
+
+.public-btn-view:hover { 
+    background: #156f75; 
+    transform: translateY(-2px); 
+}
+
+.public-btn-like { 
+    flex: 1;
+    background: rgba(253, 69, 134, 0.1); 
+    color: #fd4586; 
+    border: 1px solid #fd4586; 
+    padding: 0.5rem; 
+    border-radius: 8px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 0.5rem; 
+    cursor: pointer; 
+    font-size: 0.875rem; 
+    transition: all 0.3s ease; 
+}
+
+.public-btn-like.liked { 
+    background: #fd4586; 
+    color: white; 
+}
+
+.public-btn-like:hover { 
+    transform: translateY(-2px); 
+}
+
+.public-btn-asistir {
+    flex: 1;
+    background: rgba(27, 142, 149, 0.1);
+    color: #1B8E95;
+    border: 1px solid #1B8E95;
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.public-btn-asistir.confirmed {
+    background: #1B8E95;
+    color: white;
+}
+
+.public-btn-asistir:hover {
+    transform: translateY(-2px);
+}
+
+.public-eventos-empty { 
+    text-align: center; 
+    padding: 4rem; 
+    background: #f8f9fa; 
+    border-radius: 12px; 
+}
+
+.public-eventos-empty svg { 
+    color: #1B8E95; 
+    margin-bottom: 1rem; 
+}
+
+.public-eventos-loading { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 400px; 
+    gap: 1rem; 
+}
+
+.spinner { 
+    width: 40px; 
+    height: 40px; 
+    border: 3px solid #e2e8f0; 
+    border-top-color: #1B8E95; 
+    border-radius: 50%; 
+    animation: spin 0.8s linear infinite; 
+}
+
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
+
+.evento-asistentes {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+}
+
+.evento-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.badge-admin {
+    background: #1B8E95;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-fundacion {
+    background: #fd4586;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+/* ============================================
+   RESPONSIVE PARA INDEX
+   ============================================ */
+
+@media (min-width: 1200px) {
+    .public-eventos-grid { 
+        grid-template-columns: repeat(4, 1fr); 
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .public-eventos-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .public-eventos-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 767px) {
+    .public-eventos-grid { 
+        grid-template-columns: 1fr; 
+    }
+    
+    .public-card-actions {
+        flex-direction: column;
+    }
+    
+    .public-card-body {
+        padding: 1rem;
+    }
+    
+    .public-eventos-header h1 {
+        font-size: 1.75rem;
+    }
+}
+
+/* ============================================
+   DETALLE DE EVENTO - SHOW (original restaurado)
+   ============================================ */
+
+.public-detail-container { 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 2rem 1rem; 
+}
+
+.public-detail-card { 
+    background: white; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+}
+
+.public-detail-body { 
+    padding: 2rem; 
+}
+
+.public-detail-image { 
+    width: 100%; 
+    max-height: 400px; 
+    object-fit: cover; 
+    border-radius: 12px; 
+    margin-bottom: 1.5rem; 
+}
+
+.public-detail-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    gap: 1rem; 
+    margin-bottom: 1.5rem; 
+}
+
+.public-detail-title { 
+    color: #1B8E95; 
+    font-size: 2rem; 
+    margin: 0; 
+}
+
+.public-detail-actions-header { 
+    display: flex; 
+    gap: 0.5rem; 
+}
+
+.public-btn-like-detail { 
+    background: rgba(253, 69, 134, 0.1); 
+    color: #fd4586; 
+    border: 1px solid #fd4586; 
+    padding: 0.5rem 1rem; 
+    border-radius: 8px; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.public-btn-like-detail.liked { 
+    background: #fd4586; 
+    color: white; 
+}
+
+.public-btn-like-detail:hover { 
+    transform: translateY(-2px); 
+}
+
+.public-btn-share { 
+    background: rgba(27, 142, 149, 0.1); 
+    color: #1B8E95; 
+    border: 1px solid #1B8E95; 
+    padding: 0.5rem 1rem; 
+    border-radius: 8px; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.public-btn-share:hover { 
+    background: #1B8E95; 
+    color: white; 
+}
+
+.public-info-section { 
+    background: #f8f9fa; 
+    padding: 1.5rem; 
+    border-radius: 12px; 
+    margin: 1.5rem 0; 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1rem; 
+}
+
+.public-info-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 0.75rem; 
+}
+
+.public-info-icon { 
+    color: #fd4586; 
+}
+
+.public-description { 
+    margin: 1.5rem 0; 
+}
+
+.public-description h5 { 
+    color: #1B8E95; 
+    margin-bottom: 1rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+}
+
+.public-description p { 
+    background: rgba(27, 142, 149, 0.05); 
+    padding: 1.5rem; 
+    border-radius: 12px; 
+    border-left: 4px solid #fd4586; 
+    line-height: 1.7; 
+}
+
+.public-detail-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 2rem; 
+    padding-top: 1rem; 
+    border-top: 1px solid #e0e0e0; 
+    flex-wrap: wrap; 
+    gap: 1rem; 
+}
+
+.public-btn-secondary { 
+    background: #f8f9fa; 
+    color: #333; 
+    text-decoration: none; 
+    padding: 0.5rem 1rem; 
+    border-radius: 8px; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    transition: all 0.3s ease; 
+}
+
+.public-btn-secondary:hover { 
+    background: #e9ecef; 
+    transform: translateX(-4px); 
+}
+
+.public-publish-date { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    color: #666; 
+    font-size: 0.875rem; 
+}
+
+.detail-badge {
+    margin-bottom: 1rem;
+}
+
+.badge-admin-large {
+    background: #1B8E95;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-fundacion-large {
+    background: #fd4586;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.asistencia-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.btn-asistir-principal {
+    background: #1B8E95;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-asistir-principal.confirmed {
+    background: #fd4586;
+}
+
+.btn-asistir-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(27, 142, 149, 0.3);
+}
+
+.total-asistentes {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.public-detail-placeholder {
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(135deg, #1B8E95, #fd4586);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.public-detail-placeholder svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.7;
+}
+
+/* Responsive para detalle */
 @media (max-width: 768px) {
-    .public-eventos-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    .public-card-actions { flex-direction: column; }
-    .public-detail-body { padding: 1.5rem; }
-    .public-detail-title { font-size: 1.5rem; }
-    .public-detail-header { flex-direction: column; align-items: flex-start; }
-    .public-detail-actions-header { width: 100%; }
-    .public-btn-like-detail, .public-btn-share { flex: 1; justify-content: center; }
-    .public-detail-footer { flex-direction: column; align-items: stretch; }
-    .public-btn-secondary { justify-content: center; }
+    .public-detail-body {
+        padding: 1.5rem;
+    }
+    
+    .public-detail-title {
+        font-size: 1.5rem;
+    }
+    
+    .public-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .public-detail-actions-header {
+        width: 100%;
+    }
+    
+    .public-btn-like-detail,
+    .public-btn-share {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .public-info-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .public-detail-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .public-btn-secondary {
+        justify-content: center;
+    }
+    
+    .asistencia-section {
+        padding: 1rem;
+    }
+    
+    .btn-asistir-principal {
+        width: 100%;
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .public-detail-placeholder {
+        height: 200px;
+    }
 }
