@@ -21,7 +21,13 @@
 .eventos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
 .eventos-title { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
 .eventos-subtitle { color: var(--color-text-light); font-size: 0.95rem; }
-.eventos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+
+/* 🔥 CAMBIO PRINCIPAL: 4 cards por fila en desktop */
+.eventos-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 1.5rem; 
+}
 
 .evento-card { background: var(--color-white); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.3s ease; }
 .evento-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
@@ -113,11 +119,39 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 .show-footer { text-align: right; padding-top: 1rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); }
 .show-footer small { display: inline-flex; align-items: center; gap: 0.5rem; }
 
-@media (max-width: 768px) {
+/* ============================================
+   RESPONSIVE: Ajuste de columnas según pantalla
+   ============================================ */
+
+/* Pantallas grandes (1200px en adelante) - 4 columnas */
+@media (min-width: 1200px) {
+    .eventos-grid { 
+        grid-template-columns: repeat(4, 1fr); 
+    }
+}
+
+/* Pantallas medianas (992px - 1199px) - 3 columnas */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .eventos-grid { 
+        grid-template-columns: repeat(3, 1fr); 
+    }
+}
+
+/* Pantallas tablet (768px - 991px) - 2 columnas */
+@media (min-width: 768px) and (max-width: 991px) {
+    .eventos-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+/* Pantallas móviles (menos de 768px) - 1 columna */
+@media (max-width: 767px) {
     .eventos-container { padding: 1rem; }
     .eventos-header { flex-direction: column; align-items: flex-start; }
     .eventos-title { font-size: 1.5rem; }
-    .eventos-grid { grid-template-columns: 1fr; }
+    .eventos-grid { 
+        grid-template-columns: 1fr; 
+    }
     .form-row { grid-template-columns: 1fr; gap: 0; }
     .eventos-form-container { padding: 1rem; }
     .form-card-body { padding: 1.5rem; }
