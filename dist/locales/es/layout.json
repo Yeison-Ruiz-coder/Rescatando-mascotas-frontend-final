@@ -1,0 +1,170 @@
+{
+  "navbar": {
+    "reportar_rescate": "Reportar rescate",
+    "iniciar_sesion": "Iniciar sesión",
+    "registrarse": "Registrarse",
+    "cerrar_sesion": "Cerrar sesión",
+    "mi_perfil": "Mi perfil",
+    "administrador": "Administrador",
+    "usuario": "Usuario",
+    "invitado": "Invitado",
+    "bienvenido": "Bienvenido",
+    "logo_title": "Rescatando Mascotas Forever",
+    "logo_subtitle": "Sanando su historia.",
+    "profile": "Mi Perfil",
+    "settings": "Configuración",
+    "logout": "Cerrar Sesión",
+    "dashboard": "Mi Panel",
+    "admin_panel": "Administración",
+    "admin": "Admin",
+    "role_admin": "Administrador",
+    "role_vet": "Veterinaria",
+    "role_foundation": "Fundación",
+    "role_user": "Usuario"
+  },
+  "sidebar": {
+    "acciones_principales": "ACCIONES PRINCIPALES",
+    "reportar_emergencia": "Reportar emergencia",
+    "rescates_activos": "Rescates activos",
+    "adopcion": "ADOPCIÓN",
+    "mascotas_adopcion": "Mascotas en adopción",
+    "mis_solicitudes": "Mis solicitudes",
+    "apadrinar": "Apadrinar",
+    "colaborar": "COLABORAR",
+    "donar": "Donar",
+    "eventos": "Eventos",
+    "comunidad": "COMUNIDAD",
+    "fundaciones": "Fundaciones",
+    "veterinarias": "Veterinarias",
+    "notificaciones": "Notificaciones",
+    "ayuda": "Ayuda"
+  },
+  "footer": {
+    "contacto": {
+      "titulo": "Contacto",
+      "telefono": "+57 304 884 234",
+      "email": "rmforever@org",
+      "direccion": "Calle 6 # 234 - CC y S",
+      "ciudad": "Popayán, Colombia"
+    },
+    "servicios": "Servicios",
+    "mis_acciones": "Mis Acciones",
+    "comunidad": {
+      "titulo": "Comunidad"
+    },
+    "siguenos": {
+      "titulo": "Síguenos"
+    },
+    "links": {
+      "adopcion": "Adopción",
+      "rescates": "Rescates",
+      "donaciones": "Donaciones",
+      "fundaciones": "Fundaciones",
+      "veterinarias": "Veterinarias",
+      "eventos": "Eventos",
+      "dashboard": "Dashboard",
+      "usuarios": "Usuarios",
+      "mascotas": "Mascotas",
+      "adopciones": "Adopciones",
+      "reportes": "Reportes",
+      "atenciones": "Atenciones",
+      "vacunas": "Vacunas",
+      "contacto": "Contacto",
+      "mis_mascotas": "Mis Mascotas",
+      "solicitudes": "Solicitudes",
+      "voluntarios": "Voluntarios",
+      "mi_panel": "Mi Panel",
+      "mis_solicitudes": "Mis Solicitudes",
+      "mis_donaciones": "Mis Donaciones",
+      "mi_perfil": "Mi Perfil"
+    },
+    "copyright": "© {{year}} Rescatando Mascotas Forever. Todos los derechos reservados.",
+    "legal": {
+      "privacidad": "Privacidad",
+      "terminos": "Términos",
+      "cookies": "Cookies"
+    },
+    "logo_alt": "Logo de Rescatando Mascotas Forever",
+    "logo_text_alt": "Rescatando Mascotas Forever - Salvando vidas"
+  },
+  
+
+  "dashboard": "Dashboard",
+  "rescates": "Rescates",
+  "todos_rescates": "Todos los rescates",
+  "pendientes": "Pendientes",
+  "mapa_rescates": "Mapa de rescates",
+  "mascotas": "Mascotas",
+  "todas_mascotas": "Todas las mascotas",
+  "registrar_mascota": "Registrar mascota",
+  "catalogo_razas": "Catálogo de razas",
+  "usuarios": "Usuarios",
+  "todos_usuarios": "Todos los usuarios",
+  "pendientes_aprobacion": "Pendientes de aprobación",
+  "fundaciones": "Fundaciones",
+  "veterinarias": "Veterinarias",
+  "adopciones": "Adopciones",
+  "todas_adopciones": "Todas las adopciones",
+  "solicitudes_pendientes": "Solicitudes pendientes",
+  "seguimientos": "Seguimientos",
+  "eventos": "Eventos",
+  "todos_eventos": "Todos los eventos",
+  "crear_evento": "Crear evento",
+  "calendario": "Calendario",
+  "donaciones": "Donaciones",
+  "mi_perfil": "Mi Perfil",
+  "cerrar_sesion": "Cerrar Sesión",
+  "rescates_cerca": "Rescates cerca de mí",
+  "mis_rescates": "Mis rescates asignados",
+  "mis_mascotas": "Mis mascotas",
+  "registrar_desde_rescate": "Registrar desde rescate",
+  "solicitudes_recibidas": "Solicitudes recibidas",
+  "adopciones_aprobadas": "Adopciones aprobadas",
+  "seguimiento_post": "Seguimiento post-adopción",
+  "mis_eventos": "Mis eventos",
+  "atenciones_medicas": "Atenciones médicas",
+  "historial_atenciones": "Historial de atenciones",
+  "nueva_atencion": "Nueva atención",
+  "mascotas_atendidas": "Mascotas atendidas",
+  "control_vacunas": "Control de vacunas",
+  "navegacion": "Navegación",
+  "inicio": "Inicio",
+  "adopcion": "Adopción",
+  "mascotas_adopcion": "Mascotas en adopción",
+  "urgente": "Urgente",
+  "reportar_rescate": "Reportar rescate",
+  "comunidad": "Comunidad",
+  "eventos_proximos": "Próximos eventos",
+  "colaborar": "Colaborar",
+  "mi_cuenta": "Mi cuenta",
+  "mis_solicitudes": "Mis solicitudes",
+  "bienvenido": "Bienvenido",
+  "invitado": "Invitado",
+
+
+
+
+  "admin_navbar": {
+    "brand_title": "Rescatando",
+    "brand_subtitle": "Panel Admin",
+    "language_selector": {
+      "spanish": "Español",
+      "english": "Inglés"
+    },
+    "user_menu": {
+      "my_profile": "Mi Perfil",
+      "settings": "Configuración",
+      "logout": "Cerrar Sesión",
+      "admin_role": "Administrador",
+      "foundation_role": "Fundación",
+      "veterinary_role": "Veterinaria",
+      "user_role": "Administrador"
+    },
+    "aria": {
+      "toggle_menu": "Abrir/cerrar menú",
+      "select_language": "Seleccionar idioma",
+      "user_menu": "Menú de usuario"
+    }
+  }
+
+}

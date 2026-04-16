@@ -1,0 +1,91 @@
+{
+  "titulo": "Registrar Nueva Mascota",
+  "subtitulo": "Ayuda a una mascota a encontrar un hogar lleno de amor",
+  "fundacion_label": "Fundación",
+  
+  "steps": {
+    "informacion_basica": "Información Básica",
+    "ubicacion_descripcion": "Ubicación y Descripción",
+    "salud_vacunas": "Salud y Vacunas",
+    "galeria_fotos": "Galería de Fotos"
+  },
+  
+  "informacion_basica": "Información Básica",
+  "nombre_mascota": "Nombre de la Mascota",
+  "nombre_mascota_placeholder": "Ej: Luna, Max, Bella",
+  "especie": "Especie",
+  "seleccionar_especie": "Seleccionar especie",
+  "razas": "Razas",
+  "seleccionar_especie_primero": "Selecciona una especie primero para ver las razas disponibles",
+  "cargando_razas": "Cargando razas...",
+  "sin_razas": "No hay razas disponibles para",
+  "edad_aprox": "Edad Aproximada (años)",
+  "edad_placeholder": "Ej: 2.5",
+  "genero": "Género",
+  "macho": "Macho",
+  "hembra": "Hembra",
+  "desconocido": "Desconocido",
+  "estado_actual": "Estado Actual",
+  "estado_en_adopcion": "En adopción",
+  "estado_rescatada": "Rescatada",
+  "estado_en_acogida": "En acogida",
+  "estado_adoptado": "Adoptado",
+  
+  "ubicacion_descripcion": "Ubicación y Descripción",
+  "lugar_rescate": "Lugar donde se encuentra",
+  "lugar_rescate_placeholder": "Ej: Parque Central, Calle Principal #123",
+  "descripcion": "Descripción",
+  "descripcion_placeholder": "Describe a la mascota: carácter, comportamiento, condición de salud, necesidades especiales...",
+  "condiciones_especiales": "Condiciones Especiales",
+  "condiciones_placeholder": "Enfermedades crónicas, discapacidades, cuidados especiales...",
+  
+  "salud_vacunas": "Salud y Vacunas",
+  "necesita_hogar_temporal": "Necesita hogar temporal",
+  "apto_con_ninos": "Apto con niños",
+  "apto_con_otros_animales": "Apto con otros animales",
+  "vacunas_aplicadas": "Vacunas Aplicadas",
+  "sin_vacunas": "No hay vacunas disponibles",
+  "frecuencia_dias": "Cada {{dias}} días",
+  
+  "galeria_fotos": "Galería de Fotos",
+  "foto_principal": "Foto Principal",
+  "foto_principal_requerida": "La foto principal es requerida",
+  "formatos_imagen": "Formatos: JPG, PNG, GIF • Máx. 2MB",
+  "galeria_descripcion": "Puedes seleccionar múltiples fotos adicionales (máx. 2MB cada una)",
+  
+  "botones": {
+    "anterior": "Anterior",
+    "siguiente": "Siguiente",
+    "registrar": "Registrar Mascota",
+    "registrando": "Registrando..."
+  },
+  
+  "errores": {
+    "nombre_requerido": "El nombre es requerido",
+    "especie_requerida": "La especie es requerida",
+    "razas_requeridas": "Debes seleccionar al menos una raza",
+    "edad_requerida": "La edad es requerida",
+    "genero_requerido": "El género es requerido",
+    "estado_requerido": "El estado es requerido",
+    "lugar_rescate_requerido": "El lugar de rescate es requerido",
+    "descripcion_requerida": "La descripción es requerida",
+    "foto_principal_requerida": "La foto principal es requerida"
+  },
+  
+  "mensajes": {
+    "solo_fundacion": "Solo los usuarios de tipo fundación pueden registrar mascotas.",
+    "sin_perfil_fundacion": "No se encontró el perfil de fundación. Por favor, contacta al administrador.",
+    "registro_exitoso": "Mascota registrada exitosamente",
+    "error_registro": "Error al registrar la mascota",
+    "imagen_grande": "La imagen no debe superar los 2MB",
+    "imagen_excluida": "La imagen {{nombre}} supera los 2MB y no será incluida",
+    "seleccionar_especie_primero": "Primero debes seleccionar una especie"
+  },
+  
+  "acceso_no_autorizado": {
+    "titulo": "Acceso no autorizado",
+    "mensaje": "Esta sección es solo para usuarios de tipo Fundación",
+    "tu_tipo": "Tu tipo de usuario es",
+    "volver_inicio": "Volver al inicio"
+  }
+}
