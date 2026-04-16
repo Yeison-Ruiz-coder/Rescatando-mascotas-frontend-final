@@ -18,7 +18,10 @@
     "step2_title": "Completa tu Solicitud",
     "step2_desc": "Llena nuestro formulario de adopción y cuéntanos sobre ti y tu hogar.",
     "step3_title": "Conoce y Adopta",
-    "step3_desc": "Conoce a tu potencial nuevo miembro familiar y completa el proceso de adopción."
+    "step3_desc": "Conoce a tu potencial nuevo miembro familiar y completa el proceso de adopción.",
+    "step4_title": "Proporciona un Hogar Amoroso",
+    "step4_desc": "Dale a tu nueva mascota el amor y cuidado que merece en su hogar para siempre.",
+    "btn_iniciar": "Iniciar Proceso"
   },
   "testimonios": {
     "title": "Lo Que Dicen Nuestros Adoptantes",
