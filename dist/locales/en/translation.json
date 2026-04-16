@@ -1,0 +1,55 @@
+{
+  "home": {
+    "hero": {
+      "title": "Find Your Perfect Companion",
+      "welcome": "WELCOME TO RESCATANDO MASCOTAS FOREVER!!",
+      "description": "Give a second chance to an animal in need. Thousands of pets are waiting for a loving home.",
+      "adopt_now": "Adopt Now",
+      "know_process": "Learn the Process",
+      "family_with_pet": "Family with pet"
+    },
+    "stats": {
+      "rescued_pets": "Pets Rescued",
+      "successful_adoptions": "Successful Adoptions",
+      "active_volunteers": "Active Volunteers",
+      "years_experience": "Years of Experience"
+    },
+    "pets": {
+      "available_title": "Pets Available for Adoption",
+      "available_subtitle": "Meet our friends looking for a home full of love and care.",
+      "know_more": "Learn More",
+      "adopt": "Adopt",
+      "no_pets": "Soon we will have pets available for adoption.",
+      "view_all": "View All Pets"
+    },
+    "process": {
+      "title": "Adoption Process",
+      "subtitle": "We follow a careful process to ensure each pet finds the perfect home.",
+      "knowledge": "Get to Know",
+      "knowledge_desc": "Meet the pet and make sure they are compatible with your lifestyle.",
+      "request": "Application",
+      "request_desc": "Complete our adoption form with your details and preferences.",
+      "interview": "Interview",
+      "interview_desc": "We talk with you to better understand your expectations and capabilities.",
+      "adoption": "Adoption!",
+      "adoption_desc": "Sign the documents and take home your new family member.",
+      "start": "Start Adoption Process"
+    },
+    "testimonials": {
+      "title": "Success Stories",
+      "subtitle": "Learn about the experiences of families who have adopted with us.",
+      "adopted": "Adopted",
+      "ago": "ago",
+      "maria_text": "The adoption experience was wonderful. The team was very professional and Luna has adapted perfectly to our family. We couldn't be happier!",
+      "carlos_text": "Rocky has completely changed our lives. He is the perfect companion for my children and has brought so much joy to our home. Thank you for making this adoption possible.",
+      "ana_text": "The process was very clear and I felt supported throughout. Simba is a wonderful cat and I am very grateful for the opportunity to give him a home."
+    },
+    "cta": {
+      "title": "Ready to Change a Life?",
+      "description": "Every adoption not only saves a life but also creates space for us to rescue another animal in need.",
+      "adopt": "Adopt a Pet",
+      "report": "Report Rescue",
+      "donate": "Make a Donation"
+    }
+  }
+}

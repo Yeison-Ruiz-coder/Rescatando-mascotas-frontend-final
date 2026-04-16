@@ -1,0 +1,41 @@
+{
+  "titulo": "My Adoption Requests",
+  "subtitulo": "Here you can see all your adoption requests and download the PDF forms",
+  
+  "solicitudes_cargadas": "requests loaded",
+  "cargando_solicitudes": "Loading your requests...",
+  
+  "error_titulo": "Error loading requests",
+  "error_cargar_solicitudes": "Error loading your requests",
+  "error_respuesta": "Unexpected server response",
+  "error_sesion_expirada": "Your session has expired. Please log in again.",
+  "error_permisos": "You don't have permission to access your requests.",
+  "error_no_encontradas": "No requests found.",
+  "error_servidor": "Internal server error. Please try again later.",
+  "error_conexion": "Connection error. Check your internet connection.",
+  
+  "reintentar": "Retry",
+  "ver_mascotas_disponibles": "View available pets",
+  
+  "sin_solicitudes": "You have no requests yet",
+  "sin_solicitudes_desc": "When you submit an adoption request, it will appear here",
+  
+  "solicitud_numero": "Request",
+  "mascota_solicitada": "Requested pet:",
+  "tu_mensaje": "Your message:",
+  "razon_rechazo": "Rejection reason:",
+  "notas_adicionales": "Additional notes:",
+  "mascota_no_disponible": "Pet not available",
+  "fecha_no_disponible": "Date not available",
+  "no_especificado": "Not specified",
+  
+  "estado_pendiente": "Pending",
+  "estado_en_revision": "Under Review",
+  "estado_aprobada": "Approved",
+  "estado_rechazada": "Rejected",
+  "estado_completada": "Completed",
+  
+  "generando_pdf": "Generating PDF...",
+  "descargar_pdf": "Download PDF",
+  "error_pdf": "PDF Error"
+}

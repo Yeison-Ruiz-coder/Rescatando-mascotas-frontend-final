@@ -1,0 +1,97 @@
+{
+  "bienvenido": "¡Bienvenido, {{nombre}}!",
+  "resumen_fundacion": "Este es el resumen de tu fundación",
+  "locale": "es-ES",
+  
+  "mascotas_registradas": "MASCOTAS REGISTRADAS",
+  "adopciones_exitosas": "ADOPCIONES EXITOSAS",
+  "donaciones_recibidas": "DONACIONES RECIBIDAS",
+  "adopciones_proceso": "ADOPCIONES EN PROCESO",
+  "este_mes": "este mes",
+  "meta": "Meta: {{meta}}",
+  "familias_interesadas": "Familias interesadas",
+  
+  "actividad_reciente": "Actividad Reciente",
+  "ver_todas": "Ver todas",
+  "acciones_rapidas": "Acciones Rápidas",
+  
+  "actividad_adopcion_titulo": "Nueva adopción completada",
+  "actividad_adopcion_desc": "{{nombre}} fue adoptada por la familia {{familia}}",
+  "actividad_mascota_titulo": "Nueva mascota registrada",
+  "actividad_mascota_desc": "{{nombre}}, un {{raza}} de {{edad}} años",
+  "actividad_donacion_titulo": "Donación recibida",
+  "actividad_donacion_desc": "${{monto}} para el programa de {{programa}}",
+  "actividad_voluntario_titulo": "Nuevo voluntario registrado",
+  "actividad_voluntario_desc": "{{nombre}} se unió como voluntario",
+  
+  "hace_2_horas": "Hace 2 horas",
+  "ayer": "Ayer",
+  "hace_3_dias": "Hace 3 días",
+  "hace_4_dias": "Hace 4 días",
+  
+  "registrar_mascota": "Registrar Mascota",
+  "programar_evento": "Programar Evento",
+  "generar_reporte": "Generar Reporte",
+  "gestionar_voluntarios": "Gestionar Voluntarios",
+  
+  "adopciones_este_mes": "Adopciones este mes",
+  "nuevas_familias": "nuevas familias",
+  "tasa_exito": "Tasa de éxito",
+  "adopciones_exitosas_label": "adopciones exitosas",
+  
+  "sin_datos": "No hay datos disponibles",
+  "cargando": "Cargando...",
+  "error_carga": "Error al cargar los datos",
+
+
+  
+  "mis_mascotas": "Mis Mascotas",
+  "gestion_mascotas": "Gestiona el registro de tus mascotas en adopción",
+  "todos": "Todos",
+  "sin_mascotas": "No hay mascotas para mostrar",
+  "sin_resultados_filtros": "No se encontraron mascotas con los filtros seleccionados",
+  "primer_mascota": "Comienza registrando tu primera mascota para encontrarle un hogar",
+  "limpiar_filtros": "Limpiar filtros",
+  "registrar_primera": "Registrar primera mascota",
+  "buscar_placeholder": "Buscar por nombre, especie o raza...",
+  "cargando_mascotas": "Cargando mascotas...",
+  "error_permisos": "No tienes permisos para ver las mascotas. Verifica que tu usuario sea de tipo fundación.",
+  "error_sesion": "Sesión expirada. Por favor inicia sesión nuevamente.",
+  "error_carga_mascotas": "Error al cargar las mascotas",
+  "error_eliminar": "Error al eliminar",
+
+
+  
+  "estado_en_adopcion": "En adopción",
+  "estado_adoptado": "Adoptado",
+  "estado_rescatada": "Rescatada",
+  "estado_en_acogida": "En acogida",
+  "edad_formato": "{edad} años",
+  "fecha_no_disponible": "Fecha no disponible",
+  "id_label": "ID",
+  "especie_label": "Especie",
+  "no_especificada": "No especificada",
+  "raza_label": "Raza",
+  "mixto": "Mixto",
+  "edad_label": "Edad",
+  "genero_label": "Género",
+  "macho": "Macho",
+  "hembra": "Hembra",
+  "no_especificado": "No especificado",
+  "lugar_rescate_label": "Rescate",
+  "registrado_label": "Registrado",
+  "sin_descripcion": "Sin descripción disponible",
+  "cambiar_estado_label": "Cambiar estado",
+  "ver_detalles": "Ver detalles",
+  "editar": "Editar",
+  "eliminar": "Eliminar",
+  "eliminando": "Eliminando...",
+  "sin_imagen": "Sin imagen",
+  "estado_actualizado_exito": "Estado actualizado a {{estado}}",
+  "error_actualizar_estado": "Error al actualizar el estado",
+  "confirmar_eliminar": "¿Estás seguro de que deseas eliminar a {{nombre}}? Esta acción no se puede deshacer.",
+  "mascota_eliminada_exito": "{{nombre}} ha sido eliminado(a)",
+  "error_eliminar_mascota": "Error al eliminar la mascota"
+
+
+}

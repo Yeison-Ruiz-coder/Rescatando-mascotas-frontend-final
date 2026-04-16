@@ -1,0 +1,91 @@
+{
+  "titulo": "Register New Pet",
+  "subtitulo": "Help a pet find a loving home",
+  "fundacion_label": "Foundation",
+  
+  "steps": {
+    "informacion_basica": "Basic Information",
+    "ubicacion_descripcion": "Location & Description",
+    "salud_vacunas": "Health & Vaccines",
+    "galeria_fotos": "Photo Gallery"
+  },
+  
+  "informacion_basica": "Basic Information",
+  "nombre_mascota": "Pet Name",
+  "nombre_mascota_placeholder": "Eg: Luna, Max, Bella",
+  "especie": "Species",
+  "seleccionar_especie": "Select species",
+  "razas": "Breeds",
+  "seleccionar_especie_primero": "Select a species first to see available breeds",
+  "cargando_razas": "Loading breeds...",
+  "sin_razas": "No breeds available for",
+  "edad_aprox": "Approximate Age (years)",
+  "edad_placeholder": "Eg: 2.5",
+  "genero": "Gender",
+  "macho": "Male",
+  "hembra": "Female",
+  "desconocido": "Unknown",
+  "estado_actual": "Current Status",
+  "estado_en_adopcion": "For adoption",
+  "estado_rescatada": "Rescued",
+  "estado_en_acogida": "In foster care",
+  "estado_adoptado": "Adopted",
+  
+  "ubicacion_descripcion": "Location & Description",
+  "lugar_rescate": "Rescue Location",
+  "lugar_rescate_placeholder": "Eg: Central Park, Main St #123",
+  "descripcion": "Description",
+  "descripcion_placeholder": "Describe the pet: personality, behavior, health condition, special needs...",
+  "condiciones_especiales": "Special Conditions",
+  "condiciones_placeholder": "Chronic diseases, disabilities, special care...",
+  
+  "salud_vacunas": "Health & Vaccines",
+  "necesita_hogar_temporal": "Needs foster home",
+  "apto_con_ninos": "Good with children",
+  "apto_con_otros_animales": "Good with other animals",
+  "vacunas_aplicadas": "Applied Vaccines",
+  "sin_vacunas": "No vaccines available",
+  "frecuencia_dias": "Every {{dias}} days",
+  
+  "galeria_fotos": "Photo Gallery",
+  "foto_principal": "Main Photo",
+  "foto_principal_requerida": "Main photo is required",
+  "formatos_imagen": "Formats: JPG, PNG, GIF • Max. 2MB",
+  "galeria_descripcion": "You can select multiple additional photos (max. 2MB each)",
+  
+  "botones": {
+    "anterior": "Previous",
+    "siguiente": "Next",
+    "registrar": "Register Pet",
+    "registrando": "Registering..."
+  },
+  
+  "errores": {
+    "nombre_requerido": "Name is required",
+    "especie_requerida": "Species is required",
+    "razas_requeridas": "Select at least one breed",
+    "edad_requerida": "Age is required",
+    "genero_requerido": "Gender is required",
+    "estado_requerido": "Status is required",
+    "lugar_rescate_requerido": "Rescue location is required",
+    "descripcion_requerida": "Description is required",
+    "foto_principal_requerida": "Main photo is required"
+  },
+  
+  "mensajes": {
+    "solo_fundacion": "Only foundation users can register pets.",
+    "sin_perfil_fundacion": "Foundation profile not found. Please contact the administrator.",
+    "registro_exitoso": "Pet registered successfully",
+    "error_registro": "Error registering pet",
+    "imagen_grande": "Image must not exceed 2MB",
+    "imagen_excluida": "Image {{nombre}} exceeds 2MB and will not be included",
+    "seleccionar_especie_primero": "Please select a species first"
+  },
+  
+  "acceso_no_autorizado": {
+    "titulo": "Unauthorized Access",
+    "mensaje": "This section is only for Foundation users",
+    "tu_tipo": "Your user type is",
+    "volver_inicio": "Back to home"
+  }
+}
