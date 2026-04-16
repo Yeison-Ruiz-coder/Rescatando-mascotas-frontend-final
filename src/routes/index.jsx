@@ -29,6 +29,10 @@ import SolicitudExitosa from '../pages/public/SolicitarAdopcion/SolicitudExitosa
 import PublicEventosIndex from '../pages/public/eventos/EventosIndex';
 import PublicEventosShow from '../pages/public/eventos/EventosShow';
 
+// ✅ FUNDACIONES PÚBLICAS
+import FundacionesIndex from '../pages/public/fundaciones/FundacionesIndex';
+import FundacionDetalle from '../pages/public/fundaciones/FundacionDetalle';
+
 // =============================================================
 // PÁGINAS DE USUARIO
 // =============================================================
@@ -101,7 +105,6 @@ const UsuarioDetail = () => (
 
 const AdminAdopciones = () => <div style={{ color: '#333', padding: '2rem' }}>Adopciones - Próximamente</div>;
 const AdminDonaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Donaciones - Próximamente</div>;
-// ❌ ELIMINADO: const AdminEventos = () => ... (ya no se usa)
 const AdminFundaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Fundaciones - Próximamente</div>;
 const AdminVeterinarias = () => <div style={{ color: '#333', padding: '2rem' }}>Veterinarias - Próximamente</div>;
 const AdminProductos = () => <div style={{ color: '#333', padding: '2rem' }}>Productos - Próximamente</div>;
@@ -115,9 +118,8 @@ const AdminCategorias = () => <div style={{ color: '#333', padding: '2rem' }}>Ca
 
 // Públicas placeholders
 const Adopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Listado de Adopciones - Próximamente</div>;
-const Fundaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Fundaciones - Próximamente</div>;
+// ❌ ELIMINADO: const Fundaciones = () => ... (ya no se usa, ahora usamos FundacionesIndex real)
 const Veterinarias = () => <div style={{ color: 'white', padding: '2rem' }}>Veterinarias - Próximamente</div>;
-// ❌ ELIMINADO: const Eventos = () => ... (ya no se usa)
 const Donaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
 const Tienda = () => <div style={{ color: 'white', padding: '2rem' }}>Tienda - Próximamente</div>;
 const ReportarRescate = () => <div style={{ color: 'white', padding: '2rem' }}>Reportar Rescate - Próximamente</div>;
@@ -144,7 +146,6 @@ const VetReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Repor
 const FundRescates = () => <div style={{ color: 'white', padding: '2rem' }}>Rescates - Próximamente</div>;
 const FundAdopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Adopciones - Próximamente</div>;
 const FundDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
-// ❌ ELIMINADO: const FundEventos = () => ... (ya no se usa)
 const FundVoluntarios = () => <div style={{ color: 'white', padding: '2rem' }}>Voluntarios - Próximamente</div>;
 const FundReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Reportes - Próximamente</div>;
 
@@ -202,7 +203,7 @@ const NotFound = () => {
 // CONFIGURACIÓN DE RUTAS
 // =============================================================
 const router = createBrowserRouter([
-  // RUTAS PÚBLICAS
+  // ✅ RUTAS PÚBLICAS (CORREGIDO)
   {
     path: '/',
     element: <PublicLayout />,
@@ -212,12 +213,14 @@ const router = createBrowserRouter([
       { path: 'register', element: <Register /> },
       { path: 'mascotas', element: <Mascotas /> },
       { path: 'adopciones', element: <Adopciones /> },
-      { path: 'fundaciones', element: <Fundaciones /> },
+      // ✅ RUTAS PÚBLICAS DE FUNDACIONES (CORREGIDO)
+      { path: 'fundaciones', element: <FundacionesIndex /> },
+      { path: 'fundaciones/:id', element: <FundacionDetalle /> },
       { path: 'veterinarias', element: <Veterinarias /> },
       { path: 'mascota/:id', element: <MascotaDetalle /> },
       { path: 'solicitar-adopcion/:id', element: <SolicitarAdopcion /> },
       { path: 'adopcion-exitosa/:id', element: <SolicitudExitosa /> },
-      // ✅ RUTAS PÚBLICAS DE EVENTOS (CORREGIDO - solo una vez)
+      // ✅ RUTAS PÚBLICAS DE EVENTOS
       { path: 'eventos', element: <PublicEventosIndex /> },
       { path: 'eventos/:id', element: <PublicEventosShow /> },
       { path: 'tienda', element: <Tienda /> },
@@ -270,7 +273,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // ✅ RUTAS DE FUNDACIÓN (CORREGIDO - sin duplicados)
+  // ✅ RUTAS DE FUNDACIÓN (PANEL ADMINISTRATIVO)
   {
     path: '/fundacion',
     element: <FundacionRoute />,
@@ -285,7 +288,7 @@ const router = createBrowserRouter([
           { path: 'rescates', element: <FundRescates /> },
           { path: 'adopciones', element: <FundAdopciones /> },
           { path: 'donaciones', element: <FundDonaciones /> },
-          // ✅ RUTAS DE EVENTOS PARA FUNDACIÓN (solo estas)
+          // ✅ RUTAS DE EVENTOS PARA FUNDACIÓN
           { path: 'eventos', element: <EventosIndex /> },
           { path: 'eventos/crear', element: <EventosCreate /> },
           { path: 'eventos/:id', element: <EventosShow /> },
@@ -298,7 +301,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // ✅ RUTAS DE ADMIN (CORREGIDO - sin duplicados)
+  // ✅ RUTAS DE ADMIN
   {
     path: '/admin',
     element: <AdminRoute />,
@@ -322,7 +325,7 @@ const router = createBrowserRouter([
           { path: 'mascotas/nueva', element: <AdminMascotasNueva /> },
           { path: 'adopciones', element: <AdminAdopciones /> },
           { path: 'donaciones', element: <AdminDonaciones /> },
-          // ✅ RUTAS DE EVENTOS PARA ADMIN (solo estas)
+          // ✅ RUTAS DE EVENTOS PARA ADMIN
           { path: 'eventos', element: <AdminEventosIndex /> },
           { path: 'eventos/crear', element: <AdminEventosCreate /> },
           { path: 'eventos/:id', element: <AdminEventosShow /> },

@@ -6,6 +6,9 @@
     
     "buscar_placeholder": "Buscar por nombre o descripción...",
     "todas_ciudades": "Todas las ciudades",
+    "limpiar_filtros": "Limpiar filtros",
+    "mostrando": "Mostrando",
+    "fundaciones_encontradas": "fundaciones encontradas",
     
     "verificado": "Verificada",
     "ver_mas": "Ver más",
@@ -28,8 +31,14 @@
     "descripcion": "Descripción",
     "necesidades_actuales": "Necesidades Actuales",
     "mascotas_en_adopcion": "Mascotas en Adopción",
-    "mas_mascotas": "más mascotas",
+    "ver_todas_mascotas": "Ver todas las mascotas",
+    "ubicacion": "Ubicación",
+    "ver_en_maps": "Ver en Google Maps",
+    "actualizado": "Actualizado",
     "animales": "animales",
+    "voluntarios": "Voluntarios",
+    "si_recibe": "Sí recibe voluntarios",
+    "no_recibe": "No recibe voluntarios",
     
     "fundacion_verificada": "Fundación Verificada",
     "no_encontrada": "Fundación no encontrada",

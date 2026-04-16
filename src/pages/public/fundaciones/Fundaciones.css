@@ -1,0 +1,632 @@
+/* ============================================
+   FUNDACIONES PÚBLICAS - ESTILOS (Solo esta vista)
+   ============================================ */
+
+/* Variables locales (solo afectan dentro de .fundaciones-page) */
+.fundaciones-page {
+    --color-primary: #1B8E95;
+    --color-primary-dark: #156f75;
+    --color-secondary: #fd4586;
+    --color-secondary-dark: #d83d73;
+    --color-text-dark: #333;
+    --color-text-light: #666;
+    --color-bg-light: #f8f9fa;
+    --color-white: #fff;
+    --color-border: #e0e0e0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --border-radius: 12px;
+}
+
+/* ============================================
+   LISTADO DE FUNDACIONES
+   ============================================ */
+
+.fundaciones-page .fundaciones-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.fundaciones-page .fundaciones-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.fundaciones-page .fundaciones-header h1 {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.fundaciones-page .fundaciones-header p {
+    color: var(--color-text-light);
+    font-size: 1.125rem;
+}
+
+/* Filtros */
+.fundaciones-page .fundaciones-filtros {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.fundaciones-page .search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 50px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .search-box:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(27, 142, 149, 0.1);
+}
+
+.fundaciones-page .search-box input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    background: transparent;
+}
+
+.fundaciones-page .filter-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 50px;
+    padding: 0.75rem 1rem;
+}
+
+.fundaciones-page .filter-box select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.fundaciones-page .btn-limpiar {
+    background: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .btn-limpiar:hover {
+    background: var(--color-secondary-dark);
+    transform: translateY(-2px);
+}
+
+.fundaciones-page .resultados-count {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-bg-light);
+    border-radius: 8px;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+}
+
+/* Grid de fundaciones */
+.fundaciones-page .fundaciones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Card de fundación */
+.fundaciones-page .fundacion-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .fundacion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.fundaciones-page .fundacion-card-header {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    padding: 1.5rem;
+    color: var(--color-white);
+    position: relative;
+}
+
+.fundaciones-page .fundacion-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .fundacion-card-header h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.fundaciones-page .verified-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.fundaciones-page .fundacion-card-body {
+    padding: 1.5rem;
+}
+
+.fundaciones-page .fundacion-descripcion {
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .fundacion-info {
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .fundacion-info .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.fundaciones-page .fundacion-stats {
+    display: flex;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #eee;
+}
+
+.fundaciones-page .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.fundaciones-page .fundacion-card-footer {
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.fundaciones-page .btn-ver-fundacion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .btn-ver-fundacion:hover {
+    gap: 0.75rem;
+    color: var(--color-secondary);
+}
+
+/* ============================================
+   DETALLE DE FUNDACIÓN
+   ============================================ */
+
+.fundaciones-page .fundacion-detalle-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.fundaciones-page .detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.fundaciones-page .btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .btn-volver:hover {
+    color: var(--color-primary);
+    transform: translateX(-4px);
+}
+
+.fundaciones-page .btn-compartir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f0f0f0;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fundaciones-page .btn-compartir:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.fundaciones-page .detalle-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.fundaciones-page .detalle-portada {
+    height: 200px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fundaciones-page .detalle-portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fundaciones-page .portada-placeholder svg {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.fundaciones-page .detalle-contenido {
+    padding: 2rem;
+}
+
+.fundaciones-page .detalle-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.fundaciones-page .detalle-titulo h1 {
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.fundaciones-page .verified-badge-large {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(27, 142, 149, 0.1);
+    color: var(--color-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.fundaciones-page .detalle-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.fundaciones-page .info-seccion h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.fundaciones-page .info-item {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .info-item svg {
+    color: var(--color-secondary);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+.fundaciones-page .info-item strong {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0.2rem;
+}
+
+.fundaciones-page .info-item p {
+    color: #333;
+    margin: 0;
+}
+
+.fundaciones-page .detalle-descripcion,
+.fundaciones-page .detalle-necesidades,
+.fundaciones-page .detalle-mapa,
+.fundaciones-page .detalle-mascotas {
+    margin-bottom: 2rem;
+}
+
+.fundaciones-page .detalle-descripcion h3,
+.fundaciones-page .detalle-necesidades h3,
+.fundaciones-page .detalle-mapa h3,
+.fundaciones-page .detalle-mascotas h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .detalle-descripcion p {
+    line-height: 1.7;
+    color: #555;
+}
+
+.fundaciones-page .necesidades-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.fundaciones-page .necesidad-tag {
+    background: #f0f0f0;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+/* Mapa */
+.fundaciones-page .mapa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.fundaciones-page .btn-mapa-externo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.fundaciones-page .mapa-container {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+/* Mascotas preview */
+.fundaciones-page .mascotas-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.fundaciones-page .mascota-preview-card {
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+.fundaciones-page .mascota-preview-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.fundaciones-page .mascota-preview-placeholder {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    color: var(--color-white);
+}
+
+.fundaciones-page .mascota-preview-card span {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    font-size: 0.9rem;
+}
+
+.fundaciones-page .mascota-preview-card small {
+    font-size: 0.7rem;
+    color: var(--color-text-light);
+}
+
+.fundaciones-page .mascota-preview-card:hover {
+    transform: translateY(-3px);
+}
+
+.fundaciones-page .ver-todas-mascotas {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.fundaciones-page .detalle-footer {
+    text-align: right;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    color: #999;
+    font-size: 0.75rem;
+}
+
+/* Empty State */
+.fundaciones-page .fundaciones-empty {
+    text-align: center;
+    padding: 4rem;
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius);
+}
+
+.fundaciones-page .fundaciones-empty svg {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.fundaciones-page .fundaciones-empty h4 {
+    color: var(--color-text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.fundaciones-page .btn-limpiar-empty {
+    margin-top: 1rem;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+/* Loading */
+.fundaciones-page .fundaciones-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+}
+
+.fundaciones-page .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e0e0e0;
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 992px) {
+    .fundaciones-page .fundaciones-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .fundaciones-page .fundaciones-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .fundaciones-page .fundaciones-filtros {
+        flex-direction: column;
+    }
+    
+    .fundaciones-page .search-box,
+    .fundaciones-page .filter-box {
+        width: 100%;
+    }
+    
+    .fundaciones-page .detalle-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .fundaciones-page .detalle-contenido {
+        padding: 1.5rem;
+    }
+    
+    .fundaciones-page .detalle-titulo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .fundaciones-page .detalle-titulo {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .fundaciones-page .mascotas-preview {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .fundaciones-page .fundaciones-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .fundaciones-page .mascotas-preview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .fundaciones-page .mascota-preview-card img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .fundaciones-page .mascota-preview-placeholder {
+        width: 80px;
+        height: 80px;
+    }
+}
