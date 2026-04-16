@@ -1,0 +1,42 @@
+/* src/globals.css */
+:root {
+  /* Modo claro */
+  --color-bg-primary: #fffaf5;
+  --color-bg-secondary: #fef3e7;
+  --color-bg-card: #ffffff;
+  
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  
+  --color-border: rgba(0, 0, 0, 0.12);
+  --color-accent: #ff8c42;
+  --color-primary: #667eea;
+  
+  --gradient-primary: linear-gradient(135deg, #667eea, #764ba2);
+  
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 32px rgba(0,0,0,0.1);
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] {
+  /* Modo oscuro - INVERTIDO */
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-card: #ffffff;        /* ← BLANCA en modo oscuro */
+  
+  --color-text-primary: #1f2937;   /* ← OSCURO en modo oscuro */
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  
+  --color-border: rgba(255, 255, 255, 0.2);
+  --color-accent: #ff8c42;
+  --color-primary: #667eea;
+  
+  --shadow-sm: 0 8px 20px rgba(0,0,0,0.3);
+  --shadow-md: 0 12px 28px rgba(0,0,0,0.35);
+  --shadow-lg: 0 20px 40px rgba(0,0,0,0.4);
+}

@@ -1,0 +1,34 @@
+/* src/styles/dark-theme.css */
+:root {
+  /* Fondos - página oscura, elementos CLAROS */
+  --color-bg-primary: #0f172a;      /* Fondo página oscuro */
+  --color-bg-secondary: #1e293b;
+  --color-bg-card: #ffffff;          /* ← Card BLANCA */
+  --color-bg-elevated: #f8f9fa;      /* ← Elementos claros */
+  
+  /* Textos - oscuros sobre fondo claro */
+  --color-text-primary: #1f2937;     /* ← Texto OSCURO */
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #6b7280;
+  --color-text-inverse: #0f172a;
+  
+  /* Bordes - más visibles */
+  --color-border: rgba(255, 255, 255, 0.2);
+  --color-border-strong: rgba(255, 255, 255, 0.3);
+  
+  /* Brand - mismos colores */
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --color-accent: #ff8c42;
+  --color-heart: #ff6b9d;
+  
+  /* Sombras - más pronunciadas */
+  --shadow-sm: 0 8px 20px rgba(0,0,0,0.3);
+  --shadow-md: 0 12px 28px rgba(0,0,0,0.35);
+  --shadow-lg: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}

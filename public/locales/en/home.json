@@ -18,7 +18,10 @@
     "step2_title": "Complete Your Application",
     "step2_desc": "Fill out our adoption form and tell us about yourself and your home.",
     "step3_title": "Meet and Adopt",
-    "step3_desc": "Meet your potential new family member and complete the adoption process."
+    "step3_desc": "Meet your potential new family member and complete the adoption process.",
+    "step4_title": "Provide a Loving Home",
+    "step4_desc": "Give your new pet the love and care they deserve in their forever home.",
+    "btn_iniciar": "Start Process"
   },
   "testimonios": {
     "title": "What Our Adopters Say",
