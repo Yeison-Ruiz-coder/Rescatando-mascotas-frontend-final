@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "Give a Second Chance to Those Who Need It Most",
+    "welcome": "Welcome to Rescatando Mascotas",
+    "description": "We connect loving families with pets in need of a home. Every adoption saves a life and brings joy to your home.",
+    "cta": "Start Adoption Process",
+    "process": "See Our Process"
+  },
+  "stats": {
+    "rescates": "Pets Rescued",
+    "adopciones": "Successful Adoptions",
+    "voluntarios": "Active Volunteers",
+    "experiencia": "Years of Experience"
+  },
+  "proceso": {
+    "step1_title": "Find Your Perfect Match",
+    "step1_desc": "Browse our available pets and find the one that steals your heart.",
+    "step2_title": "Complete Your Application",
+    "step2_desc": "Fill out our adoption form and tell us about yourself and your home.",
+    "step3_title": "Meet and Adopt",
+    "step3_desc": "Meet your potential new family member and complete the adoption process.",
+    "step4_title": "Provide a Loving Home",
+    "step4_desc": "Give your new pet the love and care they deserve in their forever home.",
+    "btn_iniciar": "Start Process"
+  },
+  "testimonios": {
+    "title": "What Our Adopters Say",
+    "subtitle": "Real stories from families who have found their perfect companion",
+    "maria": {
+      "name": "María González",
+      "role": "Adopter",
+      "text": "Adopting Luna was the best decision we ever made. She's brought so much joy to our family!"
+    },
+    "carlos": {
+      "name": "Carlos Rodríguez",
+      "role": "Volunteer",
+      "text": "Being part of this rescue organization has been incredibly rewarding. Every life we save matters."
+    },
+    "ana": {
+      "name": "Ana López",
+      "role": "Foundation Partner",
+      "text": "Their dedication to animal welfare is inspiring. We've seen countless success stories."
+    }
+  },
+  "cta": {
+    "title": "Ready to Make a Difference?",
+    "description": "Join our mission to save lives and find loving homes for pets in need.",
+    "btn_adoptar": "Adopt a Pet",
+    "btn_rescate": "Report a Rescue",
+    "btn_donar": "Make a Donation"
+  },
+  "mascotas_disponibles": "Available Pets",
+  "mascotas_subtitle": "Meet the pets waiting for their forever home",
+  "sin_mascotas": "No pets available at the moment. Check back soon!",
+  "ver_todas": "View All Pets",
+
+  "proceso.title": "Our Adoption Process",
+  "proceso.subtitle": "Simple steps to find your new best friend"
+}
