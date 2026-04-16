@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "mascotas": "Mascotas",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar Sesión"
+  },
+  "buttons": {
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  },
+  "auth": {
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "no_account": "¿No tienes cuenta?",
+    "yes_account": "¿Ya tienes cuenta?",
+    "register_now": "Regístrate aquí",
+    "login_now": "Inicia sesión aquí"
+  }
+}

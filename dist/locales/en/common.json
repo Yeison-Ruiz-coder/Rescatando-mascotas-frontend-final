@@ -1,0 +1,22 @@
+{
+  "nav": {
+    "home": "Home",
+    "mascotas": "Pets",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "no_account": "Don't have an account?",
+    "yes_account": "Already have an account?",
+    "register_now": "Register here",
+    "login_now": "Login here"
+  }
+}

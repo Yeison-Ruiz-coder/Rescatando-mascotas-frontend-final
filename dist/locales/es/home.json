@@ -1,0 +1,57 @@
+{
+  "hero": {
+    "title": "Da una Segunda Oportunidad a Quienes Más lo Necesitan",
+    "welcome": "Bienvenido a Rescatando Mascotas",
+    "description": "Conectamos familias amorosas con mascotas que necesitan un hogar. Cada adopción salva una vida y trae alegría a tu hogar.",
+    "cta": "Iniciar Proceso de Adopción",
+    "process": "Ver Nuestro Proceso"
+  },
+  "stats": {
+    "rescates": "Mascotas Rescatadas",
+    "adopciones": "Adopciones Exitosas",
+    "voluntarios": "Voluntarios Activos",
+    "experiencia": "Años de Experiencia"
+  },
+  "proceso": {
+    "step1_title": "Encuentra tu Pareja Perfecta",
+    "step1_desc": "Navega por nuestras mascotas disponibles y encuentra la que robe tu corazón.",
+    "step2_title": "Completa tu Solicitud",
+    "step2_desc": "Llena nuestro formulario de adopción y cuéntanos sobre ti y tu hogar.",
+    "step3_title": "Conoce y Adopta",
+    "step3_desc": "Conoce a tu potencial nuevo miembro familiar y completa el proceso de adopción."
+  },
+  "testimonios": {
+    "title": "Lo Que Dicen Nuestros Adoptantes",
+    "subtitle": "Historias reales de familias que han encontrado su compañero perfecto",
+    "maria": {
+      "name": "María González",
+      "role": "Adoptante",
+      "text": "Adoptar a Luna fue la mejor decisión que tomamos. ¡Ha traído tanta alegría a nuestra familia!"
+    },
+    "carlos": {
+      "name": "Carlos Rodríguez",
+      "role": "Voluntario",
+      "text": "Ser parte de esta organización de rescate ha sido increíblemente gratificante. Cada vida que salvamos importa."
+    },
+    "ana": {
+      "name": "Ana López",
+      "role": "Socia de Fundación",
+      "text": "Su dedicación al bienestar animal es inspiradora. Hemos visto innumerables historias de éxito."
+    }
+  },
+  "cta": {
+    "title": "¿Listo para Hacer la Diferencia?",
+    "description": "Únete a nuestra misión de salvar vidas y encontrar hogares amorosos para mascotas necesitadas.",
+    "btn_adoptar": "Adoptar una Mascota",
+    "btn_rescate": "Reportar un Rescate",
+    "btn_donar": "Hacer una Donación"
+  },
+  "mascotas_disponibles": "Mascotas Disponibles",
+  "mascotas_subtitle": "Conoce las mascotas esperando su hogar para siempre",
+  "sin_mascotas": "No hay mascotas disponibles en este momento. ¡Vuelve pronto!",
+  "ver_todas": "Ver Todas las Mascotas",
+
+  
+  "proceso.title": "Nuestro Proceso de Adopción",
+  "proceso.subtitle": "Pasos simples para encontrar tu nuevo mejor amigo"
+}

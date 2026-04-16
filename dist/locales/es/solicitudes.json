@@ -1,0 +1,41 @@
+{
+  "titulo": "Mis Solicitudes de Adopción",
+  "subtitulo": "Aquí puedes ver todas tus solicitudes de adopción y descargar los formularios en PDF",
+  
+  "solicitudes_cargadas": "solicitudes cargadas",
+  "cargando_solicitudes": "Cargando tus solicitudes...",
+  
+  "error_titulo": "Error al cargar solicitudes",
+  "error_cargar_solicitudes": "Error al cargar tus solicitudes",
+  "error_respuesta": "Respuesta inesperada del servidor",
+  "error_sesion_expirada": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.",
+  "error_permisos": "No tienes permisos para acceder a tus solicitudes.",
+  "error_no_encontradas": "No se encontraron solicitudes.",
+  "error_servidor": "Error interno del servidor. Por favor, intenta más tarde.",
+  "error_conexion": "Error de conexión. Verifica tu conexión a internet.",
+  
+  "reintentar": "Reintentar",
+  "ver_mascotas_disponibles": "Ver mascotas disponibles",
+  
+  "sin_solicitudes": "No tienes solicitudes aún",
+  "sin_solicitudes_desc": "Cuando envíes una solicitud de adopción, aparecerá aquí",
+  
+  "solicitud_numero": "Solicitud",
+  "mascota_solicitada": "Mascota solicitada:",
+  "tu_mensaje": "Tu mensaje:",
+  "razon_rechazo": "Razón del rechazo:",
+  "notas_adicionales": "Notas adicionales:",
+  "mascota_no_disponible": "Mascota no disponible",
+  "fecha_no_disponible": "Fecha no disponible",
+  "no_especificado": "No especificado",
+  
+  "estado_pendiente": "Pendiente",
+  "estado_en_revision": "En Revisión",
+  "estado_aprobada": "Aprobada",
+  "estado_rechazada": "Rechazada",
+  "estado_completada": "Completada",
+  
+  "generando_pdf": "Generando PDF...",
+  "descargar_pdf": "Descargar PDF",
+  "error_pdf": "Error PDF"
+}
