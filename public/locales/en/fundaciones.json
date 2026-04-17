@@ -1,0 +1,41 @@
+{
+    "titulo": "Protector Foundations",
+    "subtitulo": "Meet the foundations working for animal welfare",
+    "cargando": "Loading foundations...",
+    "cargando_detalle": "Loading foundation information...",
+    
+    "buscar_placeholder": "Search by name or description...",
+    "todas_ciudades": "All cities",
+    
+    "verificado": "Verified",
+    "ver_mas": "View more",
+    "volver_lista": "Back to foundations",
+    "compartir": "Share",
+    "enlace_copiado": "Link copied to clipboard!",
+    
+    "capacidad": "Capacity",
+    "mascotas_rescatadas": "Rescued pets",
+    
+    "informacion_contacto": "Contact Information",
+    "datos_fundacion": "Foundation Data",
+    "direccion": "Address",
+    "telefono": "Phone",
+    "email": "Email",
+    "horario": "Schedule",
+    "registro_sanitario": "Health Registry",
+    "capacidad_maxima": "Maximum capacity",
+    "fundada": "Founded",
+    "descripcion": "Description",
+    "necesidades_actuales": "Current Needs",
+    "mascotas_en_adopcion": "Pets for Adoption",
+    "mas_mascotas": "more pets",
+    "animales": "animals",
+    
+    "fundacion_verificada": "Verified Foundation",
+    "no_encontrada": "Foundation not found",
+    
+    "sin_resultados": {
+        "titulo": "No foundations found",
+        "mensaje": "Try different search terms"
+    }
+}

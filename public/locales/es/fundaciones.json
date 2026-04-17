@@ -1,0 +1,41 @@
+{
+    "titulo": "Fundaciones Protectoras",
+    "subtitulo": "Conoce las fundaciones que trabajan por el bienestar animal",
+    "cargando": "Cargando fundaciones...",
+    "cargando_detalle": "Cargando información de la fundación...",
+    
+    "buscar_placeholder": "Buscar por nombre o descripción...",
+    "todas_ciudades": "Todas las ciudades",
+    
+    "verificado": "Verificada",
+    "ver_mas": "Ver más",
+    "volver_lista": "Volver a fundaciones",
+    "compartir": "Compartir",
+    "enlace_copiado": "¡Enlace copiado al portapapeles!",
+    
+    "capacidad": "Capacidad",
+    "mascotas_rescatadas": "Mascotas rescatadas",
+    
+    "informacion_contacto": "Información de Contacto",
+    "datos_fundacion": "Datos de la Fundación",
+    "direccion": "Dirección",
+    "telefono": "Teléfono",
+    "email": "Email",
+    "horario": "Horario de atención",
+    "registro_sanitario": "Registro Sanitario",
+    "capacidad_maxima": "Capacidad máxima",
+    "fundada": "Fundada",
+    "descripcion": "Descripción",
+    "necesidades_actuales": "Necesidades Actuales",
+    "mascotas_en_adopcion": "Mascotas en Adopción",
+    "mas_mascotas": "más mascotas",
+    "animales": "animales",
+    
+    "fundacion_verificada": "Fundación Verificada",
+    "no_encontrada": "Fundación no encontrada",
+    
+    "sin_resultados": {
+        "titulo": "No se encontraron fundaciones",
+        "mensaje": "Intenta con otros términos de búsqueda"
+    }
+}
