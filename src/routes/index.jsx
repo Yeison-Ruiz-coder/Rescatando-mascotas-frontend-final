@@ -34,6 +34,10 @@ import Fundaciones from '../pages/public/Fundaciones/Fundaciones';
 import FundacionDetalle from '../pages/public/Fundaciones/FundacionDetalle';
 import ReportarRescate from '../pages/public/ReportarRescate/ReportarRescate';
 
+// Eventos Público
+import PublicEventosIndex from '../pages/public/eventos/EventosIndex';
+import PublicEventosShow from '../pages/public/eventos/EventosShow';
+
 // =============================================================
 // PÁGINAS DE USUARIO
 // =============================================================
@@ -44,6 +48,12 @@ import Solicitudes from '../pages/user/Solicitudes/Solicitudes';
 // =============================================================
 import Dashboard from '../pages/admin/Dashboard/Dashboard';
 import UsuariosPendientes from '../pages/admin/Usuarios/UsuariosPendientes';
+
+// Eventos Admin
+import AdminEventosIndex from '../pages/admin/eventos/EventosIndex';
+import AdminEventosCreate from '../pages/admin/eventos/EventosCreate';
+import AdminEventosEdit from '../pages/admin/eventos/EventosEdit';
+import AdminEventosShow from '../pages/admin/eventos/EventosShow';
 
 // =============================================================
 // PÁGINAS DE FUNDACIÓN (COMPONENTES REALES)
@@ -235,7 +245,9 @@ const router = createBrowserRouter([
       { path: 'mascota/:id', element: <MascotaDetalle /> },
       { path: 'solicitar-adopcion/:id', element: <SolicitarAdopcion /> },
       { path: 'adopcion-exitosa/:id', element: <SolicitudExitosa /> },
-      { path: 'eventos', element: <Eventos /> },
+      // ✅ RUTAS PÚBLICAS DE EVENTOS (CORREGIDO - solo una vez)
+      { path: 'eventos', element: <PublicEventosIndex /> },
+      { path: 'eventos/:id', element: <PublicEventosShow /> },
       { path: 'tienda', element: <Tienda /> },
       { path: 'rescates/reportar', element: <ReportarRescate /> },
       { path: 'donaciones', element: <Donaciones /> },
@@ -291,7 +303,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE FUNDACIÓN (USANDO COMPONENTES REALES)
+  // ✅ RUTAS DE FUNDACIÓN (CORREGIDO - sin duplicados)
   {
     path: '/fundacion',
     element: <FundacionRoute />,
@@ -306,7 +318,11 @@ const router = createBrowserRouter([
           { path: 'rescates', element: <FundRescates /> },
           { path: 'adopciones', element: <FundAdopciones /> },
           { path: 'donaciones', element: <FundDonaciones /> },
-          { path: 'eventos', element: <FundEventos /> },
+          // ✅ RUTAS DE EVENTOS PARA FUNDACIÓN (solo estas)
+          { path: 'eventos', element: <EventosIndex /> },
+          { path: 'eventos/crear', element: <EventosCreate /> },
+          { path: 'eventos/:id', element: <EventosShow /> },
+          { path: 'eventos/:id/editar', element: <EventosEdit /> },
           { path: 'voluntarios', element: <FundVoluntarios /> },
           { path: 'reportes', element: <FundReportes /> },
           { path: 'perfil', element: <div>Mi Perfil</div> },
@@ -315,7 +331,7 @@ const router = createBrowserRouter([
     ]
   },
 
-  // RUTAS DE ADMIN
+  // ✅ RUTAS DE ADMIN (CORREGIDO - sin duplicados)
   {
     path: '/admin',
     element: <AdminRoute />,
@@ -339,7 +355,11 @@ const router = createBrowserRouter([
           { path: 'mascotas/nueva', element: <AdminMascotasNueva /> },
           { path: 'adopciones', element: <AdminAdopciones /> },
           { path: 'donaciones', element: <AdminDonaciones /> },
-          { path: 'eventos', element: <AdminEventos /> },
+          // ✅ RUTAS DE EVENTOS PARA ADMIN (solo estas)
+          { path: 'eventos', element: <AdminEventosIndex /> },
+          { path: 'eventos/crear', element: <AdminEventosCreate /> },
+          { path: 'eventos/:id', element: <AdminEventosShow /> },
+          { path: 'eventos/:id/editar', element: <AdminEventosEdit /> },
           { path: 'fundaciones', element: <AdminFundaciones /> },
           { path: 'veterinarias', element: <AdminVeterinarias /> },
           { path: 'productos', element: <AdminProductos /> },
