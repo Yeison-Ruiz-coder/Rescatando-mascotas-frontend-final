@@ -22,8 +22,17 @@ import Login from '../pages/public/Login/Login';
 import MascotaDetalle from '../pages/public/MascotaDetalle/MascotaDetalle';
 import Register from '../pages/public/Register/Register';
 import Mascotas from '../pages/public/Mascotas/Mascotas';
+import Adopciones from '../pages/public/Adopciones/Adopciones';
+import Eventos from '../pages/public/Eventos/Eventos';
+import Donaciones from '../pages/public/Donaciones/Donaciones';
+import Tienda from '../pages/public/Tienda/Tienda';
 import SolicitarAdopcion from '../pages/public/SolicitarAdopcion/SolicitarAdopcion';
 import SolicitudExitosa from '../pages/public/SolicitarAdopcion/SolicitudExitosa';
+import Veterinarias from '../pages/public/Veterinarias/Veterinarias';
+import VeterinariaDetalle from '../pages/public/Veterinarias/VeterinariaDetalle';
+import Fundaciones from '../pages/public/Fundaciones/Fundaciones';
+import FundacionDetalle from '../pages/public/Fundaciones/FundacionDetalle';
+import ReportarRescate from '../pages/public/ReportarRescate/ReportarRescate';
 
 // Eventos Público
 import PublicEventosIndex from '../pages/public/eventos/EventosIndex';
@@ -53,11 +62,13 @@ import FundDashboard from '../pages/fundacion/dashboard/Dashboard';
 import FundMascotas from '../pages/fundacion/mascotas/Mascotas';
 import FundNuevaMascota from '../pages/fundacion/mascotas/NuevaMascota';
 
-// Eventos Fundación
-import EventosIndex from '../pages/fundacion/eventos/EventosIndex';
-import EventosCreate from '../pages/fundacion/eventos/EventosCreate';
-import EventosEdit from '../pages/fundacion/eventos/EventosEdit';
-import EventosShow from '../pages/fundacion/eventos/EventosShow';
+// Veterinaria reales
+import DashboardVeterinaria from '../pages/veterinaria/dashboard/DashboardVeterinaria';
+import Citas from '../pages/veterinaria/citas/Citas';
+import CitaForm from '../pages/veterinaria/citas/CitaForm';
+import Pacientes from '../pages/veterinaria/pacientes/Pacientes';
+import PacienteForm from '../pages/veterinaria/pacientes/PacienteForm';
+import HistorialMedico from '../pages/veterinaria/historial/HistorialMedico';
 
 // =============================================================
 // PLACEHOLDERS PARA PÁGINAS QUE NO TIENES AÚN
@@ -99,54 +110,68 @@ const UsuarioDetail = () => (
   </div>
 );
 
-const AdminAdopciones = () => <div style={{ color: '#333', padding: '2rem' }}>Adopciones - Próximamente</div>;
-const AdminDonaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Donaciones - Próximamente</div>;
-// ❌ ELIMINADO: const AdminEventos = () => ... (ya no se usa)
-const AdminFundaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Fundaciones - Próximamente</div>;
-const AdminVeterinarias = () => <div style={{ color: '#333', padding: '2rem' }}>Veterinarias - Próximamente</div>;
-const AdminProductos = () => <div style={{ color: '#333', padding: '2rem' }}>Productos - Próximamente</div>;
-const AdminComentarios = () => <div style={{ color: '#333', padding: '2rem' }}>Comentarios - Próximamente</div>;
-const AdminNotificaciones = () => <div style={{ color: '#333', padding: '2rem' }}>Notificaciones - Próximamente</div>;
-const AdminReportes = () => <div style={{ color: '#333', padding: '2rem' }}>Reportes - Próximamente</div>;
-const AdminConfiguracion = () => <div style={{ color: '#333', padding: '2rem' }}>Configuración - Próximamente</div>;
-const AdminRazas = () => <div style={{ color: '#333', padding: '2rem' }}>Catálogo de Razas - Próximamente</div>;
-const AdminVacunas = () => <div style={{ color: '#333', padding: '2rem' }}>Tipos de Vacunas - Próximamente</div>;
-const AdminCategorias = () => <div style={{ color: '#333', padding: '2rem' }}>Categorías - Próximamente</div>;
+const PagePlaceholder = ({ title, description = 'Próximamente - Página en construcción' }) => (
+  <div
+    style={{
+      minHeight: '70vh',
+      padding: '4rem 1.5rem',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#f8fafc',
+      color: '#1f2937'
+    }}
+  >
+    <div style={{ maxWidth: '860px', textAlign: 'center', width: '100%' }}>
+      <h1 style={{ fontSize: '2.75rem', marginBottom: '1rem' }}>{title}</h1>
+      <p style={{ fontSize: '1.15rem', lineHeight: '1.75', color: '#475569' }}>{description}</p>
+    </div>
+  </div>
+);
+
+const AdminAdopciones = () => <PagePlaceholder title="Adopciones" />;
+const AdminDonaciones = () => <PagePlaceholder title="Donaciones" />;
+const AdminEventos = () => <PagePlaceholder title="Eventos" />;
+const AdminFundaciones = () => <PagePlaceholder title="Fundaciones" />;
+const AdminVeterinarias = () => <PagePlaceholder title="Veterinarias" />;
+const AdminProductos = () => <PagePlaceholder title="Productos" />;
+const AdminComentarios = () => <PagePlaceholder title="Comentarios" />;
+const AdminNotificaciones = () => <PagePlaceholder title="Notificaciones" />;
+const AdminReportes = () => <PagePlaceholder title="Reportes" />;
+const AdminConfiguracion = () => <PagePlaceholder title="Configuración" />;
+const AdminRazas = () => <PagePlaceholder title="Catálogo de Razas" />;
+const AdminVacunas = () => <PagePlaceholder title="Tipos de Vacunas" />;
+const AdminCategorias = () => <PagePlaceholder title="Categorías" />;
 
 // Públicas placeholders
-const Adopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Listado de Adopciones - Próximamente</div>;
-const Fundaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Fundaciones - Próximamente</div>;
-const Veterinarias = () => <div style={{ color: 'white', padding: '2rem' }}>Veterinarias - Próximamente</div>;
-// ❌ ELIMINADO: const Eventos = () => ... (ya no se usa)
-const Donaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
-const Tienda = () => <div style={{ color: 'white', padding: '2rem' }}>Tienda - Próximamente</div>;
-const ReportarRescate = () => <div style={{ color: 'white', padding: '2rem' }}>Reportar Rescate - Próximamente</div>;
+// Estos placeholders se mantienen solo para rutas que no tienen componentes reales aún.
+// Las rutas públicas principales tienen componentes reales importados arriba.
 
 // Usuario placeholders
-const UserDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Usuario - Próximamente</div>;
-const UserProfile = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Perfil - Próximamente</div>;
-const UserCarrito = () => <div style={{ color: 'white', padding: '2rem' }}>Mi Carrito - Próximamente</div>;
-const UserPedidos = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Pedidos - Próximamente</div>;
-const UserDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Mis Donaciones - Próximamente</div>;
+const UserDashboard = () => <PagePlaceholder title="Dashboard Usuario" />;
+const UserProfile = () => <PagePlaceholder title="Mi Perfil" />;
+const UserCarrito = () => <PagePlaceholder title="Mi Carrito" />;
+const UserPedidos = () => <PagePlaceholder title="Mis Pedidos" />;
+const UserDonaciones = () => <PagePlaceholder title="Mis Donaciones" />;
 
 // Veterinaria placeholders
-const VetDashboard = () => <div style={{ color: 'white', padding: '2rem' }}>Dashboard Veterinaria - Próximamente</div>;
-const VetAtenciones = () => <div style={{ color: 'white', padding: '2rem' }}>Atenciones Médicas - Próximamente</div>;
-const VetHistoriales = () => <div style={{ color: 'white', padding: '2rem' }}>Historiales - Próximamente</div>;
-const VetCitas = () => <div style={{ color: 'white', padding: '2rem' }}>Citas - Próximamente</div>;
-const VetMascotas = () => <div style={{ color: 'white', padding: '2rem' }}>Mascotas - Próximamente</div>;
-const VetVacunas = () => <div style={{ color: 'white', padding: '2rem' }}>Vacunas - Próximamente</div>;
-const VetProductos = () => <div style={{ color: 'white', padding: '2rem' }}>Productos - Próximamente</div>;
-const VetPedidos = () => <div style={{ color: 'white', padding: '2rem' }}>Pedidos - Próximamente</div>;
-const VetReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Reportes - Próximamente</div>;
+const VetDashboard = () => <PagePlaceholder title="Dashboard Veterinaria" />;
+const VetAtenciones = () => <PagePlaceholder title="Atenciones Médicas" />;
+const VetHistoriales = () => <PagePlaceholder title="Historiales" />;
+const VetCitas = () => <PagePlaceholder title="Citas" />;
+const VetMascotas = () => <PagePlaceholder title="Mascotas" />;
+const VetVacunas = () => <PagePlaceholder title="Vacunas" />;
+const VetProductos = () => <PagePlaceholder title="Productos" />;
+const VetPedidos = () => <PagePlaceholder title="Pedidos" />;
+const VetReportes = () => <PagePlaceholder title="Reportes" />;
 
 // Fundación placeholders (SOLO para páginas que NO tienen componente real)
-const FundRescates = () => <div style={{ color: 'white', padding: '2rem' }}>Rescates - Próximamente</div>;
-const FundAdopciones = () => <div style={{ color: 'white', padding: '2rem' }}>Adopciones - Próximamente</div>;
-const FundDonaciones = () => <div style={{ color: 'white', padding: '2rem' }}>Donaciones - Próximamente</div>;
-// ❌ ELIMINADO: const FundEventos = () => ... (ya no se usa)
-const FundVoluntarios = () => <div style={{ color: 'white', padding: '2rem' }}>Voluntarios - Próximamente</div>;
-const FundReportes = () => <div style={{ color: 'white', padding: '2rem' }}>Reportes - Próximamente</div>;
+const FundRescates = () => <PagePlaceholder title="Rescates" />;
+const FundAdopciones = () => <PagePlaceholder title="Adopciones" />;
+const FundDonaciones = () => <PagePlaceholder title="Donaciones" />;
+const FundEventos = () => <PagePlaceholder title="Eventos" />;
+const FundVoluntarios = () => <PagePlaceholder title="Voluntarios" />;
+const FundReportes = () => <PagePlaceholder title="Reportes" />;
 
 // =============================================================
 // COMPONENTE 404
@@ -201,6 +226,7 @@ const NotFound = () => {
 // =============================================================
 // CONFIGURACIÓN DE RUTAS
 // =============================================================
+
 const router = createBrowserRouter([
   // RUTAS PÚBLICAS
   {
@@ -213,7 +239,9 @@ const router = createBrowserRouter([
       { path: 'mascotas', element: <Mascotas /> },
       { path: 'adopciones', element: <Adopciones /> },
       { path: 'fundaciones', element: <Fundaciones /> },
+      { path: 'fundaciones/:id', element: <FundacionDetalle /> },
       { path: 'veterinarias', element: <Veterinarias /> },
+      { path: 'veterinarias/:id', element: <VeterinariaDetalle /> },
       { path: 'mascota/:id', element: <MascotaDetalle /> },
       { path: 'solicitar-adopcion/:id', element: <SolicitarAdopcion /> },
       { path: 'adopcion-exitosa/:id', element: <SolicitudExitosa /> },
@@ -255,11 +283,16 @@ const router = createBrowserRouter([
         element: <VeterinariaLayout />,
         children: [
           { index: true, element: <Navigate to="/veterinaria/dashboard" replace /> },
-          { path: 'dashboard', element: <VetDashboard /> },
+          { path: 'dashboard', element: <DashboardVeterinaria /> },
           { path: 'atenciones', element: <VetAtenciones /> },
           { path: 'historiales', element: <VetHistoriales /> },
-          { path: 'citas', element: <VetCitas /> },
-          { path: 'mascotas', element: <VetMascotas /> },
+          { path: 'citas', element: <Citas /> },
+          { path: 'citas/nueva', element: <CitaForm /> },
+          { path: 'citas/editar/:id', element: <CitaForm /> },
+          { path: 'mascotas', element: <Pacientes /> },
+          { path: 'pacientes/nuevo', element: <PacienteForm /> },
+          { path: 'pacientes/editar/:id', element: <PacienteForm /> },
+          { path: 'pacientes/:id/historial', element: <HistorialMedico /> },
           { path: 'vacunas', element: <VetVacunas /> },
           { path: 'productos', element: <VetProductos /> },
           { path: 'pedidos', element: <VetPedidos /> },

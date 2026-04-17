@@ -1,0 +1,187 @@
+/* src/components/veterinaria/CitaCard/CitaCard.css */
+.cita-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.cita-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.cita-card-header {
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cita-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cita-fecha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.estado-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.estado-pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.estado-confirmada {
+  background: #d4edda;
+  color: #155724;
+}
+
+.estado-completada {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.estado-cancelada {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.cita-card-body {
+  padding: 1.5rem;
+}
+
+.cita-paciente {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.paciente-icon {
+  font-size: 2.5rem;
+}
+
+.cita-paciente h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.cita-paciente p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.cita-detalles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.detalle-item i {
+  width: 20px;
+  color: #2c7da0;
+}
+
+.cita-motivo {
+  background: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.cita-card-footer {
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-top: 1px solid #f0f0f0;
+}
+
+.cita-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cita-actions button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.action-view {
+  background: #3498db;
+  color: white;
+}
+
+.action-edit {
+  background: #f39c12;
+  color: white;
+}
+
+.action-confirm {
+  background: #2ecc71;
+  color: white;
+}
+
+.action-cancel {
+  background: #e74c3c;
+  color: white;
+}
+
+.action-complete {
+  background: #9b59b6;
+  color: white;
+}
+
+.action-delete {
+  background: #c0392b;
+  color: white;
+}
+
+.cita-actions button:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .cita-actions {
+    justify-content: center;
+  }
+}
