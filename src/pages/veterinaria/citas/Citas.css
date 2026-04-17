@@ -1,0 +1,25 @@
+/* Citas styles */
+/* src/pages/veterinaria/citas/Citas.css */
+
+.citas-page {
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: linear-gradient(135deg, #e8f4f8 0%, #d1e8f0 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.citas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .citas-page {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,106 @@
+/* SearchFilter styles *//* src/components/common/SearchFilter/SearchFilter.css */
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.filters-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.4rem 1rem;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #555;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-btn:hover {
+  border-color: #2c7da0;
+  color: #2c7da0;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #2c7da0, #1e5a7a);
+  color: white;
+  border-color: transparent;
+}
+
+.filter-count {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.7rem;
+}
+
+.filter-btn.active .filter-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 30px;
+  padding: 0.35rem 0.8rem;
+  position: relative;
+}
+
+.search-box i {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 0.3rem;
+  width: 220px;
+  background: transparent;
+  font-size: 0.8rem;
+}
+
+.search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .search-filter-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filters-group {
+    justify-content: center;
+  }
+  
+  .search-box input {
+    width: 100%;
+  }
+}
