@@ -1,10 +1,8 @@
+// src/services/api.js
 import axios from 'axios';
 
-// En desarrollo usar rutas relativas para que el proxy de Vite funcione
-// En producción usar la URL completa
 const API_URL = import.meta.env.DEV ? '/api' : (import.meta.env.VITE_API_URL || 'http://rescatando-mascotas-forever.test/api');
 
-// Cliente para rutas que NO necesitan autenticación
 export const publicApi = axios.create({
   baseURL: API_URL,
   headers: {
@@ -14,7 +12,6 @@ export const publicApi = axios.create({
   withCredentials: false,
 });
 
-// Cliente para rutas que SÍ necesitan autenticación
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -24,7 +21,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Interceptor para agregar token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('auth_token');
@@ -36,7 +32,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Interceptor para manejar respuestas 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -48,5 +43,8 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// ✅ NUEVA FUNCIÓN PARA REPORTAR RESCATE (usa publicApi, no requiere autenticación)
+export const reportarRescate = (data) => publicApi.post('/rescates/reportar', data);
 
 export default api;

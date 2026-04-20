@@ -1,3 +1,5 @@
+/* src/components/common/Modal/Modal.css */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -22,7 +24,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--color-card-bg, white);
   border-radius: 20px;
   position: relative;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -36,13 +38,13 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #999;
+  color: var(--color-text-muted, #999);
   transition: color 0.3s;
   z-index: 10;
 }
 
 .modal-close:hover {
-  color: #333;
+  color: var(--color-text, #333);
 }
 
 @keyframes fadeIn {

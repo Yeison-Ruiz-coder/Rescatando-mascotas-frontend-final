@@ -1,7 +1,7 @@
 /* src/components/common/Mascotas/FundacionCard.css */
 
 .fundacion-card {
-  background: linear-gradient(135deg, #af66ea10, #a2754b10);
+  background: linear-gradient(135deg, rgba(175, 102, 234, 0.1), rgba(162, 117, 75, 0.1));
   border-radius: 20px;
   padding: 20px;
   margin: 24px 0;
@@ -23,7 +23,7 @@
 .fundacion-avatar {
   width: 60px;
   height: 60px;
-  background: white;
+  background: var(--color-card-bg, white);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -104,7 +104,7 @@
 }
 
 .fundacion-card.no-fundacion {
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
   text-align: center;
   color: var(--color-text-muted);
 }

@@ -1,4 +1,5 @@
-/* SearchFilter styles *//* src/components/common/SearchFilter/SearchFilter.css */
+/* src/components/common/SearchFilter/SearchFilter.css */
+
 .search-filter-container {
   display: flex;
   justify-content: space-between;
@@ -6,10 +7,10 @@
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
-  background: white;
+  background: var(--color-card-bg, white);
   padding: 0.75rem 1.25rem;
   border-radius: 14px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .filters-group {
@@ -20,26 +21,26 @@
 
 .filter-btn {
   padding: 0.4rem 1rem;
-  border: 1px solid #e0e0e0;
-  background: white;
+  border: 1px solid var(--color-border, #e0e0e0);
+  background: var(--color-card-bg, white);
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.8rem;
   font-weight: 500;
-  color: #555;
+  color: var(--color-text-muted, #555);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .filter-btn:hover {
-  border-color: #2c7da0;
-  color: #2c7da0;
+  border-color: var(--color-primary, #2c7da0);
+  color: var(--color-primary, #2c7da0);
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #2c7da0, #1e5a7a);
+  background: var(--gradient-primary);
   color: white;
   border-color: transparent;
 }
@@ -59,15 +60,15 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
+  background: var(--color-light-secondary, #f8f9fa);
+  border: 1px solid var(--color-border, #e0e0e0);
   border-radius: 30px;
   padding: 0.35rem 0.8rem;
   position: relative;
 }
 
 .search-box i {
-  color: #999;
+  color: var(--color-text-light, #999);
   font-size: 0.8rem;
 }
 
@@ -78,13 +79,18 @@
   width: 220px;
   background: transparent;
   font-size: 0.8rem;
+  color: var(--color-text, #2d3748);
+}
+
+.search-box input::placeholder {
+  color: var(--color-text-light, #999);
 }
 
 .search-clear {
   background: none;
   border: none;
   cursor: pointer;
-  color: #999;
+  color: var(--color-text-light, #999);
   padding: 0;
   display: flex;
   align-items: center;

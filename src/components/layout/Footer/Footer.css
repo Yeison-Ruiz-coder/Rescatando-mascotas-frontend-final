@@ -1,7 +1,7 @@
 /* src/components/layout/Footer/Footer.css */
 
 .custom-footer {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   margin-top: 60px;
   padding: 60px 0 20px;
@@ -15,24 +15,21 @@
   padding: 0 20px;
 }
 
-/* Columnas - Síguenos más grande */
+/* Columnas */
 .footer-col {
   margin-bottom: 30px;
 }
 
-/* Columna de Síguenos ocupa más espacio */
 .footer-social {
   flex: 0 0 30%;
   max-width: 30%;
 }
 
-/* Las demás columnas */
 .footer-col:not(.footer-social) {
   flex: 0 0 17.5%;
   max-width: 17.5%;
 }
 
-/* Logo */
 .footer-logo {
   width: 160px;
   height: auto;
@@ -48,7 +45,6 @@
   max-width: 180px;
 }
 
-/* Títulos */
 .footer-heading {
   font-size: 1.1rem;
   font-weight: 600;
@@ -81,7 +77,6 @@
   text-align: center;
 }
 
-/* Enlaces */
 .footer-links {
   list-style: none;
   padding: 0;
@@ -115,7 +110,6 @@
   display: inline-block;
 }
 
-/* Redes Sociales - Más grandes */
 .social-icons-wrapper {
   display: flex;
   justify-content: center;
@@ -145,7 +139,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Colores específicos al hover */
 .social-icon-link:nth-child(1):hover {
   background: #1877f2;
   color: white;
@@ -163,7 +156,6 @@
   color: white;
 }
 
-/* Footer Bottom */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 20px;
@@ -196,7 +188,6 @@
   color: white;
 }
 
-/* Responsive */
 @media (max-width: 992px) {
   .footer-col:not(.footer-social) {
     flex: 0 0 25%;

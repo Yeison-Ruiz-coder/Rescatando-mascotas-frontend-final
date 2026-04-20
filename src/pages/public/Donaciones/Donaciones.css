@@ -1,9 +1,11 @@
+/* src/pages/public/Donaciones/Donaciones.css */
+
 .donaciones-page {
   padding-bottom: 3rem;
 }
 
 .donaciones-hero {
-  background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 4rem 1.5rem;
   text-align: center;
@@ -41,10 +43,16 @@
 }
 
 .donacion-card {
-  background: white;
+  background: var(--color-card-bg, white);
   border-radius: 1rem;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-md);
   padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.donacion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .donacion-header {
@@ -58,15 +66,16 @@
 .donacion-header h2 {
   font-size: 1.25rem;
   margin: 0;
+  color: var(--color-text);
 }
 
 .donacion-header span {
   font-weight: 700;
-  color: #047857;
+  color: var(--color-primary, #667eea);
 }
 
 .donacion-card p {
-  color: #475569;
+  color: var(--color-text-muted);
   margin-bottom: 1.5rem;
   line-height: 1.7;
 }
@@ -75,14 +84,20 @@
   padding: 0.9rem 1.35rem;
   border: none;
   border-radius: 999px;
-  background: #047857;
+  background: var(--gradient-primary);
   color: white;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.donar-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .empty-message {
   text-align: center;
   padding: 3rem 1rem;
-  color: #475569;
+  color: var(--color-text-muted);
 }
