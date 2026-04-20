@@ -102,12 +102,12 @@ const Citas = () => {
 
   return (
     <div className="citas-page">
-      <div className="page-header">
+      <div className="citas-header">
         <div>
           <h1><i className="fas fa-calendar-alt"></i> {t('mis_citas')}</h1>
-          <p className="page-subtitle">{t('gestion_citas')}</p>
+          <p className="citas-subtitle">{t('gestion_citas')}</p>
         </div>
-        <button className="btn-primary" onClick={() => navigate('/veterinaria/citas/nueva')}>
+        <button className="citas-btn-primary" onClick={() => navigate('/veterinaria/citas/nueva')}>
           <i className="fas fa-plus"></i> {t('agendar_cita')}
         </button>
       </div>

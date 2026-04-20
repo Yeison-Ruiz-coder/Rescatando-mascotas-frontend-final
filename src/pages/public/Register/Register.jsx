@@ -341,34 +341,36 @@ const Register = () => {
   // Pantalla de éxito
   if (registrationSuccess) {
     return (
-      <div className="register-success-fullscreen">
-        <div className="register-success-card">
-          <div className="success-icon">
-            <i className="fas fa-check-circle"></i>
-          </div>
-          <h2>{t('exito_titulo')}</h2>
-          <div className="success-message">
-            {successMessage.split('\n').map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-          {(selectedType === "fundacion" || selectedType === "veterinaria") && (
-            <div className="success-info">
-              <i className="fas fa-info-circle"></i>
-              <p>{selectedType === "fundacion" ? t('exito_info_fundacion') : t('exito_info_veterinaria')}</p>
+      <div className="register-page">
+        <div className="register-success-fullscreen">
+          <div className="register-success-card">
+            <div className="success-icon">
+              <i className="fas fa-check-circle"></i>
             </div>
-          )}
-          <div className="success-buttons">
-            <Link to="/" className="btn-success-primary">
-              <i className="fas fa-home"></i>
-              {t('exito_boton_inicio')}
-            </Link>
-            {selectedType === "user" && (
-              <Link to="/" className="btn-success-secondary">
-                <i className="fas fa-paw"></i>
-                {t('exito_boton_explorar')}
-              </Link>
+            <h2>{t('exito_titulo')}</h2>
+            <div className="success-message">
+              {successMessage.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+            {(selectedType === "fundacion" || selectedType === "veterinaria") && (
+              <div className="success-info">
+                <i className="fas fa-info-circle"></i>
+                <p>{selectedType === "fundacion" ? t('exito_info_fundacion') : t('exito_info_veterinaria')}</p>
+              </div>
             )}
+            <div className="register-success-buttons">
+              <Link to="/" className="register-btn-success-primary">
+                <i className="fas fa-home"></i>
+                {t('exito_boton_inicio')}
+              </Link>
+              {selectedType === "user" && (
+                <Link to="/" className="register-btn-success-secondary">
+                  <i className="fas fa-paw"></i>
+                  {t('exito_boton_explorar')}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -424,16 +426,16 @@ const Register = () => {
             </div>
             <h3 className="step-title">{t('datos_personales')}</h3>
             
-            <div className="form-group">
-              <label className="form-label">
-                {t('nombre_completo')} <span className="required">*</span>
+            <div className="register-form-group">
+              <label className="register-form-label">
+                {t('nombre_completo')} <span className="register-required">*</span>
               </label>
-              <div className={`input-wrapper ${errors.nombre && touched.nombre ? "error" : ""}`}>
-                <i className="fas fa-user input-icon"></i>
+              <div className={`register-input-wrapper ${errors.nombre && touched.nombre ? "error" : ""}`}>
+                <i className="fas fa-user register-input-icon"></i>
                 <input
                   type="text"
                   name="nombre"
-                  className="form-input"
+                  className="register-form-input"
                   value={formData.nombre}
                   onChange={handleChange}
                   onBlur={() => handleBlur("nombre")}
@@ -441,18 +443,18 @@ const Register = () => {
                 />
               </div>
               {errors.nombre && touched.nombre && (
-                <div className="field-error">{errors.nombre}</div>
+                <div className="register-field-error">{errors.nombre}</div>
               )}
             </div>
 
-            <div className="form-group">
-              <label className="form-label">{t('apellidos')}</label>
-              <div className="input-wrapper">
-                <i className="fas fa-user-tag input-icon"></i>
+            <div className="register-form-group">
+              <label className="register-form-label">{t('apellidos')}</label>
+              <div className="register-input-wrapper">
+                <i className="fas fa-user-tag register-input-icon"></i>
                 <input
                   type="text"
                   name="apellidos"
-                  className="form-input"
+                  className="register-form-input"
                   value={formData.apellidos}
                   onChange={handleChange}
                   placeholder={t('apellidos_placeholder')}
@@ -460,16 +462,16 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">
-                {t('email')} <span className="required">*</span>
+            <div className="register-form-group">
+              <label className="register-form-label">
+                {t('email')} <span className="register-required">*</span>
               </label>
-              <div className={`input-wrapper ${errors.email && touched.email ? "error" : ""}`}>
-                <i className="fas fa-envelope input-icon"></i>
+              <div className={`register-input-wrapper ${errors.email && touched.email ? "error" : ""}`}>
+                <i className="fas fa-envelope register-input-icon"></i>
                 <input
                   type="email"
                   name="email"
-                  className="form-input"
+                  className="register-form-input"
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={() => handleBlur("email")}
@@ -482,19 +484,19 @@ const Register = () => {
                 )}
               </div>
               {errors.email && touched.email && (
-                <div className="field-error">{errors.email}</div>
+                <div className="register-field-error">{errors.email}</div>
               )}
-              <small className="field-hint">{t('email_hint')}</small>
+              <small className="register-field-hint">{t('email_hint')}</small>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">{t('telefono')}</label>
-              <div className={`input-wrapper ${errors.telefono && touched.telefono ? "error" : ""}`}>
-                <i className="fas fa-phone input-icon"></i>
+            <div className="register-form-group">
+              <label className="register-form-label">{t('telefono')}</label>
+              <div className={`register-input-wrapper ${errors.telefono && touched.telefono ? "error" : ""}`}>
+                <i className="fas fa-phone register-input-icon"></i>
                 <input
                   type="tel"
                   name="telefono"
-                  className="form-input"
+                  className="register-form-input"
                   value={formData.telefono}
                   onChange={handleChange}
                   onBlur={() => handleBlur("telefono")}
@@ -502,9 +504,9 @@ const Register = () => {
                 />
               </div>
               {errors.telefono && touched.telefono && (
-                <div className="field-error">{errors.telefono}</div>
+                <div className="register-field-error">{errors.telefono}</div>
               )}
-              <small className="field-hint">{t('telefono_hint')}</small>
+              <small className="register-field-hint">{t('telefono_hint')}</small>
             </div>
           </div>
         );
@@ -517,17 +519,17 @@ const Register = () => {
             </div>
             <h3 className="step-title">{t('crear_contraseña')}</h3>
             
-            <div className="form-group">
-              <label className="form-label">
-                {t('contraseña')} <span className="required">*</span>
+            <div className="register-form-group">
+              <label className="register-form-label">
+                {t('contraseña')} <span className="register-required">*</span>
               </label>
-              <div className={`input-wrapper ${errors.password && touched.password ? "error" : ""}`}>
-                <i className="fas fa-lock input-icon"></i>
-                <div className="password-wrapper">
+              <div className={`register-input-wrapper ${errors.password && touched.password ? "error" : ""}`}>
+                <i className="fas fa-lock register-input-icon"></i>
+                <div className="register-password-wrapper">
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
-                    className="form-input"
+                    className="register-form-input"
                     value={formData.password}
                     onChange={handleChange}
                     onBlur={() => handleBlur("password")}
@@ -535,7 +537,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className="register-password-toggle"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
@@ -543,9 +545,9 @@ const Register = () => {
                 </div>
               </div>
               {errors.password && touched.password && (
-                <div className="field-error">{errors.password}</div>
+                <div className="register-field-error">{errors.password}</div>
               )}
-              <div className="password-requirements">
+              <div className="register-password-requirements">
                 <span className={formData.password.length >= 8 ? "valid" : "invalid"}>
                   <i className={`fas ${formData.password.length >= 8 ? "fa-check-circle" : "fa-circle"}`}></i>
                   {t('requisitos_longitud')}
@@ -565,17 +567,17 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">
-                {t('confirmar_contraseña')} <span className="required">*</span>
+            <div className="register-form-group">
+              <label className="register-form-label">
+                {t('confirmar_contraseña')} <span className="register-required">*</span>
               </label>
-              <div className={`input-wrapper ${errors.password_confirmation && touched.password_confirmation ? "error" : ""}`}>
-                <i className="fas fa-lock input-icon"></i>
-                <div className="password-wrapper">
+              <div className={`register-input-wrapper ${errors.password_confirmation && touched.password_confirmation ? "error" : ""}`}>
+                <i className="fas fa-lock register-input-icon"></i>
+                <div className="register-password-wrapper">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     name="password_confirmation"
-                    className="form-input"
+                    className="register-form-input"
                     value={formData.password_confirmation}
                     onChange={handleChange}
                     onBlur={() => handleBlur("password_confirmation")}
@@ -583,7 +585,7 @@ const Register = () => {
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className="register-password-toggle"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     <i className={`fas ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
@@ -591,7 +593,7 @@ const Register = () => {
                 </div>
               </div>
               {errors.password_confirmation && touched.password_confirmation && (
-                <div className="field-error">{errors.password_confirmation}</div>
+                <div className="register-field-error">{errors.password_confirmation}</div>
               )}
             </div>
           </div>
@@ -613,16 +615,16 @@ const Register = () => {
 
             {(selectedType === "fundacion" || selectedType === "veterinaria") && (
               <>
-                <div className="form-group">
-                  <label className="form-label">
-                    {selectedType === "fundacion" ? t('nombre_fundacion') : t('nombre_veterinaria')} <span className="required">*</span>
+                <div className="register-form-group">
+                  <label className="register-form-label">
+                    {selectedType === "fundacion" ? t('nombre_fundacion') : t('nombre_veterinaria')} <span className="register-required">*</span>
                   </label>
-                  <div className={`input-wrapper ${errors.nombre_entidad && touched.nombre_entidad ? "error" : ""}`}>
-                    <i className="fas fa-store input-icon"></i>
+                  <div className={`register-input-wrapper ${errors.nombre_entidad && touched.nombre_entidad ? "error" : ""}`}>
+                    <i className="fas fa-store register-input-icon"></i>
                     <input
                       type="text"
                       name="nombre_entidad"
-                      className="form-input"
+                      className="register-form-input"
                       value={formData.nombre_entidad}
                       onChange={handleChange}
                       onBlur={() => handleBlur("nombre_entidad")}
@@ -630,20 +632,20 @@ const Register = () => {
                     />
                   </div>
                   {errors.nombre_entidad && touched.nombre_entidad && (
-                    <div className="field-error">{errors.nombre_entidad}</div>
+                    <div className="register-field-error">{errors.nombre_entidad}</div>
                   )}
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">
-                    {t('direccion')} <span className="required">*</span>
+                <div className="register-form-group">
+                  <label className="register-form-label">
+                    {t('direccion')} <span className="register-required">*</span>
                   </label>
-                  <div className={`input-wrapper ${errors.direccion && touched.direccion ? "error" : ""}`}>
-                    <i className="fas fa-map-marker-alt input-icon"></i>
+                  <div className={`register-input-wrapper ${errors.direccion && touched.direccion ? "error" : ""}`}>
+                    <i className="fas fa-map-marker-alt register-input-icon"></i>
                     <input
                       type="text"
                       name="direccion"
-                      className="form-input"
+                      className="register-form-input"
                       value={formData.direccion}
                       onChange={handleChange}
                       onBlur={() => handleBlur("direccion")}
@@ -651,20 +653,20 @@ const Register = () => {
                     />
                   </div>
                   {errors.direccion && touched.direccion && (
-                    <div className="field-error">{errors.direccion}</div>
+                    <div className="register-field-error">{errors.direccion}</div>
                   )}
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">
-                    {selectedType === "fundacion" ? t('nit') : t('registro_sanitario')} <span className="required">*</span>
+                <div className="register-form-group">
+                  <label className="register-form-label">
+                    {selectedType === "fundacion" ? t('nit') : t('registro_sanitario')} <span className="register-required">*</span>
                   </label>
-                  <div className={`input-wrapper ${errors.registro_sanitario && touched.registro_sanitario ? "error" : ""}`}>
-                    <i className="fas fa-id-card input-icon"></i>
+                  <div className={`register-input-wrapper ${errors.registro_sanitario && touched.registro_sanitario ? "error" : ""}`}>
+                    <i className="fas fa-id-card register-input-icon"></i>
                     <input
                       type="text"
                       name="registro_sanitario"
-                      className="form-input"
+                      className="register-form-input"
                       value={formData.registro_sanitario}
                       onChange={handleChange}
                       onBlur={() => handleBlur("registro_sanitario")}
@@ -672,36 +674,36 @@ const Register = () => {
                     />
                   </div>
                   {errors.registro_sanitario && touched.registro_sanitario && (
-                    <div className="field-error">{errors.registro_sanitario}</div>
+                    <div className="register-field-error">{errors.registro_sanitario}</div>
                   )}
                 </div>
               </>
             )}
 
             {selectedType === "fundacion" && (
-              <div className="form-group">
-                <label className="form-label">{t('capacidad_maxima')}</label>
-                <div className="input-wrapper">
-                  <i className="fas fa-home input-icon"></i>
+              <div className="register-form-group">
+                <label className="register-form-label">{t('capacidad_maxima')}</label>
+                <div className="register-input-wrapper">
+                  <i className="fas fa-home register-input-icon"></i>
                   <input
                     type="number"
                     name="capacidad"
-                    className="form-input"
+                    className="register-form-input"
                     value={formData.capacidad}
                     onChange={handleChange}
                     placeholder={t('capacidad_placeholder')}
                     min="1"
                   />
                 </div>
-                <small className="field-hint">{t('capacidad_hint')}</small>
+                <small className="register-field-hint">{t('capacidad_hint')}</small>
               </div>
             )}
 
             {selectedType === "veterinaria" && (
-              <div className="form-group">
-                <label className="form-label">{t('servicios')}</label>
-                <div className="services-checkboxes">
-                  <label className="checkbox-label">
+              <div className="register-form-group">
+                <label className="register-form-label">{t('servicios')}</label>
+                <div className="register-services-checkboxes">
+                  <label className="register-checkbox-label">
                     <input
                       type="checkbox"
                       checked={formData.servicios.includes("urgencias")}
@@ -709,7 +711,7 @@ const Register = () => {
                     />
                     <span>{t('servicios_urgencias')}</span>
                   </label>
-                  <label className="checkbox-label">
+                  <label className="register-checkbox-label">
                     <input
                       type="checkbox"
                       checked={formData.servicios.includes("cirugia")}
@@ -717,7 +719,7 @@ const Register = () => {
                     />
                     <span>{t('servicios_cirugia')}</span>
                   </label>
-                  <label className="checkbox-label">
+                  <label className="register-checkbox-label">
                     <input
                       type="checkbox"
                       checked={formData.servicios.includes("vacunacion")}
@@ -725,7 +727,7 @@ const Register = () => {
                     />
                     <span>{t('servicios_vacunacion')}</span>
                   </label>
-                  <label className="checkbox-label">
+                  <label className="register-checkbox-label">
                     <input
                       type="checkbox"
                       checked={formData.servicios.includes("hospitalizacion")}
@@ -738,7 +740,7 @@ const Register = () => {
             )}
 
             {selectedType === "user" && (
-              <div className="step-success">
+              <div className="register-step-success">
                 <i className="fas fa-heart"></i>
                 <p>{t('mensaje_user')}</p>
                 <p>{t('mensaje_user_lista')}</p>
@@ -751,7 +753,7 @@ const Register = () => {
               </div>
             )}
 
-            <div className="info-box">
+            <div className="register-info-box">
               <i className="fas fa-shield-alt"></i>
               <p>{t('info_seguridad')}</p>
             </div>
@@ -764,81 +766,83 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <div className="register-overlay"></div>
+    <div className="register-page">
+      <div className="register-container">
+        <div className="register-overlay"></div>
 
-      <div className="register-card">
-        <div className="register-header">
-          <div className="register-logo-wrapper">
-            <img src="/img/logo-claro.png" alt="Logo" className="register-logo" />
-          </div>
-          <h1 className="register-title">{t('titulo')}</h1>
-          <p className="register-subtitle">
-            {t('paso')} {currentStep} {t('de')} {totalSteps}
-          </p>
-        </div>
-
-        <div className="progress-steps">
-          {[1, 2, 3, 4].map((step) => (
-            <div
-              key={step}
-              className={`progress-step ${currentStep >= step ? "active" : ""} ${currentStep === step ? "current" : ""}`}
-              onClick={() => step < currentStep && setCurrentStep(step)}
-            >
-              <div className="step-dot">{step}</div>
-              <span className="step-label">
-                {step === 1 && t('step_tipo')}
-                {step === 2 && t('step_datos')}
-                {step === 3 && t('step_contraseña')}
-                {step === 4 && t('step_finalizar')}
-              </span>
+        <div className="register-card">
+          <div className="register-header">
+            <div className="register-logo-wrapper">
+              <img src="/img/logo-claro.png" alt="Logo" className="register-logo" />
             </div>
-          ))}
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          {renderStep()}
-
-          <div className="step-buttons">
-            {currentStep > 1 && (
-              <Button type="button" variant="outline" onClick={prevStep} className="btn-prev">
-                <i className="fas fa-arrow-left"></i>
-                {t('anterior')}
-              </Button>
-            )}
-            
-            {currentStep < totalSteps ? (
-              <Button type="button" variant="primary" onClick={nextStep} className="btn-next">
-                {t('siguiente')}
-                <i className="fas fa-arrow-right"></i>
-              </Button>
-            ) : (
-              <Button type="submit" variant="primary" disabled={loading} className="btn-submit">
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    {t('registrando')}
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-check"></i>
-                    {t('finalizar')}
-                  </>
-                )}
-              </Button>
-            )}
+            <h1 className="register-title">{t('titulo')}</h1>
+            <p className="register-subtitle">
+              {t('paso')} {currentStep} {t('de')} {totalSteps}
+            </p>
           </div>
-        </form>
 
-        <div className="login-link">
-          {t('ya_tienes_cuenta')} <Link to="/login">{t('iniciar_sesion')}</Link>
+          <div className="progress-steps">
+            {[1, 2, 3, 4].map((step) => (
+              <div
+                key={step}
+                className={`progress-step ${currentStep >= step ? "active" : ""} ${currentStep === step ? "current" : ""}`}
+                onClick={() => step < currentStep && setCurrentStep(step)}
+              >
+                <div className="step-dot">{step}</div>
+                <span className="step-label">
+                  {step === 1 && t('step_tipo')}
+                  {step === 2 && t('step_datos')}
+                  {step === 3 && t('step_contraseña')}
+                  {step === 4 && t('step_finalizar')}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            {renderStep()}
+
+            <div className="register-step-buttons">
+              {currentStep > 1 && (
+                <Button type="button" variant="outline" onClick={prevStep} className="register-btn-prev">
+                  <i className="fas fa-arrow-left"></i>
+                  {t('anterior')}
+                </Button>
+              )}
+              
+              {currentStep < totalSteps ? (
+                <Button type="button" variant="primary" onClick={nextStep} className="register-btn-next">
+                  {t('siguiente')}
+                  <i className="fas fa-arrow-right"></i>
+                </Button>
+              ) : (
+                <Button type="submit" variant="primary" disabled={loading} className="register-btn-submit">
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      {t('registrando')}
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-check"></i>
+                      {t('finalizar')}
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          </form>
+
+          <div className="register-login-link">
+            {t('ya_tienes_cuenta')} <Link to="/login">{t('iniciar_sesion')}</Link>
+          </div>
         </div>
-      </div>
 
-      <div className="register-decoration">
-        <div className="decoration-circle circle-1"></div>
-        <div className="decoration-circle circle-2"></div>
-        <div className="decoration-circle circle-3"></div>
+        <div className="register-decoration">
+          <div className="decoration-circle circle-1"></div>
+          <div className="decoration-circle circle-2"></div>
+          <div className="decoration-circle circle-3"></div>
+        </div>
       </div>
     </div>
   );

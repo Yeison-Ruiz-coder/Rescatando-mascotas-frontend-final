@@ -29,12 +29,12 @@
 }
 
 .badge.rescatada { 
-  background: linear-gradient(135deg, #ff8c42, #ff6b9d); 
+  background: linear-gradient(135deg, var(--color-accent, #ff8c42), var(--color-heart, #ff6b9d)); 
   color: white; 
 }
 
 .badge.acogida { 
-  background: linear-gradient(135deg, #667eea, #764ba2); 
+  background: var(--gradient-primary); 
   color: white; 
 }
 
@@ -98,7 +98,7 @@
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
   padding: 16px;
   border-radius: 16px;
   margin-top: 16px;

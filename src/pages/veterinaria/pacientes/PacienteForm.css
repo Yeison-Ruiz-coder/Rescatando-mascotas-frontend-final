@@ -1,142 +1,173 @@
 /* src/pages/veterinaria/pacientes/PacienteForm.css */
+/* TODOS los estilos están AISLADOS dentro de .paciente-form-page */
 
 .paciente-form-page {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #e8f4f8 0%, #d1e8f0 100%);
+  background: var(--gradient-light);
   min-height: 100vh;
 }
 
-.form-header {
+/* Header aislado */
+.paciente-form-page .form-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.form-header h1 {
+.paciente-form-page .form-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #2c3e50;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.5rem;
 }
 
-.form-header h1 i {
-  color: #2c7da0;
+.paciente-form-page .form-header h1 i {
+  color: var(--color-primary);
   margin-right: 0.75rem;
+  background: none;
+  -webkit-text-fill-color: var(--color-primary);
 }
 
-.form-header p {
-  color: #7f8c8d;
+.paciente-form-page .form-header p {
+  color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
-.paciente-form {
-  background: white;
+/* Formulario aislado */
+.paciente-form-page .paciente-form {
+  background: var(--color-card-bg);
   border-radius: 24px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
 }
 
-.form-step {
-  animation: fadeIn 0.5s ease;
+/* Steps aislados */
+.paciente-form-page .form-step {
+  animation: pacienteFadeIn 0.5s ease;
 }
 
-.form-step h2 {
+.paciente-form-page .form-step h2 {
   font-size: 1.3rem;
-  color: #2c3e50;
+  color: var(--color-text);
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.form-step h2 i {
-  color: #2c7da0;
+.paciente-form-page .form-step h2 i {
+  color: var(--color-primary);
 }
 
-.form-row {
+/* Grid aislado */
+.paciente-form-page .form-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.form-group {
+/* Grupos de formulario aislados */
+.paciente-form-page .form-group {
   margin-bottom: 1.25rem;
 }
 
-.form-group label {
+.paciente-form-page .form-group label {
   display: block;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #555;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
-.form-group .required {
-  color: #f44336;
+.paciente-form-page .form-group .required {
+  color: var(--color-danger);
 }
 
-.form-group input:not([type="checkbox"]):not([type="radio"]),
-.form-group select,
-.form-group textarea {
+/* Inputs aislados */
+.paciente-form-page .form-group input:not([type="checkbox"]):not([type="radio"]),
+.paciente-form-page .form-group select,
+.paciente-form-page .form-group textarea {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   font-size: 0.9rem;
   transition: all 0.3s ease;
-  background: #f8f9fa;
+  background: var(--color-card-bg);
+  color: var(--color-text);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.paciente-form-page .form-group input:focus,
+.paciente-form-page .form-group select:focus,
+.paciente-form-page .form-group textarea:focus {
   outline: none;
-  border-color: #2c7da0;
-  box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
-  background: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: var(--color-card-bg);
 }
 
-.form-group input.error,
-.form-group select.error,
-.form-group textarea.error {
-  border-color: #f44336;
+.paciente-form-page .form-group input.error,
+.paciente-form-page .form-group select.error,
+.paciente-form-page .form-group textarea.error {
+  border-color: var(--color-danger);
 }
 
-.error-msg {
+/* Mensajes de error aislados */
+.paciente-form-page .error-msg {
   display: block;
-  color: #f44336;
+  color: var(--color-danger);
   font-size: 0.7rem;
   margin-top: 0.3rem;
 }
 
-.radio-group {
+/* Radio group aislado */
+.paciente-form-page .radio-group {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.radio-group label {
+.paciente-form-page .radio-group label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
   font-weight: normal;
+  color: var(--color-text);
 }
 
-.checkbox-label {
+.paciente-form-page .radio-group input[type="radio"] {
+  width: auto;
+  margin-right: 0;
+  accent-color: var(--color-primary);
+}
+
+/* Checkbox aislado */
+.paciente-form-page .checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
+  color: var(--color-text);
 }
 
-.btn-link {
+.paciente-form-page .checkbox-label input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--color-primary);
+}
+
+/* Botón link aislado */
+.paciente-form-page .btn-link {
   background: none;
   border: none;
-  color: #2c7da0;
+  color: var(--color-primary);
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
@@ -145,12 +176,14 @@
   border-radius: 10px;
 }
 
-.btn-link:hover {
-  background: rgba(44, 125, 160, 0.1);
-  color: #1e5a7a;
+.paciente-form-page .btn-link:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-secondary);
+  transform: translateX(4px);
 }
 
-@keyframes fadeIn {
+/* Animación aislada */
+@keyframes pacienteFadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -161,21 +194,22 @@
   }
 }
 
+/* Responsive aislado */
 @media (max-width: 768px) {
   .paciente-form-page {
     padding: 1rem;
   }
   
-  .paciente-form {
+  .paciente-form-page .paciente-form {
     padding: 1.5rem;
   }
   
-  .form-row {
+  .paciente-form-page .form-row {
     grid-template-columns: 1fr;
     gap: 0;
   }
   
-  .radio-group {
+  .paciente-form-page .radio-group {
     flex-direction: column;
     gap: 0.5rem;
   }

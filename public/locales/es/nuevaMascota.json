@@ -2,6 +2,10 @@
   "titulo": "Registrar Nueva Mascota",
   "subtitulo": "Ayuda a una mascota a encontrar un hogar lleno de amor",
   "fundacion_label": "Fundación",
+  "cargando": "Cargando...",
+  "registrar_mascota_rescatada": "Registrar mascota rescatada",
+  "registrar_mascota_rescatada_desc": "Completa los datos de la mascota que fue rescatada",
+  "registrando_mascota_rescatada_en": "Rescatada en",
   
   "steps": {
     "informacion_basica": "Información Básica",
@@ -16,6 +20,7 @@
   "especie": "Especie",
   "seleccionar_especie": "Seleccionar especie",
   "razas": "Razas",
+  "seleccionar_razas": "Seleccionar razas",
   "seleccionar_especie_primero": "Selecciona una especie primero para ver las razas disponibles",
   "cargando_razas": "Cargando razas...",
   "sin_razas": "No hay razas disponibles para",
@@ -30,6 +35,8 @@
   "estado_rescatada": "Rescatada",
   "estado_en_acogida": "En acogida",
   "estado_adoptado": "Adoptado",
+  "edad_aproximada": "Edad aproximada",
+  
   
   "ubicacion_descripcion": "Ubicación y Descripción",
   "lugar_rescate": "Lugar donde se encuentra",
@@ -44,14 +51,22 @@
   "apto_con_ninos": "Apto con niños",
   "apto_con_otros_animales": "Apto con otros animales",
   "vacunas_aplicadas": "Vacunas Aplicadas",
+  "seleccionar_vacunas": "Seleccionar vacunas",
   "sin_vacunas": "No hay vacunas disponibles",
   "frecuencia_dias": "Cada {{dias}} días",
+  "cada": "cada",
+  "dias": "días",
   
   "galeria_fotos": "Galería de Fotos",
   "foto_principal": "Foto Principal",
   "foto_principal_requerida": "La foto principal es requerida",
   "formatos_imagen": "Formatos: JPG, PNG, GIF • Máx. 2MB",
   "galeria_descripcion": "Puedes seleccionar múltiples fotos adicionales (máx. 2MB cada una)",
+  "seleccionar_imagenes": "Seleccionar imágenes",
+  "seleccionar_imagen": "Seleccionar imagen",
+  "seleccionar_opciones": "Seleccionar opciones",
+  "buscar": "Buscar...",
+  "sin_opciones": "No hay opciones",
   
   "botones": {
     "anterior": "Anterior",
@@ -79,6 +94,7 @@
     "error_registro": "Error al registrar la mascota",
     "imagen_grande": "La imagen no debe superar los 2MB",
     "imagen_excluida": "La imagen {{nombre}} supera los 2MB y no será incluida",
+    "imagen_invalida": "Formato no válido o imagen muy pesada (máx 2MB)",
     "seleccionar_especie_primero": "Primero debes seleccionar una especie"
   },
   

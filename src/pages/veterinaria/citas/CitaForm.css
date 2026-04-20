@@ -1,71 +1,111 @@
 /* src/pages/veterinaria/citas/CitaForm.css */
+/* TODOS los estilos están AISLADOS dentro de .cita-form-page */
 
 .cita-form-page {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #e8f4f8 0%, #d1e8f0 100%);
+  background: var(--gradient-light);
   min-height: 100vh;
 }
 
-.cita-form {
-  background: white;
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+/* Header aislado */
+.cita-form-page .cita-form-header {
+  margin-bottom: 2rem;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.25rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #555;
+.cita-form-page .cita-form-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.cita-form-page .cita-form-header p {
+  color: var(--color-text-muted);
+}
+
+/* Formulario aislado */
+.cita-form-page .cita-form-container {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+/* Grid aislado */
+.cita-form-page .cita-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Grupo de formulario aislado */
+.cita-form-page .cita-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.cita-form-page .cita-form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.cita-form-page .cita-form-group label .required {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+/* Inputs aislados */
+.cita-form-page .cita-form-group input,
+.cita-form-page .cita-form-group select,
+.cita-form-page .cita-form-group textarea {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   font-size: 0.9rem;
   transition: all 0.3s ease;
-  background: #f8f9fa;
+  background: var(--color-card-bg);
+  color: var(--color-text);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.cita-form-page .cita-form-group input:focus,
+.cita-form-page .cita-form-group select:focus,
+.cita-form-page .cita-form-group textarea:focus {
   outline: none;
-  border-color: #2c7da0;
-  box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
-  background: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: var(--color-card-bg);
 }
 
-.form-actions {
+/* Mensaje de error aislado */
+.cita-form-page .cita-error-msg {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Acciones del formulario aisladas */
+.cita-form-page .cita-form-actions {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
-.btn-cancel,
-.btn-submit {
+/* Botones aislados */
+.cita-form-page .cita-btn-cancel {
   padding: 0.7rem 1.8rem;
   border-radius: 10px;
   font-size: 0.9rem;
@@ -73,38 +113,59 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
-}
-
-.btn-cancel {
-  background: #6c757d;
+  background: var(--color-text-muted);
   color: white;
 }
 
-.btn-submit {
-  background: linear-gradient(135deg, #2c7da0, #1e5a7a);
+.cita-form-page .cita-btn-cancel:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+.cita-form-page .cita-btn-submit {
+  padding: 0.7rem 1.8rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  background: var(--gradient-primary);
   color: white;
 }
 
+.cita-form-page .cita-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.cita-form-page .cita-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive aislado */
 @media (max-width: 768px) {
   .cita-form-page {
     padding: 1rem;
   }
   
-  .cita-form {
+  .cita-form-page .cita-form-container {
     padding: 1.5rem;
   }
   
-  .form-row {
+  .cita-form-page .cita-form-row {
     grid-template-columns: 1fr;
     gap: 0;
   }
   
-  .form-actions {
+  .cita-form-page .cita-form-actions {
     flex-direction: column;
   }
   
-  .btn-cancel,
-  .btn-submit {
+  .cita-form-page .cita-btn-cancel,
+  .cita-form-page .cita-btn-submit {
     justify-content: center;
+    width: 100%;
   }
 }

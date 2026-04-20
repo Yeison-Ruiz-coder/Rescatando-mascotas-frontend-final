@@ -1,9 +1,12 @@
+/* src/pages/veterinaria/Dashboard/DashboardVeterinaria.css */
+
 .vet-dashboard-page {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 2rem 1.5rem;
   min-height: 80vh;
+  background: var(--gradient-light);
 }
 
 .dashboard-header {
@@ -12,20 +15,24 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: rgba(102, 126, 234, 0.08);
+  background: var(--color-card-bg);
   border-radius: 24px;
-  border: 1px solid rgba(102, 126, 234, 0.15);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .dashboard-header h1 {
   margin: 0;
   font-size: 2.4rem;
-  color: #1f2937;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .dashboard-header p {
   margin: 0.5rem 0 0;
-  color: #475569;
+  color: var(--color-text-muted);
   line-height: 1.6;
 }
 
@@ -43,9 +50,9 @@
   min-height: 190px;
   padding: 1.5rem;
   border-radius: 24px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  background: white;
-  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--color-border);
+  background: var(--color-card-bg);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   text-align: left;
@@ -53,13 +60,21 @@
 
 .dashboard-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
+  box-shadow: var(--shadow-lg);
 }
 
-.stats-card h2,
+.stats-card h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 .action-card h3 {
   margin: 0;
-  color: #111827;
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .stats-list {
@@ -73,21 +88,27 @@
   align-items: center;
   padding: 0.95rem 1rem;
   border-radius: 20px;
-  background: #f8fafc;
+  background: var(--color-light-secondary);
+  transition: all 0.3s ease;
+}
+
+.stats-list div:hover {
+  background: rgba(102, 126, 234, 0.05);
+  transform: translateX(4px);
 }
 
 .stats-list strong {
   font-size: 1.35rem;
-  color: #1f2937;
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 .stats-list span {
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .action-card {
   text-align: left;
-  color: #111827;
 }
 
 .action-card h3 {
@@ -97,15 +118,37 @@
   font-size: 1.2rem;
 }
 
+.action-card h3 i {
+  color: var(--color-primary);
+  font-size: 1.3rem;
+}
+
 .action-card p {
   margin: 0;
-  color: #475569;
+  color: var(--color-text-muted);
   line-height: 1.65;
 }
 
 @media (max-width: 768px) {
+  .vet-dashboard-page {
+    padding: 1rem;
+  }
+  
   .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .dashboard-grid {
+    gap: 1rem;
+  }
+  
+  .dashboard-card {
+    min-height: auto;
+    padding: 1.25rem;
   }
 }

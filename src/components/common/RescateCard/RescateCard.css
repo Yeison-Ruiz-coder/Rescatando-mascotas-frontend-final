@@ -1,0 +1,334 @@
+/* src/components/common/RescateCard/RescateCard.css */
+.rescate-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.rescate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+}
+
+.rescate-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border-left: 5px solid;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.rescate-tipo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rescate-tipo i {
+  font-size: 1.25rem;
+}
+
+.rescate-tipo-text {
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rescate-prioridad-badge {
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.3px;
+}
+
+.rescate-prioridad-badge.prioridad-alta {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.rescate-prioridad-badge.prioridad-media {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
+}
+
+.rescate-prioridad-badge.prioridad-baja {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+}
+
+.rescate-fecha {
+  font-size: 0.85rem;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 5px 12px;
+  border-radius: 30px;
+}
+
+.rescate-fecha i {
+  margin-right: 6px;
+  color: #667eea;
+}
+
+.rescate-card-body {
+  padding: 1.5rem 1.75rem;
+}
+
+.rescate-lugar {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rescate-lugar i {
+  color: #667eea;
+  font-size: 1.1rem;
+  width: 24px;
+}
+
+.rescate-descripcion {
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 16px;
+  border-left: 3px solid #667eea;
+}
+
+.rescate-reportante {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.rescate-reportante i {
+  color: #667eea;
+  font-size: 0.9rem;
+  width: 20px;
+}
+
+.rescate-reportante small {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.rescate-coordenadas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: #475569;
+  margin-top: 0.65rem;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.rescate-coordenadas i {
+  color: #667eea;
+  font-size: 0.85rem;
+}
+
+.ver-mapa-link {
+  color: #667eea;
+  text-decoration: none;
+  margin-left: auto;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ver-mapa-link:hover {
+  color: #5b21b6;
+  text-decoration: underline;
+}
+
+.rescate-card-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  justify-content: flex-end;
+}
+
+.btn-aceptar,
+.btn-rechazar,
+.btn-detalle,
+.btn-registrar {
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.btn-aceptar {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.btn-aceptar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.btn-rechazar {
+  background: white;
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+}
+
+.btn-rechazar:hover:not(:disabled) {
+  background: #fee2e2;
+  transform: translateY(-2px);
+}
+
+.btn-detalle {
+  background: white;
+  color: #667eea;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-detalle:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  border-color: #667eea;
+}
+
+.btn-registrar {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: white;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25);
+}
+
+.btn-registrar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+}
+
+.btn-aceptar:disabled,
+.btn-rechazar:disabled,
+.btn-registrar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rescate-card-status {
+  padding: 0.85rem 1.75rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.rescate-card-status.en-proceso {
+  background: linear-gradient(135deg, #fef3c7, #fffbeb);
+  color: #d97706;
+}
+
+.rescate-card-status.completado {
+  background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+  color: #059669;
+}
+
+.rescate-card-status i {
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rescate-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
+  }
+  
+  .rescate-card-body {
+    padding: 1.25rem;
+  }
+  
+  .rescate-card-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem 1.25rem;
+  }
+  
+  .btn-aceptar,
+  .btn-rechazar,
+  .btn-detalle,
+  .btn-registrar {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 16px;
+  }
+  
+  .rescate-lugar {
+    font-size: 1rem;
+  }
+  
+  .rescate-descripcion {
+    font-size: 0.85rem;
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rescate-card-actions {
+    flex-direction: column;
+  }
+  
+  .btn-aceptar,
+  .btn-rechazar,
+  .btn-detalle,
+  .btn-registrar {
+    width: 100%;
+  }
+  
+  .rescate-tipo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .rescate-fecha {
+    font-size: 0.75rem;
+  }
+}
