@@ -131,7 +131,7 @@ const CitaForm = () => {
 
   return (
     <div className="cita-form-page">
-      <div className="form-header">
+      <div className="cita-form-header">
         <h1>
           <i className="fas fa-calendar-plus"></i>
           {isEditing ? t('editar_cita') : t('agendar_cita')}
@@ -139,9 +139,9 @@ const CitaForm = () => {
         <p>{t('formulario_descripcion')}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="cita-form">
-        <div className="form-row">
-          <div className="form-group">
+      <form onSubmit={handleSubmit} className="cita-form-container">
+        <div className="cita-form-row">
+          <div className="cita-form-group">
             <label>{t('paciente')} <span className="required">*</span></label>
             <select name="paciente_id" value={form.paciente_id} onChange={handleChange}>
               <option value="">{t('seleccionar_paciente')}</option>
@@ -151,10 +151,10 @@ const CitaForm = () => {
                 </option>
               ))}
             </select>
-            {errors.paciente_id && <span className="error-msg">{errors.paciente_id}</span>}
+            {errors.paciente_id && <span className="cita-error-msg">{errors.paciente_id}</span>}
           </div>
 
-          <div className="form-group">
+          <div className="cita-form-group">
             <label>{t('veterinario')}</label>
             <select name="veterinario_id" value={form.veterinario_id} onChange={handleChange}>
               <option value="">{t('seleccionar_veterinario')}</option>
@@ -167,8 +167,8 @@ const CitaForm = () => {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
+        <div className="cita-form-row">
+          <div className="cita-form-group">
             <label>{t('servicio')}</label>
             <select name="servicio_id" value={form.servicio_id} onChange={handleChange}>
               <option value="">{t('seleccionar_servicio')}</option>
@@ -180,7 +180,7 @@ const CitaForm = () => {
             </select>
           </div>
 
-          <div className="form-group">
+          <div className="cita-form-group">
             <label>{t('estado')}</label>
             <select name="estado" value={form.estado} onChange={handleChange}>
               {estados.map(est => (
@@ -194,36 +194,36 @@ const CitaForm = () => {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
+        <div className="cita-form-row">
+          <div className="cita-form-group">
             <label>{t('fecha')} <span className="required">*</span></label>
             <input type="date" name="fecha" value={form.fecha} onChange={handleChange} />
-            {errors.fecha && <span className="error-msg">{errors.fecha}</span>}
+            {errors.fecha && <span className="cita-error-msg">{errors.fecha}</span>}
           </div>
 
-          <div className="form-group">
+          <div className="cita-form-group">
             <label>{t('hora')} <span className="required">*</span></label>
             <input type="time" name="hora" value={form.hora} onChange={handleChange} />
-            {errors.hora && <span className="error-msg">{errors.hora}</span>}
+            {errors.hora && <span className="cita-error-msg">{errors.hora}</span>}
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="cita-form-group">
           <label>{t('motivo')} <span className="required">*</span></label>
           <textarea name="motivo" value={form.motivo} onChange={handleChange} rows="3" />
-          {errors.motivo && <span className="error-msg">{errors.motivo}</span>}
+          {errors.motivo && <span className="cita-error-msg">{errors.motivo}</span>}
         </div>
 
-        <div className="form-group">
+        <div className="cita-form-group">
           <label>{t('notas')}</label>
           <textarea name="notas" value={form.notas} onChange={handleChange} rows="2" />
         </div>
 
-        <div className="form-actions">
-          <button type="button" className="btn-cancel" onClick={() => navigate('/veterinaria/citas')}>
+        <div className="cita-form-actions">
+          <button type="button" className="cita-btn-cancel" onClick={() => navigate('/veterinaria/citas')}>
             <i className="fas fa-times"></i> {t('botones.cancelar')}
           </button>
-          <button type="submit" className="btn-submit" disabled={loading}>
+          <button type="submit" className="cita-btn-submit" disabled={loading}>
             {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-save"></i>}
             {isEditing ? t('botones.actualizar') : t('botones.guardar')}
           </button>

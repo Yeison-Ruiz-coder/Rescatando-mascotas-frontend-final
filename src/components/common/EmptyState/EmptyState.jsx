@@ -1,5 +1,6 @@
 // src/components/common/EmptyState/EmptyState.jsx
 import React from 'react';
+import Button from '../Button/Button';
 import './EmptyState.css';
 
 const EmptyState = ({ 
@@ -18,14 +19,14 @@ const EmptyState = ({
       <p>{description}</p>
       <div className="empty-actions">
         {showClearButton && onClearFilters && (
-          <button className="btn-secondary" onClick={onClearFilters}>
+          <Button variant="secondary" onClick={onClearFilters}>
             <i className="fas fa-eraser"></i> Limpiar filtros
-          </button>
+          </Button>
         )}
         {actionText && onAction && (
-          <button className="btn-primary" onClick={onAction}>
+          <Button variant="primary" onClick={onAction}>
             <i className="fas fa-plus"></i> {actionText}
-          </button>
+          </Button>
         )}
       </div>
     </div>

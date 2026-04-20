@@ -1,3 +1,4 @@
+/* src/components/common/ImageUploader/ImageUploader.css */
 .image-uploader {
   margin-bottom: 1rem;
 }
@@ -6,19 +7,19 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--color-text, #2d3748);
 }
 
 .image-uploader-label .required {
-  color: #f56565;
+  color: var(--color-danger, #f56565);
 }
 
 .image-uploader-area {
-  border: 2px dashed #cbd5e0;
+  border: 2px dashed var(--color-border, #cbd5e0);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s;
-  background: #f7fafc;
+  background: var(--color-light-secondary, #f7fafc);
   min-height: 150px;
   display: flex;
   align-items: center;
@@ -26,13 +27,13 @@
 }
 
 .image-uploader-area:hover {
-  border-color: #667eea;
-  background: #edf2f7;
+  border-color: var(--color-primary, #667eea);
+  background: var(--color-light, #edf2f7);
 }
 
 .image-uploader-area.dragging {
-  border-color: #667eea;
-  background: #e2e8f0;
+  border-color: var(--color-primary, #667eea);
+  background: var(--color-border, #e2e8f0);
 }
 
 .upload-placeholder {
@@ -42,17 +43,17 @@
 
 .upload-placeholder i {
   font-size: 2.5rem;
-  color: #a0aec0;
+  color: var(--color-text-light, #a0aec0);
   margin-bottom: 0.5rem;
 }
 
 .upload-placeholder p {
   margin: 0;
-  color: #4a5568;
+  color: var(--color-text-muted, #4a5568);
 }
 
 .upload-placeholder small {
-  color: #a0aec0;
+  color: var(--color-text-light, #a0aec0);
   font-size: 0.75rem;
 }
 
@@ -91,11 +92,11 @@
 }
 
 .remove-image-btn:hover {
-  background: #f56565;
+  background: var(--color-danger, #f56565);
 }
 
 .image-uploader-error {
-  color: #f56565;
+  color: var(--color-danger, #f56565);
   font-size: 0.75rem;
   margin-top: 0.25rem;
 }

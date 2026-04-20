@@ -11,19 +11,19 @@
   --color-secondary-light: #9b6bc4;
   
   /* 🔥 COLORES CÁLIDOS para calidez y alegría */
-  --color-accent: #ff8c42;       /* Naranja cálido para acciones */
-  --color-heart: #ff6b9d;        /* Rosa corazón para amor */
-  --color-success: #2ecc71;      /* Verde esperanza para éxitos */
-  --color-warm-bg: #fff9f0;      /* Fondo cálido crema */
+  --color-accent: #ff8c42;
+  --color-heart: #ff6b9d;
+  --color-success: #2ecc71;
+  --color-warm-bg: #fff9f0;
   
   /* 🔥 FONDOS CLAROS - Cálidos y acogedores */
-  --color-light: #fff9f0;        /* Crema cálido */
-  --color-light-secondary: #fff5e6;  /* Crema más suave */
-  --color-card-bg: #ffffff;      /* Blanco para tarjetas */
+  --color-light: #fff9f0;
+  --color-light-secondary: #fff5e6;
+  --color-card-bg: #ffffff;
   --color-border: rgba(0, 0, 0, 0.08);
-  --color-text: #2d3748;         /* Texto oscuro legible */
-  --color-text-muted: #718096;   /* Texto secundario */
-  --color-text-light: #a0aec0;   /* Texto muy claro */
+  --color-text: #2d3748;
+  --color-text-muted: #718096;
+  --color-text-light: #a0aec0;
   
   /* Gradientes */
   --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
@@ -139,7 +139,7 @@
   flex-wrap: wrap;
 }
 
-/* Botón primario con gradiente morado */
+/* Botón primario */
 .home-page .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -161,7 +161,7 @@
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
-/* Botón secundario con acento cálido */
+/* Botón outline */
 .home-page .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -203,7 +203,7 @@
   display: block;
 }
 
-/* ===== STATS SECTION - CON GRADIENTE MORADO ===== */
+/* ===== STATS SECTION ===== */
 .home-page .stats {
   background: var(--gradient-primary);
   padding: 60px 0;
@@ -232,13 +232,26 @@
   color: white;
 }
 
+/* ===== MASCOTAS SECTION - SOLO EL GRID ===== */
+.home-page .mascotas-section {
+  padding: 80px 0;
+  width: 100%;
+}
+
+.home-page .mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  justify-items: center;
+  align-items: stretch;
+}
+
 /* ===== PROCESO SECTION ===== */
 .home-page .proceso {
   background: rgba(255, 249, 240, 0.8);
   width: 100%;
   position: relative;
   padding: 80px 0;
-  top: 80px;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
@@ -297,17 +310,6 @@
   width: 100%;
   position: relative;
   padding: 80px 0;
-}
-
-.home-page .testimonios .section-title {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.home-page .testimonios .section-subtitle {
-  color: var(--color-text-muted);
 }
 
 .home-page .testimonios-grid {
@@ -399,7 +401,6 @@
   flex-wrap: wrap;
 }
 
-/* Botón principal CTA - Blanco */
 .home-page .btn-light {
   display: inline-flex;
   align-items: center;
@@ -420,7 +421,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Botón secundario CTA - Outline blanco */
 .home-page .btn-outline-light {
   display: inline-flex;
   align-items: center;
@@ -442,7 +442,6 @@
   transform: translateY(-2px);
 }
 
-/* ===== BOTÓN PRINCIPAL ===== */
 .home-page .btn-primary-custom {
   background: var(--gradient-primary);
   color: white;
@@ -496,6 +495,11 @@
   .home-page .stats-grid,
   .home-page .proceso-grid,
   .home-page .testimonios-grid {
+    gap: 1.5rem;
+  }
+  
+  .home-page .mascotas-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 }
@@ -571,18 +575,7 @@
   .home-page .mascotas-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-  
-  .home-page .card-image {
-    height: 200px;
-  }
-  
-  .home-page .card-buttons {
-    flex-direction: column;
-  }
-  
-  .home-page .btn-card {
-    width: 100%;
+    justify-items: center;
   }
 }
 
@@ -624,13 +617,5 @@
   
   .home-page .cta {
     padding: 40px 0;
-  }
-  
-  .home-page .card-content {
-    padding: 1rem;
-  }
-  
-  .home-page .card-title {
-    font-size: 1.1rem;
   }
 }

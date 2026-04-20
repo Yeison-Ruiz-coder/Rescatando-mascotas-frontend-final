@@ -1,6 +1,5 @@
 /* src/assets/styles/pages.css */
-/* Estilos base para todas las páginas - No interfieren con Home */
-/* Actualizado con nueva paleta de colores */
+/* Estilos base para todas las páginas - Unificado con Home.css */
 
 /* Contenedor principal de todas las páginas */
 .page-container {
@@ -61,13 +60,13 @@
   width: 100%;
 }
 
-/* Tarjetas estilo consistente con Home */
+/* Tarjetas estilo consistente */
 .page-card {
   background: var(--color-card-bg);
   border-radius: 24px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: var(--transition, all 0.3s ease);
+  transition: var(--transition);
   border: 1px solid var(--color-border);
 }
 
@@ -83,7 +82,7 @@
   min-height: auto;
 }
 
-/* Botones consistentes */
+/* Botones consistentes con Home.css */
 .page-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -94,7 +93,7 @@
   border-radius: 50px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   border: none;
   cursor: pointer;
 }
@@ -114,7 +113,7 @@
   border-radius: 50px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   border: none;
   cursor: pointer;
 }
@@ -135,7 +134,7 @@
   border-radius: 50px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   cursor: pointer;
 }
 

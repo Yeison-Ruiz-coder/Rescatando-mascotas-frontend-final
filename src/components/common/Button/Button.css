@@ -1,4 +1,5 @@
-.btn {
+/* src/components/common/Button/Button.css */
+.app-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -12,53 +13,53 @@
   gap: 8px;
 }
 
-.btn:disabled {
+.app-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-primary {
+.app-btn-primary {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
+.app-btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-.btn-secondary {
+.app-btn-secondary {
   background-color: #6c757d;
   color: white;
 }
 
-.btn-secondary:hover:not(:disabled) {
+.app-btn-secondary:hover:not(:disabled) {
   background-color: #5a6268;
 }
 
-.btn-danger {
+.app-btn-danger {
   background-color: #ff4757;
   color: white;
 }
 
-.btn-danger:hover:not(:disabled) {
+.app-btn-danger:hover:not(:disabled) {
   background-color: #ff2e44;
 }
 
-.btn-success {
+.app-btn-success {
   background-color: #28a745;
   color: white;
 }
 
-.btn-success:hover:not(:disabled) {
+.app-btn-success:hover:not(:disabled) {
   background-color: #218838;
 }
 
-.btn-warning {
+.app-btn-warning {
   background-color: #ffc107;
   color: #333;
 }
 
-.btn-warning:hover:not(:disabled) {
+.app-btn-warning:hover:not(:disabled) {
   background-color: #e0a800;
 }

@@ -1,3 +1,4 @@
+/* src/components/common/Input/Input.css */
 .form-group {
   margin-bottom: 1rem;
   width: 100%;
@@ -6,45 +7,45 @@
 .form-label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: var(--color-text, #2d3748);
   font-weight: 500;
   font-size: 0.9rem;
 }
 
 .form-label .required {
-  color: #ff4757;
+  color: var(--color-danger, #ff4757);
   margin-left: 4px;
 }
 
 .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--color-border, #e2e8f0);
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--color-card-bg, white);
+  color: var(--color-text, #2d3748);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-primary, #667eea);
+  background: var(--color-card-bg, white);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
 .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-light, #a0aec0);
 }
 
 .input-error {
-  border-color: #ff4757;
+  border-color: var(--color-danger, #ff4757);
 }
 
 .error-message {
   display: block;
   margin-top: 0.5rem;
-  color: #ff4757;
+  color: var(--color-danger, #ff4757);
   font-size: 0.85rem;
 }
