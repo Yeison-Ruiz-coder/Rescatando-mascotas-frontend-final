@@ -1,13 +1,12 @@
 /* src/components/common/Mascotas/VacunasSection.css */
 
 .vacunas-section-compact {
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 12px;
 }
 
-/* Estado de vacunas */
 .estado-vacunas {
   margin-bottom: 8px;
 }
@@ -31,7 +30,7 @@
 .vacunas-header small {
   display: block;
   font-size: 11px;
-  color: #718096;
+  color: var(--color-text-muted, #718096);
   margin-bottom: 2px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -42,33 +41,30 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Lista de vacunas */
 .vacunas-lista {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--color-border, #e2e8f0);
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* Tarjeta de cada vacuna */
 .vacuna-card {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  background: white;
+  background: var(--color-card-bg, white);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .vacuna-card:hover {
   transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Colores por tipo de vacuna */
 .vacuna-card.rabia {
   border-left: 3px solid #e74c3c;
 }
@@ -85,7 +81,6 @@
   border-left: 3px solid var(--color-primary, #667eea);
 }
 
-/* Icono de la vacuna */
 .vacuna-icon {
   width: 36px;
   height: 36px;
@@ -102,7 +97,6 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Información de la vacuna */
 .vacuna-info {
   flex: 1;
 }
@@ -111,7 +105,7 @@
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--color-text, #2d3748);
   margin-bottom: 4px;
 }
 
@@ -120,7 +114,7 @@
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: #718096;
+  color: var(--color-text-muted, #718096);
   margin-right: 12px;
 }
 
@@ -129,7 +123,6 @@
   color: var(--color-primary, #667eea);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .vacunas-section-compact {
     padding: 10px 12px;

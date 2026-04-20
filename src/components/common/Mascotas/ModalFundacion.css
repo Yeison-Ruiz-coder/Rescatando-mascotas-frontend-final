@@ -15,7 +15,7 @@
 }
 
 .modal-container-fundacion {
-  background: white;
+  background: var(--color-card-bg, white);
   border-radius: 32px;
   width: 90%;
   max-width: 600px;
@@ -116,7 +116,7 @@
 
 .mision, .vision {
   padding: 16px;
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
   border-radius: 16px;
 }
 
@@ -144,7 +144,7 @@
   align-items: center;
   gap: 16px;
   padding: 12px;
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -221,7 +221,7 @@
   gap: 12px;
   padding: 16px 24px;
   border-top: 1px solid var(--color-border);
-  background: #f8fafc;
+  background: var(--color-light-secondary, #f8fafc);
 }
 
 .btn-cerrar, .btn-llamar {
@@ -234,7 +234,7 @@
 }
 
 .btn-cerrar {
-  background: white;
+  background: var(--color-card-bg, white);
   border: 1px solid var(--color-border);
   color: var(--color-text);
 }

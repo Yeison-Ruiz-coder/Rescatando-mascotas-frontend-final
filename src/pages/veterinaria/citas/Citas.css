@@ -1,25 +1,84 @@
-/* Citas styles */
 /* src/pages/veterinaria/citas/Citas.css */
+/* TODOS los estilos están AISLADOS dentro de .citas-page */
 
 .citas-page {
   padding: 1.5rem;
   width: 100%;
   max-width: 100%;
   margin: 0;
-  background: linear-gradient(135deg, #e8f4f8 0%, #d1e8f0 100%);
+  background: var(--gradient-light);
   min-height: 100vh;
   box-sizing: border-box;
 }
 
-.citas-list {
+/* Header aislado */
+.citas-page .citas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.citas-page .citas-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
+.citas-page .citas-header h1 i {
+  background: none;
+  -webkit-text-fill-color: var(--color-primary);
+  margin-right: 0.5rem;
+}
+
+.citas-page .citas-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Botón primario aislado */
+.citas-page .citas-btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.citas-page .citas-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Lista de citas aislada */
+.citas-page .citas-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-top: 1rem;
 }
 
+/* Responsive aislado */
 @media (max-width: 768px) {
   .citas-page {
     padding: 1rem;
+  }
+  
+  .citas-page .citas-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

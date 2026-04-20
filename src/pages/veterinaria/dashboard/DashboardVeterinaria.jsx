@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿// src/pages/veterinaria/Dashboard/DashboardVeterinaria.jsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardVeterinaria.css';
 
