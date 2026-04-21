@@ -1,0 +1,204 @@
+/* src/components/common/FundacionCard/FundacionCard.css */
+/* Estilos basados en las variables globales del sitio */
+
+.fundacion-card {
+    background: white !important;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+}
+
+.fundacion-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
+}
+
+/* Imagen */
+.fundacion-card .card-image {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--gradient-primary);
+}
+
+.fundacion-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.fundacion-card:hover .card-image img {
+    transform: scale(1.08);
+}
+
+.fundacion-card .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+}
+
+.fundacion-card .image-placeholder svg {
+    opacity: 0.7;
+}
+
+.fundacion-card .image-placeholder span {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* Badge verificado */
+.fundacion-card .verified-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--color-success);
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: white;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+}
+
+/* Contenido */
+.fundacion-card .card-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título */
+.fundacion-card .card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--color-text);
+}
+
+/* Ciudad */
+.fundacion-card .card-city {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* Descripción */
+.fundacion-card .card-description {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Información de contacto */
+.fundacion-card .card-info {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fundacion-card .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.fundacion-card .info-item svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+/* Estadísticas */
+.fundacion-card .card-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.fundacion-card .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+}
+
+.fundacion-card .stat svg {
+    color: var(--color-primary);
+}
+
+/* Footer */
+.fundacion-card .card-footer {
+    margin-top: auto;
+}
+
+/* Botón - estilo coherente con el sitio */
+.fundacion-card .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.7rem;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: var(--transition);
+}
+
+.fundacion-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .fundacion-card .card-image {
+        height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fundacion-card .card-content {
+        padding: 1rem;
+    }
+    
+    .fundacion-card .card-title {
+        font-size: 1rem;
+    }
+}
