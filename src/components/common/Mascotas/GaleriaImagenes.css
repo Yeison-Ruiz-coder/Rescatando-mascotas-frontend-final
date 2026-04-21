@@ -1,22 +1,38 @@
 /* src/components/common/Mascotas/GaleriaImagenes.css */
 
 .galeria-container {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
+/* Imagen principal */
 .imagen-principal {
   position: relative;
-  border-radius: 20px;
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 24px;
   overflow: hidden;
   cursor: pointer;
-  aspect-ratio: 1 / 1;
-  background: var(--color-light-secondary, #f5f5f5);
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.imagen-principal:hover {
+  border-color: #667eea;
+  transform: scale(1.01);
 }
 
 .imagen-principal img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.imagen-principal:hover img {
+  transform: scale(1.02);
 }
 
 .indicador-galeria {
@@ -24,37 +40,39 @@
   bottom: 16px;
   right: 16px;
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   color: white;
   padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  backdrop-filter: blur(4px);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
+/* Miniaturas */
 .miniaturas {
   display: flex;
   gap: 12px;
-  margin-top: 16px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding: 8px 0;
   scrollbar-width: thin;
 }
 
 .miniaturas::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
 .miniaturas::-webkit-scrollbar-track {
-  background: var(--color-border, #f1f1f1);
+  background: #f1f5f9;
   border-radius: 10px;
 }
 
 .miniaturas::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: #cbd5e1;
   border-radius: 10px;
 }
 
 .miniatura {
+  flex-shrink: 0;
   width: 80px;
   height: 80px;
   border-radius: 12px;
@@ -62,16 +80,16 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.3s ease;
-  flex-shrink: 0;
+  background: #f1f5f9;
 }
 
 .miniatura:hover {
-  transform: scale(1.05);
+  transform: translateY(-3px);
 }
 
 .miniatura.active {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .miniatura img {
@@ -88,11 +106,12 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -105,6 +124,7 @@
   max-width: 100%;
   max-height: 85vh;
   object-fit: contain;
+  border-radius: 16px;
 }
 
 .modal-close {
@@ -114,7 +134,7 @@
   background: none;
   border: none;
   color: white;
-  font-size: 32px;
+  font-size: 28px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -134,8 +154,8 @@
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
-  padding: 10px 20px;
-  border-radius: 40px;
+  padding: 10px 24px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
@@ -151,13 +171,30 @@
   cursor: not-allowed;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (max-width: 768px) {
-  .galeria-container {
-    padding: 16px;
-  }
-  
   .miniatura {
     width: 60px;
     height: 60px;
+  }
+  
+  .modal-nav {
+    gap: 12px;
+  }
+  
+  .nav-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .miniatura {
+    width: 50px;
+    height: 50px;
   }
 }

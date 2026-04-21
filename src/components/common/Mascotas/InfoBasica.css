@@ -1,157 +1,202 @@
 /* src/components/common/Mascotas/InfoBasica.css */
 
 .info-basica {
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
+/* Badge de estado */
 .estado-badge {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  border-radius: 40px;
-  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
-.badge.adopcion { 
-  background: linear-gradient(135deg, #2ecc71, #27ae60); 
-  color: white; 
+.badge.adopcion {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
 }
 
-.badge.adoptado { 
-  background: #95a5a6; 
-  color: white; 
+.badge.adoptado {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  color: white;
 }
 
-.badge.rescatada { 
-  background: linear-gradient(135deg, var(--color-accent, #ff8c42), var(--color-heart, #ff6b9d)); 
-  color: white; 
+.badge.rescatada {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
 }
 
-.badge.acogida { 
-  background: var(--gradient-primary); 
-  color: white; 
+.badge.acogida {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
 }
 
+/* Nombre de la mascota */
 .nombre-mascota {
-  font-size: 32px;
-  font-weight: 800;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
   margin-bottom: 20px;
-  color: var(--color-text);
-  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
+/* Grid de información resumen */
 .info-resumen {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   margin-bottom: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--color-border);
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 20px;
 }
 
 .info-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  color: var(--color-text-muted);
-  font-size: 14px;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .info-item i {
-  color: var(--color-primary);
-  width: 20px;
-  font-size: 16px;
+  font-size: 1.25rem;
+  color: #667eea;
 }
 
+.info-item span {
+  font-size: 0.85rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* Descripción */
 .descripcion {
   margin-bottom: 24px;
 }
 
-.descripcion h3 {
-  font-size: 18px;
+.descripcion h3,
+.lugar-rescate h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
   margin-bottom: 12px;
-  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.descripcion p {
+.descripcion h3 i,
+.lugar-rescate h3 i {
+  color: #667eea;
+}
+
+.descripcion p,
+.lugar-rescate p {
+  color: #475569;
   line-height: 1.6;
-  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
+/* Lugar de rescate */
 .lugar-rescate {
   margin-bottom: 24px;
 }
 
-.lugar-rescate h3 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  color: var(--color-text);
-}
-
+/* Fechas */
 .fechas {
   display: flex;
-  gap: 24px;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  background: var(--color-light-secondary, #f8fafc);
-  padding: 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 1rem;
   border-radius: 16px;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 
 .fecha-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  color: #475569;
 }
 
 .fecha-item i {
-  color: var(--color-primary);
+  color: #667eea;
 }
 
-.razas-section {
-  margin-bottom: 24px;
+.fecha-item strong {
+  font-weight: 600;
+  color: #1e293b;
 }
 
-.razas-section h3 {
-  font-size: 18px;
-  margin-bottom: 12px;
-  color: var(--color-text);
+/* Separador entre secciones */
+.separador-seccion {
+  margin: 24px 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
 }
 
-.razas-lista {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.raza-tag {
-  background: rgba(102, 126, 234, 0.1);
-  color: var(--color-primary);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .nombre-mascota {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
   
   .info-resumen {
-    gap: 16px;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 20px;
+  }
+  
+  .info-item {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+  
+  .descripcion {
+    margin-bottom: 20px;
+  }
+  
+  .lugar-rescate {
+    margin-bottom: 20px;
   }
   
   .fechas {
     flex-direction: column;
-    gap: 12px;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-resumen {
+    padding: 0.75rem;
+  }
+  
+  .info-item {
+    padding: 0.5rem;
+  }
+  
+  .info-item span {
+    font-size: 0.8rem;
   }
 }

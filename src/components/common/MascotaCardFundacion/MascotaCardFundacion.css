@@ -1,62 +1,27 @@
-/* src/components/fundacion/MascotaCardFundacion/MascotaCardFundacion.css */
+/* src/components/common/MascotaCardFundacion/MascotaCardFundacion.css */
+
+/* ============================================
+   TARJETA SIMPLIFICADA PARA FUNDACIÓN
+   Solo información esencial
+   ============================================ */
 
 .mascota-card-fundacion {
   background: white;
-  border-radius: 14px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: all 0.25s ease;
-  position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .mascota-card-fundacion:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Badge de estado */
-.estado-badge-fundacion {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  padding: 4px 10px;
-  border-radius: 30px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.estado-badge-fundacion i {
-  font-size: 0.6rem;
-}
-
-.estado-adopcion {
-  background: rgba(76, 175, 80, 0.9);
-  color: white;
-}
-
-.estado-adoptado {
-  background: rgba(158, 158, 158, 0.9);
-  color: white;
-}
-
-.estado-rescatada {
-  background: rgba(255, 152, 0, 0.9);
-  color: white;
-}
-
-.estado-acogida {
-  background: rgba(33, 150, 243, 0.9);
-  color: white;
+  transform: translateY(-6px);
+  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
 /* Imagen */
@@ -64,19 +29,19 @@
   position: relative;
   height: 200px;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea, #764ba2);
   flex-shrink: 0;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
 }
 
 .card-image-fundacion img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .mascota-card-fundacion:hover .card-image-fundacion img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .image-placeholder-fundacion {
@@ -86,242 +51,250 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.8);
-  gap: 6px;
+  gap: 8px;
+  color: #94a3b8;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
 }
 
 .image-placeholder-fundacion i {
-  font-size: 2rem;
-  opacity: 0.6;
+  font-size: 2.5rem;
+  opacity: 0.5;
 }
 
 .image-placeholder-fundacion span {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-/* Overlay */
-.image-overlay-fundacion {
+/* Badge de estado */
+.estado-badge-fundacion {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  top: 10px;
+  right: 10px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  gap: 6px;
+  z-index: 2;
 }
 
-.card-image-fundacion:hover .image-overlay-fundacion {
-  opacity: 1;
+.estado-badge-fundacion i {
+  font-size: 0.6rem;
 }
 
-.overlay-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: white;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: #667eea;
+.estado-adopcion {
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
-.overlay-btn:hover {
-  transform: scale(1.1);
-  background: #667eea;
-  color: white;
+.estado-adoptado {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
 }
 
-.overlay-btn.delete:hover {
-  background: #f44336;
-  color: white;
+.estado-rescatada {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
 }
 
-/* Contenido - Se expande para llenar */
+.estado-acogida {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+/* Contenido simplificado */
 .card-content-fundacion {
-  padding: 1rem;
+  padding: 16px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+/* Header */
 .card-header-fundacion {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.75rem;
+  align-items: center;
+  margin-bottom: 12px;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 6px;
 }
 
 .card-title-fundacion {
   font-size: 1rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #0f172a;
   margin: 0;
 }
 
 .card-id-fundacion {
   font-size: 0.6rem;
-  color: #999;
+  color: #94a3b8;
   font-family: monospace;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 20px;
 }
 
-/* Detalles */
+/* Grid de detalles - solo 2 líneas */
 .card-details-fundacion {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  background: #f8f9fa;
-  border-radius: 10px;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 12px;
 }
 
 .detail-item {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 6px;
   font-size: 0.7rem;
 }
 
 .detail-item i {
-  width: 16px;
+  width: 18px;
   color: #667eea;
   font-size: 0.65rem;
 }
 
 .detail-label {
-  color: #666;
+  color: #94a3b8;
   font-weight: 500;
 }
 
 .detail-value {
-  color: #333;
+  color: #1e293b;
   font-weight: 600;
 }
 
-/* Descripción */
+/* Descripción - solo 1 línea */
 .card-description-fundacion {
-  color: #666;
-  font-size: 0.75rem;
+  color: #64748b;
+  font-size: 0.7rem;
   line-height: 1.4;
-  margin-bottom: 0.75rem;
+  margin-bottom: 16px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Selector de estado */
+/* Selector de estado - compacto */
 .estado-selector-fundacion {
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  background: #f8f9fa;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #f8fafc;
   border-radius: 10px;
-  position: relative;
 }
 
 .estado-selector-fundacion label {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.6rem;
-  color: #666;
-  margin-bottom: 0.3rem;
   font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+}
+
+.estado-selector-fundacion label i {
+  color: #667eea;
+  font-size: 0.55rem;
 }
 
 .estado-select-fundacion {
   width: 100%;
-  padding: 0.4rem;
-  border: 1px solid #e0e0e0;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
+  background: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: white;
+  color: #1e293b;
 }
 
 .estado-select-fundacion:hover {
   border-color: #667eea;
 }
 
-.estado-select-fundacion:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
-}
-
 .estado-loading {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.65rem;
   color: #667eea;
-  font-size: 0.7rem;
 }
 
-/* Botones de acción */
+/* Botones de acción - más compactos */
 .card-actions-fundacion {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   margin-top: auto;
 }
 
 .action-btn-fundacion {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.45rem;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 30px;
   font-size: 0.7rem;
   font-weight: 600;
+  text-align: center;
   text-decoration: none;
+  transition: all 0.3s ease;
   cursor: pointer;
-  transition: all 0.2s ease;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .action-btn-fundacion.view {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.action-btn-fundacion.view:hover {
+  background: #667eea;
   color: white;
+  transform: translateY(-2px);
 }
 
 .action-btn-fundacion.edit {
-  background: #ff9800;
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.action-btn-fundacion.edit:hover {
+  background: #f59e0b;
   color: white;
+  transform: translateY(-2px);
 }
 
 .action-btn-fundacion.delete {
-  background: #f44336;
-  color: white;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-.action-btn-fundacion:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.02);
+.action-btn-fundacion.delete:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
 }
 
 .action-btn-fundacion:active {
   transform: translateY(0);
-}
-
-.action-btn-fundacion:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
 }
 
 /* Responsive */
@@ -330,15 +303,29 @@
     height: 180px;
   }
   
-  .card-details-fundacion {
-    grid-template-columns: 1fr;
-  }
-  
   .card-actions-fundacion {
     flex-direction: column;
+    gap: 6px;
   }
   
-  .action-btn-fundacion {
-    padding: 0.5rem;
+  .card-content-fundacion {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-title-fundacion {
+    font-size: 0.9rem;
+  }
+  
+  .estado-badge-fundacion {
+    top: 8px;
+    right: 8px;
+    padding: 3px 10px;
+    font-size: 0.6rem;
+  }
+  
+  .card-details-fundacion {
+    grid-template-columns: 1fr;
   }
 }
