@@ -15,18 +15,7 @@ const SaludCuidados = ({ mascota, vacunas, t }) => {
         {/* Vacunas */}
         <VacunasSection vacunas={vacunas} t={t} />
         
-        {/* Lugar de rescate */}
-        {mascota.lugar_rescate && (
-          <div className="cuidado-card rescate-card">
-            <div className="cuidado-header">
-              <i className="fas fa-map-marker-alt"></i>
-              <div>
-                <small>{t('lugar_rescate') || 'Rescatado en'}</small>
-                <strong>{mascota.lugar_rescate}</strong>
-              </div>
-            </div>
-          </div>
-        )}
+        
 
         {/* Condiciones especiales */}
         {mascota.condiciones_especiales && (
