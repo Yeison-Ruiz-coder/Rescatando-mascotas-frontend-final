@@ -2,162 +2,231 @@
 
 .mascota-detalle-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+  background: transparent;
   padding: 40px 0;
 }
 
 .detalle-container {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* Botón volver */
+/* Botón volver - Versión Alternativa (sin pseudo-elementos complejos) */
 .btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  border: 1px solid var(--color-border);
-  border-radius: 40px;
-  padding: 10px 20px;
-  margin-bottom: 30px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  color: var(--color-text);
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(135deg, #667eea, #764ba2) !important;
+  border: none !important;
+  border-radius: 40px !important;
+  padding: 10px 24px !important;
+  margin-bottom: 30px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+  text-decoration: none !important;
+  width: auto !important;
+  min-width: 110px !important;
 }
 
 .btn-back:hover {
-  border-color: var(--color-primary);
-  transform: translateX(-4px);
-  box-shadow: var(--shadow-sm);
+  transform: translateX(-4px) !important;
+  background: linear-gradient(135deg, #7c8ef0, #8a5cb8) !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
 }
 
+.btn-back i {
+  font-size: 0.9rem !important;
+  transition: transform 0.2s ease !important;
+}
+
+.btn-back:hover i {
+  transform: translateX(-3px) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn-back {
+    padding: 8px 20px !important;
+    font-size: 0.85rem !important;
+    min-width: 100px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-back {
+    padding: 8px 16px !important;
+    font-size: 0.8rem !important;
+    min-width: 90px !important;
+  }
+}
 /* Grid principal */
 .detalle-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  gap: 32px;
   background: white;
   border-radius: 32px;
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
 /* Columna izquierda - Galería */
 .detalle-gallery {
-  padding: 24px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  overflow-x: hidden; /* ✅ Evita desbordamiento horizontal */
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
 }
 
 /* Columna derecha - Información */
 .detalle-info {
-  padding: 24px;
+  padding: 32px;
+  background: white;
   overflow-y: auto;
   max-height: 800px;
-  overflow-x: hidden; /* ✅ Evita desbordamiento horizontal */
-  word-wrap: break-word; /* ✅ Rompe palabras largas */
+  scrollbar-width: thin;
 }
 
-/* Botones acción */
-.botones-accion {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.detalle-info::-webkit-scrollbar {
+  width: 6px;
 }
 
-.btn-adoptar, .btn-acogida {
-  width: 100%;
-  padding: 14px;
-  border-radius: 40px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  text-align: center;
-  white-space: nowrap; /* ✅ Evita que el texto se rompa */
+.detalle-info::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
 }
 
-/* ✅ En móvil, permitir que el texto se ajuste */
-@media (max-width: 480px) {
-  .btn-adoptar, .btn-acogida {
-    white-space: normal;
-    padding: 12px;
-    font-size: 14px;
-  }
+.detalle-info::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
 }
 
-.btn-adoptar {
-  background: var(--gradient-accent);
-  color: white;
-}
-
-.btn-adoptar:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
-}
-
-.btn-acogida {
-  background: var(--gradient-primary);
-  color: white;
-}
-
-.btn-acogida:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.mensaje-adoptado {
-  text-align: center;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: 16px;
-  color: #95a5a6;
-}
-
-.mensaje-adoptado i {
-  font-size: 48px;
-  margin-bottom: 12px;
+.detalle-info::-webkit-scrollbar-thumb:hover {
+  background: #667eea;
 }
 
 /* Error container */
 .error-container-detalle {
   text-align: center;
-  padding: 60px 20px;
+  padding: 60px 32px;
   background: white;
-  border-radius: 24px;
+  border-radius: 32px;
   max-width: 500px;
-  margin: 0 auto;
+  margin: 40px auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
 }
 
 .error-container-detalle i {
   font-size: 64px;
-  color: #ff4757;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 20px;
 }
 
+.error-container-detalle h2 {
+  font-size: 1.5rem;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.error-container-detalle p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
 .btn-volver {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
   padding: 12px 28px;
-  border-radius: 40px;
+  border-radius: 50px;
   cursor: pointer;
-  margin-top: 20px;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Botones acción */
+.botones-accion {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.btn-adoptar, .btn-acogida {
+  width: 100%;
+  padding: 14px;
+  border-radius: 60px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-adoptar {
+  background: linear-gradient(135deg, #ff8c42, #ff6b9d);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+}
+
+.btn-adoptar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+}
+
+.btn-acogida {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-acogida:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.mensaje-adoptado {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 20px;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.mensaje-adoptado i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  color: #22c55e;
 }
 
 /* Responsive */
 @media (max-width: 968px) {
   .detalle-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 0;
+    border-radius: 24px;
   }
   
   .detalle-container {
@@ -170,7 +239,26 @@
   
   .detalle-gallery,
   .detalle-info {
+    padding: 20px;
+  }
+  
+  .detalle-info {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-back {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .detalle-gallery {
     padding: 16px;
+  }
+  
+  .detalle-info {
+    padding: 20px;
   }
 }
 
@@ -179,7 +267,59 @@
     padding: 16px;
   }
   
-  .botones-accion {
-    gap: 8px;
+  .btn-adoptar, .btn-acogida {
+    padding: 12px;
+    font-size: 0.9rem;
   }
+  
+  .botones-accion {
+    gap: 10px;
+  }
+}
+
+/* Agrega esto al final de MascotaDetalle.css */
+
+/* Sección de Razas */
+.razas-section {
+  margin: 24px 0;
+  padding: 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.razas-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 16px 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.razas-section h3 i {
+  color: #667eea;
+}
+
+.razas-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.raza-tag {
+  background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+  color: #4f46e5;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.raza-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }

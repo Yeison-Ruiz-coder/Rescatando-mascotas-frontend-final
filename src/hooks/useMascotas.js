@@ -2,6 +2,21 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import mascotaService from '../services/mascotaService';
 
+// Función para formatear edad sin decimales
+const formatEdad = (edad) => {
+  if (!edad && edad !== 0) return null;
+  
+  const edadNum = parseFloat(edad);
+  if (isNaN(edadNum)) return null;
+
+  // Redondear al entero más cercano
+  const edadRedondeada = Math.round(edadNum);
+  
+  if (edadRedondeada === 0) return null;
+  
+  return edadRedondeada;
+};
+
 const useMascotas = () => {
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +27,12 @@ const useMascotas = () => {
       setLoading(true);
       const response = await mascotaService.getMascotas();
       if (response.success) {
-        setMascotas(response.data);
+        // Limpiar los decimales de la edad en cada mascota
+        const mascotasLimpias = response.data.map(mascota => ({
+          ...mascota,
+          edad_aprox: formatEdad(mascota.edad_aprox)
+        }));
+        setMascotas(mascotasLimpias);
       }
     } catch (error) {
       toast.error('Error al cargar las mascotas');

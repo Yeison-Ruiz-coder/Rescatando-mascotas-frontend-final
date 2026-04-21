@@ -1,35 +1,39 @@
 /* src/components/common/Mascotas/SaludCuidados.css */
 
 .salud-cuidados {
-  background: var(--color-card-bg, white);
-  border-radius: 20px;
-  margin-bottom: 24px;
+  margin: 24px 0;
 }
 
 .salud-cuidados h3 {
-  font-size: 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
   margin-bottom: 16px;
-  color: var(--color-text, #2d3748);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
+}
+
+.salud-cuidados h3 i {
+  color: #667eea;
 }
 
 .salud-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .cuidado-card {
-  background: var(--color-light-secondary, #f8fafc);
-  border-radius: 12px;
-  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
   transition: all 0.3s ease;
 }
 
 .cuidado-card:hover {
   transform: translateX(4px);
+  background: #f1f5f9;
 }
 
 .cuidado-header {
@@ -39,16 +43,16 @@
 }
 
 .cuidado-header i {
-  font-size: 20px;
+  font-size: 1.25rem;
   width: 32px;
 }
 
 .cuidado-header i.fa-map-marker-alt {
-  color: #3498db;
+  color: #3b82f6;
 }
 
 .cuidado-header i.fa-exclamation-triangle {
-  color: #f39c12;
+  color: #f59e0b;
 }
 
 .cuidado-header div {
@@ -57,64 +61,65 @@
 
 .cuidado-header small {
   display: block;
-  font-size: 11px;
-  color: var(--color-text-muted, #718096);
-  margin-bottom: 2px;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-bottom: 4px;
 }
 
 .cuidado-header strong {
-  font-size: 14px;
-  color: var(--color-text, #2d3748);
+  font-size: 0.9rem;
+  color: #1e293b;
   font-weight: 600;
   word-break: break-word;
 }
 
+/* Badges de aptitudes */
 .apto-badges {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-top: 8px;
-  flex-wrap: wrap;
 }
 
 .apto-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 40px;
-  font-size: 13px;
-  font-weight: 600;
-  flex: 1;
   justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .apto-badge.ninos {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }
 
 .apto-badge.otros {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
 }
 
 .rescate-card {
-  border-left: 3px solid #3498db;
+  border-left: 3px solid #3b82f6;
 }
 
 .especiales-card {
-  border-left: 3px solid #f39c12;
+  border-left: 3px solid #f59e0b;
 }
 
 @media (max-width: 768px) {
-  .apto-badges {
-    flex-direction: column;
+  .salud-cuidados {
+    margin: 20px 0;
   }
   
-  .apto-badge {
-    width: 100%;
+  .apto-badges {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
   
   .cuidado-header {
