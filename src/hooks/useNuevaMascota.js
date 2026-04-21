@@ -7,6 +7,22 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { rescateService } from '../services/rescateService';
 
+// Función para limpiar decimales de la edad
+const cleanEdad = (edad) => {
+  if (!edad && edad !== 0) return '';
+  
+  const edadNum = parseFloat(edad);
+  if (isNaN(edadNum)) return '';
+  
+  // Redondear al entero más cercano
+  const edadRedondeada = Math.round(edadNum);
+  
+  // Si es 0, devolver vacío
+  if (edadRedondeada === 0) return '';
+  
+  return edadRedondeada.toString();
+};
+
 const useNuevaMascota = () => {
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
@@ -89,7 +105,8 @@ const useNuevaMascota = () => {
               nombre_mascota: mascota.nombre_mascota || '',
               especie: mascota.especie || '',
               razas: mascota.razas?.map(r => r.id) || [],
-              edad_aprox: mascota.edad_aprox || '',
+              // ✅ LIMPIAR DECIMALES DE LA EDAD
+              edad_aprox: cleanEdad(mascota.edad_aprox),
               genero: mascota.genero || '',
               estado: mascota.estado || 'En adopcion',
               lugar_rescate: mascota.lugar_rescate || '',
@@ -184,6 +201,15 @@ const useNuevaMascota = () => {
     loadInitialData();
   }, [loadInitialData]);
 
+  // Manejar cambio en el campo edad (limpiar decimales al escribir)
+  const handleEdadChange = (e) => {
+    const value = e.target.value;
+    // Permitir solo números enteros positivos
+    if (value === '' || /^\d+$/.test(value)) {
+      setForm(prev => ({ ...prev, edad_aprox: value }));
+    }
+  };
+
   // Validar paso actual
   const validateStep = useCallback(() => {
     const newErrors = {};
@@ -249,7 +275,9 @@ const useNuevaMascota = () => {
     formDataToSend.append('fundacion_id', fundacionId);
     formDataToSend.append('nombre_mascota', form.nombre_mascota || '');
     formDataToSend.append('especie', form.especie || '');
-    formDataToSend.append('edad_aprox', form.edad_aprox || '');
+    // ✅ Enviar edad como número entero (sin decimales)
+    const edadLimpia = form.edad_aprox ? parseInt(form.edad_aprox, 10) : 0;
+    formDataToSend.append('edad_aprox', edadLimpia);
     formDataToSend.append('genero', form.genero || '');
     formDataToSend.append('estado', form.estado || 'En adopcion');
     formDataToSend.append('lugar_rescate', form.lugar_rescate || '');
@@ -348,6 +376,7 @@ const useNuevaMascota = () => {
     prevStep,
     handleSubmit,
     getImageUrl,
+    handleEdadChange, // ✅ Exportar nueva función
     fundacionNombre: user?.fundacion?.Nombre_1 || user?.nombre,
   };
 };

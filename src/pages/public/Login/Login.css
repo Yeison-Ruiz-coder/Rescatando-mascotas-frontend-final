@@ -1,4 +1,6 @@
 /* src/pages/public/Login/Login.css */
+
+/* Contenedor principal */
 .login-container {
   min-height: 80vh;
   display: flex;
@@ -14,7 +16,7 @@
   background-attachment: fixed;
 }
 
-/* Overlay oscuro para mejorar legibilidad */
+/* Overlay oscuro */
 .login-overlay {
   position: absolute;
   top: 0;
@@ -25,7 +27,7 @@
   z-index: 1;
 }
 
-/* Tarjeta de login - Glassmorphism */
+/* Tarjeta de login */
 .login-card {
   position: relative;
   z-index: 2;
@@ -55,6 +57,7 @@
 .login-header {
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .login-logo-wrapper {
@@ -67,6 +70,8 @@
   justify-content: center;
   margin: 0 auto 1rem;
   animation: pulse 2s infinite;
+  position: relative;
+  overflow: hidden;
 }
 
 @keyframes pulse {
@@ -84,8 +89,8 @@
   object-fit: contain;
   filter: brightness(0) invert(1);
   position: absolute;
-  top: 10.5%;
-  left: 49.3%;
+  top: 43.6%;
+  left: 46.9%;
   transform: translate(-50%, -50%);
 }
 
@@ -106,74 +111,89 @@
   margin-top: 0.25rem;
 }
 
-/* Formulario */
+/* ============================================
+   ESTILOS ENCAPSULADOS PARA INPUTS
+   ============================================ */
+
+/* Contenedor del formulario */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.input-group {
+/* Grupo de input */
+.login-form .input-group {
   position: relative;
   margin-bottom: 0.25rem;
 }
 
-.input-icon {
+/* Icono dentro del input */
+.login-form .input-icon {
   position: absolute;
   left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 42px;
   color: rgba(255, 255, 255, 0.6);
   font-size: 1rem;
-  z-index: 10;
+  z-index: 15;
   pointer-events: none;
 }
 
-/* Estilos para Input personalizado */
-.login-form .form-group {
-  margin-bottom: 0;
-}
-
+/* Label del input */
 .login-form .form-label {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  display: block;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+  display: block !important;
 }
 
-.login-form .form-input {
-  width: 100%;
-  padding: 0.9rem 1rem 0.9rem 2.8rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
-  font-size: 1rem;
-  color: white;
-  transition: all 0.3s ease;
+/* Input base */
+.login-form .form-input,
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"] {
+  width: 100% !important;
+  padding: 0.9rem 1rem 0.9rem 2.8rem !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 14px !important;
+  font-size: 1rem !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  box-sizing: border-box !important;
 }
 
-.login-form .form-input:focus {
-  outline: none;
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+/* Focus en input */
+.login-form .form-input:focus,
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus,
+.login-form input[type="text"]:focus {
+  outline: none !important;
+  border-color: #667eea !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
 }
 
-.login-form .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+/* Placeholder */
+.login-form .form-input::placeholder,
+.login-form input[type="email"]::placeholder,
+.login-form input[type="password"]::placeholder,
+.login-form input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Password wrapper */
-.password-wrapper {
+/* Wrapper para contraseña */
+.login-form .password-wrapper {
   position: relative;
+  width: 100%;
 }
 
-.password-toggle {
+/* Botón toggle de contraseña */
+.login-form .password-toggle {
   position: absolute;
   right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 42px;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.6);
@@ -181,10 +201,10 @@
   font-size: 1rem;
   padding: 0;
   transition: color 0.3s;
-  z-index: 10;
+  z-index: 15;
 }
 
-.password-toggle:hover {
+.login-form .password-toggle:hover {
   color: #667eea;
 }
 
@@ -384,10 +404,14 @@
   }
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 768px) {
   .login-container {
     padding: 1rem;
+    margin: 60px 2rem;
   }
   
   .login-card {
@@ -408,9 +432,19 @@
     width: 150px;
     height: 150px;
   }
+  
+  /* Ajuste de inputs en tablet */
+  .login-form .input-icon,
+  .login-form .password-toggle {
+    top: 40px;
+  }
 }
 
 @media (max-width: 480px) {
+  .login-container {
+    margin: 40px 1rem;
+  }
+  
   .login-card {
     padding: 1.5rem;
   }
@@ -423,5 +457,19 @@
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
+  }
+  
+  /* Ajuste de inputs en móvil */
+  .login-form .input-icon,
+  .login-form .password-toggle {
+    top: 38px;
+    left: 12px;
+  }
+  
+  .login-form .form-input,
+  .login-form input[type="email"],
+  .login-form input[type="password"],
+  .login-form input[type="text"] {
+    padding: 0.8rem 1rem 0.8rem 2.5rem !important;
   }
 }

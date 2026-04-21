@@ -1,14 +1,14 @@
 /* src/components/common/Mascotas/VacunasSection.css */
 
 .vacunas-section-compact {
-  background: var(--color-light-secondary, #f8fafc);
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 0;
 }
 
 .estado-vacunas {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .vacunas-header {
@@ -18,8 +18,8 @@
 }
 
 .vacunas-header i {
-  font-size: 20px;
-  color: var(--color-primary, #667eea);
+  font-size: 1.25rem;
+  color: #667eea;
   width: 32px;
 }
 
@@ -29,56 +29,57 @@
 
 .vacunas-header small {
   display: block;
-  font-size: 11px;
-  color: var(--color-text-muted, #718096);
-  margin-bottom: 2px;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #94a3b8;
+  margin-bottom: 4px;
 }
 
 .vacunas-header strong {
-  font-size: 14px;
-  color: var(--color-primary, #667eea);
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: 600;
 }
 
 .vacunas-lista {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--color-border, #e2e8f0);
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .vacuna-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
-  background: var(--color-card-bg, white);
-  border-radius: 10px;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
   transition: all 0.3s ease;
 }
 
 .vacuna-card:hover {
   transform: translateX(4px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .vacuna-card.rabia {
-  border-left: 3px solid #e74c3c;
+  border-left: 3px solid #ef4444;
 }
 
 .vacuna-card.parvovirus {
-  border-left: 3px solid #f39c12;
+  border-left: 3px solid #f59e0b;
 }
 
 .vacuna-card.moquillo {
-  border-left: 3px solid #3498db;
+  border-left: 3px solid #3b82f6;
 }
 
 .vacuna-card.default {
-  border-left: 3px solid var(--color-primary, #667eea);
+  border-left: 3px solid #667eea;
 }
 
 .vacuna-icon {
@@ -93,8 +94,8 @@
 }
 
 .vacuna-icon i {
-  font-size: 16px;
-  color: var(--color-primary, #667eea);
+  font-size: 1rem;
+  color: #667eea;
 }
 
 .vacuna-info {
@@ -103,29 +104,29 @@
 
 .vacuna-info strong {
   display: block;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text, #2d3748);
-  margin-bottom: 4px;
+  color: #1e293b;
+  margin-bottom: 6px;
 }
 
 .vacuna-fecha, .vacuna-proxima {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  color: var(--color-text-muted, #718096);
-  margin-right: 12px;
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-right: 16px;
 }
 
 .vacuna-fecha i, .vacuna-proxima i {
-  font-size: 10px;
-  color: var(--color-primary, #667eea);
+  font-size: 0.65rem;
+  color: #667eea;
 }
 
 @media (max-width: 768px) {
   .vacunas-section-compact {
-    padding: 10px 12px;
+    padding: 12px;
   }
   
   .vacuna-card {
@@ -134,11 +135,11 @@
   }
   
   .vacuna-icon {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
   
   .vacuna-fecha, .vacuna-proxima {
     display: block;
-    margin: 4px 0;
+    margin: 6px 0;
   }
 }
