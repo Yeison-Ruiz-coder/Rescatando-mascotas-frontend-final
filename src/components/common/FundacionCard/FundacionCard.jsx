@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Building, MapPin, Phone, Users, Heart, Award, ChevronRight } from 'lucide-react';
 import './FundacionCard.css';
 
-const FundacionCard = ({
+const FundacionCard = memo(({
   fundacion,
   getImageUrl,
-  variant = 'default', // 'default' | 'compact' | 'featured'
+  variant = 'default',
   showActions = true
 }) => {
   const { t } = useTranslation('fundaciones');
@@ -18,20 +18,23 @@ const FundacionCard = ({
     Descripcion,
     Direccion,
     Telefono,
-    Email,
     ciudad,
     total_mascotas = 0,
     verificado = false,
     imagen_portada
   } = fundacion;
 
+  // ✅ Memoizar URL de imagen
+  const imageUrl = useMemo(() => getImageUrl(imagen_portada), [imagen_portada, getImageUrl]);
+
   return (
     <div className={`fundacion-card ${variant}`}>
       <div className="card-image">
-        {getImageUrl(imagen_portada) ? (
+        {imageUrl ? (
           <img
-            src={getImageUrl(imagen_portada)}
+            src={imageUrl}
             alt={Nombre_1}
+            loading="lazy"
             onError={(e) => {
               e.target.onerror = null;
               e.target.style.display = 'none';
@@ -107,6 +110,8 @@ const FundacionCard = ({
       </div>
     </div>
   );
-};
+});
+
+FundacionCard.displayName = 'FundacionCard';
 
 export default FundacionCard;

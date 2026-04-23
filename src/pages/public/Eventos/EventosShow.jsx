@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, MapPin, Calendar, FileText, Clock, Heart, Share2, CalendarCheck, Users, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import api from '../../../services/api';
+import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import './Eventos.css';
 
 const PublicEventosShow = () => {
@@ -14,43 +15,68 @@ const PublicEventosShow = () => {
     const [loading, setLoading] = useState(true);
     const [liked, setLiked] = useState(false);
     const [asistencia, setAsistencia] = useState(false);
+    const [error, setError] = useState(null);
 
-    const getImageUrl = (url) => {
+    const getImageUrl = useCallback((url) => {
         if (!url) return null;
         if (url.startsWith('http')) return url;
         if (url.startsWith('/storage')) return `http://localhost:8000${url}`;
         return `http://localhost:8000/storage/${url}`;
-    };
+    }, []);
 
     useEffect(() => {
+        const abortController = new AbortController();
+        let isMounted = true;
+
+        const loadEvento = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await api.get(`/eventos/${id}`, {
+                    signal: abortController.signal
+                });
+                
+                if (!isMounted) return;
+                
+                const data = response.data.data || response.data;
+                setEvento(data);
+                setAsistencia(data.usuario_confirmado || false);
+            } catch (error) {
+                if (error.name === 'CanceledError' || error.name === 'AbortError') {
+                    console.log('Petición cancelada (navegación rápida)');
+                    return;
+                }
+                console.error('Error:', error);
+                if (isMounted) {
+                    setError(error.message || 'Error al cargar el evento');
+                }
+            } finally {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
         loadEvento();
+        
+        return () => {
+            isMounted = false;
+            abortController.abort();
+        };
     }, [id]);
 
-    const loadEvento = async () => {
-        try {
-            const response = await api.get(`/eventos/${id}`);
-            const data = response.data.data || response.data;
-            setEvento(data);
-            setAsistencia(data.usuario_confirmado || false);
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleLike = async () => {
+    const handleLike = useCallback(async () => {
         try {
             await api.post(`/eventos/${id}/like`);
             setLiked(!liked);
         } catch (error) {
             console.error('Error al dar like:', error);
         }
-    };
+    }, [id, liked]);
 
-    const handleConfirmarAsistencia = async () => {
+    const handleConfirmarAsistencia = useCallback(async () => {
         if (!isAuthenticated) {
-            alert(t('login_requerido') || 'Debes iniciar sesión para confirmar asistencia');
+            alert(t('asistencia.login_requerido'));
             return;
         }
         
@@ -58,18 +84,19 @@ const PublicEventosShow = () => {
             if (asistencia) {
                 await api.delete(`/eventos/${id}/cancelar-asistencia`);
                 setAsistencia(false);
+                setEvento(prev => ({ ...prev, total_asistentes: Math.max(0, (prev?.total_asistentes || 0) - 1) }));
             } else {
                 await api.post(`/eventos/${id}/confirmar-asistencia`);
                 setAsistencia(true);
+                setEvento(prev => ({ ...prev, total_asistentes: (prev?.total_asistentes || 0) + 1 }));
             }
-            loadEvento();
         } catch (error) {
             console.error('Error:', error);
-            alert(error.response?.data?.message || t('error_asistencia') || 'Error al procesar la solicitud');
+            alert(error.response?.data?.message || t('asistencia.error'));
         }
-    };
+    }, [id, isAuthenticated, asistencia, t]);
 
-    const handleShare = () => {
+    const handleShare = useCallback(() => {
         if (navigator.share) {
             navigator.share({
                 title: evento?.nombre_evento,
@@ -78,15 +105,34 @@ const PublicEventosShow = () => {
             });
         } else {
             navigator.clipboard.writeText(window.location.href);
-            alert(t('enlace_copiado') || '¡Enlace copiado al portapapeles!');
+            alert(t('detalle.enlace_copiado'));
         }
-    };
+    }, [evento, t]);
 
+    // ✅ Solo el LoadingSpinner, sin texto
     if (loading) {
         return (
             <div className="public-eventos-loading">
-                <div className="spinner"></div>
-                <p>{t('cargando')}</p>
+                <LoadingSpinner />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="public-detail-container">
+                <div className="public-detail-card">
+                    <div className="public-detail-body">
+                        <div className="public-eventos-empty">
+                            <Calendar size={48} />
+                            <h4>Error al cargar el evento</h4>
+                            <p>{error}</p>
+                            <Link to="/eventos" className="public-btn-secondary">
+                                Volver a Eventos
+                            </Link>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -99,9 +145,9 @@ const PublicEventosShow = () => {
                 <div className="public-detail-body">
                     <div className="detail-badge">
                         {evento.tipo === 'admin' ? (
-                            <span className="badge-admin-large">🌟 {t('evento_global') || 'Evento Global'}</span>
+                            <span className="badge-admin-large">🌟 {t('detalle.evento_global')}</span>
                         ) : (
-                            <span className="badge-fundacion-large">🏠 {t('evento_fundacion') || 'Evento de Fundación'}</span>
+                            <span className="badge-fundacion-large">🏠 {t('detalle.evento_fundacion')}</span>
                         )}
                     </div>
 
@@ -110,6 +156,7 @@ const PublicEventosShow = () => {
                             src={getImageUrl(evento.imagen_url)} 
                             alt={evento.nombre_evento} 
                             className="public-detail-image"
+                            loading="lazy"
                             onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = 'https://via.placeholder.com/800x400/667eea/FFFFFF?text=Evento';
@@ -126,10 +173,10 @@ const PublicEventosShow = () => {
                         <h1 className="public-detail-title">{evento.nombre_evento}</h1>
                         <div className="public-detail-actions-header">
                             <button onClick={handleLike} className={`public-btn-like-detail ${liked ? 'liked' : ''}`}>
-                                <Heart size={20} /> {liked ? (t('me_gusta') || 'Me gusta') : (t('dar_like') || 'Dar like')}
+                                <Heart size={20} /> {liked ? t('botones.me_gusta') : t('botones.dar_like')}
                             </button>
                             <button onClick={handleShare} className="public-btn-share">
-                                <Share2 size={20} /> {t('compartir') || 'Compartir'}
+                                <Share2 size={20} /> {t('botones.compartir')}
                             </button>
                         </div>
                     </div>
@@ -140,16 +187,16 @@ const PublicEventosShow = () => {
                             {asistencia ? (
                                 <>
                                     <CheckCircle size={18} />
-                                    {t('asistencia_confirmada') || '¡Asistencia confirmada!'}
+                                    {t('asistencia.confirmada')}
                                 </>
                             ) : (
-                                t('confirmar_asistencia') || 'Confirmar mi asistencia'
+                                t('asistencia.confirmar')
                             )}
                         </button>
                         {evento.total_asistentes > 0 && (
                             <div className="total-asistentes">
                                 <Users size={16} />
-                                <span>{evento.total_asistentes} {t('personas_asistiran') || 'personas asistirán'}</span>
+                                <span>{evento.total_asistentes} {t('asistencia.personas_asistiran')}</span>
                             </div>
                         )}
                     </div>
@@ -157,12 +204,12 @@ const PublicEventosShow = () => {
                     <div className="public-info-section">
                         <div className="public-info-item">
                             <MapPin size={18} className="public-info-icon" />
-                            <strong>{t('lugar') || 'Lugar'}:</strong>
+                            <strong>{t('evento.lugar')}:</strong>
                             <span>{evento.lugar_evento}</span>
                         </div>
                         <div className="public-info-item">
                             <Calendar size={18} className="public-info-icon" />
-                            <strong>{t('fecha') || 'Fecha'}:</strong>
+                            <strong>{t('evento.fecha')}:</strong>
                             <span>
                                 {new Date(evento.fecha_evento).toLocaleString('es-ES', {
                                     weekday: 'long',
@@ -177,16 +224,16 @@ const PublicEventosShow = () => {
                     </div>
 
                     <div className="public-description">
-                        <h5><FileText size={18} /> {t('descripcion') || 'Descripción'}:</h5>
+                        <h5><FileText size={18} /> {t('evento.descripcion')}:</h5>
                         <p>{evento.descripcion}</p>
                     </div>
 
                     <div className="public-detail-footer">
                         <Link to="/eventos" className="public-btn-secondary">
-                            <ArrowLeft size={18} /> {t('volver') || 'Volver a Eventos'}
+                            <ArrowLeft size={18} /> {t('detalle.volver')}
                         </Link>
                         <small className="public-publish-date">
-                            <Clock size={14} /> {t('publicado') || 'Publicado'}: {new Date(evento.created_at).toLocaleDateString()}
+                            <Clock size={14} /> {t('detalle.publicado')}: {new Date(evento.created_at).toLocaleDateString()}
                         </small>
                     </div>
                 </div>
