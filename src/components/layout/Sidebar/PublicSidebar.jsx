@@ -112,6 +112,20 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+         <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
+          </div>
+          <Link
+            to="/suscripciones"
+            className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-calendar-alt"></i>
+            <span>{t("ver membresias")}</span>
+          </Link>
+        </div>
+
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
