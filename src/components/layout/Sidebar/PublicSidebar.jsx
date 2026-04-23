@@ -117,7 +117,7 @@ const PublicSidebar = () => {
             <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
           </div>
           <Link
-            to="/eventos"
+            to="/suscripciones"
             className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
             onClick={closePublicSidebar}
           >
