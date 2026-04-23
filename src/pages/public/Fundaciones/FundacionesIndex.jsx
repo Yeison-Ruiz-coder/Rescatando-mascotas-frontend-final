@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Heart, Filter, X, Building, MapPin } from 'lucide-react';
 import api from '../../../services/api';
@@ -14,52 +14,83 @@ const FundacionesIndex = () => {
   const [selectedCiudad, setSelectedCiudad] = useState('');
   const [ciudades, setCiudades] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [error, setError] = useState(null);
 
-  const getImageUrl = (url) => {
+  const getImageUrl = useCallback((url) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
     return `http://localhost:8000${url}`;
-  };
-
-  useEffect(() => {
-    loadFundaciones();
   }, []);
 
   useEffect(() => {
-    filterFundaciones();
-  }, [searchTerm, selectedCiudad, fundaciones]);
+    const abortController = new AbortController();
+    let isMounted = true;
+    
+    const loadFundaciones = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // ✅ Sin timeout - que cargue lo que el servidor tarde
+        const response = await api.get('/fundaciones', {
+          signal: abortController.signal
+        });
+        
+        if (!isMounted) return;
+        
+        const data = response.data?.data || response.data || [];
+        
+        // ✅ Cargar mascotas sin timeout
+        const fundacionesConMascotas = await Promise.all(
+          data.map(async (fundacion) => {
+            try {
+              const mascotasRes = await api.get(`/mascotas/fundacion/${fundacion.id}`, {
+                signal: abortController.signal
+              });
+              const mascotas = mascotasRes.data?.data || mascotasRes.data || [];
+              return { ...fundacion, total_mascotas: mascotas.length };
+            } catch {
+              return { ...fundacion, total_mascotas: 0 };
+            }
+          })
+        );
+        
+        if (!isMounted) return;
+        
+        // ✅ Actualizar estados inmediatamente
+        setFundaciones(fundacionesConMascotas);
+        setFilteredFundaciones(fundacionesConMascotas);
+        
+        const uniqueCiudades = [...new Set(fundacionesConMascotas.map(f => f.ciudad).filter(Boolean))];
+        setCiudades(uniqueCiudades);
+        
+      } catch (error) {
+        if (error.name === 'CanceledError' || error.name === 'AbortError') {
+          return;
+        }
+        
+        console.error('Error:', error);
+        if (isMounted) {
+          setError(error.message || 'Error al cargar las fundaciones');
+          setFundaciones([]);
+          setFilteredFundaciones([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
 
-  const loadFundaciones = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get('/fundaciones');
-      const data = response.data?.data || response.data || [];
-      
-      const fundacionesConMascotas = await Promise.all(
-        data.map(async (fundacion) => {
-          try {
-            const mascotasRes = await api.get(`/mascotas/fundacion/${fundacion.id}`);
-            const mascotas = mascotasRes.data?.data || mascotasRes.data || [];
-            return { ...fundacion, total_mascotas: mascotas.length };
-          } catch {
-            return { ...fundacion, total_mascotas: 0 };
-          }
-        })
-      );
-      
-      setFundaciones(fundacionesConMascotas);
-      setFilteredFundaciones(fundacionesConMascotas);
-      
-      const uniqueCiudades = [...new Set(fundacionesConMascotas.map(f => f.ciudad).filter(Boolean))];
-      setCiudades(uniqueCiudades);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    loadFundaciones();
+    
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
+  }, []);
 
-  const filterFundaciones = () => {
+  const filterFundaciones = useCallback(() => {
     let filtered = [...fundaciones];
     
     if (searchTerm) {
@@ -76,27 +107,50 @@ const FundacionesIndex = () => {
     }
     
     setFilteredFundaciones(filtered);
-  };
+  }, [fundaciones, searchTerm, selectedCiudad]);
 
-  const limpiarFiltros = () => {
+  useEffect(() => {
+    filterFundaciones();
+  }, [searchTerm, selectedCiudad, fundaciones, filterFundaciones]);
+
+  const limpiarFiltros = useCallback(() => {
     setSearchTerm('');
     setSelectedCiudad('');
-  };
+  }, []);
+
+  const fundacionesGrid = useMemo(() => {
+    if (filteredFundaciones.length === 0) return null;
+    
+    return filteredFundaciones.map((fundacion) => (
+      <FundacionCard
+        key={fundacion.id}
+        fundacion={fundacion}
+        getImageUrl={getImageUrl}
+        variant="default"
+        showActions={true}
+      />
+    ));
+  }, [filteredFundaciones, getImageUrl]);
 
   if (loading) {
     return (
+      <div className="fundaciones-loading">
+        <div className="spinner"></div>
+        <p>Cargando fundaciones...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
       <div className="fundaciones-container">
-        <div className="loading-skeleton">
-          {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="skeleton-card">
-              <div className="skeleton-image"></div>
-              <div className="skeleton-content">
-                <div className="skeleton-title"></div>
-                <div className="skeleton-text"></div>
-                <div className="skeleton-text short"></div>
-              </div>
-            </div>
-          ))}
+        <div className="empty-state">
+          <Building size={48} />
+          <h4>Error al cargar fundaciones</h4>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()} className="btn-outline">
+            Reintentar
+          </button>
         </div>
       </div>
     );
@@ -104,7 +158,6 @@ const FundacionesIndex = () => {
 
   return (
     <div className="fundaciones-container">
-      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
           <span className="hero-badge">Ayuda y Protección Animal</span>
@@ -113,7 +166,6 @@ const FundacionesIndex = () => {
         </div>
       </section>
 
-      {/* Search and Filters */}
       <section className="search-section">
         <div className="search-card">
           <div className="search-input-wrapper">
@@ -162,7 +214,6 @@ const FundacionesIndex = () => {
         )}
       </section>
 
-      {/* Results Count */}
       <div className="results-header">
         <div className="results-count">
           <Heart size={16} />
@@ -170,18 +221,9 @@ const FundacionesIndex = () => {
         </div>
       </div>
 
-      {/* Fundaciones Grid */}
       {filteredFundaciones.length > 0 ? (
         <div className="fundaciones-grid">
-          {filteredFundaciones.map((fundacion) => (
-            <FundacionCard
-              key={fundacion.id}
-              fundacion={fundacion}
-              getImageUrl={getImageUrl}
-              variant="default"
-              showActions={true}
-            />
-          ))}
+          {fundacionesGrid}
         </div>
       ) : (
         <div className="empty-state">
