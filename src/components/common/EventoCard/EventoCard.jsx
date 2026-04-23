@@ -1,14 +1,14 @@
 // src/components/common/EventoCard/EventoCard.jsx
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Calendar, Eye, Heart, CalendarCheck, Users } from 'lucide-react';
 import './EventoCard.css';
 
-const EventoCard = ({ 
+const EventoCard = memo(({ 
   evento, 
   getImageUrl, 
-  variant = 'default', // 'default' | 'compact' | 'featured'
+  variant = 'default',
   isAuthenticated = false,
   liked = false,
   asistencia = false,
@@ -29,22 +29,27 @@ const EventoCard = ({
     total_asistentes = 0
   } = evento;
 
-  const formatFecha = (fecha) => {
-    if (!fecha) return '';
-    return new Date(fecha).toLocaleDateString('es-ES', {
+  // ✅ Memoizar fecha formateada
+  const formatFecha = useMemo(() => {
+    if (!fecha_evento) return '';
+    return new Date(fecha_evento).toLocaleDateString('es-ES', {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
     });
-  };
+  }, [fecha_evento]);
+
+  // ✅ Memoizar URL de imagen
+  const imageUrl = useMemo(() => getImageUrl(imagen_url), [imagen_url, getImageUrl]);
 
   return (
     <div className={`evento-card ${variant}`}>
       <div className="card-image">
-        {getImageUrl(imagen_url) ? (
+        {imageUrl ? (
           <img
-            src={getImageUrl(imagen_url)}
+            src={imageUrl}
             alt={nombre_evento}
+            loading="lazy"
             onError={(e) => {
               e.target.onerror = null;
               e.target.style.display = 'none';
@@ -92,7 +97,7 @@ const EventoCard = ({
           </div>
           <div className="info-item">
             <Calendar size={14} />
-            <span>{formatFecha(fecha_evento)}</span>
+            <span>{formatFecha}</span>
           </div>
         </div>
         
@@ -127,6 +132,8 @@ const EventoCard = ({
       </div>
     </div>
   );
-};
+});
+
+EventoCard.displayName = 'EventoCard';
 
 export default EventoCard;
