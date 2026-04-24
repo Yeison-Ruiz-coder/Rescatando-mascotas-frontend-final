@@ -88,7 +88,6 @@ const FundacionDetalle = () => {
     };
   }, [id]);
 
-  // ✅ Usar LoadingSpinner
   if (loading) {
     return (
       <div className="detalle-loading">
@@ -137,39 +136,20 @@ const FundacionDetalle = () => {
   return (
     <div className="fundacion-detalle">
       <div className="detalle-container">
-        {/* Header con navegación - SIN BOTÓN COMPARTIR */}
-        <div className="detalle-nav">
-          <Link to="/fundaciones" className="nav-back">
-            <ArrowLeft size={18} />
-            <span>Volver a fundaciones</span>
-          </Link>
-        </div>
-
         {/* Card principal */}
         <div className="detalle-card">
-          {/* Portada */}
-          <div className="card-portada">
-            {fundacion.imagen_portada ? (
-              <img 
-                src={getImageUrl(fundacion.imagen_portada)} 
-                alt={fundacion.Nombre_1}
-                loading="lazy"
-              />
-            ) : (
-              <div className="portada-placeholder">
-                <Building size={64} />
-              </div>
-            )}
-            {fundacion.verificado && (
-              <div className="portada-badge">
-                <CheckCircle size={16} />
-                <span>Verificada</span>
-              </div>
-            )}
-          </div>
+          {/* ❌ Portada ELIMINADA - Imagen de portada removida */}
 
           {/* Contenido */}
           <div className="card-contenido">
+            {/* ✅ BOTÓN DENTRO DE LA CARD - ANTES DEL TÍTULO */}
+            <div className="back-button-wrapper">
+              <Link to="/fundaciones" className="nav-back-inline">
+                <ArrowLeft size={16} />
+                <span>Volver a fundaciones</span>
+              </Link>
+            </div>
+
             {/* Título y ciudad */}
             <div className="contenido-header">
               <h1>{fundacion.Nombre_1}</h1>
