@@ -48,9 +48,11 @@ const AdminEventosShow = () => {
 
     if (loading) {
         return (
-            <div className="eventos-loading">
-                <div className="spinner"></div>
-                <p>{t('cargando_evento')}</p>
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center">
+                    <div className="spinner mb-4"></div>
+                    <p className="text-gray-600">{t('cargando_evento')}</p>
+                </div>
             </div>
         );
     }
@@ -58,53 +60,114 @@ const AdminEventosShow = () => {
     if (!evento) return null;
 
     return (
-        <div className="eventos-show-container">
-            <div className="show-card">
-                <div className="show-header">
-                    <Link to="/admin/eventos" className="back-button">
-                        <ArrowLeft size={20} /> {t('ver.volver')}
+        <div className="max-w-4xl mx-auto px-4 py-8">
+            {/* Botón volver */}
+            <div className="mb-6">
+                <Link 
+                    to="/admin/eventos" 
+                    className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors"
+                >
+                    <ArrowLeft size={20} className="mr-2" />
+                    {t('ver.volver')}
+                </Link>
+            </div>
+
+            {/* Tarjeta principal */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+                {/* Header con acciones */}
+                <div className="flex justify-end gap-3 p-4 bg-gray-50 border-b border-gray-200">
+                    <Link
+                        to={`/admin/eventos/${id}/editar`}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        <Edit size={18} />
+                        {t('botones.editar')}
                     </Link>
-                    <div className="show-actions">
-                        <Link to={`/admin/eventos/${id}/editar`} className="btn-edit-show">
-                            <Edit size={18} /> {t('botones.editar')}
-                        </Link>
-                        <button onClick={handleDelete} className="btn-delete-show">
-                            <Trash2 size={18} /> {t('botones.eliminar')}
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleDelete}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                        <Trash2 size={18} />
+                        {t('botones.eliminar')}
+                    </button>
                 </div>
 
+                {/* Imagen */}
                 {evento.imagen_url && (
-                    <img 
-                        src={getImageUrl(evento.imagen_url)} 
-                        alt={evento.nombre_evento} 
-                        className="show-image" 
-                    />
+                    <div className="relative h-96 w-full overflow-hidden bg-gray-100">
+                        <img
+                            src={getImageUrl(evento.imagen_url)}
+                            alt={evento.nombre_evento}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
                 )}
 
-                <div className="show-content">
-                    <h1 className="show-title">{evento.nombre_evento}</h1>
-                    <div className="show-info">
-                        <div className="info-item">
-                            <MapPin size={18} />
-                            <strong>{t('ver.lugar')}:</strong>
-                            <span>{evento.lugar_evento}</span>
+                {/* Contenido */}
+                <div className="p-6 md:p-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-6">
+                        {evento.nombre_evento}
+                    </h1>
+
+                    {/* Información del evento */}
+                    <div className="space-y-4 mb-8">
+                        <div className="flex items-start gap-3 text-gray-700">
+                            <MapPin size={20} className="text-purple-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                                <span className="font-semibold">{t('ver.lugar')}:</span>
+                                <span className="ml-2">{evento.lugar_evento}</span>
+                            </div>
                         </div>
-                        <div className="info-item">
-                            <Calendar size={18} />
-                            <strong>{t('ver.fecha')}:</strong>
-                            <span>{new Date(evento.fecha_evento).toLocaleString('es-ES')}</span>
+
+                        <div className="flex items-start gap-3 text-gray-700">
+                            <Calendar size={20} className="text-purple-600 mt-0.5 flex-shrink-0" />
+                            <div>
+                                <span className="font-semibold">{t('ver.fecha')}:</span>
+                                <span className="ml-2">
+                                    {new Date(evento.fecha_evento).toLocaleString('es-ES', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    })}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div className="show-description">
-                        <h5><FileText size={18} /> {t('ver.descripcion')}:</h5>
-                        <p>{evento.descripcion}</p>
-                    </div>
-                    <div className="show-footer">
-                        <small>
-                            <Clock size={14} /> {t('ver.creado')}: {new Date(evento.created_at).toLocaleDateString()}
-                        </small>
-                    </div>
+
+                    {/* Descripción */}
+                    {evento.descripcion && (
+                        <div className="mb-8">
+                            <h2 className="flex items-center gap-2 text-xl font-semibold text-gray-900 mb-3">
+                                <FileText size={20} className="text-purple-600" />
+                                {t('ver.descripcion')}
+                            </h2>
+                            <div className="prose max-w-none text-gray-700 leading-relaxed">
+                                {evento.descripcion.split('\n').map((paragraph, idx) => (
+                                    <p key={idx} className="mb-3">
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Footer con fecha de creación */}
+                    {evento.created_at && (
+                        <div className="pt-6 border-t border-gray-200">
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                <Clock size={16} />
+                                <span>
+                                    {t('ver.creado')}: {new Date(evento.created_at).toLocaleDateString('es-ES', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
