@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -8,6 +8,7 @@ import {
   HelpCircle, Calendar
 } from 'lucide-react';
 import api from '../../../services/api';
+import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import './Fundaciones.css';
 
 const MapaSimple = ({ direccion, nombre }) => {
@@ -34,48 +35,101 @@ const FundacionDetalle = () => {
   const [fundacion, setFundacion] = useState(null);
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const getImageUrl = (url) => {
+  const getImageUrl = useCallback((url) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
     return `http://localhost:8000${url}`;
-  };
+  }, []);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    let isMounted = true;
+
     const loadData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const [fundacionRes, mascotasRes] = await Promise.all([
-          api.get(`/fundaciones/${id}`),
-          api.get(`/mascotas/fundacion/${id}`)
+          api.get(`/fundaciones/${id}`, {
+            signal: abortController.signal
+          }),
+          api.get(`/mascotas/fundacion/${id}`, {
+            signal: abortController.signal
+          })
         ]);
+        
+        if (!isMounted) return;
         
         setFundacion(fundacionRes.data?.data || fundacionRes.data);
         setMascotas(mascotasRes.data?.data || mascotasRes.data || []);
       } catch (error) {
+        if (error.name === 'CanceledError' || error.name === 'AbortError') {
+          console.log('Petición cancelada (navegación rápida)');
+          return;
+        }
         console.error('Error:', error);
+        if (isMounted) {
+          setError(error.message || 'Error al cargar la información');
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
+
     loadData();
+    
+    return () => {
+      isMounted = false;
+      abortController.abort();
+    };
   }, [id]);
 
+  // ✅ Usar LoadingSpinner
   if (loading) {
     return (
       <div className="detalle-loading">
-        <div className="spinner"></div>
-        <p>Cargando información...</p>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="fundacion-detalle">
+        <div className="detalle-container">
+          <div className="detalle-card">
+            <div className="card-contenido">
+              <div className="detalle-empty">
+                <Building size={48} />
+                <h4>Error al cargar la información</h4>
+                <p>{error}</p>
+                <Link to="/fundaciones" className="btn-back-link">Volver a fundaciones</Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!fundacion) {
     return (
-      <div className="detalle-empty">
-        <Building size={48} />
-        <h4>Fundación no encontrada</h4>
-        <Link to="/fundaciones" className="btn-back-link">Volver a fundaciones</Link>
+      <div className="fundacion-detalle">
+        <div className="detalle-container">
+          <div className="detalle-card">
+            <div className="card-contenido">
+              <div className="detalle-empty">
+                <Building size={48} />
+                <h4>Fundación no encontrada</h4>
+                <Link to="/fundaciones" className="btn-back-link">Volver a fundaciones</Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -96,7 +150,11 @@ const FundacionDetalle = () => {
           {/* Portada */}
           <div className="card-portada">
             {fundacion.imagen_portada ? (
-              <img src={getImageUrl(fundacion.imagen_portada)} alt={fundacion.Nombre_1} />
+              <img 
+                src={getImageUrl(fundacion.imagen_portada)} 
+                alt={fundacion.Nombre_1}
+                loading="lazy"
+              />
             ) : (
               <div className="portada-placeholder">
                 <Building size={64} />
@@ -257,7 +315,11 @@ const FundacionDetalle = () => {
                     <Link key={mascota.id} to={`/mascota/${mascota.id}`} className="mascota-item">
                       <div className="mascota-img">
                         {mascota.foto_principal ? (
-                          <img src={getImageUrl(mascota.foto_principal)} alt={mascota.nombre_mascota} />
+                          <img 
+                            src={getImageUrl(mascota.foto_principal)} 
+                            alt={mascota.nombre_mascota}
+                            loading="lazy"
+                          />
                         ) : (
                           <div className="mascota-placeholder">
                             <PawPrint size={24} />
