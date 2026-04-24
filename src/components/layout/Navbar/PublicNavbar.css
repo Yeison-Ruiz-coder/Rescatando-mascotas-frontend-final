@@ -68,7 +68,7 @@
 }
 
 .public-urgent-btn {
-  background: var(--color-danger, #ff4757);
+  background:  #ff0000a9;
   color: white;
   border: none;
   border-radius: 50px;
