@@ -376,4 +376,21 @@
   .sidebar-search i {
     left: 23px;
   }
+
+}
+/* Efecto especial para el enlace de apadrinar */
+.sidebar-item[href="/suscripciones"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.sidebar-item[href="/suscripciones"]:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46a0 100%);
+  transform: translateX(5px);
+}
+
+.sidebar-item[href="/suscripciones"] i {
+  color: white !important;
 }

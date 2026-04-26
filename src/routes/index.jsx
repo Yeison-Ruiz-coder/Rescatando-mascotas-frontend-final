@@ -1,3 +1,4 @@
+// src/routes/index.js
 import React from 'react';
 import { createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -34,8 +35,12 @@ import FundacionDetalle from '../pages/public/Fundaciones/FundacionDetalle';
 import PublicEventosIndex from '../pages/public/eventos/EventosIndex';
 import PublicEventosShow from '../pages/public/eventos/EventosShow';
 
+// SUSCRIPCIONES PÚBLICAS (NUEVO)
+import SuscripcionesPublicIndex from '../pages/public/suscripciones/SuscripcionesPublicIndex';
+
 // ================= USER =================
 import Solicitudes from '../pages/user/Solicitudes/Solicitudes';
+import UserSuscripciones from '../pages/user/MisSuscripciones'; // NUEVO
 
 // ================= ADMIN =================
 import Dashboard from '../pages/admin/Dashboard/Dashboard';
@@ -47,7 +52,7 @@ import AdminEventosCreate from '../pages/admin/eventos/EventosCreate';
 import AdminEventosEdit from '../pages/admin/eventos/EventosEdit';
 import AdminEventosShow from '../pages/admin/eventos/EventosShow';
 
-// SUSCRIPCIONES ADMIN (OK)
+// SUSCRIPCIONES ADMIN
 import AdminSuscripcionesIndex from '../pages/admin/suscripciones/SuscripcionesIndex';
 import AdminSuscripcionesCreate from '../pages/admin/suscripciones/SuscripcionesCreate';
 import AdminSuscripcionesEdit from '../pages/admin/suscripciones/SuscripcionesEdit';
@@ -64,7 +69,7 @@ import EventosCreate from '../pages/fundacion/eventos/EventosCreate';
 import EventosShow from '../pages/fundacion/eventos/EventosShow';
 import EventosEdit from '../pages/fundacion/eventos/EventosEdit';
 
-// SUSCRIPCIONES FUNDACIÓN (OK)
+// SUSCRIPCIONES FUNDACIÓN
 import SuscripcionesIndex from '../pages/fundacion/suscripciones/SuscripcionesIndex';
 import SuscripcionesCreate from '../pages/fundacion/suscripciones/SuscripcionesCreate';
 import SuscripcionesEdit from '../pages/fundacion/suscripciones/SuscripcionesEdit';
@@ -73,8 +78,12 @@ import SuscripcionesShow from '../pages/fundacion/suscripciones/SuscripcionesSho
 // ================= VETERINARIA =================
 import DashboardVeterinaria from '../pages/veterinaria/dashboard/DashboardVeterinaria';
 
+// SUSCRIPCIONES VETERINARIA (NUEVO)
+import VeterinariaSuscripcionesIndex from '../pages/veterinaria/suscripciones/SuscripcionesIndex';
+import VeterinariaSuscripcionesShow from '../pages/veterinaria/suscripciones/SuscripcionesShow';
+
 // =============================================================
-// PLACEHOLDERS (NO TOCADOS)
+// PLACEHOLDERS
 // =============================================================
 const PagePlaceholder = ({ title }) => (
   <div style={{ padding: '2rem' }}>
@@ -87,12 +96,11 @@ const PagePlaceholder = ({ title }) => (
 // =============================================================
 const NotFound = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, user, getDashboardPath } = useAuth();
 
   return (
     <div style={{ textAlign: 'center', padding: '5rem' }}>
-      <h1>404</h1>
-      <button onClick={() => navigate('/')}>Volver</button>
+      <h1>404 - Página no encontrada</h1>
+      <button onClick={() => navigate('/')}>Volver al inicio</button>
     </div>
   );
 };
@@ -111,25 +119,23 @@ const router = createBrowserRouter([
       { path: 'register', element: <Register /> },
       { path: 'mascotas', element: <Mascotas /> },
       { path: 'mascota/:id', element: <MascotaDetalle /> },
-
       { path: 'fundaciones', element: <FundacionesIndex /> },
       { path: 'fundaciones/:id', element: <FundacionDetalle /> },
-
       { path: 'veterinarias', element: <Veterinarias /> },
       { path: 'veterinarias/:id', element: <VeterinariaDetalle /> },
-
       { path: 'eventos', element: <PublicEventosIndex /> },
       { path: 'eventos/:id', element: <PublicEventosShow /> },
-
-      // ❌ ELIMINADO: SUSCRIPCIONES PUBLICAS (ERROR PRINCIPAL)
-
       { path: 'tienda', element: <Tienda /> },
       { path: 'donaciones', element: <Donaciones /> },
       { path: 'rescates/reportar', element: <ReportarRescate /> },
+      
+      // ✅ NUEVAS RUTAS PÚBLICAS DE SUSCRIPCIONES
+      { path: 'suscripciones', element: <SuscripcionesPublicIndex /> },
+      { path: 'apadrinar', element: <SuscripcionesPublicIndex /> },
     ]
   },
 
-  // ================= USER =================
+  // ================= USER (Apadrinadores/Donantes) =================
   {
     path: '/user',
     element: <PrivateRoute />,
@@ -138,8 +144,11 @@ const router = createBrowserRouter([
         element: <PublicLayout />,
         children: [
           { index: true, element: <Navigate to="/user/dashboard" /> },
-          { path: 'dashboard', element: <PagePlaceholder title="User Dashboard" /> },
-          { path: 'mis-solicitudes', element: <Solicitudes /> }
+          { path: 'dashboard', element: <PagePlaceholder title="Mi Dashboard" /> },
+          { path: 'mis-solicitudes', element: <Solicitudes /> },
+          
+          // ✅ NUEVO: Mis suscripciones
+          { path: 'mis-suscripciones', element: <UserSuscripciones /> },
         ]
       }
     ]
@@ -155,18 +164,17 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/fundacion/dashboard" /> },
           { path: 'dashboard', element: <FundDashboard /> },
-
           { path: 'mascotas', element: <FundMascotas /> },
           { path: 'mascotas/nueva', element: <FundNuevaMascota /> },
           { path: 'mascotas/:id', element: <MascotaDetalleFundacion /> },
-
-          // SUSCRIPCIONES LIMPIAS
+          
+          // SUSCRIPCIONES FUNDACIÓN
           { path: 'suscripciones', element: <SuscripcionesIndex /> },
           { path: 'suscripciones/crear', element: <SuscripcionesCreate /> },
           { path: 'suscripciones/:id', element: <SuscripcionesShow /> },
           { path: 'suscripciones/:id/editar', element: <SuscripcionesEdit /> },
-
-          // EVENTOS
+          
+          // EVENTOS FUNDACIÓN
           { path: 'eventos', element: <EventosIndex /> },
           { path: 'eventos/crear', element: <EventosCreate /> },
           { path: 'eventos/:id', element: <EventosShow /> },
@@ -186,14 +194,39 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/admin/dashboard" /> },
           { path: 'dashboard', element: <Dashboard /> },
-
-          // SUSCRIPCIONES ADMIN LIMPIO
+          
+          // SUSCRIPCIONES ADMIN
           { path: 'suscripciones', element: <AdminSuscripcionesIndex /> },
           { path: 'suscripciones/crear', element: <AdminSuscripcionesCreate /> },
           { path: 'suscripciones/:id', element: <AdminSuscripcionesShow /> },
           { path: 'suscripciones/:id/editar', element: <AdminSuscripcionesEdit /> },
+          
+          // EVENTOS ADMIN
+          { path: 'eventos', element: <AdminEventosIndex /> },
+          { path: 'eventos/crear', element: <AdminEventosCreate /> },
+          { path: 'eventos/:id', element: <AdminEventosShow /> },
+          { path: 'eventos/:id/editar', element: <AdminEventosEdit /> },
+          
+          { path: 'usuarios/pendientes', element: <UsuariosPendientes /> },
+        ]
+      }
+    ]
+  },
 
-          { path: 'usuarios/pendientes', element: <UsuariosPendientes /> }
+  // ================= VETERINARIA =================
+  {
+    path: '/veterinaria',
+    element: <VeterinariaRoute />,
+    children: [
+      {
+        element: <VeterinariaLayout />,
+        children: [
+          { index: true, element: <Navigate to="/veterinaria/dashboard" /> },
+          { path: 'dashboard', element: <DashboardVeterinaria /> },
+          
+          // ✅ NUEVO: SUSCRIPCIONES VETERINARIA
+          { path: 'suscripciones', element: <VeterinariaSuscripcionesIndex /> },
+          { path: 'suscripciones/:id', element: <VeterinariaSuscripcionesShow /> },
         ]
       }
     ]

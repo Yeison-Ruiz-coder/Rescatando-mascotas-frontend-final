@@ -28,7 +28,7 @@ i18n
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
     },
-    ns: ['common', 'layout', 'home', 'mascotas', 'auth', 'rescate' ,'translation'],
+    ns: ['common', 'layout', 'home', 'mascotas', 'auth', 'rescate' ,'translation','suscripciones'],
     defaultNS: 'common',
   });
 
