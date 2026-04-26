@@ -37,6 +37,7 @@ const PublicSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
+        {/* Navegación principal */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-home me-1"></i> {t("navegacion")}
@@ -47,6 +48,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+        {/* Adopción */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-dog me-1"></i> {t("adopcion")}
@@ -61,6 +63,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+        {/* Rescates - Urgente */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-ambulance me-1"></i> {t("urgente")}
@@ -76,6 +79,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+        {/* Comunidad */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-users me-1"></i> {t("comunidad")}
@@ -98,6 +102,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+        {/* Eventos */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-calendar-alt me-1"></i> {t("eventos")}
@@ -112,20 +117,22 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-         <div className="sidebar-section">
+        {/* ✅ SECCIÓN CORREGIDA: APADRINAR / SUSCRIPCIONES */}
+        <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
+            <i className="fas fa-heart me-1"></i> {t("apadrinar") || "Apadrinar"}
           </div>
           <Link
             to="/suscripciones"
             className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
             onClick={closePublicSidebar}
           >
-            <i className="fas fa-calendar-alt"></i>
-            <span>{t("ver membresias")}</span>
+            <i className="fas fa-hand-holding-heart"></i>
+            <span>{t("apadrinar_mascota") || "Apadrinar una mascota"}</span>
           </Link>
         </div>
 
+        {/* Colaborar - Donaciones */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
@@ -140,20 +147,53 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {isAuthenticated && (
-          <div className="sidebar-section">
-            <div className="section-title">
-              <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
-            </div>
-            <Link
-              to="/user/mis-solicitudes"
-              className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
-              onClick={closePublicSidebar}
-            >
-              <i className="fas fa-clipboard-list"></i>
-              <span>{t("mis_solicitudes")}</span>
-            </Link>
+        {/* Tienda */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-store me-1"></i> {t("tienda")}
           </div>
+          <Link
+            to="/tienda"
+            className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-shopping-cart"></i>
+            <span>{t("tienda") || "Tienda"}</span>
+          </Link>
+        </div>
+
+        {/* Mi Cuenta (solo si está autenticado) */}
+        {isAuthenticated && (
+          <>
+            <div className="sidebar-section">
+              <div className="section-title">
+                <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
+              </div>
+              <Link
+                to="/user/mis-solicitudes"
+                className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
+                onClick={closePublicSidebar}
+              >
+                <i className="fas fa-clipboard-list"></i>
+                <span>{t("mis_solicitudes")}</span>
+              </Link>
+              <Link
+                to="/user/mis-suscripciones"
+                className={`sidebar-item ${isActive("/user/mis-suscripciones") ? "active" : ""}`}
+                onClick={closePublicSidebar}
+              >
+                <i className="fas fa-credit-card"></i>
+                <span>{t("mis_suscripciones") || "Mis Suscripciones"}</span>
+              </Link>
+            </div>
+
+            <div className="sidebar-section">
+              <button onClick={handleLogout} className="sidebar-item logout-btn">
+                <i className="fas fa-sign-out-alt"></i>
+                <span>{t("cerrar_sesion")}</span>
+              </button>
+            </div>
+          </>
         )}
       </nav>
     </aside>
