@@ -1,3 +1,4 @@
+// src/components/layout/Navbar/PublicNavbar.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +13,7 @@ const PublicNavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
+  // 🔥 TODOS LOS HOOKS PRIMERO 🔥
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const languageMenuRef = useRef(null);
@@ -30,6 +32,16 @@ const PublicNavbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // 🔥 LUEGO LA CONDICIÓN PARA OCULTAR (después de todos los hooks) 🔥
+  const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const isAuthPage = authRoutes.includes(location.pathname);
+  
+  // Si es página de autenticación, NO renderizar el navbar
+  if (isAuthPage) {
+    return null;
+  }
+
+  // 🔥 RESTO DEL CÓDIGO (funciones y return) 🔥
   const toggleLanguage = (lang) => {
     i18n.changeLanguage(lang);
     setIsLanguageMenuOpen(false);
@@ -119,7 +131,7 @@ const PublicNavbar = () => {
   };
 
   return (
-    <nav className="public-navbar">
+    <nav className={`public-navbar ${isPublicSidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="public-navbar-container">
         <button 
           className={`public-hamburger-btn ${isPublicSidebarOpen ? 'open' : ''}`}
@@ -139,7 +151,6 @@ const PublicNavbar = () => {
         >
           <img src="/img/logo-oscuro.png" alt="Logo" className="public-navbar-logo" />
 
-          {/* 🔥 TEXTO DINÁMICO EN VEZ DE IMAGEN */}
           <div className="public-navbar-logo-texto">
             <span className="logo-title">{t('navbar.logo_title')}</span>
             <span className="logo-subtitle">{t('navbar.logo_subtitle')}</span>

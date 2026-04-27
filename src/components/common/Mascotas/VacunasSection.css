@@ -5,6 +5,7 @@
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 0;
+  border: 1px solid #e2e8f0;
 }
 
 .estado-vacunas {
@@ -32,13 +33,13 @@
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #94a3b8;
+  color: #64748b;
   margin-bottom: 4px;
 }
 
 .vacunas-header strong {
   font-size: 0.9rem;
-  color: #667eea;
+  color: #1e293b;
   font-weight: 600;
 }
 
@@ -59,27 +60,13 @@
   background: white;
   border-radius: 12px;
   transition: all 0.3s ease;
+  border-left: 3px solid #667eea;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .vacuna-card:hover {
-  transform: translateX(4px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.vacuna-card.rabia {
-  border-left: 3px solid #ef4444;
-}
-
-.vacuna-card.parvovirus {
-  border-left: 3px solid #f59e0b;
-}
-
-.vacuna-card.moquillo {
-  border-left: 3px solid #3b82f6;
-}
-
-.vacuna-card.default {
-  border-left: 3px solid #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
 }
 
 .vacuna-icon {
@@ -110,20 +97,20 @@
   margin-bottom: 6px;
 }
 
-.vacuna-fecha, .vacuna-proxima {
+.vacuna-fecha {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: 0.7rem;
   color: #64748b;
-  margin-right: 16px;
 }
 
-.vacuna-fecha i, .vacuna-proxima i {
+.vacuna-fecha i {
   font-size: 0.65rem;
   color: #667eea;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .vacunas-section-compact {
     padding: 12px;
@@ -138,8 +125,8 @@
     margin-bottom: 8px;
   }
   
-  .vacuna-fecha, .vacuna-proxima {
+  .vacuna-fecha {
     display: block;
-    margin: 6px 0;
+    margin-top: 6px;
   }
 }

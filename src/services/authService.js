@@ -78,8 +78,47 @@ const authService = {
     }
   },
 
-  // 👇 MÉTODOS FALTANTES 👇
   
+
+  // 🔥 RECUPERAR CONTRASEÑA - Enviar enlace 🔥
+  forgotPassword: async (email) => {
+    try {
+      const response = await api.post('/auth/password/email', { email });
+      return {
+        success: response.data.success,
+        message: response.data.message
+      };
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Error al enviar el enlace'
+      };
+    }
+  },
+
+  // 🔥 RESTABLECER CONTRASEÑA 🔥
+  resetPassword: async (token, email, password, passwordConfirmation) => {
+    try {
+      const response = await api.post('/auth/password/reset', {
+        token,
+        email,
+        password,
+        password_confirmation: passwordConfirmation
+      });
+      return {
+        success: response.data.success,
+        message: response.data.message
+      };
+    } catch (error) {
+      console.error('Reset password error:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Error al restablecer la contraseña'
+      };
+    }
+  },
+
   // Obtener el token actual
   getToken: () => {
     return localStorage.getItem('auth_token');

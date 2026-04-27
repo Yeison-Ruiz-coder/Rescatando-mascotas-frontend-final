@@ -82,23 +82,15 @@ const PublicSidebar = () => {
         {/* Comunidad */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-users me-1"></i> {t("comunidad")}
+            <i className="fas fa-dog me-1"></i> {t("adopcion")}
           </div>
           <Link
-            to="/fundaciones"
-            className={`sidebar-item ${isActive("/fundaciones") ? "active" : ""}`}
+            to="/mascotas"
+            className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
             onClick={closePublicSidebar}
           >
-            <i className="fas fa-building"></i>
-            <span>{t("fundaciones")}</span>
-          </Link>
-          <Link
-            to="/veterinarias"
-            className={`sidebar-item ${isActive("/veterinarias") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-clinic-medical"></i>
-            <span>{t("veterinarias")}</span>
+            <i className="fas fa-paw"></i>
+            <span>{t("mascotas_adopcion")}</span>
           </Link>
         </div>
 
@@ -135,15 +127,23 @@ const PublicSidebar = () => {
         {/* Colaborar - Donaciones */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
+            <i className="fas fa-users me-1"></i> {t("comunidad")}
           </div>
           <Link
-            to="/donaciones"
-            className={`sidebar-item ${isActive("/donaciones") ? "active" : ""}`}
+            to="/fundaciones"
+            className={`sidebar-item ${isActive("/fundaciones") ? "active" : ""}`}
             onClick={closePublicSidebar}
           >
-            <i className="fas fa-donate"></i>
-            <span>{t("donaciones")}</span>
+            <i className="fas fa-building"></i>
+            <span>{t("fundaciones")}</span>
+          </Link>
+          <Link
+            to="/veterinarias"
+            className={`sidebar-item ${isActive("/veterinarias") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-clinic-medical"></i>
+            <span>{t("veterinarias")}</span>
           </Link>
         </div>
 

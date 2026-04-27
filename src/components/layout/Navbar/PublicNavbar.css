@@ -11,6 +11,14 @@
   z-index: 100;
   display: flex;
   align-items: center;
+  transition: left 0.3s ease, right 0.3s ease;
+}
+
+/* Cuando el sidebar está abierto, la navbar se encoge */
+.public-navbar.sidebar-open {
+  left: 320px;
+  right: 0;
+  width: auto;
 }
 
 .public-navbar-container {
@@ -22,6 +30,13 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  transition: padding 0.3s ease;
+}
+
+/* Cuando el sidebar está abierto, reducir el padding */
+.public-navbar.sidebar-open .public-navbar-container {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .public-hamburger-btn {
@@ -39,6 +54,11 @@
   transition: all 0.3s;
   margin-right: 20px;
   flex-shrink: 0;
+}
+
+/* Ocultar el botón hamburguesa cuando el sidebar está abierto */
+.public-navbar.sidebar-open .public-hamburger-btn {
+  display: none;
 }
 
 .public-hamburger-btn:hover {
@@ -68,7 +88,7 @@
 }
 
 .public-urgent-btn {
-  background: var(--color-danger, #ff4757);
+  background:  #ff0000a9;
   color: white;
   border: none;
   border-radius: 50px;
@@ -382,6 +402,16 @@
   .public-navbar-logo-texto {
     display: none;
   }
+  
+  /* Ajuste para tablet cuando sidebar está abierto */
+  .public-navbar.sidebar-open {
+    left: 280px;
+  }
+  
+  .public-navbar.sidebar-open .public-navbar-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -438,6 +468,11 @@
     right: -10px;
     min-width: 180px;
   }
+  
+  /* Ajuste para mobile cuando sidebar está abierto */
+  .public-navbar.sidebar-open {
+    left: 280px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -475,5 +510,10 @@
   
   .language-selector-btn .fi {
     font-size: 1rem;
+  }
+  
+  /* Ajuste para mobile pequeño cuando sidebar está abierto */
+  .public-navbar.sidebar-open {
+    left: 280px;
   }
 }

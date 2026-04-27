@@ -1,21 +1,21 @@
-// src/components/common/Mascotas/FundacionCard.jsx
+// src/components/common/Mascotas/RescateFundacionCard.jsx
 import React from 'react';
-import './FundacionCard.css';
+import './RescateFundacionCard.css';  // ← CORREGIDO: falta .css
 
-const FundacionCard = ({ fundacion, onContactClick, t }) => {
+const RescateFundacionCard = ({ fundacion, onContactClick, t }) => {
   // Debug: Ver qué datos llegan
-  console.log('🏢 FundacionCard recibió:', fundacion);
+  console.log('🏢 RescateFundacionCard recibió:', fundacion);
 
   // Si no hay fundación, mostrar mensaje
   if (!fundacion) {
     return (
-      <div className="fundacion-card fundacion-card--empty">
-        <div className="fundacion-card__empty-content">
-          <i className="fas fa-building fundacion-card__empty-icon"></i>
-          <h3 className="fundacion-card__empty-title">
+      <div className="rescate-fundacion-card rescate-fundacion-card--empty">
+        <div className="rescate-fundacion-card__empty-content">
+          <i className="fas fa-building rescate-fundacion-card__empty-icon"></i>
+          <h3 className="rescate-fundacion-card__empty-title">
             {t('sin_fundacion') || 'Sin fundación'}
           </h3>
-          <p className="fundacion-card__empty-text">
+          <p className="rescate-fundacion-card__empty-text">
             {t('sin_fundacion_desc') || 'Esta mascota no está asociada a ninguna fundación'}
           </p>
         </div>
@@ -55,13 +55,13 @@ const FundacionCard = ({ fundacion, onContactClick, t }) => {
   if (!tieneDatos) {
     console.warn('⚠️ Fundación sin datos:', fundacion);
     return (
-      <div className="fundacion-card fundacion-card--sin-datos">
-        <div className="fundacion-card__empty-content">
-          <i className="fas fa-exclamation-triangle fundacion-card__empty-icon"></i>
-          <h3 className="fundacion-card__empty-title">
+      <div className="rescate-fundacion-card rescate-fundacion-card--sin-datos">
+        <div className="rescate-fundacion-card__empty-content">
+          <i className="fas fa-exclamation-triangle rescate-fundacion-card__empty-icon"></i>
+          <h3 className="rescate-fundacion-card__empty-title">
             Información no disponible
           </h3>
-          <p className="fundacion-card__empty-text">
+          <p className="rescate-fundacion-card__empty-text">
             No se pudo cargar la información de la fundación
           </p>
         </div>
@@ -70,14 +70,14 @@ const FundacionCard = ({ fundacion, onContactClick, t }) => {
   }
 
   return (
-    <div className="fundacion-card fundacion-card--active">
-      <div className="fundacion-card__header">
-        <div className="fundacion-card__avatar">
+    <div className="rescate-fundacion-card rescate-fundacion-card--active">
+      <div className="rescate-fundacion-card__header">
+        <div className="rescate-fundacion-card__avatar">
           <i className="fas fa-hand-holding-heart"></i>
         </div>
-        <div className="fundacion-card__title-section">
-          <h3 className="fundacion-card__name">{nombreFundacion}</h3>
-          <span className="fundacion-card__badge">
+        <div className="rescate-fundacion-card__title-section">
+          <h3 className="rescate-fundacion-card__name">{nombreFundacion}</h3>
+          <span className="rescate-fundacion-card__badge">
             <i className="fas fa-paw"></i> Fundación responsable
           </span>
         </div>
@@ -85,33 +85,33 @@ const FundacionCard = ({ fundacion, onContactClick, t }) => {
 
       {/* Descripción */}
       {descripcion && (
-        <div className="fundacion-card__description">
+        <div className="rescate-fundacion-card__description">
           <p>{descripcion}</p>
         </div>
       )}
 
       {/* Información de contacto */}
-      <div className="fundacion-card__info">
+      <div className="rescate-fundacion-card__info">
         {direccion && (
-          <div className="fundacion-card__info-item">
+          <div className="rescate-fundacion-card__info-item">
             <i className="fas fa-map-marker-alt"></i>
             <span>{direccion}</span>
           </div>
         )}
         {telefono && (
-          <div className="fundacion-card__info-item">
+          <div className="rescate-fundacion-card__info-item">
             <i className="fas fa-phone-alt"></i>
             <span>{telefono}</span>
           </div>
         )}
         {email && (
-          <div className="fundacion-card__info-item">
+          <div className="rescate-fundacion-card__info-item">
             <i className="fas fa-envelope"></i>
             <span>{email}</span>
           </div>
         )}
         {horario && (
-          <div className="fundacion-card__info-item">
+          <div className="rescate-fundacion-card__info-item">
             <i className="fas fa-clock"></i>
             <span>{horario}</span>
           </div>
@@ -121,4 +121,4 @@ const FundacionCard = ({ fundacion, onContactClick, t }) => {
   );
 };
 
-export default FundacionCard;
+export default RescateFundacionCard;
