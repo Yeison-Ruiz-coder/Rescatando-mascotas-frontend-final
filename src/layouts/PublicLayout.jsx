@@ -5,6 +5,7 @@ import PublicNavbar from '../components/layout/Navbar/PublicNavbar';
 import PublicSidebar from '../components/layout/Sidebar/PublicSidebar';
 import Footer from '../components/layout/Footer/Footer';
 import { useSidebar } from '../contexts/SidebarContext';
+import PawBackground from '../components/common/PawBackground/PawBackground';
 import './Layouts.css';
 
 const PublicLayout = () => {
@@ -12,6 +13,7 @@ const PublicLayout = () => {
 
   return (
     <div className="app-layout">
+      <PawBackground />
       <PublicNavbar />
       <PublicSidebar />
       {isPublicSidebarOpen && <div className="sidebar-overlay" onClick={() => {}} />}
