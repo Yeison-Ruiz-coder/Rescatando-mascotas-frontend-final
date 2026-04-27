@@ -1,51 +1,11 @@
 /* src/pages/public/Mascotas/Mascotas.css */
-/* Estilos consistentes con Home - Paleta clara cálida */
-
-/* ===== VARIABLES (heredan de index.css) ===== */
-.mascotas-page {
-  --color-primary: #667eea;
-  --color-secondary: #764ba2;
-  --color-accent: #ff8c42;
-  --color-heart: #ff6b9d;
-  --color-success: #2ecc71;
-  --color-light: #fff9f0;
-  --color-card-bg: #ffffff;
-  --color-text: #2d3748;
-  --color-text-muted: #718096;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --gradient-primary: linear-gradient(135deg, #667eea, #764ba2);
-  --gradient-accent: linear-gradient(135deg, #ff8c42, #ff6b9d);
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.1);
-  --shadow-accent: 0 8px 20px rgba(255, 140, 66, 0.2);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mascotas-page {
-  width: 100%;
-  max-width: 100%;
-  background: var(--color-light);
-  color: var(--color-text);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* ===== CONTAINER ===== */
-.mascotas-page .container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-  width: 100%;
-}
+/* Estilos específicos para la página de mascotas - Hereda de index.css */
 
 /* ===== HEADER SECTION ===== */
 .mascotas-page .mascotas-header {
   padding: 60px 0 40px 0;
   text-align: center;
-  background: linear-gradient(135deg, var(--color-light), #fff);
+  background: transparent;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -130,7 +90,7 @@
 /* ===== GRID DE MASCOTAS ===== */
 .mascotas-page .mascotas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
 }
 
@@ -175,12 +135,6 @@
   cursor: not-allowed;
 }
 
-.mascotas-page .pagination-item.disabled:hover {
-  transform: none;
-  background: white;
-  border-color: var(--color-border);
-}
-
 /* ===== LOADING ===== */
 .mascotas-page .loading-container {
   display: flex;
@@ -202,7 +156,7 @@
 
 .mascotas-page .error-container i {
   font-size: 4rem;
-  color: #ff4757;
+  color: var(--color-danger);
   margin-bottom: 1rem;
 }
 
@@ -229,7 +183,7 @@
 
 .mascotas-page .reload-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* ===== SIN RESULTADOS ===== */
@@ -244,9 +198,9 @@
 
 .mascotas-page .empty-container i {
   font-size: 4rem;
-  color: white;
+  color: var(--color-primary);
   margin-bottom: 1rem;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .mascotas-page .empty-container h3 {
@@ -258,26 +212,14 @@
   color: var(--color-text-muted);
 }
 
-.mascotas-page .btn-primary-custom {
-  background: var(--gradient-accent);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.mascotas-page .btn-primary-custom:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .mascotas-page .mascotas-header h1 {
     font-size: 2.2rem;
+  }
+  .mascotas-page .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
   }
 }
 
@@ -285,29 +227,23 @@
   .mascotas-page .mascotas-header {
     padding: 40px 0 30px 0;
   }
-  
   .mascotas-page .mascotas-header h1 {
     font-size: 1.8rem;
   }
-  
   .mascotas-page .mascotas-header .subtitle {
     font-size: 1rem;
   }
-  
   .mascotas-page .filtros-section {
     top: 60px;
   }
-  
   .mascotas-page .resultados-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
   .mascotas-page .mascotas-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
   .mascotas-page .pagination {
     flex-wrap: wrap;
   }

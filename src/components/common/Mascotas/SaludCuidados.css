@@ -29,11 +29,12 @@
   border-radius: 16px;
   padding: 16px;
   transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
 }
 
 .cuidado-card:hover {
-  transform: translateX(4px);
-  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .cuidado-header {
@@ -45,14 +46,7 @@
 .cuidado-header i {
   font-size: 1.25rem;
   width: 32px;
-}
-
-.cuidado-header i.fa-map-marker-alt {
-  color: #3b82f6;
-}
-
-.cuidado-header i.fa-exclamation-triangle {
-  color: #f59e0b;
+  color: #667eea;
 }
 
 .cuidado-header div {
@@ -64,23 +58,26 @@
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #94a3b8;
+  color: #64748b;
   margin-bottom: 4px;
 }
 
 .cuidado-header strong {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #1e293b;
   font-weight: 600;
   word-break: break-word;
 }
 
-/* Badges de aptitudes */
+/* ============================================ */
+/* BADGES DE APTITUDES - UNIFICADOS */
+/* ============================================ */
+
 .apto-badges {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .apto-badge {
@@ -88,38 +85,47 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
+/* Apto con niños - Color morado */
 .apto-badge.ninos {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
+  background: #e8daee;
+  color: #180269;
+  border: 1px solid #8c0bf5;
 }
 
+/* Apto con otros animales - Color naranja */
 .apto-badge.otros {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
+  background: #f5eee2;
+  color: #694202;
+  border: 1px solid #f59e0b;
+
 }
 
-.rescate-card {
-  border-left: 3px solid #3b82f6;
-}
 
+/* Condiciones especiales - borde naranja */
 .especiales-card {
   border-left: 3px solid #f59e0b;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .salud-cuidados {
     margin: 20px 0;
   }
   
   .apto-badges {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .apto-badge {
+    width: 100%;
+    justify-content: center;
   }
   
   .cuidado-header {
@@ -130,4 +136,22 @@
   .cuidado-header i {
     margin-bottom: 8px;
   }
+  
+}
+
+/* 🔥 ARREGLAR LETRA DE CONDICIONES ESPECIALES 🔥 */
+.especiales-card .cuidado-header strong {
+  font-size: 0.85rem;
+  color: #1e293b;
+  font-weight: 600;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.especiales-card .cuidado-header small {
+  font-size: 0.7rem;
+  color: #f54d0b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
 }

@@ -39,6 +39,53 @@ const Register = () => {
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  
+  const [currentBackground, setCurrentBackground] = useState(1);
+  const [currentQuote, setCurrentQuote] = useState(0);
+
+  const backgroundImages = [
+    '/img/login/login1.jpg',
+    '/img/login/login2.jpg',
+    '/img/login/login3.jpg',
+    '/img/login/login4.jpg',
+    '/img/login/login5.jpg'
+  ];
+
+  const motivationalQuotes = [
+    t('quotes.quote1', { defaultValue: 'Adoptar no es comprar, es salvar una vida' }),
+    t('quotes.quote2', { defaultValue: 'Ellos no necesitan palabras, solo amor y un hogar' }),
+    t('quotes.quote3', { defaultValue: 'Un amigo fiel te espera para cambiar tu vida' }),
+    t('quotes.quote4', { defaultValue: 'La mejor inversión es dar amor a quien no lo tiene' }),
+    t('quotes.quote5', { defaultValue: 'Cada mascota rescatada es una historia de esperanza' })
+  ];
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
+    const interval = setInterval(() => {
+      setCurrentBackground((prev) => {
+        const nextIndex = (prev) % backgroundImages.length + 1;
+        return nextIndex;
+      });
+    }, 5000);
+    
+    const quoteInterval = setInterval(() => {
+      setCurrentQuote((prev) => (prev + 1) % motivationalQuotes.length);
+    }, 5000);
+
+    return () => {
+      document.body.style.overflow = 'auto';
+      clearInterval(interval);
+      clearInterval(quoteInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    const container = document.querySelector('.register-container');
+    if (container) {
+      container.style.backgroundImage = `url('${backgroundImages[currentBackground - 1]}')`;
+    }
+  }, [currentBackground]);
 
   // Validación de email en tiempo real con API
   const checkEmailExists = async (email) => {
@@ -65,7 +112,6 @@ const Register = () => {
     return phoneRegex.test(phone);
   };
 
-  // Efecto para validar email en tiempo real
   useEffect(() => {
     if (touched.email && formData.email) {
       const timeoutId = setTimeout(async () => {
@@ -248,6 +294,11 @@ const Register = () => {
     }));
   };
 
+  // 🔥 CORREGIDO: Volver al home
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep()) return;
@@ -319,16 +370,16 @@ const Register = () => {
       if (error.response?.data?.errors) {
         const backendErrors = error.response.data.errors;
         if (backendErrors.email) {
-          errorMsg = "❌ " + backendErrors.email[0];
+          errorMsg = backendErrors.email[0];
           setErrors(prev => ({ ...prev, email: backendErrors.email[0] }));
           setTouched(prev => ({ ...prev, email: true }));
           setCurrentStep(2);
         } else if (backendErrors.registro_sanitario) {
-          errorMsg = "❌ " + backendErrors.registro_sanitario[0];
+          errorMsg = backendErrors.registro_sanitario[0];
           setErrors(prev => ({ ...prev, registro_sanitario: backendErrors.registro_sanitario[0] }));
           setTouched(prev => ({ ...prev, registro_sanitario: true }));
         } else {
-          errorMsg = "❌ " + Object.values(backendErrors).flat()[0];
+          errorMsg = Object.values(backendErrors).flat()[0];
         }
       }
       
@@ -338,7 +389,6 @@ const Register = () => {
     }
   };
 
-  // Pantalla de éxito
   if (registrationSuccess) {
     return (
       <div className="register-page">
@@ -770,6 +820,16 @@ const Register = () => {
       <div className="register-container">
         <div className="register-overlay"></div>
 
+        {/* 🔥 Botón de volver atrás con clase encapsulada */}
+        <button 
+          className="register-back-button"
+          onClick={handleGoBack}
+          aria-label={t('buttons.back')}
+        >
+          <i className="fas fa-arrow-left"></i>
+          <span>{t('buttons.back')}</span>
+        </button>
+
         <div className="register-card">
           <div className="register-header">
             <div className="register-logo-wrapper">
@@ -785,10 +845,12 @@ const Register = () => {
             {[1, 2, 3, 4].map((step) => (
               <div
                 key={step}
-                className={`progress-step ${currentStep >= step ? "active" : ""} ${currentStep === step ? "current" : ""}`}
+                className={`progress-step ${currentStep >= step ? "active" : ""} ${currentStep > step ? "completed" : ""} ${currentStep === step ? "current" : ""}`}
                 onClick={() => step < currentStep && setCurrentStep(step)}
               >
-                <div className="step-dot">{step}</div>
+                <div className="step-dot">
+                  {currentStep > step ? <i className="fas fa-check"></i> : step}
+                </div>
                 <span className="step-label">
                   {step === 1 && t('step_tipo')}
                   {step === 2 && t('step_datos')}
@@ -838,10 +900,31 @@ const Register = () => {
           </div>
         </div>
 
+        {/* 🔥 Texto motivacional */}
+        <div className="register-motivational-text">
+          <p className="register-motivational-quote">
+            <i className="fas fa-paw"></i>
+            <span>{motivationalQuotes[currentQuote]}</span>
+            <i className="fas fa-heart"></i>
+          </p>
+        </div>
+
+        {/* 🔥 Decoración encapsulada */}
         <div className="register-decoration">
-          <div className="decoration-circle circle-1"></div>
-          <div className="decoration-circle circle-2"></div>
-          <div className="decoration-circle circle-3"></div>
+          <div className="register-decoration-circle circle-1"></div>
+          <div className="register-decoration-circle circle-2"></div>
+          <div className="register-decoration-circle circle-3"></div>
+        </div>
+
+        {/* 🔥 Indicadores de imagen encapsulados */}
+        <div className="register-image-indicators">
+          {backgroundImages.map((_, index) => (
+            <span 
+              key={index}
+              className={`register-indicator ${currentBackground === index + 1 ? 'active' : ''}`}
+              onClick={() => setCurrentBackground(index + 1)}
+            />
+          ))}
         </div>
       </div>
     </div>

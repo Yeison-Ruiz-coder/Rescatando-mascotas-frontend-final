@@ -37,6 +37,7 @@ const PublicSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
+        {/* 1. INICIO - Principal */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-home me-1"></i> {t("navegacion")}
@@ -47,20 +48,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-dog me-1"></i> {t("adopcion")}
-          </div>
-          <Link
-            to="/mascotas"
-            className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-paw"></i>
-            <span>{t("mascotas_adopcion")}</span>
-          </Link>
-        </div>
-
+        {/* 2. REPORTAR RESCATE - Urgente */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-ambulance me-1"></i> {t("urgente")}
@@ -76,6 +64,67 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
+        {/* 3. MASCOTAS EN ADOPCIÓN - Core del negocio */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-dog me-1"></i> {t("adopcion")}
+          </div>
+          <Link
+            to="/mascotas"
+            className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-paw"></i>
+            <span>{t("mascotas_adopcion")}</span>
+          </Link>
+        </div>
+
+        {/* 4. EVENTOS - Comunidad */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-calendar-alt me-1"></i> {t("eventos")}
+          </div>
+          <Link
+            to="/eventos"
+            className={`sidebar-item ${isActive("/eventos") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-calendar-alt"></i>
+            <span>{t("eventos_proximos")}</span>
+          </Link>
+        </div>
+
+        {/* 5. DONACIONES - Soporte económico */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
+          </div>
+          <Link
+            to="/donaciones"
+            className={`sidebar-item ${isActive("/donaciones") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-donate"></i>
+            <span>{t("donaciones")}</span>
+          </Link>
+        </div>
+
+        {/* 6. SUSCRIPCIONES / MEMBRESÍAS */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
+          </div>
+          <Link
+            to="/suscripciones"
+            className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-calendar-alt"></i>
+            <span>{t("ver membresias")}</span>
+          </Link>
+        </div>
+
+        {/* 7. COMUNIDAD - Fundaciones y Veterinarias */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-users me-1"></i> {t("comunidad")}
@@ -98,48 +147,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-calendar-alt me-1"></i> {t("eventos")}
-          </div>
-          <Link
-            to="/eventos"
-            className={`sidebar-item ${isActive("/eventos") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-calendar-alt"></i>
-            <span>{t("eventos_proximos")}</span>
-          </Link>
-        </div>
-
-         <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
-          </div>
-          <Link
-            to="/suscripciones"
-            className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-calendar-alt"></i>
-            <span>{t("ver membresias")}</span>
-          </Link>
-        </div>
-
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
-          </div>
-          <Link
-            to="/donaciones"
-            className={`sidebar-item ${isActive("/donaciones") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-donate"></i>
-            <span>{t("donaciones")}</span>
-          </Link>
-        </div>
-
+        {/* 8. MI CUENTA - Solo si está autenticado (siempre al final) */}
         {isAuthenticated && (
           <div className="sidebar-section">
             <div className="section-title">

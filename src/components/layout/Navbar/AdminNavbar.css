@@ -12,6 +12,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: left 0.3s ease, right 0.3s ease;
+}
+
+/* Cuando el sidebar está abierto, la navbar se encoge */
+.admin-navbar.sidebar-open {
+  left: 320px;
+  right: 0;
+  width: auto;
 }
 
 .admin-navbar-container {
@@ -23,6 +31,13 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  transition: padding 0.3s ease;
+}
+
+/* Cuando el sidebar está abierto, reducir el padding */
+.admin-navbar.sidebar-open .admin-navbar-container {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .admin-hamburger-btn {
@@ -39,6 +54,11 @@
   gap: 6px;
   transition: all 0.3s;
   margin-right: 20px;
+}
+
+/* Ocultar el botón hamburguesa cuando el sidebar está abierto */
+.admin-navbar.sidebar-open .admin-hamburger-btn {
+  display: none;
 }
 
 .admin-hamburger-btn:hover {
@@ -304,6 +324,16 @@
     max-width: 100%;
     padding: 0 20px;
   }
+  
+  /* Ajuste para mobile cuando sidebar está abierto */
+  .admin-navbar.sidebar-open {
+    left: 280px;
+  }
+  
+  .admin-navbar.sidebar-open .admin-navbar-container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -322,6 +352,11 @@
   .user-menu-btn {
     padding: 6px 10px;
   }
+  
+  /* Ajuste para tablet cuando sidebar está abierto */
+  .admin-navbar.sidebar-open {
+    left: 280px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -332,5 +367,10 @@
   
   .admin-brand-title {
     font-size: 0.9rem;
+  }
+  
+  /* Ajuste para mobile cuando sidebar está abierto */
+  .admin-navbar.sidebar-open {
+    left: 280px;
   }
 }
