@@ -48,21 +48,6 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* Adopción */}
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-dog me-1"></i> {t("adopcion")}
-          </div>
-          <Link
-            to="/mascotas"
-            className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-paw"></i>
-            <span>{t("mascotas_adopcion")}</span>
-          </Link>
-        </div>
-
         {/* Rescates - Urgente */}
         <div className="sidebar-section">
           <div className="section-title">
@@ -109,10 +94,10 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* ✅ SECCIÓN CORREGIDA: APADRINAR / SUSCRIPCIONES */}
+        {/* Apadrinar */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-heart me-1"></i> {t("apadrinar") || "Apadrinar"}
+            <i className="fas fa-heart me-1"></i> {t("apadrinar")}
           </div>
           <Link
             to="/suscripciones"
@@ -120,7 +105,7 @@ const PublicSidebar = () => {
             onClick={closePublicSidebar}
           >
             <i className="fas fa-hand-holding-heart"></i>
-            <span>{t("apadrinar_mascota") || "Apadrinar una mascota"}</span>
+            <span>{t("apadrinar_mascota")}</span>
           </Link>
         </div>
 
@@ -147,21 +132,6 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* Tienda */}
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-store me-1"></i> {t("tienda")}
-          </div>
-          <Link
-            to="/tienda"
-            className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-shopping-cart"></i>
-            <span>{t("tienda") || "Tienda"}</span>
-          </Link>
-        </div>
-
         {/* Mi Cuenta (solo si está autenticado) */}
         {isAuthenticated && (
           <>
@@ -184,6 +154,20 @@ const PublicSidebar = () => {
               >
                 <i className="fas fa-credit-card"></i>
                 <span>{t("mis_suscripciones") || "Mis Suscripciones"}</span>
+              </Link>
+            </div>
+
+            <div className="sidebar-section">
+              <div className="section-title">
+                <i className="fas fa-store me-1"></i> {t("tienda")}
+              </div>
+              <Link
+                to="/tienda"
+                className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
+                onClick={closePublicSidebar}
+              >
+                <i className="fas fa-shopping-cart"></i>
+                <span>{t("tienda") || "Tienda"}</span>
               </Link>
             </div>
 
