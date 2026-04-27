@@ -1,6 +1,7 @@
-import React from "react";
-import { createBrowserRouter, Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+// src/routes/index.js
+import React from 'react';
+import { createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 // Layouts
 import PublicLayout from "../layouts/PublicLayout";
@@ -17,329 +18,127 @@ import FundacionRoute from "./FundacionRoute";
 import ForgotPassword from "../pages/public/ForgotPassword/ForgotPassword";
 import ResetPassword from "../pages/public/ResetPassword/ResetPassword";
 
-// =============================================================
-// PÁGINAS PÚBLICAS
-// =============================================================
-import Home from "../pages/public/Home/Home";
-import Login from "../pages/public/Login/Login";
-import MascotaDetalle from "../pages/public/MascotaDetalle/MascotaDetalle";
-import Register from "../pages/public/Register/Register";
-import Mascotas from "../pages/public/Mascotas/Mascotas";
-import Donaciones from "../pages/public/Donaciones/Donaciones";
-import Tienda from "../pages/public/Tienda/Tienda";
-import SolicitarAdopcion from "../pages/public/SolicitarAdopcion/SolicitarAdopcion";
-import SolicitudExitosa from "../pages/public/SolicitarAdopcion/SolicitudExitosa";
-import Veterinarias from "../pages/public/Veterinarias/Veterinarias";
-import VeterinariaDetalle from "../pages/public/Veterinarias/VeterinariaDetalle";
-import ReportarRescate from "../pages/public/ReportarRescate/ReportarRescate";
+// ================= PUBLIC =================
+import Home from '../pages/public/Home/Home';
+import Login from '../pages/public/Login/Login';
+import Register from '../pages/public/Register/Register';
+import Mascotas from '../pages/public/Mascotas/Mascotas';
+import MascotaDetalle from '../pages/public/MascotaDetalle/MascotaDetalle';
+import Donaciones from '../pages/public/Donaciones/Donaciones';
+import Tienda from '../pages/public/Tienda/Tienda';
+import SolicitarAdopcion from '../pages/public/SolicitarAdopcion/SolicitarAdopcion';
+import SolicitudExitosa from '../pages/public/SolicitarAdopcion/SolicitudExitosa';
+import Veterinarias from '../pages/public/Veterinarias/Veterinarias';
+import VeterinariaDetalle from '../pages/public/Veterinarias/VeterinariaDetalle';
+import ReportarRescate from '../pages/public/ReportarRescate/ReportarRescate';
+import FundacionesIndex from '../pages/public/Fundaciones/FundacionesIndex';
+import FundacionDetalle from '../pages/public/Fundaciones/FundacionDetalle';
 
-// ✅ FUNDACIONES PÚBLICAS (con carpeta Fundaciones mayúscula)
-import FundacionesIndex from "../pages/public/Fundaciones/FundacionesIndex";
-import FundacionDetalle from "../pages/public/Fundaciones/FundacionDetalle";
+// Eventos público
+import PublicEventosIndex from '../pages/public/eventos/EventosIndex';
+import PublicEventosShow from '../pages/public/eventos/EventosShow';
 
-// Eventos Público
-import PublicEventosIndex from "../pages/public/eventos/EventosIndex";
-import PublicEventosShow from "../pages/public/eventos/EventosShow";
+// SUSCRIPCIONES PÚBLICAS (NUEVO)
+import SuscripcionesPublicIndex from '../pages/public/suscripciones/SuscripcionesPublicIndex';
 
-// =============================================================
-// PÁGINAS DE USUARIO
-// =============================================================
-import Solicitudes from "../pages/user/Solicitudes/Solicitudes";
+// ================= USER =================
+import Solicitudes from '../pages/user/Solicitudes/Solicitudes';
+import UserSuscripciones from '../pages/user/MisSuscripciones'; // NUEVO
 
-// =============================================================
-// PÁGINAS ADMIN
-// =============================================================
-import Dashboard from "../pages/admin/Dashboard/Dashboard";
-import UsuariosPendientes from "../pages/admin/Usuarios/UsuariosPendientes";
+// ================= ADMIN =================
+import Dashboard from '../pages/admin/Dashboard/Dashboard';
+import UsuariosPendientes from '../pages/admin/Usuarios/UsuariosPendientes';
 
-// Eventos Admin
-import AdminEventosIndex from "../pages/admin/eventos/EventosIndex";
-import AdminEventosCreate from "../pages/admin/eventos/EventosCreate";
-import AdminEventosEdit from "../pages/admin/eventos/EventosEdit";
-import AdminEventosShow from "../pages/admin/eventos/EventosShow";
+// Eventos admin
+import AdminEventosIndex from '../pages/admin/eventos/EventosIndex';
+import AdminEventosCreate from '../pages/admin/eventos/EventosCreate';
+import AdminEventosEdit from '../pages/admin/eventos/EventosEdit';
+import AdminEventosShow from '../pages/admin/eventos/EventosShow';
 
-// Rescates Admin
-import AdminRescatesIndex from "../pages/admin/rescates/RescatesIndex";
-import AdminRescatesPendientes from "../pages/admin/rescates/RescatesPendientes";
-import AdminRescatesMapa from "../pages/admin/rescates/RescatesMapa";
-import AdminRescatesShow from "../pages/admin/rescates/RescatesShow";
+// SUSCRIPCIONES ADMIN
+import AdminSuscripcionesIndex from '../pages/admin/suscripciones/SuscripcionesIndex';
+import AdminSuscripcionesCreate from '../pages/admin/suscripciones/SuscripcionesCreate';
+import AdminSuscripcionesEdit from '../pages/admin/suscripciones/SuscripcionesEdit';
+import AdminSuscripcionesShow from '../pages/admin/suscripciones/SuscripcionesShow';
 
-// =============================================================
-// PÁGINAS DE FUNDACIÓN
-// =============================================================
-import FundDashboard from "../pages/fundacion/dashboard/Dashboard";
-import FundMascotas from "../pages/fundacion/mascotas/Mascotas";
-import FundNuevaMascota from "../pages/fundacion/mascotas/NuevaMascota";
+// ================= FUNDACIÓN =================
+import FundDashboard from '../pages/fundacion/dashboard/Dashboard';
+import FundMascotas from '../pages/fundacion/mascotas/Mascotas';
+import FundNuevaMascota from '../pages/fundacion/mascotas/NuevaMascota';
 import MascotaDetalleFundacion from "../pages/fundacion/mascotas/MascotaDetalle";
-import EventosIndex from "../pages/fundacion/eventos/EventosIndex";
-import EventosCreate from "../pages/fundacion/eventos/EventosCreate";
-import EventosShow from "../pages/fundacion/eventos/EventosShow";
-import EventosEdit from "../pages/fundacion/eventos/EventosEdit";
 
-// Rescates Fundación
-import RescatesDisponiblesFundacion from "../pages/fundacion/rescates/RescatesDisponibles";
-import MisRescatesFundacion from "../pages/fundacion/rescates/MisRescates";
-import RescateDetalleFundacion from "../pages/fundacion/rescates/RescateDetalle";
+import EventosIndex from '../pages/fundacion/eventos/EventosIndex';
+import EventosCreate from '../pages/fundacion/eventos/EventosCreate';
+import EventosShow from '../pages/fundacion/eventos/EventosShow';
+import EventosEdit from '../pages/fundacion/eventos/EventosEdit';
 
-// =============================================================
-// PÁGINAS DE VETERINARIA
-// =============================================================
-import DashboardVeterinaria from "../pages/veterinaria/dashboard/DashboardVeterinaria";
-import Citas from "../pages/veterinaria/citas/Citas";
-import CitaForm from "../pages/veterinaria/citas/CitaForm";
-import Pacientes from "../pages/veterinaria/pacientes/Pacientes";
-import PacienteForm from "../pages/veterinaria/pacientes/PacienteForm";
-import HistorialMedico from "../pages/veterinaria/historial/HistorialMedico";
+// SUSCRIPCIONES FUNDACIÓN
+import SuscripcionesIndex from '../pages/fundacion/suscripciones/SuscripcionesIndex';
+import SuscripcionesCreate from '../pages/fundacion/suscripciones/SuscripcionesCreate';
+import SuscripcionesEdit from '../pages/fundacion/suscripciones/SuscripcionesEdit';
+import SuscripcionesShow from '../pages/fundacion/suscripciones/SuscripcionesShow';
 
-// Rescates Veterinaria
-import RescatesDisponiblesVet from "../pages/veterinaria/rescates/RescatesDisponibles";
-import MisRescatesVet from "../pages/veterinaria/rescates/MisRescates";
-import RescateDetalleVet from "../pages/veterinaria/rescates/RescateDetalle";
+// ================= VETERINARIA =================
+import DashboardVeterinaria from '../pages/veterinaria/dashboard/DashboardVeterinaria';
+
+// SUSCRIPCIONES VETERINARIA (NUEVO)
+import VeterinariaSuscripcionesIndex from '../pages/veterinaria/suscripciones/SuscripcionesIndex';
+import VeterinariaSuscripcionesShow from '../pages/veterinaria/suscripciones/SuscripcionesShow';
 
 // =============================================================
-// PLACEHOLDERS PARA PÁGINAS QUE NO TIENEN AÚN
+// PLACEHOLDERS
 // =============================================================
-
-// Admin placeholders
-const AdminMascotas = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Gestión de Mascotas</h1>
-    <p>Próximamente - Página en construcción</p>
+const PagePlaceholder = ({ title }) => (
+  <div style={{ padding: '2rem' }}>
+    <h1>{title}</h1>
   </div>
 );
-
-const AdminMascotasNueva = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Registrar Nueva Mascota</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const UsuariosList = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Gestión de Usuarios</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const UsuarioForm = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Formulario de Usuario</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const UsuarioDetail = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Detalle de Usuario</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const PagePlaceholder = ({
-  title,
-  description = "Próximamente - Página en construcción",
-}) => (
-  <div
-    style={{
-      minHeight: "70vh",
-      padding: "4rem 1.5rem",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      background: "#f8fafc",
-      color: "#1f2937",
-    }}
-  >
-    <div style={{ maxWidth: "860px", textAlign: "center", width: "100%" }}>
-      <h1 style={{ fontSize: "2.75rem", marginBottom: "1rem" }}>{title}</h1>
-      <p style={{ fontSize: "1.15rem", lineHeight: "1.75", color: "#475569" }}>
-        {description}
-      </p>
-    </div>
-  </div>
-);
-
-const AdminAdopciones = () => <PagePlaceholder title="Adopciones" />;
-const AdminDonaciones = () => <PagePlaceholder title="Donaciones" />;
-const AdminFundaciones = () => <PagePlaceholder title="Fundaciones" />;
-const AdminVeterinarias = () => <PagePlaceholder title="Veterinarias" />;
-const AdminProductos = () => <PagePlaceholder title="Productos" />;
-const AdminComentarios = () => <PagePlaceholder title="Comentarios" />;
-const AdminNotificaciones = () => <PagePlaceholder title="Notificaciones" />;
-const AdminReportes = () => <PagePlaceholder title="Reportes" />;
-const AdminConfiguracion = () => <PagePlaceholder title="Configuración" />;
-const AdminRazas = () => <PagePlaceholder title="Catálogo de Razas" />;
-const AdminVacunas = () => <PagePlaceholder title="Tipos de Vacunas" />;
-const AdminCategorias = () => <PagePlaceholder title="Categorías" />;
-
-// Usuario placeholders
-const UserDashboard = () => <PagePlaceholder title="Dashboard Usuario" />;
-const UserProfile = () => <PagePlaceholder title="Mi Perfil" />;
-const UserCarrito = () => <PagePlaceholder title="Mi Carrito" />;
-const UserPedidos = () => <PagePlaceholder title="Mis Pedidos" />;
-const UserDonaciones = () => <PagePlaceholder title="Mis Donaciones" />;
-
-// Veterinaria placeholders
-const VetAtenciones = () => <PagePlaceholder title="Atenciones Médicas" />;
-const VetHistoriales = () => <PagePlaceholder title="Historiales" />;
-const VetVacunas = () => <PagePlaceholder title="Vacunas" />;
-const VetProductos = () => <PagePlaceholder title="Productos" />;
-const VetPedidos = () => <PagePlaceholder title="Pedidos" />;
-const VetReportes = () => <PagePlaceholder title="Reportes" />;
-
-// Fundación placeholders
-const FundAdopciones = () => <PagePlaceholder title="Adopciones" />;
-const FundDonaciones = () => <PagePlaceholder title="Donaciones" />;
-const FundVoluntarios = () => <PagePlaceholder title="Voluntarios" />;
-const FundReportes = () => <PagePlaceholder title="Reportes" />;
 
 // =============================================================
-// COMPONENTE 404
+// 404
 // =============================================================
 const NotFound = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, user, getDashboardPath } = useAuth();
-
-  const goBack = () => navigate(-1);
-  const goHome = () => {
-    if (
-      isAuthenticated &&
-      (user?.tipo === "admin" ||
-        user?.tipo === "veterinaria" ||
-        user?.tipo === "fundacion")
-    ) {
-      navigate(getDashboardPath());
-    } else {
-      navigate("/");
-    }
-  };
-
-  const getButtonText = () => {
-    if (!isAuthenticated) return "Volver al inicio";
-    if (user?.tipo === "admin") return "Ir al Panel Admin";
-    if (user?.tipo === "veterinaria") return "Ir a mi Clínica";
-    if (user?.tipo === "fundacion") return "Ir a mi Fundación";
-    return "Volver al inicio";
-  };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        textAlign: "center",
-        background: "linear-gradient(135deg, #1a1f2e 0%, #0f1119 100%)",
-        color: "white",
-      }}
-    >
-      <h1 style={{ fontSize: "6rem", margin: 0 }}>404</h1>
-      <h2>Página no encontrada</h2>
-      <p style={{ color: "rgba(255,255,255,0.7)" }}>
-        Lo sentimos, la página que buscas no existe.
-      </p>
-      <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
-        <button
-          onClick={goBack}
-          style={{
-            padding: "12px 30px",
-            background: "rgba(255,255,255,0.1)",
-            color: "white",
-            border: "1px solid rgba(255,255,255,0.2)",
-            borderRadius: "50px",
-            cursor: "pointer",
-          }}
-        >
-          ← Volver atrás
-        </button>
-        <button
-          onClick={goHome}
-          style={{
-            padding: "12px 30px",
-            background: "linear-gradient(135deg, #667eea, #764ba2)",
-            color: "white",
-            border: "none",
-            borderRadius: "50px",
-            cursor: "pointer",
-          }}
-        >
-          {getButtonText()} →
-        </button>
-      </div>
+    <div style={{ textAlign: 'center', padding: '5rem' }}>
+      <h1>404 - Página no encontrada</h1>
+      <button onClick={() => navigate('/')}>Volver al inicio</button>
     </div>
   );
 };
 
 // =============================================================
-// CONFIGURACIÓN DE RUTAS
+// ROUTER
 // =============================================================
-
 const router = createBrowserRouter([
-  // RUTAS PÚBLICAS
+  // ================= PUBLIC =================
   {
     path: "/",
     element: <PublicLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-      { path: "forgot-password", element: <ForgotPassword /> },
-      { path: "reset-password", element: <ResetPassword /> },
-      { path: "mascotas", element: <Mascotas /> },
-      { path: "fundaciones", element: <FundacionesIndex /> },
-      { path: "fundaciones/:id", element: <FundacionDetalle /> },
-      { path: "veterinarias", element: <Veterinarias /> },
-      { path: "veterinarias/:id", element: <VeterinariaDetalle /> },
-      { path: "mascota/:id", element: <MascotaDetalle /> },
-      { path: "solicitar-adopcion/:id", element: <SolicitarAdopcion /> },
-      { path: "adopcion-exitosa/:id", element: <SolicitudExitosa /> },
-      { path: "eventos", element: <PublicEventosIndex /> },
-      { path: "eventos/:id", element: <PublicEventosShow /> },
-      { path: "tienda", element: <Tienda /> },
-      { path: "rescates/reportar", element: <ReportarRescate /> },
-      { path: "donaciones", element: <Donaciones /> },
-    ],
+      { path: 'login', element: <Login /> },
+      { path: 'register', element: <Register /> },
+      { path: 'mascotas', element: <Mascotas /> },
+      { path: 'mascota/:id', element: <MascotaDetalle /> },
+      { path: 'fundaciones', element: <FundacionesIndex /> },
+      { path: 'fundaciones/:id', element: <FundacionDetalle /> },
+      { path: 'veterinarias', element: <Veterinarias /> },
+      { path: 'veterinarias/:id', element: <VeterinariaDetalle /> },
+      { path: 'eventos', element: <PublicEventosIndex /> },
+      { path: 'eventos/:id', element: <PublicEventosShow /> },
+      { path: 'tienda', element: <Tienda /> },
+      { path: 'donaciones', element: <Donaciones /> },
+      { path: 'rescates/reportar', element: <ReportarRescate /> },
+      
+      // ✅ NUEVAS RUTAS PÚBLICAS DE SUSCRIPCIONES
+      { path: 'suscripciones', element: <SuscripcionesPublicIndex /> },
+      { path: 'apadrinar', element: <SuscripcionesPublicIndex /> },
+    ]
   },
 
-  // RUTAS DE USUARIO
+  // ================= USER (Apadrinadores/Donantes) =================
   {
     path: "/user",
     element: <PrivateRoute />,
@@ -347,64 +146,18 @@ const router = createBrowserRouter([
       {
         element: <PublicLayout />,
         children: [
-          { index: true, element: <Navigate to="/user/dashboard" replace /> },
-          { path: "dashboard", element: <UserDashboard /> },
-          { path: "perfil", element: <UserProfile /> },
-          { path: "mis-solicitudes", element: <Solicitudes /> },
-          { path: "carrito", element: <UserCarrito /> },
-          { path: "pedidos", element: <UserPedidos /> },
-          { path: "donaciones", element: <UserDonaciones /> },
-        ],
-      },
-    ],
+          { index: true, element: <Navigate to="/user/dashboard" /> },
+          { path: 'dashboard', element: <PagePlaceholder title="Mi Dashboard" /> },
+          { path: 'mis-solicitudes', element: <Solicitudes /> },
+          
+          // ✅ NUEVO: Mis suscripciones
+          { path: 'mis-suscripciones', element: <UserSuscripciones /> },
+        ]
+      }
+    ]
   },
 
-  // RUTAS DE VETERINARIA
-  {
-    path: "/veterinaria",
-    element: <VeterinariaRoute />,
-    children: [
-      {
-        element: <VeterinariaLayout />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="/veterinaria/dashboard" replace />,
-          },
-          { path: "dashboard", element: <DashboardVeterinaria /> },
-          {
-            path: "rescates",
-            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
-          },
-          {
-            path: "rescates/disponibles",
-            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
-          },
-          {
-            path: "rescates/mis-rescates",
-            element: <MisRescatesVet tipoUsuario="veterinaria" />,
-          },
-          { path: "rescates/:id", element: <RescateDetalleVet /> },
-          { path: "atenciones", element: <VetAtenciones /> },
-          { path: "historiales", element: <VetHistoriales /> },
-          { path: "citas", element: <Citas /> },
-          { path: "citas/nueva", element: <CitaForm /> },
-          { path: "citas/editar/:id", element: <CitaForm /> },
-          { path: "mascotas", element: <Pacientes /> },
-          { path: "pacientes/nuevo", element: <PacienteForm /> },
-          { path: "pacientes/editar/:id", element: <PacienteForm /> },
-          { path: "pacientes/:id/historial", element: <HistorialMedico /> },
-          { path: "vacunas", element: <VetVacunas /> },
-          { path: "productos", element: <VetProductos /> },
-          { path: "pedidos", element: <VetPedidos /> },
-          { path: "reportes", element: <VetReportes /> },
-          { path: "perfil", element: <div>Mi Perfil</div> },
-        ],
-      },
-    ],
-  },
-
-  // RUTAS DE FUNDACIÓN
+  // ================= FUNDACIÓN =================
   {
     path: "/fundacion",
     element: <FundacionRoute />,
@@ -412,43 +165,29 @@ const router = createBrowserRouter([
       {
         element: <FundacionLayout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/fundacion/dashboard" replace />,
-          },
-          { path: "dashboard", element: <FundDashboard /> },
-          { path: "mascotas", element: <FundMascotas /> },
-          { path: "mascotas/nueva", element: <FundNuevaMascota /> },
-          { path: "mascotas/:id", element: <MascotaDetalleFundacion /> },
-          { path: "mascotas/editar/:id", element: <FundNuevaMascota /> },
-          {
-            path: "rescates",
-            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
-          },
-          {
-            path: "rescates/disponibles",
-            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
-          },
-          {
-            path: "rescates/mis-rescates",
-            element: <MisRescatesFundacion tipoUsuario="fundacion" />,
-          },
-          { path: "rescates/:id", element: <RescateDetalleFundacion /> },
-          { path: "adopciones", element: <FundAdopciones /> },
-          { path: "donaciones", element: <FundDonaciones /> },
-          { path: "eventos", element: <EventosIndex /> },
-          { path: "eventos/crear", element: <EventosCreate /> },
-          { path: "eventos/:id", element: <EventosShow /> },
-          { path: "eventos/:id/editar", element: <EventosEdit /> },
-          { path: "voluntarios", element: <FundVoluntarios /> },
-          { path: "reportes", element: <FundReportes /> },
-          { path: "perfil", element: <div>Mi Perfil</div> },
-        ],
-      },
-    ],
+          { index: true, element: <Navigate to="/fundacion/dashboard" /> },
+          { path: 'dashboard', element: <FundDashboard /> },
+          { path: 'mascotas', element: <FundMascotas /> },
+          { path: 'mascotas/nueva', element: <FundNuevaMascota /> },
+          { path: 'mascotas/:id', element: <MascotaDetalleFundacion /> },
+          
+          // SUSCRIPCIONES FUNDACIÓN
+          { path: 'suscripciones', element: <SuscripcionesIndex /> },
+          { path: 'suscripciones/crear', element: <SuscripcionesCreate /> },
+          { path: 'suscripciones/:id', element: <SuscripcionesShow /> },
+          { path: 'suscripciones/:id/editar', element: <SuscripcionesEdit /> },
+          
+          // EVENTOS FUNDACIÓN
+          { path: 'eventos', element: <EventosIndex /> },
+          { path: 'eventos/crear', element: <EventosCreate /> },
+          { path: 'eventos/:id', element: <EventosShow /> },
+          { path: 'eventos/:id/editar', element: <EventosEdit /> },
+        ]
+      }
+    ]
   },
 
-  // RUTAS DE ADMIN
+  // ================= ADMIN =================
   {
     path: "/admin",
     element: <AdminRoute />,
@@ -456,47 +195,48 @@ const router = createBrowserRouter([
       {
         element: <AdminLayout />,
         children: [
-          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-          { path: "dashboard", element: <Dashboard /> },
-          {
-            path: "usuarios",
-            children: [
-              { index: true, element: <UsuariosList /> },
-              { path: "pendientes", element: <UsuariosPendientes /> },
-              { path: "create", element: <UsuarioForm /> },
-              { path: ":id", element: <UsuarioDetail /> },
-              { path: ":id/edit", element: <UsuarioForm /> },
-            ],
-          },
-          { path: "mascotas", element: <AdminMascotas /> },
-          { path: "mascotas/nueva", element: <AdminMascotasNueva /> },
-          { path: "rescates", element: <AdminRescatesIndex /> },
-          { path: "rescates/pendientes", element: <AdminRescatesPendientes /> },
-          { path: "rescates/mapa", element: <AdminRescatesMapa /> },
-          { path: "rescates/:id", element: <AdminRescatesShow /> },
-          { path: "adopciones", element: <AdminAdopciones /> },
-          { path: "donaciones", element: <AdminDonaciones /> },
-          { path: "eventos", element: <AdminEventosIndex /> },
-          { path: "eventos/crear", element: <AdminEventosCreate /> },
-          { path: "eventos/:id", element: <AdminEventosShow /> },
-          { path: "eventos/:id/editar", element: <AdminEventosEdit /> },
-          { path: "fundaciones", element: <AdminFundaciones /> },
-          { path: "veterinarias", element: <AdminVeterinarias /> },
-          { path: "productos", element: <AdminProductos /> },
-          { path: "comentarios", element: <AdminComentarios /> },
-          { path: "notificaciones", element: <AdminNotificaciones /> },
-          { path: "reportes", element: <AdminReportes /> },
-          { path: "configuracion", element: <AdminConfiguracion /> },
-          { path: "razas", element: <AdminRazas /> },
-          { path: "vacunas", element: <AdminVacunas /> },
-          { path: "categorias", element: <AdminCategorias /> },
-          { path: "perfil", element: <div>Mi Perfil Admin</div> },
-        ],
-      },
-    ],
+          { index: true, element: <Navigate to="/admin/dashboard" /> },
+          { path: 'dashboard', element: <Dashboard /> },
+          
+          // SUSCRIPCIONES ADMIN
+          { path: 'suscripciones', element: <AdminSuscripcionesIndex /> },
+          { path: 'suscripciones/crear', element: <AdminSuscripcionesCreate /> },
+          { path: 'suscripciones/:id', element: <AdminSuscripcionesShow /> },
+          { path: 'suscripciones/:id/editar', element: <AdminSuscripcionesEdit /> },
+          
+          // EVENTOS ADMIN
+          { path: 'eventos', element: <AdminEventosIndex /> },
+          { path: 'eventos/crear', element: <AdminEventosCreate /> },
+          { path: 'eventos/:id', element: <AdminEventosShow /> },
+          { path: 'eventos/:id/editar', element: <AdminEventosEdit /> },
+          
+          { path: 'usuarios/pendientes', element: <UsuariosPendientes /> },
+        ]
+      }
+    ]
   },
 
-  { path: "*", element: <NotFound /> },
+  // ================= VETERINARIA =================
+  {
+    path: '/veterinaria',
+    element: <VeterinariaRoute />,
+    children: [
+      {
+        element: <VeterinariaLayout />,
+        children: [
+          { index: true, element: <Navigate to="/veterinaria/dashboard" /> },
+          { path: 'dashboard', element: <DashboardVeterinaria /> },
+          
+          // ✅ NUEVO: SUSCRIPCIONES VETERINARIA
+          { path: 'suscripciones', element: <VeterinariaSuscripcionesIndex /> },
+          { path: 'suscripciones/:id', element: <VeterinariaSuscripcionesShow /> },
+        ]
+      }
+    ]
+  },
+
+  // ================= 404 =================
+  { path: '*', element: <NotFound /> }
 ]);
 
 export default router;

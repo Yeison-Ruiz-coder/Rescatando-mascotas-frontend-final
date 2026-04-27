@@ -77,10 +77,5 @@
 
   "roles": {
     "administrador": "Administrador"
-  },
-
-  "apadrinar": "Apadrinar",
-  "apadrinar_mascota": "Apadrinar una mascota",
-  "mis_suscripciones": "Mis Suscripciones",
-  "tienda": "Tienda"
+  }
 }

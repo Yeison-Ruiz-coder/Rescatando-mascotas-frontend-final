@@ -37,7 +37,7 @@ const PublicSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
-        {/* 1. INICIO - Principal */}
+        {/* Navegación principal */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-home me-1"></i> {t("navegacion")}
@@ -48,7 +48,22 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* 2. REPORTAR RESCATE - Urgente */}
+        {/* Adopción */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-dog me-1"></i> {t("adopcion")}
+          </div>
+          <Link
+            to="/mascotas"
+            className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-paw"></i>
+            <span>{t("mascotas_adopcion")}</span>
+          </Link>
+        </div>
+
+        {/* Rescates - Urgente */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-ambulance me-1"></i> {t("urgente")}
@@ -64,7 +79,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* 3. MASCOTAS EN ADOPCIÓN - Core del negocio */}
+        {/* Comunidad */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-dog me-1"></i> {t("adopcion")}
@@ -79,7 +94,7 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* 4. EVENTOS - Comunidad */}
+        {/* Eventos */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-calendar-alt me-1"></i> {t("eventos")}
@@ -94,37 +109,22 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* 5. DONACIONES - Soporte económico */}
+        {/* ✅ SECCIÓN CORREGIDA: APADRINAR / SUSCRIPCIONES */}
         <div className="sidebar-section">
           <div className="section-title">
-            <i className="fas fa-hand-holding-heart me-1"></i> {t("colaborar")}
-          </div>
-          <Link
-            to="/donaciones"
-            className={`sidebar-item ${isActive("/donaciones") ? "active" : ""}`}
-            onClick={closePublicSidebar}
-          >
-            <i className="fas fa-donate"></i>
-            <span>{t("donaciones")}</span>
-          </Link>
-        </div>
-
-        {/* 6. SUSCRIPCIONES / MEMBRESÍAS */}
-        <div className="sidebar-section">
-          <div className="section-title">
-            <i className="fas fa-calendar-alt me-1"></i> {t("suscripciones")}
+            <i className="fas fa-heart me-1"></i> {t("apadrinar") || "Apadrinar"}
           </div>
           <Link
             to="/suscripciones"
             className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
             onClick={closePublicSidebar}
           >
-            <i className="fas fa-calendar-alt"></i>
-            <span>{t("ver membresias")}</span>
+            <i className="fas fa-hand-holding-heart"></i>
+            <span>{t("apadrinar_mascota") || "Apadrinar una mascota"}</span>
           </Link>
         </div>
 
-        {/* 7. COMUNIDAD - Fundaciones y Veterinarias */}
+        {/* Colaborar - Donaciones */}
         <div className="sidebar-section">
           <div className="section-title">
             <i className="fas fa-users me-1"></i> {t("comunidad")}
@@ -147,21 +147,53 @@ const PublicSidebar = () => {
           </Link>
         </div>
 
-        {/* 8. MI CUENTA - Solo si está autenticado (siempre al final) */}
-        {isAuthenticated && (
-          <div className="sidebar-section">
-            <div className="section-title">
-              <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
-            </div>
-            <Link
-              to="/user/mis-solicitudes"
-              className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
-              onClick={closePublicSidebar}
-            >
-              <i className="fas fa-clipboard-list"></i>
-              <span>{t("mis_solicitudes")}</span>
-            </Link>
+        {/* Tienda */}
+        <div className="sidebar-section">
+          <div className="section-title">
+            <i className="fas fa-store me-1"></i> {t("tienda")}
           </div>
+          <Link
+            to="/tienda"
+            className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
+            onClick={closePublicSidebar}
+          >
+            <i className="fas fa-shopping-cart"></i>
+            <span>{t("tienda") || "Tienda"}</span>
+          </Link>
+        </div>
+
+        {/* Mi Cuenta (solo si está autenticado) */}
+        {isAuthenticated && (
+          <>
+            <div className="sidebar-section">
+              <div className="section-title">
+                <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
+              </div>
+              <Link
+                to="/user/mis-solicitudes"
+                className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
+                onClick={closePublicSidebar}
+              >
+                <i className="fas fa-clipboard-list"></i>
+                <span>{t("mis_solicitudes")}</span>
+              </Link>
+              <Link
+                to="/user/mis-suscripciones"
+                className={`sidebar-item ${isActive("/user/mis-suscripciones") ? "active" : ""}`}
+                onClick={closePublicSidebar}
+              >
+                <i className="fas fa-credit-card"></i>
+                <span>{t("mis_suscripciones") || "Mis Suscripciones"}</span>
+              </Link>
+            </div>
+
+            <div className="sidebar-section">
+              <button onClick={handleLogout} className="sidebar-item logout-btn">
+                <i className="fas fa-sign-out-alt"></i>
+                <span>{t("cerrar_sesion")}</span>
+              </button>
+            </div>
+          </>
         )}
       </nav>
     </aside>
