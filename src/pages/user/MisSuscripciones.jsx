@@ -1,5 +1,6 @@
 // src/pages/user/MisSuscripciones.jsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { suscripcionService } from '../../services/suscripcionService';
 import { toast } from 'react-toastify';
 
@@ -14,9 +15,19 @@ const UserSuscripciones = () => {
   const cargarMisSuscripciones = async () => {
     try {
       setLoading(true);
-      const data = await suscripcionService.getUserSuscripciones();
-      setSuscripciones(data);
+      const response = await suscripcionService.getUserSuscripciones();
+      
+      // Manejar la respuesta correctamente
+      let suscripcionesData = [];
+      if (response?.data) {
+        suscripcionesData = response.data;
+      } else if (Array.isArray(response)) {
+        suscripcionesData = response;
+      }
+      
+      setSuscripciones(suscripcionesData);
     } catch (error) {
+      console.error('Error:', error);
       toast.error('Error al cargar tus suscripciones');
     } finally {
       setLoading(false);
@@ -85,4 +96,4 @@ const UserSuscripciones = () => {
   );
 };
 
-export default UserSuscripciones;
+export default UserSuscripciones;  // ← IMPORTANTE: exporta con este nombre
