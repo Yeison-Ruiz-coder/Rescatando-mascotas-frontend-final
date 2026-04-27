@@ -4,18 +4,88 @@ import { useNavigate } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import './SuscripcionesPublic.css';
+import './SuscripcionesPublicIndex.css';
+
+// DATOS DE PRUEBA (mientras el backend no está listo)
+const DATOS_PRUEBA = {
+  planes: [
+    {
+      id: 1,
+      nombre: "Plan Básico",
+      monto: 10000,
+      frecuencia: "mensual",
+      destacado: false,
+      descripcion: "Ideal para empezar a ayudar",
+      beneficios: ["Certificado digital", "Actualización mensual", "Calcomanía"]
+    },
+    {
+      id: 2,
+      nombre: "Plan Premium",
+      monto: 25000,
+      frecuencia: "mensual",
+      destacado: true,
+      descripcion: "Para quienes quieren marcar la diferencia",
+      beneficios: ["Certificado premium", "Actualización semanal", "Fotos exclusivas", "Descuento en tienda", "Eventos especiales"]
+    },
+    {
+      id: 3,
+      nombre: "Plan Vitalicio",
+      monto: 50000,
+      frecuencia: "mensual",
+      destacado: false,
+      descripcion: "Para los súper patrocinadores",
+      beneficios: ["Certificado especial", "Visitas mensuales", "Nombre en placa", "Descuento 20% tienda", "Eventos VIP"]
+    }
+  ],
+  mascotas: [
+    {
+      id: 1,
+      nombre: "Max",
+      especie: "Perro",
+      raza: "Golden Retriever",
+      edad: 3,
+      historia_corta: "Max fue rescatado de la calle y necesita cuidados especiales.",
+      monto_sugerido: 15000,
+      apadrinamientos: 2,
+      foto_url: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=300&h=250&fit=crop"
+    },
+    {
+      id: 2,
+      nombre: "Luna",
+      especie: "Gato",
+      raza: "Siamés",
+      edad: 2,
+      historia_corta: "Luna es muy cariñosa y busca un hogar temporal.",
+      monto_sugerido: 12000,
+      apadrinamientos: 1,
+      foto_url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&h=250&fit=crop"
+    },
+    {
+      id: 3,
+      nombre: "Toby",
+      especie: "Perro",
+      raza: "Labrador",
+      edad: 4,
+      historia_corta: "Toby necesita una operación y tu ayuda es vital.",
+      monto_sugerido: 20000,
+      apadrinamientos: 0,
+      foto_url: "https://images.unsplash.com/photo-1587301091292-9d12c5e3c1b6?w=300&h=250&fit=crop"
+    }
+  ]
+};
 
 const SuscripcionesPublicIndex = () => {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
-  const [planes, setPlanes] = useState([]);
-  const [mascotas, setMascotas] = useState([]);
+  const [membresias, setMembresias] = useState([]);
+  const [mascotasApadrinar, setMascotasApadrinar] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedMembresia, setSelectedMembresia] = useState(null);
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [estadisticas, setEstadisticas] = useState(null);
+  const [filterEspecie, setFilterEspecie] = useState('todas');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('recientes');
 
   useEffect(() => {
     cargarDatos();
@@ -25,20 +95,35 @@ const SuscripcionesPublicIndex = () => {
     try {
       setLoading(true);
       
-      // Cargar todos los datos en paralelo
-      const [planesData, mascotasData, statsData] = await Promise.all([
-        suscripcionService.getPlanesMembresia(),
-        suscripcionService.getMascotasApadrinar(),
-        suscripcionService.getEstadisticas()
-      ]);
+      let membresiasData = DATOS_PRUEBA.planes;
+      let mascotasData = DATOS_PRUEBA.mascotas;
       
-      setPlanes(planesData || []);
-      setMascotas(mascotasData || []);
-      setEstadisticas(statsData);
+      try {
+        const response = await suscripcionService.getPlanesMembresia();
+        if (response && Array.isArray(response) && response.length > 0) {
+          membresiasData = response;
+          console.log('✅ Planes cargados del backend');
+        }
+      } catch (errorPlan) {
+        console.log('⚠️ Usando datos de prueba para planes');
+      }
+      
+      try {
+        const response = await suscripcionService.getMascotasApadrinar();
+        if (response && Array.isArray(response) && response.length > 0) {
+          mascotasData = response;
+          console.log('✅ Mascotas cargadas del backend');
+        }
+      } catch (errorMascota) {
+        console.log('⚠️ Usando datos de prueba para mascotas');
+      }
+      
+      setMembresias(membresiasData);
+      setMascotasApadrinar(mascotasData);
       
     } catch (error) {
-      console.error('Error cargando datos:', error);
-      toast.error('Error al cargar los datos');
+      console.error('Error general:', error);
+      toast.error('Error al cargar las opciones de membresía');
     } finally {
       setLoading(false);
     }
@@ -46,31 +131,60 @@ const SuscripcionesPublicIndex = () => {
 
   const handleApadrinar = (mascota) => {
     if (!isAuthenticated) {
-      toast.info('Por favor, inicia sesión para apadrinar');
+      localStorage.setItem('intencion_apadrinar', JSON.stringify({
+        mascota_id: mascota.id,
+        timestamp: new Date().getTime()
+      }));
+      toast.info('Por favor, inicia sesión o regístrate para apadrinar');
       navigate('/login', { state: { from: '/suscripciones' } });
       return;
     }
     setSelectedMascota(mascota);
-    setSelectedPlan(null);
+    setSelectedMembresia(null);
     setShowModal(true);
   };
 
-  const handlePlanClick = (plan) => {
+  const handleMembresiaClick = (membresia) => {
     if (!isAuthenticated) {
-      toast.info('Por favor, inicia sesión para continuar');
+      localStorage.setItem('intencion_membresia', JSON.stringify({
+        plan_id: membresia.id,
+        timestamp: new Date().getTime()
+      }));
+      toast.info('Por favor, inicia sesión o regístrate para continuar');
       navigate('/login', { state: { from: '/suscripciones' } });
       return;
     }
-    setSelectedPlan(plan);
+    setSelectedMembresia(membresia);
     setSelectedMascota(null);
     setShowModal(true);
   };
 
+  const mascotasFiltradas = mascotasApadrinar
+    .filter(mascota => {
+      if (filterEspecie !== 'todas' && mascota.especie !== filterEspecie) return false;
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        return mascota.nombre.toLowerCase().includes(searchLower) ||
+               (mascota.raza && mascota.raza.toLowerCase().includes(searchLower));
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'recientes') return new Date(b.created_at) - new Date(a.created_at);
+      if (sortBy === 'antiguos') return new Date(a.created_at) - new Date(b.created_at);
+      if (sortBy === 'nombre') return a.nombre.localeCompare(b.nombre);
+      return 0;
+    });
+
+  const especiesUnicas = ['todas', ...new Set(mascotasApadrinar.map(m => m.especie))];
+
   if (loading) {
     return (
-      <div className="suscripciones-loading">
-        <div className="spinner"></div>
-        <p>Cargando opciones de membresía...</p>
+      <div className="suscripciones-public">
+        <div className="suscripciones-loading">
+          <div className="spinner"></div>
+          <p>Cargando opciones de membresía...</p>
+        </div>
       </div>
     );
   }
@@ -78,7 +192,7 @@ const SuscripcionesPublicIndex = () => {
   return (
     <div className="suscripciones-public">
       {/* Hero Section */}
-      <div className="hero-section-suscripciones">
+      <div className="suscripciones-hero">
         <div className="hero-content">
           <h1>Conviértete en Patrocinador</h1>
           <p>
@@ -87,30 +201,41 @@ const SuscripcionesPublicIndex = () => {
           </p>
           <div className="hero-stats">
             <div className="stat">
-              <span className="stat-number">{estadisticas?.total_suscripciones || 500}+</span>
-              <span className="stat-label">Suscripciones activas</span>
+              <span className="stat-number">500+</span>
+              <span className="stat-label">Animales rescatados</span>
             </div>
             <div className="stat">
-              <span className="stat-number">{estadisticas?.activas || 200}+</span>
-              <span className="stat-label">Padrinos activos</span>
+              <span className="stat-number">200+</span>
+              <span className="stat-label">Adopciones exitosas</span>
             </div>
             <div className="stat">
-              <span className="stat-number">${estadisticas?.ingreso_mensual_total || 10000}+</span>
-              <span className="stat-label">Ayuda mensual</span>
+              <span className="stat-number">1000+</span>
+              <span className="stat-label">Patrocinadores activos</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Planes de Membresía */}
-      <div className="planes-section-suscripciones">
+      <div className="planes-section">
+        {/* Banner con emoji */}
+        <div className="planes-banner-simple">
+          <div className="simple-banner-content">
+            <span className="puppy-emoji">🐶🐱🐾</span>
+            <div>
+              <h3>¡Ellos te necesitan!</h3>
+              <p>Con tu apoyo, muchos animales tendrán una segunda oportunidad</p>
+            </div>
+          </div>
+        </div>
+
         <div className="section-header">
           <h2>Planes de Membresía</h2>
           <p>Elige el plan que mejor se adapte a ti y comienza a marcar la diferencia.</p>
         </div>
         
         <div className="planes-grid">
-          {planes.map((plan, index) => (
+          {membresias.map((plan, index) => (
             <div key={plan.id} className={`plan-card ${plan.destacado ? 'featured' : ''}`}>
               {plan.destacado && <div className="plan-badge">⭐ Más Popular</div>}
               <div className="plan-icon">
@@ -135,7 +260,7 @@ const SuscripcionesPublicIndex = () => {
               </ul>
               <button 
                 className={`btn-plan ${plan.destacado ? 'btn-primary' : 'btn-outline'}`}
-                onClick={() => handlePlanClick(plan)}
+                onClick={() => handleMembresiaClick(plan)}
               >
                 Seleccionar Plan
               </button>
@@ -145,21 +270,63 @@ const SuscripcionesPublicIndex = () => {
       </div>
 
       {/* Mascotas para Apadrinar */}
-      <div className="mascotas-section-suscripciones">
+      <div className="mascotas-section">
         <div className="section-header">
           <h2>Mascotas que necesitan tu ayuda</h2>
           <p>Apadrina una mascota específica y recibe actualizaciones de su progreso.</p>
           <div className="mascotas-stats">
-            <span className="badge-count">🐾 Tenemos {mascotas.length} mascotas esperando un padrino</span>
+            <span className="badge-count">🐾 Tenemos {mascotasFiltradas.length} mascotas esperando un padrino</span>
           </div>
         </div>
 
+        {/* Filtros y búsqueda */}
+        <div className="filtros-container">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Buscar por nombre o raza..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          
+          <div className="filters-group">
+            <div className="filter-item">
+              <label>ESPECIE</label>
+              <select value={filterEspecie} onChange={(e) => setFilterEspecie(e.target.value)}>
+                {especiesUnicas.map(especie => (
+                  <option key={especie} value={especie}>
+                    {especie === 'todas' ? 'Todas las especies' : especie}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Resultados y orden */}
+        <div className="results-header">
+          <div className="results-count">
+            Mostrando {mascotasFiltradas.length} de {mascotasApadrinar.length} mascotas
+          </div>
+          <div className="sort-options">
+            <label>Ordenar por:</label>
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+              <option value="recientes">Más recientes</option>
+              <option value="antiguos">Más antiguos</option>
+              <option value="nombre">Nombre</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Grid de mascotas */}
         <div className="mascotas-grid">
-          {mascotas.map((mascota) => (
+          {mascotasFiltradas.map((mascota) => (
             <div key={mascota.id} className="mascota-card">
               <div className="mascota-image">
                 <img 
-                  src={mascota.foto_url || '/images/default-pet.jpg'} 
+                  src={mascota.foto_url} 
                   alt={mascota.nombre}
                   onError={(e) => { 
                     e.target.src = 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=300&h=250&fit=crop';
@@ -172,9 +339,9 @@ const SuscripcionesPublicIndex = () => {
               <div className="mascota-info">
                 <h3>{mascota.nombre}</h3>
                 <div className="mascota-details">
-                  <span className="especie">{mascota.especie}</span>
-                  <span className="raza">{mascota.raza}</span>
-                  <span className="edad">{mascota.edad} años</span>
+                  <span>{mascota.especie}</span>
+                  <span>{mascota.raza}</span>
+                  <span>{mascota.edad} años</span>
                 </div>
                 <p className="mascota-historia">{mascota.historia_corta}</p>
                 <div className="mascota-stats">
@@ -183,7 +350,7 @@ const SuscripcionesPublicIndex = () => {
                     <span className="label">Apadrinamientos</span>
                   </div>
                   <div className="stat">
-                    <span className="value">${(mascota.monto_sugerido || 10000).toLocaleString()}</span>
+                    <span className="value">${mascota.monto_sugerido.toLocaleString()}</span>
                     <span className="label">Monto sugerido</span>
                   </div>
                 </div>
@@ -198,15 +365,15 @@ const SuscripcionesPublicIndex = () => {
           ))}
         </div>
 
-        {mascotas.length === 0 && (
+        {mascotasFiltradas.length === 0 && (
           <div className="no-results">
-            <p>No hay mascotas disponibles para apadrinar en este momento.</p>
+            <p>No se encontraron mascotas que coincidan con tu búsqueda.</p>
           </div>
         )}
       </div>
 
       {/* FAQ Section */}
-      <div className="faq-section-suscripciones">
+      <div className="faq-section">
         <div className="section-header">
           <h2>Preguntas Frecuentes</h2>
           <p>Resolvemos tus dudas sobre el apadrinamiento</p>
@@ -234,7 +401,7 @@ const SuscripcionesPublicIndex = () => {
       {/* Modal de Suscripción */}
       {showModal && (
         <SuscripcionModal
-          plan={selectedPlan}
+          membresia={selectedMembresia}
           mascota={selectedMascota}
           onClose={() => setShowModal(false)}
           onSuccess={() => {
@@ -249,20 +416,19 @@ const SuscripcionesPublicIndex = () => {
 };
 
 // Componente Modal
-const SuscripcionModal = ({ plan, mascota, onClose, onSuccess }) => {
+const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    monto: plan?.monto || mascota?.monto_sugerido || 10000,
+    monto: membresia?.monto || mascota?.monto_sugerido || 10000,
     frecuencia: 'mensual',
-    mensaje_apoyo: ''
+    mensaje_apoyo: '',
+    metodo_pago: 'tarjeta'
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -270,17 +436,18 @@ const SuscripcionModal = ({ plan, mascota, onClose, onSuccess }) => {
     setLoading(true);
     
     try {
-      const data = {
+      const suscripcionData = {
         user_id: user.id,
         mascota_id: mascota?.id || null,
         monto_mensual: formData.monto,
         frecuencia: formData.frecuencia,
         fecha_inicio: new Date().toISOString().split('T')[0],
         mensaje_apoyo: formData.mensaje_apoyo,
-        estado: 'activo'
+        estado: 'activo',
+        plan_id: membresia?.id || null
       };
       
-      await suscripcionService.createPublicSuscripcion(data);
+      await suscripcionService.createPublicSuscripcion(suscripcionData);
       onSuccess();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error al procesar la suscripción');
@@ -296,7 +463,7 @@ const SuscripcionModal = ({ plan, mascota, onClose, onSuccess }) => {
           <h2>
             {mascota 
               ? `Apadrinar a ${mascota.nombre}`
-              : `Plan ${plan?.nombre}`
+              : `Plan ${membresia?.nombre}`
             }
           </h2>
           <button className="modal-close" onClick={onClose}>×</button>
@@ -325,33 +492,15 @@ const SuscripcionModal = ({ plan, mascota, onClose, onSuccess }) => {
               <label>Frecuencia</label>
               <div className="frecuencia-opciones">
                 <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="mensual"
-                    checked={formData.frecuencia === 'mensual'}
-                    onChange={handleChange}
-                  />
+                  <input type="radio" name="frecuencia" value="mensual" checked={formData.frecuencia === 'mensual'} onChange={handleChange} />
                   <span>Mensual</span>
                 </label>
                 <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="trimestral"
-                    checked={formData.frecuencia === 'trimestral'}
-                    onChange={handleChange}
-                  />
+                  <input type="radio" name="frecuencia" value="trimestral" checked={formData.frecuencia === 'trimestral'} onChange={handleChange} />
                   <span>Trimestral</span>
                 </label>
                 <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="anual"
-                    checked={formData.frecuencia === 'anual'}
-                    onChange={handleChange}
-                  />
+                  <input type="radio" name="frecuencia" value="anual" checked={formData.frecuencia === 'anual'} onChange={handleChange} />
                   <span>Anual</span>
                 </label>
               </div>
@@ -366,6 +515,15 @@ const SuscripcionModal = ({ plan, mascota, onClose, onSuccess }) => {
                 value={formData.mensaje_apoyo}
                 onChange={handleChange}
               />
+            </div>
+            
+            <div className="form-group">
+              <label>Método de pago</label>
+              <select name="metodo_pago" value={formData.metodo_pago} onChange={handleChange} required>
+                <option value="tarjeta">Tarjeta de crédito/débito</option>
+                <option value="transferencia">Transferencia bancaria</option>
+                <option value="paypal">PayPal</option>
+              </select>
             </div>
             
             <div className="modal-footer">

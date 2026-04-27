@@ -1,21 +1,30 @@
 {
     "titulo_admin": "Global Events",
     "subtitulo_admin": "Manage all system events",
-    "cargando": "Loading global events...",
-    "cargando_evento": "Loading global event...",
-    "evento_sin_imagen": "Global Event",
+    
+    "titulo": "Pet Events",
+    "subtitulo": "Discover upcoming events and activities for you and your pet",
+    
+    "cargando": "Loading events...",
+    "cargando_evento": "Loading event...",
+    "evento_sin_imagen": "Event",
     
     "botones": {
         "crear_evento": "Create Global Event",
         "crear_primero": "Create First Event",
         "crear_evento_global": "Create Global Event",
-        "ver_detalles": "View details",
+        "ver_detalles": "View Details",
         "editar": "Edit",
         "eliminar": "Delete",
         "cancelar": "Cancel",
         "creando": "Creating...",
         "guardando": "Saving...",
-        "guardar_cambios": "Save Changes"
+        "guardar_cambios": "Save Changes",
+        "dar_like": "Like",
+        "me_gusta": "Liked",
+        "asistire": "I'll attend",
+        "confirmado": "✅ Confirmed",
+        "compartir": "Share"
     },
     
     "mensajes": {
@@ -36,8 +45,8 @@
     },
     
     "sin_eventos": {
-        "titulo": "No global events",
-        "mensaje": "Create the first event for the entire system"
+        "titulo": "No events scheduled",
+        "mensaje": "Soon we will have events for pets. Stay tuned!"
     },
     
     "crear": {
@@ -68,5 +77,49 @@
         "fecha": "Date",
         "descripcion": "Description",
         "creado": "Created"
-    }
+    },
+    
+    "evento": {
+        "global": "Global",
+        "fundacion": "Foundation",
+        "sin_imagen": "Event",
+        "sin_descripcion": "No description",
+        "asistentes": "attendees",
+        "lugar": "Location",
+        "fecha": "Date",
+        "descripcion": "Description"
+    },
+    
+    "detalle": {
+        "volver": "Back to Events",
+        "publicado": "Published",
+        "ubicacion": "Location",
+        "fecha_completa": "Date and Time",
+        "enlace_copiado": "Link copied to clipboard!",
+        "evento_global": "Global Event",
+        "evento_fundacion": "Foundation Event"
+    },
+    
+    "asistencia": {
+        "confirmar": "Confirm my attendance",
+        "confirmada": "Attendance confirmed!",
+        "personas_asistiran": "people attending",
+        "login_requerido": "You must log in to confirm attendance",
+        "error": "Error processing request"
+    },
+    
+    "sin_imagen": "Event",
+    "global": "Global",
+    "fundacion": "Foundation",
+    "asistentes": "attendees",
+    "sin_descripcion": "No description",
+    "ver_detalles": "View Details",
+    "me_gusta": "Liked",
+    "dar_like": "Like",
+    "confirmado": "✅ Confirmed",
+    "asistire": "I'll attend",
+    "login_requerido": "Log in to confirm attendance"
+
+    
+
 }
