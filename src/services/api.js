@@ -44,7 +44,7 @@ api.interceptors.response.use(
   }
 );
 
-// ✅ NUEVA FUNCIÓN PARA REPORTAR RESCATE (usa publicApi, no requiere autenticación)
+// NUEVA FUNCIÓN PARA REPORTAR RESCATE (usa publicApi, no requiere autenticación)
 export const reportarRescate = (data) => publicApi.post('/rescates/reportar', data);
 
 export default api;

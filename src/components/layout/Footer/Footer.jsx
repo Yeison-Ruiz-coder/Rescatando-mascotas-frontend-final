@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "../../../contexts/AuthContext";
 import "./Footer.css";
@@ -8,7 +8,17 @@ const Footer = () => {
   const { t } = useTranslation("layout");
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const currentYear = new Date().getFullYear();
+
+  // 🔥 RUTAS DONDE NO DEBE APARECER EL FOOTER 🔥
+  const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const isAuthPage = authRoutes.includes(location.pathname);
+  
+  // Si es página de autenticación, NO renderizar el footer
+  if (isAuthPage) {
+    return null;
+  }
 
   const navigateTo = (path) => {
     if (!isAuthenticated) {

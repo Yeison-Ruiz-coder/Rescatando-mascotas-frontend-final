@@ -1,19 +1,23 @@
 /* src/pages/public/Login/Login.css */
 
-/* Contenedor principal */
+/* Contenedor principal - Pantalla completa */
 .login-container {
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  margin: 80px 12rem 80px 12rem;
-  position: relative;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  background-image: url('https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out;
 }
 
 /* Overlay oscuro */
@@ -27,11 +31,41 @@
   z-index: 1;
 }
 
-/* Tarjeta de login */
+/* Botón de volver atrás - Encapsulado */
+.login-back-button {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  z-index: 20;
+  background: transparent;
+  border: 2px solid white;
+  color: white !important;
+  padding: 10px 20px;
+  border-radius: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.login-back-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-3px);
+}
+
+.login-back-button i {
+  font-size: 0.9rem;
+  color: white;
+}
+
+/* Tarjeta de login - Centrada */
 .login-card {
   position: relative;
   z-index: 2;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.555);
   backdrop-filter: blur(12px);
   border-radius: 28px;
   padding: 2.5rem;
@@ -39,10 +73,10 @@
   max-width: 480px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-  animation: fadeInUp 0.6s ease-out;
+  animation: loginFadeInUp 0.6s ease-out;
 }
 
-@keyframes fadeInUp {
+@keyframes loginFadeInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -51,6 +85,34 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Texto motivacional */
+.login-motivational-text {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.login-motivational-quote {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-style: italic;
+  transition: opacity 0.5s ease;
+}
+
+.login-motivational-quote i {
+  font-size: 0.8rem;
+  opacity: 0.6;
 }
 
 /* Header */
@@ -69,13 +131,14 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  animation: pulse 2s infinite;
+  animation: loginPulse 2s infinite;
   position: relative;
   overflow: hidden;
 }
 
-@keyframes pulse {
-  0%, 100% {
+@keyframes loginPulse {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
   }
   50% {
@@ -111,24 +174,18 @@
   margin-top: 0.25rem;
 }
 
-/* ============================================
-   ESTILOS ENCAPSULADOS PARA INPUTS
-   ============================================ */
-
-/* Contenedor del formulario */
+/* Formulario */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Grupo de input */
 .login-form .input-group {
   position: relative;
   margin-bottom: 0.25rem;
 }
 
-/* Icono dentro del input */
 .login-form .input-icon {
   position: absolute;
   left: 16px;
@@ -139,7 +196,6 @@
   pointer-events: none;
 }
 
-/* Label del input */
 .login-form .form-label {
   color: rgba(255, 255, 255, 0.8) !important;
   font-size: 0.85rem !important;
@@ -148,7 +204,6 @@
   display: block !important;
 }
 
-/* Input base */
 .login-form .form-input,
 .login-form input[type="email"],
 .login-form input[type="password"],
@@ -164,7 +219,6 @@
   box-sizing: border-box !important;
 }
 
-/* Focus en input */
 .login-form .form-input:focus,
 .login-form input[type="email"]:focus,
 .login-form input[type="password"]:focus,
@@ -175,7 +229,6 @@
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
 }
 
-/* Placeholder */
 .login-form .form-input::placeholder,
 .login-form input[type="email"]::placeholder,
 .login-form input[type="password"]::placeholder,
@@ -183,13 +236,11 @@
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Wrapper para contraseña */
 .login-form .password-wrapper {
   position: relative;
   width: 100%;
 }
 
-/* Botón toggle de contraseña */
 .login-form .password-toggle {
   position: absolute;
   right: 16px;
@@ -208,7 +259,6 @@
   color: #667eea;
 }
 
-/* Opciones de login */
 .login-options {
   display: flex;
   justify-content: space-between;
@@ -240,12 +290,11 @@
 }
 
 .forgot-link:hover {
-  color: #764ba2;
+  color: #ffffff;
   text-decoration: underline;
 }
 
-/* Error general */
-.error-general {
+.login-error-general {
   background: rgba(255, 71, 87, 0.15);
   border: 1px solid #ff4757;
   color: #ff6b81;
@@ -259,11 +308,10 @@
   gap: 8px;
 }
 
-.error-general i {
+.login-error-general i {
   font-size: 1rem;
 }
 
-/* Botón de login */
 .login-button {
   width: 100%;
   margin-top: 0.5rem;
@@ -292,7 +340,6 @@
   cursor: not-allowed;
 }
 
-/* Divisor */
 .login-divider {
   text-align: center;
   margin: 1.5rem 0 1rem;
@@ -301,7 +348,7 @@
 
 .login-divider::before,
 .login-divider::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   width: calc(50% - 70px);
@@ -324,7 +371,6 @@
   font-size: 0.85rem;
 }
 
-/* Botón de registro */
 .register-button {
   display: flex;
   align-items: center;
@@ -352,6 +398,37 @@
   font-size: 1rem;
 }
 
+/* Indicadores de imagen - Encapsulados */
+.login-image-indicators {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.login-indicator {
+  width: 30px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-indicator:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: scaleY(1.5);
+}
+
+.login-indicator.active {
+  background: #667eea;
+  width: 40px;
+}
+
 /* Decoración */
 .login-decoration {
   position: absolute;
@@ -364,14 +441,18 @@
   pointer-events: none;
 }
 
-.decoration-circle {
+.login-decoration-circle {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
-  animation: float 8s ease-in-out infinite;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.3),
+    rgba(118, 75, 162, 0.3)
+  );
+  animation: loginFloat 8s ease-in-out infinite;
 }
 
-.circle-1 {
+.login-decoration-circle.circle-1 {
   width: 300px;
   height: 300px;
   top: -100px;
@@ -379,7 +460,7 @@
   animation-delay: 0s;
 }
 
-.circle-2 {
+.login-decoration-circle.circle-2 {
   width: 200px;
   height: 200px;
   bottom: -50px;
@@ -387,7 +468,7 @@
   animation-delay: 2s;
 }
 
-.circle-3 {
+.login-decoration-circle.circle-3 {
   width: 150px;
   height: 150px;
   bottom: 30%;
@@ -395,8 +476,9 @@
   animation-delay: 4s;
 }
 
-@keyframes float {
-  0%, 100% {
+@keyframes loginFloat {
+  0%,
+  100% {
     transform: translateY(0) scale(1);
   }
   50% {
@@ -404,72 +486,99 @@
   }
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
+/* Responsive */
 @media (max-width: 768px) {
-  .login-container {
-    padding: 1rem;
-    margin: 60px 2rem;
-  }
-  
   .login-card {
     padding: 2rem;
     max-width: 400px;
   }
-  
+
   .login-title {
     font-size: 1.8rem;
   }
-  
-  .circle-1 {
+
+  .login-back-button {
+    top: 20px;
+    left: 20px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .login-back-button span {
+    display: none;
+  }
+
+  .login-back-button i {
+    margin: 0;
+  }
+
+  .login-motivational-quote {
+    font-size: 0.75rem;
+    gap: 8px;
+  }
+
+  .login-decoration-circle.circle-1 {
     width: 200px;
     height: 200px;
   }
-  
-  .circle-2 {
+
+  .login-decoration-circle.circle-2 {
     width: 150px;
     height: 150px;
   }
-  
-  /* Ajuste de inputs en tablet */
+
   .login-form .input-icon,
   .login-form .password-toggle {
     top: 40px;
   }
+
+  .login-image-indicators {
+    bottom: 20px;
+  }
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    margin: 40px 1rem;
-  }
-  
   .login-card {
     padding: 1.5rem;
+    margin: 0 1rem;
   }
-  
+
   .login-title {
     font-size: 1.5rem;
   }
-  
+
   .login-options {
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
   }
-  
-  /* Ajuste de inputs en móvil */
+
+  .login-motivational-quote {
+    display: none;
+  }
+
   .login-form .input-icon,
   .login-form .password-toggle {
     top: 38px;
     left: 12px;
   }
-  
+
   .login-form .form-input,
   .login-form input[type="email"],
   .login-form input[type="password"],
   .login-form input[type="text"] {
     padding: 0.8rem 1rem 0.8rem 2.5rem !important;
+  }
+
+  .login-image-indicators {
+    bottom: 15px;
+  }
+
+  .login-indicator {
+    width: 20px;
+  }
+
+  .login-indicator.active {
+    width: 30px;
   }
 }

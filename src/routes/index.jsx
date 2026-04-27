@@ -4,16 +4,19 @@ import { createBrowserRouter, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 // Layouts
-import PublicLayout from '../layouts/PublicLayout';
-import VeterinariaLayout from '../layouts/VeterinariaLayout';
-import FundacionLayout from '../layouts/FundacionLayout';
-import AdminLayout from '../layouts/AdminLayout';
+import PublicLayout from "../layouts/PublicLayout";
+import VeterinariaLayout from "../layouts/VeterinariaLayout";
+import FundacionLayout from "../layouts/FundacionLayout";
+import AdminLayout from "../layouts/AdminLayout";
 
 // Route Guards
-import PrivateRoute from './PrivateRoute';
-import AdminRoute from './AdminRoute';
-import VeterinariaRoute from './VeterinariaRoute';
-import FundacionRoute from './FundacionRoute';
+import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
+import VeterinariaRoute from "./VeterinariaRoute";
+import FundacionRoute from "./FundacionRoute";
+
+import ForgotPassword from "../pages/public/ForgotPassword/ForgotPassword";
+import ResetPassword from "../pages/public/ResetPassword/ResetPassword";
 
 // ================= PUBLIC =================
 import Home from '../pages/public/Home/Home';
@@ -111,7 +114,7 @@ const NotFound = () => {
 const router = createBrowserRouter([
   // ================= PUBLIC =================
   {
-    path: '/',
+    path: "/",
     element: <PublicLayout />,
     children: [
       { index: true, element: <Home /> },
@@ -137,7 +140,7 @@ const router = createBrowserRouter([
 
   // ================= USER (Apadrinadores/Donantes) =================
   {
-    path: '/user',
+    path: "/user",
     element: <PrivateRoute />,
     children: [
       {
@@ -156,7 +159,7 @@ const router = createBrowserRouter([
 
   // ================= FUNDACIÓN =================
   {
-    path: '/fundacion',
+    path: "/fundacion",
     element: <FundacionRoute />,
     children: [
       {
@@ -186,7 +189,7 @@ const router = createBrowserRouter([
 
   // ================= ADMIN =================
   {
-    path: '/admin',
+    path: "/admin",
     element: <AdminRoute />,
     children: [
       {

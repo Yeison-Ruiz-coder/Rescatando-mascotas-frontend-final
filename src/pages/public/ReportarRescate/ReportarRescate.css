@@ -2,7 +2,7 @@
 /* TODOS los estilos están dentro del scope .rescate-page para no afectar otras páginas */
 
 .rescate-page {
-  background: var(--color-light, #fff9f0);
+  background: transparent;
   min-height: 100vh;
   padding: 60px 0 80px;
 }

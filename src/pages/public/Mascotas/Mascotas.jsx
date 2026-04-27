@@ -159,7 +159,7 @@ const Mascotas = () => {
   }
 
   return (
-    <div className="mascotas-page">
+    <div className="mascotas-page ">
       <div className="mascotas-header">
         <div className="container">
           <h1>{t("titulo")}</h1>

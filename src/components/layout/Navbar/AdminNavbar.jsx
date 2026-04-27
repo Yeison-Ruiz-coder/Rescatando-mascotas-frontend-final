@@ -1,3 +1,4 @@
+// src/components/layout/Navbar/AdminNavbar.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +40,6 @@ const AdminNavbar = () => {
     navigate('/login');
   };
 
-  // Definir los idiomas con los nombres traducidos correctamente
   const languages = [
     { code: 'es', name: 'Español', flag: 'co', label: 'ES' },
     { code: 'en', name: 'English', flag: 'us', label: 'EN' }
@@ -63,7 +63,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <nav className="admin-navbar">
+    <nav className={`admin-navbar ${isAdminSidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="admin-navbar-container">
         <button 
           className={`admin-hamburger-btn ${isAdminSidebarOpen ? 'open' : ''}`}
@@ -86,8 +86,6 @@ const AdminNavbar = () => {
         </Link>
 
         <div className="admin-navbar-actions">
-
-
           {/* User Menu */}
           <div className="user-menu" ref={userMenuRef}>
             <button 
@@ -122,7 +120,7 @@ const AdminNavbar = () => {
             )}
           </div>
 
-                    {/* Selector de idioma */}
+          {/* Selector de idioma */}
           <div className="language-selector" ref={languageMenuRef}>
             <button 
               className="language-selector-btn" 
@@ -150,8 +148,6 @@ const AdminNavbar = () => {
               </div>
             )}
           </div>
-
-
         </div>
       </div>
     </nav>
