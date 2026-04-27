@@ -1,21 +1,30 @@
 {
     "titulo_admin": "Eventos Globales",
     "subtitulo_admin": "Administra todos los eventos del sistema",
-    "cargando": "Cargando eventos globales...",
-    "cargando_evento": "Cargando evento global...",
-    "evento_sin_imagen": "Evento Global",
+    
+    "titulo": "Eventos para Mascotas",
+    "subtitulo": "Descubre los próximos eventos y actividades para ti y tu mascota",
+    
+    "cargando": "Cargando eventos...",
+    "cargando_evento": "Cargando evento...",
+    "evento_sin_imagen": "Evento",
     
     "botones": {
         "crear_evento": "Crear Evento Global",
         "crear_primero": "Crear Primer Evento",
         "crear_evento_global": "Crear Evento Global",
-        "ver_detalles": "Ver detalles",
+        "ver_detalles": "Ver Detalles",
         "editar": "Editar",
         "eliminar": "Eliminar",
         "cancelar": "Cancelar",
         "creando": "Creando...",
         "guardando": "Guardando...",
-        "guardar_cambios": "Guardar Cambios"
+        "guardar_cambios": "Guardar Cambios",
+        "dar_like": "Dar like",
+        "me_gusta": "Me gusta",
+        "asistire": "Asistiré",
+        "confirmado": "✅ Confirmado",
+        "compartir": "Compartir"
     },
     
     "mensajes": {
@@ -36,8 +45,8 @@
     },
     
     "sin_eventos": {
-        "titulo": "No hay eventos globales",
-        "mensaje": "Crea el primer evento para todo el sistema"
+        "titulo": "No hay eventos programados",
+        "mensaje": "Próximamente tendremos eventos para mascotas. ¡Mantente atento!"
     },
     
     "crear": {
@@ -68,5 +77,47 @@
         "fecha": "Fecha",
         "descripcion": "Descripción",
         "creado": "Creado"
-    }
+    },
+    
+    "evento": {
+        "global": "Global",
+        "fundacion": "Fundación",
+        "sin_imagen": "Evento",
+        "sin_descripcion": "Sin descripción",
+        "asistentes": "asistentes",
+        "lugar": "Lugar",
+        "fecha": "Fecha",
+        "descripcion": "Descripción"
+    },
+    
+    "detalle": {
+        "volver": "Volver a Eventos",
+        "publicado": "Publicado",
+        "ubicacion": "Ubicación",
+        "fecha_completa": "Fecha y Hora",
+        "enlace_copiado": "¡Enlace copiado al portapapeles!",
+        "evento_global": "Evento Global",
+        "evento_fundacion": "Evento de Fundación"
+    },
+    
+    "asistencia": {
+        "confirmar": "Confirmar mi asistencia",
+        "confirmada": "¡Asistencia confirmada!",
+        "personas_asistiran": "personas asistirán",
+        "login_requerido": "Debes iniciar sesión para confirmar asistencia",
+        "error": "Error al procesar la solicitud"
+    },
+    
+    "sin_imagen": "Evento",
+    "global": "Global",
+    "fundacion": "Fundación",
+    "asistentes": "asistentes",
+    "sin_descripcion": "Sin descripción",
+    "ver_detalles": "Ver Detalles",
+    "me_gusta": "Me gusta",
+    "dar_like": "Dar like",
+    "confirmado": "✅ Confirmado",
+    "asistire": "Asistiré",
+    "login_requerido": "Inicia sesión para confirmar asistencia"
+
 }

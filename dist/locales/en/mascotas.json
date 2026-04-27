@@ -11,11 +11,8 @@
   "ave": "Bird",
   "otro": "Other",
   
-
-  "buscar_placeholder": "Search...",
   "buscar": "Search",
-  "limpiar": "Clear",
-
+  "buscar_placeholder": "Search...",
 
   "genero": "Gender",
   "todos_generos": "All",
@@ -34,7 +31,6 @@
   
   "aplicar_filtros": "Apply filters",
   "limpiar_filtros": "Clear",
-  "filtros": "Filters",
   
   "mostrando": "Showing",
   "de": "of",
@@ -46,13 +42,20 @@
   "cargando": "Loading pets...",
   "error_carga": "Error loading pets",
   "reintentar": "Retry",
-  "filtrar": "Search",
+  
   "conocer_mas": "Learn more",
   "adoptar": "Adopt",
   "rescatado_por": "Rescued by",
   "sin_descripcion": "No description available",
   "sin_imagen": "No image",
 
+  "estado": "Status",
+  "todos_estados": "All statuses",
+  "raza": "Breed",
+  "raza_placeholder": "Ex: Labrador, Siamese, Persian...",
+  "filtrar": "Search",
+  "limpiar": "Clear",
+  "filtros": "Filters",
 
   "cargando_detalle": "Loading pet details...",
   "no_encontrada": "Pet not found",
@@ -67,9 +70,10 @@
   "desconocido": "Unknown",
   "año": "year",
   "años": "years",
+  "edad_desconocida": "Age unknown",
   "descripcion": "Description",
   "lugar_rescate": "Rescue location",
-  "fecha_ingreso": "Entry date",
+  "fecha_ingreso": "Admission date",
   "fecha_salida": "Departure date",
   "caracteristicas": "Characteristics",
   "hogar_temporal": "Needs foster home",
@@ -82,9 +86,9 @@
   "vacunas": "Vaccines",
   "proxima_dosis": "Next dose",
   "sin_fundacion": "No foundation assigned",
-  "sin_fundacion_desc": "This pet doesn't have a foundation assigned yet",
+  "sin_fundacion_desc": "This pet doesn't have a foundation assigned",
   "fundacion_responsable": "Responsible foundation",
-  "contactar_fundacion": "Contact foundation",
+  "contactar_fundacion": "Contact the foundation",
   "sobre_nosotros": "About us",
   "mision": "Mission",
   "vision": "Vision",
@@ -100,12 +104,10 @@
   "solicitar_acogida": "Request foster care",
   "ya_fue_adoptado": "This pet has already found a home",
   "contacto_no_disponible": "Contact not available",
-  
+
   "salud_cuidados": "Health and Care",
-  "vacunas_registradas": "Registered vaccines",
-  "en_proceso": "In process",
-
-
+  "vacunas_registradas": "vaccines registered",
+  "en_proceso": "In progress",
 
   "editar_mascota": "Edit Pet",
   "registrar_mascota": "Register Pet",
@@ -118,26 +120,18 @@
   "fechas": "Dates",
   
   "nombre_mascota": "Pet Name",
-  "nombre_mascota_placeholder": "Eg: Luna, Max, Bella",
-
+  "nombre_mascota_placeholder": "Ex: Luna, Max, Bella",
   "seleccionar_especie": "Select species",
-
   "seleccionar_razas": "Select one or more breeds",
   "edad_aprox": "Approximate Age (years)",
-  "edad_placeholder": "Eg: 2.5",
-
-  "estado": "Current Status",
+  "edad_placeholder": "Ex: 2.5",
   
-
-  "lugar_rescate_placeholder": "Eg: Central Park, Main St #123",
-
+  "lugar_rescate_placeholder": "Ex: Central Park, Main Street #123",
   "descripcion_placeholder": "Describe the pet: personality, behavior, health condition, special needs...",
-
-  "condiciones_placeholder": "Chronic diseases, disabilities, special care...",
+  "condiciones_placeholder": "Chronic illnesses, disabilities, special care...",
   
-
+  "necesita_hogar_temporal": "Needs foster home",
   "apto_con_otros_animales": "Good with other animals",
-
   "seleccionar_vacunas": "Select applied vaccines",
   
   "foto_principal": "Main Photo",
@@ -150,6 +144,44 @@
   "exito_registro": "Pet registered successfully",
   "exito_actualizacion": "Pet updated successfully",
   "error_registro": "Error registering pet",
-  "error_actualizacion": "Error updating pet"
-
+  "error_actualizacion": "Error updating pet",
+  "telefono": "Phone",
+  "direccion": "Address",
+  "sitio_web": "Website",
+  "bienvenido_mascota": "🐾 Meet",
+  "confirmar_adopcion": "Do you want to request the adoption of {{nombre}}?",
+  "confirmar_acogida": "Do you want to request foster care for {{nombre}}?",
+  "compartir": "Share",
+  "compartir_texto": "Look at {{nombre}}! Looking for a home ❤️",
+  "enlace_copiado": "Link copied to clipboard!",
+  "raza_no_especificada": "Breed not specified",
+  "error_cargar": "Could not load pet",
+  "estado_actualizado": "Status updated to",
+  "error_actualizar": "Error updating status",
+  "confirmar_eliminar": "Delete {{nombre}}?",
+  "mascota_eliminada": "Pet deleted",
+  "error_eliminar": "Error deleting",
+  "edad": "Age",
+  "estado_actual": "Current status",
+  "actualizando": "Updating...",
+  "principal": "Main",
+  "editar": "Edit",
+  "eliminar": "Delete",
+  "protegido_por": "Protected by",
+  "conocer_fundacion": "Learn more about the foundation",
+  "sobre_la_fundacion": "About the foundation",
+  "tamanio": "Size",
+  "color": "Color",
+  "esterilizado": "Neutered",
+  "vacunado": "Vaccinated",
+  "desparasitado": "Dewormed",
+  "socializable": "Socializable",
+  "sin_imagen_principal": "No main image",
+  "edad_no_especificada": "Not specified",
+  "mes": "month",
+  "meses": "months",
+  "no_especificada": "Not specified",
+  "no_especificado": "Not specified",
+  "mixto": "Mixed",
+  "error_cargar_datos": "Error loading data"
 }

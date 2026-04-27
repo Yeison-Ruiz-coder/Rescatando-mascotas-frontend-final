@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import './SuscripcionesPublic.css';
+import './SuscripcionesPublicIndex.css';
 
 // DATOS DE PRUEBA (mientras el backend no está listo)
 const DATOS_PRUEBA = {
@@ -95,11 +95,9 @@ const SuscripcionesPublicIndex = () => {
     try {
       setLoading(true);
       
-      // Datos de prueba por defecto
       let membresiasData = DATOS_PRUEBA.planes;
       let mascotasData = DATOS_PRUEBA.mascotas;
       
-      // Intentar cargar planes del backend
       try {
         const response = await suscripcionService.getPlanesMembresia();
         if (response && Array.isArray(response) && response.length > 0) {
@@ -107,11 +105,9 @@ const SuscripcionesPublicIndex = () => {
           console.log('✅ Planes cargados del backend');
         }
       } catch (errorPlan) {
-        console.log('⚠️ Usando datos de prueba para planes (backend no disponible)');
-        // Usamos los datos de prueba que ya tenemos
+        console.log('⚠️ Usando datos de prueba para planes');
       }
       
-      // Intentar cargar mascotas del backend
       try {
         const response = await suscripcionService.getMascotasApadrinar();
         if (response && Array.isArray(response) && response.length > 0) {
@@ -119,8 +115,7 @@ const SuscripcionesPublicIndex = () => {
           console.log('✅ Mascotas cargadas del backend');
         }
       } catch (errorMascota) {
-        console.log('⚠️ Usando datos de prueba para mascotas (backend no disponible)');
-        // Usamos los datos de prueba que ya tenemos
+        console.log('⚠️ Usando datos de prueba para mascotas');
       }
       
       setMembresias(membresiasData);
@@ -164,7 +159,6 @@ const SuscripcionesPublicIndex = () => {
     setShowModal(true);
   };
 
-  // Filtrar y ordenar mascotas
   const mascotasFiltradas = mascotasApadrinar
     .filter(mascota => {
       if (filterEspecie !== 'todas' && mascota.especie !== filterEspecie) return false;
@@ -182,14 +176,15 @@ const SuscripcionesPublicIndex = () => {
       return 0;
     });
 
-  // Obtener especies únicas para el filtro
   const especiesUnicas = ['todas', ...new Set(mascotasApadrinar.map(m => m.especie))];
 
   if (loading) {
     return (
-      <div className="suscripciones-loading">
-        <div className="spinner"></div>
-        <p>Cargando opciones de membresía...</p>
+      <div className="suscripciones-public">
+        <div className="suscripciones-loading">
+          <div className="spinner"></div>
+          <p>Cargando opciones de membresía...</p>
+        </div>
       </div>
     );
   }
@@ -197,9 +192,9 @@ const SuscripcionesPublicIndex = () => {
   return (
     <div className="suscripciones-public">
       {/* Hero Section */}
-      <div className="hero-section-suscripciones">
+      <div className="suscripciones-hero">
         <div className="hero-content">
-          <h1>Conviértete en Patrocinador Suscribete!</h1>
+          <h1>Conviértete en Patrocinador</h1>
           <p>
             Con tu apoyo, podemos seguir rescatando, rehabilitando y dando 
             una segunda oportunidad a más animales necesitados.
@@ -221,9 +216,9 @@ const SuscripcionesPublicIndex = () => {
         </div>
       </div>
 
-      {/* Planes de Membresía CON BANNER DE PERRITO */}
-      <div className="planes-section-suscripciones">
-        {/* Banner con emoji (alternativa a imagen) */}
+      {/* Planes de Membresía */}
+      <div className="planes-section">
+        {/* Banner con emoji */}
         <div className="planes-banner-simple">
           <div className="simple-banner-content">
             <span className="puppy-emoji">🐶🐱🐾</span>
@@ -242,7 +237,7 @@ const SuscripcionesPublicIndex = () => {
         <div className="planes-grid">
           {membresias.map((plan, index) => (
             <div key={plan.id} className={`plan-card ${plan.destacado ? 'featured' : ''}`}>
-              {plan.destacado && <div className="plan-badge">Más Popular</div>}
+              {plan.destacado && <div className="plan-badge">⭐ Más Popular</div>}
               <div className="plan-icon">
                 {index === 0 && '🐾'}
                 {index === 1 && '💝'}
@@ -275,12 +270,12 @@ const SuscripcionesPublicIndex = () => {
       </div>
 
       {/* Mascotas para Apadrinar */}
-      <div className="mascotas-section-suscripciones">
+      <div className="mascotas-section">
         <div className="section-header">
           <h2>Mascotas que necesitan tu ayuda</h2>
           <p>Apadrina una mascota específica y recibe actualizaciones de su progreso.</p>
           <div className="mascotas-stats">
-            <span className="badge-count">🔴 Tenemos {mascotasFiltradas.length} mascotas esperando un padrino</span>
+            <span className="badge-count">🐾 Tenemos {mascotasFiltradas.length} mascotas esperando un padrino</span>
           </div>
         </div>
 
@@ -289,7 +284,7 @@ const SuscripcionesPublicIndex = () => {
           <div className="search-box">
             <input
               type="text"
-              placeholder="Buscar..."
+              placeholder="Buscar por nombre o raza..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
@@ -305,15 +300,6 @@ const SuscripcionesPublicIndex = () => {
                     {especie === 'todas' ? 'Todas las especies' : especie}
                   </option>
                 ))}
-              </select>
-            </div>
-
-            <div className="filter-item">
-              <label>GÉNERO</label>
-              <select>
-                <option>Todos</option>
-                <option>Macho</option>
-                <option>Hembra</option>
               </select>
             </div>
           </div>
@@ -353,9 +339,9 @@ const SuscripcionesPublicIndex = () => {
               <div className="mascota-info">
                 <h3>{mascota.nombre}</h3>
                 <div className="mascota-details">
-                  <span className="especie">{mascota.especie}</span>
-                  <span className="raza">{mascota.raza}</span>
-                  <span className="edad">{mascota.edad} años</span>
+                  <span>{mascota.especie}</span>
+                  <span>{mascota.raza}</span>
+                  <span>{mascota.edad} años</span>
                 </div>
                 <p className="mascota-historia">{mascota.historia_corta}</p>
                 <div className="mascota-stats">
@@ -372,7 +358,7 @@ const SuscripcionesPublicIndex = () => {
                   className="btn-apadrinar"
                   onClick={() => handleApadrinar(mascota)}
                 >
-                  Apadrinar
+                  Apadrinar a {mascota.nombre}
                 </button>
               </div>
             </div>
@@ -387,26 +373,26 @@ const SuscripcionesPublicIndex = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="faq-section-suscripciones">
+      <div className="faq-section">
         <div className="section-header">
           <h2>Preguntas Frecuentes</h2>
           <p>Resolvemos tus dudas sobre el apadrinamiento</p>
         </div>
         <div className="faq-grid">
           <div className="faq-item">
-            <h4>¿Cómo funciona el apadrinamiento?</h4>
+            <h4>🐶 ¿Cómo funciona el apadrinamiento?</h4>
             <p>Al apadrinar, tu donación mensual se destina específicamente al cuidado de la mascota que elegiste: alimentación, atención veterinaria, medicamentos y rehabilitación.</p>
           </div>
           <div className="faq-item">
-            <h4>¿Puedo visitar a la mascota que apadrino?</h4>
+            <h4>📅 ¿Puedo visitar a la mascota que apadrino?</h4>
             <p>Sí, coordinamos visitas para que puedas conocer a tu ahijado y ver su progreso. Contáctanos para agendar una cita.</p>
           </div>
           <div className="faq-item">
-            <h4>¿Qué beneficios tengo como patrocinador?</h4>
+            <h4>🎁 ¿Qué beneficios tengo como patrocinador?</h4>
             <p>Recibirás certificado digital, actualizaciones mensuales, fotos de tu mascota, descuentos en tienda y eventos exclusivos.</p>
           </div>
           <div className="faq-item">
-            <h4>¿Cómo cancelo mi suscripción?</h4>
+            <h4>❌ ¿Cómo cancelo mi suscripción?</h4>
             <p>Puedes cancelar en cualquier momento desde tu perfil o contactándonos. Sin compromisos a largo plazo.</p>
           </div>
         </div>
@@ -486,7 +472,7 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
         <div className="modal-body">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>Monto a donar</label>
+              <label>Monto a donar (COP)</label>
               <div className="monto-input">
                 <span className="currency">$</span>
                 <input
@@ -499,6 +485,7 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
                   required
                 />
               </div>
+              <small>Monto mínimo: $1,000 COP</small>
             </div>
             
             <div className="form-group">
@@ -520,11 +507,11 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
             </div>
             
             <div className="form-group">
-              <label>Mensaje de apoyo</label>
+              <label>Mensaje de apoyo (opcional)</label>
               <textarea
                 name="mensaje_apoyo"
                 rows="3"
-                placeholder="Déjanos un mensaje de apoyo..."
+                placeholder="Déjanos un mensaje de apoyo para la mascota..."
                 value={formData.mensaje_apoyo}
                 onChange={handleChange}
               />
