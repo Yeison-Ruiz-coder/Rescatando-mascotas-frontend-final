@@ -93,8 +93,9 @@
 }
 
 .btn-limpiar:hover {
-    background:repeating-linear-gradient(135deg, #667eea,#667eea6e);
-  color: white;
+  background: #e8daee;
+  color: #667eea;
+  border: 1px solid #667eea;
   transition: all 0.3s ease;
   transform: translateY(-2px);
 }

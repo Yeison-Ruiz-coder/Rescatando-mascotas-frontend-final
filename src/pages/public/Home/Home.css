@@ -44,7 +44,7 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  background: var(--gradient-light);
+  background: transparent;
   color: var(--color-text);
   flex: 1;
   display: flex;
