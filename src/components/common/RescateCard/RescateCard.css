@@ -58,16 +58,19 @@
 .rescate-prioridad-badge.prioridad-alta {
   background: linear-gradient(135deg, #dc2626, #b91c1c);
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  color: rgb(247, 199, 199);
 }
 
 .rescate-prioridad-badge.prioridad-media {
   background: linear-gradient(135deg, #ea580c, #c2410c);
   box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
+  color: rgb(247, 244, 199);
 }
 
 .rescate-prioridad-badge.prioridad-baja {
   background: linear-gradient(135deg, #16a34a, #15803d);
   box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+  color: rgb(205, 247, 199);
 }
 
 .rescate-fecha {
