@@ -24,7 +24,7 @@
 
 .solicitar-adopcion-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff9f0 0%, #ffffff 100%);
+  background: transparent;
   padding: 40px 0;
 }
 

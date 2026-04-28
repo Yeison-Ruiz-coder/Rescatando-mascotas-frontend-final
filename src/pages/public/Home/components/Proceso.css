@@ -1,0 +1,126 @@
+/* src/pages/public/Home/components/Proceso.css */
+.proceso-section {
+  padding: 80px 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: transparent;
+}
+
+.proceso-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.proceso-title {
+  font-size: 2.8rem;  /* ajustado de 2.5rem a 2.8rem */
+  font-weight: 800;    /* igual que section-title */
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.proceso-subtitle {
+  text-align: center;
+  color: #718096;
+  font-size: 1.2rem;   /* ajustado de 1.125rem a 1.2rem */
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.proceso-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.proceso-step {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.proceso-step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-color: #ff8c42;
+}
+
+.proceso-step-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ff8c42, #ff6b9d);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2rem;
+  color: white;
+}
+
+.proceso-step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #2d3748;
+}
+
+.proceso-step-desc {
+  color: #718096;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.proceso-footer {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.proceso-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.proceso-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(102,126,234,0.4);
+}
+
+@media (max-width: 768px) {
+  .proceso-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .proceso-title { font-size: 1.8rem; }
+  .proceso-step { padding: 1.5rem; }
+  .proceso-step-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .proceso-steps-grid {
+    grid-template-columns: 1fr;
+  }
+}

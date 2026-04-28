@@ -18,8 +18,8 @@
   --color-info: #4299e1;         /* Azul para información */
   
   /* ===== FONDOS CLAROS - Cálidos y acogedores ===== */
-  --color-light: #fff9f0;              /* Crema cálido */
-  --color-light-secondary: #fff5e6;    /* Crema más suave */
+  --color-light: #f7f2fc;              
+  --color-light-secondary: #f6e6ff;    
   --color-card-bg: #ffffff;            /* Blanco para tarjetas */
   --color-border: rgba(0, 0, 0, 0.08);
   
@@ -63,7 +63,7 @@ html {
 body {
   font-family: var(--fuente-principal);
   color: var(--color-text);
-  background: var(--gradient-light);
+  background: var(--color-light);
   min-height: 100vh;
   height: 100%;
   line-height: 1.5;

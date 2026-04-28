@@ -1,9 +1,10 @@
 // src/components/layout/Sidebar/AdminSidebar.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useSidebar } from '../../../contexts/SidebarContext';
+import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import './Sidebar.css';
 
 const AdminSidebar = () => {
@@ -12,7 +13,10 @@ const AdminSidebar = () => {
   const { isAdminSidebarOpen, closeAdminSidebar } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
+  const sidebarRef = useRef(null);
+  useSidebarCloser(sidebarRef, isAdminSidebarOpen, closeAdminSidebar);
+
   const [openSections, setOpenSections] = useState({
     rescates: true,
     mascotas: false,
@@ -65,7 +69,7 @@ const AdminSidebar = () => {
   };
 
   return (
-    <aside className={`sidebar admin-sidebar ${isAdminSidebarOpen ? 'open' : ''}`}>
+    <aside ref={sidebarRef} className={`sidebar admin-sidebar ${isAdminSidebarOpen ? 'open' : ''}`}>
       <div className="sidebar-header admin-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar admin-avatar">
@@ -83,14 +87,14 @@ const AdminSidebar = () => {
 
       <nav className="sidebar-nav">
         <div className="sidebar-section">
-          <Link to="/admin/dashboard" className={`sidebar-item ${isActive('/admin/dashboard') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+          <Link to="/admin/dashboard" className={`sidebar-item ${isActive('/admin/dashboard') ? 'active' : ''}`}>
             <i className="fas fa-tachometer-alt"></i>
             <span>{t("dashboard")}</span>
           </Link>
         </div>
 
         <div className="sidebar-section">
-          <div 
+          <div
             className={`sidebar-item has-submenu ${isActive('/admin/rescates') ? 'active' : ''}`}
             onClick={() => toggleSection('rescates')}
           >
@@ -99,21 +103,21 @@ const AdminSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
-            <Link to="/admin/rescates" className={`submenu-item ${isActive('/admin/rescates') && !isActive('/admin/rescates/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/rescates" className={`submenu-item ${isActive('/admin/rescates') && !isActive('/admin/rescates/pendientes') ? 'active' : ''}`}>
               <i className="fas fa-list"></i> {t("todos_rescates")}
             </Link>
-            <Link to="/admin/rescates/pendientes" className={`submenu-item ${isActive('/admin/rescates/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/rescates/pendientes" className={`submenu-item ${isActive('/admin/rescates/pendientes') ? 'active' : ''}`}>
               <i className="fas fa-clock"></i> {t("pendientes")}
               <span className="sidebar-badge urgent">!</span>
             </Link>
-            <Link to="/admin/rescates/mapa" className={`submenu-item ${isActive('/admin/rescates/mapa') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/rescates/mapa" className={`submenu-item ${isActive('/admin/rescates/mapa') ? 'active' : ''}`}>
               <i className="fas fa-map-marker-alt"></i> {t("mapa_rescates")}
             </Link>
           </div>
         </div>
 
         <div className="sidebar-section">
-          <div 
+          <div
             className={`sidebar-item has-submenu ${isActive('/admin/mascotas') ? 'active' : ''}`}
             onClick={() => toggleSection('mascotas')}
           >
@@ -122,20 +126,20 @@ const AdminSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
-            <Link to="/admin/mascotas" className={`submenu-item ${isActive('/admin/mascotas') && !isActive('/admin/mascotas/nueva') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/mascotas" className={`submenu-item ${isActive('/admin/mascotas') && !isActive('/admin/mascotas/nueva') ? 'active' : ''}`}>
               <i className="fas fa-list"></i> {t("todas_mascotas")}
             </Link>
-            <Link to="/admin/mascotas/nueva" className={`submenu-item ${isActive('/admin/mascotas/nueva') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/mascotas/nueva" className={`submenu-item ${isActive('/admin/mascotas/nueva') ? 'active' : ''}`}>
               <i className="fas fa-plus-circle"></i> {t("registrar_mascota")}
             </Link>
-            <Link to="/admin/razas" className={`submenu-item ${isActive('/admin/razas') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/razas" className={`submenu-item ${isActive('/admin/razas') ? 'active' : ''}`}>
               <i className="fas fa-dna"></i> {t("catalogo_razas")}
             </Link>
           </div>
         </div>
 
         <div className="sidebar-section">
-          <div 
+          <div
             className={`sidebar-item has-submenu ${isActive('/admin/usuarios') ? 'active' : ''}`}
             onClick={() => toggleSection('usuarios')}
           >
@@ -144,26 +148,26 @@ const AdminSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.usuarios ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.usuarios ? 'open' : ''}`}>
-            <Link to="/admin/usuarios" className={`submenu-item ${isActive('/admin/usuarios') && !isActive('/admin/usuarios/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/usuarios" className={`submenu-item ${isActive('/admin/usuarios') && !isActive('/admin/usuarios/pendientes') ? 'active' : ''}`}>
               <i className="fas fa-users"></i> {t("todos_usuarios")}
             </Link>
-            <Link to="/admin/usuarios/pendientes" className={`submenu-item ${isActive('/admin/usuarios/pendientes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/usuarios/pendientes" className={`submenu-item ${isActive('/admin/usuarios/pendientes') ? 'active' : ''}`}>
               <i className="fas fa-clock"></i> {t("pendientes_aprobacion")}
               {pendingCount > 0 && (
                 <span className="sidebar-badge urgent">{pendingCount}</span>
               )}
             </Link>
-            <Link to="/admin/usuarios/fundaciones" className={`submenu-item ${isActive('/admin/usuarios/fundaciones') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/usuarios/fundaciones" className={`submenu-item ${isActive('/admin/usuarios/fundaciones') ? 'active' : ''}`}>
               <i className="fas fa-building"></i> {t("fundaciones")}
             </Link>
-            <Link to="/admin/usuarios/veterinarias" className={`submenu-item ${isActive('/admin/usuarios/veterinarias') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/usuarios/veterinarias" className={`submenu-item ${isActive('/admin/usuarios/veterinarias') ? 'active' : ''}`}>
               <i className="fas fa-clinic-medical"></i> {t("veterinarias")}
             </Link>
           </div>
         </div>
 
         <div className="sidebar-section">
-          <div 
+          <div
             className={`sidebar-item has-submenu ${isActive('/admin/adopciones') ? 'active' : ''}`}
             onClick={() => toggleSection('adopciones')}
           >
@@ -172,23 +176,21 @@ const AdminSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.adopciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.adopciones ? 'open' : ''}`}>
-            <Link to="/admin/adopciones" className={`submenu-item ${isActive('/admin/adopciones') && !isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/adopciones" className={`submenu-item ${isActive('/admin/adopciones') && !isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`}>
               <i className="fas fa-list"></i> {t("todas_adopciones")}
             </Link>
-            <Link to="/admin/adopciones/solicitudes" className={`submenu-item ${isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/adopciones/solicitudes" className={`submenu-item ${isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`}>
               <i className="fas fa-clipboard-list"></i> {t("solicitudes_pendientes")}
               <span className="sidebar-badge">5</span>
             </Link>
-            <Link to="/admin/adopciones/seguimientos" className={`submenu-item ${isActive('/admin/adopciones/seguimientos') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/adopciones/seguimientos" className={`submenu-item ${isActive('/admin/adopciones/seguimientos') ? 'active' : ''}`}>
               <i className="fas fa-chart-line"></i> {t("seguimientos")}
             </Link>
           </div>
         </div>
 
-
-
         <div className="sidebar-section">
-          <div 
+          <div
             className={`sidebar-item has-submenu ${isActive('/admin/eventos') ? 'active' : ''}`}
             onClick={() => toggleSection('eventos')}
           >
@@ -197,90 +199,58 @@ const AdminSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.eventos ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.eventos ? 'open' : ''}`}>
-            <Link to="/admin/eventos" className={`submenu-item ${isActive('/admin/eventos') && !isActive('/admin/eventos/crear') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/eventos" className={`submenu-item ${isActive('/admin/eventos') && !isActive('/admin/eventos/crear') ? 'active' : ''}`}>
               <i className="fas fa-list"></i> {t("todos_eventos")}
             </Link>
-            <Link to="/admin/eventos/crear" className={`submenu-item ${isActive('/admin/eventos/crear') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/eventos/crear" className={`submenu-item ${isActive('/admin/eventos/crear') ? 'active' : ''}`}>
               <i className="fas fa-plus-circle"></i> {t("crear_evento")}
             </Link>
-            <Link to="/admin/eventos/calendario" className={`submenu-item ${isActive('/admin/eventos/calendario') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+            <Link to="/admin/eventos/calendario" className={`submenu-item ${isActive('/admin/eventos/calendario') ? 'active' : ''}`}>
               <i className="fas fa-calendar-week"></i> {t("calendario")}
             </Link>
           </div>
         </div>
 
-
-
-
-       <div className="sidebar-section">
-
-  <div 
-    className={`sidebar-item has-submenu ${isActive('/admin/suscripciones') ? 'active' : ''}`}
-    onClick={() => toggleSection('suscripciones')}
-  >
-    <i className="fas fa-hand-holding-heart"></i>
-    <span>{t("suscripciones")}</span>
-    <i className={`fas fa-chevron-right arrow ${openSections.suscripciones ? 'open' : ''}`}></i>
-  </div>
-
-  <div className={`submenu ${openSections.suscripciones ? 'open' : ''}`}>
-
-    {/* 📋 LISTADO */}
-    <Link 
-      to="/admin/suscripciones" 
-      className={`submenu-item ${
-        isActive('/admin/suscripciones') && 
-        !isActive('/admin/suscripciones/crear') &&
-        !isActive('/admin/suscripciones/reportes')
-        ? 'active' : ''
-      }`}
-      onClick={closeAdminSidebar}
-    >
-      <i className="fas fa-list"></i> {t("todas_suscripciones")}
-    </Link>
-
-    {/* ➕ CREAR */}
-    <Link 
-      to="/admin/suscripciones/crear" 
-      className={`submenu-item ${isActive('/admin/suscripciones/crear') ? 'active' : ''}`}
-      onClick={closeAdminSidebar}
-    >
-      <i className="fas fa-plus-circle"></i> {t("crear_suscripcion")}
-    </Link>
-
-    {/* 📊 ESTADO / GESTIÓN */}
-    <Link 
-      to="/admin/suscripciones/estado" 
-      className={`submenu-item ${isActive('/admin/suscripciones/estado') ? 'active' : ''}`}
-      onClick={closeAdminSidebar}
-    >
-      <i className="fas fa-toggle-on"></i> {t("gestion_estados")}
-    </Link>
-
-    {/* 📈 REPORTES */}
-    <Link 
-      to="/admin/suscripciones/reportes" 
-      className={`submenu-item ${isActive('/admin/suscripciones/reportes') ? 'active' : ''}`}
-      onClick={closeAdminSidebar}
-    >
-      <i className="fas fa-chart-line"></i> {t("reportes_suscripciones")}
-    </Link>
-
-  </div>
-
-</div>
-
-
-
+        <div className="sidebar-section">
+          <div
+            className={`sidebar-item has-submenu ${isActive('/admin/suscripciones') ? 'active' : ''}`}
+            onClick={() => toggleSection('suscripciones')}
+          >
+            <i className="fas fa-hand-holding-heart"></i>
+            <span>{t("suscripciones")}</span>
+            <i className={`fas fa-chevron-right arrow ${openSections.suscripciones ? 'open' : ''}`}></i>
+          </div>
+          <div className={`submenu ${openSections.suscripciones ? 'open' : ''}`}>
+            <Link
+              to="/admin/suscripciones"
+              className={`submenu-item ${
+                isActive('/admin/suscripciones') &&
+                !isActive('/admin/suscripciones/crear') &&
+                !isActive('/admin/suscripciones/reportes')
+                ? 'active' : ''
+              }`}
+            >
+              <i className="fas fa-list"></i> {t("todas_suscripciones")}
+            </Link>
+            <Link to="/admin/suscripciones/crear" className={`submenu-item ${isActive('/admin/suscripciones/crear') ? 'active' : ''}`}>
+              <i className="fas fa-plus-circle"></i> {t("crear_suscripcion")}
+            </Link>
+            <Link to="/admin/suscripciones/estado" className={`submenu-item ${isActive('/admin/suscripciones/estado') ? 'active' : ''}`}>
+              <i className="fas fa-toggle-on"></i> {t("gestion_estados")}
+            </Link>
+            <Link to="/admin/suscripciones/reportes" className={`submenu-item ${isActive('/admin/suscripciones/reportes') ? 'active' : ''}`}>
+              <i className="fas fa-chart-line"></i> {t("reportes_suscripciones")}
+            </Link>
+          </div>
+        </div>
 
         <div className="sidebar-section">
-          <Link to="/admin/donaciones" className={`sidebar-item ${isActive('/admin/donaciones') ? 'active' : ''}`} onClick={closeAdminSidebar}>
+          <Link to="/admin/donaciones" className={`sidebar-item ${isActive('/admin/donaciones') ? 'active' : ''}`}>
             <i className="fas fa-hand-holding-heart"></i>
             <span>{t("donaciones")}</span>
           </Link>
         </div>
       </nav>
-
     </aside>
   );
 };
