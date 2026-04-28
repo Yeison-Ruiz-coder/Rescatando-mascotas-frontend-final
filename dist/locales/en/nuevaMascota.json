@@ -102,5 +102,7 @@
     "mensaje": "This section is for Foundation users only",
     "tu_tipo": "Your user type is",
     "volver_inicio": "Back to home"
-  }
+  },
+  "editar_mascota": "Edit Pet",
+  "editar_mascota_desc": "Edit your pet's information, photos and details"
 }

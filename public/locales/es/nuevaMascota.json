@@ -103,5 +103,8 @@
     "mensaje": "Esta sección es solo para usuarios de tipo Fundación",
     "tu_tipo": "Tu tipo de usuario es",
     "volver_inicio": "Volver al inicio"
-  }
+  },
+  "editar_mascota": "Editar Mascota",
+  "editar_mascota_desc": "Modifica la información, fotos y detalles de tu mascota"
+  
 }
