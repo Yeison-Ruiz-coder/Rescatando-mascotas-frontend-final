@@ -67,10 +67,11 @@ const RescateDetalle = ({ tipoUsuario }) => {
     }
   };
 
-  // Nueva función: Redirigir a registro de mascotas
-  const handleRegistrarMascota = () => {
-    navigate(`/${tipoUsuario}/mascotas/nueva?rescate_id=${id}`);
-  };
+const handleRegistrarMascota = () => {
+  // Si tipoUsuario viene vacío, usar fundacion por defecto
+  const ruta = tipoUsuario ? `/${tipoUsuario}/mascotas/nueva` : '/fundacion/mascotas/nueva';
+  navigate(`${ruta}?rescate_id=${id}`);
+};
 
   const getPrioridadClass = () => {
     switch (rescate?.prioridad) {

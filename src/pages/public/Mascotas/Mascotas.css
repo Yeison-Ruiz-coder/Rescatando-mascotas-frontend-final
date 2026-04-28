@@ -2,11 +2,27 @@
 /* Estilos específicos para la página de mascotas - Hereda de index.css */
 
 /* ===== HEADER SECTION ===== */
+/* ===== HEADER SECTION CON EFECTO SUTIL (como home) ===== */
 .mascotas-page .mascotas-header {
   padding: 60px 0 40px 0;
   text-align: center;
-  background: transparent;
-  border-bottom: 1px solid var(--color-border);
+  background: transparent;          /* Sin fondo sólido */
+  backdrop-filter: blur(2px);       /* Blur muy leve, casi imperceptible */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Borde muy suave */
+  position: relative;
+}
+
+/* Efecto de brillo muy sutil (opcional) */
+.mascotas-page .mascotas-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1), transparent 80%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .mascotas-page .mascotas-header h1 {
@@ -15,8 +31,8 @@
   margin-bottom: 1rem;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
 .mascotas-page .mascotas-header .subtitle {
@@ -30,12 +46,10 @@
   font-size: 0.9rem;
   margin-top: 1rem;
 }
-
 /* ===== FILTROS SECTION ===== */
 .mascotas-page .filtros-section {
   padding: 30px 0;
-  background: white;
-  border-bottom: 1px solid var(--color-border);
+  background: rgb(255, 255, 255);
   position: sticky;
   top: 70px;
   z-index: 99;
