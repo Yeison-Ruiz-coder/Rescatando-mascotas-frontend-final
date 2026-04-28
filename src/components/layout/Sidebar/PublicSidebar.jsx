@@ -1,9 +1,10 @@
 // src/components/layout/Sidebar/PublicSidebar.jsx
-import React from "react";
+import React, { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useSidebar } from "../../../contexts/SidebarContext";
+import useSidebarCloser from "../../../hooks/useSidebarCloser";
 import "./Sidebar.css";
 
 const PublicSidebar = () => {
@@ -11,6 +12,9 @@ const PublicSidebar = () => {
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const { isPublicSidebarOpen, closePublicSidebar } = useSidebar();
+
+  const sidebarRef = useRef(null);
+  useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar);
 
   const isActive = (path) => location.pathname.startsWith(path);
 
@@ -20,7 +24,10 @@ const PublicSidebar = () => {
   };
 
   return (
-    <aside className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}>
+    <aside
+      ref={sidebarRef}
+      className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}
+    >
       <div className="sidebar-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar">
@@ -42,7 +49,7 @@ const PublicSidebar = () => {
           <div className="section-title">
             <i className="fas fa-home me-1"></i> {t("navegacion")}
           </div>
-          <Link to="/" className="sidebar-item" onClick={closePublicSidebar}>
+          <Link to="/" className="sidebar-item">
             <i className="fas fa-home"></i>
             <span>{t("inicio")}</span>
           </Link>
@@ -56,7 +63,6 @@ const PublicSidebar = () => {
           <Link
             to="/rescates/reportar"
             className={`sidebar-item rescue-item ${isActive("/rescates/reportar") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-exclamation-triangle"></i>
             <span>{t("reportar_rescate")}</span>
@@ -72,7 +78,6 @@ const PublicSidebar = () => {
           <Link
             to="/mascotas"
             className={`sidebar-item ${isActive("/mascotas") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-paw"></i>
             <span>{t("mascotas_adopcion")}</span>
@@ -87,7 +92,6 @@ const PublicSidebar = () => {
           <Link
             to="/eventos"
             className={`sidebar-item ${isActive("/eventos") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-calendar-alt"></i>
             <span>{t("eventos_proximos")}</span>
@@ -102,7 +106,6 @@ const PublicSidebar = () => {
           <Link
             to="/suscripciones"
             className={`sidebar-item ${isActive("/suscripciones") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-hand-holding-heart"></i>
             <span>{t("apadrinar_mascota")}</span>
@@ -117,7 +120,6 @@ const PublicSidebar = () => {
           <Link
             to="/fundaciones"
             className={`sidebar-item ${isActive("/fundaciones") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-building"></i>
             <span>{t("fundaciones")}</span>
@@ -125,7 +127,6 @@ const PublicSidebar = () => {
           <Link
             to="/veterinarias"
             className={`sidebar-item ${isActive("/veterinarias") ? "active" : ""}`}
-            onClick={closePublicSidebar}
           >
             <i className="fas fa-clinic-medical"></i>
             <span>{t("veterinarias")}</span>
@@ -142,7 +143,6 @@ const PublicSidebar = () => {
               <Link
                 to="/user/mis-solicitudes"
                 className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
-                onClick={closePublicSidebar}
               >
                 <i className="fas fa-clipboard-list"></i>
                 <span>{t("mis_solicitudes")}</span>
@@ -150,7 +150,6 @@ const PublicSidebar = () => {
               <Link
                 to="/user/mis-suscripciones"
                 className={`sidebar-item ${isActive("/user/mis-suscripciones") ? "active" : ""}`}
-                onClick={closePublicSidebar}
               >
                 <i className="fas fa-credit-card"></i>
                 <span>{t("mis_suscripciones") || "Mis Suscripciones"}</span>
@@ -164,18 +163,10 @@ const PublicSidebar = () => {
               <Link
                 to="/tienda"
                 className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
-                onClick={closePublicSidebar}
               >
                 <i className="fas fa-shopping-cart"></i>
                 <span>{t("tienda") || "Tienda"}</span>
               </Link>
-            </div>
-
-            <div className="sidebar-section">
-              <button onClick={handleLogout} className="sidebar-item logout-btn">
-                <i className="fas fa-sign-out-alt"></i>
-                <span>{t("cerrar_sesion")}</span>
-              </button>
             </div>
           </>
         )}

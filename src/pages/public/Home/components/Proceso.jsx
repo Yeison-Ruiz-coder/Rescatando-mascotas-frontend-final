@@ -1,6 +1,8 @@
+// Proceso.jsx modificado
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import './Proceso.css'; // Creamos este archivo
 
 const Proceso = () => {
   const { t } = useTranslation('home');
@@ -13,25 +15,25 @@ const Proceso = () => {
   ];
 
   return (
-    <section className="section proceso">
-      <div className="container">
-        <h2 className="section-title">{t('proceso.title')}</h2>
-        <p className="section-subtitle">{t('proceso.subtitle')}</p>
+    <section className="proceso-section">
+      <div className="proceso-container">
+        <h2 className="proceso-title">{t('proceso.title')}</h2>
+        <p className="proceso-subtitle">{t('proceso.subtitle')}</p>
 
-        <div className="proceso-grid">
+        <div className="proceso-steps-grid">
           {steps.map((step, index) => (
-            <div key={index} className="step">
-              <div className="step-icon">
+            <div key={index} className="proceso-step">
+              <div className="proceso-step-icon">
                 <i className={step.icon}></i>
               </div>
-              <h3 className="step-title">{step.title}</h3>
-              <p className="step-description">{step.desc}</p>
+              <h3 className="proceso-step-title">{step.title}</h3>
+              <p className="proceso-step-desc">{step.desc}</p>
             </div>
           ))}
         </div>
 
-        <div className="text-center mt-5">
-          <Link to="/mascotas" className="btn-primary">
+        <div className="proceso-footer">
+          <Link to="/mascotas" className="proceso-btn">
             <i className="fas fa-paw me-2"></i>{t('proceso.btn_iniciar')}
           </Link>
         </div>

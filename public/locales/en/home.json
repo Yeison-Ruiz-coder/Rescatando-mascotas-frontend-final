@@ -4,7 +4,19 @@
     "welcome": "Welcome to Rescatando Mascotas",
     "description": "We connect loving families with pets in need of a home. Every adoption saves a life and brings joy to your home.",
     "cta": "Start Adoption Process",
-    "process": "See Our Process"
+    "process": "See Our Process",
+    "slide1_title": "Give them a second chance",
+    "slide1_highlight": "They are waiting for you",
+    "slide1_desc": "Every animal deserves a home full of love. Adopt and change a life.",
+    "slide2_title": "Be part of the change",
+    "slide2_highlight": "Report a rescue",
+    "slide2_desc": "Your report can save a life. Act now and help an animal in need.",
+    "slide3_title": "Make a donation",
+    "slide3_highlight": "Your support is vital",
+    "slide3_desc": "With your help we can rescue, rehabilitate and find homes for more animals.",
+    "btn_adoptar": "Adopt",
+    "btn_rescate": "Report Rescue",
+    "btn_donar": "Donate"
   },
   "stats": {
     "rescates": "Pets Rescued",
@@ -13,6 +25,8 @@
     "experiencia": "Years of Experience"
   },
   "proceso": {
+    "title": "Our Adoption Process",
+    "subtitle": "Simple steps to find your new best friend",
     "step1_title": "Find Your Perfect Match",
     "step1_desc": "Browse our available pets and find the one that steals your heart.",
     "step2_title": "Complete Your Application",
@@ -25,21 +39,21 @@
   },
   "testimonios": {
     "title": "What Our Adopters Say",
-    "subtitle": "Real stories from families who have found their perfect companion",
+    "subtitle": "Real stories from families who found their perfect companion",
     "maria": {
-      "name": "María González",
+      "name": "Maria Gonzalez",
       "role": "Adopter",
-      "text": "Adopting Luna was the best decision we ever made. She's brought so much joy to our family!"
+      "text": "Adopting Luna was the best decision we ever made. She has brought so much joy to our family!"
     },
     "carlos": {
-      "name": "Carlos Rodríguez",
+      "name": "Carlos Rodriguez",
       "role": "Volunteer",
       "text": "Being part of this rescue organization has been incredibly rewarding. Every life we save matters."
     },
     "ana": {
-      "name": "Ana López",
+      "name": "Ana Lopez",
       "role": "Foundation Partner",
-      "text": "Their dedication to animal welfare is inspiring. We've seen countless success stories."
+      "text": "Their dedication to animal welfare is inspiring. We have witnessed countless success stories."
     }
   },
   "cta": {
@@ -52,8 +66,5 @@
   "mascotas_disponibles": "Available Pets",
   "mascotas_subtitle": "Meet the pets waiting for their forever home",
   "sin_mascotas": "No pets available at the moment. Check back soon!",
-  "ver_todas": "View All Pets",
-
-  "proceso.title": "Our Adoption Process",
-  "proceso.subtitle": "Simple steps to find your new best friend"
+  "ver_todas": "View All Pets"
 }
