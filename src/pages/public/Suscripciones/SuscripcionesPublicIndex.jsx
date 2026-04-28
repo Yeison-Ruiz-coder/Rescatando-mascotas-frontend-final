@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import './SuscripcionesPublicIndex.css';
+import "./SuscripcionesPublic.css";
 
 // DATOS DE PRUEBA (mientras el backend no está listo)
 const DATOS_PRUEBA = {
@@ -274,8 +274,8 @@ const SuscripcionesPublicIndex = () => {
         <div className="section-header">
           <h2>Mascotas que necesitan tu ayuda</h2>
           <p>Apadrina una mascota específica y recibe actualizaciones de su progreso.</p>
-          <div className="mascotas-stats">
-            <span className="badge-count">🐾 Tenemos {mascotasFiltradas.length} mascotas esperando un padrino</span>
+          <div className="badge-count">
+            🐾 Tenemos {mascotasFiltradas.length} mascotas esperando un padrino
           </div>
         </div>
 
@@ -521,8 +521,6 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
               <label>Método de pago</label>
               <select name="metodo_pago" value={formData.metodo_pago} onChange={handleChange} required>
                 <option value="tarjeta">Tarjeta de crédito/débito</option>
-                <option value="transferencia">Transferencia bancaria</option>
-                <option value="paypal">PayPal</option>
               </select>
             </div>
             
