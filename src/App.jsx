@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { SidebarProvider } from './contexts/SidebarContext';
 import { FiltrosProvider } from './contexts/FiltrosContext'; // <-- IMPORTAR
 import router from './routes';
+import 'flag-icons/css/flag-icons.min.css';
 import ReportarRescate from "./pages/public/ReportarRescate/ReportarRescate";
 
 function App() {
