@@ -1,19 +1,21 @@
 /* src/components/layout/Navbar/PublicNavbar.css */
 
+/* Reemplazar el .public-navbar existente */
 .public-navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 70px;
-  background: var(--color-card-bg, #ffffff);
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   z-index: 100;
   display: flex;
   align-items: center;
   transition: left 0.3s ease, right 0.3s ease;
 }
-
 /* Cuando el sidebar está abierto, la navbar se encoge */
 .public-navbar.sidebar-open {
   left: 320px;
@@ -516,4 +518,16 @@
   .public-navbar.sidebar-open {
     left: 280px;
   }
+}
+
+/* Añadir al final del archivo PublicNavbar.css */
+.public-navbar {
+  background: var(--color-card-bg, #ffffff);
+  border-bottom: 2px solid var(--color-primary, #667eea); /* Borde morado */
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08); /* Sombra suave */
+}
+
+/* Para hacerlo más visible cuando hay sidebar */
+.public-navbar.sidebar-open {
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
