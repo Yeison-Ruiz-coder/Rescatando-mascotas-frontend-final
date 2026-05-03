@@ -1,12 +1,53 @@
 /* src/pages/fundacion/rescates/Rescates.css */
+
+/* ============================================
+   VARIABLES Y ESTILOS BASE
+   ============================================ */
+
 .rescates-container {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
+/* ============================================
+   HEADER MEJORADO
+   ============================================ */
+
 .rescates-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.rescates-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.rescates-header h1 i {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 2rem;
+}
+
+.rescates-header p {
+  color: #64748b;
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 600px;
+  position: relative;
+  padding-left: 1rem;
+  border-left: 3px solid #667eea;
 }
 
 .header-title {
@@ -15,41 +56,30 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
-}
-
-.rescates-header h1 {
-  font-size: 1.8rem;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   margin-bottom: 0.5rem;
 }
 
-.rescates-header h1 i {
-  color: #667eea;
-}
-
-.rescates-header p {
-  color: #64748b;
-}
-
+/* Botón refresh mejorado */
 .btn-refresh {
-  background: #f1f5f9;
-  border: none;
-  width: 40px;
-  height: 40px;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 1px solid #e2e8f0;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #64748b;
 }
 
 .btn-refresh:hover:not(:disabled) {
-  background: #e2e8f0;
-  transform: rotate(180deg);
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: transparent;
+  color: white;
+  transform: rotate(180deg) scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-refresh:disabled {
@@ -57,28 +87,348 @@
   cursor: not-allowed;
 }
 
+/* ============================================
+   GRID - 2 COLUMNAS CON DISEÑO MODERNO
+   ============================================ */
+
+/* ============================================
+   GRID - 2 COLUMNAS (FORZADO)
+   ============================================ */
+
 .rescates-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 1.5rem !important;
+  margin-top: 1rem !important;
 }
+
+/* Forzar que las cards respeten el grid */
+.rescates-list > div {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* Forzar la card específicamente */
+.rescates-list .rescate-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+
+.rescates-list .rescate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.rescates-list .rescate-card:hover::before {
+  opacity: 1;
+}
+
+.rescates-list .rescate-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Header de la card */
+.rescates-list .rescate-card-header {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-left: 4px solid #667eea;
+  padding: 1.25rem 1.5rem;
+}
+
+.rescate-tipo-text {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #475569;
+}
+
+.rescate-prioridad-badge {
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.rescate-fecha {
+  background: #f1f5f9;
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+/* Cuerpo de la card */
+.rescates-list .rescate-card-body {
+  padding: 1.5rem;
+}
+
+.rescate-lugar {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rescate-lugar i {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.rescate-descripcion {
+  color: #475569;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  background: #f8fafc;
+  padding: 1rem 1.25rem;
+  border-radius: 20px;
+  border-left: 3px solid #667eea;
+  margin: 1rem 0;
+}
+
+/* Información del reportante */
+.rescate-reportante {
+  background: linear-gradient(135deg, #f8fafc, #ffffff);
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  margin-top: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.rescate-reportante i {
+  color: #667eea;
+  width: 24px;
+}
+
+/* Coordenadas */
+.rescate-coordenadas {
+  background: #f1f5f9;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.ver-mapa-link {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.ver-mapa-link:hover {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+/* Botones de acción */
+.rescates-list .rescate-card-actions {
+  background: #f8fafc;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.btn-aceptar,
+.btn-rechazar,
+.btn-detalle,
+.btn-registrar {
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+
+.btn-aceptar {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.btn-aceptar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.btn-rechazar {
+  background: white;
+  color: #ef4444;
+  border: 1px solid #fee2e2;
+}
+
+.btn-rechazar:hover:not(:disabled) {
+  background: #fee2e2;
+  transform: translateY(-2px);
+}
+
+.btn-detalle {
+  background: white;
+  color: #667eea;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-detalle:hover {
+  background: #667eea;
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+.btn-registrar {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: white;
+}
+
+.btn-registrar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+}
+
+/* Estados de la card */
+.rescate-card-status {
+  padding: 0.85rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.rescate-card-status.en-proceso {
+  background: linear-gradient(135deg, #fef3c7, #fffbeb);
+  color: #d97706;
+}
+
+.rescate-card-status.completado {
+  background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+  color: #059669;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rescates-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rescates-list {
+    grid-template-columns: repeat(2, minmax(400px, 500px)) !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .rescates-container {
+    padding: 1rem;
+  }
+  
+  .rescates-header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .rescates-list {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .rescates-list .rescate-card-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .btn-aceptar,
+  .btn-rechazar,
+  .btn-detalle,
+  .btn-registrar {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rescates-list .rescate-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .rescates-list .rescate-card-body {
+    padding: 1rem;
+  }
+  
+  .rescate-lugar {
+    font-size: 1rem;
+  }
+  
+  .rescate-descripcion {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+  }
+}
+
+/* ============================================
+   ESTADOS VACÍOS Y ERRORES (mejorados)
+   ============================================ */
 
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border-radius: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  border-radius: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
 }
 
 .empty-state i {
   font-size: 4rem;
-  color: #94a3b8;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   margin-bottom: 1rem;
 }
 
 .empty-state h3 {
-  color: #334155;
+  color: #1e293b;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
 
@@ -91,21 +441,28 @@
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  padding: 10px 24px;
-  border-radius: 40px;
+  padding: 12px 28px;
+  border-radius: 50px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-refresh-empty:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .error-card {
   text-align: center;
   padding: 3rem;
   background: white;
-  border-radius: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #fee2e2;
 }
 
 .error-card i {
@@ -116,23 +473,21 @@
 
 .btn-reload {
   margin-top: 1rem;
-  padding: 8px 20px;
+  padding: 10px 24px;
   background: #667eea;
   color: white;
   border: none;
-  border-radius: 40px;
+  border-radius: 50px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .rescates-container {
-    padding: 1rem;
-  }
-  
-  .rescates-header h1 {
-    font-size: 1.4rem;
-  }
+.btn-reload:hover {
+  transform: translateY(-2px);
+  background: #5b21b6;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
