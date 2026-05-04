@@ -225,25 +225,6 @@ const PublicNavbar = () => {
           </Link>
         )}
 
-        {/* Idioma */}
-        <div className="language-selector" ref={languageMenuRef}>
-          <button className="language-selector-btn" onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}>
-            <span className={`fi fi-${currentLanguage.flag}`}></span>
-            <span className="language-text">{currentLanguage.label}</span>
-            <i className={`fas fa-chevron-down language-arrow ${isLanguageMenuOpen ? 'open' : ''}`}></i>
-          </button>
-          
-          {isLanguageMenuOpen && (
-            <div className="language-dropdown">
-              {languages.map((lang) => (
-                <button key={lang.code} onClick={() => toggleLanguage(lang.code)} className={`language-dropdown-item ${i18n.language === lang.code ? 'active' : ''}`}>
-                  <span className={`fi fi-${lang.flag}`}></span>
-                  <span className="language-name">{lang.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </nav>
   );
