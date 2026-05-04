@@ -119,35 +119,6 @@ const AdminNavbar = () => {
               </div>
             )}
           </div>
-
-          {/* Selector de idioma */}
-          <div className="language-selector" ref={languageMenuRef}>
-            <button 
-              className="language-selector-btn" 
-              onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-              aria-label={t('admin_navbar.aria.select_language')}
-            >
-              <span className={`fi fi-${currentLanguage.flag}`}></span>
-              <span className="language-text">{currentLanguage.label}</span>
-              <i className={`fas fa-chevron-down language-arrow ${isLanguageMenuOpen ? 'open' : ''}`}></i>
-            </button>
-            
-            {isLanguageMenuOpen && (
-              <div className="language-dropdown">
-                {languages.map((lang) => (
-                  <button 
-                    key={lang.code} 
-                    onClick={() => toggleLanguage(lang.code)} 
-                    className={`language-dropdown-item ${i18n.language === lang.code ? 'active' : ''}`}
-                  >
-                    <span className={`fi fi-${lang.flag}`}></span>
-                    <span className="language-name">{lang.name}</span>
-                    {i18n.language === lang.code && <i className="fas fa-check language-check"></i>}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </nav>
