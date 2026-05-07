@@ -159,7 +159,7 @@ const AdminEventosEdit = () => {
                     <div className="form-grid">
                         <div className="form-column">
                             <div className="form-group required">
-                                <label>📌 Nombre del evento *</label>
+                                <label>⚲ Nombre del evento *</label>
                                 <input type="text" name="nombre_evento" value={formData.nombre_evento} onChange={handleChange} required />
                             </div>
 
@@ -187,17 +187,17 @@ const AdminEventosEdit = () => {
 
                             <div className="form-row-2">
                                 <div className="form-group">
-                                    <label>💰 Costo</label>
+                                    <label>$ Costo</label>
                                     <input type="text" name="costo" value={formData.costo} onChange={handleChange} />
                                 </div>
                                 <div className="form-group">
-                                    <label>👥 Capacidad</label>
+                                    <label>𖠋𖠋 Capacidad</label>
                                     <input type="number" name="capacidad_maxima" value={formData.capacidad_maxima} onChange={handleChange} />
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label>🏷️ Etiquetas</label>
+                                <label>𖤘 Etiquetas</label>
                                 <div className="tags-input-container">
                                     <div className="tags-list">
                                         {formData.tags.map(tag => (
@@ -215,7 +215,7 @@ const AdminEventosEdit = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>🖼️ Imagen</label>
+                                <label> Imagen</label>
                                 <div className="image-upload-area">
                                     {(existingImage || previewImage) ? (
                                         <div className="image-preview">
