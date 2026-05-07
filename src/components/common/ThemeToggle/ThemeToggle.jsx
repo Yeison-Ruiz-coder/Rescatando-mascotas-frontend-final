@@ -1,6 +1,6 @@
 // src/components/ThemeToggle.jsx
 import React, { useEffect, useState } from 'react';
-import '../../common/FloatingButtons/FloatingLanguageSelector.css';
+import '../../common/common/FloatingButtons/FloatingLanguageSelector/FloatingLanguageSelector.css';
 
 const ThemeToggle = () => {
   const [isDark, setIsDark] = useState(() => {
