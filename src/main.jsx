@@ -4,7 +4,7 @@ import App from './App'
 import './i18n'
 import 'flag-icons/css/flag-icons.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './assets/styles/index.css'
+import './styles/index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

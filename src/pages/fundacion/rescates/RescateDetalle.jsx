@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { rescateService } from '../../../services/rescateService';
 import Button from '../../../components/common/Button/Button';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
-// Eliminar import del modal
 import './RescateDetalle.css';
 
 const RescateDetalle = ({ tipoUsuario }) => {
@@ -16,14 +15,31 @@ const RescateDetalle = ({ tipoUsuario }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [accionLoading, setAccionLoading] = useState(false);
-  // Eliminar estado modalOpen
+  const [fotoPrincipal, setFotoPrincipal] = useState(null);
+  const [galeriaFotos, setGaleriaFotos] = useState([]);
 
   const fetchRescate = useCallback(async () => {
     try {
       setLoading(true);
       const response = await rescateService.getRescateById(id);
       if (response.data.success) {
-        setRescate(response.data.data);
+        const data = response.data.data;
+        setRescate(data);
+        
+        // Procesar fotos
+        if (data.foto_principal) {
+          setFotoPrincipal(data.foto_principal);
+        }
+        if (data.galeria_fotos) {
+          try {
+            const galeria = typeof data.galeria_fotos === 'string' 
+              ? JSON.parse(data.galeria_fotos) 
+              : data.galeria_fotos;
+            setGaleriaFotos(galeria || []);
+          } catch (e) {
+            setGaleriaFotos([]);
+          }
+        }
       }
       setError(null);
     } catch (err) {
@@ -67,11 +83,10 @@ const RescateDetalle = ({ tipoUsuario }) => {
     }
   };
 
-const handleRegistrarMascota = () => {
-  // Si tipoUsuario viene vacío, usar fundacion por defecto
-  const ruta = tipoUsuario ? `/${tipoUsuario}/mascotas/nueva` : '/fundacion/mascotas/nueva';
-  navigate(`${ruta}?rescate_id=${id}`);
-};
+  const handleRegistrarMascota = () => {
+    const ruta = tipoUsuario ? `/${tipoUsuario}/mascotas/nueva` : '/fundacion/mascotas/nueva';
+    navigate(`${ruta}?rescate_id=${id}`);
+  };
 
   const getPrioridadClass = () => {
     switch (rescate?.prioridad) {
@@ -95,7 +110,9 @@ const handleRegistrarMascota = () => {
     return new Date(date).toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -144,6 +161,37 @@ const handleRegistrarMascota = () => {
           </span>
         </div>
 
+        {/* ===== FOTO PRINCIPAL ===== */}
+        {fotoPrincipal && (
+          <div className="detalle-foto-principal">
+            <label><i className="fas fa-camera"></i> {t('foto_principal')}</label>
+            <img 
+              src={fotoPrincipal} 
+              alt="Foto principal del rescate"
+              className="foto-principal-img"
+              onClick={() => window.open(fotoPrincipal, '_blank')}
+            />
+          </div>
+        )}
+
+        {/* ===== GALERÍA DE FOTOS ===== */}
+        {galeriaFotos.length > 0 && (
+          <div className="detalle-galeria">
+            <label><i className="fas fa-images"></i> {t('galeria_fotos')} ({galeriaFotos.length})</label>
+            <div className="galeria-grid">
+              {galeriaFotos.map((foto, index) => (
+                <img 
+                  key={index}
+                  src={foto} 
+                  alt={`Foto ${index + 1}`}
+                  className="galeria-img"
+                  onClick={() => window.open(foto, '_blank')}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="detalle-info">
           <div className="info-group">
             <label><i className="fas fa-map-marker-alt"></i> {t('lugar_label')}</label>
@@ -160,22 +208,24 @@ const handleRegistrarMascota = () => {
             <p>{rescate.descripcion_rescate}</p>
           </div>
 
-          {rescate.nombre_reportante && (
+          {/* Datos del reportante */}
+          {(rescate.nombre_reportante || rescate.telefono_reportante || rescate.email_reportante) && (
             <div className="info-group">
               <label><i className="fas fa-user"></i> {t('reportado_por')}</label>
               <p>
-                {rescate.nombre_reportante}
-                {rescate.telefono_reportante && <span> - 📞 {rescate.telefono_reportante}</span>}
-                {rescate.email_reportante && <span> - ✉️ {rescate.email_reportante}</span>}
+                {rescate.nombre_reportante && <><strong>{rescate.nombre_reportante}</strong><br /></>}
+                {rescate.telefono_reportante && <><i className="fas fa-phone"></i> {rescate.telefono_reportante}<br /></>}
+                {rescate.email_reportante && <><i className="fas fa-envelope"></i> {rescate.email_reportante}</>}
               </p>
             </div>
           )}
 
+          {/* Coordenadas */}
           {rescate.lat && rescate.lng && (
             <div className="info-group">
               <label><i className="fas fa-location-dot"></i> {t('coordenadas')}</label>
               <p>
-                {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
+                📍 {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
                 <a 
                   href={`https://www.openstreetmap.org/?mlat=${rescate.lat}&mlon=${rescate.lng}#map=15/${rescate.lat}/${rescate.lng}`}
                   target="_blank"
@@ -187,6 +237,27 @@ const handleRegistrarMascota = () => {
               </p>
             </div>
           )}
+
+          {/* Información adicional */}
+          <div className="info-group info-metadata">
+            <label><i className="fas fa-info-circle"></i> {t('informacion_adicional')}</label>
+            <div className="metadata-grid">
+              <div className="metadata-item">
+                <span className="metadata-label">{t('tipo_emergencia')}:</span>
+                <span className="metadata-value">{t(`btn_${rescate.tipo_emergencia || 'otro'}`)}</span>
+              </div>
+              <div className="metadata-item">
+                <span className="metadata-label">{t('id_rescate')}:</span>
+                <span className="metadata-value">#{rescate.id}</span>
+              </div>
+              {rescate.created_at && (
+                <div className="metadata-item">
+                  <span className="metadata-label">{t('reportado_en')}:</span>
+                  <span className="metadata-value">{new Date(rescate.created_at).toLocaleString()}</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="detalle-actions">
@@ -213,8 +284,6 @@ const handleRegistrarMascota = () => {
           </Button>
         </div>
       </div>
-
-      {/* Eliminar el modal */}
     </div>
   );
 };

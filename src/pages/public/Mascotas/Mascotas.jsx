@@ -176,7 +176,8 @@ const Mascotas = () => {
         </div>
       </div>
 
-      <div className="filtros-section">
+      {/* Filtros section - usando clases globales */}
+      <div className="filtros-section sticky-glass glass-auto shadow-sticky">
         <div className="container">
           <FiltrosMascotas
             especies={especies}

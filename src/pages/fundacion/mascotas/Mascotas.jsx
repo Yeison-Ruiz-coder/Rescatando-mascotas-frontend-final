@@ -117,97 +117,142 @@ const Mascotas = () => {
   if (loading) {
     return (
       <div className="mascotas-list-page">
-        <LoadingSpinner text={t('cargando_mascotas', { defaultValue: 'Cargando mascotas...' })} />
+        <div className="loading-container">
+          <LoadingSpinner text={t('cargando_mascotas', { defaultValue: 'Cargando mascotas...' })} />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="mascotas-list-page">
-      <div className="page-header">
-        <div>
-          <h1><i className="fas fa-paw"></i> {t('mis_mascotas', { defaultValue: 'Mis Mascotas' })}</h1>
-          <p className="page-subtitle">{t('gestion_mascotas', { defaultValue: 'Gestiona el registro de tus mascotas en adopción' })}</p>
-        </div>
-        <Link to="/fundacion/mascotas/nueva" className="btn-primary">
-          <i className="fas fa-plus"></i> {t('registrar_mascota', { defaultValue: 'Registrar Nueva Mascota' })}
-        </Link>
-      </div>
-
-      {/* Filtros y búsqueda */}
-      <div className="filtros-container">
-        <div className="filtros-buttons">
-          <button 
-            className={`filtro-btn ${filter === 'todos' ? 'active' : ''}`}
-            onClick={() => setFilter('todos')}
-          >
-            {t('todos', { defaultValue: 'Todos' })} ({mascotasArray.length})
-          </button>
-          <button 
-            className={`filtro-btn ${filter === 'en_adopcion' ? 'active' : ''}`}
-            onClick={() => setFilter('en_adopcion')}
-          >
-            {t('estado_en_adopcion', { defaultValue: 'En adopción' })} ({mascotasArray.filter(m => m.estado === 'En adopcion').length})
-          </button>
-          <button 
-            className={`filtro-btn ${filter === 'adoptado' ? 'active' : ''}`}
-            onClick={() => setFilter('adoptado')}
-          >
-            {t('estado_adoptado', { defaultValue: 'Adoptados' })} ({mascotasArray.filter(m => m.estado === 'Adoptado').length})
-          </button>
-        </div>
-        
-        <div className="search-box">
-          <i className="fas fa-search"></i>
-          <input
-            type="text"
-            placeholder={t('buscar_placeholder', { defaultValue: 'Buscar por nombre, especie o raza...' })}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {mascotasFiltradas.length === 0 ? (
-        <div className="empty-state">
-          <i className="fas fa-dog"></i>
-          <h3>{t('sin_mascotas', { defaultValue: 'No hay mascotas para mostrar' })}</h3>
-          <p>
-            {searchTerm || filter !== 'todos' 
-              ? t('sin_resultados_filtros', { defaultValue: 'No se encontraron mascotas con los filtros seleccionados' })
-              : t('primer_mascota', { defaultValue: 'Comienza registrando tu primera mascota para encontrarle un hogar' })}
+      {/* Header con estilo glassmorphism */}
+      <div className="mascotas-header">
+        <div className="container">
+          <h1>
+            <i className="fas fa-paw"></i> 
+            {t('mis_mascotas', { defaultValue: 'Mis Mascotas' })}
+          </h1>
+          <p className="subtitle">
+            {t('gestion_mascotas', { defaultValue: 'Gestiona el registro de tus mascotas en adopción' })}
           </p>
-          {(searchTerm || filter !== 'todos') && (
-            <button 
-              className="btn-secondary"
-              onClick={() => {
-                setSearchTerm('');
-                setFilter('todos');
-              }}
-            >
-              <i className="fas fa-eraser"></i> {t('limpiar_filtros', { defaultValue: 'Limpiar filtros' })}
-            </button>
+          {mascotasArray.length > 0 && (
+            <p className="info">
+              <i className="fas fa-heart" style={{ color: "var(--color-heart)" }}></i>
+              {t('mensaje_bienvenida', { total: mascotasArray.length, defaultValue: `Tienes ${mascotasArray.length} mascota(s) registradas` })}
+            </p>
           )}
-          {!searchTerm && filter === 'todos' && mascotasArray.length === 0 && (
+        </div>
+      </div>
+
+      {/* Filtros section - sticky glass */}
+      <div className="filtros-section">
+        <div className="container">
+          <div className="filtros-container" style={{ background: 'transparent', padding: 0 }}>
+            <div className="filtros-buttons">
+              <button 
+                className={`filtro-btn ${filter === 'todos' ? 'active' : ''}`}
+                onClick={() => setFilter('todos')}
+              >
+                {t('todos', { defaultValue: 'Todos' })} ({mascotasArray.length})
+              </button>
+              <button 
+                className={`filtro-btn ${filter === 'en_adopcion' ? 'active' : ''}`}
+                onClick={() => setFilter('en_adopcion')}
+              >
+                {t('estado_en_adopcion', { defaultValue: 'En adopción' })} ({mascotasArray.filter(m => m.estado === 'En adopcion').length})
+              </button>
+              <button 
+                className={`filtro-btn ${filter === 'adoptado' ? 'active' : ''}`}
+                onClick={() => setFilter('adoptado')}
+              >
+                {t('estado_adoptado', { defaultValue: 'Adoptados' })} ({mascotasArray.filter(m => m.estado === 'Adoptado').length})
+              </button>
+            </div>
+            
+            <div className="search-box">
+              <i className="fas fa-search"></i>
+              <input
+                type="text"
+                placeholder={t('buscar_placeholder', { defaultValue: 'Buscar por nombre, especie o raza...' })}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button 
+                  className="search-clear"
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--color-text-muted)'
+                  }}
+                >
+                  <i className="fas fa-times-circle"></i>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Resultados section */}
+      <div className="resultados-section">
+        <div className="container">
+          <div className="resultados-header">
+            <div className="resultados-count">
+              <i className="fas fa-list"></i> Mostrando <strong>{mascotasFiltradas.length}</strong> de <strong>{mascotasArray.length}</strong> mascotas
+            </div>
+            {/* Botón Agregar Mascota - Reemplaza el ordenar por */}
             <Link to="/fundacion/mascotas/nueva" className="btn-primary">
-              <i className="fas fa-plus"></i> {t('registrar_primera', { defaultValue: 'Registrar primera mascota' })}
+              <i className="fas fa-plus"></i> 
+              {t('agregar_mascota', { defaultValue: 'Agregar Mascota' })}
             </Link>
+          </div>
+
+          {mascotasFiltradas.length === 0 ? (
+            <div className="empty-container">
+              <i className="fas fa-search"></i>
+              <h3>{t('sin_mascotas', { defaultValue: 'No hay mascotas para mostrar' })}</h3>
+              <p>
+                {searchTerm || filter !== 'todos' 
+                  ? t('sin_resultados_filtros', { defaultValue: 'No se encontraron mascotas con los filtros seleccionados' })
+                  : t('primer_mascota', { defaultValue: 'Comienza registrando tu primera mascota' })}
+              </p>
+              {(searchTerm || filter !== 'todos') && (
+                <button 
+                  className="btn-secondary"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilter('todos');
+                  }}
+                >
+                  <i className="fas fa-eraser"></i> Limpiar filtros
+                </button>
+              )}
+              {!searchTerm && filter === 'todos' && mascotasArray.length === 0 && (
+                <Link to="/fundacion/mascotas/nueva" className="btn-primary">
+                  <i className="fas fa-plus"></i> Registrar primera mascota
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className="mascotas-grid">
+              {mascotasFiltradas.map((mascota) => (
+                <MascotaCardFundacion
+                  key={mascota.id}
+                  mascota={mascota}
+                  onEstadoChange={handleCambiarEstado}
+                  onEliminar={handleEliminar}
+                  onVerDetalle={(id) => navigate(`/fundacion/mascotas/${id}`)}
+                  onEditar={(id) => navigate(`/fundacion/mascotas/editar/${id}`)}
+                />
+              ))}
+            </div>
           )}
         </div>
-      ) : (
-        <div className="mascotas-grid">
-          {mascotasFiltradas.map((mascota) => (
-            <MascotaCardFundacion
-              key={mascota.id}
-              mascota={mascota}
-              onEstadoChange={handleCambiarEstado}
-              onEliminar={handleEliminar}
-              onVerDetalle={(id) => navigate(`/fundacion/mascotas/${id}`)}
-              onEditar={(id) => navigate(`/fundacion/mascotas/editar/${id}`)}
-            />
-          ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 };

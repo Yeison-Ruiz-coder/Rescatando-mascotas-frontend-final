@@ -88,7 +88,6 @@
     "logo_alt": "Logo de Rescatando Mascotas Forever",
     "logo_text_alt": "Rescatando Mascotas Forever - Salvando vidas"
   },
-  
 
   "dashboard": "Dashboard",
   "rescates": "Rescates",
@@ -141,9 +140,9 @@
   "mis_solicitudes": "Mis solicitudes",
   "bienvenido": "Bienvenido",
   "invitado": "Invitado",
-
-
-
+  "apadrinar": "Apadrinar",
+  "apadrinar_mascota": "Apadrinar una mascota",
+  "mis_suscripciones": "Mis Suscripciones",
 
   "admin_navbar": {
     "brand_title": "Rescatando",
@@ -167,5 +166,4 @@
       "user_menu": "Menú de usuario"
     }
   }
-
 }

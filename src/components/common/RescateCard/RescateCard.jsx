@@ -8,7 +8,7 @@ const RescateCard = ({
   onAceptar,
   onRechazar,
   onVerDetalle,
-  onRegistrar,  // ← Cambiado de onRegistrarMascota a onRegistrar
+  onRegistrar,
   showActions = true,
   loading = false,
 }) => {
@@ -73,6 +73,17 @@ const RescateCard = ({
 
   return (
     <div className="rescate-card">
+      {/* Foto principal - nueva sección */}
+      {rescate?.foto_principal && (
+        <div className="rescate-card-imagen">
+          <img 
+            src={rescate.foto_principal} 
+            alt="Foto principal del rescate"
+            className="rescate-imagen"
+          />
+        </div>
+      )}
+
       <div
         className="rescate-card-header"
         style={{ borderLeftColor: getTipoColor() }}

@@ -8,7 +8,7 @@
   display: block;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #4a5568;
+  color: var(--form-label);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
@@ -16,7 +16,7 @@
 
 .custom-select-label i {
   margin-right: 0.5rem;
-  color: #667eea;
+  color: var(--color-primary);
 }
 
 .custom-select {
@@ -25,28 +25,28 @@
 }
 
 .custom-select-trigger {
-  background: white;
-  border: #4a556820 1px solid;
-  border-radius: 12px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-md);
   padding: 0.7rem 1rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   font-size: 0.9rem;
-  color: #2d3748;
+  color: var(--form-text);
 }
 
 .custom-select-trigger:hover {
-  border: 1px solid #ff8c42; /* Borde sapote */
+  border-color: var(--color-accent);
   transform: translateY(-1px);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
 }
 
 .custom-select-trigger.open {
-  border-color: #667eea; /* Morado cuando está abierto */
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
 }
 
 .custom-select-value {
@@ -54,12 +54,12 @@
 }
 
 .custom-select-trigger i {
-  color: #ff8c42; /* Icono sapote */
+  color: var(--color-accent);
   transition: transform 0.3s ease;
 }
 
 .custom-select-trigger.open i {
-  color: #667eea; /* Icono morado cuando está abierto */
+  color: var(--color-primary);
 }
 
 .custom-select-options {
@@ -67,12 +67,13 @@
   top: calc(100% + 5px);
   left: 0;
   right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  background: var(--form-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
   overflow: hidden;
   animation: fadeIn 0.2s ease;
+  border: 1px solid var(--color-border);
 }
 
 @keyframes fadeIn {
@@ -89,16 +90,16 @@
 .custom-select-option {
   padding: 0.75rem 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-fast);
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: var(--form-text);
 }
 
 .custom-select-option:hover {
-  background: linear-gradient(135deg, #667eea, #764ba2); /* Morado */
+  background: var(--gradient-primary);
   color: white;
 }
 
@@ -107,7 +108,7 @@
 }
 
 .custom-select-option.selected {
-  background: linear-gradient(135deg, #667eea, #764ba2); /* Morado */
+  background: var(--gradient-primary);
   color: white;
 }
 
@@ -117,5 +118,16 @@
 
 .custom-select-option i {
   font-size: 0.8rem;
-  color: #667eea; /* Morado */
+  color: var(--color-primary);
+}
+
+/* Modo oscuro - ajustes */
+[data-theme="dark"] .custom-select-option:hover,
+[data-theme="dark"] .custom-select-option.selected {
+  background: var(--gradient-primary);
+}
+
+[data-theme="dark"] .custom-select-trigger {
+  background: var(--form-input-bg);
+  color: var(--form-text);
 }

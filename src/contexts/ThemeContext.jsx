@@ -18,24 +18,8 @@ export const ThemeProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Cargar el CSS correspondiente
-    const linkId = 'theme-css';
-    let existingLink = document.getElementById(linkId);
-    
-    if (existingLink) {
-      existingLink.remove();
-    }
-    
-    const link = document.createElement('link');
-    link.id = linkId;
-    link.rel = 'stylesheet';
-    link.href = theme === 'light' 
-      ? '/src/styles/light-theme.css' 
-      : '/src/styles/dark-theme.css';
-    
-    document.head.appendChild(link);
-    localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

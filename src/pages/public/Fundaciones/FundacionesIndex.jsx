@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Search, Heart, Filter, X, Building, MapPin } from 'lucide-react';
 import api from '../../../services/api';
 import FundacionCard from '../../../components/common/FundacionCard/FundacionCard';
+import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import './Fundaciones.css';
 
 const FundacionesIndex = () => {
@@ -19,7 +20,27 @@ const FundacionesIndex = () => {
   const getImageUrl = useCallback((url) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    return `http://localhost:8000${url}`;
+    if (url.startsWith('/storage')) return `http://localhost:8000${url}`;
+    return `http://localhost:8000/storage/${url}`;
+  }, []);
+
+  // Función para extraer datos de la respuesta del backend
+  const extractData = useCallback((response) => {
+    // Si es array directo
+    if (Array.isArray(response)) return response;
+    
+    // Si tiene estructura de ApiResponses con data
+    if (response?.data && Array.isArray(response.data)) return response.data;
+    
+    // Si tiene estructura de paginación de Laravel
+    if (response?.data?.data && Array.isArray(response.data.data)) return response.data.data;
+    
+    // Si tiene estructura anidada
+    if (response?.data?.data?.data && Array.isArray(response.data.data.data)) return response.data.data.data;
+    
+    // Si es un objeto vacío o no tiene array, retornar array vacío
+    console.warn('Estructura de respuesta inesperada:', response);
+    return [];
   }, []);
 
   useEffect(() => {
@@ -31,25 +52,50 @@ const FundacionesIndex = () => {
       setError(null);
       
       try {
-        // ✅ Sin timeout - que cargue lo que el servidor tarde
+        // Cargar fundaciones
         const response = await api.get('/fundaciones', {
           signal: abortController.signal
         });
         
         if (!isMounted) return;
         
-        const data = response.data?.data || response.data || [];
+        // ✅ Extraer datos correctamente (maneja cualquier estructura)
+        let fundacionesData = extractData(response.data);
         
-        // ✅ Cargar mascotas sin timeout
+        console.log('Fundaciones extraídas:', fundacionesData); // Debug
+        
+        // Si no hay datos, intentar con response.data directamente
+        if (fundacionesData.length === 0 && response.data) {
+          if (Array.isArray(response.data)) {
+            fundacionesData = response.data;
+          } else if (response.data.data && Array.isArray(response.data.data)) {
+            fundacionesData = response.data.data;
+          } else if (response.data.fundaciones && Array.isArray(response.data.fundaciones)) {
+            fundacionesData = response.data.fundaciones;
+          }
+        }
+        
+        if (!isMounted) return;
+        
+        // Cargar mascotas para cada fundación (sin errores)
         const fundacionesConMascotas = await Promise.all(
-          data.map(async (fundacion) => {
+          fundacionesData.map(async (fundacion) => {
             try {
               const mascotasRes = await api.get(`/mascotas/fundacion/${fundacion.id}`, {
                 signal: abortController.signal
               });
-              const mascotas = mascotasRes.data?.data || mascotasRes.data || [];
+              // Extraer mascotas de la respuesta
+              let mascotas = [];
+              if (Array.isArray(mascotasRes.data)) {
+                mascotas = mascotasRes.data;
+              } else if (mascotasRes.data?.data && Array.isArray(mascotasRes.data.data)) {
+                mascotas = mascotasRes.data.data;
+              } else if (mascotasRes.data?.mascotas && Array.isArray(mascotasRes.data.mascotas)) {
+                mascotas = mascotasRes.data.mascotas;
+              }
               return { ...fundacion, total_mascotas: mascotas.length };
-            } catch {
+            } catch (error) {
+              console.warn(`Error cargando mascotas para fundación ${fundacion.id}:`, error);
               return { ...fundacion, total_mascotas: 0 };
             }
           })
@@ -57,19 +103,21 @@ const FundacionesIndex = () => {
         
         if (!isMounted) return;
         
-        // ✅ Actualizar estados inmediatamente
+        // Actualizar estados
         setFundaciones(fundacionesConMascotas);
         setFilteredFundaciones(fundacionesConMascotas);
         
+        // Extraer ciudades únicas
         const uniqueCiudades = [...new Set(fundacionesConMascotas.map(f => f.ciudad).filter(Boolean))];
         setCiudades(uniqueCiudades);
         
       } catch (error) {
         if (error.name === 'CanceledError' || error.name === 'AbortError') {
+          console.log('Petición cancelada');
           return;
         }
         
-        console.error('Error:', error);
+        console.error('Error al cargar fundaciones:', error);
         if (isMounted) {
           setError(error.message || 'Error al cargar las fundaciones');
           setFundaciones([]);
@@ -88,8 +136,9 @@ const FundacionesIndex = () => {
       isMounted = false;
       abortController.abort();
     };
-  }, []);
+  }, [extractData]);
 
+  // Filtrar fundaciones
   const filterFundaciones = useCallback(() => {
     let filtered = [...fundaciones];
     
@@ -135,8 +184,7 @@ const FundacionesIndex = () => {
   if (loading) {
     return (
       <div className="fundaciones-loading">
-        <div className="spinner"></div>
-        <p>Cargando fundaciones...</p>
+        <LoadingSpinner />
       </div>
     );
   }

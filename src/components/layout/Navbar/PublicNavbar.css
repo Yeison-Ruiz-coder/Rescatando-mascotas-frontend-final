@@ -1,21 +1,22 @@
 /* src/components/layout/Navbar/PublicNavbar.css */
 
-/* Reemplazar el .public-navbar existente */
+/* ============================================
+   PUBLIC NAVBAR - DISEÑO INVERTIDO
+   Siempre en contraste con el fondo de la página
+   ============================================ */
+
 .public-navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 70px;
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   z-index: 100;
   display: flex;
   align-items: center;
   transition: left 0.3s ease, right 0.3s ease;
 }
+
 /* Cuando el sidebar está abierto, la navbar se encoge */
 .public-navbar.sidebar-open {
   left: 320px;
@@ -41,10 +42,11 @@
   padding-right: 20px;
 }
 
+/* ===== BOTÓN HAMBURGUESA (siempre con gradiente) ===== */
 .public-hamburger-btn {
   width: 45px;
   height: 45px;
-  background: var(--color-primary, #667eea);
+  background: var(--gradient-primary);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -65,7 +67,8 @@
 
 .public-hamburger-btn:hover {
   transform: scale(1.05);
-  background: #5a6fd6;
+  background: var(--gradient-primary);
+  filter: brightness(0.95);
 }
 
 .public-hamburger-btn span {
@@ -76,21 +79,58 @@
   transition: all 0.3s;
 }
 
+/* ===== LOGO (siempre con gradiente) ===== */
 .public-navbar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
   flex: 1;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .public-navbar-logo {
   height: 50px;
   width: auto;
+  transition: filter 0.1s ease;
+  filter: brightness(0) saturate(100%) invert(1);
 }
 
+[data-theme="dark"] .public-navbar-logo {
+  filter: none;
+}
+
+.public-navbar-logo-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 0;
+  height: 65px;
+}
+
+.logo-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.logo-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===== BOTÓN URGENTE ===== */
 .public-urgent-btn {
-  background:  #ff0000a9;
+  background: #dc2626;
   color: white;
   border: none;
   border-radius: 50px;
@@ -108,36 +148,63 @@
 }
 
 .public-urgent-btn:hover {
-  background: #ff2e44;
+  background: #ef4444;
   transform: scale(1.05);
+}
+
+[data-theme="dark"] .public-urgent-btn {
+  background: #dc2626;
   color: white;
 }
 
+[data-theme="dark"] .public-urgent-btn:hover {
+  background: #ef4444;
+}
+
+/* ===== ROLE BADGE ===== */
+.role-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, #ff4757, #ff6b81);
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-right: 10px;
+  transition: all 0.3s;
+}
+
+.role-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+}
+
+/* ===== PERFIL / LOGIN (fondo adaptativo) ===== */
 .public-profile-btn {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 5px 15px 5px 10px;
   border-radius: 50px;
-  background: var(--color-card-bg, #ffffff);
   text-decoration: none;
   transition: all 0.3s;
   cursor: pointer;
-  color: var(--color-text, #333);
-  border: 1px solid var(--color-border, #e0e0e0);
   height: 50px;
   max-width: 220px;
   min-width: 140px;
 }
 
 .public-profile-btn:hover {
-  background: var(--color-light, #f8f8f8);
+  background: var(--color-hover);
 }
 
 .public-profile-avatar {
   width: 38px;
   height: 38px;
-  background: var(--color-primary, #667eea);
+  background: var(--gradient-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -162,7 +229,6 @@
 .public-profile-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text, #333);
   line-height: 1.3;
   max-width: 100px;
   overflow: hidden;
@@ -172,7 +238,6 @@
 
 .public-profile-role {
   font-size: 0.7rem;
-  color: var(--color-text-muted, #666);
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -181,7 +246,6 @@
 
 .profile-arrow {
   font-size: 0.7rem;
-  color: var(--color-text-light, #999);
   margin-left: 4px;
   transition: transform 0.3s ease;
 }
@@ -190,6 +254,7 @@
   transform: rotate(180deg);
 }
 
+/* ===== DROPDOWNS ===== */
 .profile-menu {
   position: relative;
 }
@@ -199,9 +264,7 @@
   top: calc(100% + 8px);
   right: 0;
   min-width: 200px;
-  background: var(--color-card-bg, white);
   border-radius: 12px;
-  box-shadow: var(--shadow-md);
   overflow: hidden;
   z-index: 1000;
   animation: dropdownFadeIn 0.2s ease;
@@ -213,182 +276,150 @@
   gap: 12px;
   width: 100%;
   padding: 12px 16px;
-  background: var(--color-card-bg, white);
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
   font-size: 0.9rem;
-  color: var(--color-text, #333);
   text-decoration: none;
-}
-
-.profile-dropdown-item:hover {
-  background: var(--color-light, #f5f5f5);
 }
 
 .profile-dropdown-item i {
   width: 20px;
-  color: var(--color-primary, #667eea);
   font-size: 1rem;
 }
 
 .profile-dropdown-item.logout-item {
-  color: var(--color-danger, #ff4757);
+  color: var(--color-danger);
 }
 
 .profile-dropdown-item.logout-item i {
-  color: var(--color-danger, #ff4757);
+  color: var(--color-danger);
 }
 
 .profile-dropdown-item.logout-item:hover {
-  background: rgba(255, 71, 87, 0.05);
+  background: rgba(255, 71, 87, 0.1);
 }
 
 .dropdown-divider {
   height: 1px;
-  background: var(--color-border, #e0e0e0);
   margin: 4px 0;
 }
 
-.language-selector {
-  position: relative;
-  margin-left: 1rem;
+/* ===== MODOS: CLARO Y OSCURO (fondo invertido) ===== */
+
+/* ----- MODO CLARO: Navbar OSCURO ----- */
+.public-navbar {
+  background: #1e293b;
+  border-bottom: 2px solid var(--color-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.language-selector-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: white !important;
-  border: 1px solid var(--color-border, #e0e0e0);
-  border-radius: 40px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-text, #333);
+/* Textos en navbar - modo claro */
+.public-profile-name {
+  color: #f1f5f9;
 }
 
-.language-selector-btn:hover {
-  background: var(--color-light, #f8f8f8);
-  border-color: var(--color-primary, #667eea);
+.public-profile-role {
+  color: #94a3b8;
 }
 
-.language-selector-btn .fi {
-  font-size: 1.2rem;
-  border-radius: 3px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.public-profile-btn {
+  background: #334155;
+  border: 1px solid #475569;
+  color: #e2e8f0;
 }
 
-.language-text {
-  font-weight: 500;
+.public-profile-btn:hover {
+  background: #475569;
 }
 
+.profile-arrow,
 .language-arrow {
-  font-size: 0.8rem;
-  color: var(--color-text-light, #999);
-  transition: transform 0.3s ease;
+  color: #94a3b8;
 }
 
-.language-arrow.open {
-  transform: rotate(180deg);
-}
-
+/* Dropdowns - modo claro */
+.profile-dropdown,
 .language-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 160px;
-  background: var(--color-card-bg, white);
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  z-index: 1001;
-  animation: dropdownFadeIn 0.2s ease;
+  background: #1e293b;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.language-dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--color-card-bg, white);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
-  font-size: 0.9rem;
-  color: var(--color-text, #333);
+.profile-dropdown-item {
+  background: transparent;
+  color: #e2e8f0;
 }
 
-.language-dropdown-item:hover {
-  background:  rgba(102, 126, 234, 0.1) !important;
-}
-
-.language-dropdown-item.active {
-  background: rgba(102, 126, 234, 0.1);
-  color: var(--color-primary, #667eea);
-}
-
-.language-dropdown-item .fi {
-  font-size: 1.2rem;
-  border-radius: 3px;
-}
-
-.language-name {
-  flex: 1;
-}
-
-.language-check {
-  color: var(--color-primary, #667eea);
-  font-size: 0.8rem;
-}
-
-.role-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: linear-gradient(135deg, #ff4757, #ff6b81);
+.profile-dropdown-item:hover {
+  background: #334155;
   color: white;
-  border-radius: 20px;
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-right: 10px;
-  transition: all 0.3s;
 }
 
-.role-badge:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+.profile-dropdown-item i {
+  color: #8b9cff;
 }
 
-.public-navbar-logo-texto {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 0;
-  height: 65px;
+.dropdown-divider {
+  background: #334155;
 }
 
-.logo-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--color-primary, #667eea);
-  line-height: 1;
+/* ----- MODO OSCURO: Navbar CLARO ----- */
+[data-theme="dark"] .public-navbar {
+  background: #ffffff;
+  border-bottom: 2px solid var(--color-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.logo-subtitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-secondary, #764ba2);
-  line-height: 1;
+[data-theme="dark"] .public-profile-name {
+  color: #1e293b;
 }
 
+[data-theme="dark"] .public-profile-role {
+  color: #64748b;
+}
+
+[data-theme="dark"] .public-profile-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+[data-theme="dark"] .public-profile-btn:hover {
+  background: #e2e8f0;
+}
+
+[data-theme="dark"] .profile-arrow,
+[data-theme="dark"] .language-arrow {
+  color: #64748b;
+}
+
+[data-theme="dark"] .profile-dropdown,
+[data-theme="dark"] .language-dropdown {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .profile-dropdown-item {
+  background: transparent;
+  color: #1e293b;
+}
+
+[data-theme="dark"] .profile-dropdown-item:hover {
+  background: #f1f5f9;
+}
+
+[data-theme="dark"] .profile-dropdown-item i {
+  color: #667eea;
+}
+
+[data-theme="dark"] .dropdown-divider {
+  background: #e2e8f0;
+}
+
+/* ===== ANIMACIONES ===== */
 @keyframes dropdownFadeIn {
   from {
     opacity: 0;
@@ -400,12 +431,12 @@
   }
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .public-navbar-logo-texto {
     display: none;
   }
   
-  /* Ajuste para tablet cuando sidebar está abierto */
   .public-navbar.sidebar-open {
     left: 280px;
   }
@@ -434,23 +465,6 @@
     margin: 0 8px;
   }
   
-  .language-selector {
-    margin-left: 0.5rem;
-  }
-  
-  .language-selector-btn {
-    padding: 6px 12px;
-  }
-  
-  .language-text {
-    display: none;
-  }
-  
-  .language-dropdown {
-    right: -10px;
-    min-width: 140px;
-  }
-  
   .public-profile-btn {
     padding: 5px 12px 5px 8px;
     min-width: auto;
@@ -462,16 +476,11 @@
     font-size: 0.8rem;
   }
   
-  .public-profile-role {
-    font-size: 0.65rem;
-  }
-  
   .profile-dropdown {
     right: -10px;
     min-width: 180px;
   }
   
-  /* Ajuste para mobile cuando sidebar está abierto */
   .public-navbar.sidebar-open {
     left: 280px;
   }
@@ -506,28 +515,9 @@
     display: none;
   }
   
-  .language-selector-btn {
-    padding: 6px 10px;
-  }
-  
-  .language-selector-btn .fi {
-    font-size: 1rem;
-  }
-  
-  /* Ajuste para mobile pequeño cuando sidebar está abierto */
   .public-navbar.sidebar-open {
     left: 280px;
   }
 }
+/* Forzar que el logo se adapte al modo oscuro con filtro */
 
-/* Añadir al final del archivo PublicNavbar.css */
-.public-navbar {
-  background: var(--color-card-bg, #ffffff);
-  border-bottom: 2px solid var(--color-primary, #667eea); /* Borde morado */
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08); /* Sombra suave */
-}
-
-/* Para hacerlo más visible cuando hay sidebar */
-.public-navbar.sidebar-open {
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-}

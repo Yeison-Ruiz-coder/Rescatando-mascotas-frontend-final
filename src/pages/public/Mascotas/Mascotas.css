@@ -2,27 +2,13 @@
 /* Estilos específicos para la página de mascotas - Hereda de index.css */
 
 /* ===== HEADER SECTION ===== */
-/* ===== HEADER SECTION CON EFECTO SUTIL (como home) ===== */
 .mascotas-page .mascotas-header {
   padding: 60px 0 40px 0;
   text-align: center;
-  background: transparent;          /* Sin fondo sólido */
-  backdrop-filter: blur(2px);       /* Blur muy leve, casi imperceptible */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Borde muy suave */
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
-}
-
-/* Efecto de brillo muy sutil (opcional) */
-.mascotas-page .mascotas-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1), transparent 80%);
-  pointer-events: none;
-  z-index: -1;
 }
 
 .mascotas-page .mascotas-header h1 {
@@ -46,20 +32,23 @@
   font-size: 0.9rem;
   margin-top: 1rem;
 }
-/* ===== FILTROS SECTION ===== */
+
+/* ===== FILTROS SECTION - USANDO CLASES GLOBALES ===== */
 .mascotas-page .filtros-section {
-  padding: 30px 0;
-  background: rgb(255, 255, 255);
+  padding: 10px 0;
   position: sticky;
-  top: 70px;
+  top: var(--navbar-height, 70px);
   z-index: 99;
-  box-shadow: var(--shadow-sm);
+  /* Usar clases globales en su lugar, pero mantenemos por compatibilidad */
 }
+
+/* O puedes simplificar aún más en el JSX usando className */
 
 /* ===== RESULTADOS SECTION ===== */
 .mascotas-page .resultados-section {
   padding: 40px 0;
 }
+
 
 .mascotas-page .resultados-header {
   display: flex;
@@ -93,11 +82,11 @@
 
 .mascotas-page .orden-select {
   padding: 8px 12px;
-  background: white;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-md);
   font-size: 0.85rem;
-  color: var(--color-text);
+  color: var(--form-text);
   cursor: pointer;
 }
 
@@ -106,47 +95,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
-}
-
-/* ===== PAGINACIÓN ===== */
-.mascotas-page .pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 3rem;
-  padding: 2rem 0;
-}
-
-.mascotas-page .pagination-item {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  color: var(--color-text);
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 500;
-}
-
-.mascotas-page .pagination-item:hover:not(.disabled):not(.active) {
-  border-color: var(--color-accent);
-  background: rgba(255, 140, 66, 0.1);
-  transform: translateY(-2px);
-}
-
-.mascotas-page .pagination-item.active {
-  background: var(--gradient-accent);
-  border-color: transparent;
-  color: white;
-}
-
-.mascotas-page .pagination-item.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 /* ===== LOADING ===== */
@@ -161,11 +109,12 @@
 .mascotas-page .error-container {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border-radius: 24px;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
   margin: 2rem auto;
   max-width: 500px;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
 }
 
 .mascotas-page .error-container i {
@@ -189,7 +138,7 @@
   color: white;
   border: none;
   padding: 12px 28px;
-  border-radius: 50px;
+  border-radius: var(--radius-round);
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
@@ -204,26 +153,47 @@
 .mascotas-page .empty-container {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border-radius: 24px;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
   margin: 2rem 0;
   box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
 .mascotas-page .empty-container i {
   font-size: 4rem;
   color: var(--color-primary);
   margin-bottom: 1rem;
-  opacity: 0.4;
+  opacity: 0.9;
 }
 
 .mascotas-page .empty-container h3 {
-  color: var(--color-text);
+  color: var(--form-text);
   margin-bottom: 0.5rem;
 }
 
 .mascotas-page .empty-container p {
   color: var(--color-text-muted);
+}
+
+/* ===== MODO OSCURO - AJUSTES ESPECÍFICOS ===== */
+[data-theme="dark"] .mascotas-page .filtros-section {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme="dark"] .mascotas-page .mascotas-header {
+  border-bottom-color: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .mascotas-page .orden-select {
+  background: var(--form-input-bg);
+  color: var(--form-text);
+  border-color: var(--form-border);
+}
+
+[data-theme="dark"] .mascotas-page .orden-select option {
+  background: var(--form-bg);
+  color: var(--form-text);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -258,13 +228,13 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  .mascotas-page .pagination {
-    flex-wrap: wrap;
-  }
 }
 
 @media (max-width: 480px) {
   .mascotas-page .mascotas-header h1 {
     font-size: 1.5rem;
+  }
+  .mascotas-page .resultados-count {
+    font-size: 0.8rem;
   }
 }
