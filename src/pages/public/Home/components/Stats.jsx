@@ -1,6 +1,7 @@
-// Stats.jsx (mejorado con div envolvente)
+// src/pages/public/Home/components/Stats.jsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import './Stats.css';  // ← Importar CSS propio
 
 const Stats = ({ stats }) => {
   const { t } = useTranslation('home');
@@ -13,13 +14,13 @@ const Stats = ({ stats }) => {
   ];
 
   return (
-    <section className="stats">
-      <div className="container">
+    <section className="stats-section">
+      <div className="stats-container">
         <div className="stats-grid">
           {statsData.map((stat, index) => (
-            <div key={index} className="stat-card">
-              <div className="stat-number">{stat.value}</div>
-              <p className="stat-label">{stat.label}</p>
+            <div key={index} className="stats-card">
+              <div className="stats-number">{stat.value}</div>
+              <p className="stats-label">{stat.label}</p>
             </div>
           ))}
         </div>

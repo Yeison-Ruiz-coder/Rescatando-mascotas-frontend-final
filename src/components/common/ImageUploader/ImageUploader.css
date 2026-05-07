@@ -100,3 +100,56 @@
   font-size: 0.75rem;
   margin-top: 0.25rem;
 }
+
+/* Modo múltiple - Grid de imágenes */
+.image-uploader-area.multiple-mode {
+  min-height: auto;
+  flex-direction: column;
+}
+
+.image-previews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.image-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #cbd5e0);
+  background: var(--color-light, #edf2f7);
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-preview-item .remove-image-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.image-preview-item .remove-image-btn i {
+  font-size: 0.7rem;
+}
+
+
+/* Ajuste para el área cuando tiene múltiples previews */
+.image-uploader-area.multiple-mode.has-preview {
+  padding: 0;
+}
+
+.image-uploader-area.multiple-mode .upload-placeholder {
+  padding: 1.5rem;
+  width: 100%;
+}

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { getImageUrl } from '../../../utils/imageUtils'; // ✅ Importar la función
 import './MascotaCardFundacion.css';
 
 const MascotaCardFundacion = ({ 
@@ -11,7 +12,7 @@ const MascotaCardFundacion = ({
   onEliminar,
   onVerDetalle,
   onEditar,
-  getImageUrl 
+  getImageUrl: propGetImageUrl  // ✅ Renombrar para evitar conflicto
 }) => {
   const { t } = useTranslation(['mascotas', 'fundacion']);
   const [cambiandoEstado, setCambiandoEstado] = useState(false);
@@ -28,6 +29,16 @@ const MascotaCardFundacion = ({
     foto_principal,
     lugar_rescate
   } = mascota;
+
+  // ✅ Función unificada para obtener URL de imagen
+  const getImageUrlSafe = (path) => {
+    // Si viene una función como prop, usarla
+    if (propGetImageUrl && typeof propGetImageUrl === 'function') {
+      return propGetImageUrl(path);
+    }
+    // Si no, usar la función importada
+    return getImageUrl(path);
+  };
 
   // Función para formatear edad (sin decimales)
   const formatEdad = (edad) => {
@@ -107,8 +118,8 @@ const MascotaCardFundacion = ({
     }
   };
 
-  const imageUrl = getImageUrl ? getImageUrl(foto_principal) : 
-    (foto_principal ? `http://localhost:8000/storage/${foto_principal}` : null);
+  // ✅ Obtener URL de imagen correctamente
+  const imageUrl = getImageUrlSafe(foto_principal);
 
   return (
     <div className="mascota-card-fundacion">
@@ -125,6 +136,7 @@ const MascotaCardFundacion = ({
             src={imageUrl}
             alt={nombre_mascota}
             onError={(e) => {
+              console.error('Error cargando imagen:', imageUrl);
               e.target.src = 'https://placehold.co/400x300?text=Sin+Imagen';
             }}
           />

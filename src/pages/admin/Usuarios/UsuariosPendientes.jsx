@@ -73,29 +73,55 @@ const UsuariosPendientes = () => {
     }
   };
 
-  const aprobarUsuario = async (id) => {
-    setProcessing((prev) => ({ ...prev, [id]: true }));
+  const aprobarUsuario = async (usuario) => {
+    setProcessing((prev) => ({ ...prev, [usuario.id]: true }));
     try {
-      await adminService.cambiarEstadoUsuario(id, "activo");
+      await adminService.cambiarEstadoUsuario(usuario.id, {
+        estado: "activo",
+        nombre: usuario.nombre || usuario.nombre_entidad || "",
+        email: usuario.email || "",
+        tipo: usuario.tipo || "",
+        ...(usuario.nombre_entidad ? { nombre_entidad: usuario.nombre_entidad } : {}),
+        ...(usuario.telefono ? { telefono: usuario.telefono } : {}),
+        ...(usuario.direccion ? { direccion: usuario.direccion } : {}),
+        ...(usuario.tipo_documento ? { tipo_documento: usuario.tipo_documento } : {}),
+        ...(usuario.numero_documento ? { numero_documento: usuario.numero_documento } : {}),
+        ...(usuario.registro_sanitario ? { registro_sanitario: usuario.registro_sanitario } : {}),
+        ...(usuario.capacidad_maxima ? { capacidad_maxima: usuario.capacidad_maxima } : {}),
+        ...(usuario.servicios ? { servicios: usuario.servicios } : {}),
+      });
       toast.success(t("aprobado_exito"));
       fetchPendientes();
     } catch (error) {
       toast.error(error.response?.data?.message || t("error_aprobar"));
     } finally {
-      setProcessing((prev) => ({ ...prev, [id]: false }));
+      setProcessing((prev) => ({ ...prev, [usuario.id]: false }));
     }
   };
 
-  const rechazarUsuario = async (id) => {
-    setProcessing((prev) => ({ ...prev, [id]: true }));
+  const rechazarUsuario = async (usuario) => {
+    setProcessing((prev) => ({ ...prev, [usuario.id]: true }));
     try {
-      await adminService.cambiarEstadoUsuario(id, "inactivo");
+      await adminService.cambiarEstadoUsuario(usuario.id, {
+        estado: "inactivo",
+        nombre: usuario.nombre || usuario.nombre_entidad || "",
+        email: usuario.email || "",
+        tipo: usuario.tipo || "",
+        ...(usuario.nombre_entidad ? { nombre_entidad: usuario.nombre_entidad } : {}),
+        ...(usuario.telefono ? { telefono: usuario.telefono } : {}),
+        ...(usuario.direccion ? { direccion: usuario.direccion } : {}),
+        ...(usuario.tipo_documento ? { tipo_documento: usuario.tipo_documento } : {}),
+        ...(usuario.numero_documento ? { numero_documento: usuario.numero_documento } : {}),
+        ...(usuario.registro_sanitario ? { registro_sanitario: usuario.registro_sanitario } : {}),
+        ...(usuario.capacidad_maxima ? { capacidad_maxima: usuario.capacidad_maxima } : {}),
+        ...(usuario.servicios ? { servicios: usuario.servicios } : {}),
+      });
       toast.warning(t("rechazado_exito"));
       fetchPendientes();
     } catch (error) {
       toast.error(error.response?.data?.message || t("error_rechazar"));
     } finally {
-      setProcessing((prev) => ({ ...prev, [id]: false }));
+      setProcessing((prev) => ({ ...prev, [usuario.id]: false }));
     }
   };
 
@@ -283,7 +309,7 @@ const UsuariosPendientes = () => {
 
             <div className="pendiente-footer">
               <button
-                onClick={() => aprobarUsuario(usuario.id)}
+                onClick={() => aprobarUsuario(usuario)}
                 disabled={processing[usuario.id]}
                 className="btn-aprobar"
               >
@@ -295,7 +321,7 @@ const UsuariosPendientes = () => {
                 {t("aprobar")}
               </button>
               <button
-                onClick={() => rechazarUsuario(usuario.id)}
+                onClick={() => rechazarUsuario(usuario)}
                 disabled={processing[usuario.id]}
                 className="btn-rechazar"
               >

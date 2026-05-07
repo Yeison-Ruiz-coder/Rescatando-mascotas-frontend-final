@@ -11,7 +11,9 @@
     "informacion_basica": "Información Básica",
     "ubicacion_descripcion": "Ubicación y Descripción",
     "salud_vacunas": "Salud y Vacunas",
-    "galeria_fotos": "Galería de Fotos"
+    "galeria_fotos": "Galería de Fotos",
+    "caracteristicas_fisicas": "Características Físicas",
+    "requisitos_adopcion": "Requisitos de Adopción"
   },
   
   "informacion_basica": "Información Básica",
@@ -69,10 +71,14 @@
   "sin_opciones": "No hay opciones",
   
   "botones": {
+    "registrando": "Registrando...",
     "anterior": "Anterior",
     "siguiente": "Siguiente",
-    "registrar": "Registrar Mascota",
-    "registrando": "Registrando..."
+    "guardando": "Guardando...",
+    "actualizar": "Actualizar",
+    "registrar": "Registrar",
+    "cancelar": "Cancelar",
+    "volver": "Volver"
   },
   
   "errores": {
@@ -84,7 +90,10 @@
     "estado_requerido": "El estado es requerido",
     "lugar_rescate_requerido": "El lugar de rescate es requerido",
     "descripcion_requerida": "La descripción es requerida",
-    "foto_principal_requerida": "La foto principal es requerida"
+    "foto_principal_requerida": "La foto principal es requerida",
+    "no_autorizado": "No autorizado",
+    "solo_fundacion": "Solo las fundaciones pueden acceder a esta página.",
+    "carga_datos": "Error al cargar los datos"
   },
   
   "mensajes": {
@@ -95,7 +104,8 @@
     "imagen_grande": "La imagen no debe superar los 2MB",
     "imagen_excluida": "La imagen {{nombre}} supera los 2MB y no será incluida",
     "imagen_invalida": "Formato no válido o imagen muy pesada (máx 2MB)",
-    "seleccionar_especie_primero": "Primero debes seleccionar una especie"
+    "seleccionar_especie_primero": "Primero debes seleccionar una especie",
+    "registrada_exitoso": "Mascota registrada exitosamente"
   },
   
   "acceso_no_autorizado": {
@@ -105,6 +115,49 @@
     "volver_inicio": "Volver al inicio"
   },
   "editar_mascota": "Editar Mascota",
-  "editar_mascota_desc": "Modifica la información, fotos y detalles de tu mascota"
-  
+  "editar_mascota_desc": "Modifica la información, fotos y detalles de tu mascota",
+
+  "peso_aprox": "Peso aproximado (kg)",
+  "tamano": "Tamaño",
+  "seleccionar_tamano": "Seleccionar tamaño",
+  "tamano_pequeño": "Pequeño",
+  "tamano_mediano": "Mediano",
+  "tamano_grande": "Grande",
+  "tamano_muy_grande": "Muy grande",
+  "color": "Color",
+  "salud_general": "Salud general",
+  "salud_general_placeholder": "Describe el estado de salud general de la mascota...",
+  "esterilizado": "Esterilizado/a",
+  "desparasitado": "Desparasitado/a",
+  "vacunado": "Vacunado/a",
+  "enfermedades_cronicas": "Enfermedades crónicas",
+  "enfermedad_placeholder": "Ej: Diabetes, Artritis...",
+  "medicamentos": "Medicamentos",
+  "medicamento_placeholder": "Ej: Antibióticos, Analgésicos...",
+  "requisitos_adopcion": "Requisitos para adopción",
+  "requisito_placeholder": "Ej: Casa con jardín, Experiencia previa...",
+  "hogar_recomendado": "Tipo de hogar recomendado",
+  "seleccionar_hogar": "Seleccionar tipo de hogar",
+  "casa_con_jardin": "Casa con jardín",
+  "departamento": "Departamento",
+  "casa_sin_jardin": "Casa sin jardín",
+  "espacio_amplio": "Espacio amplio",
+  "requisitos_help": "Agrega los requisitos que debe cumplir el adoptante",
+  "video_url": "Video (URL)",
+  "video_help": "Pega el enlace de YouTube o Vimeo",
+  "galeria_help": "Puedes seleccionar hasta 10 imágenes adicionales (máx 2MB cada una)",
+  "titulo_editar": "Editar Mascota",
+  "subtitulo_editar": "Modifica la información, fotos y detalles de tu mascota",
+  "actualizando_mascota": "Actualizando mascota...",
+  "actualizacion_exitosa": "Mascota actualizada exitosamente",
+  "error_actualizacion": "Error al actualizar la mascota",
+  "titulo_nueva": "Registrar Nueva Mascota",
+  "titulo_registrar_rescate": "Registrar Mascota Rescatada",
+  "registrando_desde_rescate": "Registrando desde rescate",
+
+
+  "confirmaciones": {
+    "salir": "¿Estás seguro de que quieres salir? Los datos no guardados se perderán.",
+    "cancelar": "¿Estás seguro de que quieres cancelar? Los datos no guardados se perderán."
+  }
 }

@@ -1,0 +1,98 @@
+@keyframes floatCircle {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33% { transform: translateY(-30px) translateX(20px); }
+  66% { transform: translateY(20px) translateX(-15px); }
+}
+
+@keyframes floatBlob {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-50px) rotate(10deg); }
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.1; }
+  25% { transform: translateY(-30px) translateX(15px); opacity: 0.25; }
+  50% { transform: translateY(20px) translateX(-10px); opacity: 0.15; }
+  75% { transform: translateY(-15px) translateX(20px); opacity: 0.2; }
+}
+
+@keyframes orbitGroup1 {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  25% { transform: translate(15px, -10px) rotate(5deg); }
+  50% { transform: translate(-10px, 15px) rotate(-3deg); }
+  75% { transform: translate(5px, -5px) rotate(2deg); }
+}
+
+@keyframes orbitGroup2 {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  25% { transform: translate(-12px, -8px) rotate(-4deg); }
+  50% { transform: translate(8px, 12px) rotate(3deg); }
+  75% { transform: translate(-5px, 5px) rotate(-2deg); }
+}
+
+@keyframes orbitGroup3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(-8px, 10px) scale(1.02); }
+  66% { transform: translate(10px, -5px) scale(0.98); }
+}
+
+@keyframes orbitGroup4 {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  50% { transform: translate(10px, -8px) rotate(8deg); }
+}
+
+@keyframes floatPaw1 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-12px) rotate(5deg); }
+}
+
+@keyframes floatPaw2 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(10px) rotate(-8deg); }
+}
+
+@keyframes floatPaw3 {
+  0% { transform: translateY(0px) scale(1); }
+  100% { transform: translateY(-8px) scale(1.05); }
+}
+
+@keyframes floatPaw4 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(8px) rotate(6deg); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease;
+}

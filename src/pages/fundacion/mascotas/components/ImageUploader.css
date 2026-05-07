@@ -1,0 +1,84 @@
+/* src/pages/fundacion/mascotas/components/ImageUploader.css */
+
+/* Todos los estilos encapsulados bajo .image-uploader */
+.image-uploader {
+  width: 100%;
+}
+
+.image-uploader .image-uploader-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  border: 2px dashed var(--form-border);
+  border-radius: var(--radius-xl);
+  background: var(--form-input-bg);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.image-uploader .image-uploader-label:hover {
+  border-color: var(--color-primary);
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.image-uploader .image-uploader-label i {
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+.image-uploader .image-uploader-label span {
+  color: var(--form-text);
+  font-size: 0.9rem;
+}
+
+.image-uploader .image-uploader-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.image-uploader .image-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  transition: var(--transition-fast);
+}
+
+.image-uploader .image-preview-item.main {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.image-uploader .image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-uploader .image-preview-item button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.image-uploader .image-preview-item button:hover {
+  background: var(--color-danger);
+  transform: scale(1.05);
+}

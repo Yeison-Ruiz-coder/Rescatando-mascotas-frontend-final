@@ -1,27 +1,27 @@
-/* src/components/common/MascotaCardFundacion/MascotaCardFundacion.css */
+/* src/components/fundacion/MascotaCardFundacion/MascotaCardFundacion.css */
 
 /* ============================================
    TARJETA SIMPLIFICADA PARA FUNDACIÓN
-   Solo información esencial
+   Adaptada a estilos globales y tema claro/oscuro
    ============================================ */
 
 .mascota-card-fundacion {
-  background: white;
+  background: var(--color-card-bg);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
   position: relative;
 }
 
 .mascota-card-fundacion:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
-  border-color: rgba(102, 126, 234, 0.2);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
 }
 
 /* Imagen */
@@ -30,7 +30,7 @@
   height: 200px;
   overflow: hidden;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  background: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
 }
 
 .card-image-fundacion img {
@@ -52,8 +52,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #94a3b8;
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  color: var(--color-text-muted);
+  background: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
 }
 
 .image-placeholder-fundacion i {
@@ -88,6 +88,7 @@
   font-size: 0.6rem;
 }
 
+/* Estados - colores fijos (no dependen del tema) */
 .estado-adopcion {
   background: linear-gradient(135deg, #10b981, #059669);
 }
@@ -125,15 +126,15 @@
 .card-title-fundacion {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   margin: 0;
 }
 
 .card-id-fundacion {
   font-size: 0.6rem;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-family: monospace;
-  background: #f1f5f9;
+  background: var(--color-light);
   padding: 2px 8px;
   border-radius: 20px;
 }
@@ -145,7 +146,7 @@
   gap: 8px;
   margin-bottom: 12px;
   padding: 8px;
-  background: #f8fafc;
+  background: var(--color-light);
   border-radius: 12px;
 }
 
@@ -158,23 +159,23 @@
 
 .detail-item i {
   width: 18px;
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 0.65rem;
 }
 
 .detail-label {
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
 .detail-value {
-  color: #1e293b;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 /* Descripción - solo 1 línea */
 .card-description-fundacion {
-  color: #64748b;
+  color: var(--color-text-muted);
   font-size: 0.7rem;
   line-height: 1.4;
   margin-bottom: 16px;
@@ -188,7 +189,7 @@
 .estado-selector-fundacion {
   margin-bottom: 12px;
   padding: 8px;
-  background: #f8fafc;
+  background: var(--color-light);
   border-radius: 10px;
 }
 
@@ -198,39 +199,50 @@
   gap: 6px;
   font-size: 0.6rem;
   font-weight: 600;
-  color: #64748b;
+  color: var(--color-text-muted);
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .estado-selector-fundacion label i {
-  color: #667eea;
+  color: var(--color-primary);
   font-size: 0.55rem;
 }
 
 .estado-select-fundacion {
   width: 100%;
   padding: 6px 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 0.7rem;
   font-weight: 500;
-  background: white;
+  background: var(--color-card-bg);
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #1e293b;
+  transition: var(--transition);
+  color: var(--color-text);
 }
 
 .estado-select-fundacion:hover {
-  border-color: #667eea;
+  border-color: var(--color-primary);
+}
+
+.estado-select-fundacion:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
 }
 
 .estado-loading {
   display: inline-block;
   margin-left: 6px;
   font-size: 0.65rem;
-  color: #667eea;
+  color: var(--color-primary);
+  animation: spinEstado 1s linear infinite;
+}
+
+@keyframes spinEstado {
+  to { transform: rotate(360deg); }
 }
 
 /* Botones de acción - más compactos */
@@ -248,7 +260,7 @@
   font-weight: 600;
   text-align: center;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   cursor: pointer;
   border: none;
   display: inline-flex;
@@ -259,12 +271,12 @@
 
 .action-btn-fundacion.view {
   background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  color: var(--color-primary);
   border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .action-btn-fundacion.view:hover {
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
   transform: translateY(-2px);
 }
@@ -295,6 +307,30 @@
 
 .action-btn-fundacion:active {
   transform: translateY(0);
+}
+
+.action-btn-fundacion:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Modo oscuro - ajustes adicionales */
+[data-theme="dark"] .card-details-fundacion {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .card-id-fundacion {
+  background: rgba(255, 255, 255, 0.1);
+  color: #a0aec0;
+}
+
+[data-theme="dark"] .estado-selector-fundacion {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .card-description-fundacion {
+  color: #a0aec0;
 }
 
 /* Responsive */

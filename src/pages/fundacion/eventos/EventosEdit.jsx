@@ -1,113 +1,175 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { MapPin, Calendar, Image, FileText, X, Upload, Save } from 'lucide-react';
+// src/pages/fundacion/eventos/EventosEdit.jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Save, Calendar, MapPin, FileText, Image as ImageIcon, X, Loader, Trash2 } from 'lucide-react';
 import api from '../../../services/api';
-import './Eventos.css';
+import './EventosForm.css';
 
-const EventosEdit = () => {
+
+const FundacionEventosEdit = () => {
     const { id } = useParams();
+    const { t } = useTranslation('eventos');
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [previewImage, setPreviewImage] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(true);
     const [errors, setErrors] = useState({});
+    const [previewImage, setPreviewImage] = useState(null);
+    const [existingImage, setExistingImage] = useState(null);
+    
     const [formData, setFormData] = useState({
-        Nombre_evento: '',
-        Lugar_evento: '',
-        Descripcion: '',
-        Fecha_evento: '',
-        imagen: null
+        nombre_evento: '',
+        lugar_evento: '',
+        descripcion: '',
+        fecha_evento: '',
+        fecha_fin: '',
+        capacidad_maxima: '',
+        costo: '',
+        organizador: '',
+        telefono_contacto: '',
+        email_contacto: '',
+        categoria: '',
+        tags: []
     });
+    
+    const [tagInput, setTagInput] = useState('');
+    const [imagen, setImagen] = useState(null);
+
+    const getImageUrl = useCallback((url) => {
+        if (!url) return null;
+        if (url.startsWith('http')) return url;
+        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+        return url.startsWith('/storage') ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
+    }, []);
 
     useEffect(() => {
+        const loadEvento = async () => {
+            try {
+                const response = await api.get(`/entity/eventos/${id}`);
+                const evento = response.data.data || response.data;
+                
+                setFormData({
+                    nombre_evento: evento.nombre_evento || '',
+                    lugar_evento: evento.lugar_evento || '',
+                    descripcion: evento.descripcion || '',
+                    fecha_evento: evento.fecha_evento ? evento.fecha_evento.slice(0, 16) : '',
+                    fecha_fin: evento.fecha_fin ? evento.fecha_fin.slice(0, 16) : '',
+                    capacidad_maxima: evento.capacidad_maxima || '',
+                    costo: evento.costo || '',
+                    organizador: evento.organizador || '',
+                    telefono_contacto: evento.telefono_contacto || '',
+                    email_contacto: evento.email_contacto || '',
+                    categoria: evento.categoria || '',
+                    tags: Array.isArray(evento.tags) ? evento.tags : (evento.tags ? JSON.parse(evento.tags) : [])
+                });
+                
+                if (evento.imagen_url) {
+                    setExistingImage(getImageUrl(evento.imagen_url));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar el evento');
+                navigate('/fundacion/eventos');
+            } finally {
+                setInitialLoading(false);
+            }
+        };
+        
         loadEvento();
-    }, [id]);
-
-    const loadEvento = async () => {
-        try {
-            const response = await api.get(`/entity/eventos/${id}`);
-            const evento = response.data.data || response.data;
-            setFormData({
-                Nombre_evento: evento.nombre_evento,
-                Lugar_evento: evento.lugar_evento,
-                Descripcion: evento.descripcion,
-                Fecha_evento: evento.fecha_evento?.slice(0, 16),
-                imagen: null
-            });
-            setPreviewImage(evento.imagen_url);
-        } catch (error) {
-            console.error('Error:', error);
-            navigate('/fundacion/eventos');
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [id, navigate, getImageUrl]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (file.size > 2 * 1024 * 1024) {
-                setErrors(prev => ({ ...prev, imagen: 'El archivo no debe superar los 2MB' }));
-                return;
-            }
-            setFormData(prev => ({ ...prev, imagen: file }));
-            const reader = new FileReader();
-            reader.onloadend = () => setPreviewImage(reader.result);
-            reader.readAsDataURL(file);
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: null }));
         }
     };
 
-    const validateForm = () => {
-        const newErrors = {};
-        if (!formData.Nombre_evento.trim()) newErrors.Nombre_evento = 'El nombre es requerido';
-        if (!formData.Lugar_evento.trim()) newErrors.Lugar_evento = 'El lugar es requerido';
-        if (!formData.Descripcion.trim()) newErrors.Descripcion = 'La descripción es requerida';
-        if (!formData.Fecha_evento) newErrors.Fecha_evento = 'La fecha es requerida';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+    const handleAddTag = () => {
+        if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                tags: [...prev.tags, tagInput.trim()]
+            }));
+            setTagInput('');
+        }
+    };
+
+    const handleRemoveTag = (tag) => {
+        setFormData(prev => ({
+            ...prev,
+            tags: prev.tags.filter(t => t !== tag)
+        }));
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) {
+                alert('La imagen no puede superar los 2MB');
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                alert('Solo se permiten imágenes');
+                return;
+            }
+            setImagen(file);
+            const reader = new FileReader();
+            reader.onloadend = () => setPreviewImage(reader.result);
+            reader.readAsDataURL(file);
+            setExistingImage(null);
+        }
+    };
+
+    const handleRemoveExistingImage = () => {
+        setExistingImage(null);
+        setImagen(null);
+        setPreviewImage(null);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateForm()) return;
+        setLoading(true);
+        setErrors({});
 
-        setSaving(true);
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            if (key === 'tags' && formData.tags.length > 0) {
+                formDataToSend.append(key, JSON.stringify(formData.tags));
+            } else if (formData[key]) {
+                formDataToSend.append(key, formData[key]);
+            }
+        });
+        
+        if (imagen) {
+            formDataToSend.append('imagen', imagen);
+        }
+        
+        formDataToSend.append('_method', 'PUT');
+
         try {
-            const formDataToSend = new FormData();
-            formDataToSend.append('Nombre_evento', formData.Nombre_evento);
-            formDataToSend.append('Lugar_evento', formData.Lugar_evento);
-            formDataToSend.append('Descripcion', formData.Descripcion);
-            formDataToSend.append('Fecha_evento', formData.Fecha_evento);
-            if (formData.imagen) formDataToSend.append('imagen', formData.imagen);
-            formDataToSend.append('_method', 'PUT');
-
             await api.post(`/entity/eventos/${id}`, formDataToSend, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-
-            navigate('/fundacion/eventos');
+            
+            navigate(`/fundacion/eventos/${id}`);
         } catch (error) {
             console.error('Error:', error);
             if (error.response?.data?.errors) {
                 setErrors(error.response.data.errors);
             } else {
-                alert('Error al actualizar el evento');
+                alert(error.response?.data?.message || 'Error al actualizar el evento');
             }
         } finally {
-            setSaving(false);
+            setLoading(false);
         }
     };
 
-    if (loading) {
+    if (initialLoading) {
         return (
-            <div className="eventos-loading">
-                <div className="spinner"></div>
+            <div className="eventos-form-loading">
+                <Loader size={40} className="spinner" />
                 <p>Cargando evento...</p>
             </div>
         );
@@ -115,64 +177,159 @@ const EventosEdit = () => {
 
     return (
         <div className="eventos-form-container">
-            <div className="form-card">
-                <div className="form-card-header">
-                    <h2>Editar Evento</h2>
-                    <p>Actualiza los datos del evento</p>
+            <div className="eventos-form-card">
+                <div className="form-header">
+                    <Link to="/fundacion/eventos" className="back-link">
+                        <ArrowLeft size={20} />
+                        {t('volver') || 'Volver a mis eventos'}
+                    </Link>
+                    <h1>✏️ {t('editar_evento') || 'Editar Evento'}</h1>
+                    <p>{t('modifica_datos') || 'Modifica los datos de tu evento'}</p>
                 </div>
-                <div className="form-card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label><FileText size={16} /> Nombre del Evento *</label>
-                                <input type="text" name="Nombre_evento" className={`form-control ${errors.Nombre_evento ? 'is-invalid' : ''}`} value={formData.Nombre_evento} onChange={handleChange} />
-                                {errors.Nombre_evento && <div className="invalid-feedback">{errors.Nombre_evento}</div>}
+
+                <form onSubmit={handleSubmit} className="eventos-form">
+                    <div className="form-grid">
+                        <div className="form-column">
+                            <div className="form-group required">
+                                <label>📌 {t('nombre_evento') || 'Nombre del evento'}</label>
+                                <input
+                                    type="text"
+                                    name="nombre_evento"
+                                    value={formData.nombre_evento}
+                                    onChange={handleChange}
+                                    required
+                                />
                             </div>
+
+                            <div className="form-group required">
+                                <label><MapPin size={16} /> {t('lugar') || 'Lugar'}</label>
+                                <input
+                                    type="text"
+                                    name="lugar_evento"
+                                    value={formData.lugar_evento}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group required">
+                                <label><Calendar size={16} /> {t('fecha_inicio') || 'Fecha de inicio'}</label>
+                                <input
+                                    type="datetime-local"
+                                    name="fecha_evento"
+                                    value={formData.fecha_evento}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
                             <div className="form-group">
-                                <label><MapPin size={16} /> Lugar del Evento *</label>
-                                <input type="text" name="Lugar_evento" className={`form-control ${errors.Lugar_evento ? 'is-invalid' : ''}`} value={formData.Lugar_evento} onChange={handleChange} />
-                                {errors.Lugar_evento && <div className="invalid-feedback">{errors.Lugar_evento}</div>}
+                                <label><Calendar size={16} /> {t('fecha_fin') || 'Fecha de fin'}</label>
+                                <input
+                                    type="datetime-local"
+                                    name="fecha_fin"
+                                    value={formData.fecha_fin}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <label><FileText size={16} /> Descripción *</label>
-                            <textarea name="Descripcion" rows="5" className={`form-control ${errors.Descripcion ? 'is-invalid' : ''}`} value={formData.Descripcion} onChange={handleChange} />
-                            {errors.Descripcion && <div className="invalid-feedback">{errors.Descripcion}</div>}
-                        </div>
-
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label><Calendar size={16} /> Fecha y Hora *</label>
-                                <input type="datetime-local" name="Fecha_evento" className={`form-control ${errors.Fecha_evento ? 'is-invalid' : ''}`} value={formData.Fecha_evento} onChange={handleChange} />
-                                {errors.Fecha_evento && <div className="invalid-feedback">{errors.Fecha_evento}</div>}
+                        <div className="form-column">
+                            <div className="form-group required">
+                                <label><FileText size={16} /> {t('descripcion') || 'Descripción'}</label>
+                                <textarea
+                                    name="descripcion"
+                                    value={formData.descripcion}
+                                    onChange={handleChange}
+                                    rows="5"
+                                    required
+                                />
                             </div>
-                            <div className="form-group">
-                                <label><Image size={16} /> Imagen del Evento</label>
-                                <div className="file-upload">
-                                    <input type="file" id="imagen" className="file-input" accept="image/*" onChange={handleFileChange} />
-                                    <label htmlFor="imagen" className="file-label"><Upload size={20} /> Cambiar imagen</label>
+
+                            <div className="form-row-2">
+                                <div className="form-group">
+                                    <label>💰 {t('costo') || 'Costo'}</label>
+                                    <input
+                                        type="text"
+                                        name="costo"
+                                        value={formData.costo}
+                                        onChange={handleChange}
+                                    />
                                 </div>
-                                {previewImage && (
-                                    <div className="image-preview">
-                                        <img src={previewImage} alt="Vista previa" />
-                                        <button type="button" onClick={() => { setPreviewImage(null); setFormData(prev => ({ ...prev, imagen: null })); }} className="remove-preview"><X size={16} /></button>
+                                <div className="form-group">
+                                    <label>👥 {t('capacidad') || 'Capacidad'}</label>
+                                    <input
+                                        type="number"
+                                        name="capacidad_maxima"
+                                        value={formData.capacidad_maxima}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label>🏷️ {t('tags') || 'Etiquetas'}</label>
+                                <div className="tags-input-container">
+                                    <div className="tags-list">
+                                        {formData.tags.map(tag => (
+                                            <span key={tag} className="tag">
+                                                {tag}
+                                                <button type="button" onClick={() => handleRemoveTag(tag)}>
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))}
                                     </div>
-                                )}
-                                <div className="form-text">Formatos: JPEG, PNG, JPG, GIF (Máximo 2MB)</div>
-                                {errors.imagen && <div className="invalid-feedback">{errors.imagen}</div>}
+                                    <div className="tags-input-wrapper">
+                                        <input
+                                            type="text"
+                                            value={tagInput}
+                                            onChange={(e) => setTagInput(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                                            placeholder="Agregar etiqueta"
+                                        />
+                                        <button type="button" onClick={handleAddTag}>+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label><ImageIcon size={16} /> {t('imagen') || 'Imagen'}</label>
+                                <div className="image-upload-area">
+                                    {(existingImage || previewImage) ? (
+                                        <div className="image-preview">
+                                            <img src={previewImage || existingImage} alt="Preview" />
+                                            <button type="button" onClick={handleRemoveExistingImage}>
+                                                <X size={20} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <label className="upload-label">
+                                            <input type="file" accept="image/*" onChange={handleImageChange} />
+                                            <div className="upload-placeholder">
+                                                <ImageIcon size={32} />
+                                                <span>Subir nueva imagen</span>
+                                            </div>
+                                        </label>
+                                    )}
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="form-actions">
-                            <button type="button" onClick={() => navigate('/fundacion/eventos')} className="btn-secondary" disabled={saving}>Cancelar</button>
-                            <button type="submit" className="btn-primary" disabled={saving}><Save size={18} /> {saving ? 'Guardando...' : 'Guardar Cambios'}</button>
-                        </div>
-                    </form>
-                </div>
+                    <div className="form-actions">
+                        <Link to="/fundacion/eventos" className="btn-cancel">
+                            Cancelar
+                        </Link>
+                        <button type="submit" className="btn-submit" disabled={loading}>
+                            {loading ? <Loader size={20} className="spinner" /> : <Save size={20} />}
+                            {loading ? 'Guardando...' : 'Guardar Cambios'}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
 };
 
-export default EventosEdit;
+export default FundacionEventosEdit;
