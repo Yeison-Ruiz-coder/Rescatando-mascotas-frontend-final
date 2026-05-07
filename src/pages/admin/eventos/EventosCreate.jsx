@@ -103,7 +103,7 @@ const AdminEventosCreate = () => {
                     <Link to="/admin/eventos" className="back-link">
                         <ArrowLeft size={20} /> Volver a eventos
                     </Link>
-                    <h1>✨ Crear Nuevo Evento</h1>
+                    <h1> Crear Nuevo Evento</h1>
                     <p>Completa los datos para crear un evento global</p>
                 </div>
 
@@ -111,7 +111,7 @@ const AdminEventosCreate = () => {
                     <div className="form-grid">
                         <div className="form-column">
                             <div className="form-group required">
-                                <label>📌 Nombre del evento *</label>
+                                <label>⚲ Nombre del evento *</label>
                                 <input
                                     type="text"
                                     name="nombre_evento"
@@ -160,7 +160,7 @@ const AdminEventosCreate = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>👥 Capacidad máxima</label>
+                                <label>𖠋𖠋 Capacidad máxima</label>
                                 <input
                                     type="number"
                                     name="capacidad_maxima"
@@ -187,17 +187,17 @@ const AdminEventosCreate = () => {
 
                             <div className="form-row-2">
                                 <div className="form-group">
-                                    <label>💰 Costo</label>
+                                    <label>$ Costo</label>
                                     <input type="text" name="costo" value={formData.costo} onChange={handleChange} placeholder="Ej: Gratuito" />
                                 </div>
                                 <div className="form-group">
-                                    <label>📁 Categoría</label>
+                                    <label>🗁 Categoría</label>
                                     <input type="text" name="categoria" value={formData.categoria} onChange={handleChange} placeholder="Ej: Adopción" />
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label>📞 Contacto (opcional)</label>
+                                <label>✆ Contacto (opcional)</label>
                                 <div className="form-row-2">
                                     <input type="text" name="organizador" value={formData.organizador} onChange={handleChange} placeholder="Organizador" />
                                     <input type="tel" name="telefono_contacto" value={formData.telefono_contacto} onChange={handleChange} placeholder="Teléfono" />
@@ -206,7 +206,7 @@ const AdminEventosCreate = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>🏷️ Etiquetas</label>
+                                <label>𖤘 Etiquetas</label>
                                 <div className="tags-input-container">
                                     <div className="tags-list">
                                         {formData.tags.map(tag => (
