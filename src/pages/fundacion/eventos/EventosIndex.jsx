@@ -1,160 +1,199 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/fundacion/eventos/EventosIndex.jsx
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Eye, Edit, Trash2, MapPin, Calendar, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Plus, Calendar, Edit, Trash2, Eye, Loader } from 'lucide-react';
+import { useAuth } from '../../../contexts/AuthContext';
 import api from '../../../services/api';
-import './Eventos.css';
+import './EventosIndex.css';
 
-const EventosIndex = () => {
+const FundacionEventosIndex = () => {
+    const { t } = useTranslation('eventos');
+    const { user } = useAuth();
     const [eventos, setEventos] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
+    const [error, setError] = useState(null);
+    const [deletingId, setDeletingId] = useState(null);
 
-    // ✅ Función para obtener la URL completa de la imagen
-    const getImageUrl = (url) => {
+    const getImageUrl = useCallback((url) => {
         if (!url) return null;
         if (url.startsWith('http')) return url;
-        return `http://localhost:8000${url}`;
-    };
-
-    useEffect(() => {
-        loadEventos();
+        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+        return url.startsWith('/storage') ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
     }, []);
 
-    const loadEventos = async () => {
+    const loadEventos = useCallback(async () => {
         setLoading(true);
+        setError(null);
         try {
             const response = await api.get('/entity/eventos');
-            setEventos(response.data.data || response.data);
+            const data = response.data.data || response.data;
+            setEventos(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error('Error:', error);
-            setAlertMessage('Error al cargar los eventos');
-            setShowAlert(true);
-            setTimeout(() => setShowAlert(false), 3000);
+            console.error('Error al cargar eventos:', error);
+            setError(error.response?.data?.message || 'Error al cargar los eventos');
+            setEventos([]);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        loadEventos();
+    }, [loadEventos]);
 
     const handleDelete = async (id) => {
-        if (window.confirm('¿Estás seguro de eliminar este evento?')) {
-            try {
-                await api.delete(`/entity/eventos/${id}`);
-                setAlertMessage('Evento eliminado correctamente');
-                setShowAlert(true);
-                loadEventos();
-                setTimeout(() => setShowAlert(false), 3000);
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al eliminar el evento');
-            }
+        if (!window.confirm(t('confirmar_eliminar') || '¿Estás seguro de eliminar este evento?')) {
+            return;
+        }
+
+        setDeletingId(id);
+        try {
+            await api.delete(`/entity/eventos/${id}`);
+            setEventos(prev => prev.filter(evento => evento.id !== id));
+        } catch (error) {
+            console.error('Error al eliminar:', error);
+            alert(error.response?.data?.message || 'Error al eliminar el evento');
+        } finally {
+            setDeletingId(null);
         }
     };
 
     if (loading) {
         return (
-            <div className="eventos-loading">
-                <div className="spinner"></div>
+            <div className="fundacion-eventos-loading">
+                <Loader className="spinner" size={40} />
                 <p>Cargando eventos...</p>
             </div>
         );
     }
 
-    return (
-        <div className="eventos-container">
-            {showAlert && (
-                <div className="alert-success">
-                    {alertMessage}
-                    <button className="btn-close" onClick={() => setShowAlert(false)}>×</button>
+    if (error) {
+        return (
+            <div className="fundacion-eventos-container">
+                <div className="fundacion-eventos-error">
+                    <Calendar size={48} />
+                    <h4>Error al cargar eventos</h4>
+                    <p>{error}</p>
+                    <button onClick={loadEventos} className="btn-retry">Reintentar</button>
                 </div>
-            )}
+            </div>
+        );
+    }
 
-            <div className="eventos-header">
+    return (
+        <div className="fundacion-eventos-container">
+            <div className="fundacion-eventos-header">
                 <div>
-                    <h1 className="eventos-title">Mis Eventos</h1>
-                    <p className="eventos-subtitle">Gestiona los eventos de tu fundación</p>
+                    <h1>📅 {t('mis_eventos') || 'Mis Eventos'}</h1>
+                    <p>{t('gestiona_eventos') || 'Gestiona los eventos de tu fundación'}</p>
                 </div>
-                <Link to="/fundacion/eventos/crear" className="btn-primary">
-                    <Plus size={18} />
-                    Crear Nuevo Evento
+                <Link to="/fundacion/eventos/crear" className="btn-create-evento">
+                    <Plus size={20} />
+                    {t('crear_evento') || 'Crear Evento'}
                 </Link>
             </div>
 
-            {eventos.length > 0 ? (
-                <div className="eventos-grid">
-                    {eventos.map((evento) => (
-                        <div key={evento.id} className="evento-card">
-                            {/* ✅ IMAGEN CORREGIDA */}
-                            {evento.imagen_url ? (
-                                <img 
-                                    src={getImageUrl(evento.imagen_url)} 
-                                    alt={evento.nombre_evento} 
-                                    className="evento-card-img"
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.style.display = 'none';
-                                        if (e.target.nextSibling) {
-                                            e.target.nextSibling.style.display = 'flex';
-                                        }
-                                    }}
-                                />
-                            ) : null}
-                            {!evento.imagen_url && (
-                                <div className="evento-card-placeholder">
-                                    <Calendar size={48} />
-                                    <span>{evento.nombre_evento}</span>
-                                </div>
-                            )}
-
-                            <div className="evento-card-body">
-                                <h5 className="evento-card-title">{evento.nombre_evento}</h5>
-                                <p className="evento-card-text">
-                                    {evento.descripcion?.substring(0, 100)}
-                                    {evento.descripcion?.length > 100 ? '...' : ''}
-                                </p>
-
-                                <div className="evento-card-info">
-                                    <div className="info-item">
-                                        <MapPin size={14} />
-                                        <span>{evento.lugar_evento}</span>
-                                    </div>
-                                    <div className="info-item">
-                                        <Calendar size={14} />
-                                        <span className="evento-date">
-                                            {new Date(evento.fecha_evento).toLocaleDateString('es-ES', {
-                                                day: '2-digit',
-                                                month: 'short',
-                                                year: 'numeric'
-                                            })}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="evento-card-actions">
-                                    <Link to={`/fundacion/eventos/${evento.id}`} className="btn-icon btn-view" title="Ver detalles">
-                                        <Eye size={16} />
-                                    </Link>
-                                    <Link to={`/fundacion/eventos/${evento.id}/editar`} className="btn-icon btn-edit" title="Editar evento">
-                                        <Edit size={16} />
-                                    </Link>
-                                    <button onClick={() => handleDelete(evento.id)} className="btn-icon btn-delete" title="Eliminar evento">
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+            {eventos.length === 0 ? (
+                <div className="fundacion-eventos-empty">
+                    <Calendar size={64} />
+                    <h4>{t('sin_eventos') || 'No tienes eventos creados'}</h4>
+                    <p>{t('crea_primer_evento') || 'Crea tu primer evento para compartir con la comunidad'}</p>
+                    <Link to="/fundacion/eventos/crear" className="btn-create-first">
+                        <Plus size={20} />
+                        {t('crear_primer_evento') || 'Crear mi primer evento'}
+                    </Link>
                 </div>
             ) : (
-                <div className="eventos-empty">
-                    <AlertCircle size={48} />
-                    <h4>No hay eventos creados</h4>
-                    <p>Comienza creando tu primer evento</p>
-                    <Link to="/fundacion/eventos/crear" className="btn-primary">Crear Primer Evento</Link>
+                <div className="fundacion-eventos-table-container">
+                    <table className="fundacion-eventos-table">
+                        <thead>
+                            <tr>
+                                <th>{t('imagen') || 'Imagen'}</th>
+                                <th>{t('nombre') || 'Nombre'}</th>
+                                <th>{t('lugar') || 'Lugar'}</th>
+                                <th>{t('fecha') || 'Fecha'}</th>
+                                <th>{t('asistentes') || 'Asistentes'}</th>
+                                <th>{t('likes') || 'Likes'}</th>
+                                <th>{t('acciones') || 'Acciones'}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {eventos.map(evento => (
+                                <tr key={evento.id}>
+                                    <td className="table-image-cell">
+                                        {evento.imagen_url ? (
+                                            <img 
+                                                src={getImageUrl(evento.imagen_url)} 
+                                                alt={evento.nombre_evento}
+                                                onError={(e) => { e.target.src = '/placeholder-event.png'; }}
+                                            />
+                                        ) : (
+                                            <div className="table-image-placeholder">
+                                                <Calendar size={24} />
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className="table-title-cell">
+                                        <strong>{evento.nombre_evento}</strong>
+                                        <span className="evento-desc-preview">
+                                            {evento.descripcion?.substring(0, 50)}...
+                                        </span>
+                                    </td>
+                                    <td>{evento.lugar_evento}</td>
+                                    <td>
+                                        {new Date(evento.fecha_evento).toLocaleDateString('es-ES', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric'
+                                        })}
+                                    </td>
+                                    <td className="table-stats-cell">
+                                        <span className="stat-badge asistentes">
+                                            👥 {evento.total_asistentes || 0}
+                                        </span>
+                                    </td>
+                                    <td className="table-stats-cell">
+                                        <span className="stat-badge likes">
+                                            ❤️ {evento.likes || 0}
+                                        </span>
+                                    </td>
+                                    <td className="table-actions-cell">
+                                        <Link 
+                                            to={`/fundacion/eventos/${evento.id}`} 
+                                            className="action-btn view-btn"
+                                            title="Ver detalles"
+                                        >
+                                            <Eye size={18} />
+                                        </Link>
+                                        <Link 
+                                            to={`/fundacion/eventos/${evento.id}/editar`} 
+                                            className="action-btn edit-btn"
+                                            title="Editar"
+                                        >
+                                            <Edit size={18} />
+                                        </Link>
+                                        <button 
+                                            onClick={() => handleDelete(evento.id)} 
+                                            className="action-btn delete-btn"
+                                            disabled={deletingId === evento.id}
+                                            title="Eliminar"
+                                        >
+                                            {deletingId === evento.id ? (
+                                                <Loader size={18} className="spinner-small" />
+                                            ) : (
+                                                <Trash2 size={18} />
+                                            )}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>
     );
 };
 
-export default EventosIndex;
+export default FundacionEventosIndex;

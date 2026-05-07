@@ -2,7 +2,7 @@
 
 .mascota-card {
   background: var(--color-card-bg);
-  border-radius: 24px;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
@@ -17,12 +17,12 @@
 .mascota-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--color-accent);
+  border-color: var(--color-primary);
 }
 
 /* Variante compact */
 .mascota-card.compact {
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
 }
 
 .mascota-card.compact .card-image {
@@ -87,12 +87,12 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  z-index: 2;
+  z-index: var(--z-elevate);
 }
 
 .mascota-card .badge {
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   backdrop-filter: blur(8px);
@@ -146,9 +146,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 140, 66, 0.08);
+  background: var(--color-hover);
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 /* Botones */
@@ -162,7 +162,7 @@
   flex: 1;
   min-width: 110px;
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 600;
   text-align: center;
@@ -178,15 +178,16 @@
 }
 
 .mascota-card .btn-card-outline {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--color-hover);
   color: var(--color-primary);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  border: 1px solid var(--color-border);
 }
 
 .mascota-card .btn-card-outline:hover {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: white;
   transform: translateY(-2px);
+  border-color: transparent;
 }
 
 .mascota-card .btn-card-primary {
@@ -196,7 +197,16 @@
 
 .mascota-card .btn-card-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-accent);
+}
+
+/* Modo oscuro - ajustes específicos */
+[data-theme="dark"] .mascota-card .badge-dark {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .mascota-card .card-fundacion {
+  background: rgba(139, 156, 255, 0.1);
 }
 
 /* Responsive */

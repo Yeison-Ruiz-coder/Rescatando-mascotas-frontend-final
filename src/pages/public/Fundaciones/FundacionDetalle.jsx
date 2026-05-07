@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { 
   ArrowLeft, Building, MapPin, Phone, Mail, 
   Clock, Users, Heart, FileText, 
-  CheckCircle, Award, PawPrint, ExternalLink, 
-  HelpCircle, Calendar
+  PawPrint, ExternalLink
 } from 'lucide-react';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
@@ -29,6 +28,14 @@ const MapaSimple = ({ direccion, nombre }) => {
   );
 };
 
+// Función para extraer datos de respuesta
+const extractData = (responseData) => {
+  if (Array.isArray(responseData)) return responseData;
+  if (responseData?.data && Array.isArray(responseData.data)) return responseData.data;
+  if (responseData?.data?.data && Array.isArray(responseData.data.data)) return responseData.data.data;
+  return responseData;
+};
+
 const FundacionDetalle = () => {
   const { id } = useParams();
   const { t } = useTranslation('fundaciones');
@@ -40,7 +47,8 @@ const FundacionDetalle = () => {
   const getImageUrl = useCallback((url) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    return `http://localhost:8000${url}`;
+    if (url.startsWith('/storage')) return `http://localhost:8000${url}`;
+    return `http://localhost:8000/storage/${url}`;
   }, []);
 
   useEffect(() => {
@@ -62,11 +70,22 @@ const FundacionDetalle = () => {
         
         if (!isMounted) return;
         
-        setFundacion(fundacionRes.data?.data || fundacionRes.data);
-        setMascotas(mascotasRes.data?.data || mascotasRes.data || []);
+        // ✅ Extraer datos correctamente
+        let fundacionData = extractData(fundacionRes.data);
+        // Si extractData devuelve un array, tomar el primer elemento
+        if (Array.isArray(fundacionData) && fundacionData.length > 0) {
+          fundacionData = fundacionData[0];
+        }
+        
+        let mascotasData = extractData(mascotasRes.data);
+        if (!Array.isArray(mascotasData)) mascotasData = [];
+        
+        setFundacion(fundacionData);
+        setMascotas(mascotasData);
+        
       } catch (error) {
         if (error.name === 'CanceledError' || error.name === 'AbortError') {
-          console.log('Petición cancelada (navegación rápida)');
+          console.log('Petición cancelada');
           return;
         }
         console.error('Error:', error);
@@ -136,13 +155,9 @@ const FundacionDetalle = () => {
   return (
     <div className="fundacion-detalle">
       <div className="detalle-container">
-        {/* Card principal */}
         <div className="detalle-card">
-          {/* ❌ Portada ELIMINADA - Imagen de portada removida */}
-
-          {/* Contenido */}
           <div className="card-contenido">
-            {/* ✅ BOTÓN DENTRO DE LA CARD - ANTES DEL TÍTULO */}
+            {/* Botón volver */}
             <div className="back-button-wrapper">
               <Link to="/fundaciones" className="nav-back-inline">
                 <ArrowLeft size={16} />

@@ -4,14 +4,16 @@
   "fundacion_label": "Foundation",
   "cargando": "Loading...",
   "registrar_mascota_rescatada": "Register Rescued Pet",
-  "registrar_mascota_rescatada_desc": "Complete the rescued pet's information",
-  "registrando_mascota_rescatada_en": "Rescued at",
+  "registrar_mascota_rescatada_desc": "Complete the data of the rescued pet",
+  "registrando_mascota_rescatada_en": "Rescued in",
   
   "steps": {
     "informacion_basica": "Basic Information",
     "ubicacion_descripcion": "Location & Description",
     "salud_vacunas": "Health & Vaccines",
-    "galeria_fotos": "Photo Gallery"
+    "galeria_fotos": "Photo Gallery",
+    "caracteristicas_fisicas": "Physical Characteristics",
+    "requisitos_adopcion": "Adoption Requirements"
   },
   
   "informacion_basica": "Basic Information",
@@ -31,22 +33,22 @@
   "hembra": "Female",
   "desconocido": "Unknown",
   "estado_actual": "Current Status",
-  "estado_en_adopcion": "For Adoption",
+  "estado_en_adopcion": "Available for Adoption",
   "estado_rescatada": "Rescued",
   "estado_en_acogida": "In Foster Care",
   "estado_adoptado": "Adopted",
-  "edad_aproximada":"Approximate age",
+  "edad_aproximada": "Approximate Age",
   
   "ubicacion_descripcion": "Location & Description",
-  "lugar_rescate": "Rescue Location",
-  "lugar_rescate_placeholder": "Ex: Central Park, Main Street #123",
+  "lugar_rescate": "Location",
+  "lugar_rescate_placeholder": "Ex: Central Park, Main St #123",
   "descripcion": "Description",
   "descripcion_placeholder": "Describe the pet: personality, behavior, health condition, special needs...",
   "condiciones_especiales": "Special Conditions",
   "condiciones_placeholder": "Chronic illnesses, disabilities, special care...",
   
   "salud_vacunas": "Health & Vaccines",
-  "necesita_hogar_temporal": "Needs temporary foster home",
+  "necesita_hogar_temporal": "Needs foster home",
   "apto_con_ninos": "Good with children",
   "apto_con_otros_animales": "Good with other animals",
   "vacunas_aplicadas": "Applied Vaccines",
@@ -59,7 +61,7 @@
   "galeria_fotos": "Photo Gallery",
   "foto_principal": "Main Photo",
   "foto_principal_requerida": "Main photo is required",
-  "formatos_imagen": "Formats: JPG, PNG, GIF • Max. 2MB",
+  "formatos_imagen": "Formats: JPG, PNG, GIF • Max 2MB",
   "galeria_descripcion": "You can select multiple additional photos (max 2MB each)",
   "seleccionar_imagenes": "Select images",
   "seleccionar_imagen": "Select image",
@@ -77,11 +79,11 @@
   "errores": {
     "nombre_requerido": "Name is required",
     "especie_requerida": "Species is required",
-    "razas_requeridas": "At least one breed must be selected",
+    "razas_requeridas": "You must select at least one breed",
     "edad_requerida": "Age is required",
     "genero_requerido": "Gender is required",
     "estado_requerido": "Status is required",
-    "lugar_rescate_requerido": "Rescue location is required",
+    "lugar_rescate_requerido": "Location is required",
     "descripcion_requerida": "Description is required",
     "foto_principal_requerida": "Main photo is required"
   },
@@ -94,13 +96,52 @@
     "imagen_grande": "Image must not exceed 2MB",
     "imagen_excluida": "Image {{nombre}} exceeds 2MB and will not be included",
     "imagen_invalida": "Invalid format or image too large (max 2MB)",
-    "seleccionar_especie_primero": "You must select a species first"
+    "seleccionar_especie_primero": "You must select a species first",
+    "registrada_exitoso": "Pet registered successfully"
   },
   
   "acceso_no_autorizado": {
     "titulo": "Unauthorized Access",
-    "mensaje": "This section is for Foundation users only",
+    "mensaje": "This section is only for Foundation users",
     "tu_tipo": "Your user type is",
-    "volver_inicio": "Back to home"
-  }
+    "volver_inicio": "Back to Home"
+  },
+  
+  "editar_mascota": "Edit Pet",
+  "editar_mascota_desc": "Modify your pet's information, photos and details",
+
+  "peso_aprox": "Approximate Weight (kg)",
+  "tamano": "Size",
+  "seleccionar_tamano": "Select size",
+  "tamano_pequeño": "Small",
+  "tamano_mediano": "Medium",
+  "tamano_grande": "Large",
+  "tamano_muy_grande": "Very Large",
+  "color": "Color",
+  "salud_general": "General Health",
+  "salud_general_placeholder": "Describe the pet's general health condition...",
+  "esterilizado": "Spayed/Neutered",
+  "desparasitado": "Dewormed",
+  "vacunado": "Vaccinated",
+  "enfermedades_cronicas": "Chronic Illnesses",
+  "enfermedad_placeholder": "Ex: Diabetes, Arthritis...",
+  "medicamentos": "Medications",
+  "medicamento_placeholder": "Ex: Antibiotics, Painkillers...",
+  "requisitos_adopcion": "Adoption Requirements",
+  "requisito_placeholder": "Ex: House with garden, Previous experience...",
+  "hogar_recomendado": "Recommended Home Type",
+  "seleccionar_hogar": "Select home type",
+  "casa_con_jardin": "House with garden",
+  "departamento": "Apartment",
+  "casa_sin_jardin": "House without garden",
+  "espacio_amplio": "Large space",
+  "requisitos_help": "Add the requirements that the adopter must meet",
+  "video_url": "Video URL",
+  "video_help": "Paste YouTube or Vimeo link",
+  "galeria_help": "You can select up to 10 additional images (max 2MB each)",
+  "titulo_editar": "Edit Pet",
+  "subtitulo_editar": "Modify your pet's information, photos and details",
+  "actualizando_mascota": "Updating pet...",
+  "actualizacion_exitosa": "Pet updated successfully",
+  "error_actualizacion": "Error updating pet"
 }

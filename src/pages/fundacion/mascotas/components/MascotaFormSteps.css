@@ -1,0 +1,126 @@
+/* src/pages/fundacion/mascotas/components/MascotaFormSteps.css */
+
+/* Todos los estilos encapsulados bajo .steps-container */
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  background: var(--form-input-bg);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--form-border);
+}
+
+.steps-container .step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0.5rem;
+}
+
+.steps-container .step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--form-border);
+  z-index: 1;
+}
+
+.steps-container .step.active:not(:last-child)::after,
+.steps-container .step.completed:not(:last-child)::after {
+  background: var(--color-primary);
+}
+
+.steps-container .step-circle {
+  width: 40px;
+  height: 40px;
+  background: var(--form-input-bg);
+  border: 2px solid var(--form-border);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--form-text);
+  margin-bottom: 0.5rem;
+  z-index: 2;
+  background: var(--form-bg);
+  transition: var(--transition);
+}
+
+.steps-container .step.active .step-circle {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.steps-container .step.completed .step-circle {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.steps-container .step.completed .step-circle i {
+  font-size: 0.8rem;
+}
+
+.steps-container .step-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.steps-container .step-label i {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+}
+
+.steps-container .step.active .step-label {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.steps-container .step.completed .step-label {
+  color: var(--color-success);
+}
+
+@media (max-width: 768px) {
+  .steps-container {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .steps-container .step {
+    flex: 0 0 calc(33.33% - 0.5rem);
+  }
+  
+  .steps-container .step:not(:last-child)::after {
+    display: none;
+  }
+  
+  .steps-container .step-label span {
+    display: none;
+  }
+  
+  .steps-container .step-label i {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .steps-container .step {
+    flex: 0 0 calc(50% - 0.5rem);
+  }
+}

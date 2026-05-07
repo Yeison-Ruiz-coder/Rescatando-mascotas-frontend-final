@@ -130,3 +130,77 @@
     justify-content: center;
   }
 }
+
+/* src/pages/fundacion/rescates/RescateDetalle.css */
+/* Agrega esto al final del archivo */
+
+/* ============================================
+   MODO OSCURO - RESCATE DETALLE
+   ============================================ */
+
+[data-theme="dark"] .rescate-detalle-container {
+  background: transparent;
+}
+
+[data-theme="dark"] .btn-back {
+  color: #8b9cff;
+}
+
+[data-theme="dark"] .btn-back:hover {
+  background: #1e293b;
+}
+
+[data-theme="dark"] .detalle-header h1 {
+  color: #f1f5f9;
+}
+
+/* Card principal - fondo blanco forzado */
+[data-theme="dark"] .detalle-card {
+  background: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Badges en modo oscuro */
+[data-theme="dark"] .detalle-badges {
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="dark"] .detalle-tipo {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Textos dentro de la card (siempre oscuros) */
+[data-theme="dark"] .info-group label {
+  color: #64748b;
+}
+
+[data-theme="dark"] .info-group p {
+  color: #1e293b !important;
+}
+
+/* Fotos en modo oscuro */
+[data-theme="dark"] .detalle-foto-principal label,
+[data-theme="dark"] .detalle-galeria label {
+  color: #334155;
+}
+
+/* Metadata */
+[data-theme="dark"] .info-metadata {
+  background: #f8fafc;
+}
+
+[data-theme="dark"] .metadata-label {
+  color: #64748b;
+}
+
+[data-theme="dark"] .metadata-value {
+  color: #1e293b;
+}
+
+/* Botones de acción en modo oscuro */
+[data-theme="dark"] .detalle-actions {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
+}

@@ -1,75 +1,13 @@
 /* src/pages/public/Home/Home.css */
-/* ===== VARIABLES ===== */
-.home-page {
-  --color-primary: #667eea;
-  --color-secondary: #764ba2;
-  --color-accent: #ff8c42;
-  --color-heart: #ff6b9d;
-  --color-text: #1e293b;
-  --color-text-muted: #475569;
-  --color-white-soft: rgba(255, 255, 255, 0.85);
-  --color-white-glass: rgba(255, 255, 255, 0.25);
-  --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-  --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-heart));
-  --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
-  --border-glass: 1px solid rgba(255, 255, 255, 0.3);
-  --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --border-radius-card: 28px;
-}
+/* Estilos exclusivos del Home (no duplica estilos globales) */
 
 .home-page {
   width: 100%;
   overflow-x: hidden;
   background: transparent;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Contenedor principal */
-.home-page .container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-  position: relative;
-  z-index: 2;
-}
-
-/* ===== EFECTOS GLOBALES ===== */
-.home-page .section {
-  padding: 80px 0;
-  position: relative;
-  backdrop-filter: blur(2px);
-}
-
-/* Títulos con gradiente + sombra suave */
-.home-page .section-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 1rem;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.home-page .section-subtitle {
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: 1.2rem;
-  margin-bottom: 3rem;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-/* ===== CARRUSEL HERO (mejorado) ===== */
+/* ===== CARRUSEL HERO ===== */
 .home-page .hero-carousel-full {
   position: relative;
   width: 100%;
@@ -126,7 +64,7 @@
 
 .home-page .carousel-content {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-elevate);
   height: 100%;
   display: flex;
   align-items: center;
@@ -134,11 +72,11 @@
 
 .home-page .carousel-text {
   max-width: 650px;
-  color: white;
+  color: white ;
   backdrop-filter: blur(4px);
   background: rgba(0, 0, 0, 0.2);
   padding: 2rem;
-  border-radius: 32px;
+  border-radius: var(--radius-2xl);
   border-left: 4px solid var(--color-accent);
 }
 
@@ -147,6 +85,7 @@
   font-weight: 500;
   margin-bottom: 0.75rem;
   opacity: 0.95;
+  color: white;
   letter-spacing: 1px;
 }
 
@@ -166,9 +105,9 @@
   margin-bottom: 2rem;
   opacity: 0.95;
   line-height: 1.5;
+  color: white;
 }
 
-/* Botones carrusel con vidrio */
 .home-page .carousel-nav {
   position: absolute;
   top: 50%;
@@ -193,7 +132,7 @@
   background: var(--gradient-primary);
   transform: translateY(-50%) scale(1.05);
   border-color: transparent;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 .home-page .carousel-prev { left: 30px; }
@@ -216,7 +155,7 @@
   background: rgba(255, 255, 255, 0.5);
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-fast);
 }
 
 .home-page .carousel-dot.active {
@@ -224,350 +163,223 @@
   background: var(--color-accent);
 }
 
-/* ===== STATS (tarjetas con vidrio) ===== */
-.home-page .stats {
-  padding: 70px 0;
-  background: transparent;
-  position: relative;
-  backdrop-filter: blur(4px);
-}
-
-.home-page .stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  text-align: center;
-}
-
-.home-page .stats-grid > div {
-  background: white;
-  backdrop-filter: blur(12px);
-  border-radius: 32px;
-  padding: 2rem 1rem;
-  border: var(--border-glass);
-  transition: var(--transition);
-  box-shadow: var(--shadow-glass);
-}
-
-.home-page .stats-grid > div:hover {
-  transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.35);
-  border-color: var(--color-primary);
-}
-
-.home-page .stat-number {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  background: var(--gradient-accent);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.home-page .stat-label {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--color-text);
-  letter-spacing: -0.2px;
-}
-
-/* ===== MASCOTAS ===== */
-.home-page .mascotas-section {
-  padding: 80px 0;
-  position: relative;
-}
-
-.home-page .mascotas-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  justify-items: center;
-}
-
-/* Estilos adicionales para MascotaCard (asegura consistencia) */
-.home-page .mascotas-grid .mascota-card {
-  background: var(--color-white-soft);
-  backdrop-filter: blur(8px);
-  border-radius: var(--border-radius-card);
-  overflow: hidden;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-  border: var(--border-glass);
-}
-
-.home-page .mascotas-grid .mascota-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-accent);
-}
-
-/* ===== PROCESO (ya tiene su propio CSS, pero lo armonizamos) ===== */
-/* Aseguramos que el proceso se vea bien con el fondo */
-.home-page .proceso-section {
-  backdrop-filter: blur(4px);
-}
-
-/* ===== TESTIMONIOS ===== */
-.home-page .testimonios {
-  background: transparent;
-  position: relative;
-  padding: 80px 0;
-}
-
-.home-page .testimonios-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.home-page .testimonial {
-  background: white;
-  backdrop-filter: blur(12px);
-  border-radius: 32px;
-  padding: 1.8rem;
-  transition: var(--transition);
-  box-shadow: var(--shadow-glass);
-  border: var(--border-glass);
-}
-
-.home-page .testimonial:hover {
-  transform: translateY(-6px);
-  background: white;
-  border-color: var(--color-accent);
-}
-
-.home-page .testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
-}
-
-.home-page .testimonial-avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--color-accent);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.home-page .testimonial-name {
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-  color: var(--color-text);
-}
-
-.home-page .testimonial-role {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin: 0;
-}
-
-.home-page .testimonial-text {
-  font-style: italic;
-  line-height: 1.6;
-  margin: 0;
-  color: var(--color-text);
-  font-size: 0.95rem;
-}
-
-/* ===== CTA - VERSIÓN CLARA CON BOTONES OSCUROS ===== */
-.home-page .cta {
-  text-align: center;
-  padding: 80px 0;
-  background: rgba(255, 255, 255, 0.85); /* Fondo claro semitransparente */
-  backdrop-filter: blur(12px);
-  position: relative;
-  border-radius: 60px 60px 0 0;
-  margin-top: 40px;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-/* Efecto de brillo sutil */
-.home-page .cta::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 70% 30%, rgba(102, 126, 234, 0.1), transparent 80%);
-  pointer-events: none;
-  border-radius: 60px 60px 0 0;
-}
-
-.home-page .cta-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: none;
-}
-
-.home-page .cta-text {
-  font-size: 1.2rem;
-  color: var(--color-text-muted);
-  margin-bottom: 2.5rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 500;
-  background: transparent;
-  text-shadow: none;
-}
-
-.home-page .cta-buttons {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* Botones oscuros (sólidos) para fondo claro */
-.home-page .cta .btn-light {
-  background: var(--gradient-primary);
-  color: white;
-  border: none;
-  padding: 14px 36px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transition: var(--transition);
-}
-
-.home-page .cta .btn-light:hover {
-  transform: translateY(-4px);
-  color:var(--color-primary);
-  background-color: #667eea2d;
-  border: 2px solid var(--color-primary);
-  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.4);
-}
-
-.home-page .cta .btn-outline-light {
-  background: transparent;
-  border: 2px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 14px 36px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: var(--transition);
-}
-
-.home-page .cta .btn-outline-light:hover {
-  background: transparent;
-  color: #ff8c42;
-  border:2px solid #ff8c42;
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.3);
-}
-/* ===== BOTONES unificados con efecto glass ===== */
-.home-page .btn-light,
-.home-page .btn-outline-light,
-.home-page .carousel-btn,
-.home-page .btn-primary,
-.home-page .btn-primary-custom {
+/* ===== BOTÓN DEL CARRUSEL ===== */
+.home-page .carousel-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
   padding: 14px 32px;
+  background: var(--gradient-primary);
+  color: white;
   border-radius: 60px;
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
   transition: var(--transition);
-  cursor: pointer;
   border: none;
-  backdrop-filter: blur(8px);
-  letter-spacing: 0.3px;
+  cursor: pointer;
 }
 
-.home-page .carousel-btn,
-.home-page .btn-primary,
-.home-page .btn-primary-custom {
+.home-page .carousel-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px var(--shadow-accent);
+}
+
+/* ===== SECCIÓN MASCOTAS ===== */
+.mascotas-section {
+  padding: 80px 0;
+  position: relative;
+}
+
+.mascotas-section .section-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mascotas-section .section-subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* ===== CARRUSEL DE MASCOTAS ===== */
+.mascotas-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.mascotas-carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: var(--color-card-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-round);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+}
+
+.mascotas-carousel-nav:hover {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transform: translateY(-50%) scale(1.05);
+  border-color: transparent;
 }
 
-.home-page .carousel-btn:hover,
-.home-page .btn-primary:hover,
-.home-page .btn-primary-custom:hover {
+.mascotas-carousel-prev { left: -22px; }
+.mascotas-carousel-next { right: -22px; }
+
+.mascotas-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: calc(360px * 3 + 2rem * 2);
+  margin: 0 auto;
+}
+
+.mascotas-grid > * {
+  flex: 0 0 auto;
+  width: 360px;
+  max-width: 100%;
+}
+
+/* ===== BOTÓN PRIMARIO CUSTOM ===== */
+.btn-primary-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 14px 32px;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary-custom:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
 }
 
-.home-page .btn-light {
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--color-primary);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+/* ===== MODO OSCURO - SOLO AJUSTES ESPECÍFICOS ===== */
+[data-theme="dark"] .mascotas-carousel-nav {
+  background: #1e293b;
+  color: #8b9cff;
+  border-color: rgba(139, 156, 255, 0.3);
 }
 
-.home-page .btn-light:hover {
-  background: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.home-page .btn-outline-light {
-  background: rgba(255, 255, 255, 0.15);
+[data-theme="dark"] .mascotas-carousel-nav:hover {
+  background: var(--gradient-primary);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(12px);
 }
 
-.home-page .btn-outline-light:hover {
-  background: var(--color-primary);
-  color: white;
-  transform: translateY(-3px);
-  border-color: transparent;
+[data-theme="dark"] .home-page .carousel-nav:hover {
+  background: var(--gradient-primary);
 }
 
-/* ===== RESPONSIVE mejorado ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .home-page .carousel-title { font-size: 3rem; }
-  .home-page .section-title { font-size: 2.3rem; }
-  .home-page .mascotas-grid { grid-template-columns: repeat(2, 1fr); }
-  .home-page .stats-grid { gap: 1.5rem; }
-  .home-page .stats-grid > div { padding: 1.5rem 0.5rem; }
-  .home-page .stat-number { font-size: 2.5rem; }
+  .mascotas-section .section-title { font-size: 2.3rem; }
+  .mascotas-carousel-prev { left: -15px; }
+  .mascotas-carousel-next { right: -15px; }
+  .mascotas-carousel-nav { width: 38px; height: 38px; font-size: 1rem; }
+  .mascotas-grid {
+    gap: 1.5rem;
+    max-width: calc(360px * 2 + 1.5rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .mascotas-grid {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+  .mascotas-grid > * {
+    width: 360px;
+  }
 }
 
 @media (max-width: 768px) {
-  .home-page .hero-carousel-full { height: 60vh; min-height: 450px; margin-top: -60px; }
+  .home-page .hero-carousel-full {
+    height: 60vh;
+    min-height: 450px;
+    margin-top: -60px;
+  }
   .home-page .carousel-title { font-size: 2.2rem; }
   .home-page .carousel-pre-title { font-size: 0.9rem; }
   .home-page .carousel-description { font-size: 0.9rem; display: none; }
   .home-page .carousel-text { padding: 1rem; max-width: 90%; }
-  .home-page .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-  .home-page .mascotas-grid { grid-template-columns: 1fr; }
-  .home-page .testimonios-grid { grid-template-columns: 1fr; }
-  .home-page .section-title { font-size: 1.8rem; }
-  .home-page .cta-title { font-size: 1.8rem; }
-  .home-page .cta-buttons { flex-direction: column; align-items: center; }
-  .home-page .btn-light, .home-page .btn-outline-light, .home-page .carousel-btn, 
-  .home-page .btn-primary, .home-page .btn-primary-custom {
+  .mascotas-section .section-title { font-size: 1.8rem; }
+  .btn-primary-custom {
     width: 100%;
     justify-content: center;
     max-width: 280px;
   }
+  .mascotas-section { padding: 60px 0; }
+  .mascotas-carousel {
+    flex-direction: column;
+  }
+  .mascotas-carousel-prev,
+  .mascotas-carousel-next {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+    margin: 1rem auto;
+  }
+  .mascotas-carousel-nav {
+    width: 44px;
+    height: 44px;
+  }
+  .mascotas-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .mascotas-grid > * {
+    width: 100%;
+    max-width: 380px;
+  }
 }
 
 @media (max-width: 480px) {
-  .home-page .hero-carousel-full { height: 50vh; min-height: 400px; }
+  .home-page .hero-carousel-full {
+    height: 50vh;
+    min-height: 400px;
+  }
   .home-page .carousel-title { font-size: 1.6rem; }
   .home-page .carousel-pre-title { font-size: 0.7rem; }
-  .home-page .stat-number { font-size: 1.8rem; }
-  .home-page .stat-label { font-size: 0.9rem; }
-  .home-page .section { padding: 60px 0; }
-  .home-page .stats { padding: 40px 0; }
+  .mascotas-section .section-title { font-size: 1.6rem; }
 }

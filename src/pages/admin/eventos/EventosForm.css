@@ -1,0 +1,299 @@
+/* src/pages/admin/eventos/EventosForm.css */
+
+.admin-eventos-form-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.admin-eventos-form-card {
+    background: var(--color-card-bg);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.admin-eventos-form-card .form-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 2rem;
+}
+
+.admin-eventos-form-card .form-header .back-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.admin-eventos-form-card .form-header h1 {
+    font-size: 1.75rem;
+    margin: 0.5rem 0 0;
+    color: white;
+}
+
+.admin-eventos-form-card .form-header p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.5rem 0 0;
+}
+
+.admin-eventos-form-card .eventos-form {
+    padding: 2rem;
+}
+
+.admin-eventos-form-card .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.admin-eventos-form-card .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.admin-eventos-form-card .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.admin-eventos-form-card .form-group input,
+.admin-eventos-form-card .form-group textarea,
+.admin-eventos-form-card .form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--form-input-bg);
+    border: 1px solid var(--form-border);
+    border-radius: var(--radius-lg);
+    font-size: 0.875rem;
+    color: var(--form-text);
+}
+
+.admin-eventos-form-card .form-group input:focus,
+.admin-eventos-form-card .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--form-focus-ring);
+}
+
+.admin-eventos-form-card .form-group input.error,
+.admin-eventos-form-card .form-group textarea.error {
+    border-color: var(--color-danger);
+}
+
+.admin-eventos-form-card .error-message {
+    color: var(--color-danger);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.admin-eventos-form-card .form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.admin-eventos-form-card .tags-input-container {
+    border: 1px solid var(--form-border);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem;
+    background: var(--form-input-bg);
+}
+
+.admin-eventos-form-card .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-eventos-form-card .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--color-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+}
+
+.admin-eventos-form-card .tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    color: var(--color-primary);
+}
+
+.admin-eventos-form-card .tags-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.admin-eventos-form-card .tags-input-wrapper input {
+    flex: 1;
+    border: none;
+    padding: 0.5rem;
+    background: transparent;
+}
+
+.admin-eventos-form-card .tags-input-wrapper input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.admin-eventos-form-card .tags-input-wrapper button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.admin-eventos-form-card .image-upload-area {
+    border: 2px dashed var(--form-border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    text-align: center;
+    transition: var(--transition-fast);
+}
+
+.admin-eventos-form-card .image-upload-area:hover {
+    border-color: var(--color-primary);
+}
+
+.admin-eventos-form-card .image-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.admin-eventos-form-card .image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: var(--radius-lg);
+}
+
+.admin-eventos-form-card .image-preview button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--color-danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-eventos-form-card .upload-label {
+    cursor: pointer;
+    display: block;
+}
+
+.admin-eventos-form-card .upload-label input {
+    display: none;
+}
+
+.admin-eventos-form-card .upload-placeholder {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-muted);
+}
+
+.admin-eventos-form-card .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.admin-eventos-form-card .btn-cancel {
+    padding: 0.75rem 1.5rem;
+    background: var(--form-input-bg);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.admin-eventos-form-card .btn-cancel:hover {
+    background: var(--color-hover);
+    color: var(--color-text);
+}
+
+.admin-eventos-form-card .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.admin-eventos-form-card .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-eventos-form-card .btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.admin-eventos-form-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .admin-eventos-form-container {
+        padding: 1rem;
+    }
+    
+    .admin-eventos-form-card .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .admin-eventos-form-card .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-eventos-form-card .form-actions {
+        flex-direction: column;
+    }
+    
+    .admin-eventos-form-card .btn-cancel,
+    .admin-eventos-form-card .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}

@@ -1,527 +1,414 @@
 /* src/pages/public/ReportarRescate/ReportarRescate.css */
-/* TODOS los estilos están dentro del scope .rescate-page para no afectar otras páginas */
 
+/* ============================================
+   ESTILOS EXCLUSIVOS PARA ReportarRescate
+   - TODOS los estilos bajo .rescate-page o .rescate-form
+   - No afecta a otras páginas
+   ============================================ */
+
+/* Contenedor principal */
 .rescate-page {
-  background: transparent;
-  min-height: 100vh;
-  padding: 60px 0 80px;
+  min-height: calc(100vh - var(--navbar-height, 70px));
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ===== HEADER MEJORADO ===== */
-.rescate-header {
+.rescate-page .container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+.rescate-page .rescate-header {
   text-align: center;
-  padding: 20px 20px 40px;
-  border-radius: 48px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 2rem;
 }
 
-.rescate-header h1 {
-  font-size: 2.8rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #667eea, #764ba2, #ff8c42);
+.rescate-page .rescate-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
 }
 
-.rescate-header h1 i {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 2.5rem;
-}
-
-.rescate-header .subtitle {
-  color: #4a5568;
-  font-size: 1.15rem;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.rescate-header .emergency-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 6px 16px;
-  border-radius: 40px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-top: 16px;
-}
-
-.rescate-header .emergency-badge i {
-  font-size: 0.9rem;
+.rescate-page .rescate-header .subtitle {
+  color: var(--color-text-muted);
+  font-size: 1rem;
 }
 
 /* ===== FORMULARIO ===== */
-.rescate-form {
-  max-width: 720px;
-  margin: 0 auto;
-  background: white;
+.rescate-page .rescate-form {
+  background: var(--form-bg);
+  border-radius: 32px;
   padding: 2rem;
-  border-radius: 28px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  transition: var(--transition-theme);
 }
 
-.rescate-page .form-row {
-  margin-bottom: 1.5rem;
+/* SECCIONES DEL FORMULARIO */
+.rescate-page .rescate-form .form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--form-border);
 }
 
-.rescate-page .form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #2d3748;
+.rescate-page .rescate-form .form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
-.rescate-page .form-group .required {
-  color: #ff6b9d;
-}
-
-.rescate-page .input-wrapper {
-  position: relative;
+.rescate-page .rescate-form .section-header {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary);
 }
 
-.rescate-page .input-wrapper i {
-  position: absolute;
-  left: 12px;
-  color: #a0aec0;
-  font-size: 1rem;
+.rescate-page .rescate-form .section-header i {
+  font-size: 1.25rem;
+  color: var(--color-primary);
 }
 
-.rescate-page .input-wrapper input,
-.rescate-page .form-group textarea,
-.rescate-page .form-group select {
+.rescate-page .rescate-form .section-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--form-text);
+}
+
+/* ===== LABELS ===== */
+.rescate-page .rescate-form .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--form-label);
+}
+
+.rescate-page .rescate-form .form-label i {
+  margin-right: 0.5rem;
+  color: var(--color-primary);
+}
+
+/* ===== INPUTS ===== */
+.rescate-page .rescate-form input,
+.rescate-page .rescate-form textarea,
+.rescate-page .rescate-form select {
   width: 100%;
-  padding: 12px 12px 12px 40px;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  font-size: 1rem;
-  transition: all 0.2s;
-  background: #f8fafc;
-}
-
-.rescate-page .form-group textarea {
-  padding: 12px;
-  resize: vertical;
-}
-
-.rescate-page .input-wrapper input:focus,
-.rescate-page .form-group textarea:focus,
-.rescate-page .form-group select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-  background: white;
-}
-
-.rescate-page .input-wrapper input.error,
-.rescate-page .form-group textarea.error,
-.rescate-page .form-group select.error {
-  border-color: #ff6b9d;
-  background: #fff5f5;
-}
-
-.rescate-page .error-message {
-  display: block;
-  color: #ff6b9d;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
-}
-
-.rescate-page .form-divider {
-  text-align: center;
-  margin: 24px 0;
-  position: relative;
-}
-
-.rescate-page .form-divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #e2e8f0;
-}
-
-.rescate-page .form-divider span {
-  background: white;
-  padding: 0 16px;
-  position: relative;
-  color: #718096;
-  font-size: 0.85rem;
-}
-
-.rescate-page .form-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-.rescate-page .alert {
-  padding: 12px 16px;
-  border-radius: 16px;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.rescate-page .alert-error {
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
-}
-
-.rescate-page .form-hint {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: #718096;
-}
-
-.rescate-page .form-label {
-  display: block;
-  font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #2d3748;
+}
+
+/* ===== BOTONES DE PRIORIDAD ===== */
+.rescate-page .rescate-form .prioridad-buttons-container {
+  margin-bottom: 1rem;
+}
+
+.rescate-page .rescate-form .prioridad-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.rescate-page .rescate-form .prioridad-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  border: 2px solid var(--form-border);
+  border-radius: 16px;
+  background: var(--form-input-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rescate-page .rescate-form .prioridad-btn i {
+  font-size: 1.5rem;
+  color: var(--form-placeholder);
+}
+
+.rescate-page .rescate-form .prioridad-btn span {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--form-label);
+}
+
+.rescate-page .rescate-form .prioridad-btn small {
+  font-size: 0.7rem;
+  color: var(--form-placeholder);
+}
+
+.rescate-page .rescate-form .prioridad-btn:hover {
+  border-color: var(--color-primary);
+  background: var(--color-hover);
+  transform: translateY(-2px);
+}
+
+/* Estados activos */
+.rescate-page .rescate-form .prioridad-btn.urgente.active {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.rescate-page .rescate-form .prioridad-btn.herido.active {
+  border-color: #ea580c;
+  background: #fff7ed;
+}
+
+.rescate-page .rescate-form .prioridad-btn.abandonado.active {
+  border-color: #ca8a04;
+  background: #fefce8;
+}
+
+.rescate-page .rescate-form .prioridad-btn.otro.active {
+  border-color: #16a34a;
+  background: #f0fdf4;
 }
 
 /* ===== TARJETA DE PRIORIDAD ===== */
-.rescate-page .prioridad-card {
-  padding: 1rem;
-  border-radius: 16px;
-  margin-bottom: 1.5rem;
+.rescate-page .rescate-form .prioridad-card {
+  border-radius: 20px;
+  padding: 1.2rem;
+  margin: 1rem 0;
   border-left: 5px solid;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  animation: rescateFadeIn 0.5s ease;
 }
 
-@keyframes rescateFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.rescate-page .prioridad-header {
+.rescate-page .rescate-form .prioridad-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
   flex-wrap: wrap;
   margin-bottom: 0.75rem;
 }
 
-.rescate-page .prioridad-title {
-  font-weight: 800;
+.rescate-page .rescate-form .prioridad-title {
+  font-weight: 700;
   font-size: 1rem;
-  letter-spacing: 1px;
 }
 
-.rescate-page .prioridad-badge {
-  padding: 4px 12px;
+.rescate-page .rescate-form .prioridad-badge {
+  padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.7rem;
   font-weight: 700;
-  color: white;
   margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  color: white !important;
 }
 
-.rescate-page .prioridad-alta {
+.rescate-page .rescate-form .prioridad-badge.prioridad-alta {
   background: #dc2626;
 }
 
-.rescate-page .prioridad-media {
-  background: #ea580c;
+.rescate-page .rescate-form .prioridad-badge.prioridad-media {
+  background: #ca8a04;
 }
 
-.rescate-page .prioridad-baja {
+.rescate-page .rescate-form .prioridad-badge.prioridad-baja {
   background: #16a34a;
 }
 
-.rescate-page .prioridad-descripcion {
+.rescate-page .rescate-form .prioridad-descripcion {
   margin: 0.5rem 0;
   font-size: 0.9rem;
-  color: #374151;
+  color: var(--form-label);
 }
 
-.rescate-page .prioridad-recomendacion {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed rgba(0,0,0,0.1);
+.rescate-page .rescate-form .prioridad-recomendacion {
   font-size: 0.85rem;
-  color: #4b5563;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--form-border);
+  color: var(--form-hint);
 }
 
-/* ===== BOTONES DE PRIORIDAD MANUAL ===== */
-.rescate-page .prioridad-buttons-container {
-  margin-bottom: 1.5rem;
+.rescate-page .rescate-form .prioridad-recomendacion strong {
+  color: var(--form-text);
 }
 
-.rescate-page .prioridad-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.rescate-page .prioridad-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.75rem 0.5rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 16px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.rescate-page .prioridad-btn i {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.rescate-page .prioridad-btn span {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.rescate-page .prioridad-btn small {
-  font-size: 0.7rem;
-  color: #718096;
-}
-
-.rescate-page .prioridad-btn:hover {
-  transform: translateY(-2px);
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-
-.rescate-page .prioridad-btn.urgente.active {
-  background: #fee2e2;
-  border-color: #dc2626;
-  color: #dc2626;
-}
-
-.rescate-page .prioridad-btn.herido.active {
-  background: #ffedd5;
-  border-color: #ea580c;
-  color: #ea580c;
-}
-
-.rescate-page .prioridad-btn.abandonado.active {
-  background: #fef9c3;
-  border-color: #ca8a04;
-  color: #ca8a04;
-}
-
-.rescate-page .prioridad-btn.otro.active {
-  background: #dcfce7;
-  border-color: #16a34a;
-  color: #16a34a;
-}
-
-/* ===== MAPA ===== */
-.rescate-page .location-picker {
-  margin: 1rem 0;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #e2e8f0;
-}
-
-.rescate-page .location-coords {
-  background: #f8fafc;
-  padding: 8px 12px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: #475569;
-}
-
-.rescate-page .location-buttons {
-  margin-bottom: 0.75rem;
-}
-
-.rescate-page .location-buttons .btn {
-  font-size: 0.85rem;
-  padding: 8px 16px;
-}
-
-.rescate-page .location-confirmed {
-  margin-top: 0.5rem;
-  padding: 8px 12px;
-  background: #e8f5e9;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #2e7d32;
-}
-
-/* ===== ÉXITO ===== */
-/* ===== PÁGINA DE ÉXITO - ESTILO CARD MODAL ===== */
-.rescate-success {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.rescate-page .success-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 24px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.rescate-page .success-card i {
-  font-size: 4rem;
-  color: #2ecc71;
+/* ===== UBICACIÓN ===== */
+.rescate-page .rescate-form .location-controls {
   margin-bottom: 1rem;
 }
 
-.rescate-page .success-card h2 {
-  color: #ffffff;
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
+/* ===== HINTS ===== */
+.rescate-page .rescate-form .form-hint {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--form-hint);
 }
 
-.rescate-page .success-card p {
-  color: #ffffff;
+.rescate-page .rescate-form .form-hint i {
+  margin-right: 0.25rem;
+}
+
+/* ===== ERRORES ===== */
+.rescate-page .rescate-form .error-text {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  margin-top: -0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.rescate-page .rescate-form .alert {
+  padding: 1rem;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-.rescate-page .success-card .btn {
-  padding: 10px 24px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 40px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.rescate-page .success-card .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-/* ===== BOTONES ===== */
-.rescate-page .btn {
-  padding: 12px 28px;
-  border-radius: 40px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
-.rescate-page .btn-primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+.rescate-page .rescate-form .alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: var(--color-danger);
 }
 
-.rescate-page .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+/* ===== BOTONES DE ACCIÓN ===== */
+.rescate-page .rescate-form .form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--form-border);
 }
 
-.rescate-page .btn-secondary {
-  background: #f1f5f9;
-  color: #475569;
+.rescate-page .rescate-form .form-actions button {
+  min-width: 140px;
 }
 
-.rescate-page .btn-secondary:hover {
-  background: #e2e8f0;
+/* Botón cancelar */
+.rescate-page .rescate-form .btn-cancelar-rescate {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
-.rescate-page .btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.rescate-page .rescate-form .btn-cancelar-rescate:hover {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+/* ===== PÁGINA DE ÉXITO ===== */
+.rescate-success {
+  min-height: calc(100vh - var(--navbar-height, 70px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.rescate-success .success-card {
+  background: var(--form-bg);
+  border-radius: 32px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+
+.rescate-success .success-card i {
+  font-size: 4rem;
+  color: var(--color-success);
+  margin-bottom: 1rem;
+}
+
+.rescate-success .success-card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--form-text);
+}
+
+.rescate-success .success-card p {
+  color: var(--form-hint);
+  margin-bottom: 2rem;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.urgente.active {
+  background: #450a0a;
+  border-color: #dc2626;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-card {
+  background-color: #0f172a !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-card .prioridad-title,
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-card .prioridad-descripcion,
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-card .prioridad-recomendacion {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .alert-error {
+  background: #450a0a;
+  border-color: #7f1d1d;
+  color: #fecaca !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .btn-cancelar-rescate {
+  background: #334155 !important;
+  border-color: #475569 !important;
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .btn-cancelar-rescate:hover {
+  background: #475569 !important;
+  color: #ffffff !important;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+  .rescate-page {
+    padding: 1rem;
+  }
+
   .rescate-page .rescate-form {
     padding: 1.5rem;
-    margin: 0 16px;
   }
-  
+
   .rescate-page .rescate-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
-  
-  .rescate-page .rescate-header h1 i {
-    font-size: 1.8rem;
-  }
-  
-  .rescate-page .form-actions {
-    flex-direction: column;
-  }
-  
-  .rescate-page .btn {
-    justify-content: center;
-  }
-  
-  .rescate-page .prioridad-buttons {
+
+  .rescate-page .rescate-form .prioridad-buttons {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rescate-page .rescate-form .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .rescate-page .rescate-form .form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .rescate-page .rescate-form {
+    padding: 1rem;
+  }
+
+  .rescate-page .rescate-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .rescate-page .rescate-form .prioridad-buttons {
+    grid-template-columns: 1fr;
   }
 }

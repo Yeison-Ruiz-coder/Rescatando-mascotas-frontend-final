@@ -1,24 +1,28 @@
 // src/hooks/useRescate.js
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { reportarRescate } from '../services/api';
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { rescateService } from "../services/rescateService";
 
 const useRescate = () => {
-  const { t } = useTranslation('rescate');
+  const { t } = useTranslation("rescate");
   const navigate = useNavigate();
 
   // Estado del formulario
   const [formData, setFormData] = useState({
-    lugar_rescate: '',
-    descripcion_rescate: '',
-    fecha_rescate: '',
-    nombre_reportante: '',
-    email_reportante: '',
-    telefono_reportante: '',
+    lugar_rescate: "",
+    descripcion_rescate: "",
+    fecha_rescate: new Date().toISOString().split("T")[0],
+    nombre_reportante: "",
+    email_reportante: "",
+    telefono_reportante: "",
     lat: null,
     lng: null,
   });
+
+  // Estado unificado para fotos (archivos y previews)
+  const [fotosFiles, setFotosFiles] = useState([]);
+  const [fotosPreviews, setFotosPreviews] = useState([]);
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -31,46 +35,49 @@ const useRescate = () => {
     const texto = descripcion.toLowerCase();
 
     const palabrasUrgente = [
-      'urgente', 'emergencia', 'grave', 'critico', 'inmediato', 'ahora mismo',
-      'muriendo', 'agonizando', 'desangrando', 'convulsion', 'atropellado',
-      'golpeado', 'accidente', 'veneno', 'envenenado', 'respira mal',
+      "urgente", "emergencia", "grave", "critico", "inmediato", "ahora mismo",
+      "muriendo", "agonizando", "desangrando", "convulsion", "atropellado",
+      "golpeado", "accidente", "veneno", "envenenado", "respira mal",
     ];
 
     const palabrasHerido = [
-      'herido', 'sangra', 'sangrando', 'golpe', 'lastimado', 'fractura',
-      'hueso roto', 'cojea', 'malherido', 'quemadura', 'corte', 'herida',
-      'pata rota', 'dolor', 'llorando', 'gimiendo',
+      "herido", "sangra", "sangrando", "golpe", "lastimado", "fractura",
+      "hueso roto", "cojea", "malherido", "quemadura", "corte", "herida",
+      "pata rota", "dolor", "llorando", "gimiendo",
     ];
 
     const palabrasAbandonado = [
-      'abandonado', 'cachorros', 'solo', 'sin dueño', 'vagando', 'callejero',
-      'botaron', 'dejaron', 'perdido', 'extraviado', 'bebé', 'recién nacido',
+      "abandonado", "cachorros", "solo", "sin dueño", "vagando", "callejero",
+      "botaron", "dejaron", "perdido", "extraviado", "bebé", "recién nacido",
     ];
 
     for (const palabra of palabrasUrgente) {
       if (texto.includes(palabra)) {
-        return { tipo: 'urgente', prioridad: 'alta' };
+        return { tipo: "urgente", prioridad: "alta" };
       }
     }
 
     for (const palabra of palabrasHerido) {
       if (texto.includes(palabra)) {
-        return { tipo: 'herido', prioridad: 'alta' };
+        return { tipo: "herido", prioridad: "alta" };
       }
     }
 
     for (const palabra of palabrasAbandonado) {
       if (texto.includes(palabra)) {
-        return { tipo: 'abandonado', prioridad: 'media' };
+        return { tipo: "abandonado", prioridad: "media" };
       }
     }
 
-    return { tipo: 'otro', prioridad: 'baja' };
+    return { tipo: "otro", prioridad: "baja" };
   }, []);
 
   // Actualizar prioridad cuando cambia la descripción
   useEffect(() => {
-    if (formData.descripcion_rescate && formData.descripcion_rescate.trim().length > 10) {
+    if (
+      formData.descripcion_rescate &&
+      formData.descripcion_rescate.trim().length > 10
+    ) {
       const analisis = analizarDescripcion(formData.descripcion_rescate);
       setPrioridad(analisis);
     } else if (!formData.descripcion_rescate) {
@@ -79,13 +86,16 @@ const useRescate = () => {
   }, [formData.descripcion_rescate, analizarDescripcion]);
 
   // Manejar cambios en los inputs
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  }, [errors]);
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: "" }));
+      }
+    },
+    [errors],
+  );
 
   // Manejar cambio de ubicación
   const handleLocationChange = useCallback((lat, lng) => {
@@ -97,7 +107,7 @@ const useRescate = () => {
     if (!navigator.geolocation) {
       setErrors((prev) => ({
         ...prev,
-        general: t('errors.geolocation_not_supported'),
+        general: t("errors.geolocation_not_supported"),
       }));
       return;
     }
@@ -113,83 +123,177 @@ const useRescate = () => {
         setGettingLocation(false);
       },
       (error) => {
-        console.error('Error de geolocalización:', error);
-        let mensaje = t('errors.location_failed');
-        if (error.code === 1) mensaje = t('errors.location_permission_denied');
-        else if (error.code === 2) mensaje = t('errors.location_unavailable');
-        else mensaje = t('errors.location_timeout');
+        console.error("Error de geolocalización:", error);
+        let mensaje = t("errors.location_failed");
+        if (error.code === 1) mensaje = t("errors.location_permission_denied");
+        else if (error.code === 2) mensaje = t("errors.location_unavailable");
+        else mensaje = t("errors.location_timeout");
         setErrors((prev) => ({ ...prev, general: mensaje }));
         setGettingLocation(false);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
   }, [t]);
 
+  // Manejar cambio de fotos
+  const handleFotosChange = useCallback(
+    (files, previews) => {
+      console.log("📸 handleFotosChange - files:", files);
+      console.log("📸 files[0] es File?", files?.[0] instanceof File);
+      
+      setFotosFiles(files || []);
+      setFotosPreviews(previews || []);
+
+      if (errors.fotos) {
+        setErrors((prev) => ({ ...prev, fotos: "" }));
+      }
+    },
+    [errors],
+  );
+
   // Selección manual de prioridad
   const setPrioridadManual = useCallback((tipo) => {
-    let prioridadValue = 'baja';
-    if (tipo === 'urgente' || tipo === 'herido') prioridadValue = 'alta';
-    if (tipo === 'abandonado') prioridadValue = 'media';
+    let prioridadValue = "baja";
+    if (tipo === "urgente" || tipo === "herido") prioridadValue = "alta";
+    if (tipo === "abandonado") prioridadValue = "media";
     setPrioridad({ tipo, prioridad: prioridadValue });
   }, []);
 
   // Validar formulario
   const validate = useCallback(() => {
     const newErrors = {};
-    if (!formData.lugar_rescate.trim()) newErrors.lugar_rescate = t('errors.lugar_required');
-    if (!formData.descripcion_rescate.trim()) newErrors.descripcion_rescate = t('errors.descripcion_required');
-    if (!formData.fecha_rescate) newErrors.fecha_rescate = t('errors.fecha_required');
-    if (formData.email_reportante && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email_reportante)) {
-      newErrors.email_reportante = t('errors.email_invalid');
+
+    if (!formData.lugar_rescate?.trim())
+      newErrors.lugar_rescate = t("errors.lugar_required");
+    if (!formData.descripcion_rescate?.trim())
+      newErrors.descripcion_rescate = t("errors.descripcion_required");
+    if (!formData.fecha_rescate)
+      newErrors.fecha_rescate = t("errors.fecha_required");
+
+    if (
+      formData.email_reportante &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email_reportante)
+    ) {
+      newErrors.email_reportante = t("errors.email_invalid");
     }
+
+    if (fotosFiles.length > 0) {
+      const maxSize = 5 * 1024 * 1024;
+      const oversizedFiles = fotosFiles.filter((f) => f && f.size > maxSize);
+      if (oversizedFiles.length > 0) {
+        newErrors.fotos = t("errors.photo_max_size", { size: 5 });
+      }
+      if (fotosFiles.length > 5) {
+        newErrors.fotos = t("errors.max_photos", { max: 5 });
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData, t]);
+  }, [formData, fotosFiles, t]);
 
   // Enviar formulario
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    if (!validate()) return;
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
 
-    const dataToSend = {
-      ...formData,
-      tipo_emergencia: prioridad?.tipo || 'otro',
-      prioridad: prioridad?.prioridad || 'baja',
-    };
+      const formDataToSend = new FormData();
 
-    setLoading(true);
-    try {
-      const response = await reportarRescate(dataToSend);
-      if (response.data.success) {
-        setSubmitSuccess(true);
-        setTimeout(() => navigate('/'), 3000);
-      } else {
-        setErrors({ general: response.data.message || t('errors.general') });
+      // Agregar campos normales
+      formDataToSend.append("lugar_rescate", formData.lugar_rescate);
+      formDataToSend.append("descripcion_rescate", formData.descripcion_rescate);
+      formDataToSend.append("fecha_rescate", formData.fecha_rescate);
+      formDataToSend.append("tipo_emergencia", prioridad?.tipo || "otro");
+      formDataToSend.append("prioridad", prioridad?.prioridad || "baja");
+
+      // Campos opcionales
+      if (formData.nombre_reportante)
+        formDataToSend.append("nombre_reportante", formData.nombre_reportante);
+      if (formData.email_reportante)
+        formDataToSend.append("email_reportante", formData.email_reportante);
+      if (formData.telefono_reportante)
+        formDataToSend.append("telefono_reportante", formData.telefono_reportante);
+      if (formData.lat) formDataToSend.append("lat", formData.lat);
+      if (formData.lng) formDataToSend.append("lng", formData.lng);
+
+      // ===== IMPORTANTE: AGREGAR FOTOS CORRECTAMENTE =====
+      if (fotosFiles.length > 0) {
+        // Asegurar que todos sean File objects
+        const validFiles = fotosFiles.filter(f => f instanceof File && f.size > 0);
+        
+        console.log("📸 Archivos válidos a enviar:", validFiles.length);
+        
+        if (validFiles.length > 0) {
+          // Enviar CADA foto individualmente
+          validFiles.forEach((foto, index) => {
+            if (index === 0) {
+              // Primera foto como foto_principal
+              formDataToSend.append("foto_principal", foto);
+              console.log(`📸 Enviando foto_principal: ${foto.name}`);
+            } else {
+              // Resto como galeria_fotos (MISMO nombre de campo)
+              formDataToSend.append("galeria_fotos[]", foto);
+              console.log(`📸 Enviando galeria_fotos[]: ${foto.name}`);
+            }
+          });
+        } else {
+          console.error("❌ No se encontraron archivos válidos en fotosFiles:", fotosFiles);
+        }
       }
-    } catch (err) {
-      const apiErrors = err.response?.data?.errors;
-      if (apiErrors) {
-        setErrors(apiErrors);
-      } else {
-        setErrors({ general: err.response?.data?.message || t('errors.general') });
+
+      // DEBUG: Mostrar todo el FormData
+      console.log("=== FORM DATA A ENVIAR ===");
+      for (let [key, value] of formDataToSend.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: ${value.name} (${value.type}, ${value.size} bytes)`);
+        } else {
+          console.log(`${key}: ${value}`);
+        }
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [formData, prioridad, validate, t, navigate]);
+
+      setLoading(true);
+      try {
+        const response = await rescateService.createRescate(formDataToSend);
+
+        if (response.data.success) {
+          setSubmitSuccess(true);
+          setTimeout(() => navigate("/"), 3000);
+        } else {
+          setErrors({ general: response.data.message || t("errors.general") });
+        }
+      } catch (err) {
+        console.error("Error al enviar rescate:", err);
+        const apiErrors = err.response?.data?.errors;
+        if (apiErrors) {
+          console.error("Errores de validación:", apiErrors);
+          setErrors(apiErrors);
+        } else {
+          setErrors({
+            general: err.response?.data?.message || t("errors.general"),
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData, prioridad, fotosFiles, validate, t, navigate],
+  );
 
   // Resetear formulario
   const resetForm = useCallback(() => {
     setFormData({
-      lugar_rescate: '',
-      descripcion_rescate: '',
-      fecha_rescate: '',
-      nombre_reportante: '',
-      email_reportante: '',
-      telefono_reportante: '',
+      lugar_rescate: "",
+      descripcion_rescate: "",
+      fecha_rescate: new Date().toISOString().split("T")[0],
+      nombre_reportante: "",
+      email_reportante: "",
+      telefono_reportante: "",
       lat: null,
       lng: null,
     });
+    setFotosFiles([]);
+    setFotosPreviews([]);
     setErrors({});
     setPrioridad(null);
     setSubmitSuccess(false);
@@ -198,72 +302,71 @@ const useRescate = () => {
   // Configuración para la tarjeta de prioridad
   const prioridadConfig = {
     urgente: {
-      icon: 'fa-circle-exclamation',
-      color: '#dc2626',
-      bgColor: '#fee2e2',
-      title: t('prioridad_urgente_title'),
-      description: t('prioridad_urgente_desc'),
-      recomendacion: t('prioridad_urgente_recomendacion'),
+      icon: "fa-circle-exclamation",
+      color: "#dc2626",
+      bgColor: "#fee2e2",
+      title: t("prioridad_urgente_title"),
+      description: t("prioridad_urgente_desc"),
+      recomendacion: t("prioridad_urgente_recomendacion"),
     },
     herido: {
-      icon: 'fa-triangle-exclamation',
-      color: '#ea580c',
-      bgColor: '#ffedd5',
-      title: t('prioridad_herido_title'),
-      description: t('prioridad_herido_desc'),
-      recomendacion: t('prioridad_herido_recomendacion'),
+      icon: "fa-triangle-exclamation",
+      color: "#ea580c",
+      bgColor: "#ffedd5",
+      title: t("prioridad_herido_title"),
+      description: t("prioridad_herido_desc"),
+      recomendacion: t("prioridad_herido_recomendacion"),
     },
     abandonado: {
-      icon: 'fa-paw',
-      color: '#ca8a04',
-      bgColor: '#fef9c3',
-      title: t('prioridad_abandonado_title'),
-      description: t('prioridad_abandonado_desc'),
-      recomendacion: t('prioridad_abandonado_recomendacion'),
+      icon: "fa-paw",
+      color: "#ca8a04",
+      bgColor: "#fef9c3",
+      title: t("prioridad_abandonado_title"),
+      description: t("prioridad_abandonado_desc"),
+      recomendacion: t("prioridad_abandonado_recomendacion"),
     },
     otro: {
-      icon: 'fa-info-circle',
-      color: '#16a34a',
-      bgColor: '#dcfce7',
-      title: t('prioridad_otro_title'),
-      description: t('prioridad_otro_desc'),
-      recomendacion: t('prioridad_otro_recomendacion'),
+      icon: "fa-info-circle",
+      color: "#16a34a",
+      bgColor: "#dcfce7",
+      title: t("prioridad_otro_title"),
+      description: t("prioridad_otro_desc"),
+      recomendacion: t("prioridad_otro_recomendacion"),
     },
   };
 
   const prioridadTexto = {
-    alta: t('prioridad_alta'),
-    media: t('prioridad_media'),
-    baja: t('prioridad_baja'),
+    alta: t("prioridad_alta"),
+    media: t("prioridad_media"),
+    baja: t("prioridad_baja"),
   };
 
   const botonesPrioridad = [
-    { tipo: 'urgente', icono: 'fa-skull-crosswalk', label: t('btn_urgente'), desc: t('btn_urgente_desc') },
-    { tipo: 'herido', icono: 'fa-band-aid', label: t('btn_herido'), desc: t('btn_herido_desc') },
-    { tipo: 'abandonado', icono: 'fa-home', label: t('btn_abandonado'), desc: t('btn_abandonado_desc') },
-    { tipo: 'otro', icono: 'fa-info-circle', label: t('btn_otro'), desc: t('btn_otro_desc') },
+    { tipo: "urgente", icono: "fa-skull-crosswalk", label: t("btn_urgente"), desc: t("btn_urgente_desc") },
+    { tipo: "herido", icono: "fa-band-aid", label: t("btn_herido"), desc: t("btn_herido_desc") },
+    { tipo: "abandonado", icono: "fa-home", label: t("btn_abandonado"), desc: t("btn_abandonado_desc") },
+    { tipo: "otro", icono: "fa-info-circle", label: t("btn_otro"), desc: t("btn_otro_desc") },
   ];
 
   return {
-    // Estados
     formData,
     errors,
     loading,
     submitSuccess,
     gettingLocation,
     prioridad,
-    // Funciones
+    fotosPreviews,
+    fotosFiles,
     handleChange,
     handleLocationChange,
     getCurrentLocation,
     setPrioridadManual,
     handleSubmit,
     resetForm,
-    // Configuraciones
+    handleFotosChange,
     prioridadConfig,
     prioridadTexto,
     botonesPrioridad,
-    // Utils
     t,
   };
 };

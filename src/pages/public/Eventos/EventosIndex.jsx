@@ -16,10 +16,22 @@ const PublicEventosIndex = () => {
     const [asistenciaEvents, setAsistenciaEvents] = useState({});
     const [error, setError] = useState(null);
 
+    // ✅ CORREGIDA: Función para imágenes (soporta Cloudinary y Storage)
     const getImageUrl = useCallback((url) => {
         if (!url) return null;
+        
+        // Si ya es URL completa (Cloudinary o cualquier HTTPS)
         if (url.startsWith('http')) return url;
-        return `http://localhost:8000${url}`;
+        
+        // Si es ruta local que empieza con /storage
+        if (url.startsWith('/storage')) {
+            const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+            return `${baseUrl}${url}`;
+        }
+        
+        // Si solo es el nombre del archivo (caso fallback)
+        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+        return `${baseUrl}/storage/${url}`;
     }, []);
 
     useEffect(() => {
@@ -138,7 +150,6 @@ const PublicEventosIndex = () => {
         ));
     }, [eventos, likedEvents, asistenciaEvents, isAuthenticated, getImageUrl, handleLike, handleConfirmarAsistencia]);
 
-    // ✅ Solo el LoadingSpinner, sin texto
     if (loading) {
         return (
             <div className="public-eventos-loading">

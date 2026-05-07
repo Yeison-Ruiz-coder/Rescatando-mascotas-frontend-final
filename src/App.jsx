@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { SidebarProvider } from './contexts/SidebarContext';
 import { FiltrosProvider } from './contexts/FiltrosContext'; // <-- IMPORTAR
-import ThemeToggle from './components/ThemeToggle';
+import ThemeToggle from './components/common/ThemeToggle/ThemeToggle';
 import router from './routes';
 import FloatingLanguageSelector from './components/common/FloatingButtons/FloatingLanguageSelector';
 import ReportarRescate from "./pages/public/ReportarRescate/ReportarRescate";

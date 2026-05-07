@@ -1,0 +1,116 @@
+.paw-background-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -7;
+  overflow: hidden;
+}
+
+.paw-fixed {
+  position: absolute;
+  object-fit: contain;
+  pointer-events: none;
+  transition: var(--transition-fast);
+  opacity: var(--paw-opacity);
+}
+
+.paw-orbital {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -4;
+  overflow: hidden;
+}
+
+.paw-orbital-img {
+  position: absolute;
+  object-fit: contain;
+  pointer-events: none;
+  transition: var(--transition-fast);
+}
+
+.paw-orbit-group-1 {
+  position: absolute;
+  top: 35%;
+  right: 8%;
+  width: 200px;
+  height: 200px;
+  animation: orbitGroup1 20s infinite ease-in-out;
+}
+
+.paw-orbit-group-1 .paw-orbital-img { width: 45px; animation: floatPaw1 3s infinite alternate; }
+.paw-orbit-group-1 .paw-1 { top: -10px; left: 50%; transform: translateX(-50%) rotate(15deg); animation-delay: 0s; }
+.paw-orbit-group-1 .paw-2 { bottom: -10px; left: 20%; transform: rotate(-10deg); animation-delay: -1s; }
+.paw-orbit-group-1 .paw-3 { bottom: 20%; right: -20px; transform: rotate(25deg); animation-delay: -2s; }
+.paw-orbit-group-1 .paw-4 { top: 30%; left: -25px; transform: rotate(-20deg); animation-delay: -0.5s; }
+.paw-orbit-group-1 .paw-5 { bottom: 40%; right: -10px; transform: rotate(10deg); animation-delay: -1.5s; }
+
+.paw-orbit-group-2 {
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 180px;
+  height: 180px;
+  animation: orbitGroup2 22s infinite ease-in-out;
+}
+
+.paw-orbit-group-2 .paw-orbital-img { width: 50px; animation: floatPaw2 3.5s infinite alternate; }
+.paw-orbit-group-2 .paw-1 { top: -5px; left: 40%; transform: translateX(-50%) rotate(-15deg); animation-delay: 0s; }
+.paw-orbit-group-2 .paw-2 { bottom: -15px; right: 30%; transform: rotate(20deg); animation-delay: -1.2s; }
+.paw-orbit-group-2 .paw-3 { top: 25%; right: -25px; transform: rotate(-25deg); animation-delay: -2.5s; }
+.paw-orbit-group-2 .paw-4 { bottom: 35%; left: -20px; transform: rotate(15deg); animation-delay: -0.8s; }
+.paw-orbit-group-2 .paw-5 { top: 50%; left: -15px; transform: rotate(-5deg); animation-delay: -1.8s; }
+
+.paw-orbit-group-3 {
+  position: absolute;
+  bottom: 18%;
+  left: 12%;
+  width: 250px;
+  height: 250px;
+  animation: orbitGroup3 18s infinite ease-in-out;
+}
+
+.paw-orbit-group-3 .paw-orbital-img { width: 42px; animation: floatPaw3 2.8s infinite alternate; }
+.paw-orbit-group-3 .paw-1 { top: -20px; left: 50%; transform: translateX(-50%) rotate(10deg); animation-delay: 0s; }
+.paw-orbit-group-3 .paw-2 { bottom: 10px; left: 15%; transform: rotate(-20deg); animation-delay: -0.7s; }
+.paw-orbit-group-3 .paw-3 { top: 20%; right: -15px; transform: rotate(30deg); animation-delay: -1.5s; }
+.paw-orbit-group-3 .paw-4 { bottom: 30%; right: 0px; transform: rotate(-10deg); animation-delay: -2.2s; }
+
+.paw-orbit-group-4 {
+  position: absolute;
+  bottom: 25%;
+  right: 20%;
+  width: 150px;
+  height: 150px;
+  animation: orbitGroup4 25s infinite ease-in-out;
+}
+
+.paw-orbit-group-4 .paw-orbital-img { width: 38px; animation: floatPaw4 3.2s infinite alternate; }
+.paw-orbit-group-4 .paw-1 { top: -8px; right: 30%; transform: rotate(-15deg); animation-delay: 0s; }
+.paw-orbit-group-4 .paw-2 { bottom: 5px; left: 20%; transform: rotate(25deg); animation-delay: -1s; }
+.paw-orbit-group-4 .paw-3 { top: 35%; left: -20px; transform: rotate(-30deg); animation-delay: -2s; }
+
+[data-theme="dark"] .paw-fixed,
+[data-theme="dark"] .paw-orbital-img {
+  filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+}
+
+[data-theme="dark"] .paw-fixed { opacity: 0.35; }
+[data-theme="dark"] .paw-orbital-img { opacity: 0.4; }
+
+.paw-fixed:hover,
+.paw-orbital-img:hover {
+  opacity: 0.5 !important;
+  transform: scale(1.1) rotate(10deg);
+}
+
+[data-theme="dark"] .paw-fixed:hover,
+[data-theme="dark"] .paw-orbital-img:hover {
+  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5)) !important;
+}
