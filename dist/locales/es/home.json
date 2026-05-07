@@ -4,7 +4,19 @@
     "welcome": "Bienvenido a Rescatando Mascotas",
     "description": "Conectamos familias amorosas con mascotas que necesitan un hogar. Cada adopción salva una vida y trae alegría a tu hogar.",
     "cta": "Iniciar Proceso de Adopción",
-    "process": "Ver Nuestro Proceso"
+    "process": "Ver Nuestro Proceso",
+    "slide1_title": "Dales una segunda oportunidad",
+    "slide1_highlight": "Ellos te esperan",
+    "slide1_desc": "Cada animal merece un hogar lleno de amor. Adopta y cambia una vida.",
+    "slide2_title": "Sé parte del cambio",
+    "slide2_highlight": "Reporta un rescate",
+    "slide2_desc": "Tu reporte puede salvar una vida. Actúa ahora y ayuda a un animal necesitado.",
+    "slide3_title": "Haz una donación",
+    "slide3_highlight": "Tu apoyo es vital",
+    "slide3_desc": "Con tu ayuda podemos rescatar, rehabilitar y dar hogar a más animales.",
+    "btn_adoptar": "Adoptar",
+    "btn_rescate": "Reportar Rescate",
+    "btn_donar": "Donar"
   },
   "stats": {
     "rescates": "Mascotas Rescatadas",
@@ -13,6 +25,8 @@
     "experiencia": "Años de Experiencia"
   },
   "proceso": {
+    "title": "Nuestro Proceso de Adopción",
+    "subtitle": "Pasos simples para encontrar tu nuevo mejor amigo",
     "step1_title": "Encuentra tu Pareja Perfecta",
     "step1_desc": "Navega por nuestras mascotas disponibles y encuentra la que robe tu corazón.",
     "step2_title": "Completa tu Solicitud",
@@ -52,9 +66,5 @@
   "mascotas_disponibles": "Mascotas Disponibles",
   "mascotas_subtitle": "Conoce las mascotas esperando su hogar para siempre",
   "sin_mascotas": "No hay mascotas disponibles en este momento. ¡Vuelve pronto!",
-  "ver_todas": "Ver Todas las Mascotas",
-
-  
-  "proceso.title": "Nuestro Proceso de Adopción",
-  "proceso.subtitle": "Pasos simples para encontrar tu nuevo mejor amigo"
+  "ver_todas": "Ver Todas las Mascotas"
 }

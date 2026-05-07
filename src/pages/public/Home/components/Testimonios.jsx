@@ -1,5 +1,7 @@
+// src/pages/public/Home/components/Testimonios.jsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import './Testimonios.css';  // ← Importar CSS propio
 
 const Testimonios = () => {
   const { t } = useTranslation('home');
@@ -26,14 +28,14 @@ const Testimonios = () => {
   ];
 
   return (
-    <section className="section testimonios">
-      <div className="container">
-        <h2 className="section-title">{t('testimonios.title')}</h2>
-        <p className="section-subtitle">{t('testimonios.subtitle')}</p>
+    <section className="testimonios-section">
+      <div className="testimonios-container">
+        <h2 className="testimonios-title">{t('testimonios.title')}</h2>
+        <p className="testimonios-subtitle">{t('testimonios.subtitle')}</p>
 
         <div className="testimonios-grid">
           {testimonios.map((testimonio, index) => (
-            <div key={index} className="testimonial">
+            <div key={index} className="testimonial-card">
               <div className="testimonial-author">
                 <img
                   src={testimonio.image}

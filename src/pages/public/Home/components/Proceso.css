@@ -1,8 +1,8 @@
 /* src/pages/public/Home/components/Proceso.css */
 .proceso-section {
   padding: 80px 0;
-  border-top: 1px solid rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  border-top: 1px solid var(--color-border, rgba(0,0,0,0.08));
+  border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
   background: transparent;
 }
 
@@ -13,8 +13,8 @@
 }
 
 .proceso-title {
-  font-size: 2.8rem;  /* ajustado de 2.5rem a 2.8rem */
-  font-weight: 800;    /* igual que section-title */
+  font-size: 2.8rem;
+  font-weight: 800;
   text-align: center;
   margin-bottom: 1rem;
   background: linear-gradient(135deg, #667eea, #764ba2);
@@ -26,8 +26,8 @@
 
 .proceso-subtitle {
   text-align: center;
-  color: #718096;
-  font-size: 1.2rem;   /* ajustado de 1.125rem a 1.2rem */
+  color: var(--color-text-muted, #718096);
+  font-size: 1.2rem;
   margin-bottom: 3rem;
   max-width: 700px;
   margin-left: auto;
@@ -45,18 +45,18 @@
 .proceso-step {
   text-align: center;
   padding: 2rem;
-  background: rgba(255,255,255,0.8);
+  background: var(--color-card-bg, rgba(255,255,255,0.8));
   backdrop-filter: blur(10px);
   border-radius: 24px;
   transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid var(--color-border, rgba(0,0,0,0.05));
 }
 
 .proceso-step:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  border-color: #ff8c42;
+  border-color: #667eea;
 }
 
 .proceso-step-icon {
@@ -76,11 +76,11 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  color: #2d3748;
+  color: var(--color-text, #2d3748);
 }
 
 .proceso-step-desc {
-  color: #718096;
+  color: var(--color-text-muted, #718096);
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -123,4 +123,45 @@
   .proceso-steps-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .proceso-title {
+  background: linear-gradient(135deg, #8b9cff, #b07cd4);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme="dark"] .proceso-subtitle {
+  color: #a0aec0 !important;
+}
+
+[data-theme="dark"] .proceso-step {
+  background: #1e293b;
+  border-color: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .proceso-step:hover {
+  border-color: #667eea;
+}
+
+[data-theme="dark"] .proceso-step-title {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .proceso-step-desc {
+  color: #a0aec0;
+}
+
+[data-theme="dark"] .proceso-btn {
+  background: linear-gradient(135deg, #8b9cff, #b07cd4);
+}
+
+[data-theme="dark"] .proceso-btn:hover {
+  box-shadow: 0 12px 24px rgba(139, 156, 255, 0.4);
+}
+
+[data-theme="dark"] .proceso-section {
+  border-top-color: rgba(139, 156, 255, 0.15);
+  border-bottom-color: rgba(139, 156, 255, 0.15);
 }

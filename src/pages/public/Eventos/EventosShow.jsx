@@ -17,11 +17,22 @@ const PublicEventosShow = () => {
     const [asistencia, setAsistencia] = useState(false);
     const [error, setError] = useState(null);
 
+    // ✅ CORREGIDA: Función para imágenes (soporta Cloudinary y Storage)
     const getImageUrl = useCallback((url) => {
         if (!url) return null;
+        
+        // Si ya es URL completa (Cloudinary o cualquier HTTPS)
         if (url.startsWith('http')) return url;
-        if (url.startsWith('/storage')) return `http://localhost:8000${url}`;
-        return `http://localhost:8000/storage/${url}`;
+        
+        // Si es ruta local que empieza con /storage
+        if (url.startsWith('/storage')) {
+            const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+            return `${baseUrl}${url}`;
+        }
+        
+        // Si solo es el nombre del archivo (caso fallback)
+        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+        return `${baseUrl}/storage/${url}`;
     }, []);
 
     useEffect(() => {
@@ -69,6 +80,7 @@ const PublicEventosShow = () => {
         try {
             await api.post(`/eventos/${id}/like`);
             setLiked(!liked);
+            setEvento(prev => ({ ...prev, likes: (prev?.likes || 0) + (liked ? -1 : 1) }));
         } catch (error) {
             console.error('Error al dar like:', error);
         }
@@ -76,7 +88,7 @@ const PublicEventosShow = () => {
 
     const handleConfirmarAsistencia = useCallback(async () => {
         if (!isAuthenticated) {
-            alert(t('asistencia.login_requerido'));
+            alert(t('asistencia.login_requerido') || 'Debes iniciar sesión para confirmar asistencia');
             return;
         }
         
@@ -92,7 +104,7 @@ const PublicEventosShow = () => {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert(error.response?.data?.message || t('asistencia.error'));
+            alert(error.response?.data?.message || t('asistencia.error') || 'Error al procesar la solicitud');
         }
     }, [id, isAuthenticated, asistencia, t]);
 
@@ -105,11 +117,10 @@ const PublicEventosShow = () => {
             });
         } else {
             navigator.clipboard.writeText(window.location.href);
-            alert(t('detalle.enlace_copiado'));
+            alert(t('detalle.enlace_copiado') || 'Enlace copiado al portapapeles');
         }
     }, [evento, t]);
 
-    // ✅ Solo el LoadingSpinner, sin texto
     if (loading) {
         return (
             <div className="public-eventos-loading">
@@ -145,9 +156,9 @@ const PublicEventosShow = () => {
                 <div className="public-detail-body">
                     <div className="detail-badge">
                         {evento.tipo === 'admin' ? (
-                            <span className="badge-admin-large">🌟 {t('detalle.evento_global')}</span>
+                            <span className="badge-admin-large">🌟 {t('detalle.evento_global') || 'Evento Global'}</span>
                         ) : (
-                            <span className="badge-fundacion-large">🏠 {t('detalle.evento_fundacion')}</span>
+                            <span className="badge-fundacion-large">🏠 {t('detalle.evento_fundacion') || 'Evento de Fundación'}</span>
                         )}
                     </div>
 
@@ -159,24 +170,28 @@ const PublicEventosShow = () => {
                             loading="lazy"
                             onError={(e) => {
                                 e.target.onerror = null;
-                                e.target.src = 'https://via.placeholder.com/800x400/667eea/FFFFFF?text=Evento';
+                                e.target.style.display = 'none';
+                                if (e.target.parentElement) {
+                                    const placeholder = e.target.parentElement.querySelector('.public-detail-placeholder');
+                                    if (placeholder) placeholder.style.display = 'flex';
+                                }
                             }}
                         />
-                    ) : (
-                        <div className="public-detail-placeholder">
-                            <Calendar size={64} />
-                            <span>{evento.nombre_evento}</span>
-                        </div>
-                    )}
+                    ) : null}
+                    
+                    <div className="public-detail-placeholder" style={{ display: evento.imagen_url ? 'none' : 'flex' }}>
+                        <Calendar size={64} />
+                        <span>{evento.nombre_evento}</span>
+                    </div>
 
                     <div className="public-detail-header">
                         <h1 className="public-detail-title">{evento.nombre_evento}</h1>
                         <div className="public-detail-actions-header">
                             <button onClick={handleLike} className={`public-btn-like-detail ${liked ? 'liked' : ''}`}>
-                                <Heart size={20} /> {liked ? t('botones.me_gusta') : t('botones.dar_like')}
+                                <Heart size={20} /> {liked ? (t('botones.me_gusta') || 'Me gusta') : (t('botones.dar_like') || 'Dar like')}
                             </button>
                             <button onClick={handleShare} className="public-btn-share">
-                                <Share2 size={20} /> {t('botones.compartir')}
+                                <Share2 size={20} /> {t('botones.compartir') || 'Compartir'}
                             </button>
                         </div>
                     </div>
@@ -187,16 +202,16 @@ const PublicEventosShow = () => {
                             {asistencia ? (
                                 <>
                                     <CheckCircle size={18} />
-                                    {t('asistencia.confirmada')}
+                                    {t('asistencia.confirmada') || 'Confirmado'}
                                 </>
                             ) : (
-                                t('asistencia.confirmar')
+                                t('asistencia.confirmar') || 'Confirmar asistencia'
                             )}
                         </button>
                         {evento.total_asistentes > 0 && (
                             <div className="total-asistentes">
                                 <Users size={16} />
-                                <span>{evento.total_asistentes} {t('asistencia.personas_asistiran')}</span>
+                                <span>{evento.total_asistentes} {t('asistencia.personas_asistiran') || 'personas asistirán'}</span>
                             </div>
                         )}
                     </div>
@@ -204,12 +219,12 @@ const PublicEventosShow = () => {
                     <div className="public-info-section">
                         <div className="public-info-item">
                             <MapPin size={18} className="public-info-icon" />
-                            <strong>{t('evento.lugar')}:</strong>
+                            <strong>{t('evento.lugar') || 'Lugar'}:</strong>
                             <span>{evento.lugar_evento}</span>
                         </div>
                         <div className="public-info-item">
                             <Calendar size={18} className="public-info-icon" />
-                            <strong>{t('evento.fecha')}:</strong>
+                            <strong>{t('evento.fecha') || 'Fecha'}:</strong>
                             <span>
                                 {new Date(evento.fecha_evento).toLocaleString('es-ES', {
                                     weekday: 'long',
@@ -224,16 +239,16 @@ const PublicEventosShow = () => {
                     </div>
 
                     <div className="public-description">
-                        <h5><FileText size={18} /> {t('evento.descripcion')}:</h5>
+                        <h5><FileText size={18} /> {t('evento.descripcion') || 'Descripción'}:</h5>
                         <p>{evento.descripcion}</p>
                     </div>
 
                     <div className="public-detail-footer">
                         <Link to="/eventos" className="public-btn-secondary">
-                            <ArrowLeft size={18} /> {t('detalle.volver')}
+                            <ArrowLeft size={18} /> {t('detalle.volver') || 'Volver a eventos'}
                         </Link>
                         <small className="public-publish-date">
-                            <Clock size={14} /> {t('detalle.publicado')}: {new Date(evento.created_at).toLocaleDateString()}
+                            <Clock size={14} /> {t('detalle.publicado') || 'Publicado'}: {new Date(evento.created_at).toLocaleDateString()}
                         </small>
                     </div>
                 </div>

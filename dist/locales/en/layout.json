@@ -140,8 +140,9 @@
   "mis_solicitudes": "My requests",
   "bienvenido": "Welcome",
   "invitado": "Guest",
-
-
+  "apadrinar": "Sponsor",
+  "apadrinar_mascota": "Sponsor a pet",
+  "mis_suscripciones": "My Subscriptions",
 
   "admin_navbar": {
     "brand_title": "Rescatando",
@@ -165,5 +166,4 @@
       "user_menu": "User menu"
     }
   }
-
 }

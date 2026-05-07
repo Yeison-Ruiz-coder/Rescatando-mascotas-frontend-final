@@ -491,3 +491,122 @@
   background: #5b21b6;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
+
+/* src/pages/fundacion/rescates/Rescates.css */
+/* Agrega esto al final del archivo */
+
+/* ============================================
+   MODO OSCURO - ADAPTACIONES
+   ============================================ */
+
+[data-theme="dark"] .rescates-container {
+  background: transparent;
+}
+
+/* Header en modo oscuro */
+[data-theme="dark"] .rescates-header h1 {
+  background: linear-gradient(135deg, #e2e8f0 0%, #8b9cff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme="dark"] .rescates-header p {
+  color: #94a3b8;
+  border-left-color: #8b9cff;
+}
+
+/* Botón refresh modo oscuro */
+[data-theme="dark"] .btn-refresh {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .btn-refresh:hover:not(:disabled) {
+  background: linear-gradient(135deg, #8b9cff, #b07cd4);
+  color: white;
+}
+
+/* Cards - fondo blanco forzado en modo oscuro */
+[data-theme="dark"] .rescates-list .rescate-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="dark"] .rescates-list .rescate-card-header {
+  background: #ffffff !important;
+}
+
+[data-theme="dark"] .rescates-list .rescate-card-body {
+  background: #ffffff !important;
+}
+
+/* Textos dentro de las cards (siempre oscuros para contraste con fondo blanco) */
+[data-theme="dark"] .rescate-lugar,
+[data-theme="dark"] .rescate-descripcion,
+[data-theme="dark"] .rescate-tipo-text,
+[data-theme="dark"] .rescate-fecha,
+[data-theme="dark"] .rescate-reportante,
+[data-theme="dark"] .rescate-reportante span,
+[data-theme="dark"] .rescate-coordenadas span {
+  color: #1e293b !important;
+}
+
+[data-theme="dark"] .rescate-descripcion {
+  background: #f8fafc !important;
+  color: #334155 !important;
+}
+
+[data-theme="dark"] .rescate-reportante {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="dark"] .rescate-coordenadas {
+  background: #f1f5f9 !important;
+}
+
+/* Botones en modo oscuro */
+[data-theme="dark"] .btn-detalle {
+  background: white;
+  color: #8b9cff;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .btn-detalle:hover {
+  background: #8b9cff;
+  color: white;
+}
+
+[data-theme="dark"] .btn-rechazar {
+  background: white;
+  color: #f87171;
+  border: 1px solid #fee2e2;
+}
+
+/* Estados vacíos y errores en modo oscuro */
+[data-theme="dark"] .empty-state {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .empty-state h3 {
+  color: #1e293b;
+}
+
+[data-theme="dark"] .empty-state p {
+  color: #475569;
+}
+
+[data-theme="dark"] .error-card {
+  background: #ffffff !important;
+  border: 1px solid #fecaca;
+}
+
+[data-theme="dark"] .error-card h3 {
+  color: #1e293b;
+}
+
+[data-theme="dark"] .error-card p {
+  color: #475569;
+}

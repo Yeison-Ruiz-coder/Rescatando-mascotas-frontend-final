@@ -1,330 +1,401 @@
 /* src/pages/fundacion/mascotas/Mascotas.css */
 
 /* ============================================
-   ESTILOS MODERNOS PARA LISTADO DE MASCOTAS
-   Máximo 4 cards por fila - Centradas
+   PÁGINA DE MASCOTAS - FUNDACIÓN
+   Mismo estilo glassmorphism que la página pública
    ============================================ */
 
-.mascotas-list-page {
-  min-height: 100vh;
+/* ===== HEADER SECTION ===== */
+.mascotas-list-page .mascotas-header {
+  padding: 60px 0 40px 0;
+  text-align: center;
   background: transparent;
-  padding: 32px 24px;
-  width: 100%;
-  box-sizing: border-box;
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
 }
 
-/* Contenedor interno - centrado */
-.mascotas-list-page .container-custom {
-  max-width: 1400px;
-  margin: 0 auto;
-  width: 100%;
+.mascotas-list-page .mascotas-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-/* ===== HEADER ===== */
-.mascotas-list-page .page-header {
-  background: white;
-  border-radius: 24px;
-  padding: 24px 32px;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+.mascotas-list-page .mascotas-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
 }
 
-.mascotas-list-page .page-header h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.mascotas-list-page .page-header h1 i {
-  color: #667eea;
-  font-size: 1.8rem;
-}
-
-.mascotas-list-page .page-subtitle {
-  color: #64748b;
+.mascotas-list-page .mascotas-header .info {
+  color: var(--color-text-muted);
   font-size: 0.9rem;
-  margin: 0;
+  margin-top: 1rem;
 }
 
-/* Botón registrar */
-.mascotas-list-page .btn-primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 50px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  font-weight: 600;
-  font-size: 0.9rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+/* ===== FILTROS SECTION - Mejorado ===== */
+.mascotas-list-page .filtros-section {
+  padding: 1rem 0;
+  position: sticky;
+  top: var(--navbar-height, 70px);
+  z-index: 99;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-sm);
 }
 
-.mascotas-list-page .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+[data-theme="dark"] .mascotas-list-page .filtros-section {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(139, 156, 255, 0.15);
 }
 
-/* ===== FILTROS ===== */
+/* Contenedor de filtros - mejor espaciado */
 .mascotas-list-page .filtros-container {
-  background: white;
-  border-radius: 20px;
-  padding: 16px 24px;
-  margin-bottom: 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 1rem;
 }
 
+/* Botones de filtro - más espacio */
 .mascotas-list-page .filtros-buttons {
   display: flex;
-  gap: 12px;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .mascotas-list-page .filtro-btn {
-  padding: 8px 20px;
-  border: 1px solid #e2e8f0;
-  background: white;
+  padding: 10px 24px;
   border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+[data-theme="dark"] .mascotas-list-page .filtro-btn {
+  background: rgba(30, 41, 59, 0.6);
 }
 
 .mascotas-list-page .filtro-btn:hover {
-  border-color: #667eea;
-  color: #667eea;
-  transform: translateY(-1px);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
 }
 
 .mascotas-list-page .filtro-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+  background: var(--gradient-primary);
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-
-.mascotas-list-page .filtro-btn.active i {
   color: white;
 }
 
-/* Buscador */
+/* Search box - más ancho y espaciado */
 .mascotas-list-page .search-box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 50px;
-  padding: 8px 18px;
-  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+  min-width: 280px;
 }
 
-.mascotas-list-page .search-box:focus-within {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+[data-theme="dark"] .mascotas-list-page .search-box {
+  background: var(--color-card-bg);
 }
 
 .mascotas-list-page .search-box i {
-  color: #94a3b8;
-  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-right: 0.75rem;
+  font-size: 1rem;
 }
 
 .mascotas-list-page .search-box input {
   border: none;
-  outline: none;
-  padding: 6px 0;
-  width: 240px;
   background: transparent;
-  font-size: 0.9rem;
-  color: #1e293b;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.95rem;
+  width: 100%;
+  color: var(--color-text);
+}
+
+.mascotas-list-page .search-box input:focus {
+  outline: none;
 }
 
 .mascotas-list-page .search-box input::placeholder {
-  color: #94a3b8;
+  color: var(--color-text-light);
+}
+
+.mascotas-list-page .search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0 0.5rem;
+  transition: var(--transition);
+}
+
+.mascotas-list-page .search-clear:hover {
+  color: var(--color-danger);
+}
+
+/* ===== RESULTADOS SECTION ===== */
+.mascotas-list-page .resultados-section {
+  padding: 40px 0;
+}
+
+.mascotas-list-page .resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mascotas-list-page .resultados-count {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.mascotas-list-page .resultados-count strong {
+  color: var(--color-accent);
+  font-size: 1.1rem;
 }
 
 /* ===== GRID DE MASCOTAS ===== */
-/* Máximo 4 cards por fila, centradas */
 .mascotas-list-page .mascotas-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(280px, 320px));
-  gap: 28px;
-  margin-top: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* ===== LOADING ===== */
+.mascotas-list-page .loading-container {
+  display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 400px;
 }
 
-/* Para pantallas grandes (menos de 1400px) */
-@media (max-width: 1400px) {
-  .mascotas-list-page .mascotas-grid {
-    grid-template-columns: repeat(4, minmax(260px, 300px));
-    gap: 24px;
-  }
-}
-
-/* Para pantallas medianas (menos de 1200px) - 3 cards */
-@media (max-width: 1200px) {
-  .mascotas-list-page .mascotas-grid {
-    grid-template-columns: repeat(3, minmax(280px, 320px));
-    gap: 24px;
-  }
-}
-
-/* Para pantallas tablet (menos de 900px) - 2 cards */
-@media (max-width: 900px) {
-  .mascotas-list-page .mascotas-grid {
-    grid-template-columns: repeat(2, minmax(280px, 340px));
-    gap: 20px;
-  }
-}
-
-/* Para pantallas móviles (menos de 640px) - 1 card */
-@media (max-width: 640px) {
-  .mascotas-list-page .mascotas-grid {
-    grid-template-columns: 1fr;
-    max-width: 400px;
-    margin: 0 auto;
-    gap: 20px;
-  }
-}
-
-/* ===== ESTADO VACÍO ===== */
-.mascotas-list-page .empty-state {
+/* ===== ERROR ===== */
+.mascotas-list-page .error-container {
   text-align: center;
-  padding: 60px 32px;
-  background: white;
-  border-radius: 32px;
-  margin: 20px auto;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem auto;
   max-width: 500px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
 }
 
-.mascotas-list-page .empty-state i {
-  font-size: 64px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 20px;
+.mascotas-list-page .error-container i {
+  font-size: 4rem;
+  color: var(--color-danger);
+  margin-bottom: 1rem;
 }
 
-.mascotas-list-page .empty-state h3 {
-  font-size: 1.3rem;
-  color: #0f172a;
-  margin-bottom: 12px;
+.mascotas-list-page .error-container h2 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
 }
 
-.mascotas-list-page .empty-state p {
-  color: #64748b;
+.mascotas-list-page .error-container p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.mascotas-list-page .reload-btn {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.mascotas-list-page .reload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== SIN RESULTADOS ===== */
+.mascotas-list-page .empty-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem 0;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.mascotas-list-page .empty-container i {
+  font-size: 4rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.mascotas-list-page .empty-container h3 {
+  color: var(--form-text);
+  margin-bottom: 0.5rem;
+}
+
+.mascotas-list-page .empty-container p {
+  color: var(--color-text-muted);
+}
+
+/* ===== BOTONES ===== */
+.mascotas-list-page .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
   font-size: 0.9rem;
-  margin-bottom: 24px;
+}
+
+.mascotas-list-page .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.05);
 }
 
 .mascotas-list-page .btn-secondary {
-  background: #f1f5f9;
-  color: #475569;
-  padding: 10px 24px;
-  border-radius: 50px;
-  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
+  gap: 0.5rem;
+  padding: 10px 20px;
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary);
+  border-radius: 50px;
   font-weight: 600;
-  font-size: 0.85rem;
-  border: none;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1px solid rgba(102, 126, 234, 0.3);
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .mascotas-list-page .btn-secondary:hover {
-  background: #e2e8f0;
+  background: var(--color-primary);
+  color: white;
   transform: translateY(-2px);
 }
 
-/* ===== RESPONSIVE GENERAL ===== */
-@media (max-width: 968px) {
-  .mascotas-list-page {
-    padding: 24px 16px;
+/* ===== MODO OSCURO - AJUSTES ESPECÍFICOS ===== */
+[data-theme="dark"] .mascotas-list-page .mascotas-header {
+  border-bottom-color: rgba(139, 156, 255, 0.15);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .mascotas-list-page .mascotas-header h1 {
+    font-size: 2.2rem;
+  }
+  .mascotas-list-page .mascotas-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .mascotas-list-page .search-box {
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mascotas-list-page .mascotas-header {
+    padding: 40px 0 30px 0;
+  }
+  .mascotas-list-page .mascotas-header h1 {
+    font-size: 1.8rem;
+  }
+  .mascotas-list-page .mascotas-header .subtitle {
+    font-size: 1rem;
+  }
+  .mascotas-list-page .filtros-section {
+    top: 60px;
   }
   
-  .mascotas-list-page .page-header {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .mascotas-list-page .page-header h1 {
-    font-size: 1.5rem;
-    justify-content: center;
-  }
-  
+  /* Filtros en columna para móvil */
   .mascotas-list-page .filtros-container {
     flex-direction: column;
     align-items: stretch;
-    padding: 16px;
+    gap: 1rem;
   }
   
   .mascotas-list-page .filtros-buttons {
     justify-content: center;
+    gap: 0.75rem;
+  }
+  
+  .mascotas-list-page .filtro-btn {
+    padding: 8px 18px;
+    font-size: 0.85rem;
   }
   
   .mascotas-list-page .search-box {
     width: 100%;
+    min-width: auto;
   }
   
   .mascotas-list-page .search-box input {
     width: 100%;
   }
+  
+  .mascotas-list-page .resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .mascotas-list-page .mascotas-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
+  .mascotas-list-page .mascotas-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .mascotas-list-page .resultados-count {
+    font-size: 0.8rem;
+  }
+  
+  .mascotas-list-page .filtros-buttons {
+    gap: 0.5rem;
+  }
+  
   .mascotas-list-page .filtro-btn {
     padding: 6px 14px;
     font-size: 0.75rem;
   }
   
-  .mascotas-list-page .btn-primary {
+  .mascotas-list-page .btn-primary,
+  .mascotas-list-page .btn-secondary {
     padding: 10px 20px;
     font-size: 0.85rem;
-  }
-  
-  .mascotas-list-page .page-header {
-    padding: 16px;
-  }
-  
-  .mascotas-list-page .empty-state {
-    padding: 40px 20px;
-  }
-  
-  .mascotas-list-page .empty-state i {
-    font-size: 48px;
-  }
-  
-  .mascotas-list-page .empty-state h3 {
-    font-size: 1.1rem;
   }
 }

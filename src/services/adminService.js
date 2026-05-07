@@ -37,6 +37,7 @@ const adminService = {
       const queryParams = new URLSearchParams();
 
       if (params.page) queryParams.append('page', params.page);
+      if (params.per_page) queryParams.append('per_page', params.per_page);
       if (params.search) queryParams.append('search', params.search);
       if (params.tipo) queryParams.append('tipo', params.tipo);
       if (params.estado) queryParams.append('estado', params.estado);
@@ -46,6 +47,37 @@ const adminService = {
 
     } catch (error) {
       console.error('Error en getUsuarios:', error);
+      throw error;
+    }
+  },
+
+  deleteUsuario: async (id) => {
+    try {
+      const response = await api.delete(`/admin/usuarios/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error en deleteUsuario:', error);
+      throw error;
+    }
+  },
+
+  cambiarEstadoUsuario: async (id, payload) => {
+    try {
+      const body = typeof payload === 'string' ? { estado: payload } : payload;
+      const response = await api.patch(`/admin/usuarios/${id}`, body);
+      return response.data;
+    } catch (error) {
+      console.error('Error en cambiarEstadoUsuario:', error);
+      throw error;
+    }
+  },
+
+  verificarEmailUsuario: async (id) => {
+    try {
+      const response = await api.post(`/admin/usuarios/${id}/verificar-email`);
+      return response.data;
+    } catch (error) {
+      console.error('Error en verificarEmailUsuario:', error);
       throw error;
     }
   },
