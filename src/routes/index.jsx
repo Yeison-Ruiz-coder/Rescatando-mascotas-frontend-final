@@ -80,7 +80,8 @@ import AdminRescatesShow from "../pages/admin/rescates/RescatesShow";
 // =============================================================
 import FundDashboard from "../pages/fundacion/dashboard/Dashboard";
 import FundMascotas from "../pages/fundacion/mascotas/Mascotas";
-import FundNuevaMascota from "../pages/fundacion/mascotas/NuevaMascota";
+import CrearMascota from "../pages/fundacion/mascotas/CrearMascota";
+import EditarMascota from "../pages/fundacion/mascotas/EditarMascota";   
 import MascotaDetalleFundacion from "../pages/fundacion/mascotas/MascotaDetalle";
 import EventosIndex from "../pages/fundacion/eventos/EventosIndex";
 import EventosCreate from "../pages/fundacion/eventos/EventosCreate";
@@ -457,11 +458,11 @@ const router = createBrowserRouter([
           },
           { path: "dashboard", element: <FundDashboard /> },
 
-          // Mascotas
+          // Mascotas - RUTAS CORREGIDAS
           { path: "mascotas", element: <FundMascotas /> },
-          { path: "mascotas/nueva", element: <FundNuevaMascota /> },
+          { path: "mascotas/nueva", element: <CrearMascota /> }, // ✅ NUEVA RUTA (creación)
           { path: "mascotas/:id", element: <MascotaDetalleFundacion /> },
-          { path: "mascotas/editar/:id", element: <FundNuevaMascota /> },
+          { path: "mascotas/editar/:id", element: <EditarMascota /> }, // ✅ NUEVA RUTA (edición)
 
           // Rescates
           {
@@ -484,7 +485,7 @@ const router = createBrowserRouter([
           { path: "eventos/:id", element: <EventosShow /> },
           { path: "eventos/:id/editar", element: <EventosEdit /> },
 
-          // ✅ SUSCRIPCIONES FUNDACIÓN
+          // Suscripciones Fundación
           { path: "suscripciones", element: <SuscripcionesIndex /> },
           { path: "suscripciones/crear", element: <SuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },

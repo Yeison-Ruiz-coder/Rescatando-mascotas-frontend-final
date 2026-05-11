@@ -39,7 +39,6 @@ const MisRescates = ({ tipoUsuario }) => {
   };
 
   const handleRegistrar = (id) => {
-    // Redirigir a la página de registro de mascotas con el rescate_id como parámetro
     navigate(`/${tipoUsuario}/mascotas/nueva?rescate_id=${id}`);
   };
 
@@ -88,7 +87,7 @@ const MisRescates = ({ tipoUsuario }) => {
               key={rescate.id}
               rescate={rescate}
               onVerDetalle={handleVerDetalle}
-              onRegistrar={handleRegistrar}  // ← Cambiado
+              onRegistrar={handleRegistrar}
               showActions={true}
             />
           ))}

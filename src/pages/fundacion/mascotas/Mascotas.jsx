@@ -101,7 +101,7 @@ const Mascotas = () => {
   const mascotasArray = Array.isArray(mascotas) ? mascotas : [];
   
   const mascotasFiltradas = mascotasArray.filter(mascota => {
-    if (filter === 'en_adopcion' && mascota.estado !== 'En adopcion') return false;
+    if (filter === 'en_adopcion' && mascota.estado !== 'En adopción') return false;
     if (filter === 'adoptado' && mascota.estado !== 'Adoptado') return false;
     
     if (searchTerm) {

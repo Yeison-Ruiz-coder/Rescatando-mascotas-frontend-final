@@ -186,15 +186,15 @@ const EventoCard = memo(({
         <div className="card-buttons admin-buttons">
           <Link to={`/admin/eventos/${id}`} className="btn-card btn-card-outline">
             <Eye size={16} />
-            <span>{t('ver') || 'Ver'}</span>
+            <span>{t('ver_detalles') || 'Ver'}</span>
           </Link>
           <button onClick={() => onEdit?.(id)} className="btn-card btn-card-edit">
             <Edit size={16} />
-            <span>{t('editar') || 'Editar'}</span>
+            <span>{t('edit_event') || 'Editar'}</span>
           </button>
           <button onClick={() => onDelete?.(id)} className="btn-card btn-card-delete">
             <Trash2 size={16} />
-            <span>{t('eliminar') || 'Eliminar'}</span>
+            <span>{t('cancel') || 'Eliminar'}</span>
           </button>
         </div>
       );
@@ -202,23 +202,23 @@ const EventoCard = memo(({
     
     // Rol Fundación
     if (rol === 'fundacion') {
-      return (
-        <div className="card-buttons fundacion-buttons">
-          <Link to={`/fundacion/eventos/${id}`} className="btn-card btn-card-outline">
-            <Eye size={16} />
-            <span>{t('ver') || 'Ver'}</span>
-          </Link>
-          <Link to={`/fundacion/eventos/${id}/editar`} className="btn-card btn-card-edit">
-            <Edit size={16} />
-            <span>{t('editar') || 'Editar'}</span>
-          </Link>
-          <button onClick={() => onDelete?.(id)} className="btn-card btn-card-delete">
-            <Trash2 size={16} />
-            <span>{t('eliminar') || 'Eliminar'}</span>
-          </button>
-        </div>
-      );
-    }
+  return (
+    <div className="card-buttons fundacion-buttons">
+      <Link to={`/fundacion/eventos/${id}`} className="btn-card btn-card-outline">
+        <Eye size={16} />
+        <span>{t('ver_detalles') || 'Ver'}</span>
+      </Link>
+      <Link to={`/fundacion/eventos/${id}/editar`} className="btn-card btn-card-edit">
+        <Edit size={16} />
+        <span>{t('edit_event') || 'Editar'}</span>
+      </Link>
+      <button onClick={() => onDelete?.(id)} className="btn-card btn-card-delete">
+        <Trash2 size={16} />
+        <span>{t('eliminar') || 'Eliminar'}</span>
+      </button>
+    </div>
+  );
+}
     
     // Rol Public
     return (

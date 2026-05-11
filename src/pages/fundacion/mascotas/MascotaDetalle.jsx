@@ -24,9 +24,11 @@ const MascotaDetalleFundacion = () => {
 
   // Función para formatear edad
   const formatEdad = (edad) => {
-    if (!edad && edad !== 0) return t("mascotas:edad_no_especificada", "No especificada");
+    if (!edad && edad !== 0)
+      return t("mascotas:edad_no_especificada", "No especificada");
     const edadNum = parseFloat(edad);
-    if (isNaN(edadNum)) return t("mascotas:edad_no_especificada", "No especificada");
+    if (isNaN(edadNum))
+      return t("mascotas:edad_no_especificada", "No especificada");
 
     if (edadNum < 1) {
       const meses = Math.round(edadNum * 12);
@@ -43,12 +45,14 @@ const MascotaDetalleFundacion = () => {
     if (!galeria) return [];
     if (Array.isArray(galeria)) {
       // Filtrar solo strings válidos
-      return galeria.filter(item => item && typeof item === 'string');
+      return galeria.filter((item) => item && typeof item === "string");
     }
     if (typeof galeria === "string") {
       try {
         const parsed = JSON.parse(galeria);
-        return Array.isArray(parsed) ? parsed.filter(item => item && typeof item === 'string') : [];
+        return Array.isArray(parsed)
+          ? parsed.filter((item) => item && typeof item === "string")
+          : [];
       } catch (e) {
         // Si no es JSON válido, podría ser una sola URL
         return galeria ? [galeria] : [];
@@ -78,7 +82,7 @@ const MascotaDetalleFundacion = () => {
       pequeño: "Pequeño",
       mediano: "Mediano",
       grande: "Grande",
-      muy_grande: "Muy grande"
+      muy_grande: "Muy grande",
     };
     return tamanos[tamano] || tamano;
   };
@@ -86,13 +90,13 @@ const MascotaDetalleFundacion = () => {
   // Función segura para obtener URL de imagen
   const safeGetImageUrl = (url) => {
     if (!url) return null;
-    if (typeof url !== 'string') return null;
+    if (typeof url !== "string") return null;
     return getImageUrl(url);
   };
 
   // Abrir modal de imagen
   const openImageModal = (imageUrl) => {
-    if (imageUrl && typeof imageUrl === 'string') {
+    if (imageUrl && typeof imageUrl === "string") {
       setModalImage(imageUrl);
     }
   };
@@ -119,7 +123,9 @@ const MascotaDetalleFundacion = () => {
         setVacunas(data.vacunas || []);
         setRazas(data.razas || []);
       } else {
-        toast.error(t("nuevaMascota:error_cargar", "No se pudo cargar la mascota"));
+        toast.error(
+          t("nuevaMascota:error_cargar", "No se pudo cargar la mascota"),
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -139,49 +145,49 @@ const MascotaDetalleFundacion = () => {
       });
       if (response.data.success) {
         setMascota((prev) => ({ ...prev, estado: nuevoEstado }));
-        toast.success(`${t("nuevaMascota:estado_actualizado", "Estado actualizado a")} ${nuevoEstado}`);
+        toast.success(
+          `${t("nuevaMascota:estado_actualizado", "Estado actualizado a")} ${nuevoEstado}`,
+        );
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(t("nuevaMascota:error_actualizar", "Error al actualizar estado"));
+      toast.error(
+        t("nuevaMascota:error_actualizar", "Error al actualizar estado"),
+      );
     } finally {
       setCambiandoEstado(false);
     }
   };
 
   const handleEliminar = async () => {
-    console.log('Intentando eliminar mascota con ID:', mascotaId);
-    console.log('Datos de la mascota:', mascota);
+    if (!mascotaId) return;
 
-    if (!mascotaId) {
-      console.error('No hay mascotaId para eliminar');
-      return;
-    }
-
-    const confirmacion = window.confirm(t("nuevaMascota:confirmar_eliminar", "¿Eliminar a {{nombre}}?", { nombre: mascota?.nombre_mascota }));
-    console.log('Confirmación del usuario:', confirmacion);
+    const confirmacion = window.confirm(
+      t("nuevaMascota:confirmar_eliminar", "¿Eliminar a {{nombre}}?", {
+        nombre: mascota?.nombre_mascota,
+      }),
+    );
 
     if (confirmacion) {
       try {
-        console.log('Enviando petición DELETE a:', `/entity/mascotas/${mascotaId}`);
         const response = await api.delete(`/entity/mascotas/${mascotaId}`);
-        console.log('Respuesta del servidor:', response);
 
         if (response.data.success) {
-          console.log('Mascota eliminada exitosamente');
-          toast.success(t("nuevaMascota:mascota_eliminada", "Mascota eliminada"));
+          // ✅ Sin toast de éxito aquí
+          // El usuario verá el mensaje cuando llegue a la lista
           navigate("/fundacion/mascotas");
         } else {
-          console.error('Error en la respuesta:', response.data);
-          toast.error(response.data.message || t("nuevaMascota:error_eliminar", "Error al eliminar"));
+          toast.error(
+            response.data.message ||
+              t("nuevaMascota:error_eliminar", "Error al eliminar"),
+          );
         }
       } catch (error) {
-        console.error("Error al eliminar mascota:", error);
-        console.error("Detalles del error:", error.response?.data);
-        toast.error(error.response?.data?.message || t("nuevaMascota:error_eliminar", "Error al eliminar"));
+        toast.error(
+          error.response?.data?.message ||
+            t("nuevaMascota:error_eliminar", "Error al eliminar"),
+        );
       }
-    } else {
-      console.log('Usuario canceló la eliminación');
     }
   };
 
@@ -200,7 +206,8 @@ const MascotaDetalleFundacion = () => {
           <i className="fas fa-paw"></i>
           <h2>{t("mascotas:no_encontrada", "Mascota no encontrada")}</h2>
           <Link to="/fundacion/mascotas" className="btn-back-fundacion">
-            <i className="fas fa-arrow-left"></i> {t("mascotas:volver", "Volver")}
+            <i className="fas fa-arrow-left"></i>{" "}
+            {t("mascotas:volver", "Volver")}
           </Link>
         </div>
       </div>
@@ -240,19 +247,19 @@ const MascotaDetalleFundacion = () => {
 
   // Array de todas las imágenes (principal + galería) - CORREGIDO para validar strings
   const todasLasImagenes = [];
-  
+
   // Agregar foto principal si existe y es string
-  if (mascota.foto_principal && typeof mascota.foto_principal === 'string') {
+  if (mascota.foto_principal && typeof mascota.foto_principal === "string") {
     todasLasImagenes.push({
       url: mascota.foto_principal,
       esPrincipal: true,
       alt: `${mascota.nombre_mascota} - Foto principal`,
     });
   }
-  
+
   // Agregar imágenes de galería
   galeriaArray.forEach((foto, idx) => {
-    if (foto && typeof foto === 'string') {
+    if (foto && typeof foto === "string") {
       todasLasImagenes.push({
         url: foto,
         esPrincipal: false,
@@ -261,8 +268,11 @@ const MascotaDetalleFundacion = () => {
     }
   });
 
-  const imagenActualData = todasLasImagenes[imagenActual] || todasLasImagenes[0] || null;
-  const imagenActualUrl = imagenActualData?.url ? safeGetImageUrl(imagenActualData.url) : null;
+  const imagenActualData =
+    todasLasImagenes[imagenActual] || todasLasImagenes[0] || null;
+  const imagenActualUrl = imagenActualData?.url
+    ? safeGetImageUrl(imagenActualData.url)
+    : null;
 
   return (
     <div className="mascota-detalle-page-fundacion">
@@ -270,7 +280,8 @@ const MascotaDetalleFundacion = () => {
         {/* Header solo con botón volver */}
         <div className="detalle-header-fundacion">
           <button onClick={() => navigate(-1)} className="btn-back-fundacion">
-            <i className="fas fa-arrow-left"></i> {t("mascotas:volver", "Volver")}
+            <i className="fas fa-arrow-left"></i>{" "}
+            {t("mascotas:volver", "Volver")}
           </button>
         </div>
 
@@ -278,8 +289,8 @@ const MascotaDetalleFundacion = () => {
           {/* Sección de Imágenes - Carrusel lateral */}
           <div className="imagenes-section-fundacion">
             {/* Imagen Principal Grande */}
-            <div 
-              className="imagen-principal-fundacion" 
+            <div
+              className="imagen-principal-fundacion"
               onClick={() => openImageModal(imagenActualUrl)}
             >
               {imagenActualUrl ? (
@@ -287,7 +298,8 @@ const MascotaDetalleFundacion = () => {
                   src={imagenActualUrl}
                   alt={imagenActualData?.alt || mascota.nombre_mascota}
                   onError={(e) => {
-                    e.target.src = "https://placehold.co/800x800?text=Sin+Imagen";
+                    e.target.src =
+                      "https://placehold.co/800x800?text=Sin+Imagen";
                   }}
                 />
               ) : (
@@ -318,7 +330,8 @@ const MascotaDetalleFundacion = () => {
                             src={imgUrl}
                             alt={`Miniatura ${idx + 1}`}
                             onError={(e) => {
-                              e.target.src = "https://placehold.co/80x80?text=Error";
+                              e.target.src =
+                                "https://placehold.co/80x80?text=Error";
                             }}
                           />
                           {img.esPrincipal && (
@@ -349,7 +362,10 @@ const MascotaDetalleFundacion = () => {
               <div className="info-item-fundacion">
                 <i className="fas fa-tag"></i>
                 <strong>{t("nuevaMascota:especie", "Especie")}</strong>
-                <span>{mascota.especie || t("mascotas:no_especificada", "No especificada")}</span>
+                <span>
+                  {mascota.especie ||
+                    t("mascotas:no_especificada", "No especificada")}
+                </span>
               </div>
               <div className="info-item-fundacion">
                 <i className="fas fa-paw"></i>
@@ -368,40 +384,63 @@ const MascotaDetalleFundacion = () => {
               <div className="info-item-fundacion">
                 <i className="fas fa-venus-mars"></i>
                 <strong>{t("nuevaMascota:genero", "Género")}</strong>
-                <span>{mascota.genero || t("mascotas:no_especificado", "No especificado")}</span>
+                <span>
+                  {mascota.genero ||
+                    t("mascotas:no_especificado", "No especificado")}
+                </span>
               </div>
-              
+
               {/* Características Físicas */}
               {(mascota.peso_aprox || mascota.tamano || mascota.color) && (
                 <>
                   <div className="info-item-fundacion">
                     <i className="fas fa-weight-hanging"></i>
                     <strong>{t("nuevaMascota:peso_aprox", "Peso")}</strong>
-                    <span>{mascota.peso_aprox ? `${mascota.peso_aprox} kg` : t("mascotas:no_especificado", "No especificado")}</span>
+                    <span>
+                      {mascota.peso_aprox
+                        ? `${mascota.peso_aprox} kg`
+                        : t("mascotas:no_especificado", "No especificado")}
+                    </span>
                   </div>
                   <div className="info-item-fundacion">
                     <i className="fas fa-ruler-combined"></i>
                     <strong>{t("nuevaMascota:tamano", "Tamaño")}</strong>
-                    <span>{mascota.tamano ? getTamanoTexto(mascota.tamano) : t("mascotas:no_especificado", "No especificado")}</span>
+                    <span>
+                      {mascota.tamano
+                        ? getTamanoTexto(mascota.tamano)
+                        : t("mascotas:no_especificado", "No especificado")}
+                    </span>
                   </div>
                   <div className="info-item-fundacion">
                     <i className="fas fa-palette"></i>
                     <strong>{t("nuevaMascota:color", "Color")}</strong>
-                    <span>{mascota.color || t("mascotas:no_especificado", "No especificado")}</span>
+                    <span>
+                      {mascota.color ||
+                        t("mascotas:no_especificado", "No especificado")}
+                    </span>
                   </div>
                 </>
               )}
 
               <div className="info-item-fundacion">
                 <i className="fas fa-map-marker-alt"></i>
-                <strong>{t("nuevaMascota:lugar_rescate", "Lugar de rescate")}</strong>
-                <span>{mascota.lugar_rescate || t("mascotas:no_especificado", "No especificado")}</span>
+                <strong>
+                  {t("nuevaMascota:lugar_rescate", "Lugar de rescate")}
+                </strong>
+                <span>
+                  {mascota.lugar_rescate ||
+                    t("mascotas:no_especificado", "No especificado")}
+                </span>
               </div>
               <div className="info-item-fundacion">
                 <i className="fas fa-clock"></i>
-                <strong>{t("nuevaMascota:fecha_ingreso", "Fecha ingreso")}</strong>
+                <strong>
+                  {t("nuevaMascota:fecha_ingreso", "Fecha ingreso")}
+                </strong>
                 <span>
-                  {mascota.fecha_ingreso ? new Date(mascota.fecha_ingreso).toLocaleDateString() : t("mascotas:no_especificada", "No especificada")}
+                  {mascota.fecha_ingreso
+                    ? new Date(mascota.fecha_ingreso).toLocaleDateString()
+                    : t("mascotas:no_especificada", "No especificada")}
                 </span>
               </div>
             </div>
@@ -409,16 +448,24 @@ const MascotaDetalleFundacion = () => {
             {/* Descripción */}
             <div className="info-section-fundacion">
               <h3>
-                <i className="fas fa-file-alt"></i> {t("nuevaMascota:descripcion", "Descripción")}
+                <i className="fas fa-file-alt"></i>{" "}
+                {t("nuevaMascota:descripcion", "Descripción")}
               </h3>
-              <p>{mascota.descripcion || t("mascotas:sin_descripcion", "Sin descripción")}</p>
+              <p>
+                {mascota.descripcion ||
+                  t("mascotas:sin_descripcion", "Sin descripción")}
+              </p>
             </div>
 
             {/* Condiciones especiales */}
             {mascota.condiciones_especiales && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-heartbeat"></i> {t("nuevaMascota:condiciones_especiales", "Condiciones especiales")}
+                  <i className="fas fa-heartbeat"></i>{" "}
+                  {t(
+                    "nuevaMascota:condiciones_especiales",
+                    "Condiciones especiales",
+                  )}
                 </h3>
                 <p>{mascota.condiciones_especiales}</p>
               </div>
@@ -428,32 +475,39 @@ const MascotaDetalleFundacion = () => {
             {mascota.salud_general && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-stethoscope"></i> {t("nuevaMascota:salud_general", "Salud general")}
+                  <i className="fas fa-stethoscope"></i>{" "}
+                  {t("nuevaMascota:salud_general", "Salud general")}
                 </h3>
                 <p>{mascota.salud_general}</p>
               </div>
             )}
 
             {/* Estado de salud (booleanos) */}
-            {(mascota.esterilizado || mascota.desparasitado || mascota.vacunado) && (
+            {(mascota.esterilizado ||
+              mascota.desparasitado ||
+              mascota.vacunado) && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-check-circle"></i> {t("nuevaMascota:estado_salud", "Estado de salud")}
+                  <i className="fas fa-check-circle"></i>{" "}
+                  {t("nuevaMascota:estado_salud", "Estado de salud")}
                 </h3>
                 <div className="salud-badges">
                   {mascota.esterilizado && (
                     <span className="salud-badge esterilizado">
-                      <i className="fas fa-scissors"></i> {t("nuevaMascota:esterilizado", "Esterilizado/a")}
+                      <i className="fas fa-scissors"></i>{" "}
+                      {t("nuevaMascota:esterilizado", "Esterilizado/a")}
                     </span>
                   )}
                   {mascota.desparasitado && (
                     <span className="salud-badge desparasitado">
-                      <i className="fas fa-bug"></i> {t("nuevaMascota:desparasitado", "Desparasitado/a")}
+                      <i className="fas fa-bug"></i>{" "}
+                      {t("nuevaMascota:desparasitado", "Desparasitado/a")}
                     </span>
                   )}
                   {mascota.vacunado && (
                     <span className="salud-badge vacunado">
-                      <i className="fas fa-syringe"></i> {t("nuevaMascota:vacunado", "Vacunado/a")}
+                      <i className="fas fa-syringe"></i>{" "}
+                      {t("nuevaMascota:vacunado", "Vacunado/a")}
                     </span>
                   )}
                 </div>
@@ -464,7 +518,11 @@ const MascotaDetalleFundacion = () => {
             {enfermedadesArray.length > 0 && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-notes-medical"></i> {t("nuevaMascota:enfermedades_cronicas", "Enfermedades crónicas")}
+                  <i className="fas fa-notes-medical"></i>{" "}
+                  {t(
+                    "nuevaMascota:enfermedades_cronicas",
+                    "Enfermedades crónicas",
+                  )}
                 </h3>
                 <div className="enfermedades-lista">
                   {enfermedadesArray.map((enf, idx) => (
@@ -480,7 +538,8 @@ const MascotaDetalleFundacion = () => {
             {medicamentosArray.length > 0 && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-tablets"></i> {t("nuevaMascota:medicamentos", "Medicamentos")}
+                  <i className="fas fa-tablets"></i>{" "}
+                  {t("nuevaMascota:medicamentos", "Medicamentos")}
                 </h3>
                 <div className="medicamentos-lista">
                   {medicamentosArray.map((med, idx) => (
@@ -496,12 +555,14 @@ const MascotaDetalleFundacion = () => {
             {vacunas.length > 0 && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-syringe"></i> {t("nuevaMascota:vacunas", "Vacunas aplicadas")}
+                  <i className="fas fa-syringe"></i>{" "}
+                  {t("nuevaMascota:vacunas", "Vacunas aplicadas")}
                 </h3>
                 <div className="vacunas-lista-fundacion">
                   {vacunas.map((vacuna, idx) => (
                     <span key={idx} className="vacuna-tag-fundacion">
-                      <i className="fas fa-shield-alt"></i> {vacuna.nombre_vacuna || vacuna.nombre}
+                      <i className="fas fa-shield-alt"></i>{" "}
+                      {vacuna.nombre_vacuna || vacuna.nombre}
                     </span>
                   ))}
                 </div>
@@ -512,7 +573,11 @@ const MascotaDetalleFundacion = () => {
             {requisitosArray.length > 0 && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-clipboard-list"></i> {t("nuevaMascota:requisitos_adopcion", "Requisitos de adopción")}
+                  <i className="fas fa-clipboard-list"></i>{" "}
+                  {t(
+                    "nuevaMascota:requisitos_adopcion",
+                    "Requisitos de adopción",
+                  )}
                 </h3>
                 <ul className="requisitos-lista">
                   {requisitosArray.map((req, idx) => (
@@ -528,50 +593,75 @@ const MascotaDetalleFundacion = () => {
             {mascota.hogar_recomendado && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-home"></i> {t("nuevaMascota:hogar_recomendado", "Hogar recomendado")}
+                  <i className="fas fa-home"></i>{" "}
+                  {t("nuevaMascota:hogar_recomendado", "Hogar recomendado")}
                 </h3>
                 <p className="hogar-recomendado">
-                  <i className="fas fa-info-circle"></i> {mascota.hogar_recomendado === "casa_jardin" ? "Casa con jardín" :
-                    mascota.hogar_recomendado === "departamento" ? "Departamento" :
-                    mascota.hogar_recomendado === "casa_sin_jardin" ? "Casa sin jardín" :
-                    mascota.hogar_recomendado === "espacio_amplio" ? "Espacio amplio" :
-                    mascota.hogar_recomendado}
+                  <i className="fas fa-info-circle"></i>{" "}
+                  {mascota.hogar_recomendado === "casa_jardin"
+                    ? "Casa con jardín"
+                    : mascota.hogar_recomendado === "departamento"
+                      ? "Departamento"
+                      : mascota.hogar_recomendado === "casa_sin_jardin"
+                        ? "Casa sin jardín"
+                        : mascota.hogar_recomendado === "espacio_amplio"
+                          ? "Espacio amplio"
+                          : mascota.hogar_recomendado}
                 </p>
               </div>
             )}
 
             {/* Aptitudes */}
-            {(mascota.necesita_hogar_temporal !== undefined || mascota.apto_con_ninos !== undefined || mascota.apto_con_otros_animales !== undefined) && (
+            {(mascota.necesita_hogar_temporal !== undefined ||
+              mascota.apto_con_ninos !== undefined ||
+              mascota.apto_con_otros_animales !== undefined) && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-heart"></i> {t("nuevaMascota:aptitudes", "Aptitudes")}
+                  <i className="fas fa-heart"></i>{" "}
+                  {t("nuevaMascota:aptitudes", "Aptitudes")}
                 </h3>
                 <div className="aptitudes-grid">
                   {mascota.necesita_hogar_temporal && (
                     <span className="aptitud-tag temporal">
-                      <i className="fas fa-clock"></i> {t("nuevaMascota:necesita_hogar_temporal", "Necesita hogar temporal")}
+                      <i className="fas fa-clock"></i>{" "}
+                      {t(
+                        "nuevaMascota:necesita_hogar_temporal",
+                        "Necesita hogar temporal",
+                      )}
                     </span>
                   )}
                   {mascota.apto_con_ninos && (
                     <span className="aptitud-tag ninos">
-                      <i className="fas fa-child"></i> {t("nuevaMascota:apto_con_ninos", "Apto con niños")}
+                      <i className="fas fa-child"></i>{" "}
+                      {t("nuevaMascota:apto_con_ninos", "Apto con niños")}
                     </span>
                   )}
-                  {!mascota.apto_con_ninos && mascota.apto_con_ninos !== undefined && (
-                    <span className="aptitud-tag no-ninos">
-                      <i className="fas fa-child"></i> {t("nuevaMascota:no_apto_ninos", "No apto con niños")}
-                    </span>
-                  )}
+                  {!mascota.apto_con_ninos &&
+                    mascota.apto_con_ninos !== undefined && (
+                      <span className="aptitud-tag no-ninos">
+                        <i className="fas fa-child"></i>{" "}
+                        {t("nuevaMascota:no_apto_ninos", "No apto con niños")}
+                      </span>
+                    )}
                   {mascota.apto_con_otros_animales && (
                     <span className="aptitud-tag animales">
-                      <i className="fas fa-dog"></i> {t("nuevaMascota:apto_con_otros_animales", "Apto con otros animales")}
+                      <i className="fas fa-dog"></i>{" "}
+                      {t(
+                        "nuevaMascota:apto_con_otros_animales",
+                        "Apto con otros animales",
+                      )}
                     </span>
                   )}
-                  {!mascota.apto_con_otros_animales && mascota.apto_con_otros_animales !== undefined && (
-                    <span className="aptitud-tag no-animales">
-                      <i className="fas fa-dog"></i> {t("nuevaMascota:no_apto_animales", "No apto con otros animales")}
-                    </span>
-                  )}
+                  {!mascota.apto_con_otros_animales &&
+                    mascota.apto_con_otros_animales !== undefined && (
+                      <span className="aptitud-tag no-animales">
+                        <i className="fas fa-dog"></i>{" "}
+                        {t(
+                          "nuevaMascota:no_apto_animales",
+                          "No apto con otros animales",
+                        )}
+                      </span>
+                    )}
                 </div>
               </div>
             )}
@@ -580,11 +670,18 @@ const MascotaDetalleFundacion = () => {
             {mascota.video_url && (
               <div className="info-section-fundacion">
                 <h3>
-                  <i className="fas fa-video"></i> {t("nuevaMascota:video", "Video")}
+                  <i className="fas fa-video"></i>{" "}
+                  {t("nuevaMascota:video", "Video")}
                 </h3>
                 <div className="video-container">
-                  <a href={mascota.video_url} target="_blank" rel="noopener noreferrer" className="video-link">
-                    <i className="fas fa-play-circle"></i> Ver video de {mascota.nombre_mascota}
+                  <a
+                    href={mascota.video_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="video-link"
+                  >
+                    <i className="fas fa-play-circle"></i> Ver video de{" "}
+                    {mascota.nombre_mascota}
                   </a>
                 </div>
               </div>
@@ -593,7 +690,8 @@ const MascotaDetalleFundacion = () => {
             {/* Estado actual */}
             <div className="info-section-fundacion">
               <h3>
-                <i className="fas fa-chart-line"></i> {t("nuevaMascota:estado_actual", "Estado actual")}
+                <i className="fas fa-chart-line"></i>{" "}
+                {t("nuevaMascota:estado_actual", "Estado actual")}
               </h3>
               <select
                 value={mascota.estado}
@@ -601,13 +699,23 @@ const MascotaDetalleFundacion = () => {
                 className="estado-select-fundacion"
                 disabled={cambiandoEstado}
               >
-                <option value="En adopcion">{t("mascotas:en_adopcion", "En adopción")}</option>
-                <option value="Rescatada">{t("mascotas:rescatada", "Rescatada")}</option>
-                <option value="En acogida">{t("mascotas:en_acogida", "En acogida")}</option>
-                <option value="Adoptado">{t("mascotas:adoptado", "Adoptado")}</option>
+                <option value="En adopción">
+                  {t("mascotas:en_adopcion", "En adopción")}
+                </option>
+                <option value="Rescatada">
+                  {t("mascotas:rescatada", "Rescatada")}
+                </option>
+                <option value="En acogida">
+                  {t("mascotas:en_acogida", "En acogida")}
+                </option>
+                <option value="Adoptado">
+                  {t("mascotas:adoptado", "Adoptado")}
+                </option>
               </select>
               {cambiandoEstado && (
-                <span className="loading-fundacion">{t("nuevaMascota:actualizando", "Actualizando...")}</span>
+                <span className="loading-fundacion">
+                  {t("nuevaMascota:actualizando", "Actualizando...")}
+                </span>
               )}
             </div>
 
@@ -618,10 +726,15 @@ const MascotaDetalleFundacion = () => {
                   to={`/fundacion/mascotas/editar/${mascotaId}`}
                   className="btn-edit-fundacion"
                 >
-                  <i className="fas fa-edit"></i> {t("nuevaMascota:editar", "Editar")}
+                  <i className="fas fa-edit"></i>{" "}
+                  {t("nuevaMascota:editar", "Editar")}
                 </Link>
-                <button onClick={handleEliminar} className="btn-delete-fundacion">
-                  <i className="fas fa-trash"></i> {t("nuevaMascota:eliminar", "Eliminar")}
+                <button
+                  onClick={handleEliminar}
+                  className="btn-delete-fundacion"
+                >
+                  <i className="fas fa-trash"></i>{" "}
+                  {t("nuevaMascota:eliminar", "Eliminar")}
                 </button>
               </div>
             </div>
@@ -631,11 +744,21 @@ const MascotaDetalleFundacion = () => {
 
       {/* Modal para ver imagen en grande */}
       {modalImage && (
-        <div className="modal-imagen-fundacion" onClick={() => setModalImage(null)}>
-          <button className="modal-close-fundacion" onClick={() => setModalImage(null)}>
+        <div
+          className="modal-imagen-fundacion"
+          onClick={() => setModalImage(null)}
+        >
+          <button
+            className="modal-close-fundacion"
+            onClick={() => setModalImage(null)}
+          >
             <i className="fas fa-times"></i>
           </button>
-          <img src={modalImage} alt="Vista ampliada" onClick={(e) => e.stopPropagation()} />
+          <img
+            src={modalImage}
+            alt="Vista ampliada"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </div>

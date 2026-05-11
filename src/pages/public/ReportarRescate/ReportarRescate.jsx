@@ -17,18 +17,25 @@ const ReportarRescate = () => {
     errors,
     loading,
     submitSuccess,
-    gettingLocation,
+    waitingForAdmin,              // ✅ Cambiado
+    timeUntilAdminAvailable,      // ✅ Cambiado
+    rescateDisponibleParaAdmin,   // ✅ Cambiado
+    rescateId,                    // ✅ Nuevo (opcional)
     prioridad,
     fotosPreviews,
+    fotosFiles,
+    gettingLocation,
     handleChange,
     handleLocationChange,
     getCurrentLocation,
     setPrioridadManual,
     handleSubmit,
+    resetForm,
     handleFotosChange,
     prioridadConfig,
     prioridadTexto,
     botonesPrioridad,
+    formatTimeRemaining,
     t,
   } = useRescate();
 
@@ -52,7 +59,7 @@ const ReportarRescate = () => {
             {info.title}
           </span>
           <span className={`prioridad-badge prioridad-${prioridad.prioridad}`}>
-            <i className="fas fa-flag" /> {t("prioridad_label")}:{" "}
+            <i className="fas fa-flag" style={{ color: "white" }}></i> {t("prioridad_label")}:{" "}
             {prioridadTexto[prioridad.prioridad]}
           </span>
         </div>
@@ -96,6 +103,78 @@ const ReportarRescate = () => {
   );
 
   if (submitSuccess) {
+    if (waitingForAdmin) {
+      return (
+        <div className="rescate-success">
+          <div className="success-card waiting">
+            <i className="fas fa-clock" />
+            <h2>
+              {t("rescate_enviado_title", {
+                defaultValue: "¡Rescate reportado exitosamente!",
+              })}
+            </h2>
+            <p>
+              {t("rescate_enviado_message", {
+                defaultValue:
+                  "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
+              })}
+            </p>
+
+            <div className="timer-info">
+              <i className="fas fa-hourglass-half" />
+              <span>
+                {t("admin_waiting_time", {
+                  defaultValue: "Tiempo para intervención de administradores:",
+                })}{" "}
+                {formatTimeRemaining(timeUntilAdminAvailable)}
+              </span>
+            </div>
+
+            <p className="info-text">
+              <i className="fas fa-info-circle" />
+              {t("admin_info", {
+                defaultValue:
+                  "Si ninguna fundación o veterinaria responde en 30 minutos, los administradores podrán ver y gestionar este rescate.",
+              })}
+            </p>
+
+            <Button onClick={() => navigate("/")} variant="secondary">
+              <i className="fas fa-home" /> {t("back_home")}
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (rescateDisponibleParaAdmin) {
+      return (
+        <div className="rescate-success">
+          <div className="success-card available">
+            <i className="fas fa-users" />
+            <h2>
+              {t("available_title", {
+                defaultValue: "Rescate disponible para administradores",
+              })}
+            </h2>
+            <p>
+              {t("available_message", {
+                defaultValue:
+                  "Ha pasado el tiempo de espera. Ahora los administradores pueden ver y gestionar este rescate.",
+              })}
+            </p>
+            <div className="available-actions">
+              <Button
+                onClick={() => navigate("/")}
+                variant="primary"
+              >
+                <i className="fas fa-home" /> {t("back_home")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="rescate-success">
         <div className="success-card">
@@ -202,7 +281,9 @@ const ReportarRescate = () => {
               initialLng={formData.lng}
               height="300px"
             />
-
+            {errors.ubicacion_rescate && (
+              <div className="error-text">{errors.ubicacion_rescate}</div>
+            )}
 
             <small className="form-hint">
               <i className="fas fa-info-circle" /> {t("map_hint")}

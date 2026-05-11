@@ -7,3 +7,61 @@
   font-size: 0.75rem;
   color: var(--form-hint);
 }
+/* Agrega esto a FormStep6.css */
+
+/* Estilos para la galería existente */
+.form-step .image-uploader-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.form-step .image-preview-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  background: var(--form-input-bg);
+  transition: all 0.2s ease;
+}
+
+.form-step .image-preview-item:hover {
+  transform: scale(1.02);
+  border-color: var(--color-primary);
+}
+
+.form-step .image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.form-step .image-preview-item button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.form-step .image-preview-item button:hover {
+  background: var(--color-danger);
+  transform: scale(1.1);
+}
+
+.form-step .image-preview-item.main {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.3);
+}

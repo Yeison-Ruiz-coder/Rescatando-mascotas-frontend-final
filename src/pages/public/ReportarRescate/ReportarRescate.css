@@ -110,6 +110,27 @@
   margin-bottom: 0.5rem;
 }
 
+/* ===== DATE PICKER - CLICKEABLE Y VISIBLE ===== */
+.rescate-page .rescate-form input[type="date"] {
+  position: relative;
+  cursor: pointer;
+}
+
+.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator {
+  background-color: var(--color-primary);
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+}
+
+.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background-color: var(--color-primary-dark);
+  transform: scale(1.05);
+}
+
 /* ===== BOTONES DE PRIORIDAD ===== */
 .rescate-page .rescate-form .prioridad-buttons-container {
   margin-bottom: 1rem;
@@ -157,7 +178,7 @@
   transform: translateY(-2px);
 }
 
-/* Estados activos */
+/* ===== ESTADOS ACTIVOS MODO CLARO ===== */
 .rescate-page .rescate-form .prioridad-btn.urgente.active {
   border-color: #dc2626;
   background: #fef2f2;
@@ -176,6 +197,13 @@
 .rescate-page .rescate-form .prioridad-btn.otro.active {
   border-color: #16a34a;
   background: #f0fdf4;
+}
+
+/* ===== TEXTO NEGRO EN BOTONES ACTIVOS (AMBOS MODOS) ===== */
+.rescate-page .rescate-form .prioridad-btn.active span,
+.rescate-page .rescate-form .prioridad-btn.active small,
+.rescate-page .rescate-form .prioridad-btn.active i {
+  color: #000000 !important;
 }
 
 /* ===== TARJETA DE PRIORIDAD ===== */
@@ -205,7 +233,6 @@
   font-size: 0.7rem;
   font-weight: 700;
   margin-left: auto;
-  color: white !important;
 }
 
 .rescate-page .rescate-form .prioridad-badge.prioridad-alta {
@@ -339,12 +366,87 @@
   margin-bottom: 2rem;
 }
 
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.urgente.active {
-  background: #450a0a;
-  border-color: #dc2626;
+/* Estados específicos de éxito */
+.rescate-success .success-card.waiting i {
+  color: #f59e0b; /* Naranja para esperando */
 }
 
+.rescate-success .success-card.available i {
+  color: #3b82f6; /* Azul para disponible */
+}
+
+.rescate-success .success-card.waiting .timer-info {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.rescate-success .success-card.waiting .info-text {
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #0c4a6e;
+  text-align: left;
+}
+
+.rescate-success .success-card.available .available-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.rescate-success .success-card.available .available-actions button {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* ===== MODO OSCURO ===== */
+
+.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator {
+  background-color: VAR(--color-primary) !important; /* Color morado */
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+  filter: none !important; /* Elimina cualquier filtro que pueda cambiar el color */
+}
+
+/* Botones de prioridad activos modo oscuro - fondos más claros */
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.urgente.active {
+  background: #ffc9c9 !important;
+  border-color: #dc2626 !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.herido.active {
+  background: #ffdec9 !important;
+  border-color: #ea580c !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.abandonado.active {
+  background: #fff3c9 !important;
+  border-color: #ca8a04 !important;
+}
+
+[data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.otro.active {
+  background: #cdffc9 !important;
+  border-color: #16a34a !important;
+}
+
+/* Tarjeta de prioridad modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .prioridad-card {
   background-color: #0f172a !important;
 }
@@ -355,12 +457,14 @@
   color: #e2e8f0 !important;
 }
 
+/* Alertas modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .alert-error {
   background: #450a0a;
   border-color: #7f1d1d;
   color: #fecaca !important;
 }
 
+/* Botón cancelar modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .btn-cancelar-rescate {
   background: #334155 !important;
   border-color: #475569 !important;
@@ -411,4 +515,9 @@
   .rescate-page .rescate-form .prioridad-buttons {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== IMAGE UPLOADER ===== */
+.image-uploader > label.image-uploader-label {
+  display: none;
 }

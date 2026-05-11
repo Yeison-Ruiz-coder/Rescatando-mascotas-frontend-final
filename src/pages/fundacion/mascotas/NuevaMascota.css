@@ -2,10 +2,11 @@
 
 /* ============================================
    PÁGINA NUEVA MASCOTA - FUNDACIÓN
-   TODOS los estilos encapsulados bajo .nueva-mascota-page
+   SOLO estilos de layout y contenedores
+   Los estilos de componentes están en sus propios CSS
    ============================================ */
 
-/* Contenedor principal - TODOS los estilos van dentro de este contexto */
+/* Contenedor principal */
 .nueva-mascota-page {
   min-height: calc(100vh - var(--navbar-height, 70px));
   padding: 2rem 1.5rem;
@@ -13,7 +14,7 @@
   position: relative;
 }
 
-/* Botón de retroceso FUERA del formulario */
+/* Botón de retroceso */
 .nueva-mascota-page .page-header-buttons {
   max-width: 900px;
   margin: 0 auto 1rem auto;
@@ -25,7 +26,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgb(255, 255, 255);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--color-primary);
@@ -51,21 +52,15 @@
   box-shadow: var(--shadow-md);
 }
 
-.nueva-mascota-page .btn-back-page:hover i,
-.nueva-mascota-page .btn-back-page:hover span {
-  color: white;
-}
-
 .nueva-mascota-page .btn-back-page i {
   font-size: 0.9rem;
   transition: var(--transition);
 }
 
-/* Contenedor del formulario con glassmorphism */
 .nueva-mascota-page .mascota-form-container {
   max-width: 900px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.95); /* ✅ Más opaco en modo claro */
   backdrop-filter: blur(10px);
   border-radius: 32px;
   padding: 1.5rem 2rem;
@@ -73,14 +68,15 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Modo oscuro - fondo más oscuro para contraste */
 [data-theme="dark"] .nueva-mascota-page .mascota-form-container {
-  background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(139, 156, 255, 0.15);
+  background: rgba(30, 41, 59, 0.95); /* ✅ Más opaco en modo oscuro */
+  border-color: rgba(139, 156, 255, 0.2);
 }
-
 /* Header del formulario */
 .nueva-mascota-page .form-header {
   text-align: center;
+  background: transparent;
   margin-bottom: 2rem;
 }
 
@@ -118,57 +114,6 @@
 /* Contenido del formulario */
 .nueva-mascota-page .form-content {
   margin-top: 1.5rem;
-}
-
-/* Steps del formulario - encapsulado */
-.nueva-mascota-page .mascota-steps {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  padding: 0 1rem;
-}
-
-.nueva-mascota-page .step-item {
-  flex: 1;
-  text-align: center;
-  position: relative;
-}
-
-.nueva-mascota-page .step-number {
-  width: 36px;
-  height: 36px;
-  background: var(--color-light);
-  border: 2px solid var(--color-border);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 0.5rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  transition: var(--transition);
-}
-
-.nueva-mascota-page .step-item.active .step-number {
-  background: var(--gradient-primary);
-  border-color: transparent;
-  color: white;
-}
-
-.nueva-mascota-page .step-item.completed .step-number {
-  background: var(--color-success);
-  border-color: transparent;
-  color: white;
-}
-
-.nueva-mascota-page .step-label {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-}
-
-.nueva-mascota-page .step-item.active .step-label {
-  color: var(--color-primary);
-  font-weight: 600;
 }
 
 /* Error container */
@@ -222,15 +167,7 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Loading container */
-.nueva-mascota-page .loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-/* Responsive - encapsulado */
+/* Responsive solo para el layout */
 @media (max-width: 768px) {
   .nueva-mascota-page {
     padding: 1rem;
@@ -251,19 +188,6 @@
   
   .nueva-mascota-page .form-header h1 {
     font-size: 1.4rem;
-  }
-  
-  .nueva-mascota-page .mascota-steps {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .nueva-mascota-page .step-item {
-    min-width: 60px;
-  }
-  
-  .nueva-mascota-page .step-label {
-    font-size: 0.65rem;
   }
 }
 
@@ -287,12 +211,6 @@
   
   .nueva-mascota-page .btn-back-page {
     padding: 0.5rem 0.9rem;
-    font-size: 0.8rem;
-  }
-  
-  .nueva-mascota-page .step-number {
-    width: 30px;
-    height: 30px;
     font-size: 0.8rem;
   }
 }

@@ -15,4 +15,5 @@
 @import './decorations/circles.css';
 @import './decorations/particles.css';
 @import './decorations/paws.css';
+@import './components/status-badges.css';
 @import './utilities.css';

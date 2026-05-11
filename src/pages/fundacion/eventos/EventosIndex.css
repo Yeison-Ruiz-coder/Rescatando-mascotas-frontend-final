@@ -1,237 +1,289 @@
 /* src/pages/fundacion/eventos/EventosIndex.css */
 
-.fundacion-eventos-container {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
+/* ============================================
+   FUNDACIÓN - LISTA DE EVENTOS (DISEÑO MASCOTAS)
+   ============================================ */
+
+.fundacion-eventos-page {
+  min-height: calc(100vh - var(--navbar-height, 70px));
 }
 
+/* ===== HEADER SECTION ===== */
 .fundacion-eventos-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+  padding: 60px 0 40px 0;
+  text-align: center;
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
 }
 
 .fundacion-eventos-header h1 {
-    font-size: 1.75rem;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.25rem;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.fundacion-eventos-header p {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
+.fundacion-eventos-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
 }
 
-.btn-create-evento {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--gradient-primary);
-    color: white;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: var(--transition);
+.fundacion-eventos-header .info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.btn-create-evento:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    color: white;
-    text-decoration: none;
+/* ===== FILTROS SECTION ===== */
+.fundacion-eventos-filtros-section {
+  padding: 10px 0;
+  position: sticky;
+  top: var(--navbar-height, 70px);
+  z-index: 99;
 }
 
-.fundacion-eventos-table-container {
-    background: var(--color-card-bg);
-    border-radius: var(--radius-xl);
-    overflow-x: auto;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-border);
+/* ===== RESULTADOS SECTION ===== */
+.fundacion-eventos-resultados-section {
+  padding: 40px 0;
 }
 
-.fundacion-eventos-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
+.fundacion-eventos-resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.fundacion-eventos-table th,
-.fundacion-eventos-table td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
+.fundacion-eventos-resultados-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
-.fundacion-eventos-table th {
-    background: var(--color-hover);
-    font-weight: 600;
-    color: var(--color-text);
+.fundacion-eventos-resultados-count strong {
+  color: var(--color-accent);
+  font-size: 1.1rem;
 }
 
-.table-image-cell {
-    width: 60px;
+.fundacion-eventos-resultados-orden {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.table-image-cell img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: var(--radius-md);
+.fundacion-eventos-resultados-orden label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.table-image-placeholder {
-    width: 50px;
-    height: 50px;
-    background: var(--gradient-primary);
-    opacity: 0.7;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+/* ===== GRID DE EVENTOS ===== */
+.fundacion-eventos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
-.table-title-cell strong {
-    display: block;
-    margin-bottom: 4px;
-    color: var(--color-text);
-}
-
-.evento-desc-preview {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-}
-
-.stat-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 50px;
-    font-size: 0.75rem;
-}
-
-.stat-badge.asistentes {
-    background: rgba(66, 153, 225, 0.1);
-    color: var(--color-info);
-}
-
-.stat-badge.likes {
-    background: rgba(245, 101, 101, 0.1);
-    color: var(--color-danger);
-}
-
-.table-actions-cell {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.action-btn {
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-    border: none;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    background: transparent;
-}
-
-.action-btn.view-btn {
-    color: var(--color-info);
-    background: rgba(66, 153, 225, 0.1);
-}
-
-.action-btn.edit-btn {
-    color: var(--color-warning);
-    background: rgba(245, 158, 11, 0.1);
-}
-
-.action-btn.delete-btn {
-    color: var(--color-danger);
-    background: rgba(239, 68, 68, 0.1);
-}
-
-.action-btn:hover {
-    transform: scale(1.05);
-}
-
+/* ===== ESTADO VACÍO ===== */
 .fundacion-eventos-empty {
-    text-align: center;
-    padding: 4rem;
-    background: var(--color-card-bg);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--color-border);
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem 0;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
 }
 
-.fundacion-eventos-empty h4 {
-    margin: 1rem 0 0.5rem;
-    color: var(--color-text);
+.fundacion-eventos-empty svg {
+  color: var(--color-primary);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.fundacion-eventos-empty h3 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
 }
 
 .fundacion-eventos-empty p {
-    color: var(--color-text-muted);
-    margin-bottom: 1.5rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
 }
 
-.btn-create-first {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--gradient-primary);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 50px;
-    text-decoration: none;
+.fundacion-btn-limpiar-empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
 }
 
-.fundacion-eventos-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    gap: 1rem;
+.fundacion-btn-limpiar-empty:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: translateY(-2px);
 }
 
+/* ===== ESTADO DE ERROR ===== */
 .fundacion-eventos-error {
-    text-align: center;
-    padding: 3rem;
-    background: var(--color-card-bg);
-    border-radius: var(--radius-xl);
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem auto;
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
 }
 
-.btn-retry {
-    margin-top: 1rem;
-    padding: 0.5rem 1.5rem;
-    background: var(--color-primary);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
+.fundacion-eventos-error svg {
+  color: var(--color-danger);
+  margin-bottom: 1rem;
+}
+
+.fundacion-eventos-error h4 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.fundacion-eventos-error p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.fundacion-btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.fundacion-btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== LOADING ===== */
+.fundacion-eventos-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.fundacion-eventos-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .fundacion-eventos-filtros-section {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme="dark"] .fundacion-eventos-header {
+  border-bottom-color: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .fundacion-eventos-empty,
+[data-theme="dark"] .fundacion-eventos-error {
+  background: var(--color-card-bg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .fundacion-eventos-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .fundacion-eventos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .fundacion-eventos-container {
-        padding: 1rem;
-    }
-    
-    .fundacion-eventos-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .table-actions-cell {
-        flex-wrap: wrap;
-    }
+  .fundacion-eventos-header {
+    padding: 40px 0 30px 0;
+  }
+  
+  .fundacion-eventos-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .fundacion-eventos-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .fundacion-eventos-filtros-section {
+    top: 60px;
+  }
+  
+  .fundacion-eventos-resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .fundacion-eventos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fundacion-eventos-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .fundacion-eventos-resultados-count {
+    font-size: 0.8rem;
+  }
+  
+  .fundacion-eventos-empty {
+    padding: 2rem 1rem;
+  }
 }

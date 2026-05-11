@@ -1,12 +1,12 @@
-/* src/pages/fundacion/eventos/EventosForm.css */
+/* src/pages/admin/eventos/EventosForm.css */
 
-.eventos-form-container {
+.admin-eventos-form-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;
 }
 
-.eventos-form-card {
+.admin-eventos-form-card {
     background: var(--color-card-bg);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-md);
@@ -14,13 +14,13 @@
     border: 1px solid var(--color-border);
 }
 
-.form-header {
+.admin-eventos-form-card .form-header {
     background: var(--gradient-primary);
     color: white;
     padding: 2rem;
 }
 
-.form-header .back-link {
+.admin-eventos-form-card .form-header .back-link {
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     display: inline-flex;
@@ -30,36 +30,37 @@
     transition: var(--transition-fast);
 }
 
-.form-header .back-link:hover {
+.admin-eventos-form-card .form-header .back-link:hover {
     color: white;
+    transform: translateX(-4px);
 }
 
-.form-header h1 {
+.admin-eventos-form-card .form-header h1 {
     font-size: 1.75rem;
     margin: 0.5rem 0 0;
     color: white;
 }
 
-.form-header p {
+.admin-eventos-form-card .form-header p {
     color: rgba(255, 255, 255, 0.8);
     margin: 0.5rem 0 0;
 }
 
-.eventos-form {
+.admin-eventos-form-card .eventos-form {
     padding: 2rem;
 }
 
-.form-grid {
+.admin-eventos-form-card .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
 }
 
-.form-group {
+.admin-eventos-form-card .form-group {
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.admin-eventos-form-card .form-group label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -68,60 +69,112 @@
     color: var(--color-text);
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+/* ===== ICONOS EN LABELS - COLOR DINÁMICO ===== */
+.admin-eventos-form-card .form-group label svg {
+    color: var(--color-primary);
+    transition: all 0.2s ease;
+}
+
+.admin-eventos-form-card .form-group label:hover svg {
+    color: var(--color-accent);
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .admin-eventos-form-card .form-group label svg {
+    color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .admin-eventos-form-card .form-group label:hover svg {
+    color: var(--color-accent);
+}
+
+/* ===== INPUTS ===== */
+.admin-eventos-form-card .form-group input,
+.admin-eventos-form-card .form-group textarea,
+.admin-eventos-form-card .form-group select {
     width: 100%;
     padding: 0.75rem 1rem;
     background: var(--form-input-bg);
     border: 1px solid var(--form-border);
     border-radius: var(--radius-lg);
     font-size: 0.875rem;
-    transition: var(--transition-fast);
     color: var(--form-text);
+    transition: all 0.2s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.admin-eventos-form-card .form-group input:focus,
+.admin-eventos-form-card .form-group textarea:focus,
+.admin-eventos-form-card .form-group select:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px var(--form-focus-ring);
 }
 
-.form-group input.error,
-.form-group textarea.error {
+/* Inputs numéricos - quitar flechas */
+.admin-eventos-form-card .form-group input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.admin-eventos-form-card .form-group input[type="number"]::-webkit-inner-spin-button,
+.admin-eventos-form-card .form-group input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Datetime-local en modo oscuro */
+.admin-eventos-form-card .form-group input[type="datetime-local"] {
+    color-scheme: dark;
+}
+
+.admin-eventos-form-card .form-group input.error,
+.admin-eventos-form-card .form-group textarea.error,
+.admin-eventos-form-card .form-group select.error {
     border-color: var(--color-danger);
 }
 
-.error-message {
+.admin-eventos-form-card .error-message {
     color: var(--color-danger);
     font-size: 0.75rem;
     margin-top: 0.25rem;
     display: block;
 }
 
-.form-row-2 {
+/* Campo requerido - asterisco */
+.admin-eventos-form-card .form-group.required label::after {
+    content: " *";
+    color: var(--color-danger);
+    font-size: 0.875rem;
+}
+
+/* ===== FORM ROW 2 COLUMNAS ===== */
+.admin-eventos-form-card .form-row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
-.tags-input-container {
+/* ===== TAGS INPUT ===== */
+.admin-eventos-form-card .tags-input-container {
     border: 1px solid var(--form-border);
     border-radius: var(--radius-lg);
     padding: 0.5rem;
     background: var(--form-input-bg);
+    transition: all 0.2s ease;
 }
 
-.tags-list {
+.admin-eventos-form-card .tags-input-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--form-focus-ring);
+}
+
+.admin-eventos-form-card .tags-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
-.tag {
+.admin-eventos-form-card .tag {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -130,66 +183,83 @@
     padding: 0.25rem 0.75rem;
     border-radius: 50px;
     font-size: 0.75rem;
+    transition: all 0.2s ease;
 }
 
-.tag button {
+.admin-eventos-form-card .tag:hover {
+    background: rgba(102, 126, 234, 0.25);
+}
+
+.admin-eventos-form-card .tag button {
     background: none;
     border: none;
     cursor: pointer;
     display: inline-flex;
     color: var(--color-primary);
+    padding: 0;
+    transition: transform 0.2s ease;
 }
 
-.tags-input-wrapper {
+.admin-eventos-form-card .tag button:hover {
+    transform: scale(1.2);
+    color: var(--color-danger);
+}
+
+.admin-eventos-form-card .tags-input-wrapper {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
 }
 
-.tags-input-wrapper input {
+.admin-eventos-form-card .tags-input-wrapper input {
     flex: 1;
     border: none;
     padding: 0.5rem;
     background: transparent;
-}
-
-.tags-input-wrapper input:focus {
     outline: none;
-    box-shadow: none;
 }
 
-.tags-input-wrapper button {
+.admin-eventos-form-card .tags-input-wrapper button {
     background: var(--color-primary);
     color: white;
     border: none;
     padding: 0.25rem 0.75rem;
     border-radius: var(--radius-md);
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.image-upload-area {
+.admin-eventos-form-card .tags-input-wrapper button:hover {
+    background: var(--color-accent);
+    transform: scale(1.05);
+}
+
+/* ===== IMAGE UPLOAD ===== */
+.admin-eventos-form-card .image-upload-area {
     border: 2px dashed var(--form-border);
     border-radius: var(--radius-lg);
     padding: 1rem;
     text-align: center;
-    transition: var(--transition-fast);
+    transition: all 0.2s ease;
 }
 
-.image-upload-area:hover {
+.admin-eventos-form-card .image-upload-area:hover {
     border-color: var(--color-primary);
 }
 
-.image-preview {
+.admin-eventos-form-card .image-preview {
     position: relative;
     display: inline-block;
 }
 
-.image-preview img {
+.admin-eventos-form-card .image-preview img {
     max-width: 100%;
     max-height: 200px;
     border-radius: var(--radius-lg);
+    object-fit: cover;
 }
 
-.image-preview button {
+.admin-eventos-form-card .image-preview button {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -203,27 +273,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
-.upload-label {
+.admin-eventos-form-card .image-preview button:hover {
+    transform: scale(1.1);
+}
+
+.admin-eventos-form-card .upload-label {
     cursor: pointer;
     display: block;
 }
 
-.upload-label input {
+.admin-eventos-form-card .upload-label input {
     display: none;
 }
 
-.upload-placeholder {
+.admin-eventos-form-card .upload-placeholder {
     padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
     color: var(--color-text-muted);
+    transition: all 0.2s ease;
 }
 
-.form-actions {
+.admin-eventos-form-card .upload-placeholder svg {
+    color: var(--color-primary);
+}
+
+.admin-eventos-form-card .upload-placeholder:hover svg {
+    transform: scale(1.1);
+    color: var(--color-accent);
+}
+
+/* ===== BOTONES ===== */
+.admin-eventos-form-card .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
@@ -232,22 +318,26 @@
     border-top: 1px solid var(--color-border);
 }
 
-.btn-cancel {
+.admin-eventos-form-card .btn-cancel {
     padding: 0.75rem 1.5rem;
     background: var(--form-input-bg);
     color: var(--color-text-muted);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     text-decoration: none;
-    transition: var(--transition-fast);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.btn-cancel:hover {
+.admin-eventos-form-card .btn-cancel:hover {
     background: var(--color-hover);
     color: var(--color-text);
+    transform: translateY(-2px);
 }
 
-.btn-submit {
+.admin-eventos-form-card .btn-submit {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -257,21 +347,30 @@
     border: none;
     border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: all 0.2s ease;
 }
 
-.btn-submit:hover {
+.admin-eventos-form-card .btn-submit:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
-.btn-submit:disabled {
+.admin-eventos-form-card .btn-submit:disabled {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
 }
 
-.eventos-form-loading {
+.admin-eventos-form-card .btn-submit .spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ===== LOADING ===== */
+.admin-eventos-form-loading {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -280,27 +379,173 @@
     gap: 1rem;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    .eventos-form-container {
+    .admin-eventos-form-container {
         padding: 1rem;
     }
     
-    .form-grid {
+    .admin-eventos-form-card .form-grid {
         grid-template-columns: 1fr;
         gap: 0;
     }
     
-    .form-row-2 {
+    .admin-eventos-form-card .form-row-2 {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     
-    .form-actions {
+    .admin-eventos-form-card .form-actions {
         flex-direction: column;
     }
     
-    .btn-cancel,
-    .btn-submit {
+    .admin-eventos-form-card .btn-cancel,
+    .admin-eventos-form-card .btn-submit {
         width: 100%;
         justify-content: center;
     }
+    
+    .admin-eventos-form-card .eventos-form {
+        padding: 1.5rem;
+    }
 }
+
+@media (max-width: 480px) {
+    .admin-eventos-form-card .eventos-form {
+        padding: 1rem;
+    }
+    
+    .admin-eventos-form-card .form-header {
+        padding: 1.5rem;
+    }
+    
+    .admin-eventos-form-card .form-header h1 {
+        font-size: 1.4rem;
+    }
+}
+
+/* src/pages/admin/eventos/EventosForm.css */
+
+/* ===== ICONO DE CALENDARIO PERSONALIZADO - AJUSTADO ===== */
+
+/* Contenedor relativo para el campo de fecha */
+.admin-eventos-form-card .form-group {
+    position: relative;
+}
+
+/* Icono personalizado del calendario - dentro del input */
+.admin-eventos-form-card .form-group .calendar-icon-custom {
+    position: absolute;
+    right: 12px;
+    top: 38px; /* Ajustado para alinear con el input */
+    background: var(--gradient-primary);
+    padding: 6px;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-eventos-form-card .form-group .calendar-icon-custom svg {
+    width: 16px;
+    height: 16px;
+    color: white;
+}
+
+/* Hover del icono */
+.admin-eventos-form-card .form-group .calendar-icon-custom:hover {
+    background: var(--gradient-accent);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Input con padding derecho para no solapar el icono */
+.admin-eventos-form-card .form-group input[type="datetime-local"] {
+    padding-right: 50px !important;
+}
+
+/* Ocultar el icono nativo del calendario */
+.admin-eventos-form-card .form-group input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    z-index: 3;
+}
+
+/* Hacer que todo el input sea cliqueable para abrir el calendario */
+.admin-eventos-form-card .form-group input[type="datetime-local"] {
+    cursor: pointer;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .admin-eventos-form-card .form-group .calendar-icon-custom {
+        padding: 5px;
+        width: 28px;
+        height: 28px;
+        top: 36px;
+    }
+    
+    .admin-eventos-form-card .form-group .calendar-icon-custom svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+/* src/pages/admin/eventos/EventosForm.css */
+
+/* ===== BOTÓN VOLVER CON GRADIENTE - POSICIÓN EXTERNA ===== */
+
+/* Contenedor del botón volver (fuera del formulario) */
+.admin-eventos-form-container .back-button-wrapper {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Botón volver con gradiente */
+.admin-eventos-form-container .btn-back-gradient {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Efecto hover */
+.admin-eventos-form-container .btn-back-gradient:hover {
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-md);
+    background: var(--gradient-accent);
+    color: white;
+}
+
+/* Icono dentro del botón */
+.admin-eventos-form-container .btn-back-gradient svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+}
+
+.admin-eventos-form-container .btn-back-gradient:hover svg {
+    transform: translateX(-2px);
+}
+
+/* Modo oscuro - se mantiene igual porque el gradiente ya se adapta */

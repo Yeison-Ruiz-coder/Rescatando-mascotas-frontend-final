@@ -23,12 +23,65 @@ const useRescate = () => {
   // Estado unificado para fotos (archivos y previews)
   const [fotosFiles, setFotosFiles] = useState([]);
   const [fotosPreviews, setFotosPreviews] = useState([]);
+  
+  const [prioridad, setPrioridad] = useState(null);
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // Estados para el timer de ADMINISTRADORES (solo ellos esperan)
+  const [waitingForAdmin, setWaitingForAdmin] = useState(false);
+  const [timeUntilAdminAvailable, setTimeUntilAdminAvailable] = useState(null);
+  const [rescateDisponibleParaAdmin, setRescateDisponibleParaAdmin] = useState(false);
+  const [rescateId, setRescateId] = useState(null);
+  
   const [gettingLocation, setGettingLocation] = useState(false);
-  const [prioridad, setPrioridad] = useState(null);
+  
+  // Timer para hacer rescate disponible para ADMINISTRADORES
+  const TIMEOUT_MINUTES = 30; // 30 minutos para que el admin pueda intervenir
+  const [timeoutId, setTimeoutId] = useState(null);
+
+  // Limpiar timer al desmontar
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
+  // Función para iniciar el timer solo para ADMINISTRADORES
+  // (Fundaciones y veterinarias ven el rescate de inmediato)
+  const startAdminTimer = useCallback((rescateIdCreado) => {
+    setRescateId(rescateIdCreado);
+    setWaitingForAdmin(true);
+    setTimeUntilAdminAvailable(TIMEOUT_MINUTES * 60); // convertir a segundos
+
+    const interval = setInterval(() => {
+      setTimeUntilAdminAvailable((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setWaitingForAdmin(false);
+          setRescateDisponibleParaAdmin(true);
+          // Notificar al backend que el rescate ya está disponible para administradores
+          rescateService.marcarDisponibleParaAdmin(rescateIdCreado).catch(console.error);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // Timer principal para marcar como disponible para admin
+    const mainTimeout = setTimeout(() => {
+      setWaitingForAdmin(false);
+      setRescateDisponibleParaAdmin(true);
+      clearInterval(interval);
+      rescateService.marcarDisponibleParaAdmin(rescateIdCreado).catch(console.error);
+    }, TIMEOUT_MINUTES * 60 * 1000);
+
+    setTimeoutId(mainTimeout);
+  }, []);
 
   // Analizar la descripción para determinar prioridad y tipo de emergencia
   const analizarDescripcion = useCallback((descripcion) => {
@@ -169,6 +222,8 @@ const useRescate = () => {
       newErrors.descripcion_rescate = t("errors.descripcion_required");
     if (!formData.fecha_rescate)
       newErrors.fecha_rescate = t("errors.fecha_required");
+    if (formData.lat == null || formData.lng == null)
+      newErrors.ubicacion_rescate = t("errors.location_required", { defaultValue: "Selecciona la ubicación del rescate" });
 
     if (
       formData.email_reportante &&
@@ -206,6 +261,10 @@ const useRescate = () => {
       formDataToSend.append("fecha_rescate", formData.fecha_rescate);
       formDataToSend.append("tipo_emergencia", prioridad?.tipo || "otro");
       formDataToSend.append("prioridad", prioridad?.prioridad || "baja");
+      // El rescate es visible INMEDIATAMENTE para fundaciones y veterinarias
+      formDataToSend.append("disponible_para_fundaciones", "true");
+      formDataToSend.append("disponible_para_veterinarias", "true");
+      formDataToSend.append("disponible_para_admin", "false"); // Solo después de 30 min
 
       // Campos opcionales
       if (formData.nombre_reportante)
@@ -214,41 +273,21 @@ const useRescate = () => {
         formDataToSend.append("email_reportante", formData.email_reportante);
       if (formData.telefono_reportante)
         formDataToSend.append("telefono_reportante", formData.telefono_reportante);
-      if (formData.lat) formDataToSend.append("lat", formData.lat);
-      if (formData.lng) formDataToSend.append("lng", formData.lng);
+      if (formData.lat != null) formDataToSend.append("lat", formData.lat);
+      if (formData.lng != null) formDataToSend.append("lng", formData.lng);
 
-      // ===== IMPORTANTE: AGREGAR FOTOS CORRECTAMENTE =====
+      // Agregar fotos
       if (fotosFiles.length > 0) {
-        // Asegurar que todos sean File objects
         const validFiles = fotosFiles.filter(f => f instanceof File && f.size > 0);
         
-        console.log("📸 Archivos válidos a enviar:", validFiles.length);
-        
         if (validFiles.length > 0) {
-          // Enviar CADA foto individualmente
           validFiles.forEach((foto, index) => {
             if (index === 0) {
-              // Primera foto como foto_principal
               formDataToSend.append("foto_principal", foto);
-              console.log(`📸 Enviando foto_principal: ${foto.name}`);
             } else {
-              // Resto como galeria_fotos (MISMO nombre de campo)
               formDataToSend.append("galeria_fotos[]", foto);
-              console.log(`📸 Enviando galeria_fotos[]: ${foto.name}`);
             }
           });
-        } else {
-          console.error("❌ No se encontraron archivos válidos en fotosFiles:", fotosFiles);
-        }
-      }
-
-      // DEBUG: Mostrar todo el FormData
-      console.log("=== FORM DATA A ENVIAR ===");
-      for (let [key, value] of formDataToSend.entries()) {
-        if (value instanceof File) {
-          console.log(`${key}: ${value.name} (${value.type}, ${value.size} bytes)`);
-        } else {
-          console.log(`${key}: ${value}`);
         }
       }
 
@@ -257,8 +296,11 @@ const useRescate = () => {
         const response = await rescateService.createRescate(formDataToSend);
 
         if (response.data.success) {
+          const nuevoRescateId = response.data.data.id;
+          setRescateId(nuevoRescateId);
           setSubmitSuccess(true);
-          setTimeout(() => navigate("/"), 3000);
+          // Iniciar timer solo para ADMINISTRADORES
+          startAdminTimer(nuevoRescateId);
         } else {
           setErrors({ general: response.data.message || t("errors.general") });
         }
@@ -266,7 +308,6 @@ const useRescate = () => {
         console.error("Error al enviar rescate:", err);
         const apiErrors = err.response?.data?.errors;
         if (apiErrors) {
-          console.error("Errores de validación:", apiErrors);
           setErrors(apiErrors);
         } else {
           setErrors({
@@ -277,8 +318,15 @@ const useRescate = () => {
         setLoading(false);
       }
     },
-    [formData, prioridad, fotosFiles, validate, t, navigate],
+    [formData, prioridad, fotosFiles, validate, t, startAdminTimer],
   );
+
+  // Formatear tiempo restante
+  const formatTimeRemaining = useCallback((seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }, []);
 
   // Resetear formulario
   const resetForm = useCallback(() => {
@@ -297,7 +345,15 @@ const useRescate = () => {
     setErrors({});
     setPrioridad(null);
     setSubmitSuccess(false);
-  }, []);
+    setWaitingForAdmin(false);
+    setTimeUntilAdminAvailable(null);
+    setRescateDisponibleParaAdmin(false);
+    setRescateId(null);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+  }, [timeoutId]);
 
   // Configuración para la tarjeta de prioridad
   const prioridadConfig = {
@@ -353,10 +409,14 @@ const useRescate = () => {
     errors,
     loading,
     submitSuccess,
-    gettingLocation,
+    waitingForAdmin,        // Cambiado: antes waitingForResponse
+    timeUntilAdminAvailable, // Cambiado: antes timeUntilAvailable
+    rescateDisponibleParaAdmin, // Cambiado: antes rescateDisponible
+    rescateId,
     prioridad,
     fotosPreviews,
     fotosFiles,
+    gettingLocation,
     handleChange,
     handleLocationChange,
     getCurrentLocation,
@@ -367,6 +427,7 @@ const useRescate = () => {
     prioridadConfig,
     prioridadTexto,
     botonesPrioridad,
+    formatTimeRemaining,
     t,
   };
 };

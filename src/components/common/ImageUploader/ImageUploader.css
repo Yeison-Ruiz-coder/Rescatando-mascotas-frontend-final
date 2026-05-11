@@ -1,155 +1,237 @@
 /* src/components/common/ImageUploader/ImageUploader.css */
+
+/* ============================================
+   IMAGE UPLOADER - COMPONENTE ENCAPSULADO
+   Todos los estilos bajo .image-uploader
+   ============================================ */
+
 .image-uploader {
+  width: 100%;
   margin-bottom: 1rem;
 }
 
-.image-uploader-label {
+/* Label */
+.image-uploader .image-uploader-label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: var(--color-text, #2d3748);
+  color: var(--form-label);
 }
 
-.image-uploader-label .required {
-  color: var(--color-danger, #f56565);
+.image-uploader .image-uploader-label .required {
+  color: var(--color-danger);
+  margin-left: 0.25rem;
 }
 
-.image-uploader-area {
-  border: 2px dashed var(--color-border, #cbd5e0);
-  border-radius: 12px;
+/* ============================================
+   ÁREA DE UPLOAD
+   ============================================ */
+.image-uploader .image-uploader-area {
+  border: 2px dashed var(--form-border);
+  border-radius: var(--radius-xl);
   cursor: pointer;
-  transition: all 0.3s;
-  background: var(--color-light-secondary, #f7fafc);
-  min-height: 150px;
+  transition: var(--transition);
+  background: var(--form-input-bg);
+  min-height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.image-uploader-area:hover {
-  border-color: var(--color-primary, #667eea);
-  background: var(--color-light, #edf2f7);
+.image-uploader .image-uploader-area:hover {
+  border-color: var(--color-primary);
+  background: var(--color-hover);
 }
 
-.image-uploader-area.dragging {
-  border-color: var(--color-primary, #667eea);
-  background: var(--color-border, #e2e8f0);
+.image-uploader .image-uploader-area.dragging {
+  border-color: var(--color-primary);
+  background: rgba(102, 126, 234, 0.1);
 }
 
-.upload-placeholder {
+/* Placeholder cuando no hay imagen */
+.image-uploader .upload-placeholder {
   text-align: center;
   padding: 2rem;
 }
 
-.upload-placeholder i {
+.image-uploader .upload-placeholder i {
   font-size: 2.5rem;
-  color: var(--color-text-light, #a0aec0);
+  color: var(--color-text-muted);
   margin-bottom: 0.5rem;
 }
 
-.upload-placeholder p {
+.image-uploader .upload-placeholder p {
   margin: 0;
-  color: var(--color-text-muted, #4a5568);
+  color: var(--color-text-muted);
 }
 
-.upload-placeholder small {
-  color: var(--color-text-light, #a0aec0);
-  font-size: 0.75rem;
+.image-uploader .upload-placeholder small {
+  color: var(--color-text-light);
+  font-size: 0.7rem;
+  display: block;
+  margin-top: 0.5rem;
 }
 
-.image-preview {
+/* ============================================
+   MODO SINGLE - FOTO PRINCIPAL
+   ============================================ */
+.image-uploader .image-preview {
   position: relative;
   width: 100%;
-  height: 150px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--form-input-bg);
 }
 
-.image-preview img {
+.image-uploader .image-preview img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
+  max-height: 300px;
+  object-fit: contain; /* ✅ Cambiado de 'cover' a 'contain' para no deformar */
+  border-radius: var(--radius-lg);
 }
 
-.remove-image-btn {
+/* Botón eliminar - modo single */
+.image-uploader .image-preview .remove-image-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.6);
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
   border: none;
   border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition-fast);
+  z-index: 10;
 }
 
-.remove-image-btn i {
+.image-uploader .image-preview .remove-image-btn i {
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
-.remove-image-btn:hover {
-  background: var(--color-danger, #f56565);
+.image-uploader .image-preview .remove-image-btn:hover {
+  background: var(--color-danger);
+  transform: scale(1.05);
 }
 
-.image-uploader-error {
-  color: var(--color-danger, #f56565);
-  font-size: 0.75rem;
-  margin-top: 0.25rem;
-}
-
-/* Modo múltiple - Grid de imágenes */
-.image-uploader-area.multiple-mode {
+/* ============================================
+   MODO MÚLTIPLE - GALERÍA
+   ============================================ */
+.image-uploader .image-uploader-area.multiple-mode {
   min-height: auto;
   flex-direction: column;
 }
 
-.image-previews-grid {
+.image-uploader .image-previews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 1rem;
   width: 100%;
   padding: 1rem;
 }
 
-.image-preview-item {
+.image-uploader .image-preview-item {
   position: relative;
-  aspect-ratio: 1;
-  border-radius: 8px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--color-border, #cbd5e0);
-  background: var(--color-light, #edf2f7);
+  border: 2px solid var(--color-border);
+  background: var(--form-input-bg);
+  transition: var(--transition-fast);
 }
 
-.image-preview-item img {
+.image-uploader .image-preview-item:hover {
+  transform: scale(1.02);
+  border-color: var(--color-primary);
+}
+
+.image-uploader .image-preview-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.image-preview-item .remove-image-btn {
+/* Botón eliminar - modo múltiple */
+.image-uploader .image-preview-item .remove-image-btn {
   position: absolute;
   top: 6px;
   right: 6px;
-  width: 24px;
-  height: 24px;
   background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
 }
 
-.image-preview-item .remove-image-btn i {
+.image-uploader .image-preview-item .remove-image-btn i {
+  color: white;
   font-size: 0.7rem;
 }
 
+.image-uploader .image-preview-item .remove-image-btn:hover {
+  background: var(--color-danger);
+  transform: scale(1.05);
+}
 
-/* Ajuste para el área cuando tiene múltiples previews */
-.image-uploader-area.multiple-mode.has-preview {
+/* Ajuste para el área cuando tiene previews */
+.image-uploader .image-uploader-area.multiple-mode.has-preview {
   padding: 0;
 }
 
-.image-uploader-area.multiple-mode .upload-placeholder {
+.image-uploader .image-uploader-area.multiple-mode .upload-placeholder {
   padding: 1.5rem;
   width: 100%;
+}
+
+/* Mensaje de error */
+.image-uploader .image-uploader-error {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .image-uploader .image-previews-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .image-uploader .image-preview img {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-uploader .image-previews-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .image-uploader .upload-placeholder {
+    padding: 1.5rem;
+  }
+  
+  .image-uploader .upload-placeholder i {
+    font-size: 2rem;
+  }
+  
+  .image-uploader .upload-placeholder p {
+    font-size: 0.85rem;
+  }
 }

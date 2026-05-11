@@ -12,7 +12,7 @@ const FormActions = ({
   onSubmit, 
   loading, 
   isEditMode,
-  cancelUrl = '/fundacion/mascotas' // Ruta a donde ir al cancelar
+  cancelUrl = '/fundacion/mascotas'
 }) => {
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
@@ -22,6 +22,8 @@ const FormActions = ({
       navigate(cancelUrl);
     }
   };
+
+  const isLastStep = currentStep === totalSteps;
 
   return (
     <div className="form-actions">
@@ -38,12 +40,17 @@ const FormActions = ({
           <i className="fas fa-times"></i> {t('botones.cancelar', { defaultValue: 'Cancelar' })}
         </button>
         
-        {currentStep < totalSteps ? (
+        {!isLastStep ? (
           <button type="button" className="btn-next" onClick={onNext}>
             {t('botones.siguiente')} <i className="fas fa-arrow-right"></i>
           </button>
         ) : (
-          <button type="submit" className="btn-submit" disabled={loading}>
+          <button 
+            type="button"  // ✅ Cambiado de "submit" a "button"
+            className="btn-submit" 
+            onClick={onSubmit}  // ✅ Ejecuta onSubmit directamente
+            disabled={loading}
+          >
             {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-save"></i>}
             {loading 
               ? ` ${t('botones.guardando')}` 
