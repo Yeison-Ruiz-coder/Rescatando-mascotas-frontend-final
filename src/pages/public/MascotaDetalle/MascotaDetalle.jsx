@@ -183,7 +183,7 @@ const MascotaDetalle = () => {
             />
 
             <div className="botones-accion">
-              {(mascota.estado === "En adopcion" || mascota.estado === "En acogida") && (
+              {(mascota.estado === "En adopción" || mascota.estado === "En acogida") && (
                 <>
                   <button onClick={handleAdoptar} className="btn-adoptar">
                     <i className="fas fa-heart"></i> {t("solicitar_adopcion")}

@@ -1,13 +1,15 @@
 // src/pages/admin/eventos/EventosShow.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Calendar, FileText, Clock, Heart, Users, Edit, Trash2, Loader, DollarSign, Building2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, MapPin, Calendar, FileText, Clock, Heart, Users, Edit, Trash2, Loader, Mail, Phone, Tag, DollarSign } from 'lucide-react';
 import api from '../../../services/api';
 import './EventosShow.css';
 
 const AdminEventosShow = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation('eventos');
     const [evento, setEvento] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,6 +29,7 @@ const AdminEventosShow = () => {
                 const data = response.data.data || response.data;
                 setEvento(data);
             } catch (error) {
+                console.error('Error:', error);
                 setError(error.response?.data?.message || 'Error al cargar el evento');
             } finally {
                 setLoading(false);
@@ -36,13 +39,17 @@ const AdminEventosShow = () => {
     }, [id]);
 
     const handleDelete = async () => {
-        if (!window.confirm('¿Eliminar este evento permanentemente?')) return;
+        if (!window.confirm('¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer.')) {
+            return;
+        }
+        
         setDeleting(true);
         try {
             await api.delete(`/admin/eventos/${id}`);
             navigate('/admin/eventos');
         } catch (error) {
-            alert(error.response?.data?.message || 'Error al eliminar');
+            console.error('Error:', error);
+            alert(error.response?.data?.message || 'Error al eliminar el evento');
             setDeleting(false);
         }
     };
@@ -51,7 +58,7 @@ const AdminEventosShow = () => {
         return (
             <div className="admin-eventos-show-loading">
                 <Loader size={40} className="spinner" />
-                <p>Cargando...</p>
+                <p>{t("loading") || "Cargando evento..."}</p>
             </div>
         );
     }
@@ -61,9 +68,9 @@ const AdminEventosShow = () => {
             <div className="admin-eventos-show-container">
                 <div className="error-container">
                     <Calendar size={48} />
-                    <h4>Error al cargar el evento</h4>
-                    <p>{error}</p>
-                    <Link to="/admin/eventos" className="btn-back">Volver</Link>
+                    <h4>{t("error_title") || "Error al cargar el evento"}</h4>
+                    <p>{error || 'Evento no encontrado'}</p>
+                    <Link to="/admin/eventos" className="btn-back">{t("back_to_events") || "Volver a eventos"}</Link>
                 </div>
             </div>
         );
@@ -73,14 +80,17 @@ const AdminEventosShow = () => {
         <div className="admin-eventos-show-container">
             <div className="eventos-show-actions-bar">
                 <Link to="/admin/eventos" className="btn-back">
-                    <ArrowLeft size={18} /> Volver a eventos
+                    <ArrowLeft size={18} />
+                    {t("back_to_events") || "Volver a eventos"}
                 </Link>
                 <div className="show-actions">
                     <Link to={`/admin/eventos/${id}/editar`} className="btn-edit">
-                        <Edit size={18} /> Editar
+                        <Edit size={18} />
+                        {t("edit") || "Editar"}
                     </Link>
                     <button onClick={handleDelete} className="btn-delete" disabled={deleting}>
-                        {deleting ? <Loader size={18} className="spinner-small" /> : <Trash2 size={18} />} Eliminar
+                        {deleting ? <Loader size={18} className="spinner-small" /> : <Trash2 size={18} />}
+                        {t("delete") || "Eliminar"}
                     </button>
                 </div>
             </div>
@@ -96,18 +106,22 @@ const AdminEventosShow = () => {
                     <div className="show-header">
                         <h1>{evento.nombre_evento}</h1>
                         <div className="evento-stats">
-                            <span className="stat"><Heart size={16} /> {evento.likes || 0}</span>
-                            <span className="stat"><Users size={16} /> {evento.total_asistentes || 0}</span>
+                            <span className="stat">
+                                <Heart size={16} />
+                                {evento.likes || 0} {t("likes") || "likes"}
+                            </span>
+                            <span className="stat">
+                                <Users size={16} />
+                                {evento.total_asistentes || 0} {t("attendees") || "asistentes"}
+                            </span>
                         </div>
                     </div>
 
                     <div className="evento-badge">
                         {evento.tipo === 'admin' ? (
-                            <span className="badge-admin">🌍 Evento Global</span>
+                            <span className="badge-admin">🌍 {t("global_event") || "Evento Global"}</span>
                         ) : (
-                            <span className="badge-fundacion">
-                                <Building2 size={14} /> {evento.fundacion?.Nombre_1 || 'Fundación'}
-                            </span>
+                            <span className="badge-fundacion">🏠 {t("foundation_event") || "Evento de Fundación"}</span>
                         )}
                     </div>
 
@@ -115,14 +129,14 @@ const AdminEventosShow = () => {
                         <div className="info-item">
                             <MapPin size={18} className="info-icon" />
                             <div>
-                                <strong>Lugar</strong>
+                                <strong>{t("location") || "Lugar"}</strong>
                                 <p>{evento.lugar_evento}</p>
                             </div>
                         </div>
                         <div className="info-item">
                             <Calendar size={18} className="info-icon" />
                             <div>
-                                <strong>Fecha</strong>
+                                <strong>{t("date") || "Fecha y hora"}</strong>
                                 <p>{new Date(evento.fecha_evento).toLocaleString('es-ES')}</p>
                             </div>
                         </div>
@@ -130,7 +144,7 @@ const AdminEventosShow = () => {
                             <div className="info-item">
                                 <Clock size={18} className="info-icon" />
                                 <div>
-                                    <strong>Fecha de fin</strong>
+                                    <strong>{t("end_date") || "Fecha de fin"}</strong>
                                     <p>{new Date(evento.fecha_fin).toLocaleString('es-ES')}</p>
                                 </div>
                             </div>
@@ -139,7 +153,7 @@ const AdminEventosShow = () => {
                             <div className="info-item">
                                 <DollarSign size={18} className="info-icon" />
                                 <div>
-                                    <strong>Costo</strong>
+                                    <strong>{t("cost") || "Costo"}</strong>
                                     <p>{evento.costo}</p>
                                 </div>
                             </div>
@@ -148,8 +162,8 @@ const AdminEventosShow = () => {
                             <div className="info-item">
                                 <Users size={18} className="info-icon" />
                                 <div>
-                                    <strong>Capacidad</strong>
-                                    <p>{evento.capacidad_maxima} personas</p>
+                                    <strong>{t("capacity") || "Capacidad máxima"}</strong>
+                                    <p>{evento.capacidad_maxima} {t("people") || "personas"}</p>
                                 </div>
                             </div>
                         )}
@@ -157,22 +171,34 @@ const AdminEventosShow = () => {
 
                     {evento.descripcion && (
                         <div className="description-section">
-                            <h3><FileText size={18} /> Descripción</h3>
+                            <h3>
+                                <FileText size={18} />
+                                {t("description") || "Descripción"}
+                            </h3>
                             <p>{evento.descripcion}</p>
                         </div>
                     )}
 
-                    {evento.organizador && (
+                    {(evento.organizador || evento.telefono_contacto || evento.email_contacto) && (
                         <div className="contact-section">
-                            <p><strong>Organizador:</strong> {evento.organizador}</p>
-                            {evento.telefono_contacto && <p><strong>Teléfono:</strong> {evento.telefono_contacto}</p>}
-                            {evento.email_contacto && <p><strong>Email:</strong> {evento.email_contacto}</p>}
+                            <h3>
+                                <Phone size={18} />
+                                {t("contact") || "Contacto"}
+                            </h3>
+                            <div className="contact-info">
+                                {evento.organizador && <p><strong>{t("organizer") || "Organizador"}:</strong> {evento.organizador}</p>}
+                                {evento.telefono_contacto && <p><strong>{t("phone") || "Teléfono"}:</strong> {evento.telefono_contacto}</p>}
+                                {evento.email_contacto && <p><strong>{t("email") || "Email"}:</strong> {evento.email_contacto}</p>}
+                            </div>
                         </div>
                     )}
 
                     {evento.tags && evento.tags.length > 0 && (
                         <div className="tags-section">
-                            <h3>🏷️ Etiquetas</h3>
+                            <h3>
+                                <Tag size={18} />
+                                {t("tags") || "Etiquetas"}
+                            </h3>
                             <div className="tags-list">
                                 {(Array.isArray(evento.tags) ? evento.tags : JSON.parse(evento.tags)).map((tag, idx) => (
                                     <span key={idx} className="tag">#{tag}</span>
@@ -182,7 +208,10 @@ const AdminEventosShow = () => {
                     )}
 
                     <div className="show-footer">
-                        <small><Clock size={14} /> Creado: {new Date(evento.created_at).toLocaleDateString()}</small>
+                        <small>
+                            <Clock size={14} />
+                            {t("created") || "Creado"}: {new Date(evento.created_at).toLocaleDateString()}
+                        </small>
                     </div>
                 </div>
             </div>

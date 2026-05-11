@@ -8,7 +8,7 @@ const ImageUploader = ({
   onImageChange,
   // Modo múltiple (NUEVO)
   multiple = false,
-  maxFiles = 5,
+  maxFiles = 10,
   currentImages = [],
   // Modo single (existente)
   currentImage = null,

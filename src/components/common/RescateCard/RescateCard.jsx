@@ -191,11 +191,38 @@ const RescateCard = ({
         </div>
       )}
 
-      {/* Estado COMPLETADO - solo mostrar badge */}
+      {/* Estado COMPLETADO - mostrar badge + botón ver detalle */}
       {rescate?.estado === "completado" && (
-        <div className="rescate-card-status completado">
-          <i className="fas fa-check-circle"></i> {t("rescate_completado")}
-        </div>
+        <>
+          <div className="rescate-card-actions">
+            <button
+              className="btn-detalle"
+              onClick={() => onVerDetalle?.(rescate.id)}
+            >
+              <i className="fas fa-eye"></i> {t("ver_detalle")}
+            </button>
+          </div>
+          <div className="rescate-card-status completado">
+            <i className="fas fa-check-circle"></i> {t("rescate_completado")}
+          </div>
+        </>
+      )}
+
+      {/* Estado RECHAZADO - mostrar badge + botón ver detalle (opcional) */}
+      {rescate?.estado === "rechazado" && (
+        <>
+          <div className="rescate-card-actions">
+            <button
+              className="btn-detalle"
+              onClick={() => onVerDetalle?.(rescate.id)}
+            >
+              <i className="fas fa-eye"></i> {t("ver_detalle")}
+            </button>
+          </div>
+          <div className="rescate-card-status rechazado">
+            <i className="fas fa-times-circle"></i> {t("rescate_rechazado")}
+          </div>
+        </>
       )}
     </div>
   );

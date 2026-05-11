@@ -1,199 +1,239 @@
 // src/pages/fundacion/eventos/EventosIndex.jsx
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Plus, Calendar, Edit, Trash2, Eye, Loader } from 'lucide-react';
-import { useAuth } from '../../../contexts/AuthContext';
-import api from '../../../services/api';
-import './EventosIndex.css';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Calendar, List, Heart, Loader, X } from "lucide-react";
+import api from "../../../services/api";
+import EventoCard from "../../../components/common/EventoCard/EventoCard";
+import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
+import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
+import { useFiltrosEventos } from "../../../contexts/FiltrosContext";
+import "./EventosIndex.css";
 
-const FundacionEventosIndex = () => {
-    const { t } = useTranslation('eventos');
-    const { user } = useAuth();
-    const [eventos, setEventos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [deletingId, setDeletingId] = useState(null);
+const EventosIndex = () => {
+  const { t, i18n } = useTranslation("eventos");
+  const { filtros, limpiarFiltros } = useFiltrosEventos();
+  const [eventos, setEventos] = useState([]);
+  const [eventosFiltrados, setEventosFiltrados] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orden, setOrden] = useState("reciente");
+  const [isMobile, setIsMobile] = useState(false);
 
-    const getImageUrl = useCallback((url) => {
-        if (!url) return null;
-        if (url.startsWith('http')) return url;
-        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
-        return url.startsWith('/storage') ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
-    }, []);
+  const opcionesOrden = useMemo(() => [
+    { value: "reciente", label: t("mas_recientes") },
+    { value: "antiguos", label: t("mas_antiguos") },
+    { value: "nombre", label: t("nombre_az") },
+    { value: "capacidad", label: t("mayor_capacidad") },
+  ], [t, i18n.language]);
 
-    const loadEventos = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await api.get('/entity/eventos');
-            const data = response.data.data || response.data;
-            setEventos(Array.isArray(data) ? data : []);
-        } catch (error) {
-            console.error('Error al cargar eventos:', error);
-            setError(error.response?.data?.message || 'Error al cargar los eventos');
-            setEventos([]);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+  const getImageUrl = useCallback((url) => {
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || 
+      "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return url.startsWith("/storage")
+      ? `${baseUrl}${url}`
+      : `${baseUrl}/storage/${url}`;
+  }, []);
 
-    useEffect(() => {
-        loadEventos();
-    }, [loadEventos]);
-
-    const handleDelete = async (id) => {
-        if (!window.confirm(t('confirmar_eliminar') || '¿Estás seguro de eliminar este evento?')) {
-            return;
-        }
-
-        setDeletingId(id);
-        try {
-            await api.delete(`/entity/eventos/${id}`);
-            setEventos(prev => prev.filter(evento => evento.id !== id));
-        } catch (error) {
-            console.error('Error al eliminar:', error);
-            alert(error.response?.data?.message || 'Error al eliminar el evento');
-        } finally {
-            setDeletingId(null);
-        }
+  // Detectar móvil
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
     };
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
-    if (loading) {
-        return (
-            <div className="fundacion-eventos-loading">
-                <Loader className="spinner" size={40} />
-                <p>Cargando eventos...</p>
-            </div>
-        );
+  // Cargar eventos
+  const loadEventos = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await api.get(`/entity/eventos`);
+
+      let eventosData = [];
+      if (response.data && response.data.success !== undefined) {
+        eventosData = response.data.data?.data || response.data.data || [];
+      } else if (response.data && response.data.data) {
+        eventosData = response.data.data.data || response.data.data;
+      } else if (Array.isArray(response.data)) {
+        eventosData = response.data;
+      }
+
+      setEventos(eventosData);
+      setEventosFiltrados(eventosData);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error.response?.data?.message || t("error_carga"));
+      setEventos([]);
+      setEventosFiltrados([]);
+    } finally {
+      setLoading(false);
     }
+  }, [t]);
 
-    if (error) {
-        return (
-            <div className="fundacion-eventos-container">
-                <div className="fundacion-eventos-error">
-                    <Calendar size={48} />
-                    <h4>Error al cargar eventos</h4>
-                    <p>{error}</p>
-                    <button onClick={loadEventos} className="btn-retry">Reintentar</button>
-                </div>
-            </div>
+  useEffect(() => {
+    loadEventos();
+  }, [loadEventos]);
+
+  // Aplicar filtros locales (búsqueda y categoría)
+  useEffect(() => {
+    if (eventos.length > 0) {
+      let resultado = [...eventos];
+
+      if (filtros.busqueda && filtros.busqueda.trim()) {
+        const busquedaLower = filtros.busqueda.toLowerCase().trim();
+        resultado = resultado.filter(
+          (e) =>
+            e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
+            e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
+            e.categoria?.toLowerCase().includes(busquedaLower)
         );
-    }
+      }
 
+      if (filtros.categoria && filtros.categoria.trim()) {
+        resultado = resultado.filter(
+          (e) => e.categoria?.toLowerCase() === filtros.categoria.toLowerCase()
+        );
+      }
+
+      // Ordenar
+      switch (orden) {
+        case "nombre":
+          resultado.sort((a, b) => a.nombre_evento?.localeCompare(b.nombre_evento));
+          break;
+        case "antiguos":
+          resultado.sort((a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento));
+          break;
+        case "capacidad":
+          resultado.sort((a, b) => (b.capacidad_maxima || 0) - (a.capacidad_maxima || 0));
+          break;
+        default:
+          resultado.sort((a, b) => new Date(b.fecha_evento) - new Date(a.fecha_evento));
+          break;
+      }
+
+      setEventosFiltrados(resultado);
+    } else if (eventos.length === 0) {
+      setEventosFiltrados([]);
+    }
+  }, [filtros, orden, eventos]);
+
+  // Limpiar filtros locales
+  const handleClearFilters = () => {
+    limpiarFiltros();
+  };
+
+  if (loading) {
     return (
-        <div className="fundacion-eventos-container">
-            <div className="fundacion-eventos-header">
-                <div>
-                    <h1>📅 {t('mis_eventos') || 'Mis Eventos'}</h1>
-                    <p>{t('gestiona_eventos') || 'Gestiona los eventos de tu fundación'}</p>
-                </div>
-                <Link to="/fundacion/eventos/crear" className="btn-create-evento">
-                    <Plus size={20} />
-                    {t('crear_evento') || 'Crear Evento'}
-                </Link>
-            </div>
-
-            {eventos.length === 0 ? (
-                <div className="fundacion-eventos-empty">
-                    <Calendar size={64} />
-                    <h4>{t('sin_eventos') || 'No tienes eventos creados'}</h4>
-                    <p>{t('crea_primer_evento') || 'Crea tu primer evento para compartir con la comunidad'}</p>
-                    <Link to="/fundacion/eventos/crear" className="btn-create-first">
-                        <Plus size={20} />
-                        {t('crear_primer_evento') || 'Crear mi primer evento'}
-                    </Link>
-                </div>
-            ) : (
-                <div className="fundacion-eventos-table-container">
-                    <table className="fundacion-eventos-table">
-                        <thead>
-                            <tr>
-                                <th>{t('imagen') || 'Imagen'}</th>
-                                <th>{t('nombre') || 'Nombre'}</th>
-                                <th>{t('lugar') || 'Lugar'}</th>
-                                <th>{t('fecha') || 'Fecha'}</th>
-                                <th>{t('asistentes') || 'Asistentes'}</th>
-                                <th>{t('likes') || 'Likes'}</th>
-                                <th>{t('acciones') || 'Acciones'}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {eventos.map(evento => (
-                                <tr key={evento.id}>
-                                    <td className="table-image-cell">
-                                        {evento.imagen_url ? (
-                                            <img 
-                                                src={getImageUrl(evento.imagen_url)} 
-                                                alt={evento.nombre_evento}
-                                                onError={(e) => { e.target.src = '/placeholder-event.png'; }}
-                                            />
-                                        ) : (
-                                            <div className="table-image-placeholder">
-                                                <Calendar size={24} />
-                                            </div>
-                                        )}
-                                    </td>
-                                    <td className="table-title-cell">
-                                        <strong>{evento.nombre_evento}</strong>
-                                        <span className="evento-desc-preview">
-                                            {evento.descripcion?.substring(0, 50)}...
-                                        </span>
-                                    </td>
-                                    <td>{evento.lugar_evento}</td>
-                                    <td>
-                                        {new Date(evento.fecha_evento).toLocaleDateString('es-ES', {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: 'numeric'
-                                        })}
-                                    </td>
-                                    <td className="table-stats-cell">
-                                        <span className="stat-badge asistentes">
-                                            👥 {evento.total_asistentes || 0}
-                                        </span>
-                                    </td>
-                                    <td className="table-stats-cell">
-                                        <span className="stat-badge likes">
-                                            ❤️ {evento.likes || 0}
-                                        </span>
-                                    </td>
-                                    <td className="table-actions-cell">
-                                        <Link 
-                                            to={`/fundacion/eventos/${evento.id}`} 
-                                            className="action-btn view-btn"
-                                            title="Ver detalles"
-                                        >
-                                            <Eye size={18} />
-                                        </Link>
-                                        <Link 
-                                            to={`/fundacion/eventos/${evento.id}/editar`} 
-                                            className="action-btn edit-btn"
-                                            title="Editar"
-                                        >
-                                            <Edit size={18} />
-                                        </Link>
-                                        <button 
-                                            onClick={() => handleDelete(evento.id)} 
-                                            className="action-btn delete-btn"
-                                            disabled={deletingId === evento.id}
-                                            title="Eliminar"
-                                        >
-                                            {deletingId === evento.id ? (
-                                                <Loader size={18} className="spinner-small" />
-                                            ) : (
-                                                <Trash2 size={18} />
-                                            )}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
+      <div className="fundacion-eventos-page">
+        <div className="fundacion-eventos-loading">
+          <Loader size={40} className="spinner" />
+          <p>{t("cargando_eventos")}</p>
         </div>
+      </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className="fundacion-eventos-page">
+        <div className="container">
+          <div className="fundacion-eventos-error">
+            <Calendar size={48} />
+            <h4>{t("error_titulo")}</h4>
+            <p>{error}</p>
+            <button onClick={loadEventos} className="fundacion-btn-retry">
+              <Loader size={16} />
+              {t("reintentar")}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fundacion-eventos-page">
+      <div className="fundacion-eventos-header">
+        <div className="container">
+          <h1>
+            <Calendar size={28} />
+            {t("mis_eventos")}
+          </h1>
+          <p className="subtitle">{t("mis_eventos_desc")}</p>
+          {eventos.length > 0 && (
+            <p className="info">
+              <Heart size={14} style={{ color: "var(--color-heart)" }} />{" "}
+              {t("total_eventos", { total: eventos.length })}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="fundacion-eventos-filtros-section sticky-glass glass-auto shadow-sticky">
+        <div className="container">
+          <FiltrosEventos variant={isMobile ? "modal" : "inline"} />
+        </div>
+      </div>
+
+      <div className="fundacion-eventos-resultados-section">
+        <div className="container">
+          <div className="fundacion-eventos-resultados-header">
+            <div className="fundacion-eventos-resultados-count">
+              <List size={16} />
+              {t("mostrando")} <strong>{eventosFiltrados.length}</strong>{" "}
+              {t("de")} <strong>{eventos.length}</strong> {t("eventos")}
+            </div>
+            <div className="fundacion-eventos-resultados-orden">
+              <label>{t("ordenar_por")}:</label>
+              <CustomSelect
+                options={opcionesOrden}
+                value={orden}
+                onChange={(e) => setOrden(e.target.value)}
+                name="orden"
+              />
+            </div>
+          </div>
+
+          {eventosFiltrados.length === 0 ? (
+            <div className="fundacion-eventos-empty">
+              <Calendar size={64} />
+              <h3>{t("sin_resultados")}</h3>
+              <p>{t("sin_resultados_desc")}</p>
+              {(filtros.busqueda || filtros.categoria) && (
+                <button onClick={handleClearFilters} className="fundacion-btn-limpiar-empty">
+                  <X size={16} />
+                  {t("limpiar_filtros")}
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="fundacion-eventos-grid">
+              {eventosFiltrados.map((evento) => (
+                <EventoCard
+                  key={evento.id}
+                  evento={evento}
+                  getImageUrl={getImageUrl}
+                  variant="default"
+                  rol="fundacion"
+                  onDelete={async (id) => {
+                    if (window.confirm(t("confirm_delete"))) {
+                      await api.delete(`/entity/eventos/${id}`);
+                      loadEventos();
+                    }
+                  }}
+                  showActions={true}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default FundacionEventosIndex;
+export default EventosIndex;

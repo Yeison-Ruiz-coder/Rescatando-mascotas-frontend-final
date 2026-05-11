@@ -6,7 +6,7 @@
   "registrar_mascota_rescatada": "Register Rescued Pet",
   "registrar_mascota_rescatada_desc": "Complete the data of the rescued pet",
   "registrando_mascota_rescatada_en": "Rescued in",
-  
+
   "steps": {
     "informacion_basica": "Basic Information",
     "ubicacion_descripcion": "Location & Description",
@@ -15,7 +15,7 @@
     "caracteristicas_fisicas": "Physical Characteristics",
     "requisitos_adopcion": "Adoption Requirements"
   },
-  
+
   "informacion_basica": "Basic Information",
   "nombre_mascota": "Pet Name",
   "nombre_mascota_placeholder": "Ex: Luna, Max, Bella",
@@ -38,7 +38,7 @@
   "estado_en_acogida": "In Foster Care",
   "estado_adoptado": "Adopted",
   "edad_aproximada": "Approximate Age",
-  
+
   "ubicacion_descripcion": "Location & Description",
   "lugar_rescate": "Location",
   "lugar_rescate_placeholder": "Ex: Central Park, Main St #123",
@@ -46,7 +46,7 @@
   "descripcion_placeholder": "Describe the pet: personality, behavior, health condition, special needs...",
   "condiciones_especiales": "Special Conditions",
   "condiciones_placeholder": "Chronic illnesses, disabilities, special care...",
-  
+
   "salud_vacunas": "Health & Vaccines",
   "necesita_hogar_temporal": "Needs foster home",
   "apto_con_ninos": "Good with children",
@@ -57,7 +57,7 @@
   "frecuencia_dias": "Every {{dias}} days",
   "cada": "every",
   "dias": "days",
-  
+
   "galeria_fotos": "Photo Gallery",
   "foto_principal": "Main Photo",
   "foto_principal_requerida": "Main photo is required",
@@ -68,14 +68,14 @@
   "seleccionar_opciones": "Select options",
   "buscar": "Search...",
   "sin_opciones": "No options",
-  
+
   "botones": {
     "anterior": "Previous",
     "siguiente": "Next",
     "registrar": "Register Pet",
     "registrando": "Registering..."
   },
-  
+
   "errores": {
     "nombre_requerido": "Name is required",
     "especie_requerida": "Species is required",
@@ -87,7 +87,7 @@
     "descripcion_requerida": "Description is required",
     "foto_principal_requerida": "Main photo is required"
   },
-  
+
   "mensajes": {
     "solo_fundacion": "Only foundation users can register pets.",
     "sin_perfil_fundacion": "Foundation profile not found. Please contact the administrator.",
@@ -97,16 +97,17 @@
     "imagen_excluida": "Image {{nombre}} exceeds 2MB and will not be included",
     "imagen_invalida": "Invalid format or image too large (max 2MB)",
     "seleccionar_especie_primero": "You must select a species first",
-    "registrada_exitoso": "Pet registered successfully"
+    "registrada_exitoso": "Pet registered successfully",
+    "mensajes.registrada_exito": "Pet registered successfully"
   },
-  
+
   "acceso_no_autorizado": {
     "titulo": "Unauthorized Access",
     "mensaje": "This section is only for Foundation users",
     "tu_tipo": "Your user type is",
     "volver_inicio": "Back to Home"
   },
-  
+
   "editar_mascota": "Edit Pet",
   "editar_mascota_desc": "Modify your pet's information, photos and details",
 
@@ -143,5 +144,15 @@
   "subtitulo_editar": "Modify your pet's information, photos and details",
   "actualizando_mascota": "Updating pet...",
   "actualizacion_exitosa": "Pet updated successfully",
-  "error_actualizacion": "Error updating pet"
+  "error_actualizacion": "Error updating pet",
+  "titulo_nueva": "Register New Pet",
+  "titulo_registrar_rescate": "Register Rescued Pet",
+  "registrando_desde_rescate": "Registering from rescue",
+
+  "confirmaciones": {
+    "salir": "Are you sure you want to leave? Unsaved data will be lost.",
+    "cancelar": "Are you sure you want to cancel? Unsaved data will be lost."
+  },
+
+  "registrada_exito": "Pet registered successfully"
 }

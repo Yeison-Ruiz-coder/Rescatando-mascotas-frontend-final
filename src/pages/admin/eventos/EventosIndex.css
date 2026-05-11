@@ -1,436 +1,565 @@
 /* src/pages/admin/eventos/EventosIndex.css */
 
-/* Contenedor principal */
-.ryg-admin-eventos-wrapper {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
+/* ============================================
+   ADMIN - LISTA DE EVENTOS (DISEÑO FUNDACIÓN)
+   ============================================ */
+
+.admin-eventos-page {
+  min-height: calc(100vh - var(--navbar-height, 70px));
 }
 
-/* Header */
-.ryg-admin-header {
+/* ===== HEADER SECTION ===== */
+.admin-eventos-header {
+  padding: 60px 0 40px 0;
+  text-align: center;
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.admin-eventos-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-eventos-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.admin-eventos-header .info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* ===== ESTADÍSTICAS ===== */
+.admin-eventos-stats {
+  padding: 20px 0;
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.admin-stat-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.admin-stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ===== FILTROS SECTION ===== */
+.admin-eventos-filtros-section {
+  padding: 10px 0;
+  position: sticky;
+  top: var(--navbar-height, 70px);
+  z-index: 99;
+  background: var(--form-bg);
+  backdrop-filter: blur(10px);
+}
+
+.admin-filters-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-filters-left {
+  flex: 1;
+  min-width: 200px;
+}
+/* ===== ACTIONS SECTION (Botón Crear Evento fuera de filtros) ===== */
+.admin-eventos-actions {
+    padding: 20px 0 0 0;
+}
+
+.admin-actions-wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    justify-content: flex-end;
 }
 
-.ryg-admin-header h1 {
-    font-size: 1.75rem;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.25rem;
-}
-
-.ryg-admin-header p {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-}
-
-/* Botón crear - usa gradiente global */
-.ryg-btn-crear {
+.admin-btn-crear {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     background: var(--gradient-primary);
-    color: white !important;
+    color: white;
     border-radius: var(--radius-lg);
     font-weight: 600;
+    font-size: 0.875rem;
     text-decoration: none;
     transition: var(--transition);
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
 }
 
-.ryg-btn-crear:hover {
+.admin-btn-crear:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
-    color: white !important;
+    color: white;
+    filter: brightness(0.95);
 }
 
-/* Tarjetas de estadísticas */
-.ryg-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
+/* Eliminar estilos antiguos del botón en filtros */
+.admin-filters-wrapper {
+    display: block;
 }
 
-.ryg-stat-card {
-    background: var(--color-card-bg);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    text-align: center;
-    border: 1px solid var(--color-border);
-    transition: var(--transition);
-}
-
-.ryg-stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-
-.ryg-stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.ryg-stat-label {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    margin-top: 0.25rem;
-}
-
-/* Barra de filtros */
-.ryg-filters-bar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.ryg-btn-filtros {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--form-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    color: var(--color-text);
-    transition: var(--transition-fast);
-}
-
-.ryg-btn-filtros:hover {
-    background: var(--color-hover);
-}
-
-.ryg-btn-limpiar {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: none;
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-    color: var(--color-danger);
-    font-size: 0.875rem;
-    transition: var(--transition-fast);
-}
-
-.ryg-btn-limpiar:hover {
-    background: rgba(239, 68, 68, 0.2);
-}
-
-.ryg-filtro-activo {
-    width: 8px;
-    height: 8px;
-    background: var(--color-primary);
-    border-radius: 50%;
-    display: inline-block;
-    margin-left: 0.25rem;
-}
-
-/* Panel de filtros */
-.ryg-panel-filtros {
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.ryg-panel-filtros select {
-    padding: 0.5rem 1rem;
-    background: var(--form-input-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    color: var(--color-text);
-}
-
-.ryg-checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text);
-    cursor: pointer;
-}
-
-/* Tabla */
-.ryg-tabla-contenedor {
-    background: var(--color-card-bg);
-    border-radius: var(--radius-xl);
-    overflow-x: auto;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-border);
-}
-
-.ryg-tabla {
+.admin-filters-left {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 1000px;
-}
-
-.ryg-tabla th,
-.ryg-tabla td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.ryg-tabla th {
-    background: var(--color-hover);
-    font-weight: 600;
-    color: var(--color-text);
-    font-size: 0.875rem;
-}
-
-/* Imagen de la tabla */
-.ryg-col-imagen {
-    width: 60px;
-}
-
-.ryg-col-imagen img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: var(--radius-md);
-}
-
-.ryg-imagen-placeholder {
-    width: 50px;
-    height: 50px;
-    background: var(--gradient-primary);
-    opacity: 0.7;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-/* Celda con icono */
-.ryg-cell-with-icon {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.ryg-cell-with-icon svg {
-    color: var(--color-text-muted);
-    flex-shrink: 0;
-}
-
-/* Título del evento */
-.ryg-titulo-evento strong {
-    display: block;
-    margin-bottom: 4px;
-    color: var(--color-text);
-    font-size: 0.9375rem;
-}
-
-.ryg-descripcion-corta {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    display: block;
-    max-width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Badges de tipo */
-.ryg-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--radius-lg);
-    font-size: 0.7rem;
-    font-weight: 600;
-}
-
-.ryg-badge-admin {
-    background: var(--gradient-primary);
-    color: white;
-}
-
-.ryg-badge-fundacion {
-    background: var(--gradient-accent);
-    color: white;
-}
-
-/* Badges de estadísticas */
-.ryg-stat-asistentes {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-round);
-    font-size: 0.75rem;
-    background: rgba(66, 153, 225, 0.15);
-    color: var(--color-info);
-}
-
-.ryg-stat-likes {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-round);
-    font-size: 0.75rem;
-    background: rgba(239, 68, 68, 0.15);
-    color: var(--color-danger);
-}
-
-/* ===== BOTONES DE ACCIÓN - COLORES SÓLIDOS (sin variables globales) ===== */
-.ryg-acciones {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.ryg-btn-accion {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.ryg-btn-accion:hover {
-    transform: scale(1.05);
-}
-
-/* Ver - Verde sólido */
-.ryg-btn-ver {
-    background:rgb(0, 0, 255);
-    color: white;
-}
-
-.ryg-btn-ver:hover {
-    background: rgb(23, 23, 221);
-    color: white;
-}
-
-/* Editar - Azul sólido */
-.ryg-btn-editar {
-    background: #faa200;
-    color: white;
-}
-
-.ryg-btn-editar:hover {
-    background: #da9d2d;
-    color: white;
-}
-
-/* Eliminar - Rojo sólido */
-.ryg-btn-eliminar {
-    background: #ef4444;
-    color: white;
-}
-
-.ryg-btn-eliminar:hover:not(:disabled) {
-    background: #b92a2a;
-}
-
-.ryg-btn-eliminar:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Estado vacío */
-.ryg-vacio {
-    text-align: center;
-    padding: 4rem;
-    background: var(--color-card-bg);
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--color-border);
-}
-
-.ryg-vacio h4 {
-    margin: 1rem 0 0.5rem;
-    color: var(--color-text);
-    font-size: 1.25rem;
-}
-
-.ryg-vacio p {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-}
-
-/* Loading */
-.ryg-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    gap: 1rem;
-}
-
-.ryg-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--color-border);
-    border-top-color: var(--color-primary);
-    border-radius: 50%;
-    animation: ryg-spin 0.8s linear infinite;
-}
-
-.ryg-spinner-small {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: ryg-spin 0.8s linear infinite;
-}
-
-@keyframes ryg-spin {
-    to { transform: rotate(360deg); }
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-    .ryg-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 768px) {
+    .admin-actions-wrapper {
+        justify-content: center;
     }
+    
+    .admin-btn-crear {
+        width: 100%;
+        justify-content: center;
+    }
+}
+/* ===== RESULTADOS SECTION ===== */
+.admin-eventos-resultados-section {
+  padding: 40px 0;
+}
+
+.admin-eventos-resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-eventos-resultados-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.admin-eventos-resultados-count strong {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+
+/* Botón Limpiar Filtros - Oculto completamente */
+.admin-btn-limpiar-header {
+  display: none !important;
+}
+
+/* ===== TABLA ===== */
+.admin-tabla-contenedor {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-xl);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.admin-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+}
+
+.admin-tabla th,
+.admin-tabla td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-tabla th {
+  background: var(--color-hover);
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+/* Columna imagen */
+.admin-col-imagen {
+  width: 60px;
+}
+
+.admin-col-imagen img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+.admin-imagen-placeholder {
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-primary);
+  opacity: 0.7;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Título evento */
+.admin-titulo-evento strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.admin-descripcion-corta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  display: block;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badges */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.admin-badge-admin {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.admin-badge-fundacion {
+  background: var(--gradient-accent);
+  color: white;
+}
+
+/* Celda con icono */
+.admin-cell-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-cell-with-icon svg {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* Estadísticas en tabla */
+.admin-stat-asistentes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-round);
+  font-size: 0.75rem;
+  background: rgba(66, 153, 225, 0.15);
+  color: var(--color-info);
+}
+
+.admin-stat-likes {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-round);
+  font-size: 0.75rem;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+
+/* Acciones */
+.admin-acciones {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-btn-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.admin-btn-accion:hover {
+  transform: scale(1.05);
+}
+
+.admin-btn-ver {
+  background: rgba(102, 126, 234, 0.15);
+  color: var(--color-primary);
+}
+
+.admin-btn-ver:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.admin-btn-editar {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
+}
+
+.admin-btn-editar:hover {
+  background: var(--color-warning);
+  color: white;
+}
+
+.admin-btn-eliminar {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+
+.admin-btn-eliminar:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: white;
+}
+
+.admin-btn-eliminar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Estados vacío y error */
+.admin-eventos-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem 0;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.admin-eventos-empty svg {
+  color: var(--color-primary);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.admin-eventos-empty h3 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.admin-eventos-empty p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.admin-eventos-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem auto;
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+.admin-eventos-error svg {
+  color: var(--color-danger);
+  margin-bottom: 1rem;
+}
+
+.admin-eventos-error h4 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.admin-eventos-error p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.admin-btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.admin-btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Loading */
+.admin-eventos-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.admin-eventos-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.admin-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .admin-eventos-filtros-section {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme="dark"] .admin-eventos-header {
+  border-bottom-color: rgba(139, 156, 255, 0.15);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .admin-eventos-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .ryg-admin-eventos-wrapper {
-        padding: 1rem;
-    }
-    
-    .ryg-stats-grid {
-        gap: 0.75rem;
-    }
-    
-    .ryg-panel-filtros {
-        flex-direction: column;
-    }
+  .admin-eventos-header {
+    padding: 40px 0 30px 0;
+  }
+  
+  .admin-eventos-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .admin-eventos-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .admin-eventos-filtros-section {
+    top: 60px;
+  }
+  
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .admin-eventos-resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-filters-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-btn-crear {
+    justify-content: center;
+    width: 100%;
+    align-self: stretch;
+  }
+  
+  .admin-filters-left {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-    .ryg-stats-grid {
-        grid-template-columns: 1fr;
-    }
+  .admin-eventos-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-eventos-empty {
+    padding: 2rem 1rem;
+  }
 }

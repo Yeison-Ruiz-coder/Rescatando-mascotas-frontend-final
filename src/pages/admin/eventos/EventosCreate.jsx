@@ -1,12 +1,19 @@
 // src/pages/admin/eventos/EventosCreate.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Calendar, MapPin, FileText, Image as ImageIcon, X, Loader } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { 
+    ArrowLeft, Save, Calendar, MapPin, FileText, 
+    Image as ImageIcon, X, Loader, Tag, Users, 
+    DollarSign, User, Layers 
+} from 'lucide-react';
 import api from '../../../services/api';
 import './EventosForm.css';
 
 const AdminEventosCreate = () => {
+    const { t } = useTranslation('eventos');
     const navigate = useNavigate();
+    const fechaInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [previewImage, setPreviewImage] = useState(null);
@@ -29,6 +36,36 @@ const AdminEventosCreate = () => {
     const [tagInput, setTagInput] = useState('');
     const [imagen, setImagen] = useState(null);
 
+    // Función para abrir el calendario nativo
+    const openCalendar = () => {
+        if (fechaInputRef.current) {
+            if (fechaInputRef.current.showPicker) {
+                fechaInputRef.current.showPicker();
+            } else {
+                fechaInputRef.current.focus();
+                fechaInputRef.current.click();
+            }
+        }
+    };
+
+    // Validación de solo números para capacidad
+    const handleNumberChange = (e) => {
+        const { name, value } = e.target;
+        if (value === '' || /^[0-9]+$/.test(value)) {
+            setFormData(prev => ({ ...prev, [name]: value }));
+            if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
+        }
+    };
+
+    // Validación de solo números para teléfono
+    const handlePhoneChange = (e) => {
+        const { name, value } = e.target;
+        if (value === '' || /^[0-9]{0,15}$/.test(value)) {
+            setFormData(prev => ({ ...prev, [name]: value }));
+            if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -50,11 +87,11 @@ const AdminEventosCreate = () => {
         const file = e.target.files[0];
         if (file) {
             if (file.size > 2 * 1024 * 1024) {
-                alert('La imagen no puede superar los 2MB');
+                alert(t('image_max_size'));
                 return;
             }
             if (!file.type.startsWith('image/')) {
-                alert('Solo se permiten imágenes');
+                alert(t('image_only'));
                 return;
             }
             setImagen(file);
@@ -70,13 +107,21 @@ const AdminEventosCreate = () => {
         setErrors({});
 
         const formDataToSend = new FormData();
+        
         Object.keys(formData).forEach(key => {
-            if (key === 'tags' && formData.tags.length > 0) {
-                formDataToSend.append(key, JSON.stringify(formData.tags));
-            } else if (formData[key]) {
-                formDataToSend.append(key, formData[key]);
+            if (formData[key] !== null && formData[key] !== '') {
+                if (key === 'tags' && formData.tags.length > 0) {
+                    formData.tags.forEach(tag => {
+                        formDataToSend.append('tags[]', tag);
+                    });
+                } else if (key === 'tags' && formData.tags.length === 0) {
+                    return;
+                } else {
+                    formDataToSend.append(key, formData[key]);
+                }
             }
         });
+        
         if (imagen) formDataToSend.append('imagen', imagen);
 
         try {
@@ -89,7 +134,7 @@ const AdminEventosCreate = () => {
             if (error.response?.data?.errors) {
                 setErrors(error.response.data.errors);
             } else {
-                alert(error.response?.data?.message || 'Error al crear el evento');
+                alert(error.response?.data?.message || t('error_create'));
             }
         } finally {
             setLoading(false);
@@ -98,47 +143,56 @@ const AdminEventosCreate = () => {
 
     return (
         <div className="admin-eventos-form-container">
-            <div className="admin-eventos-form-card">
-                <div className="form-header">
-                    <Link to="/admin/eventos" className="back-link">
-                        <ArrowLeft size={20} /> Volver a eventos
-                    </Link>
-                    <h1> Crear Nuevo Evento</h1>
-                    <p>Completa los datos para crear un evento global</p>
-                </div>
+        {/* Botón volver externo - izquierda, con gradiente */}
+        <div className="back-button-wrapper">
+            <Link to="/admin/eventos" className="btn-back-gradient">
+                <ArrowLeft size={18} />
+                {t('back_to_events')}
+            </Link>
+        </div>
 
+        {/* Card del formulario */}
+        <div className="admin-eventos-form-card">
+            <div className="form-header">
+                <h1>✨ {t('create_event')}</h1>
+                <p>{t('create_event_desc')}</p>
+            </div>
                 <form onSubmit={handleSubmit} className="eventos-form">
                     <div className="form-grid">
+                        {/* COLUMNA IZQUIERDA */}
                         <div className="form-column">
                             <div className="form-group required">
-                                <label>⚲ Nombre del evento *</label>
+                                <label><FileText size={16} /> {t('event_name')}</label>
                                 <input
                                     type="text"
                                     name="nombre_evento"
                                     value={formData.nombre_evento}
                                     onChange={handleChange}
                                     className={errors.nombre_evento ? 'error' : ''}
+                                    placeholder={t('event_name_placeholder')}
                                     required
                                 />
                                 {errors.nombre_evento && <span className="error-message">{errors.nombre_evento[0]}</span>}
                             </div>
 
                             <div className="form-group required">
-                                <label><MapPin size={16} /> Lugar *</label>
+                                <label><MapPin size={16} /> {t('location')}</label>
                                 <input
                                     type="text"
                                     name="lugar_evento"
                                     value={formData.lugar_evento}
                                     onChange={handleChange}
                                     className={errors.lugar_evento ? 'error' : ''}
+                                    placeholder={t('location_placeholder')}
                                     required
                                 />
                                 {errors.lugar_evento && <span className="error-message">{errors.lugar_evento[0]}</span>}
                             </div>
 
-                            <div className="form-group required">
-                                <label><Calendar size={16} /> Fecha de inicio *</label>
+                            <div className="form-group required" style={{ position: 'relative' }}>
+                                <label><Calendar size={16} /> {t('start_date')} *</label>
                                 <input
+                                    ref={fechaInputRef}
                                     type="datetime-local"
                                     name="fecha_evento"
                                     value={formData.fecha_evento}
@@ -146,11 +200,14 @@ const AdminEventosCreate = () => {
                                     className={errors.fecha_evento ? 'error' : ''}
                                     required
                                 />
+                                <div className="calendar-icon-custom" onClick={openCalendar}>
+                                    <Calendar size={16} />
+                                </div>
                                 {errors.fecha_evento && <span className="error-message">{errors.fecha_evento[0]}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label><Calendar size={16} /> Fecha de fin (opcional)</label>
+                                <label><Calendar size={16} /> {t('end_date')}</label>
                                 <input
                                     type="datetime-local"
                                     name="fecha_fin"
@@ -160,26 +217,29 @@ const AdminEventosCreate = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>𖠋𖠋 Capacidad máxima</label>
+                                <label><Users size={16} /> {t('max_capacity')}</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     name="capacidad_maxima"
                                     value={formData.capacidad_maxima}
-                                    onChange={handleChange}
-                                    placeholder="Ej: 100"
+                                    onChange={handleNumberChange}
+                                    placeholder={t('capacity_placeholder')}
+                                    inputMode="numeric"
                                 />
                             </div>
                         </div>
 
+                        {/* COLUMNA DERECHA */}
                         <div className="form-column">
                             <div className="form-group required">
-                                <label><FileText size={16} /> Descripción *</label>
+                                <label><FileText size={16} /> {t('description')}</label>
                                 <textarea
                                     name="descripcion"
                                     value={formData.descripcion}
                                     onChange={handleChange}
                                     rows="5"
                                     className={errors.descripcion ? 'error' : ''}
+                                    placeholder={t('description_placeholder')}
                                     required
                                 />
                                 {errors.descripcion && <span className="error-message">{errors.descripcion[0]}</span>}
@@ -187,32 +247,65 @@ const AdminEventosCreate = () => {
 
                             <div className="form-row-2">
                                 <div className="form-group">
-                                    <label>$ Costo</label>
-                                    <input type="text" name="costo" value={formData.costo} onChange={handleChange} placeholder="Ej: Gratuito" />
+                                    <label><DollarSign size={16} /> {t('cost')}</label>
+                                    <input 
+                                        type="text" 
+                                        name="costo" 
+                                        value={formData.costo} 
+                                        onChange={handleChange} 
+                                        placeholder={t('cost_placeholder')}
+                                    />
                                 </div>
                                 <div className="form-group">
-                                    <label>🗁 Categoría</label>
-                                    <input type="text" name="categoria" value={formData.categoria} onChange={handleChange} placeholder="Ej: Adopción" />
+                                    <label><Layers size={16} /> {t('category')}</label>
+                                    <input 
+                                        type="text" 
+                                        name="categoria" 
+                                        value={formData.categoria} 
+                                        onChange={handleChange} 
+                                        placeholder={t('category_placeholder')}
+                                    />
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label>✆ Contacto (opcional)</label>
+                                <label><User size={16} /> {t('contact')}</label>
                                 <div className="form-row-2">
-                                    <input type="text" name="organizador" value={formData.organizador} onChange={handleChange} placeholder="Organizador" />
-                                    <input type="tel" name="telefono_contacto" value={formData.telefono_contacto} onChange={handleChange} placeholder="Teléfono" />
+                                    <input 
+                                        type="text" 
+                                        name="organizador" 
+                                        value={formData.organizador} 
+                                        onChange={handleChange} 
+                                        placeholder={t('organizer_placeholder')}
+                                    />
+                                    <input 
+                                        type="tel" 
+                                        name="telefono_contacto" 
+                                        value={formData.telefono_contacto} 
+                                        onChange={handlePhoneChange} 
+                                        placeholder={t('phone_placeholder')}
+                                        inputMode="numeric"
+                                    />
                                 </div>
-                                <input type="email" name="email_contacto" value={formData.email_contacto} onChange={handleChange} placeholder="Email de contacto" />
+                                <input 
+                                    type="email" 
+                                    name="email_contacto" 
+                                    value={formData.email_contacto} 
+                                    onChange={handleChange} 
+                                    placeholder={t('email_placeholder')}
+                                />
                             </div>
 
                             <div className="form-group">
-                                <label>𖤘 Etiquetas</label>
+                                <label><Tag size={16} /> {t('tags')}</label>
                                 <div className="tags-input-container">
                                     <div className="tags-list">
                                         {formData.tags.map(tag => (
                                             <span key={tag} className="tag">
-                                                {tag}
-                                                <button type="button" onClick={() => handleRemoveTag(tag)}><X size={14} /></button>
+                                                #{tag}
+                                                <button type="button" onClick={() => handleRemoveTag(tag)}>
+                                                    <X size={14} />
+                                                </button>
                                             </span>
                                         ))}
                                     </div>
@@ -222,7 +315,7 @@ const AdminEventosCreate = () => {
                                             value={tagInput}
                                             onChange={(e) => setTagInput(e.target.value)}
                                             onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                                            placeholder="Agregar etiqueta"
+                                            placeholder={t('tags_placeholder')}
                                         />
                                         <button type="button" onClick={handleAddTag}>+</button>
                                     </div>
@@ -230,20 +323,22 @@ const AdminEventosCreate = () => {
                             </div>
 
                             <div className="form-group">
-                                <label><ImageIcon size={16} /> Imagen del evento</label>
+                                <label><ImageIcon size={16} /> {t('event_image')}</label>
                                 <div className="image-upload-area">
                                     {previewImage ? (
                                         <div className="image-preview">
                                             <img src={previewImage} alt="Preview" />
-                                            <button type="button" onClick={() => { setImagen(null); setPreviewImage(null); }}><X size={20} /></button>
+                                            <button type="button" onClick={() => { setImagen(null); setPreviewImage(null); }}>
+                                                <X size={20} />
+                                            </button>
                                         </div>
                                     ) : (
                                         <label className="upload-label">
                                             <input type="file" accept="image/*" onChange={handleImageChange} />
                                             <div className="upload-placeholder">
                                                 <ImageIcon size={32} />
-                                                <span>Haz clic para subir una imagen</span>
-                                                <small>JPG, PNG, GIF (max 2MB)</small>
+                                                <span>{t('click_to_upload')}</span>
+                                                <small>{t('image_max_size_text')}</small>
                                             </div>
                                         </label>
                                     )}
@@ -253,10 +348,12 @@ const AdminEventosCreate = () => {
                     </div>
 
                     <div className="form-actions">
-                        <Link to="/admin/eventos" className="btn-cancel">Cancelar</Link>
+                        <Link to="/admin/eventos" className="btn-cancel">
+                            <X size={16} /> {t('cancel')}
+                        </Link>
                         <button type="submit" className="btn-submit" disabled={loading}>
                             {loading ? <Loader size={20} className="spinner" /> : <Save size={20} />}
-                            {loading ? 'Creando...' : 'Crear Evento'}
+                            {loading ? t('creating') : t('create_event_btn')}
                         </button>
                     </div>
                 </form>

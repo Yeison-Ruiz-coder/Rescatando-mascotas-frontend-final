@@ -225,7 +225,7 @@ const RescateDetalle = ({ tipoUsuario }) => {
             <div className="info-group">
               <label><i className="fas fa-location-dot"></i> {t('coordenadas')}</label>
               <p>
-                📍 {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
+                 {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
                 <a 
                   href={`https://www.openstreetmap.org/?mlat=${rescate.lat}&mlon=${rescate.lng}#map=15/${rescate.lat}/${rescate.lng}`}
                   target="_blank"
@@ -237,27 +237,6 @@ const RescateDetalle = ({ tipoUsuario }) => {
               </p>
             </div>
           )}
-
-          {/* Información adicional */}
-          <div className="info-group info-metadata">
-            <label><i className="fas fa-info-circle"></i> {t('informacion_adicional')}</label>
-            <div className="metadata-grid">
-              <div className="metadata-item">
-                <span className="metadata-label">{t('tipo_emergencia')}:</span>
-                <span className="metadata-value">{t(`btn_${rescate.tipo_emergencia || 'otro'}`)}</span>
-              </div>
-              <div className="metadata-item">
-                <span className="metadata-label">{t('id_rescate')}:</span>
-                <span className="metadata-value">#{rescate.id}</span>
-              </div>
-              {rescate.created_at && (
-                <div className="metadata-item">
-                  <span className="metadata-label">{t('reportado_en')}:</span>
-                  <span className="metadata-value">{new Date(rescate.created_at).toLocaleString()}</span>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
 
         <div className="detalle-actions">
@@ -278,10 +257,6 @@ const RescateDetalle = ({ tipoUsuario }) => {
               <i className="fas fa-paw"></i> {t('registrar_mascota')}
             </Button>
           )}
-
-          <Button onClick={() => navigate(-1)} variant="secondary">
-            <i className="fas fa-arrow-left"></i> {t('volver')}
-          </Button>
         </div>
       </div>
     </div>

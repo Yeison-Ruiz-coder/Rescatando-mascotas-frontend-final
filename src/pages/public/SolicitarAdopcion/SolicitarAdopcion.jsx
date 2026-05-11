@@ -79,7 +79,7 @@ const SolicitarAdopcion = () => {
       const response = await api.get(`/mascotas/${id}`);
       if (response.data.success) {
         const data = response.data.data;
-        if (data.estado !== 'En adopcion') {
+        if (data.estado !== 'En adopción') {
           toast.error(t('mascota_no_disponible'));
           navigate('/mascotas');
           return;

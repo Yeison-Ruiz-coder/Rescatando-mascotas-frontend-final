@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { getImageUrl } from '../../../utils/imageUtils'; // ✅ Importar la función
+import { getImageUrl } from '../../../utils/imageUtils';
 import './MascotaCardFundacion.css';
 
 const MascotaCardFundacion = ({ 
@@ -12,7 +12,7 @@ const MascotaCardFundacion = ({
   onEliminar,
   onVerDetalle,
   onEditar,
-  getImageUrl: propGetImageUrl  // ✅ Renombrar para evitar conflicto
+  getImageUrl: propGetImageUrl
 }) => {
   const { t } = useTranslation(['mascotas', 'fundacion']);
   const [cambiandoEstado, setCambiandoEstado] = useState(false);
@@ -30,13 +30,11 @@ const MascotaCardFundacion = ({
     lugar_rescate
   } = mascota;
 
-  // ✅ Función unificada para obtener URL de imagen
+  // Función unificada para obtener URL de imagen
   const getImageUrlSafe = (path) => {
-    // Si viene una función como prop, usarla
     if (propGetImageUrl && typeof propGetImageUrl === 'function') {
       return propGetImageUrl(path);
     }
-    // Si no, usar la función importada
     return getImageUrl(path);
   };
 
@@ -79,12 +77,13 @@ const MascotaCardFundacion = ({
 
   const estadoConfig = getEstadoConfig(estado);
 
-  // Manejadores
+  // ✅ Manejador de cambio de estado (con toast aquí está bien porque es específico de esta acción)
   const handleEstadoChange = async (nuevoEstado) => {
     if (cambiandoEstado) return;
     setCambiandoEstado(true);
     try {
       await onEstadoChange(id, nuevoEstado);
+      // ✅ Este toast está bien porque es una acción independiente
       toast.success(t('fundacion:estado_actualizado_exito', { 
         estado: getEstadoConfig(nuevoEstado).label,
         defaultValue: `Estado actualizado a ${getEstadoConfig(nuevoEstado).label}`
@@ -96,29 +95,41 @@ const MascotaCardFundacion = ({
     }
   };
 
-  const handleEliminar = async () => {
-    const confirmMessage = t('fundacion:confirmar_eliminar', { 
-      nombre: nombre_mascota,
-      defaultValue: `¿Eliminar a ${nombre_mascota}?`
-    });
+  // ✅ CORREGIDO: Manejador de eliminación SIN toast de éxito
+  const handleEliminar = async (e) => {
+    e.stopPropagation();
     
-    if (window.confirm(confirmMessage)) {
-      setEliminando(true);
-      try {
-        await onEliminar(id, nombre_mascota);
-        toast.success(t('fundacion:mascota_eliminada_exito', { 
-          nombre: nombre_mascota,
-          defaultValue: `${nombre_mascota} ha sido eliminado(a)`
-        }));
-      } catch (error) {
-        toast.error(t('fundacion:error_eliminar_mascota', 'Error al eliminar la mascota'));
-      } finally {
-        setEliminando(false);
-      }
+    if (eliminando) return;
+    
+    const confirmacion = window.confirm(
+      t('fundacion:confirmar_eliminar', { 
+        nombre: nombre_mascota,
+        defaultValue: `¿Estás seguro de que quieres eliminar a ${nombre_mascota}? Esta acción no se puede deshacer.`
+      })
+    );
+    
+    if (!confirmacion) return;
+    
+    setEliminando(true);
+    try {
+      // ✅ Llamar a onEliminar sin mostrar toast aquí
+      // El toast de éxito lo mostrará el componente padre (Mascotas.jsx)
+      await onEliminar(id, nombre_mascota);
+      // ❌ NO mostrar toast de éxito aquí para evitar duplicados
+    } catch (error) {
+      // ✅ Solo mostrar errores aquí
+      console.error('Error al eliminar:', error);
+      toast.error(
+        t('fundacion:error_eliminar', { 
+          defaultValue: 'Error al eliminar la mascota' 
+        })
+      );
+    } finally {
+      setEliminando(false);
     }
   };
 
-  // ✅ Obtener URL de imagen correctamente
+  // Obtener URL de imagen
   const imageUrl = getImageUrlSafe(foto_principal);
 
   return (
@@ -152,9 +163,7 @@ const MascotaCardFundacion = ({
       <div className="card-content-fundacion">
         <div className="card-header-fundacion">
           <h3 className="card-title-fundacion">{nombre_mascota}</h3>
-          <div className="card-id-fundacion">
-            {t('fundacion:id_label', 'ID')}: #{id}
-          </div>
+        
         </div>
 
         {/* Detalles básicos */}

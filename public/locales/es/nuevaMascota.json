@@ -6,7 +6,7 @@
   "registrar_mascota_rescatada": "Registrar mascota rescatada",
   "registrar_mascota_rescatada_desc": "Completa los datos de la mascota que fue rescatada",
   "registrando_mascota_rescatada_en": "Rescatada en",
-  
+
   "steps": {
     "informacion_basica": "Información Básica",
     "ubicacion_descripcion": "Ubicación y Descripción",
@@ -15,7 +15,7 @@
     "caracteristicas_fisicas": "Características Físicas",
     "requisitos_adopcion": "Requisitos de Adopción"
   },
-  
+
   "informacion_basica": "Información Básica",
   "nombre_mascota": "Nombre de la Mascota",
   "nombre_mascota_placeholder": "Ej: Luna, Max, Bella",
@@ -38,8 +38,7 @@
   "estado_en_acogida": "En acogida",
   "estado_adoptado": "Adoptado",
   "edad_aproximada": "Edad aproximada",
-  
-  
+
   "ubicacion_descripcion": "Ubicación y Descripción",
   "lugar_rescate": "Lugar donde se encuentra",
   "lugar_rescate_placeholder": "Ej: Parque Central, Calle Principal #123",
@@ -47,7 +46,7 @@
   "descripcion_placeholder": "Describe a la mascota: carácter, comportamiento, condición de salud, necesidades especiales...",
   "condiciones_especiales": "Condiciones Especiales",
   "condiciones_placeholder": "Enfermedades crónicas, discapacidades, cuidados especiales...",
-  
+
   "salud_vacunas": "Salud y Vacunas",
   "necesita_hogar_temporal": "Necesita hogar temporal",
   "apto_con_ninos": "Apto con niños",
@@ -58,7 +57,7 @@
   "frecuencia_dias": "Cada {{dias}} días",
   "cada": "cada",
   "dias": "días",
-  
+
   "galeria_fotos": "Galería de Fotos",
   "foto_principal": "Foto Principal",
   "foto_principal_requerida": "La foto principal es requerida",
@@ -69,7 +68,7 @@
   "seleccionar_opciones": "Seleccionar opciones",
   "buscar": "Buscar...",
   "sin_opciones": "No hay opciones",
-  
+
   "botones": {
     "registrando": "Registrando...",
     "anterior": "Anterior",
@@ -80,7 +79,7 @@
     "cancelar": "Cancelar",
     "volver": "Volver"
   },
-  
+
   "errores": {
     "nombre_requerido": "El nombre es requerido",
     "especie_requerida": "La especie es requerida",
@@ -95,7 +94,7 @@
     "solo_fundacion": "Solo las fundaciones pueden acceder a esta página.",
     "carga_datos": "Error al cargar los datos"
   },
-  
+
   "mensajes": {
     "solo_fundacion": "Solo los usuarios de tipo fundación pueden registrar mascotas.",
     "sin_perfil_fundacion": "No se encontró el perfil de fundación. Por favor, contacta al administrador.",
@@ -105,9 +104,10 @@
     "imagen_excluida": "La imagen {{nombre}} supera los 2MB y no será incluida",
     "imagen_invalida": "Formato no válido o imagen muy pesada (máx 2MB)",
     "seleccionar_especie_primero": "Primero debes seleccionar una especie",
-    "registrada_exitoso": "Mascota registrada exitosamente"
+    "registrada_exitoso": "Mascota registrada exitosamente",
+    "mensajes.registrada_exito": "Mascota registrada exitosamente"
   },
-  
+
   "acceso_no_autorizado": {
     "titulo": "Acceso no autorizado",
     "mensaje": "Esta sección es solo para usuarios de tipo Fundación",
@@ -155,9 +155,10 @@
   "titulo_registrar_rescate": "Registrar Mascota Rescatada",
   "registrando_desde_rescate": "Registrando desde rescate",
 
-
   "confirmaciones": {
     "salir": "¿Estás seguro de que quieres salir? Los datos no guardados se perderán.",
     "cancelar": "¿Estás seguro de que quieres cancelar? Los datos no guardados se perderán."
-  }
+  },
+
+  "registrada_exito": "Mascota registrada exitosamente"
 }
