@@ -1,0 +1,271 @@
+/* src/styles/components/status-badges.css */
+/* ============================================
+   BADGES DE PRIORIDAD Y ESTADO - GLOBALES
+   Versión segura - solo afecta FontAwesome icons
+   ============================================ */
+
+/* ===== PRIORIDADES ===== */
+.prioridad-alta,
+.badge-prioridad-alta {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-left: 3px solid #dc2626;
+}
+
+/* Solo afecta íconos de FontAwesome dentro de prioridad-alta */
+.prioridad-alta .fas,
+.prioridad-alta .far,
+.prioridad-alta .fal,
+.prioridad-alta .fab,
+.prioridad-alta i.fa,
+.badge-prioridad-alta .fas,
+.badge-prioridad-alta .far,
+.badge-prioridad-alta .fal,
+.badge-prioridad-alta .fab,
+.badge-prioridad-alta i.fa {
+  color: #dc2626 !important;
+  font-size: 0.7rem;
+  width: 14px;
+  text-align: center;
+}
+
+.prioridad-media,
+.badge-prioridad-media {
+  background: #ffedd5 !important;
+  color: #ea580c !important;
+  border-left: 3px solid #ea580c;
+}
+
+.prioridad-media .fas,
+.prioridad-media .far,
+.prioridad-media .fal,
+.prioridad-media .fab,
+.prioridad-media i.fa,
+.badge-prioridad-media .fas,
+.badge-prioridad-media .far,
+.badge-prioridad-media .fal,
+.badge-prioridad-media .fab,
+.badge-prioridad-media i.fa {
+  color: #ea580c !important;
+  font-size: 0.7rem;
+  width: 14px;
+  text-align: center;
+}
+
+.prioridad-baja,
+.badge-prioridad-baja {
+  background: #dcfce7 !important;
+  color: #16a34a !important;
+  border-left: 3px solid #16a34a;
+}
+
+.prioridad-baja .fas,
+.prioridad-baja .far,
+.prioridad-baja .fal,
+.prioridad-baja .fab,
+.prioridad-baja i.fa,
+.badge-prioridad-baja .fas,
+.badge-prioridad-baja .far,
+.badge-prioridad-baja .fal,
+.badge-prioridad-baja .fab,
+.badge-prioridad-baja i.fa {
+  color: #16a34a !important;
+  font-size: 0.7rem;
+  width: 14px;
+  text-align: center;
+}
+
+/* ===== ESTADOS ===== */
+.estado-pendiente,
+.badge-estado-pendiente {
+  background: #fef3c7 !important;
+  color: #d97706 !important;
+  border-left: 3px solid #d97706;
+}
+
+.estado-pendiente .fas,
+.estado-pendiente .far,
+.estado-pendiente .fal,
+.estado-pendiente .fab,
+.estado-pendiente i.fa,
+.badge-estado-pendiente .fas,
+.badge-estado-pendiente .far,
+.badge-estado-pendiente .fal,
+.badge-estado-pendiente .fab,
+.badge-estado-pendiente i.fa {
+  color: #d97706 !important;
+}
+
+.estado-proceso,
+.estado-en-proceso,
+.badge-estado-proceso,
+.badge-estado-en-proceso {
+  background: #e0e7ff !important;
+  color: #4f46e5 !important;
+  border-left: 3px solid #4f46e5;
+}
+
+.estado-proceso .fas,
+.estado-proceso .far,
+.estado-proceso .fal,
+.estado-proceso .fab,
+.estado-proceso i.fa,
+.badge-estado-proceso .fas,
+.badge-estado-proceso .far,
+.badge-estado-proceso .fal,
+.badge-estado-proceso .fab,
+.badge-estado-proceso i.fa {
+  color: #4f46e5 !important;
+}
+
+.estado-completado,
+.badge-estado-completado {
+  background: #d1fae5 !important;
+  color: #059669 !important;
+  border-left: 3px solid #059669;
+}
+
+.estado-completado .fas,
+.estado-completado .far,
+.estado-completado .fal,
+.estado-completado .fab,
+.estado-completado i.fa,
+.badge-estado-completado .fas,
+.badge-estado-completado .far,
+.badge-estado-completado .fal,
+.badge-estado-completado .fab,
+.badge-estado-completado i.fa {
+  color: #059669 !important;
+}
+
+/* ===== TIPOS DE EMERGENCIA ===== */
+.tipo-urgente,
+.badge-tipo-urgente {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+}
+
+.tipo-urgente .fas,
+.tipo-urgente .far,
+.tipo-urgente .fal,
+.tipo-urgente .fab,
+.tipo-urgente i.fa {
+  color: #dc2626 !important;
+}
+
+.tipo-herido,
+.badge-tipo-herido {
+  background: #ffedd5 !important;
+  color: #ea580c !important;
+}
+
+.tipo-herido .fas,
+.tipo-herido .far,
+.tipo-herido .fal,
+.tipo-herido .fab,
+.tipo-herido i.fa {
+  color: #ea580c !important;
+}
+
+.tipo-abandonado,
+.badge-tipo-abandonado {
+  background: #fef3c7 !important;
+  color: #ca8a04 !important;
+}
+
+.tipo-abandonado .fas,
+.tipo-abandonado .far,
+.tipo-abandonado .fal,
+.tipo-abandonado .fab,
+.tipo-abandonado i.fa {
+  color: #ca8a04 !important;
+}
+
+.tipo-otro,
+.badge-tipo-otro {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+.tipo-otro .fas,
+.tipo-otro .far,
+.tipo-otro .fal,
+.tipo-otro .fab,
+.tipo-otro i.fa {
+  color: #475569 !important;
+}
+
+/* ===== ESTILOS BASE PARA BADGES ===== */
+.badge-status,
+.badge-prioridad,
+.badge-estado,
+.badge-tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* ===== BOTONES GLOBALES (más específicos) ===== */
+button.btn-aceptar i.fa,
+button.btn-aceptar .fas,
+button.btn-aceptar .far,
+button.btn-registrar i.fa,
+button.btn-registrar .fas,
+button.btn-registrar .far {
+  color: white !important;
+}
+
+button.btn-rechazar i.fa,
+button.btn-rechazar .fas,
+button.btn-rechazar .far {
+  color: currentColor !important;
+}
+
+button.btn-detalle i.fa,
+button.btn-detalle .fas,
+button.btn-detalle .far {
+  color: var(--color-primary) !important;
+}
+
+/* ===== MODO OSCURO - colores ajustados ===== */
+[data-theme="dark"] .prioridad-alta .fas,
+[data-theme="dark"] .prioridad-alta .far,
+[data-theme="dark"] .prioridad-alta i.fa {
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .prioridad-media .fas,
+[data-theme="dark"] .prioridad-media .far,
+[data-theme="dark"] .prioridad-media i.fa {
+  color: #fb923c !important;
+}
+
+[data-theme="dark"] .prioridad-baja .fas,
+[data-theme="dark"] .prioridad-baja .far,
+[data-theme="dark"] .prioridad-baja i.fa {
+  color: #4ade80 !important;
+}
+
+[data-theme="dark"] .estado-pendiente .fas,
+[data-theme="dark"] .estado-pendiente .far,
+[data-theme="dark"] .estado-pendiente i.fa {
+  color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .estado-proceso .fas,
+[data-theme="dark"] .estado-proceso .far,
+[data-theme="dark"] .estado-proceso i.fa {
+  color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .estado-completado .fas,
+[data-theme="dark"] .estado-completado .far,
+[data-theme="dark"] .estado-completado i.fa {
+  color: #34d399 !important;
+}

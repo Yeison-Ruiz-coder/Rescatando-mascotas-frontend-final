@@ -1,0 +1,347 @@
+/* src/components/common/FiltrosEventos/FiltrosEventos.css */
+
+/* ============================================
+   FILTROS DE EVENTOS - COMPONENTE AUTÓNOMO
+   ESTILOS IGUALES A FILTROSMASCOTAS
+   ============================================ */
+
+/* Contenedor principal del formulario */
+.fe-form {
+  background: var(--form-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Grid de filtros - Mismo que mascotas */
+.fe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+/* Buscador más ancho - Mismo que mascotas */
+.fe-busqueda-group {
+  grid-column: span 2;
+}
+
+/* Grupo general de filtro - Mismo que mascotas */
+.fe-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Labels - Mismo que mascotas */
+.fe-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--form-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0;
+}
+
+.fe-group label svg {
+  color: var(--color-primary);
+  width: 14px;
+  height: 14px;
+}
+
+/* Wrapper del input de búsqueda */
+.fe-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Ícono de lupa - Corregido para no sobreponerse */
+.fe-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-muted);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+ /* Input de búsqueda - Con todas las reglas para ocultar íconos nativos */
+.fe-input {
+  width: 100%;
+  padding: 0.7rem 2rem 0.7rem 2.5rem;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  color: var(--form-text);
+  transition: var(--transition);
+}
+
+/* ✅ Eliminar todos los íconos nativos */
+.fe-input::-webkit-search-cancel-button,
+.fe-input::-webkit-search-decoration,
+.fe-input::-webkit-search-results-button,
+.fe-input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.fe-input[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.fe-input::-ms-clear,
+.fe-input::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.fe-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
+}
+
+.fe-input::placeholder {
+  color: var(--form-placeholder);
+}
+
+/* Botón limpiar búsqueda */
+.fe-clear-search {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  z-index: 1;
+}
+
+.fe-clear-search:hover {
+  color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Select (cuando no se usa CustomSelect) */
+.fe-select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  color: var(--form-text);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.fe-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* Botón limpiar filtros - Mismo estilo que mascotas */
+.fe-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.fe-btn-limpiar {
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-size: 0.9rem;
+  background: var(--gradient-primary);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fe-btn-limpiar:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  filter: brightness(0.95);
+}
+
+/* Botón móvil */
+.fe-btn-mobile {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 500;
+  position: relative;
+  transition: var(--transition);
+  color: var(--form-text);
+}
+
+.fe-btn-mobile:hover {
+  background: var(--color-hover);
+  transform: translateY(-2px);
+}
+
+/* Badge para filtros activos */
+.fe-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: var(--color-heart);
+  font-size: 12px;
+}
+
+/* Modal Overlay */
+.fe-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-modal-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Container */
+.fe-modal-container {
+  background: var(--form-bg);
+  border-radius: var(--radius-2xl);
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow: hidden;
+  animation: fe-modalFadeIn 0.3s ease;
+  border: 1px solid var(--color-border);
+}
+
+@keyframes fe-modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal Header */
+.fe-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--form-border);
+  background: var(--form-input-bg);
+}
+
+.fe-modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--form-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fe-modal-header h3 svg {
+  color: var(--color-primary);
+}
+
+/* Modal Close Button */
+.fe-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--form-placeholder);
+  transition: var(--transition-fast);
+  line-height: 1;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fe-modal-close:hover {
+  color: var(--color-danger);
+}
+
+/* Modal Body */
+.fe-modal-body {
+  padding: 1.5rem;
+}
+
+.fe-modal-body .fe-form {
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+/* Responsive - Mismo que mascotas */
+@media (max-width: 768px) {
+  .fe-btn-mobile {
+    display: flex;
+  }
+  
+  .fe-form {
+    display: none;
+  }
+  
+  .fe-modal-body .fe-form {
+    display: block;
+  }
+  
+  .fe-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fe-busqueda-group {
+    grid-column: span 1;
+  }
+  
+  .fe-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .fe-modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .fe-btn-mobile {
+  background: var(--form-bg);
+  border-color: var(--form-border);
+  color: var(--form-text);
+}
+/* Input de búsqueda - Padding izquierdo aumentado para la lupa */
