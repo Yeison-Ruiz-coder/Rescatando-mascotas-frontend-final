@@ -1,0 +1,82 @@
+/* src/styles/components/glass-card.css */
+/* ============================================
+   TARJETA CON EFECTO VIDRIO
+   ============================================ */
+
+.glass-card {
+  position: relative;
+  z-index: var(--z-card);
+  background: var(--glass-bg, rgba(255, 255, 255, 0.15));
+  backdrop-filter: var(--glass-blur, blur(16px));
+  border-radius: var(--border-radius-xl, 32px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.3));
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.6s ease-out;
+  width: 100%;
+}
+
+.glass-card--small {
+  max-width: 480px;
+}
+
+.glass-card--medium {
+  max-width: 640px;
+}
+
+.glass-card__padding {
+  padding: var(--spacing-2xl, 2.5rem);
+}
+
+/* Scroll personalizado para cards con overflow */
+.glass-card--scrollable {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.glass-card--scrollable::-webkit-scrollbar {
+  width: 5px;
+}
+
+.glass-card--scrollable::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.glass-card--scrollable::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 10px;
+}
+
+/* Animación */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-card__padding {
+    padding: var(--spacing-xl, 2rem);
+  }
+  
+  .glass-card--small {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-card__padding {
+    padding: var(--spacing-lg, 1.5rem);
+  }
+  
+  .glass-card--small {
+    margin: 0 var(--spacing-md, 1rem);
+    width: calc(100% - 2rem);
+  }
+}
