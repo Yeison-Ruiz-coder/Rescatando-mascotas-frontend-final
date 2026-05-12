@@ -16,7 +16,7 @@ const PublicEventosIndex = () => {
     const [asistenciaEvents, setAsistenciaEvents] = useState({});
     const [error, setError] = useState(null);
 
-    // ✅ CORREGIDA: Función para imágenes (soporta Cloudinary y Storage)
+    // CORREGIDA: Función para imágenes (soporta Cloudinary y Storage)
     const getImageUrl = useCallback((url) => {
         if (!url) return null;
         
@@ -176,7 +176,7 @@ const PublicEventosIndex = () => {
     return (
         <div className="public-eventos-container">
             <div className="public-eventos-header">
-                <h1>🐾 {t('titulo') || 'Eventos para Mascotas'}</h1>
+                <h1>{t('titulo') || 'Eventos para Mascotas'}</h1>
                 <p>{t('subtitulo') || 'Descubre los próximos eventos y actividades para ti y tu mascota'}</p>
             </div>
 
