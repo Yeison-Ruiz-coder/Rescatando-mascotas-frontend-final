@@ -1,0 +1,55 @@
+/* src/styles/components/auth-image-indicators.css */
+/* ============================================
+   INDICADORES DE IMAGEN DE FONDO
+   ============================================ */
+
+.auth-indicators {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  z-index: var(--z-floating, 10);
+}
+
+.auth-indicator {
+  width: 30px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all var(--transition-normal, 0.3s ease);
+}
+
+.auth-indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scaleY(1.5);
+}
+
+.auth-indicator.active {
+  background: var(--color-primary, #667eea);
+  width: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-indicators {
+    bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-indicators {
+    bottom: 15px;
+  }
+  
+  .auth-indicator {
+    width: 20px;
+  }
+  
+  .auth-indicator.active {
+    width: 30px;
+  }
+}
