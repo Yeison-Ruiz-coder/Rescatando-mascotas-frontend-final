@@ -1,0 +1,85 @@
+/* src/styles/components/progress-steps.css */
+/* ============================================
+   PASOS DE PROGRESO PARA REGISTRO MULTI-STEP
+   ============================================ */
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl, 2rem);
+  position: sticky;
+  top: 0;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+  border-radius: 50px;
+  z-index: var(--z-sticky, 10);
+}
+
+.progress-step {
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-dot {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all var(--transition-normal, 0.3s ease);
+}
+
+.step-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.progress-step.active .step-dot {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.progress-step.active .step-label {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.progress-step.completed .step-dot {
+  background: var(--color-success, #4caf50);
+  border-color: transparent;
+  color: white;
+}
+
+.progress-step.completed .step-label {
+  color: var(--color-success, #4caf50);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .progress-step .step-label {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-dot {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
