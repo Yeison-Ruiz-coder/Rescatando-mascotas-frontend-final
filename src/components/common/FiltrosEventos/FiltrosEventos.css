@@ -1,46 +1,47 @@
 /* src/components/common/FiltrosEventos/FiltrosEventos.css */
 
 /* ============================================
-   FILTROS DE EVENTOS - COMPONENTE AUTÓNOMO
-   ESTILOS IGUALES A FILTROSMASCOTAS
+   FILTROS DE EVENTOS - VERSIÓN DELGADA Y COMPACTA
    ============================================ */
 
 /* Contenedor principal del formulario */
 .fe-form {
   background: var(--form-bg);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
+  padding: 0.75rem 1rem;
   width: 100%;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-/* Grid de filtros - Mismo que mascotas */
+/* Grid de filtros - Más compacto */
 .fe-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
   align-items: end;
 }
 
-/* Buscador más ancho - Mismo que mascotas */
+/* Buscador más ancho */
 .fe-busqueda-group {
   grid-column: span 2;
 }
 
-/* Grupo general de filtro - Mismo que mascotas */
+/* Grupo general de filtro */
 .fe-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
-/* Labels - Mismo que mascotas */
+/* Labels - Más pequeños */
 .fe-group label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
+  gap: 0.4rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--form-label);
   text-transform: uppercase;
@@ -50,8 +51,8 @@
 
 .fe-group label svg {
   color: var(--color-primary);
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 /* Wrapper del input de búsqueda */
@@ -62,30 +63,30 @@
   width: 100%;
 }
 
-/* Ícono de lupa - Corregido para no sobreponerse */
+/* Ícono de lupa */
 .fe-search-icon {
   position: absolute;
-  left: 12px;
+  left: 10px;
   color: var(--color-text-muted);
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   pointer-events: none;
   z-index: 1;
 }
 
- /* Input de búsqueda - Con todas las reglas para ocultar íconos nativos */
+/* Input de búsqueda - Más delgado */
 .fe-input {
   width: 100%;
-  padding: 0.7rem 2rem 0.7rem 2.5rem;
+  padding: 0.5rem 1.8rem 0.5rem 2rem;
   background: var(--form-input-bg);
   border: 1px solid var(--form-border);
   border-radius: var(--radius-md);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--form-text);
   transition: var(--transition);
 }
 
-/* ✅ Eliminar todos los íconos nativos */
+/* Eliminar íconos nativos */
 .fe-input::-webkit-search-cancel-button,
 .fe-input::-webkit-search-decoration,
 .fe-input::-webkit-search-results-button,
@@ -110,43 +111,52 @@
 .fe-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px var(--form-focus-ring);
+  box-shadow: 0 0 0 2px var(--form-focus-ring);
 }
 
 .fe-input::placeholder {
   color: var(--form-placeholder);
+  font-size: 0.8rem;
 }
 
-/* Botón limpiar búsqueda */
+/* Botón limpiar búsqueda - Más pequeño pero visible */
 .fe-clear-search {
   position: absolute;
-  right: 8px;
-  background: none;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
   color: var(--color-text-muted);
-  padding: 4px;
-  border-radius: var(--radius-sm);
+  padding: 2px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-fast);
   z-index: 1;
+  width: 20px;
+  height: 20px;
 }
 
 .fe-clear-search:hover {
-  color: var(--color-danger);
-  background: rgba(239, 68, 68, 0.1);
+  color: white;
+  background: var(--color-danger);
+  transform: scale(1.1);
 }
 
-/* Select (cuando no se usa CustomSelect) */
+.fe-clear-search svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Select */
 .fe-select {
   width: 100%;
-  padding: 0.7rem 1rem;
+  padding: 0.5rem 0.8rem;
   background: var(--form-input-bg);
   border: 1px solid var(--form-border);
   border-radius: var(--radius-md);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--form-text);
   cursor: pointer;
   transition: var(--transition);
@@ -157,31 +167,36 @@
   border-color: var(--color-accent);
 }
 
-/* Botón limpiar filtros - Mismo estilo que mascotas */
+/* Botón limpiar filtros - Más delgado */
 .fe-buttons {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .fe-btn-limpiar {
-  padding: 0.7rem 1.5rem;
+  padding: 0.5rem 1.2rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   border: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   background: var(--gradient-primary);
   color: white;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .fe-btn-limpiar:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
   filter: brightness(0.95);
+}
+
+.fe-btn-limpiar svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Botón móvil */
@@ -189,7 +204,7 @@
   display: none;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   background: var(--form-bg);
   border: 1px solid var(--form-border);
   border-radius: 40px;
@@ -198,20 +213,24 @@
   position: relative;
   transition: var(--transition);
   color: var(--form-text);
+  font-size: 0.85rem;
 }
 
 .fe-btn-mobile:hover {
   background: var(--color-hover);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 /* Badge para filtros activos */
 .fe-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  color: var(--color-heart);
-  font-size: 12px;
+  top: -2px;
+  right: -2px;
+  background: var(--color-danger);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid white;
 }
 
 /* Modal Overlay */
@@ -239,6 +258,7 @@
   overflow: hidden;
   animation: fe-modalFadeIn 0.3s ease;
   border: 1px solid var(--color-border);
+  position: relative;
 }
 
 @keyframes fe-modalFadeIn {
@@ -252,53 +272,62 @@
   }
 }
 
-/* Modal Header */
+/* Modal Header - Más delgado */
 .fe-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem 1.5rem;
+  padding: 0.8rem 1.2rem;
   border-bottom: 1px solid var(--form-border);
   background: var(--form-input-bg);
 }
 
 .fe-modal-header h3 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--form-text);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .fe-modal-header h3 svg {
   color: var(--color-primary);
+  width: 16px;
+  height: 16px;
 }
 
-/* Modal Close Button */
+/* Modal Close Button - Más visible */
 .fe-modal-close {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-danger);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
-  color: var(--form-placeholder);
+  color: var(--color-danger);
   transition: var(--transition-fast);
   line-height: 1;
   padding: 0;
-  width: 30px;
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .fe-modal-close:hover {
-  color: var(--color-danger);
+  background: var(--color-danger);
+  color: white;
+  transform: scale(1.05);
+}
+
+.fe-modal-close svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* Modal Body */
 .fe-modal-body {
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .fe-modal-body .fe-form {
@@ -307,7 +336,42 @@
   margin-bottom: 0;
 }
 
-/* Responsive - Mismo que mascotas */
+/* ============================================
+   RESPONSIVE - VERSIÓN MUY DELGADA
+   ============================================ */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+  .fe-form {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .fe-grid {
+    gap: 0.6rem;
+  }
+  
+  .fe-group label {
+    font-size: 0.65rem;
+  }
+  
+  .fe-input,
+  .fe-select,
+  .fe-btn-limpiar {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .fe-input {
+    padding-left: 1.8rem;
+    padding-right: 1.6rem;
+  }
+  
+  .fe-btn-limpiar {
+    padding: 0.45rem 1rem;
+  }
+}
+
+/* Móviles grandes (640px - 768px) */
 @media (max-width: 768px) {
   .fe-btn-mobile {
     display: flex;
@@ -323,6 +387,7 @@
   
   .fe-grid {
     grid-template-columns: 1fr;
+    gap: 0.6rem;
   }
   
   .fe-busqueda-group {
@@ -331,6 +396,138 @@
   
   .fe-buttons {
     flex-direction: column;
+  }
+  
+  .fe-form {
+    padding: 0.5rem;
+  }
+  
+  .fe-group {
+    gap: 0.3rem;
+  }
+  
+  .fe-group label {
+    font-size: 0.6rem;
+  }
+  
+  .fe-input,
+  .fe-select {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+  }
+  
+  .fe-input {
+    padding-left: 1.8rem;
+  }
+  
+  .fe-btn-limpiar {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .fe-search-icon {
+    width: 12px;
+    height: 12px;
+    left: 8px;
+  }
+  
+  .fe-clear-search {
+    width: 22px;
+    height: 22px;
+    right: 4px;
+  }
+  
+  .fe-clear-search svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* Móviles pequeños (menos de 480px) */
+@media (max-width: 480px) {
+  .fe-form {
+    padding: 0.4rem;
+  }
+  
+  .fe-grid {
+    gap: 0.4rem;
+  }
+  
+  .fe-group label {
+    font-size: 0.55rem;
+    gap: 0.25rem;
+  }
+  
+  .fe-group label svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .fe-input,
+  .fe-select {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .fe-input {
+    padding-left: 1.6rem;
+    padding-right: 1.4rem;
+  }
+  
+  .fe-btn-limpiar {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.75rem;
+  }
+  
+  .fe-btn-limpiar svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .fe-search-icon {
+    width: 11px;
+    height: 11px;
+    left: 7px;
+  }
+  
+  .fe-clear-search {
+    width: 24px;
+    height: 24px;
+    right: 3px;
+    background: rgba(239, 68, 68, 0.15);
+  }
+  
+  .fe-clear-search svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* Modal más compacto */
+  .fe-modal-container {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .fe-modal-header {
+    padding: 0.6rem 1rem;
+  }
+  
+  .fe-modal-header h3 {
+    font-size: 0.9rem;
+  }
+  
+  .fe-modal-body {
+    padding: 0.8rem;
+  }
+  
+  .fe-modal-close {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .fe-modal-close svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -344,4 +541,15 @@
   border-color: var(--form-border);
   color: var(--form-text);
 }
-/* Input de búsqueda - Padding izquierdo aumentado para la lupa */
+
+[data-theme="dark"] .fe-clear-search {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .fe-clear-search:hover {
+  background: var(--color-danger);
+}
+
+[data-theme="dark"] .fe-modal-close {
+  background: rgba(239, 68, 68, 0.2);
+}

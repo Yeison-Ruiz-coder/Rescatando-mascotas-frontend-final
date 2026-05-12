@@ -1,0 +1,50 @@
+/* src/styles/components/auth-motivational.css */
+/* ============================================
+   TEXTO MOTIVACIONAL EN LA PARTE INFERIOR
+   ============================================ */
+
+.auth-motivational {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: var(--z-floating, 10);
+  pointer-events: none;
+}
+
+.auth-quote {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-style: italic;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  padding: 6px 16px;
+  border-radius: 40px;
+}
+
+.auth-quote i {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  color: var(--color-accent, #ff8c42);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-quote {
+    font-size: 0.75rem;
+    gap: 8px;
+    padding: 4px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-motivational {
+    display: none;
+  }
+}
