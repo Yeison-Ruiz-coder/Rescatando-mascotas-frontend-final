@@ -152,7 +152,7 @@ const AdminEventosEdit = () => {
                     <Link to="/admin/eventos" className="back-link">
                         <ArrowLeft size={20} /> Volver
                     </Link>
-                    <h1>✏️ Editar Evento</h1>
+                    <h1> Editar Evento</h1>
                 </div>
 
                 <form onSubmit={handleSubmit} className="eventos-form">
