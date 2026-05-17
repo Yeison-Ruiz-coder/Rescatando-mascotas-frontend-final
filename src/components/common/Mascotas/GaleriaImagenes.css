@@ -1,4 +1,7 @@
 /* src/components/common/Mascotas/GaleriaImagenes.css */
+/* ============================================
+   GALERIA DE IMAGENES - COMPONENTE
+   ============================================ */
 
 .galeria-container {
   display: flex;
@@ -7,35 +10,35 @@
 }
 
 /* Imagen principal */
-.imagen-principal {
+.galeria-container .imagen-principal {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-radius: 24px;
+  background: var(--form-input-bg);
+  border-radius: var(--radius-xl);
   overflow: hidden;
   cursor: pointer;
-  border: 2px solid #e2e8f0;
-  transition: all 0.3s ease;
+  border: 2px solid var(--color-border);
+  transition: var(--transition);
 }
 
-.imagen-principal:hover {
-  border-color: #667eea;
+.galeria-container .imagen-principal:hover {
+  border-color: var(--color-primary);
   transform: scale(1.01);
 }
 
-.imagen-principal img {
+.galeria-container .imagen-principal img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.imagen-principal:hover img {
+.galeria-container .imagen-principal:hover img {
   transform: scale(1.02);
 }
 
-.indicador-galeria {
+.galeria-container .indicador-galeria {
   position: absolute;
   bottom: 16px;
   right: 16px;
@@ -43,13 +46,13 @@
   backdrop-filter: blur(4px);
   color: white;
   padding: 6px 12px;
-  border-radius: 50px;
+  border-radius: var(--radius-round);
   font-size: 0.75rem;
   font-weight: 500;
 }
 
 /* Miniaturas */
-.miniaturas {
+.galeria-container .miniaturas {
   display: flex;
   gap: 12px;
   overflow-x: auto;
@@ -57,49 +60,49 @@
   scrollbar-width: thin;
 }
 
-.miniaturas::-webkit-scrollbar {
+.galeria-container .miniaturas::-webkit-scrollbar {
   height: 6px;
 }
 
-.miniaturas::-webkit-scrollbar-track {
-  background: #f1f5f9;
+.galeria-container .miniaturas::-webkit-scrollbar-track {
+  background: var(--form-input-bg);
   border-radius: 10px;
 }
 
-.miniaturas::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+.galeria-container .miniaturas::-webkit-scrollbar-thumb {
+  background: var(--color-border);
   border-radius: 10px;
 }
 
-.miniatura {
+.galeria-container .miniatura {
   flex-shrink: 0;
   width: 80px;
   height: 80px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: all 0.3s ease;
-  background: #f1f5f9;
+  transition: var(--transition);
+  background: var(--form-input-bg);
 }
 
-.miniatura:hover {
+.galeria-container .miniatura:hover {
   transform: translateY(-3px);
 }
 
-.miniatura.active {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.galeria-container .miniatura.active {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-accent);
 }
 
-.miniatura img {
+.galeria-container .miniatura img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Modal Galería */
-.modal-galeria {
+.galeria-container .modal-galeria {
   position: fixed;
   top: 0;
   left: 0;
@@ -107,27 +110,27 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(8px);
-  z-index: 2000;
+  z-index: var(--z-modal);
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease;
 }
 
-.modal-content {
+.galeria-container .modal-content {
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
 }
 
-.modal-content img {
+.galeria-container .modal-content img {
   max-width: 100%;
   max-height: 85vh;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
 }
 
-.modal-close {
+.galeria-container .modal-close {
   position: absolute;
   top: -40px;
   right: 0;
@@ -136,37 +139,37 @@
   color: white;
   font-size: 28px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: var(--transition);
 }
 
-.modal-close:hover {
+.galeria-container .modal-close:hover {
   transform: scale(1.1);
 }
 
-.modal-nav {
+.galeria-container .modal-nav {
   display: flex;
   justify-content: center;
   gap: 20px;
   margin-top: 20px;
 }
 
-.nav-btn {
+.galeria-container .nav-btn {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
   padding: 10px 24px;
-  border-radius: 50px;
+  border-radius: var(--radius-round);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   font-weight: 500;
 }
 
-.nav-btn:hover:not(:disabled) {
+.galeria-container .nav-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
 }
 
-.nav-btn:disabled {
+.galeria-container .nav-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -177,23 +180,23 @@
 }
 
 @media (max-width: 768px) {
-  .miniatura {
+  .galeria-container .miniatura {
     width: 60px;
     height: 60px;
   }
   
-  .modal-nav {
+  .galeria-container .modal-nav {
     gap: 12px;
   }
   
-  .nav-btn {
+  .galeria-container .nav-btn {
     padding: 8px 16px;
     font-size: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
-  .miniatura {
+  .galeria-container .miniatura {
     width: 50px;
     height: 50px;
   }

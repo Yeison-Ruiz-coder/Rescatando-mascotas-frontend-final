@@ -4,7 +4,7 @@ import React from 'react';
 const Paso1DatosPersonales = ({ formData, handleInputChange, errores, t }) => {
   return (
     <div className="paso-contenido">
-      <h2> {t('datos_personales')}</h2>
+      <h2>{t('datos_personales')}</h2>
       <p className="paso-descripcion">{t('completa_datos')}</p>
 
       <div className="formulario-grid">

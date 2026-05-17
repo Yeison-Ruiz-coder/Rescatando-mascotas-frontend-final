@@ -19,7 +19,7 @@ const BotonesNavegacion = ({ paso, enviando, onAnterior, onSiguiente, onEnviar, 
       {paso === 4 && (
         <button onClick={onEnviar} className="btn-enviar" disabled={enviando}>
           {enviando ? (
-            <>{t('enviando')}</>
+            <><i className="fas fa-spinner fa-spin"></i> {t('enviando')}</>
           ) : (
             <>{t('enviar_solicitud')}</>
           )}
