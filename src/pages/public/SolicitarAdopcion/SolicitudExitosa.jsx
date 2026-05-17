@@ -74,7 +74,7 @@ const SolicitudExitosa = () => {
 
   if (loading) {
     return (
-      <div className="solicitar-adopcion-page">
+      <div className="solicitud-adopcion-unique">
         <div className="adopcion-container">
           <div className="exitosa-contenido">{t('cargando')}</div>
         </div>
@@ -84,11 +84,11 @@ const SolicitudExitosa = () => {
 
   if (error) {
     return (
-      <div className="solicitar-adopcion-page">
+      <div className="solicitud-adopcion-unique">
         <div className="adopcion-container">
           <div className="exitosa-contenido">
             <div className="exitosa-icono">
-              <i className="fas fa-exclamation-triangle" style={{ color: '#e74c3c' }}></i>
+              <i className="fas fa-exclamation-triangle"></i>
             </div>
             <h1>{t('error_titulo')}</h1>
             <p>{error}</p>
@@ -102,7 +102,7 @@ const SolicitudExitosa = () => {
   }
 
   return (
-    <div className="solicitar-adopcion-page">
+    <div className="solicitud-adopcion-unique">
       <div className="adopcion-container">
         <div className="exitosa-contenido">
           <div className="exitosa-icono">

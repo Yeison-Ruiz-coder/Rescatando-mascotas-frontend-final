@@ -59,17 +59,15 @@ const SolicitarAdopcion = () => {
   }, [isAuthenticated, navigate, id, t]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       fetchMascota();
-      if (user) {
-        setFormData(prev => ({
-          ...prev,
-          nombre: user.nombre || '',
-          apellido: user.apellido || '',
-          email: user.email || '',
-          telefono: user.telefono || '',
-        }));
-      }
+      setFormData(prev => ({
+        ...prev,
+        nombre: user.nombre || '',
+        apellido: user.apellido || '',
+        email: user.email || '',
+        telefono: user.telefono || '',
+      }));
     }
   }, [id, isAuthenticated, user]);
 
@@ -79,12 +77,15 @@ const SolicitarAdopcion = () => {
       const response = await api.get(`/mascotas/${id}`);
       if (response.data.success) {
         const data = response.data.data;
-        if (data.estado !== 'En adopción') {
+        if (data.estado !== 'En adopcion' && data.estado !== 'En adopción') {
           toast.error(t('mascota_no_disponible'));
           navigate('/mascotas');
           return;
         }
         setMascota(data);
+      } else {
+        toast.error(t('error_cargar_mascota'));
+        navigate('/mascotas');
       }
     } catch (err) {
       console.error('Error:', err);
@@ -215,19 +216,21 @@ const SolicitarAdopcion = () => {
 
   if (!mascota) {
     return (
-      <div className="error-container">
-        <i className="fas fa-paw"></i>
-        <h2>{t('error_titulo')}</h2>
-        <p>{t('mascota_no_encontrada')}</p>
-        <button onClick={() => navigate('/mascotas')} className="btn-volver">
-          {t('volver')}
-        </button>
+      <div className="solicitud-adopcion-unique">
+        <div className="error-container">
+          <i className="fas fa-paw"></i>
+          <h2>{t('error_titulo')}</h2>
+          <p>{t('mascota_no_encontrada')}</p>
+          <button onClick={() => navigate('/mascotas')} className="btn-volver">
+            {t('volver')}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="solicitar-adopcion-page">
+    <div className="solicitud-adopcion-unique">
       <div className="adopcion-container">
         <div className="adopcion-header">
           <h1>{t('solicitar_adopcion')}</h1>

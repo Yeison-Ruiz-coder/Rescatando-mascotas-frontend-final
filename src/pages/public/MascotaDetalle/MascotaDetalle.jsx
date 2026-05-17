@@ -80,34 +80,49 @@ const MascotaDetalle = () => {
     return images;
   };
 
+  // Función mejorada para verificar si está disponible para adopción
+  const isDisponibleParaAdopcion = () => {
+    if (!mascota) return false;
+    const estado = mascota.estado?.toLowerCase() || "";
+    // Verificar diferentes formas del estado
+    return estado === "en adopción" || 
+           estado === "en adopcion" || 
+           estado === "disponible" || 
+           estado === "en acogida";
+  };
+
+  // Función mejorada para verificar si está adoptado
+  const isAdoptado = () => {
+    if (!mascota) return false;
+    const estado = mascota.estado?.toLowerCase() || "";
+    return estado === "adoptado";
+  };
+
   const getEstadoClass = () => {
     if (!mascota) return '';
-    switch(mascota.estado) {
-      case 'En adopcion': return 'adopcion';
-      case 'En acogida': return 'acogida';
-      case 'Adoptado': return 'adoptado';
-      default: return '';
-    }
+    const estado = mascota.estado?.toLowerCase() || '';
+    if (estado === 'en adopción' || estado === 'en adopcion') return 'adopcion';
+    if (estado === 'en acogida') return 'acogida';
+    if (estado === 'adoptado') return 'adoptado';
+    return '';
   };
 
   const getEstadoIcon = () => {
     if (!mascota) return 'fa-heart';
-    switch(mascota.estado) {
-      case 'En adopcion': return 'fa-heart';
-      case 'En acogida': return 'fa-home';
-      case 'Adoptado': return 'fa-check-circle';
-      default: return 'fa-heart';
-    }
+    const estado = mascota.estado?.toLowerCase() || '';
+    if (estado === 'en adopción' || estado === 'en adopcion') return 'fa-heart';
+    if (estado === 'en acogida') return 'fa-home';
+    if (estado === 'adoptado') return 'fa-check-circle';
+    return 'fa-heart';
   };
 
   const getEstadoText = () => {
     if (!mascota) return '';
-    switch(mascota.estado) {
-      case 'En adopcion': return t('en_adopcion');
-      case 'En acogida': return t('en_acogida');
-      case 'Adoptado': return t('adoptado');
-      default: return mascota.estado;
-    }
+    const estado = mascota.estado?.toLowerCase() || '';
+    if (estado === 'en adopción' || estado === 'en adopcion') return t('en_adopcion');
+    if (estado === 'en acogida') return t('en_acogida');
+    if (estado === 'adoptado') return t('adoptado');
+    return mascota.estado;
   };
 
   const handleAdoptar = () => {
@@ -150,6 +165,8 @@ const MascotaDetalle = () => {
   }
 
   const images = getAllImages();
+  const disponible = isDisponibleParaAdopcion();
+  const adoptado = isAdoptado();
 
   return (
     <div className="mascota-detalle-page">
@@ -182,23 +199,31 @@ const MascotaDetalle = () => {
               t={t}
             />
 
+            {/* Botones de acción - SIEMPRE VISIBLES SI ESTÁ DISPONIBLE */}
             <div className="botones-accion">
-              {(mascota.estado === "En adopción" || mascota.estado === "En acogida") && (
+              {disponible && (
                 <>
                   <button onClick={handleAdoptar} className="btn-adoptar">
-                    <i className="fas fa-heart"></i> {t("solicitar_adopcion")}
+                    <i className="fas fa-heart"></i> {t("solicitar_adopcion") || "Solicitar Adopción"}
                   </button>
                   {mascota.necesita_hogar_temporal && (
                     <button onClick={handleSolicitarAcogida} className="btn-acogida">
-                      <i className="fas fa-home"></i> {t("solicitar_acogida")}
+                      <i className="fas fa-home"></i> {t("solicitar_acogida") || "Solicitar Acogida"}
                     </button>
                   )}
                 </>
               )}
-              {mascota.estado === "Adoptado" && (
+              {adoptado && (
                 <div className="mensaje-adoptado">
                   <i className="fas fa-check-circle"></i>
-                  <p>{t("ya_fue_adoptado")}</p>
+                  <p>{t("ya_fue_adoptado") || "Esta mascota ya fue adoptada"}</p>
+                </div>
+              )}
+              {/* Si no está disponible ni adoptado, mostrar mensaje genérico */}
+              {!disponible && !adoptado && (
+                <div className="mensaje-adoptado" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
+                  <i className="fas fa-info-circle"></i>
+                  <p>{t("no_disponible") || "Esta mascota no está disponible actualmente"}</p>
                 </div>
               )}
             </div>
