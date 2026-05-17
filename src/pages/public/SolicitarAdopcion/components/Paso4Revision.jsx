@@ -1,39 +1,40 @@
+// src/pages/public/SolicitarAdopcion/components/Paso4Revision.jsx
 import React from 'react';
 
-const Paso4Revision = ({ formData, mascota, t = (key) => key, getImageUrl = (path) => path }) => {
+const Paso4Revision = ({ formData, mascota, t, getImageUrl }) => {
   return (
     <div className="paso-contenido">
-      <h2>{t('revision') || 'Revisión de tu Solicitud'}</h2>
-      <p className="paso-descripcion">{t('verifica_informacion') || 'Verifica que toda la información sea correcta antes de enviar'}</p>
+      <h2>{t('revision')}</h2>
+      <p className="paso-descripcion">{t('verifica_informacion')}</p>
 
       <div className="revision-seccion">
-        <h3>{t('datos_personales') || 'Datos Personales'}</h3>
+        <h3>{t('datos_personales')}</h3>
         <div className="revision-grid">
           <div className="revision-item">
-            <strong>{t('nombre')}</strong>
+            <strong>{t('nombre_completo')}</strong>
             <p>{formData.nombre} {formData.apellido}</p>
           </div>
           <div className="revision-item">
-            <strong>{t('cedula')}</strong>
-            <p>{formData.cedula}</p>
+            <strong>{t('documento_identidad')}</strong>
+            <p>{formData.documento_identidad}</p>
           </div>
           <div className="revision-item">
             <strong>{t('email')}</strong>
             <p>{formData.email}</p>
           </div>
           <div className="revision-item">
-            <strong>{t('celular')}</strong>
-            <p>{formData.celular}</p>
+            <strong>{t('telefono')}</strong>
+            <p>{formData.telefono}</p>
           </div>
           <div className="revision-item">
             <strong>{t('ocupacion')}</strong>
-            <p>{formData.ocupacion || t('no_especificado') || 'No especificado'}</p>
+            <p>{formData.ocupacion || t('no_especificado')}</p>
           </div>
         </div>
       </div>
 
       <div className="revision-seccion">
-        <h3>{t('informacion_vivienda') || 'Información de Vivienda'}</h3>
+        <h3>{t('informacion_vivienda')}</h3>
         <div className="revision-grid">
           <div className="revision-item">
             <strong>{t('direccion')}</strong>
@@ -45,47 +46,51 @@ const Paso4Revision = ({ formData, mascota, t = (key) => key, getImageUrl = (pat
           </div>
           <div className="revision-item">
             <strong>{t('tipo_vivienda')}</strong>
-            <p>{formData.tipo_vivienda}</p>
+            <p>{formData.tipo_vivienda ? t(formData.tipo_vivienda) : t('no_especificado')}</p>
           </div>
           <div className="revision-item">
             <strong>{t('es_propietario')}</strong>
-            <p>{formData.es_propietario}</p>
+            <p>{formData.es_propietario ? t(formData.es_propietario) : t('no_especificado')}</p>
           </div>
         </div>
       </div>
 
       <div className="revision-seccion">
-        <h3>{t('informacion_adicional') || 'Información Adicional'}</h3>
+        <h3>{t('informacion_adicional')}</h3>
         <div className="revision-grid">
           <div className="revision-item full">
             <strong>{t('experiencia_mascotas')}</strong>
-            <p>{formData.experiencia_mascotas}</p>
+            <p>{formData.experiencia_mascotas || t('no_especificado')}</p>
           </div>
           <div className="revision-item full">
-            <strong>{t('razones_adopcion')}</strong>
-            <p>{formData.razones_adopcion}</p>
+            <strong>{t('motivo_adopcion')}</strong>
+            <p>{formData.motivo_adopcion || t('no_especificado')}</p>
           </div>
         </div>
       </div>
 
       <div className="revision-mascota">
-        <h3>{t('mascota_a_adoptar') || 'Mascota a Adoptar'}</h3>
+        <h3>{t('mascota_a_adoptar')}</h3>
         <div className="revision-mascota-contenido">
           {mascota?.foto_principal && (
-            <img src={getImageUrl(mascota.foto_principal)} alt={mascota.nombre_mascota} className="revision-mascota-img" />
+            <img 
+              src={getImageUrl(mascota.foto_principal)} 
+              alt={mascota.nombre_mascota} 
+              className="revision-mascota-img" 
+            />
           )}
           <div className="revision-mascota-info">
             <h4>{mascota?.nombre_mascota}</h4>
             <p><strong>{t('especie')}:</strong> {mascota?.especie}</p>
             <p><strong>{t('genero')}:</strong> {mascota?.genero}</p>
-            <p><strong>{t('edad')}:</strong> {mascota?.edad_aprox} años</p>
+            <p><strong>{t('edad')}:</strong> {mascota?.edad_aprox} {t('años')}</p>
           </div>
         </div>
       </div>
 
       <div className="aviso-importante">
-
-        <p>{t('aviso_revision') || 'Esta información será revisada por nuestro equipo. Nos contactaremos contigo si necesitamos aclaraciones.'}</p>
+        <i className="fas fa-info-circle"></i>
+        <p>{t('aviso_revision')}</p>
       </div>
     </div>
   );

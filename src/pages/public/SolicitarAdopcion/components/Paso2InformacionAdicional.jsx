@@ -4,7 +4,7 @@ import React from 'react';
 const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) => {
   return (
     <div className="paso-contenido">
-      <h2> {t('informacion_adicional')}</h2>
+      <h2>{t('informacion_adicional')}</h2>
       <p className="paso-descripcion">{t('info_vivienda')}</p>
 
       <div className="formulario-grid">

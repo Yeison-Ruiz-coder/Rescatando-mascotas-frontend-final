@@ -4,7 +4,7 @@ import React from 'react';
 const Paso3Compromisos = ({ formData, handleInputChange, errores, t }) => {
   return (
     <div className="paso-contenido">
-      <h2> {t('compromisos')}</h2>
+      <h2>{t('compromisos')}</h2>
       <p className="paso-descripcion">{t('importante_compromisos')}</p>
 
       <div className="formulario-grupo-grande">
@@ -36,7 +36,7 @@ const Paso3Compromisos = ({ formData, handleInputChange, errores, t }) => {
       </div>
 
       <div className="compromisos-checklist">
-        <h3> {t('acepta_compromisos')}</h3>
+        <h3>{t('acepta_compromisos')}</h3>
 
         <div className="checkbox-item">
           <input
