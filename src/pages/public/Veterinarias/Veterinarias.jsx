@@ -1,117 +1,306 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { publicApi } from '../../../services/api';
+import { useTranslation } from 'react-i18next';
+import { Search, Filter, X, MapPin, Phone, Star, Clock, Shield, Ambulance } from 'lucide-react';
+import api from '../../../services/api';
+import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import './Veterinarias.css';
 
-const sampleVeterinarias = [
-  {
-    id: 1,
-    nombre: 'Clínica Animal Vida',
-    ciudad: 'Popayán',
-    descripcion: 'Atención 24/7 para emergencias veterinarias y cirugías.',
-    telefono: '+57 315 555 0123',
-    direccion: 'Calle 12 # 34-56'
-  },
-  {
-    id: 2,
-    nombre: 'Veterinaria San Francisco',
-    ciudad: 'Cali',
-    descripcion: 'Especialistas en medicina preventiva y vacunación.',
-    telefono: '+57 312 444 6789',
-    direccion: 'Carrera 7 # 45-23'
-  },
-  {
-    id: 3,
-    nombre: 'Centro Veterinario Esperanza',
-    ciudad: 'Pasto',
-    descripcion: 'Cuidado integral para perros, gatos y animales exóticos.',
-    telefono: '+57 320 987 6543',
-    direccion: 'Avenida 3 Nte. # 18-77'
-  }
-];
-
 const Veterinarias = () => {
-  const [veterinarias, setVeterinarias] = useState(sampleVeterinarias);
+  const { t } = useTranslation('veterinarias');
+  const [veterinarias, setVeterinarias] = useState([]);
+  const [filteredVeterinarias, setFilteredVeterinarias] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    urgencias: false,
+    verificado: false
+  });
+
+  // Función para extraer datos de la respuesta
+  const extractData = (response) => {
+    if (response?.success === true && response?.data) {
+      if (response.data.data && Array.isArray(response.data.data)) {
+        return response.data.data;
+      }
+      if (Array.isArray(response.data)) {
+        return response.data;
+      }
+      if (typeof response.data === 'object' && response.data.id) {
+        return [response.data];
+      }
+    }
+    if (Array.isArray(response)) return response;
+    if (response?.data && Array.isArray(response.data)) return response.data;
+    if (response?.data?.data && Array.isArray(response.data.data)) return response.data.data;
+    return [];
+  };
 
   useEffect(() => {
     const loadVeterinarias = async () => {
+      setLoading(true);
+      setError(null);
+      
       try {
-        const response = await publicApi.get('/veterinarias');
-        if (response.data?.success && Array.isArray(response.data.data)) {
-          setVeterinarias(response.data.data);
-        }
-      } catch (error) {
-        console.warn('No se pudo cargar veterinarias desde la API, usando datos locales.');
+        const params = {};
+        if (filters.urgencias) params.urgencias = true;
+        if (filters.verificado) params.verificado = true;
+        
+        const response = await api.get('/veterinarias', { params });
+        
+        let data = extractData(response.data);
+        
+        setVeterinarias(data);
+        setFilteredVeterinarias(data);
+      } catch (err) {
+        console.error('Error cargando veterinarias:', err);
+        setError(err.response?.data?.message || t('error_carga'));
+        setVeterinarias([]);
+        setFilteredVeterinarias([]);
       } finally {
         setLoading(false);
       }
     };
 
     loadVeterinarias();
-  }, []);
+  }, [filters, t]);
 
-  const filtered = veterinarias.filter(item =>
-    item.nombre.toLowerCase().includes(search.toLowerCase()) ||
-    item.ciudad.toLowerCase().includes(search.toLowerCase()) ||
-    item.descripcion.toLowerCase().includes(search.toLowerCase())
-  );
+  // Filtrar por búsqueda
+  useEffect(() => {
+    let filtered = [...veterinarias];
+    
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(item => 
+        item.Nombre_vet?.toLowerCase().includes(term) ||
+        item.ciudad?.toLowerCase().includes(term) ||
+        item.Direccion?.toLowerCase().includes(term) ||
+        item.descripcion?.toLowerCase().includes(term)
+      );
+    }
+    
+    setFilteredVeterinarias(filtered);
+  }, [searchTerm, veterinarias]);
+
+  const limpiarFiltros = () => {
+    setSearchTerm('');
+    setFilters({ urgencias: false, verificado: false });
+    setShowFilters(false);
+  };
+
+  const getServiciosList = (veterinaria) => {
+    if (veterinaria.servicios) {
+      if (typeof veterinaria.servicios === 'string') {
+        try {
+          return JSON.parse(veterinaria.servicios);
+        } catch {
+          return [];
+        }
+      }
+      if (Array.isArray(veterinaria.servicios)) {
+        return veterinaria.servicios;
+      }
+    }
+    return [];
+  };
+
+  if (loading) {
+    return (
+      <div className="veterinarias-page">
+        <div className="loading-container">
+          <LoadingSpinner text={t('cargando')} />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="veterinarias-page">
+        <div className="container">
+          <div className="error-container">
+            <MapPin size={48} />
+            <h2>{t('error_carga')}</h2>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()} className="reload-btn">
+              {t('reintentar')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="veterinarias-page">
-      <header className="veterinarias-hero">
-        <div className="veterinarias-hero-content">
-          <span>Encuentra la clínica ideal</span>
-          <h1>Veterinarias confiables cerca de ti</h1>
-          <p>Descubre clínicas veterinarias con atención de calidad, servicios médicos y soporte para el cuidado de tus mascotas.</p>
+      {/* Header */}
+      <div className="veterinarias-header">
+        <div className="container">
+          <h1>{t('titulo') || 'Veterinarias Confiables'}</h1>
+          <p className="subtitle">{t('subtitulo') || 'Encuentra la clínica ideal para el cuidado de tu mascota'}</p>
+          {veterinarias.length > 0 && (
+            <p className="info">
+              <Star size={16} style={{ color: '#fbbf24' }} />
+              {' '}{t('mensaje_bienvenida', { total: veterinarias.length })}
+            </p>
+          )}
         </div>
-      </header>
+      </div>
 
-      <section className="veterinarias-search">
-        <div className="search-wrapper">
-          <i className="fas fa-search" />
-          <input
-            type="text"
-            placeholder="Buscar veterinarias, ciudades o servicios"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </section>
-
-      <section className="veterinarias-list">
-        {loading ? (
-          <div className="loading-message">Cargando veterinarias...</div>
-        ) : filtered.length === 0 ? (
-          <div className="empty-message">No se encontraron veterinarias con esos criterios.</div>
-        ) : (
-          <div className="veterinarias-grid">
-            {filtered.map((veterinaria) => (
-              <article key={veterinaria.id} className="veterinaria-card">
-                <div className="card-header">
-                  <h2>{veterinaria.nombre}</h2>
-                  <span>{veterinaria.ciudad}</span>
-                </div>
-                <p>{veterinaria.descripcion}</p>
-                <div className="card-footer">
-                  <div>
-                    <strong>Teléfono</strong>
-                    <span>{veterinaria.telefono}</span>
-                  </div>
-                  <div>
-                    <strong>Dirección</strong>
-                    <span>{veterinaria.direccion}</span>
-                  </div>
-                </div>
-                <Link to={`/veterinarias/${veterinaria.id}`} className="card-detail-link">
-                  Ver detalles
-                </Link>
-              </article>
-            ))}
+      {/* Filtros section */}
+      <div className="filtros-section sticky-glass glass-auto shadow-sticky">
+        <div className="container">
+          <div className="filtros-wrapper">
+            <div className="search-input-wrapper">
+              <Search size={20} />
+              <input
+                type="text"
+                placeholder={t('buscar_placeholder')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
+            <div className="filter-actions">
+              <button 
+                className={`filter-toggle ${showFilters ? 'active' : ''}`}
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter size={18} />
+                {t('filtros')}
+              </button>
+              
+              {(searchTerm || filters.urgencias || filters.verificado) && (
+                <button className="clear-filters" onClick={limpiarFiltros}>
+                  <X size={16} />
+                  {t('limpiar_filtros')}
+                </button>
+              )}
+            </div>
           </div>
-        )}
-      </section>
+
+          {showFilters && (
+            <div className="filters-panel">
+              <div className="filter-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.urgencias}
+                    onChange={(e) => setFilters(prev => ({ ...prev, urgencias: e.target.checked }))}
+                  />
+                  <Ambulance size={16} />
+                  <span>{t('solo_urgencias')}</span>
+                </label>
+              </div>
+              <div className="filter-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.verificado}
+                    onChange={(e) => setFilters(prev => ({ ...prev, verificado: e.target.checked }))}
+                  />
+                  <Shield size={16} />
+                  <span>{t('solo_verificadas')}</span>
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Resultados section */}
+      <div className="resultados-section">
+        <div className="container">
+          <div className="resultados-header">
+            <div className="resultados-count">
+              <Star size={16} />
+              <span>
+                {t('mostrando')} <strong>{filteredVeterinarias.length}</strong> {t('de')} <strong>{veterinarias.length}</strong> {t('veterinarias')}
+              </span>
+            </div>
+          </div>
+
+          {filteredVeterinarias.length === 0 ? (
+            <div className="empty-container">
+              <MapPin size={48} />
+              <h3>{t('sin_resultados.titulo')}</h3>
+              <p>{t('sin_resultados.mensaje')}</p>
+              <button onClick={limpiarFiltros} className="btn-outline-global">
+                {t('limpiar_filtros')}
+              </button>
+            </div>
+          ) : (
+            <div className="veterinarias-grid">
+              {filteredVeterinarias.map((veterinaria) => {
+                const servicios = getServiciosList(veterinaria);
+                const serviciosMostrar = servicios.slice(0, 3);
+                
+                return (
+                  <article key={veterinaria.id} className="veterinaria-card">
+                    <div className="card-header">
+                      <div>
+                        <h2>{veterinaria.Nombre_vet}</h2>
+                        <span className="ciudad">
+                          <MapPin size={14} />
+                          {veterinaria.ciudad || veterinaria.Direccion?.split(',')[0] || t('ubicacion_no_especificada')}
+                        </span>
+                      </div>
+                      <div className="card-badges">
+                        {veterinaria.verificado && (
+                          <span className="verified-badge" title={t('verificado')}>
+                            <Shield size={16} />
+                          </span>
+                        )}
+                        {veterinaria.urgencias_24h && (
+                          <span className="urgencia-badge" title={t('urgencias_24h')}>
+                            <Ambulance size={16} />
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <p className="descripcion">{veterinaria.descripcion || t('sin_descripcion')}</p>
+                    
+                    {serviciosMostrar.length > 0 && (
+                      <div className="servicios">
+                        {serviciosMostrar.map((servicio, idx) => (
+                          <span key={idx} className="servicio-tag">{servicio}</span>
+                        ))}
+                        {servicios.length > 3 && (
+                          <span className="servicio-mas">+{servicios.length - 3}</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div className="card-footer">
+                      <div className="footer-item">
+                        <Phone size={14} />
+                        <span>{veterinaria.Telefono || t('no_disponible')}</span>
+                      </div>
+                      <div className="footer-item">
+                        <MapPin size={14} />
+                        <span>{veterinaria.Direccion || t('no_disponible')}</span>
+                      </div>
+                      {veterinaria.horario_atencion && (
+                        <div className="footer-item">
+                          <Clock size={14} />
+                          <span>{veterinaria.horario_atencion}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <Link to={`/veterinarias/${veterinaria.id}`} className="card-detail-link">
+                      {t('ver_detalles')} →
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

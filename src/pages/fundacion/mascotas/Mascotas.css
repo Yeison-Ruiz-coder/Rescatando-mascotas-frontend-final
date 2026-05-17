@@ -246,7 +246,7 @@
 
 .mascotas-list-page .empty-container i {
   font-size: 4rem;
-  color: var(--color-primary);
+  color: white;
   margin-bottom: 1rem;
   opacity: 0.9;
 }

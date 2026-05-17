@@ -1,4 +1,7 @@
 /* src/components/common/Mascotas/SaludCuidados.css */
+/* ============================================
+   SALUD Y CUIDADOS - COMPONENTE
+   ============================================ */
 
 .salud-cuidados {
   margin: 24px 0;
@@ -7,7 +10,7 @@
 .salud-cuidados h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text);
   margin-bottom: 16px;
   display: flex;
   align-items: center;
@@ -15,143 +18,144 @@
 }
 
 .salud-cuidados h3 i {
-  color: #667eea;
+  color: var(--color-primary);
 }
 
-.salud-grid {
+.salud-cuidados .salud-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.cuidado-card {
-  background: #f8fafc;
-  border-radius: 16px;
+.salud-cuidados .cuidado-card {
+  background: var(--form-input-bg);
+  border-radius: var(--radius-xl);
   padding: 16px;
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
+  transition: var(--transition);
+  border: 1px solid var(--color-border);
 }
 
-.cuidado-card:hover {
+.salud-cuidados .cuidado-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
-.cuidado-header {
+.salud-cuidados .cuidado-header {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.cuidado-header i {
+.salud-cuidados .cuidado-header i {
   font-size: 1.25rem;
   width: 32px;
-  color: #667eea;
+  color: var(--color-primary);
 }
 
-.cuidado-header div {
+.salud-cuidados .cuidado-header div {
   flex: 1;
 }
 
-.cuidado-header small {
+.salud-cuidados .cuidado-header small {
   display: block;
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #64748b;
+  color: var(--color-text-muted);
   margin-bottom: 4px;
 }
 
-.cuidado-header strong {
+.salud-cuidados .cuidado-header strong {
   font-size: 0.85rem;
-  color: #1e293b;
+  color: var(--color-text);
   font-weight: 600;
   word-break: break-word;
 }
 
-/* ============================================ */
-/* BADGES DE APTITUDES - UNIFICADOS */
-/* ============================================ */
-
-.apto-badges {
+/* Badges de aptitudes */
+.salud-cuidados .apto-badges {
   display: flex;
   gap: 12px;
   margin-top: 12px;
   flex-wrap: wrap;
 }
 
-.apto-badge {
+.salud-cuidados .apto-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   padding: 8px 16px;
-  border-radius: 50px;
+  border-radius: var(--radius-xl);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
-/* Apto con niños - Color morado */
-.apto-badge.ninos {
+.salud-cuidados .apto-badge.ninos {
   background: #e8daee;
   color: #180269;
   border: 1px solid #8c0bf5;
 }
 
-/* Apto con otros animales - Color naranja */
-.apto-badge.otros {
+[data-theme="dark"] .salud-cuidados .apto-badge.ninos {
+  background: #4c1d95;
+  color: #e9d5ff;
+  border-color: #8b5cf6;
+}
+
+.salud-cuidados .apto-badge.otros {
   background: #f5eee2;
   color: #694202;
   border: 1px solid #f59e0b;
-
 }
 
-
-/* Condiciones especiales - borde naranja */
-.especiales-card {
-  border-left: 3px solid #f59e0b;
+[data-theme="dark"] .salud-cuidados .apto-badge.otros {
+  background: #78350f;
+  color: #fde68a;
+  border-color: #f59e0b;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .salud-cuidados {
-    margin: 20px 0;
-  }
-  
-  .apto-badges {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .apto-badge {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .cuidado-header {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .cuidado-header i {
-    margin-bottom: 8px;
-  }
-  
+.salud-cuidados .especiales-card {
+  border-left: 3px solid var(--color-warning);
 }
 
-/* 🔥 ARREGLAR LETRA DE CONDICIONES ESPECIALES 🔥 */
-.especiales-card .cuidado-header strong {
+.salud-cuidados .especiales-card .cuidado-header strong {
   font-size: 0.85rem;
-  color: #1e293b;
+  color: var(--color-text);
   font-weight: 600;
   word-break: break-word;
   line-height: 1.4;
 }
 
-.especiales-card .cuidado-header small {
+.salud-cuidados .especiales-card .cuidado-header small {
   font-size: 0.7rem;
-  color: #f54d0b;
+  color: var(--color-warning);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .salud-cuidados {
+    margin: 20px 0;
+  }
+  
+  .salud-cuidados .apto-badges {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .salud-cuidados .apto-badge {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .salud-cuidados .cuidado-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .salud-cuidados .cuidado-header i {
+    margin-bottom: 8px;
+  }
 }
