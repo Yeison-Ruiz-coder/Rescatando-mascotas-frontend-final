@@ -3,7 +3,7 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 // ============================================
-// COLORES MODO CLARO - TUS COLORES GLOBALES
+// COLORES MODO CLARO - COLORES GLOBALES
 // ============================================
 const COLORS = {
   primary: '#667eea',
@@ -24,9 +24,7 @@ const COLORS = {
 };
 
 // ============================================
-// AQUÍ DEBES COLOCAR TU LOGO EN BASE64
-// Reemplaza el string vacío con tu imagen en base64
-// Ejemplo: "data:image/png;base64,iVBORw0KGgoAAAANS..."
+// LOGO EN BASE64
 // ============================================
 const LOGO_BASE64 = 'https://res.cloudinary.com/dixyebg5i/image/upload/v1778998343/logo-oscuro.png_1_ndpy2u.png'; // <--- COLOCA AQUÍ TU BASE64
 
