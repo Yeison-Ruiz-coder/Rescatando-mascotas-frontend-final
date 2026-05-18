@@ -1,7 +1,7 @@
 // FiltrosMascotas.jsx - igual que FiltrosEventos pero con tus opciones
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, Filter, X, PawPrint, VenusMars } from 'lucide-react'; // Usa lucide-react como Eventos
+import { Search, Filter, X, PawPrint, Venus, Mars } from 'lucide-react'; // Usa lucide-react como Eventos
 import { useFiltros } from '../../../contexts/FiltrosContext';
 import './FiltrosMascotas.css';
 
