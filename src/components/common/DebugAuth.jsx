@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 
 const DebugAuth = () => {
+  const { t } = useTranslation('common');
   const { user, isAuthenticated, loading } = useAuth();
   const [visible, setVisible] = useState(false);
 
@@ -23,7 +25,7 @@ const DebugAuth = () => {
           fontSize: '12px'
         }}
       >
-        Debug
+        {t('debug', 'Debug')}
       </button>
     );
   }
@@ -59,25 +61,25 @@ const DebugAuth = () => {
           padding: '2px 6px'
         }}
       >
-        Cerrar
+        {t('close', 'Cerrar')}
       </button>
-      <h4 style={{ marginTop: 0 }}>Debug Auth</h4>
+      <h4 style={{ marginTop: 0 }}>{t('debug_auth', 'Debug Auth')}</h4>
       <div>
-        <strong>Loading:</strong> {loading ? 'true' : 'false'}
+        <strong>{t('loading', 'Loading')}:</strong> {loading ? 'true' : 'false'}
       </div>
       <div>
-        <strong>isAuthenticated:</strong> {isAuthenticated ? 'true' : 'false'}
+        <strong>{t('authenticated', 'isAuthenticated')}:</strong> {isAuthenticated ? 'true' : 'false'}
       </div>
       <div>
-        <strong>User:</strong>
+        <strong>{t('user', 'User')}:</strong>
         <pre style={{ color: '#0f0', overflow: 'auto' }}>
           {JSON.stringify(user, null, 2)}
         </pre>
       </div>
       <div>
-        <strong>Token en localStorage:</strong>
+        <strong>{t('token_in_localstorage', 'Token en localStorage')}:</strong>
         <div style={{ wordBreak: 'break-all' }}>
-          {localStorage.getItem('token') || 'No hay token'}
+          {localStorage.getItem('token') || t('no_token', 'No hay token')}
         </div>
       </div>
     </div>

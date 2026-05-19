@@ -33,7 +33,7 @@ const MascotaDetalle = () => {
     try {
       setLoading(true);
       const response = await api.get(`/mascotas/${id}`);
-      
+
       if (response.data.success) {
         const data = response.data.data;
         setMascota(data);
@@ -85,10 +85,12 @@ const MascotaDetalle = () => {
     if (!mascota) return false;
     const estado = mascota.estado?.toLowerCase() || "";
     // Verificar diferentes formas del estado
-    return estado === "en adopción" || 
-           estado === "en adopcion" || 
-           estado === "disponible" || 
-           estado === "en acogida";
+    return (
+      estado === "en adopción" ||
+      estado === "en adopcion" ||
+      estado === "disponible" ||
+      estado === "en acogida"
+    );
   };
 
   // Función mejorada para verificar si está adoptado
@@ -99,29 +101,30 @@ const MascotaDetalle = () => {
   };
 
   const getEstadoClass = () => {
-    if (!mascota) return '';
-    const estado = mascota.estado?.toLowerCase() || '';
-    if (estado === 'en adopción' || estado === 'en adopcion') return 'adopcion';
-    if (estado === 'en acogida') return 'acogida';
-    if (estado === 'adoptado') return 'adoptado';
-    return '';
+    if (!mascota) return "";
+    const estado = mascota.estado?.toLowerCase() || "";
+    if (estado === "en adopción" || estado === "en adopcion") return "adopcion";
+    if (estado === "en acogida") return "acogida";
+    if (estado === "adoptado") return "adoptado";
+    return "";
   };
 
   const getEstadoIcon = () => {
-    if (!mascota) return 'fa-heart';
-    const estado = mascota.estado?.toLowerCase() || '';
-    if (estado === 'en adopción' || estado === 'en adopcion') return 'fa-heart';
-    if (estado === 'en acogida') return 'fa-home';
-    if (estado === 'adoptado') return 'fa-check-circle';
-    return 'fa-heart';
+    if (!mascota) return "fa-heart";
+    const estado = mascota.estado?.toLowerCase() || "";
+    if (estado === "en adopción" || estado === "en adopcion") return "fa-heart";
+    if (estado === "en acogida") return "fa-home";
+    if (estado === "adoptado") return "fa-check-circle";
+    return "fa-heart";
   };
 
   const getEstadoText = () => {
-    if (!mascota) return '';
-    const estado = mascota.estado?.toLowerCase() || '';
-    if (estado === 'en adopción' || estado === 'en adopcion') return t('en_adopcion');
-    if (estado === 'en acogida') return t('en_acogida');
-    if (estado === 'adoptado') return t('adoptado');
+    if (!mascota) return "";
+    const estado = mascota.estado?.toLowerCase() || "";
+    if (estado === "en adopción" || estado === "en adopcion")
+      return t("en_adopcion");
+    if (estado === "en acogida") return t("en_acogida");
+    if (estado === "adoptado") return t("adoptado");
     return mascota.estado;
   };
 
@@ -180,7 +183,9 @@ const MascotaDetalle = () => {
           <div className="detalle-gallery">
             {/* Badge de estado encima de la foto */}
             <div className="mascota-estado-badge-wrapper">
-              <div className={`mascota-estado-badge-custom ${getEstadoClass()}`}>
+              <div
+                className={`mascota-estado-badge-custom ${getEstadoClass()}`}
+              >
                 <i className={`fas ${getEstadoIcon()}`}></i>
                 <span>{getEstadoText()}</span>
               </div>
@@ -198,35 +203,6 @@ const MascotaDetalle = () => {
               onContactClick={openFundacionModal}
               t={t}
             />
-
-            {/* Botones de acción - SIEMPRE VISIBLES SI ESTÁ DISPONIBLE */}
-            <div className="botones-accion">
-              {disponible && (
-                <>
-                  <button onClick={handleAdoptar} className="btn-adoptar">
-                    <i className="fas fa-heart"></i> {t("solicitar_adopcion") || "Solicitar Adopción"}
-                  </button>
-                  {mascota.necesita_hogar_temporal && (
-                    <button onClick={handleSolicitarAcogida} className="btn-acogida">
-                      <i className="fas fa-home"></i> {t("solicitar_acogida") || "Solicitar Acogida"}
-                    </button>
-                  )}
-                </>
-              )}
-              {adoptado && (
-                <div className="mensaje-adoptado">
-                  <i className="fas fa-check-circle"></i>
-                  <p>{t("ya_fue_adoptado") || "Esta mascota ya fue adoptada"}</p>
-                </div>
-              )}
-              {/* Si no está disponible ni adoptado, mostrar mensaje genérico */}
-              {!disponible && !adoptado && (
-                <div className="mensaje-adoptado" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
-                  <i className="fas fa-info-circle"></i>
-                  <p>{t("no_disponible") || "Esta mascota no está disponible actualmente"}</p>
-                </div>
-              )}
-            </div>
           </div>
 
           {/* Columna derecha */}
@@ -234,7 +210,9 @@ const MascotaDetalle = () => {
             <InfoBasica mascota={mascota} t={t} />
             {razas.length > 0 && (
               <div className="razas-section">
-                <h3><i className="fas fa-dna"></i> {t("razas")}</h3>
+                <h3>
+                  <i className="fas fa-dna"></i> {t("razas")}
+                </h3>
                 <div className="razas-lista">
                   {razas.map((raza, idx) => (
                     <span key={idx} className="raza-tag">
@@ -245,6 +223,52 @@ const MascotaDetalle = () => {
               </div>
             )}
             <SaludCuidados mascota={mascota} vacunas={vacunas} t={t} />
+
+            {/* Botones de acción - SIEMPRE VISIBLES SI ESTÁ DISPONIBLE */}
+            <div className="botones-accion">
+              {disponible && (
+                <>
+                  <button onClick={handleAdoptar} className="btn-adoptar">
+                    <i className="fas fa-heart"></i>{" "}
+                    {t("solicitar_adopcion") || "Solicitar Adopción"}
+                  </button>
+                  {mascota.necesita_hogar_temporal && (
+                    <button
+                      onClick={handleSolicitarAcogida}
+                      className="btn-acogida"
+                    >
+                      <i className="fas fa-home"></i>{" "}
+                      {t("solicitar_acogida") || "Solicitar Acogida"}
+                    </button>
+                  )}
+                </>
+              )}
+              {adoptado && (
+                <div className="mensaje-adoptado">
+                  <i className="fas fa-check-circle"></i>
+                  <p>
+                    {t("ya_fue_adoptado") || "Esta mascota ya fue adoptada"}
+                  </p>
+                </div>
+              )}
+              {/* Si no está disponible ni adoptado, mostrar mensaje genérico */}
+              {!disponible && !adoptado && (
+                <div
+                  className="mensaje-adoptado"
+                  style={{
+                    background: "#fef3c7",
+                    color: "#92400e",
+                    borderColor: "#fde68a",
+                  }}
+                >
+                  <i className="fas fa-info-circle"></i>
+                  <p>
+                    {t("no_disponible") ||
+                      "Esta mascota no está disponible actualmente"}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

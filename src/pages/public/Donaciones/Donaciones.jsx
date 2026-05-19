@@ -1,30 +1,13 @@
+// Donaciones.jsx - versión con i18n
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // ← Agregar
 import { publicApi } from '../../../services/api';
 import './Donaciones.css';
 
-const sampleDonaciones = [
-  {
-    id: 1,
-    titulo: 'Alimento para mascotas en rescate',
-    monto: '$30.000',
-    descripcion: 'Con tu aporte ayudamos a garantizar alimentación balanceada para perros y gatos en refugios.',
-  },
-  {
-    id: 2,
-    titulo: 'Veterinaria y cuidado médico',
-    monto: '$50.000',
-    descripcion: 'Tu donación cubre consultas, vacunas y tratamientos para animales enfermos.',
-  },
-  {
-    id: 3,
-    titulo: 'Refugio y mantención',
-    monto: '$80.000',
-    descripcion: 'Aporta al alojamiento seguro de mascotas que aún no tienen hogar definitivo.',
-  }
-];
-
 const Donaciones = () => {
-  const [donaciones, setDonaciones] = useState(sampleDonaciones);
+  const { t } = useTranslation('donaciones'); // ← Agregar
+  
+  const [donaciones, setDonaciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,15 +31,15 @@ const Donaciones = () => {
     <div className="donaciones-page">
       <header className="donaciones-hero">
         <div className="donaciones-hero-content">
-          <span>Apoya una causa animal</span>
-          <h1>Tu aporte hace la diferencia</h1>
-          <p>Elige cómo colaborar con alimentos, atención médica y refugio para mascotas en situación de riesgo.</p>
+          <span>{t('hero.badge') || 'Apoya una causa animal'}</span>
+          <h1>{t('hero.title') || 'Tu aporte hace la diferencia'}</h1>
+          <p>{t('hero.description') || 'Elige cómo colaborar con alimentos, atención médica y refugio para mascotas en situación de riesgo.'}</p>
         </div>
       </header>
 
       <section className="donaciones-list">
         {loading ? (
-          <div className="empty-message">Cargando opciones de donación...</div>
+          <div className="empty-message">{t('cargando') || 'Cargando opciones de donación...'}</div>
         ) : (
           <div className="donaciones-grid">
             {donaciones.map((item) => (
@@ -67,7 +50,7 @@ const Donaciones = () => {
                 </div>
                 <p>{item.descripcion}</p>
                 <button type="button" className="donar-button">
-                  Donar ahora
+                  {t('boton_donar') || 'Donar ahora'}
                 </button>
               </article>
             ))}

@@ -1,0 +1,9 @@
+{
+  "hero": {
+    "badge": "Support an animal cause",
+    "title": "Your contribution makes a difference",
+    "description": "Choose how to collaborate with food, medical care and shelter for pets at risk."
+  },
+  "cargando": "Loading donation options...",
+  "boton_donar": "Donate now"
+}

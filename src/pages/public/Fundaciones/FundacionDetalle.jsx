@@ -17,23 +17,19 @@ import api from "../../../services/api";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import "./FundacionesDetalle.css";
 
-const MapaSimple = ({ direccion, nombre, lat, lng, t }) => {
-  // Construir URL para Google Maps iframe
-  let mapUrl;
+const MapaSimple = ({ direccion, nombre, lat, lng }) => {
+  const { t } = useTranslation("fundaciones");
   
+  let mapUrl;
   if (lat && lng && parseFloat(lat) !== 0 && parseFloat(lng) !== 0) {
-    // Usar coordenadas si están disponibles y son válidas
     mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
   } else if (direccion) {
-    // Usar dirección codificada
     const encodedAddress = encodeURIComponent(direccion);
     mapUrl = `https://maps.google.com/maps?q=${encodedAddress}&z=15&output=embed`;
   } else {
-    // Fallback: coordenadas por defecto (Medellín)
     mapUrl = `https://maps.google.com/maps?q=6.2442,-75.5812&z=13&output=embed`;
   }
   
-  // Enlace para abrir en Google Maps
   let googleMapsUrl;
   if (lat && lng && parseFloat(lat) !== 0 && parseFloat(lng) !== 0) {
     googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -61,7 +57,7 @@ const MapaSimple = ({ direccion, nombre, lat, lng, t }) => {
           className="detalle-mapa-link-externo"
         >
           <MapPin size={14} />
-          {t("abrir_maps") || "Abrir en Google Maps"}
+          {t("abrir_maps")}
           <ExternalLink size={12} />
         </a>
       </div>
@@ -82,8 +78,8 @@ const FundacionDetalle = () => {
   const getImageUrl = useCallback((url) => {
     if (!url) return null;
     if (url.startsWith("http")) return url;
-    if (url.startsWith("/storage")) return `http://localhost:8000${url}`;
-    return `http://localhost:8000/storage/${url}`;
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
+    return url.startsWith("/storage") ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
   }, []);
 
   useEffect(() => {
@@ -191,7 +187,6 @@ const FundacionDetalle = () => {
 
   return (
     <div className="fundacion-detalle-page">
-      {/* Botón volver FUERA del contenedor principal */}
       <div className="detalle-back-outer">
         <div className="detalle-container">
           <Link to="/fundaciones" className="detalle-back-link">
@@ -204,7 +199,6 @@ const FundacionDetalle = () => {
       <div className="detalle-container">
         <div className="detalle-main-card">
           <div className="detalle-card-content-wrapper">
-            {/* Header */}
             <div className="detalle-header">
               <h1>{fundacion.Nombre_1 || fundacion.nombre || t("sin_nombre")}</h1>
               <div className="detalle-header-info">
@@ -217,15 +211,13 @@ const FundacionDetalle = () => {
                 {estadisticas?.verificado && (
                   <div className="detalle-verified">
                     <CheckCircle size={16} />
-                    <span>{t("verificada")}</span>
+                    <span>{t("verificado")}</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Grid 2 columnas */}
             <div className="detalle-info-grid">
-              {/* Contacto */}
               <div className="detalle-info-card">
                 <div className="detalle-card-header">
                   <Phone size={18} />
@@ -259,7 +251,6 @@ const FundacionDetalle = () => {
                 </div>
               </div>
 
-              {/* Datos */}
               <div className="detalle-info-card">
                 <div className="detalle-card-header">
                   <Heart size={18} />
@@ -288,7 +279,7 @@ const FundacionDetalle = () => {
                   )}
                   {fundacion.fecha_fundacion && (
                     <div className="detalle-field">
-                      <label>{t("fundacion")}</label>
+                      <label>{t("fundada")}</label>
                       <p>{new Date(fundacion.fecha_fundacion).getFullYear()}</p>
                     </div>
                   )}
@@ -296,7 +287,6 @@ const FundacionDetalle = () => {
               </div>
             </div>
 
-            {/* Descripción */}
             {fundacion.Descripcion && (
               <div className="detalle-section">
                 <div className="detalle-section-header">
@@ -307,7 +297,6 @@ const FundacionDetalle = () => {
               </div>
             )}
 
-            {/* Necesidades */}
             {necesidades.length > 0 && (
               <div className="detalle-section">
                 <div className="detalle-section-header">
@@ -324,7 +313,6 @@ const FundacionDetalle = () => {
               </div>
             )}
 
-            {/* Mapa */}
             {fundacion.Direccion && (
               <div className="detalle-section">
                 <div className="detalle-section-header">
@@ -337,18 +325,16 @@ const FundacionDetalle = () => {
                     nombre={fundacion.Nombre_1}
                     lat={fundacion.lat}
                     lng={fundacion.lng}
-                    t={t}
                   />
                 </div>
               </div>
             )}
 
-            {/* Mascotas */}
             {mascotas.length > 0 && (
               <div className="detalle-section">
                 <div className="detalle-section-header">
                   <PawPrint size={18} />
-                  <h3>{t("mascotas_adopcion")}</h3>
+                  <h3>{t("mascotas_en_adopcion")}</h3>
                 </div>
                 <div className="detalle-mascotas-grid">
                   {mascotas.slice(0, 4).map((mascota) => (
@@ -385,7 +371,6 @@ const FundacionDetalle = () => {
               </div>
             )}
 
-            {/* Footer */}
             <div className="detalle-footer">
               <small>
                 {t("actualizado")}: {new Date(fundacion.updated_at || Date.now()).toLocaleDateString()}

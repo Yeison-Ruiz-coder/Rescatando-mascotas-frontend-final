@@ -4,33 +4,37 @@ import { useTranslation } from 'react-i18next';
 import './StatsCards.css';
 
 const StatsCards = ({ stats }) => {
-  const { t } = useTranslation('mascotas');
+  const { t } = useTranslation('admin');
 
   const cards = [
     {
       key: 'en_adopcion',
-      label: t('stats.en_adopcion') || 'En Adopción',
+      labelKey: 'estadisticas.en_adopcion',
+      defaultLabel: 'En Adopción',
       icon: 'fas fa-heart',
       color: 'success',
       value: stats.en_adopcion || 0
     },
     {
       key: 'adoptados',
-      label: t('stats.adoptados') || 'Adoptados',
+      labelKey: 'estadisticas.adoptados',
+      defaultLabel: 'Adoptados',
       icon: 'fas fa-home',
       color: 'info',
       value: stats.adoptados || 0
     },
     {
       key: 'rescatadas',
-      label: t('stats.rescatadas') || 'Rescatadas',
+      labelKey: 'estadisticas.rescatados',
+      defaultLabel: 'Rescatadas',
       icon: 'fas fa-shield-alt',
       color: 'warning',
       value: stats.rescatadas || 0
     },
     {
       key: 'total',
-      label: t('stats.total') || 'Total en Sistema',
+      labelKey: 'estadisticas.total_sistema',
+      defaultLabel: 'Total en Sistema',
       icon: 'fas fa-paw',
       color: 'secondary',
       value: stats.total || 0
@@ -48,7 +52,7 @@ const StatsCards = ({ stats }) => {
               </div>
               <div className="stat-info">
                 <h4>{card.value}</h4>
-                <p>{card.label}</p>
+                <p>{t(card.labelKey, card.defaultLabel)}</p>
               </div>
             </div>
           </div>
