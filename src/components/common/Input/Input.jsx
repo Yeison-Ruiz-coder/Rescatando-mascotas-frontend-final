@@ -1,22 +1,32 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './Input.css';
 
 const Input = ({ 
   label, 
+  labelKey,
   type = 'text', 
   name, 
   value, 
   onChange, 
   error, 
+  errorKey,
   placeholder,
+  placeholderKey,
   required = false,
   className = ''
 }) => {
+  const { t } = useTranslation('common');
+  
+  const displayLabel = labelKey ? t(labelKey, label) : label;
+  const displayPlaceholder = placeholderKey ? t(placeholderKey, placeholder) : placeholder;
+  const displayError = errorKey ? t(errorKey, error) : error;
+  
   return (
     <div className={`form-group ${className}`}>
-      {label && (
+      {displayLabel && (
         <label htmlFor={name} className="form-label">
-          {label}
+          {displayLabel}
           {required && <span className="required">*</span>}
         </label>
       )}
@@ -26,11 +36,11 @@ const Input = ({
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
+        placeholder={displayPlaceholder}
         required={required}
-        className={`form-input ${error ? 'input-error' : ''}`}
+        className={`form-input ${displayError ? 'input-error' : ''}`}
       />
-      {error && <span className="error-message">{error}</span>}
+      {displayError && <span className="error-message">{displayError}</span>}
     </div>
   );
 };

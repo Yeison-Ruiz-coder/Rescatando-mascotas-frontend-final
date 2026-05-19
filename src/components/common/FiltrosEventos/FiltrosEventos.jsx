@@ -70,8 +70,6 @@ const FiltrosEventos = ({ variant = 'inline' }) => {
             {t('buscar') || 'Buscar'}
           </label>
           <div className="fe-search-wrapper">
-            {/* ✅ Solo una lupa - esta es la que debe estar */}
-            <Search size={16} className="fe-search-icon" />
             <input
               ref={inputRef}
               type="text"

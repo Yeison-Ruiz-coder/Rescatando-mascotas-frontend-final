@@ -9,7 +9,6 @@ export const useFiltros = (namespace = null) => {
     throw new Error('useFiltros must be used within FiltrosProvider');
   }
   
-  // Si se especifica un namespace, devolver solo ese
   if (namespace) {
     return {
       filtros: context.filtros[namespace] || {},
@@ -19,7 +18,6 @@ export const useFiltros = (namespace = null) => {
     };
   }
   
-  // Si no hay namespace, devolver todo (para compatibilidad)
   return {
     filtros: context.filtros,
     actualizarFiltros: context.actualizarFiltrosGlobal,
@@ -31,31 +29,39 @@ export const useFiltros = (namespace = null) => {
 export const useFiltrosMascotas = () => useFiltros('mascotas');
 export const useFiltrosEventos = () => useFiltros('eventos');
 export const useFiltrosUsuarios = () => useFiltros('usuarios');
+export const useFiltrosFundaciones = () => useFiltros('fundaciones'); // ✅ Agregado
+export const useFiltrosVeterinarias = () => useFiltros('veterinarias'); // ✅ Agregado
 
 export const FiltrosProvider = ({ children, initialFilters = {} }) => {
-  // Estado centralizado con namespaces
-  const [filtros, setFiltros] = useState(() => ({
+  // ✅ Estado inicial con estructura consistente
+  const [filtros, setFiltros] = useState({
     mascotas: {
       busqueda: '',
       especie: '',
-      genero: '',
-      ...initialFilters.mascotas
+      genero: ''
     },
     eventos: {
       busqueda: '',
-      categoria: '',
-      ...initialFilters.eventos
+      categoria: ''
     },
     usuarios: {
       busqueda: '',
       rol: '',
-      estado: '',
-      ...initialFilters.usuarios
+      estado: ''
+    },
+    // ✅ Agregar fundaciones
+    fundaciones: {
+      busqueda: '',
+      ciudad: ''
+    },
+    // ✅ Agregar veterinarias
+    veterinarias: {
+      busqueda: '',
+      ciudad: ''
     },
     ...initialFilters
-  }));
+  });
 
-  // Actualizar filtros de un namespace específico
   const actualizarFiltros = useCallback((namespace, nuevosFiltros) => {
     setFiltros(prev => ({
       ...prev,
@@ -63,40 +69,57 @@ export const FiltrosProvider = ({ children, initialFilters = {} }) => {
     }));
   }, []);
 
-  // Limpiar filtros de un namespace específico
+  // ✅ Limpiar filtros - RESETEAR a valores vacíos, NO borrar el objeto
   const limpiarFiltros = useCallback((namespace) => {
-    setFiltros(prev => ({
-      ...prev,
-      [namespace]: {}
-    }));
+    setFiltros(prev => {
+      const estadoActual = prev[namespace];
+      // Si no existe el namespace, crear uno básico
+      if (!estadoActual) {
+        return {
+          ...prev,
+          [namespace]: { busqueda: '' }
+        };
+      }
+      
+      // Resetear cada propiedad a string vacío
+      const reseteados = {};
+      Object.keys(estadoActual).forEach(key => {
+        reseteados[key] = '';
+      });
+      
+      return {
+        ...prev,
+        [namespace]: reseteados
+      };
+    });
   }, []);
 
-  // Actualizar filtros global (sin namespace) - para compatibilidad
   const actualizarFiltrosGlobal = useCallback((nuevosFiltros) => {
     setFiltros(prev => ({ ...prev, ...nuevosFiltros }));
   }, []);
 
-  // Limpiar filtros global (sin namespace) - para compatibilidad
   const limpiarFiltrosGlobal = useCallback(() => {
     setFiltros({
       mascotas: { busqueda: '', especie: '', genero: '' },
       eventos: { busqueda: '', categoria: '' },
-      usuarios: { busqueda: '', rol: '', estado: '' }
+      usuarios: { busqueda: '', rol: '', estado: '' },
+      fundaciones: { busqueda: '', ciudad: '' },      // ✅ Agregado
+      veterinarias: { busqueda: '', ciudad: '' }      // ✅ Agregado
     });
   }, []);
 
-  // Verificar si un namespace tiene filtros activos
   const tieneFiltrosActivos = useCallback((namespace) => {
     const filtrosNamespace = filtros[namespace] || {};
     return Object.values(filtrosNamespace).some(valor => valor && valor !== '');
   }, [filtros]);
 
-  // Limpiar todos los filtros de todos los namespaces
   const limpiarTodosFiltros = useCallback(() => {
     setFiltros({
       mascotas: { busqueda: '', especie: '', genero: '' },
       eventos: { busqueda: '', categoria: '' },
-      usuarios: { busqueda: '', rol: '', estado: '' }
+      usuarios: { busqueda: '', rol: '', estado: '' },
+      fundaciones: { busqueda: '', ciudad: '' },      // ✅ Agregado
+      veterinarias: { busqueda: '', ciudad: '' }      // ✅ Agregado
     });
   }, []);
 

@@ -1,8 +1,9 @@
-// src/pages/public/MascotaDetalle/components/GaleriaImagenes.jsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './GaleriaImagenes.css';
 
 const GaleriaImagenes = ({ images, nombre, imagenActual, setImagenActual }) => {
+  const { t } = useTranslation('mascotas');
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const defaultImage = '/img/mascota-placeholder.png';
 
@@ -44,7 +45,6 @@ const GaleriaImagenes = ({ images, nombre, imagenActual, setImagenActual }) => {
         </div>
       )}
 
-      {/* Modal para galería */}
       {isModalOpen && (
         <div className="modal-galeria" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

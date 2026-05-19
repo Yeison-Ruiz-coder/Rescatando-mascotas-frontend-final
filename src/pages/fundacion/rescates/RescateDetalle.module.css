@@ -1,0 +1,384 @@
+/* src/pages/fundacion/rescates/RescateDetalle.module.css */
+
+/* ============================================
+   DETALLE DE RESCATE - CSS MODULES
+   Todas las clases en camelCase para usar con styles.xxx
+   ============================================ */
+
+.rescateDfContainer {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Header */
+.rescateDfHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.rescateDfBtnBack {
+  background: var(--gradient-primary);
+  border: 1px solid var(--color-border, #e5e7eb);
+  cursor: pointer;
+  color: white;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+.rescateDfBtnBack:hover {
+  transform: translateX(-2px);
+}
+
+.rescateDfHeader h1 {
+  font-size: 1.5rem;
+  color: var(--color-text, #1f2937);
+  margin: 0;
+}
+
+/* Card principal */
+.rescateDfCard {
+  background: var(--color-card-bg, #ffffff);
+  border-radius: 24px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+/* Badges */
+.rescateDfBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--form-input-bg, #f9fafb);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.rescateDfPrioridad,
+.rescateDfEstado,
+.rescateDfTipo {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rescateDfPrioridadAlta { 
+  background: #fee2e2; 
+  color: #dc2626; 
+}
+
+.rescateDfPrioridadMedia { 
+  background: #ffedd5; 
+  color: #ea580c; 
+}
+
+.rescateDfPrioridadBaja { 
+  background: #dcfce7; 
+  color: #16a34a; 
+}
+
+.rescateDfEstadoPendiente { 
+  background: #fef3c7; 
+  color: #d97706; 
+}
+
+.rescateDfEstadoProceso { 
+  background: #e0e7ff; 
+  color: #4f46e5; 
+}
+
+.rescateDfEstadoCompletado { 
+  background: #d1fae5; 
+  color: #059669; 
+}
+
+.rescateDfTipo { 
+  background: #f1f5f9; 
+  color: #475569; 
+}
+
+/* Fotos */
+.rescateDfFotoPrincipal {
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+
+.rescateDfFotoPrincipal label,
+.rescateDfGaleria label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--form-label, #374151);
+  margin-bottom: 0.5rem;
+}
+
+.rescateDfFotoPrincipal label i,
+.rescateDfGaleria label i {
+  color: var(--color-primary, #667eea);
+  margin-right: 6px;
+}
+
+.rescateDfFotoPrincipalImg {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rescateDfFotoPrincipalImg:hover {
+  opacity: 0.9;
+}
+
+.rescateDfGaleria {
+  padding: 0.5rem 1.5rem;
+}
+
+.rescateDfGaleriaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.rescateDfGaleriaImg {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid var(--color-border, #e5e7eb);
+}
+
+.rescateDfGaleriaImg:hover {
+  transform: scale(1.02);
+  border-color: var(--color-primary, #667eea);
+}
+
+/* Información */
+.rescateDfInfo {
+  background: transparent;
+  padding: 1.5rem;
+}
+
+.rescateDfInfoGroup {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.rescateDfInfoGroup:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.rescateDfInfoGroup label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted, #6b7280);
+  margin-bottom: 0.5rem;
+}
+
+.rescateDfInfoGroup label i {
+  color: var(--color-primary, #667eea);
+  margin-right: 6px;
+  width: 20px;
+}
+
+.rescateDfInfoGroup p {
+  color: var(--color-text, #1f2937);
+  line-height: 1.6;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.rescateDfMapLink {
+  margin-left: 1rem;
+  color: var(--color-primary, #667eea);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.rescateDfMapLink:hover {
+  color: var(--color-accent, #764ba2);
+  text-decoration: underline;
+}
+
+/* Metadata */
+.rescateDfMetadata {
+  background: var(--color-card-bg, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.rescateDfMetadataGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.rescateDfMetadataItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--color-border, #e5e7eb);
+}
+
+.rescateDfMetadataItem:last-child {
+  border-bottom: none;
+}
+
+.rescateDfMetadataLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #6b7280);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.rescateDfMetadataValue {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text, #1f2937);
+  text-align: right;
+}
+
+/* Acciones */
+.rescateDfActions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--form-input-bg, #f9fafb);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  flex-wrap: wrap;
+}
+
+/* Error card */
+.rescateDfErrorCard {
+  text-align: center;
+  padding: 3rem;
+  background: var(--color-card-bg, #ffffff);
+  border-radius: 24px;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.rescateDfErrorCard i {
+  font-size: 4rem;
+  color: var(--color-danger, #ef4444);
+  margin-bottom: 1rem;
+}
+
+.rescateDfErrorCard h3 {
+  margin-bottom: 0.5rem;
+  color: var(--color-text, #1f2937);
+}
+
+.rescateDfErrorCard p {
+  color: var(--color-text-muted, #6b7280);
+  margin-bottom: 1.5rem;
+}
+
+/* Modo oscuro */
+[data-theme="dark"] .rescateDfMetadata {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .rescateDfMetadataLabel {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .rescateDfMetadataValue {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .rescateDfMetadataItem {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rescateDfContainer {
+    padding: 1rem;
+  }
+  
+  .rescateDfActions {
+    flex-direction: column;
+  }
+  
+  .rescateDfActions button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .rescateDfMetadataGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .rescateDfMetadataItem {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .rescateDfMetadataValue {
+    text-align: right;
+  }
+  
+  .rescateDfGaleriaGrid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .rescateDfInfoGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .rescateDfInfoGroup label {
+    font-size: 0.7rem;
+  }
+  
+  .rescateDfInfoGroup p {
+    font-size: 0.85rem;
+  }
+  
+  .rescateDfMapLink {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rescateDfHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .rescateDfBadges {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

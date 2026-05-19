@@ -1,11 +1,5 @@
 /* src/pages/public/ReportarRescate/ReportarRescate.css */
 
-/* ============================================
-   ESTILOS EXCLUSIVOS PARA ReportarRescate
-   - TODOS los estilos bajo .rescate-page o .rescate-form
-   - No afecta a otras páginas
-   ============================================ */
-
 /* Contenedor principal */
 .rescate-page {
   min-height: calc(100vh - var(--navbar-height, 70px));
@@ -21,7 +15,7 @@
   margin: 0 auto;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .rescate-page .rescate-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -44,7 +38,7 @@
   font-size: 1rem;
 }
 
-/* ===== FORMULARIO ===== */
+/* FORMULARIO */
 .rescate-page .rescate-form {
   background: var(--form-bg);
   border-radius: 32px;
@@ -88,7 +82,7 @@
   color: var(--form-text);
 }
 
-/* ===== LABELS ===== */
+/* LABELS */
 .rescate-page .rescate-form .form-label {
   display: block;
   margin-bottom: 0.5rem;
@@ -102,7 +96,7 @@
   color: var(--color-primary);
 }
 
-/* ===== INPUTS ===== */
+/* INPUTS base */
 .rescate-page .rescate-form input,
 .rescate-page .rescate-form textarea,
 .rescate-page .rescate-form select {
@@ -110,28 +104,7 @@
   margin-bottom: 0.5rem;
 }
 
-/* ===== DATE PICKER - CLICKEABLE Y VISIBLE ===== */
-.rescate-page .rescate-form input[type="date"] {
-  position: relative;
-  cursor: pointer;
-}
-
-.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator {
-  background-color: var(--color-primary);
-  padding: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-  opacity: 1;
-  width: 20px;
-  height: 20px;
-}
-
-.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  background-color: var(--color-primary-dark);
-  transform: scale(1.05);
-}
-
-/* ===== BOTONES DE PRIORIDAD ===== */
+/* BOTONES DE PRIORIDAD */
 .rescate-page .rescate-form .prioridad-buttons-container {
   margin-bottom: 1rem;
 }
@@ -178,7 +151,7 @@
   transform: translateY(-2px);
 }
 
-/* ===== ESTADOS ACTIVOS MODO CLARO ===== */
+/* ESTADOS ACTIVOS */
 .rescate-page .rescate-form .prioridad-btn.urgente.active {
   border-color: #dc2626;
   background: #fef2f2;
@@ -199,14 +172,14 @@
   background: #f0fdf4;
 }
 
-/* ===== TEXTO NEGRO EN BOTONES ACTIVOS (AMBOS MODOS) ===== */
+/* Texto negro en botones activos */
 .rescate-page .rescate-form .prioridad-btn.active span,
 .rescate-page .rescate-form .prioridad-btn.active small,
 .rescate-page .rescate-form .prioridad-btn.active i {
   color: #000000 !important;
 }
 
-/* ===== TARJETA DE PRIORIDAD ===== */
+/* TARJETA DE PRIORIDAD */
 .rescate-page .rescate-form .prioridad-card {
   border-radius: 20px;
   padding: 1.2rem;
@@ -264,12 +237,12 @@
   color: var(--form-text);
 }
 
-/* ===== UBICACIÓN ===== */
+/* UBICACIÓN */
 .rescate-page .rescate-form .location-controls {
   margin-bottom: 1rem;
 }
 
-/* ===== HINTS ===== */
+/* HINTS */
 .rescate-page .rescate-form .form-hint {
   display: block;
   margin-top: 0.75rem;
@@ -281,7 +254,7 @@
   margin-right: 0.25rem;
 }
 
-/* ===== ERRORES ===== */
+/* ERRORES */
 .rescate-page .rescate-form .error-text {
   color: var(--color-danger);
   font-size: 0.75rem;
@@ -304,7 +277,7 @@
   color: var(--color-danger);
 }
 
-/* ===== BOTONES DE ACCIÓN ===== */
+/* BOTONES DE ACCIÓN */
 .rescate-page .rescate-form .form-actions {
   display: flex;
   gap: 1rem;
@@ -318,19 +291,18 @@
   min-width: 140px;
 }
 
-/* Botón cancelar */
 .rescate-page .rescate-form .btn-cancelar-rescate {
-  background: #f1f5f9 !important;
-  color: #475569 !important;
-  border: 1px solid #e2e8f0 !important;
+  background: #e9171750 !important;
+  color: #df0909 !important;
+  border: 1px solid #df0909 !important;
 }
 
 .rescate-page .rescate-form .btn-cancelar-rescate:hover {
-  background: #e2e8f0 !important;
-  color: #1e293b !important;
+  background: red !important;
+  color: white !important;
 }
 
-/* ===== PÁGINA DE ÉXITO ===== */
+/* PÁGINA DE ÉXITO */
 .rescate-success {
   min-height: calc(100vh - var(--navbar-height, 70px));
   display: flex;
@@ -366,13 +338,12 @@
   margin-bottom: 2rem;
 }
 
-/* Estados específicos de éxito */
 .rescate-success .success-card.waiting i {
-  color: #f59e0b; /* Naranja para esperando */
+  color: #f59e0b;
 }
 
 .rescate-success .success-card.available i {
-  color: #3b82f6; /* Azul para disponible */
+  color: #3b82f6;
 }
 
 .rescate-success .success-card.waiting .timer-info {
@@ -412,20 +383,7 @@
   min-width: 140px;
 }
 
-/* ===== MODO OSCURO ===== */
-
-.rescate-page .rescate-form input[type="date"]::-webkit-calendar-picker-indicator {
-  background-color: VAR(--color-primary) !important; /* Color morado */
-  padding: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-  opacity: 1;
-  width: 20px;
-  height: 20px;
-  filter: none !important; /* Elimina cualquier filtro que pueda cambiar el color */
-}
-
-/* Botones de prioridad activos modo oscuro - fondos más claros */
+/* MODO OSCURO */
 [data-theme="dark"] .rescate-page .rescate-form .prioridad-btn.urgente.active {
   background: #ffc9c9 !important;
   border-color: #dc2626 !important;
@@ -446,7 +404,6 @@
   border-color: #16a34a !important;
 }
 
-/* Tarjeta de prioridad modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .prioridad-card {
   background-color: #0f172a !important;
 }
@@ -457,26 +414,24 @@
   color: #e2e8f0 !important;
 }
 
-/* Alertas modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .alert-error {
   background: #450a0a;
   border-color: #7f1d1d;
   color: #fecaca !important;
 }
 
-/* Botón cancelar modo oscuro */
 [data-theme="dark"] .rescate-page .rescate-form .btn-cancelar-rescate {
-  background: #334155 !important;
-  border-color: #475569 !important;
-  color: #e2e8f0 !important;
+  background: #e9171750 !important;
+  color: white !important;
+  border: 1px solid #df0909 !important;
 }
 
 [data-theme="dark"] .rescate-page .rescate-form .btn-cancelar-rescate:hover {
-  background: #475569 !important;
+  background: #df0909 !important;
   color: #ffffff !important;
 }
 
-/* ===== RESPONSIVE ===== */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .rescate-page {
     padding: 1rem;
@@ -515,9 +470,4 @@
   .rescate-page .rescate-form .prioridad-buttons {
     grid-template-columns: 1fr;
   }
-}
-
-/* ===== IMAGE UPLOADER ===== */
-.image-uploader > label.image-uploader-label {
-  display: none;
 }

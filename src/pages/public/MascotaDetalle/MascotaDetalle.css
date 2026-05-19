@@ -8,14 +8,14 @@
 
 .mascota-detalle-page {
   min-height: 100vh;
-  background: transparent; /* Fondo transparente */
-  padding: 40px 0 80px 0;
+  background: transparent;
+  padding: 2rem 0 4rem 0;
 }
 
 .mascota-detalle-page .detalle-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
 }
 
 /* Botón volver */
@@ -26,48 +26,47 @@
   gap: 8px !important;
   background: var(--gradient-primary) !important;
   border: none !important;
-  border-radius: var(--radius-2xl) !important;
+  border-radius: 50px !important;
   padding: 10px 24px !important;
-  margin-bottom: 30px !important;
+  margin-bottom: 24px !important;
   cursor: pointer !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
   color: white !important;
-  transition: var(--transition) !important;
-  box-shadow: var(--shadow-accent) !important;
+  transition: all 0.3s ease !important;
   width: auto !important;
   min-width: 110px !important;
 }
 
 .mascota-detalle-page .btn-back:hover {
   transform: translateX(-4px) !important;
-  filter: brightness(0.95) !important;
-  box-shadow: var(--shadow-lg) !important;
+  filter: brightness(1.05) !important;
 }
 
-/* Grid principal */
+/* Layout principal - vertical (imágenes arriba, info debajo) */
 .mascota-detalle-page .detalle-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
+  border-radius: 24px;
   overflow: hidden;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--color-border);
 }
 
-/* Columnas */
+/* Columna izquierda - Galería de imágenes (ahora arriba) */
 .mascota-detalle-page .detalle-gallery {
-  padding: 28px;
+  padding: 1.5rem;
+  background: var(--form-input-bg);
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  background: var(--form-input-bg);
+  gap: 1.5rem;
 }
 
+/* Columna derecha - Información (ahora debajo) */
 .mascota-detalle-page .detalle-info {
-  padding: 32px;
+  padding: 1.5rem 2rem 2rem 2rem;
   background: var(--color-card-bg);
 }
 
@@ -77,24 +76,25 @@
 }
 
 .mascota-detalle-page .mascota-estado-badge-custom {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 14px 24px;
-  border-radius: 60px;
-  width: 100%;
+  padding: 10px 20px;
+  border-radius: 50px;
+  width: auto;
+  min-width: 160px;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-weight: 700;
 }
 
 .mascota-detalle-page .mascota-estado-badge-custom span {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .mascota-detalle-page .mascota-estado-badge-custom i {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .mascota-detalle-page .mascota-estado-badge-custom.adopcion {
@@ -116,19 +116,20 @@
 .mascota-detalle-page .botones-accion {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
   margin-top: 8px;
 }
 
 .mascota-detalle-page .btn-adoptar,
 .mascota-detalle-page .btn-acogida {
-  width: 100%;
+  width: 300px;
   padding: 14px;
-  border-radius: 60px;
+  border-radius: 50px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   border: none;
   display: flex;
   align-items: center;
@@ -142,26 +143,30 @@
 }
 
 .mascota-detalle-page .btn-adoptar:hover {
-  background: #d9770633;
-  color: #d97706;
-  border: 2px solid #d97706 ;
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
+  background: #d977063d;
+  color: white;
+  border: 2px solid #d97706;
 }
 
 .mascota-detalle-page .btn-acogida {
-  background: var(--color-primary);
+  background: var(--gradient-primary);
   color: white;
 }
 
 .mascota-detalle-page .btn-acogida:hover {
-  background: var(--color-primary-dark);
   transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .mascota-detalle-page .mensaje-adoptado {
   text-align: center;
   padding: 20px;
   background: #f0fdf4;
-  border-radius: var(--radius-xl);
+  border-radius: 16px;
   color: #166534;
   border: 1px solid #bbf7d0;
 }
@@ -174,7 +179,7 @@
 
 /* Razas */
 .mascota-detalle-page .razas-section {
-  margin: 24px 0;
+  margin: 20px 0;
   padding: 16px 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -203,10 +208,10 @@
 .mascota-detalle-page .raza-tag {
   background: var(--form-input-bg);
   color: var(--color-primary);
-  padding: 4px 12px;
-  border-radius: var(--radius-2xl);
+  padding: 6px 14px;
+  border-radius: 50px;
   border: 1px solid var(--color-border);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
 }
 
@@ -215,7 +220,7 @@
   text-align: center;
   padding: 60px 32px;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
+  border-radius: 24px;
   max-width: 500px;
   margin: 40px auto;
   box-shadow: var(--shadow-lg);
@@ -246,10 +251,10 @@
   color: white;
   border: none;
   padding: 12px 28px;
-  border-radius: var(--radius-round);
+  border-radius: 50px;
   cursor: pointer;
   font-weight: 600;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .mascota-detalle-page .btn-volver:hover {
@@ -257,44 +262,61 @@
   box-shadow: var(--shadow-md);
 }
 
+/* Loading container */
+.mascota-detalle-page .loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
 /* ============================================
    RESPONSIVE
    ============================================ */
 
 @media (max-width: 968px) {
-  .mascota-detalle-page .detalle-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-  
   .mascota-detalle-page .detalle-container {
     padding: 0 16px;
   }
   
   .mascota-detalle-page .detalle-gallery,
   .mascota-detalle-page .detalle-info {
-    padding: 20px;
+    padding: 1.25rem;
   }
 }
 
 @media (max-width: 768px) {
+  .mascota-detalle-page {
+    padding: 1rem 0 2rem 0;
+  }
+  
   .mascota-detalle-page .btn-back {
     padding: 8px 20px;
     font-size: 0.85rem;
+    margin-bottom: 16px;
   }
   
   .mascota-detalle-page .detalle-gallery {
-    padding: 16px;
+    padding: 1rem;
   }
   
   .mascota-detalle-page .detalle-info {
-    padding: 20px;
+    padding: 1.25rem;
+  }
+  
+  .mascota-detalle-page .mascota-estado-badge-custom {
+    padding: 8px 16px;
+    min-width: 140px;
+  }
+  
+  .mascota-detalle-page .mascota-estado-badge-custom span {
+    font-size: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
   .mascota-detalle-page .detalle-info {
-    padding: 16px;
+    padding: 1rem;
   }
   
   .mascota-detalle-page .btn-adoptar,
@@ -304,20 +326,22 @@
   }
   
   .mascota-detalle-page .mascota-estado-badge-custom {
-    padding: 10px 16px;
+    padding: 6px 12px;
+    min-width: 120px;
   }
   
-  .mascota-detalle-page .mascota-estado-badge-custom span {
-    font-size: 0.85rem;
+  .mascota-detalle-page .raza-tag {
+    padding: 4px 10px;
+    font-size: 0.7rem;
   }
 }
 
 /* ============================================
-   MODO OSCURO - Fondo transparente también
+   MODO OSCURO
    ============================================ */
 
 [data-theme="dark"] .mascota-detalle-page {
-  background: transparent; /* También transparente en modo oscuro */
+  background: transparent;
 }
 
 [data-theme="dark"] .mascota-detalle-page .detalle-grid {

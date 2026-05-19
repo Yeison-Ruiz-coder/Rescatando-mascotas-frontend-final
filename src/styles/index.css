@@ -1,7 +1,3 @@
-/* ============================================
-   IMPORTADOR DE ESTILOS PRINCIPAL
-   ============================================ */
-
 @import './variables.css';
 @import './reset.css';
 @import './layout.css';
@@ -17,3 +13,5 @@
 @import './decorations/paws.css';
 @import './components/status-badges.css';
 @import './utilities.css';
+@import './components/date-select-global.css'
+

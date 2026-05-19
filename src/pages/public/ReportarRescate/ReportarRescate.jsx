@@ -1,6 +1,8 @@
 // src/pages/public/ReportarRescate/ReportarRescate.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Input from "../../../components/common/Input/Input";
 import Textarea from "../../../components/common/Textarea/Textarea";
 import Button from "../../../components/common/Button/Button";
@@ -11,16 +13,17 @@ import "./ReportarRescate.css";
 
 const ReportarRescate = () => {
   const navigate = useNavigate();
+  
+  const [fechaRescateDate, setFechaRescateDate] = useState(null);
 
   const {
     formData,
     errors,
     loading,
     submitSuccess,
-    waitingForAdmin,              // ✅ Cambiado
-    timeUntilAdminAvailable,      // ✅ Cambiado
-    rescateDisponibleParaAdmin,   // ✅ Cambiado
-    rescateId,                    // ✅ Nuevo (opcional)
+    waitingForAdmin,
+    timeUntilAdminAvailable,
+    rescateDisponibleParaAdmin,
     prioridad,
     fotosPreviews,
     fotosFiles,
@@ -30,7 +33,6 @@ const ReportarRescate = () => {
     getCurrentLocation,
     setPrioridadManual,
     handleSubmit,
-    resetForm,
     handleFotosChange,
     prioridadConfig,
     prioridadTexto,
@@ -39,7 +41,22 @@ const ReportarRescate = () => {
     t,
   } = useRescate();
 
-  // Tarjeta de prioridad
+  useEffect(() => {
+    if (formData.fecha_rescate) {
+      setFechaRescateDate(new Date(formData.fecha_rescate));
+    }
+  }, [formData.fecha_rescate]);
+
+  const handleDateChange = (date) => {
+    setFechaRescateDate(date);
+    handleChange({
+      target: {
+        name: "fecha_rescate",
+        value: date ? date.toISOString().split("T")[0] : ""
+      }
+    });
+  };
+
   const renderPrioridadCard = () => {
     if (!prioridad) return null;
 
@@ -74,7 +91,6 @@ const ReportarRescate = () => {
     );
   };
 
-  // Botones de prioridad
   const renderPrioridadButtons = () => (
     <div className="prioridad-buttons-container">
       <label className="form-label">
@@ -108,36 +124,16 @@ const ReportarRescate = () => {
         <div className="rescate-success">
           <div className="success-card waiting">
             <i className="fas fa-clock" />
-            <h2>
-              {t("rescate_enviado_title", {
-                defaultValue: "¡Rescate reportado exitosamente!",
-              })}
-            </h2>
-            <p>
-              {t("rescate_enviado_message", {
-                defaultValue:
-                  "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
-              })}
-            </p>
-
+            <h2>{t("rescate_enviado_title")}</h2>
+            <p>{t("rescate_enviado_message")}</p>
             <div className="timer-info">
               <i className="fas fa-hourglass-half" />
-              <span>
-                {t("admin_waiting_time", {
-                  defaultValue: "Tiempo para intervención de administradores:",
-                })}{" "}
-                {formatTimeRemaining(timeUntilAdminAvailable)}
-              </span>
+              <span>{t("admin_waiting_time")} {formatTimeRemaining(timeUntilAdminAvailable)}</span>
             </div>
-
             <p className="info-text">
               <i className="fas fa-info-circle" />
-              {t("admin_info", {
-                defaultValue:
-                  "Si ninguna fundación o veterinaria responde en 30 minutos, los administradores podrán ver y gestionar este rescate.",
-              })}
+              {t("admin_info")}
             </p>
-
             <Button onClick={() => navigate("/")} variant="secondary">
               <i className="fas fa-home" /> {t("back_home")}
             </Button>
@@ -151,22 +147,10 @@ const ReportarRescate = () => {
         <div className="rescate-success">
           <div className="success-card available">
             <i className="fas fa-users" />
-            <h2>
-              {t("available_title", {
-                defaultValue: "Rescate disponible para administradores",
-              })}
-            </h2>
-            <p>
-              {t("available_message", {
-                defaultValue:
-                  "Ha pasado el tiempo de espera. Ahora los administradores pueden ver y gestionar este rescate.",
-              })}
-            </p>
+            <h2>{t("available_title")}</h2>
+            <p>{t("available_message")}</p>
             <div className="available-actions">
-              <Button
-                onClick={() => navigate("/")}
-                variant="primary"
-              >
+              <Button onClick={() => navigate("/")} variant="primary">
                 <i className="fas fa-home" /> {t("back_home")}
               </Button>
             </div>
@@ -206,11 +190,11 @@ const ReportarRescate = () => {
             </div>
           )}
 
-          {/* ===== SECCIÓN 1: INFORMACIÓN DEL RESCATE ===== */}
+          {/* SECCIÓN 1: INFORMACIÓN DEL RESCATE */}
           <div className="form-section">
             <div className="section-header">
               <i className="fas fa-info-circle" />
-              <h3>{t("rescue_info_section") || "Información del rescate"}</h3>
+              <h3>{t("rescue_info_section")}</h3>
             </div>
 
             <Input
@@ -234,32 +218,45 @@ const ReportarRescate = () => {
               rows={5}
             />
 
-            <Input
-              label={t("fecha_label")}
-              name="fecha_rescate"
-              type="date"
-              value={formData.fecha_rescate}
-              onChange={handleChange}
-              error={errors.fecha_rescate}
-              required
-            />
+            {/* DATEPICKER CON ESTILOS GLOBALES */}
+            <div className="datepicker-wrapper">
+              <label className="form-label">
+                <i className="fas fa-calendar-alt" /> {t("fecha_label")}
+                <span className="required">*</span>
+              </label>
+              <DatePicker
+                selected={fechaRescateDate}
+                onChange={handleDateChange}
+                dateFormat="dd/MM/yyyy"
+                placeholderText="Selecciona la fecha del rescate"
+                className="datepicker-input"
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                locale="es"
+                required
+              />
+              {errors.fecha_rescate && (
+                <div className="error-text">{errors.fecha_rescate}</div>
+              )}
+            </div>
           </div>
 
-          {/* ===== SECCIÓN 2: PRIORIDAD ===== */}
+          {/* SECCIÓN 2: PRIORIDAD */}
           <div className="form-section">
             <div className="section-header">
               <i className="fas fa-exclamation-triangle" />
-              <h3>{t("priority_section") || "Clasificación de prioridad"}</h3>
+              <h3>{t("priority_section")}</h3>
             </div>
             {renderPrioridadButtons()}
             {renderPrioridadCard()}
           </div>
 
-          {/* ===== SECCIÓN 3: UBICACIÓN ===== */}
+          {/* SECCIÓN 3: UBICACIÓN */}
           <div className="form-section">
             <div className="section-header">
               <i className="fas fa-map-marker-alt" />
-              <h3>{t("location_section") || "Ubicación del rescate"}</h3>
+              <h3>{t("location_section")}</h3>
             </div>
 
             <div className="location-controls">
@@ -290,7 +287,7 @@ const ReportarRescate = () => {
             </small>
           </div>
 
-          {/* ===== SECCIÓN 4: FOTOS ===== */}
+          {/* SECCIÓN 4: FOTOS */}
           <div className="form-section">
             <div className="section-header">
               <i className="fas fa-camera" />
@@ -317,7 +314,7 @@ const ReportarRescate = () => {
             </small>
           </div>
 
-          {/* ===== SECCIÓN 5: DATOS DEL REPORTANTE ===== */}
+          {/* SECCIÓN 5: DATOS DEL REPORTANTE */}
           <div className="form-section">
             <div className="section-header">
               <i className="fas fa-user-edit" />
@@ -351,14 +348,10 @@ const ReportarRescate = () => {
             />
           </div>
 
-          {/* ===== BOTONES DE ACCIÓN ===== */}
+          {/* BOTONES DE ACCIÓN */}
           <div className="form-actions">
             <Button type="submit" variant="primary" disabled={loading}>
-              {loading ? (
-                <i className="fas fa-spinner fa-spin" />
-              ) : (
-                <i className="fas fa-paw" />
-              )}
+              {loading ? <i className="fas fa-spinner fa-spin" /> : <i className="fas fa-paw" />}
               {loading ? ` ${t("sending")}` : ` ${t("submit_btn")}`}
             </Button>
             <Button

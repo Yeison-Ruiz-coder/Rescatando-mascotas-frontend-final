@@ -1,6 +1,7 @@
 /* src/components/common/Mascotas/GaleriaImagenes.css */
 /* ============================================
    GALERIA DE IMAGENES - COMPONENTE
+   Estilo similar a la versión de fundación
    ============================================ */
 
 .galeria-container {
@@ -9,17 +10,18 @@
   gap: 1rem;
 }
 
-/* Imagen principal */
+/* Imagen principal - Estilo fundación */
 .galeria-container .imagen-principal {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 16/9 !important;
+  max-height: 400px !important;
   background: var(--form-input-bg);
-  border-radius: var(--radius-xl);
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   border: 2px solid var(--color-border);
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .galeria-container .imagen-principal:hover {
@@ -30,7 +32,8 @@
 .galeria-container .imagen-principal img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--color-border);
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -38,23 +41,25 @@
   transform: scale(1.02);
 }
 
+/* Indicador de galería */
 .galeria-container .indicador-galeria {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: 12px;
+  right: 12px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   color: white;
-  padding: 6px 12px;
-  border-radius: var(--radius-round);
-  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
   font-weight: 500;
+  z-index: 2;
 }
 
-/* Miniaturas */
+/* Miniaturas - Estilo fundación */
 .galeria-container .miniaturas {
   display: flex;
-  gap: 12px;
+  gap: 0.75rem;
   overflow-x: auto;
   padding: 8px 0;
   scrollbar-width: thin;
@@ -78,11 +83,11 @@
   flex-shrink: 0;
   width: 80px;
   height: 80px;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   background: var(--form-input-bg);
 }
 
@@ -127,7 +132,7 @@
   max-width: 100%;
   max-height: 85vh;
   object-fit: contain;
-  border-radius: var(--radius-xl);
+  border-radius: 16px;
 }
 
 .galeria-container .modal-close {
@@ -158,7 +163,7 @@
   border: none;
   color: white;
   padding: 10px 24px;
-  border-radius: var(--radius-round);
+  border-radius: 50px;
   cursor: pointer;
   transition: var(--transition);
   font-weight: 500;
@@ -175,20 +180,30 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
+/* Responsive */
 @media (max-width: 768px) {
+  .galeria-container .imagen-principal {
+    aspect-ratio: 1/1 !important;
+    max-height: 350px !important;
+  }
+  
   .galeria-container .miniatura {
     width: 60px;
     height: 60px;
   }
-  
+
   .galeria-container .modal-nav {
     gap: 12px;
   }
-  
+
   .galeria-container .nav-btn {
     padding: 8px 16px;
     font-size: 0.85rem;
@@ -196,8 +211,20 @@
 }
 
 @media (max-width: 480px) {
+  .galeria-container .imagen-principal {
+    aspect-ratio: 4/3 !important;
+    max-height: 280px !important;
+  }
+  
   .galeria-container .miniatura {
     width: 50px;
     height: 50px;
+  }
+  
+  .galeria-container .indicador-galeria {
+    bottom: 8px;
+    right: 8px;
+    padding: 3px 8px;
+    font-size: 0.65rem;
   }
 }

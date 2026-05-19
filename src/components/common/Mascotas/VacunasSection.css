@@ -22,28 +22,31 @@
 }
 
 .vacunas-section-compact .vacunas-header i {
-  font-size: 1.25rem;
+  font-size: 1.5rem; /* Aumentado de 1.25rem */
   color: var(--color-primary);
-  width: 32px;
+  width: 40px; /* Aumentado de 32px */
 }
 
 .vacunas-section-compact .vacunas-header div {
   flex: 1;
 }
 
+/* TÍTULO "VACUNAS" - MÁS GRANDE Y VISIBLE */
 .vacunas-section-compact .vacunas-header small {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.85rem; /* Aumentado de 0.65rem */
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--color-text-muted);
-  margin-bottom: 4px;
+  letter-spacing: 1px; /* Aumentado */
+  color: var(--color-primary) !important;
+  font-weight: 700; /* Añadido negrita */
+  margin-bottom: 6px;
 }
 
+/* NÚMERO DE VACUNAS - MÁS GRANDE */
 .vacunas-section-compact .vacunas-header strong {
-  font-size: 0.9rem;
+  font-size: 1rem; /* Aumentado de 0.9rem */
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .vacunas-section-compact .vacunas-lista {
@@ -125,6 +128,14 @@
 @media (max-width: 768px) {
   .vacunas-section-compact {
     padding: 12px;
+  }
+  
+  .vacunas-section-compact .vacunas-header small {
+    font-size: 0.75rem;
+  }
+  
+  .vacunas-section-compact .vacunas-header strong {
+    font-size: 0.9rem;
   }
   
   .vacunas-section-compact .vacuna-card {

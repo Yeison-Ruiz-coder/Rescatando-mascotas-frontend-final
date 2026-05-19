@@ -1,32 +1,30 @@
-// src/components/common/ImageUploader/ImageUploader.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './ImageUploader.css';
 
 const ImageUploader = ({ 
   label, 
+  labelKey,
   name, 
   onImageChange,
-  // Modo múltiple (NUEVO)
   multiple = false,
   maxFiles = 10,
   currentImages = [],
-  // Modo single (existente)
   currentImage = null,
   required = false,
-  maxSize = 2, // MB
+  maxSize = 2,
   acceptedFormats = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif']
 }) => {
-  // Estado para modo múltiple
+  const { t } = useTranslation(['nuevaMascota', 'common']);
   const [previews, setPreviews] = useState(currentImages);
   const [files, setFiles] = useState([]);
-  
-  // Estado para modo single (mantiene compatibilidad)
   const [preview, setPreview] = useState(currentImage);
   const [error, setError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Efecto para sincronizar cuando cambian las props
+  const displayLabel = labelKey ? t(labelKey, label) : label;
+
   useEffect(() => {
     if (multiple) {
       setPreviews(currentImages);
@@ -37,17 +35,16 @@ const ImageUploader = ({
 
   const validateFile = (file) => {
     if (!acceptedFormats.includes(file.type)) {
-      setError(`Formato no válido. Formatos permitidos: ${acceptedFormats.map(f => f.split('/')[1]).join(', ')}`);
+      setError(t('common:invalid_file_format', `Formato no válido. Formatos permitidos: ${acceptedFormats.map(f => f.split('/')[1]).join(', ')}`));
       return false;
     }
     if (file.size > maxSize * 1024 * 1024) {
-      setError(`El archivo no debe superar los ${maxSize}MB`);
+      setError(t('nuevaMascota:mensajes.imagen_muy_grande', 'La imagen no puede superar los {{maxSize}}MB', { maxSize }));
       return false;
     }
     return true;
   };
 
-  // Manejador para múltiples archivos
   const handleMultipleFiles = (newFiles) => {
     setError('');
     const fileArray = Array.from(newFiles);
@@ -58,7 +55,7 @@ const ImageUploader = ({
       if (!validateFile(file)) continue;
       
       if (files.length + validFiles.length >= maxFiles) {
-        setError(`Máximo ${maxFiles} imágenes permitidas`);
+        setError(t('common:max_files', `Máximo {{maxFiles}} imágenes permitidas`, { maxFiles }));
         break;
       }
 
@@ -82,24 +79,18 @@ const ImageUploader = ({
       
       setPreviews(updatedPreviews);
       setFiles(updatedFiles);
-      
-      // Callback con el formato esperado
       onImageChange(updatedFiles, updatedPreviews);
     });
   };
 
-  // Manejador para archivo único (comportamiento original)
   const handleSingleFile = (file) => {
     setError('');
-    
     if (!file) return;
-    
     if (!validateFile(file)) return;
     
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreview(reader.result);
-      // Mantiene compatibilidad con la API original
       onImageChange(file, reader.result);
     };
     reader.readAsDataURL(file);
@@ -116,7 +107,6 @@ const ImageUploader = ({
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    
     if (multiple) {
       handleMultipleFiles(e.dataTransfer.files);
     } else {
@@ -133,20 +123,16 @@ const ImageUploader = ({
     setIsDragging(false);
   };
 
-  // Remover imagen en modo múltiple
   const removeMultipleImage = (index) => {
     const newPreviews = [...previews];
     const newFiles = [...files];
-    
     newPreviews.splice(index, 1);
     newFiles.splice(index, 1);
-    
     setPreviews(newPreviews);
     setFiles(newFiles);
     onImageChange(newFiles, newPreviews);
   };
 
-  // Remover imagen en modo single
   const removeSingleImage = () => {
     setPreview(null);
     setError('');
@@ -158,7 +144,6 @@ const ImageUploader = ({
 
   const removeImage = multiple ? removeMultipleImage : removeSingleImage;
 
-  // Renderizar previews según el modo
   const renderPreviews = () => {
     if (multiple && previews.length > 0) {
       return (
@@ -203,10 +188,11 @@ const ImageUploader = ({
     return (
       <div className="upload-placeholder">
         <i className="fas fa-cloud-upload-alt"></i>
-        <p>Haz clic o arrastra {multiple ? 'imágenes' : 'una imagen'} aquí</p>
+        <p>{multiple ? t('common:click_or_drag_images', 'Haz clic o arrastra imágenes aquí') : t('common:click_or_drag_image', 'Haz clic o arrastra una imagen aquí')}</p>
         <small>
-          {multiple ? `Máximo ${maxFiles} imágenes - ` : ''}
-          Máximo {maxSize}MB cada una - {acceptedFormats.map(f => f.split('/')[1]).join(', ')}
+          {multiple ? t('common:max_images', `Máximo {{maxFiles}} imágenes - `, { maxFiles }) : ''}
+          {t('common:max_size_each', `Máximo {{maxSize}}MB cada una - `, { maxSize })}
+          {acceptedFormats.map(f => f.split('/')[1]).join(', ')}
         </small>
       </div>
     );
@@ -214,10 +200,9 @@ const ImageUploader = ({
 
   return (
     <div className="image-uploader">
-      {label && (
+      {displayLabel && (
         <label className="image-uploader-label">
-          {label} {required && <span className="required">*</span>}
-          
+          {displayLabel} {required && <span className="required">*</span>}
         </label>
       )}
       

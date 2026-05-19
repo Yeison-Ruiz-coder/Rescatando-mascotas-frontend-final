@@ -1,0 +1,356 @@
+/* src/pages/public/Eventos/EventosShow.css */
+
+/* ============================================
+   PÚBLICO - DETALLE DE EVENTO
+   ============================================ */
+
+.public-eventos-show-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 2rem;
+  background: transparent;
+}
+
+.public-eventos-show-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== BARRA DE ACCIONES ===== */
+.public-eventos-show-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.public-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-fast);
+}
+
+.public-btn-back:hover {
+  background: var(--gradient-primary);
+  color: white;
+  transform: translateX(-4px);
+}
+
+/* ===== CARD PRINCIPAL ===== */
+.public-eventos-show-card {
+  background: var(--color-card-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===== IMAGEN ===== */
+.public-show-image {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  overflow: hidden;
+  background: var(--gradient-primary);
+  position: relative;
+}
+
+.public-show-image img {
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  background: var(--color-light);
+  display: block;
+}
+
+/* ===== CONTENIDO ===== */
+.public-show-content {
+  padding: 2rem;
+}
+
+/* Header */
+.public-show-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.public-show-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.public-evento-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.public-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  background: var(--form-input-bg);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-lg);
+}
+
+.public-stat svg {
+  color: var(--color-primary);
+}
+
+/* Badge */
+.public-evento-badge {
+  margin-bottom: 1.5rem;
+}
+
+.public-badge-admin {
+  display: inline-block;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.35rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.public-badge-fundacion {
+  display: inline-block;
+  background: var(--gradient-accent);
+  color: white;
+  padding: 0.35rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Grid de información */
+.public-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  background: var(--color-hover);
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  margin-bottom: 1.5rem;
+}
+
+.public-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.public-info-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.public-info-item strong {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.public-info-item p {
+  margin: 0;
+  font-weight: 500;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+/* Descripción */
+.public-description-section {
+  margin-bottom: 1.5rem;
+}
+
+.public-description-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.public-description-section h3 svg {
+  color: var(--color-primary);
+}
+
+.public-description-section p {
+  background: var(--form-input-bg);
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  border-left: 4px solid var(--color-primary);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* Botón asistencia */
+.public-asistencia-section {
+  background: var(--color-hover);
+  padding: 1.5rem;
+  border-radius: var(--radius-xl);
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.public-btn-asistir {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.public-btn-asistir.confirmed {
+  background: var(--color-heart);
+}
+
+.public-btn-asistir:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.public-btn-asistir:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.public-total-asistentes {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Footer */
+.public-show-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.public-show-footer svg {
+  color: var(--color-primary);
+}
+
+/* Loading */
+.public-eventos-show-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .public-show-image {
+  background: var(--gradient-primary);
+}
+
+[data-theme="dark"] .public-stat {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .public-description-section p,
+[data-theme="dark"] .public-info-grid {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .public-eventos-show-container {
+    padding: 1rem;
+  }
+  
+  .public-show-content {
+    padding: 1.25rem;
+  }
+  
+  .public-show-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .public-show-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .public-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .public-show-image {
+    max-height: 250px;
+  }
+  
+  .public-show-image img {
+    max-height: 250px;
+  }
+  
+  .public-show-content {
+    padding: 1rem;
+  }
+  
+  .public-info-grid {
+    padding: 1rem;
+  }
+  
+  .public-description-section p {
+    padding: 1rem;
+  }
+  
+  .public-btn-asistir {
+    width: 100%;
+    padding: 0.75rem;
+  }
+}
