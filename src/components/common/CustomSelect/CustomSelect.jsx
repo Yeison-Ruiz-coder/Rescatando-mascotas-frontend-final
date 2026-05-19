@@ -1,5 +1,5 @@
-// src/components/common/CustomSelect/CustomSelect.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './CustomSelect.css';
 
 const CustomSelect = ({ 
@@ -7,9 +7,10 @@ const CustomSelect = ({
   value = '', 
   onChange, 
   name,
-  placeholder = 'Seleccionar...',
+  placeholder,
   label = ''
 }) => {
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
 
@@ -39,7 +40,7 @@ const CustomSelect = ({
           onClick={() => setIsOpen(!isOpen)}
         >
           <span className="custom-select-value">
-            {selectedOption ? selectedOption.label : placeholder}
+            {selectedOption ? selectedOption.label : (placeholder || t('select', 'Seleccionar...'))}
           </span>
           <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
         </div>

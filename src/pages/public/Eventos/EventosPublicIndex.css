@@ -1,0 +1,395 @@
+/* src/pages/public/Eventos/EventosIndex.css */
+
+/* ============================================
+   PÚBLICO - LISTA DE EVENTOS
+   ============================================ */
+
+.public-eventos-page {
+  min-height: calc(100vh - var(--navbar-height, 70px));
+}
+
+/* ===== HEADER SECTION ===== */
+.public-eventos-header {
+  padding: 60px 0 40px 0;
+  text-align: center;
+  background: transparent;
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.public-eventos-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.public-eventos-header .subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.public-eventos-header .info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* ===== FILTROS SECTION ===== */
+.public-eventos-filtros-section {
+  padding: 10px 0;
+  position: sticky;
+  top: var(--navbar-height, 70px);
+  z-index: 99;
+}
+
+/* ===== RESULTADOS SECTION ===== */
+.public-eventos-resultados-section {
+  padding: 40px 0;
+}
+
+.public-eventos-resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.public-eventos-resultados-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.public-eventos-resultados-count strong {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+
+.public-eventos-resultados-orden {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.public-eventos-resultados-orden label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ===== GRID DE EVENTOS ===== */
+.public-eventos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* ===== ESTADO VACÍO ===== */
+.public-eventos-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem 0;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.public-eventos-empty svg {
+  color: var(--color-primary);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.public-eventos-empty h3 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.public-eventos-empty p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.public-btn-limpiar-empty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  color: var(--color-danger);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.public-btn-limpiar-empty:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ===== ESTADO DE ERROR ===== */
+.public-eventos-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  margin: 2rem auto;
+  max-width: 500px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+.public-eventos-error svg {
+  color: var(--color-danger);
+  margin-bottom: 1rem;
+}
+
+.public-eventos-error h4 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.public-eventos-error p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.public-btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.public-btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== LOADING ===== */
+.public-eventos-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.public-eventos-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== FILTROS MÓVILES ===== */
+.public-btn-filtros-mobile {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  background: var(--form-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--form-text);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.public-btn-filtros-mobile:hover {
+  background: var(--color-hover);
+  border-color: var(--color-primary);
+}
+
+.public-badge-filtros {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: var(--color-danger);
+  border-radius: 50%;
+}
+
+.public-filtros-mobile-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--form-bg);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.public-filtro-input,
+.public-filtro-select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-md);
+  background: var(--form-input-bg);
+  color: var(--form-text);
+  font-size: 0.9rem;
+}
+
+.public-btn-limpiar-mobile {
+  padding: 0.6rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Filtros inline para desktop */
+.public-filtros-inline {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.public-filtro-busqueda {
+  flex: 2;
+}
+
+.public-filtro-categoria {
+  flex: 1;
+}
+
+.public-btn-limpiar-filtros {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.public-btn-limpiar-filtros:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .public-eventos-filtros-section {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme="dark"] .public-eventos-header {
+  border-bottom-color: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .public-eventos-empty,
+[data-theme="dark"] .public-eventos-error {
+  background: var(--color-card-bg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .public-eventos-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .public-eventos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .public-eventos-header {
+    padding: 40px 0 30px 0;
+  }
+  
+  .public-eventos-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .public-eventos-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .public-eventos-filtros-section {
+    top: 60px;
+  }
+  
+  .public-eventos-resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .public-eventos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .public-btn-filtros-mobile {
+    display: flex;
+  }
+  
+  .public-filtros-inline {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .public-eventos-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .public-eventos-resultados-count {
+    font-size: 0.8rem;
+  }
+  
+  .public-eventos-empty {
+    padding: 2rem 1rem;
+  }
+}

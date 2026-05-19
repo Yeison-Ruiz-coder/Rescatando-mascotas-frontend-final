@@ -9,7 +9,16 @@
   "buttons": {
     "submit": "Submit",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "confirm": "Confirm",
+    "clear": "Clear"
   },
   "auth": {
     "email": "Email",
@@ -18,5 +27,31 @@
     "yes_account": "Already have an account?",
     "register_now": "Register here",
     "login_now": "Login here"
-  }
+  },
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "search": "Search...",
+  "filter": "Filter",
+  "clear_filters": "Clear filters",
+  "no_data": "No data available",
+  "no_items": "No items found to display",
+  "select": "Select...",
+  "confirm_title": "Confirm",
+  "deleting": "Deleting...",
+  "click_or_drag_image": "Click or drag an image here",
+  "click_or_drag_images": "Click or drag images here",
+  "max_images": "Maximum {{maxFiles}} images - ",
+  "max_size_each": "Maximum {{maxSize}}MB each - ",
+  "invalid_file_format": "Invalid file format",
+  "max_files": "Maximum {{maxFiles}} images allowed",
+  "no_results": "No results",
+  "theme_toggle": "Toggle theme",
+  "debug": "Debug",
+  "debug_auth": "Debug Auth",
+  "authenticated": "Authenticated",
+  "user": "User",
+  "token_in_localstorage": "Token in localStorage",
+  "no_token": "No token",
+  "user_without_token": "User without token - cleaning..."
 }

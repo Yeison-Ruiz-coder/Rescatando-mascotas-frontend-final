@@ -1,10 +1,9 @@
-// src/components/common/LocationPicker/LocationPicker.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Solución para iconos de Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -12,7 +11,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Componente para capturar clics en el mapa
 function LocationMarker({ position, setPosition, map }) {
   useMapEvents({
     click(e) {
@@ -21,16 +19,15 @@ function LocationMarker({ position, setPosition, map }) {
       map?.setView(newPos, 15);
     },
   });
-  
   return position === null ? null : <Marker position={position} />;
 }
 
 const LocationPicker = ({ onLocationChange, initialLat, initialLng, height = '300px' }) => {
+  const { t } = useTranslation('rescate');
   const [position, setPosition] = useState(null);
   const [map, setMap] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
 
-  // Obtener ubicación actual automáticamente al cargar
   useEffect(() => {
     if (navigator.geolocation && !position && !initialLat && !initialLng) {
       navigator.geolocation.getCurrentPosition(
@@ -44,14 +41,12 @@ const LocationPicker = ({ onLocationChange, initialLat, initialLng, height = '30
         },
         (error) => {
           console.warn('Error obteniendo ubicación:', error);
-          // No establecer centro por defecto, dejar que el usuario elija
         },
         { enableHighAccuracy: true, timeout: 10000 }
       );
     }
   }, []);
 
-  // Sincronizar cuando cambian las props desde fuera
   useEffect(() => {
     if (initialLat && initialLng && map) {
       const newPosition = [initialLat, initialLng];
@@ -65,13 +60,12 @@ const LocationPicker = ({ onLocationChange, initialLat, initialLng, height = '30
     onLocationChange?.(lat, lng);
   };
 
-  // Si no hay posición, mostrar un mensaje para que el usuario seleccione
   if (!position && !initialLat && !initialLng && !isMapReady) {
     return (
       <div className="location-picker-placeholder" style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f1f5f9', borderRadius: '16px', flexDirection: 'column', gap: '1rem' }}>
         <i className="fas fa-map-marker-alt" style={{ fontSize: '2rem', color: '#667eea' }}></i>
         <p style={{ color: '#475569', textAlign: 'center', margin: 0 }}>
-          Haz clic en el mapa para seleccionar la ubicación del rescate
+          {t('click_map_to_select', 'Haz clic en el mapa para seleccionar la ubicación del rescate')}
         </p>
         <button 
           type="button" 
@@ -87,7 +81,7 @@ const LocationPicker = ({ onLocationChange, initialLat, initialLng, height = '30
             }
           }}
         >
-          <i className="fas fa-location-dot"></i> Usar mi ubicación
+          <i className="fas fa-location-dot"></i> {t('use_my_location', 'Usar mi ubicación')}
         </button>
       </div>
     );
@@ -117,7 +111,7 @@ const LocationPicker = ({ onLocationChange, initialLat, initialLng, height = '30
       {position && (
         <div className="location-coords">
           <i className="fas fa-map-marker-alt"></i>
-          <span>Ubicación seleccionada: {position[0].toFixed(6)}, {position[1].toFixed(6)}</span>
+          <span>{t('selected_location', 'Ubicación seleccionada')}: {position[0].toFixed(6)}, {position[1].toFixed(6)}</span>
         </div>
       )}
     </div>

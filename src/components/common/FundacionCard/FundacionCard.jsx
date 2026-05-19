@@ -1,3 +1,4 @@
+// src/components/common/FundacionCard/FundacionCard.jsx
 import React, { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -24,11 +25,11 @@ const FundacionCard = memo(({
     imagen_portada
   } = fundacion;
 
-  // ✅ Memoizar URL de imagen
   const imageUrl = useMemo(() => getImageUrl(imagen_portada), [imagen_portada, getImageUrl]);
 
   return (
-    <div className={`fundacion-card ${variant}`}>
+    <div className={`page-card fundacion-card ${variant}`}>
+      {/* Imagen */}
       <div className="card-image">
         {imageUrl ? (
           <img
@@ -38,10 +39,8 @@ const FundacionCard = memo(({
             onError={(e) => {
               e.target.onerror = null;
               e.target.style.display = 'none';
-              if (e.target.parentElement) {
-                const placeholder = e.target.parentElement.querySelector('.image-placeholder');
-                if (placeholder) placeholder.style.display = 'flex';
-              }
+              const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
+              if (placeholder) placeholder.style.display = 'flex';
             }}
           />
         ) : null}
@@ -58,8 +57,10 @@ const FundacionCard = memo(({
         )}
       </div>
 
+      {/* Contenido */}
       <div className="card-content">
         <h3 className="card-title">{Nombre_1}</h3>
+        
         {ciudad && (
           <div className="card-city">
             <MapPin size={14} />
@@ -102,7 +103,7 @@ const FundacionCard = memo(({
 
         {showActions && (
           <div className="card-footer">
-            <Link to={`/fundaciones/${id}`} className="btn-primary">
+            <Link to={`/fundaciones/${id}`} className="page-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
               {t('ver_mas') || 'Ver más'} <ChevronRight size={16} />
             </Link>
           </div>

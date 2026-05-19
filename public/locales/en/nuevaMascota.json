@@ -70,10 +70,14 @@
   "sin_opciones": "No options",
 
   "botones": {
+    "registrando": "Registering...",
     "anterior": "Previous",
     "siguiente": "Next",
-    "registrar": "Register Pet",
-    "registrando": "Registering..."
+    "guardando": "Saving...",
+    "actualizar": "Update",
+    "registrar": "Register",
+    "cancelar": "Cancel",
+    "volver": "Back"
   },
 
   "errores": {
@@ -85,7 +89,10 @@
     "estado_requerido": "Status is required",
     "lugar_rescate_requerido": "Location is required",
     "descripcion_requerida": "Description is required",
-    "foto_principal_requerida": "Main photo is required"
+    "foto_principal_requerida": "Main photo is required",
+    "no_autorizado": "Unauthorized",
+    "solo_fundacion": "Only foundations can access this page.",
+    "carga_datos": "Error loading data"
   },
 
   "mensajes": {
@@ -154,5 +161,21 @@
     "cancelar": "Are you sure you want to cancel? Unsaved data will be lost."
   },
 
-  "registrada_exito": "Pet registered successfully"
+  "registrada_exito": "Pet registered successfully",
+  "estado_actualizado": "Status updated to",
+  "error_actualizar": "Error updating status",
+  "actualizando": "Updating...",
+  "raza": "Breed(s)",
+  "edad": "Age",
+  "fecha_ingreso": "Admission date",
+  "aptitudes": "Traits",
+  "no_apto_ninos": "Not good with children",
+  "no_apto_animales": "Not good with other animals",
+  "video": "Video",
+  "ver_video": "Watch video of {{nombre}}",
+  "estado_salud": "Health status",
+  "peso": "Weight",
+  "tamaño": "Size",
+  "editar": "Edit",
+  "eliminar": "Delete"
 }

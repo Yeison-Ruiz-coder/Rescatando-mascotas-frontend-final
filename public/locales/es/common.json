@@ -9,7 +9,16 @@
   "buttons": {
     "submit": "Enviar",
     "cancel": "Cancelar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "confirm": "Confirmar",
+    "clear": "Limpiar"
   },
   "auth": {
     "email": "Correo Electrónico",
@@ -18,5 +27,31 @@
     "yes_account": "¿Ya tienes cuenta?",
     "register_now": "Regístrate aquí",
     "login_now": "Inicia sesión aquí"
-  }
+  },
+  "loading": "Cargando...",
+  "error": "Error",
+  "success": "Éxito",
+  "search": "Buscar...",
+  "filter": "Filtrar",
+  "clear_filters": "Limpiar filtros",
+  "no_data": "No hay datos",
+  "no_items": "No se encontraron elementos para mostrar",
+  "select": "Seleccionar...",
+  "confirm_title": "Confirmar",
+  "deleting": "Eliminando...",
+  "click_or_drag_image": "Haz clic o arrastra una imagen aquí",
+  "click_or_drag_images": "Haz clic o arrastra imágenes aquí",
+  "max_images": "Máximo {{maxFiles}} imágenes - ",
+  "max_size_each": "Máximo {{maxSize}}MB cada una - ",
+  "invalid_file_format": "Formato no válido",
+  "max_files": "Máximo {{maxFiles}} imágenes permitidas",
+  "no_results": "No hay resultados",
+  "theme_toggle": "Cambiar tema",
+  "debug": "Debug",
+  "debug_auth": "Debug Auth",
+  "authenticated": "Autenticado",
+  "user": "Usuario",
+  "token_in_localstorage": "Token en localStorage",
+  "no_token": "No hay token",
+  "user_without_token": "Usuario sin token - limpiando..."
 }

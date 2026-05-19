@@ -1,0 +1,262 @@
+/* src/components/common/VeterinariaCard/VeterinariaCard.css */
+
+.veterinaria-card {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.veterinaria-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+/* ===== IMAGEN ===== */
+.veterinaria-card .card-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--gradient-primary);
+}
+
+.veterinaria-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.veterinaria-card:hover .card-image img {
+  transform: scale(1.08);
+}
+
+.veterinaria-card .image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: white;
+}
+
+.veterinaria-card .image-placeholder svg {
+  opacity: 0.7;
+}
+
+.veterinaria-card .image-placeholder span {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Badges en la imagen */
+.veterinaria-card .image-badges {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.veterinaria-card .badge-verificado,
+.veterinaria-card .badge-urgencia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+}
+
+.veterinaria-card .badge-verificado {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.veterinaria-card .badge-urgencia {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+}
+
+/* ===== HEADER ===== */
+.veterinaria-card .card-header {
+  padding: 1rem 1.25rem 0.5rem;
+}
+
+.veterinaria-card .card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--color-text);
+}
+
+.veterinaria-card .card-ciudad {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== DESCRIPCIÓN ===== */
+.veterinaria-card .card-descripcion {
+  padding: 0 1.25rem 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== SERVICIOS ===== */
+.veterinaria-card .card-servicios {
+  padding: 0 1.25rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.veterinaria-card .servicio-tag {
+  background: var(--form-input-bg);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  color: var(--color-text);
+}
+
+.veterinaria-card .servicio-mas {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* ===== FOOTER ===== */
+.veterinaria-card .card-footer {
+  padding: 0.75rem 1.25rem;
+  background: var(--form-input-bg);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.veterinaria-card .footer-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.veterinaria-card .footer-item svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ===== BOTÓN ===== */
+.veterinaria-card .btn-detalle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: calc(100% - 2.5rem);
+  margin: 0 1.25rem 1.25rem 1.25rem;
+  padding: 0.75rem;
+  background: var(--gradient-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: var(--transition);
+}
+
+.veterinaria-card .btn-detalle:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .veterinaria-card .card-image {
+    height: 160px;
+  }
+  
+  .veterinaria-card .card-header {
+    padding: 0.75rem 1rem 0.25rem;
+  }
+  
+  .veterinaria-card .card-title {
+    font-size: 1rem;
+  }
+  
+  .veterinaria-card .card-descripcion {
+    padding: 0 1rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .veterinaria-card .card-servicios {
+    padding: 0 1rem 0.5rem;
+  }
+  
+  .veterinaria-card .card-footer {
+    padding: 0.5rem 1rem;
+  }
+  
+  .veterinaria-card .btn-detalle {
+    width: calc(100% - 2rem);
+    margin: 0 1rem 1rem 1rem;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .veterinaria-card .badge-verificado,
+  .veterinaria-card .badge-urgencia {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .veterinaria-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .veterinaria-card .card-title {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .veterinaria-card .card-descripcion,
+[data-theme="dark"] .veterinaria-card .card-ciudad,
+[data-theme="dark"] .veterinaria-card .footer-item {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .veterinaria-card .footer-item svg {
+  color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .veterinaria-card .servicio-tag {
+  background: #0f172a;
+}

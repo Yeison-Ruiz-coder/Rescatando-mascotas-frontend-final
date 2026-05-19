@@ -1,19 +1,42 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const Textarea = ({ label, name, value, onChange, error, required, placeholder, rows = 4 }) => {
+const Textarea = ({ 
+  label, 
+  labelKey,
+  name, 
+  value, 
+  onChange, 
+  error, 
+  errorKey,
+  required, 
+  placeholder,
+  placeholderKey,
+  rows = 4 
+}) => {
+  const { t } = useTranslation('common');
+  
+  const displayLabel = labelKey ? t(labelKey, label) : label;
+  const displayPlaceholder = placeholderKey ? t(placeholderKey, placeholder) : placeholder;
+  const displayError = errorKey ? t(errorKey, error) : error;
+
   return (
     <div className="form-group">
-      {label && <label htmlFor={name}>{label} {required && <span className="required">*</span>}</label>}
+      {displayLabel && (
+        <label htmlFor={name}>
+          {displayLabel} {required && <span className="required">*</span>}
+        </label>
+      )}
       <textarea
         id={name}
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
+        placeholder={displayPlaceholder}
         rows={rows}
-        className={error ? 'error' : ''}
+        className={displayError ? 'error' : ''}
       />
-      {error && <span className="error-message">{error}</span>}
+      {displayError && <span className="error-message">{displayError}</span>}
     </div>
   );
 };

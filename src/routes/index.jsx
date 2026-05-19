@@ -33,17 +33,11 @@ import SolicitudExitosa from "../pages/public/SolicitarAdopcion/SolicitudExitosa
 import Veterinarias from "../pages/public/Veterinarias/Veterinarias";
 import VeterinariaDetalle from "../pages/public/Veterinarias/VeterinariaDetalle";
 import ReportarRescate from "../pages/public/ReportarRescate/ReportarRescate";
-
-// Fundaciones públicas
 import FundacionesIndex from "../pages/public/Fundaciones/FundacionesIndex";
 import FundacionDetalle from "../pages/public/Fundaciones/FundacionDetalle";
-
-// Eventos Público
-import PublicEventosIndex from "../pages/public/eventos/EventosIndex";
-import PublicEventosShow from "../pages/public/eventos/EventosShow";
-
-// ✅ SUSCRIPCIONES PÚBLICAS (NUEVO)
-import SuscripcionesPublicIndex from "../pages/public/suscripciones/SuscripcionesPublicIndex";
+import PublicEventosIndex from "../pages/public/Eventos/EventosPublicIndex";
+import PublicEventosShow from "../pages/public/Eventos/EventosPublicShow";
+import SuscripcionesPublicIndex from "../pages/public/Suscripciones/SuscripcionesPublicIndex";
 
 // =============================================================
 // PÁGINAS DE USUARIO
@@ -56,20 +50,14 @@ import UserSuscripciones from "../pages/user/MisSuscripciones"; // NUEVO
 // =============================================================
 import Dashboard from "../pages/admin/Dashboard/Dashboard";
 import UsuariosPendientes from "../pages/admin/Usuarios/UsuariosPendientes";
-
-// Eventos Admin
 import AdminEventosIndex from "../pages/admin/eventos/EventosIndex";
 import AdminEventosCreate from "../pages/admin/eventos/EventosCreate";
 import AdminEventosEdit from "../pages/admin/eventos/EventosEdit";
 import AdminEventosShow from "../pages/admin/eventos/EventosShow";
-
-// ✅ SUSCRIPCIONES ADMIN
 import AdminSuscripcionesIndex from "../pages/admin/suscripciones/SuscripcionesIndex";
 import AdminSuscripcionesCreate from "../pages/admin/suscripciones/SuscripcionesCreate";
 import AdminSuscripcionesEdit from "../pages/admin/suscripciones/SuscripcionesEdit";
 import AdminSuscripcionesShow from "../pages/admin/suscripciones/SuscripcionesShow";
-
-// Rescates Admin
 import AdminRescatesIndex from "../pages/admin/rescates/RescatesIndex";
 import AdminRescatesPendientes from "../pages/admin/rescates/RescatesPendientes";
 import AdminRescatesMapa from "../pages/admin/rescates/RescatesMapa";
@@ -78,23 +66,19 @@ import AdminRescatesShow from "../pages/admin/rescates/RescatesShow";
 // =============================================================
 // PÁGINAS DE FUNDACIÓN
 // =============================================================
-import FundDashboard from "../pages/fundacion/dashboard/Dashboard";
+import FundDashboard from "../pages/fundacion/dashboard/FundacionDashboard";
 import FundMascotas from "../pages/fundacion/mascotas/Mascotas";
 import CrearMascota from "../pages/fundacion/mascotas/CrearMascota";
 import EditarMascota from "../pages/fundacion/mascotas/EditarMascota";   
 import MascotaDetalleFundacion from "../pages/fundacion/mascotas/MascotaDetalle";
 import EventosIndex from "../pages/fundacion/eventos/EventosIndex";
 import EventosCreate from "../pages/fundacion/eventos/EventosCreate";
-import EventosShow from "../pages/fundacion/eventos/EventosShow";
+import EventosShow from "../pages/fundacion/eventos/EventosShowFundacion";
 import EventosEdit from "../pages/fundacion/eventos/EventosEdit";
-
-// ✅ SUSCRIPCIONES FUNDACIÓN
 import SuscripcionesIndex from "../pages/fundacion/suscripciones/SuscripcionesIndex";
 import SuscripcionesCreate from "../pages/fundacion/suscripciones/SuscripcionesCreate";
 import SuscripcionesEdit from "../pages/fundacion/suscripciones/SuscripcionesEdit";
 import SuscripcionesShow from "../pages/fundacion/suscripciones/SuscripcionesShow";
-
-// Rescates Fundación
 import RescatesDisponiblesFundacion from "../pages/fundacion/rescates/RescatesDisponibles";
 import MisRescatesFundacion from "../pages/fundacion/rescates/MisRescates";
 import RescateDetalleFundacion from "../pages/fundacion/rescates/RescateDetalle";
@@ -108,12 +92,8 @@ import CitaForm from "../pages/veterinaria/citas/CitaForm";
 import Pacientes from "../pages/veterinaria/pacientes/Pacientes";
 import PacienteForm from "../pages/veterinaria/pacientes/PacienteForm";
 import HistorialMedico from "../pages/veterinaria/historial/HistorialMedico";
-
-// ✅ SUSCRIPCIONES VETERINARIA
 import VeterinariaSuscripcionesIndex from "../pages/veterinaria/suscripciones/SuscripcionesIndex";
 import VeterinariaSuscripcionesShow from "../pages/veterinaria/suscripciones/SuscripcionesShow";
-
-// Rescates Veterinaria
 import RescatesDisponiblesVet from "../pages/veterinaria/rescates/RescatesDisponibles";
 import MisRescatesVet from "../pages/veterinaria/rescates/MisRescates";
 import RescateDetalleVet from "../pages/veterinaria/rescates/RescateDetalle";
