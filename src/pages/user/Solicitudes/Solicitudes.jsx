@@ -13,10 +13,15 @@ const Solicitudes = () => {
   const [solicitudes, setSolicitudes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filaAbierta, setFilaAbierta] = useState(null);
 
   useEffect(() => {
     fetchSolicitudes();
   }, []);
+
+  const toggleDetalle = (id) => {
+    setFilaAbierta(filaAbierta === id ? null : id);
+  };
 
   const fetchSolicitudes = async () => {
     try {
@@ -24,13 +29,11 @@ const Solicitudes = () => {
       setError(null);
 
       const response = await api.get('/user/solicitudes');
-      console.log('📦 Solicitudes del usuario:', response.data);
 
       if (response.data.success) {
         const solicitudesData = response.data.data || [];
         const solicitudesList = solicitudesData.data || solicitudesData;
         setSolicitudes(Array.isArray(solicitudesList) ? solicitudesList : []);
-        console.log(`✅ ${solicitudesList.length} ${t('solicitudes_cargadas')}`);
       } else {
         throw new Error(response.data.message || t('error_respuesta'));
       }
@@ -71,16 +74,29 @@ const Solicitudes = () => {
 
   const getEstadoBadge = (estado) => {
     const estados = {
-      'pendiente': { text: t('estado_pendiente'), color: '#856404', bg: '#fff3cd', icon: 'fa-clock' },
-      'en_revision': { text: t('estado_en_revision'), color: '#0c5460', bg: '#d1ecf1', icon: 'fa-search' },
-      'aprobada': { text: t('estado_aprobada'), color: '#155724', bg: '#d4edda', icon: 'fa-check-circle' },
-      'rechazada': { text: t('estado_rechazada'), color: '#721c24', bg: '#f8d7da', icon: 'fa-times-circle' },
-      'completada': { text: t('estado_completada'), color: '#004085', bg: '#cce5ff', icon: 'fa-check-double' }
+      'pendiente': { text: t('estado_pendiente'), icon: 'fa-clock', class: 'pendiente' },
+      'en_revision': { text: t('estado_en_revision'), icon: 'fa-search', class: 'en_revision' },
+      'aprobada': { text: t('estado_aprobada'), icon: 'fa-check-circle', class: 'aprobada' },
+      'rechazada': { text: t('estado_rechazada'), icon: 'fa-times-circle', class: 'rechazada' },
+      'completada': { text: t('estado_completada'), icon: 'fa-check-double', class: 'completada' }
     };
     return estados[estado] || estados.pendiente;
   };
 
   const formatFecha = (fecha) => {
+    if (!fecha) return t('fecha_no_disponible');
+    try {
+      return new Date(fecha).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (e) {
+      return fecha;
+    }
+  };
+
+  const formatFechaCompleta = (fecha) => {
     if (!fecha) return t('fecha_no_disponible');
     try {
       return new Date(fecha).toLocaleDateString('es-ES', {
@@ -139,7 +155,7 @@ const Solicitudes = () => {
   if (loading) {
     return (
       <div className="solicitudes-page">
-        <div className="solicitudes-container">
+        <div className="loading-container">
           <LoadingSpinner text={t('cargando_solicitudes')} />
         </div>
       </div>
@@ -149,7 +165,7 @@ const Solicitudes = () => {
   if (error) {
     return (
       <div className="solicitudes-page">
-        <div className="solicitudes-container">
+        <div className="solicitudes-wrapper">
           <div className="error-message">
             <i className="fas fa-exclamation-triangle"></i>
             <h2>{t('error_titulo')}</h2>
@@ -170,7 +186,7 @@ const Solicitudes = () => {
 
   return (
     <div className="solicitudes-page">
-      <div className="solicitudes-container">
+      <div className="solicitudes-wrapper">
         <div className="solicitudes-header">
           <h1>🐾 {t('titulo')}</h1>
           <p>{t('subtitulo')}</p>
@@ -186,108 +202,111 @@ const Solicitudes = () => {
             </a>
           </div>
         ) : (
-          <div className="solicitudes-list">
+          <div className="solicitudes-table">
+            {/* Header de la tabla */}
+            <div className="solicitudes-table-header">
+              <div>{t('id') || 'ID'}</div>
+              <div>{t('mascota') || 'Mascota'}</div>
+              <div>{t('fecha_solicitud') || 'Fecha'}</div>
+              <div>{t('estado') || 'Estado'}</div>
+              <div>{t('acciones') || 'Acciones'}</div>
+            </div>
+
+            {/* Filas de solicitudes */}
             {solicitudes.map((solicitud) => {
               const estadoBadge = getEstadoBadge(solicitud.estado);
               const pdfData = preparePDFData(solicitud);
               const mascotaNombre = pdfData.mascota?.nombre_mascota || 
                                     solicitud.solicitable?.nombre_mascota || 
                                     t('mascota_no_disponible');
+              const isOpen = filaAbierta === solicitud.id;
 
               return (
-                <div key={solicitud.id} className="solicitud-card">
-                  <div className="solicitud-header">
-                    <div className="solicitud-info">
-                      <h3>
-                        <i className="fas fa-file-alt"></i> {t('solicitud_numero')} {solicitud.id}
-                      </h3>
-                      <p className="solicitud-fecha">
-                        <i className="fas fa-calendar-alt"></i>
-                        {formatFecha(solicitud.created_at || solicitud.fecha_solicitud)}
-                      </p>
+                <React.Fragment key={solicitud.id}>
+                  <div className="solicitud-row">
+                    <div className="solicitud-id">#{solicitud.id}</div>
+                    <div className="solicitud-mascota-nombre">
+                      <i className="fas fa-paw"></i> {mascotaNombre}
                     </div>
-                    <div
-                      className="solicitud-estado"
-                      style={{
-                        backgroundColor: estadoBadge.bg,
-                        color: estadoBadge.color,
-                      }}
-                    >
-                      <i className={`fas ${estadoBadge.icon}`}></i>
-                      {estadoBadge.text}
+                    <div className="solicitud-fecha">
+                      <i className="fas fa-calendar-alt"></i> {formatFecha(solicitud.created_at || solicitud.fecha_solicitud)}
                     </div>
-                  </div>
-
-                  <div className="solicitud-body">
-                    <div className="solicitud-mascota">
-                      <h4>
-                        <i className="fas fa-paw"></i> {t('mascota_solicitada')}
-                      </h4>
-                      <p>{mascotaNombre}</p>
+                    <div>
+                      <span className={`solicitud-estado ${estadoBadge.class}`}>
+                        <i className={`fas ${estadoBadge.icon}`}></i>
+                        {estadoBadge.text}
+                      </span>
                     </div>
-
-                    {solicitud.contenido && (
-                      <div className="solicitud-motivo">
-                        <h4>
-                          <i className="fas fa-heart"></i> {t('tu_mensaje')}
-                        </h4>
-                        <p>{solicitud.contenido}</p>
-                      </div>
-                    )}
-
-                    {solicitud.razon_rechazo && (
-                      <div className="solicitud-rechazo">
-                        <h4>
-                          <i className="fas fa-exclamation-circle"></i> {t('razon_rechazo')}
-                        </h4>
-                        <p>{solicitud.razon_rechazo}</p>
-                      </div>
-                    )}
-
-                    {solicitud.notas_internas && (
-                      <div className="solicitud-notas">
-                        <h4>
-                          <i className="fas fa-sticky-note"></i> {t('notas_adicionales')}
-                        </h4>
-                        <p>{solicitud.notas_internas}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="solicitud-actions">
-                    <PDFDownloadLink
-                      document={
-                        <SolicitudPDF
-                          solicitud={pdfData.solicitud}
-                          mascota={pdfData.mascota}
-                          formData={pdfData.formData}
-                        />
-                      }
-                      fileName={`solicitud-adopcion-${solicitud.id}.pdf`}
-                      className="btn-pdf-solicitud"
-                    >
-                      {({ loading: pdfLoading, error: pdfError }) => {
-                        if (pdfError) {
-                          return (
-                            <span className="btn-pdf-error">
-                              <i className="fas fa-exclamation-triangle"></i> {t('error_pdf')}
-                            </span>
-                          );
+                    <div className="solicitud-actions">
+                      <button 
+                        className="btn-ver-detalle"
+                        onClick={() => toggleDetalle(solicitud.id)}
+                      >
+                        <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+                        {isOpen ? t('ocultar') : t('ver_detalle')}
+                      </button>
+                      <PDFDownloadLink
+                        document={
+                          <SolicitudPDF
+                            solicitud={pdfData.solicitud}
+                            mascota={pdfData.mascota}
+                            formData={pdfData.formData}
+                          />
                         }
-                        return pdfLoading ? (
-                          <>
-                            <i className="fas fa-spinner fa-spin"></i> {t('generando_pdf')}
-                          </>
-                        ) : (
-                          <>
-                            <i className="fas fa-file-pdf"></i>
-                            {t('descargar_pdf')}
-                          </>
-                        );
-                      }}
-                    </PDFDownloadLink>
+                        fileName={`solicitud-adopcion-${solicitud.id}.pdf`}
+                        className="btn-pdf-solicitud"
+                      >
+                        {({ loading: pdfLoading, error: pdfError }) => {
+                          if (pdfError) {
+                            return (
+                              <span className="btn-pdf-error">
+                                <i className="fas fa-exclamation-triangle"></i>
+                              </span>
+                            );
+                          }
+                          return pdfLoading ? (
+                            <i className="fas fa-spinner fa-spin"></i>
+                          ) : (
+                            <>
+                              <i className="fas fa-file-pdf"></i> PDF
+                            </>
+                          );
+                        }}
+                      </PDFDownloadLink>
+                    </div>
                   </div>
-                </div>
+
+                  {/* Detalle desplegable */}
+                  <div className={`solicitud-detalle ${isOpen ? 'abierto' : ''}`}>
+                    <div className="solicitud-detalle-grid">
+                      <div className="detalle-item">
+                        <label>{t('fecha_completa') || 'Fecha de solicitud'}</label>
+                        <p>{formatFechaCompleta(solicitud.created_at || solicitud.fecha_solicitud)}</p>
+                      </div>
+                      
+                      {solicitud.contenido && (
+                        <div className="detalle-item">
+                          <label>{t('tu_mensaje') || 'Motivo / Mensaje'}</label>
+                          <p className="mensaje">{solicitud.contenido}</p>
+                        </div>
+                      )}
+                      
+                      {solicitud.razon_rechazo && (
+                        <div className="detalle-item">
+                          <label>{t('razon_rechazo') || 'Razón del rechazo'}</label>
+                          <p className="rechazo">{solicitud.razon_rechazo}</p>
+                        </div>
+                      )}
+                      
+                      {solicitud.notas_internas && (
+                        <div className="detalle-item">
+                          <label>{t('notas_adicionales') || 'Notas adicionales'}</label>
+                          <p className="notas">{solicitud.notas_internas}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </React.Fragment>
               );
             })}
           </div>

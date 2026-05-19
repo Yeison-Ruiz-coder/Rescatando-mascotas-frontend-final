@@ -1,41 +1,65 @@
 {
-    "titulo": "Protector Foundations",
-    "subtitulo": "Meet the foundations working for animal welfare",
-    "cargando": "Loading foundations...",
-    "cargando_detalle": "Loading foundation information...",
-    
-    "buscar_placeholder": "Search by name or description...",
-    "todas_ciudades": "All cities",
-    
-    "verificado": "Verified",
-    "ver_mas": "View more",
-    "volver_lista": "Back to foundations",
-    "compartir": "Share",
-    "enlace_copiado": "Link copied to clipboard!",
-    
-    "capacidad": "Capacity",
-    "mascotas_rescatadas": "Rescued pets",
-    
-    "informacion_contacto": "Contact Information",
-    "datos_fundacion": "Foundation Data",
-    "direccion": "Address",
-    "telefono": "Phone",
-    "email": "Email",
-    "horario": "Schedule",
-    "registro_sanitario": "Health Registry",
-    "capacidad_maxima": "Maximum capacity",
-    "fundada": "Founded",
-    "descripcion": "Description",
-    "necesidades_actuales": "Current Needs",
-    "mascotas_en_adopcion": "Pets for Adoption",
-    "mas_mascotas": "more pets",
-    "animales": "animals",
-    
-    "fundacion_verificada": "Verified Foundation",
-    "no_encontrada": "Foundation not found",
-    
-    "sin_resultados": {
-        "titulo": "No foundations found",
-        "mensaje": "Try different search terms"
-    }
+  "titulo": "Protector Foundations",
+  "subtitulo": "Meet the foundations working for animal welfare",
+  "cargando": "Loading foundations...",
+  "cargando_detalle": "Loading foundation information...",
+
+  "buscar": "Search",
+  "buscar_placeholder": "Search by name or description...",
+  "ciudad": "City",
+  "todas_ciudades": "All cities",
+  "filtros": "Filters",
+  "limpiar": "Clear",
+  "mostrando": "Showing",
+  "de": "of",
+  "fundaciones": "foundations",
+  "mensaje_bienvenida": "{{total}} foundations working for animals",
+
+  "verificado": "Verified",
+  "ver_mas": "View more",
+  "ver_todas": "View all",
+  "volver_lista": "Back to foundations",
+  "volver": "Back",
+  "compartir": "Share",
+  "enlace_copiado": "Link copied to clipboard!",
+
+  "capacidad": "Capacity",
+  "mascotas_rescatadas": "Rescued pets",
+  "animales": "animals",
+  "actualizado": "Updated",
+
+  "contacto": "Contact",
+  "informacion_contacto": "Contact Information",
+  "datos_fundacion": "Foundation Data",
+  "datos": "Data",
+  "direccion": "Address",
+  "telefono": "Phone",
+  "email": "Email",
+  "horario": "Business hours",
+  "registro_sanitario": "Health Registry",
+  "capacidad_maxima": "Maximum capacity",
+  "fundada": "Founded",
+  "descripcion": "Description",
+  "necesidades": "Current Needs",
+  "necesidades_actuales": "Current Needs",
+  "mascotas_en_adopcion": "Pets for Adoption",
+  "mas_mascotas": "more pets",
+  "ubicacion": "Location",
+  "abrir_maps": "Open in Google Maps",
+  "voluntarios": "Accepts volunteers",
+  "si_recibe": "Yes, accepts volunteers",
+  "no_recibe": "Does not accept volunteers",
+
+  "fundacion_verificada": "Verified Foundation",
+  "no_encontrada": "Foundation not found",
+  "error_titulo": "Error loading foundation",
+  "error_carga": "Error loading data",
+  "id_no_especificado": "Foundation ID not specified",
+  "reintentar": "Retry",
+  "sin_nombre": "No name",
+
+  "sin_resultados": {
+    "titulo": "No foundations found",
+    "mensaje": "Try different search terms"
+  }
 }

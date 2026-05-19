@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { rescateService } from '../../../services/rescateService';
 import Button from '../../../components/common/Button/Button';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
-import './RescateDetalle.css';
+import styles from './RescateDetalle.module.css'; // ← Importar como módulo
 
 const RescateDetalle = ({ tipoUsuario }) => {
   const { id } = useParams();
@@ -26,7 +26,6 @@ const RescateDetalle = ({ tipoUsuario }) => {
         const data = response.data.data;
         setRescate(data);
         
-        // Procesar fotos
         if (data.foto_principal) {
           setFotoPrincipal(data.foto_principal);
         }
@@ -90,17 +89,17 @@ const RescateDetalle = ({ tipoUsuario }) => {
 
   const getPrioridadClass = () => {
     switch (rescate?.prioridad) {
-      case 'alta': return 'prioridad-alta';
-      case 'media': return 'prioridad-media';
-      default: return 'prioridad-baja';
+      case 'alta': return styles.rescateDfPrioridadAlta;
+      case 'media': return styles.rescateDfPrioridadMedia;
+      default: return styles.rescateDfPrioridadBaja;
     }
   };
 
   const getEstadoClass = () => {
     switch (rescate?.estado) {
-      case 'pendiente': return 'estado-pendiente';
-      case 'en_proceso': return 'estado-proceso';
-      case 'completado': return 'estado-completado';
+      case 'pendiente': return styles.rescateDfEstadoPendiente;
+      case 'en_proceso': return styles.rescateDfEstadoProceso;
+      case 'completado': return styles.rescateDfEstadoCompletado;
       default: return '';
     }
   };
@@ -118,7 +117,7 @@ const RescateDetalle = ({ tipoUsuario }) => {
 
   if (loading) {
     return (
-      <div className="rescate-detalle-container">
+      <div className={styles.rescateDfContainer}>
         <LoadingSpinner text={t('cargando_detalle')} />
       </div>
     );
@@ -126,12 +125,12 @@ const RescateDetalle = ({ tipoUsuario }) => {
 
   if (error || !rescate) {
     return (
-      <div className="rescate-detalle-container">
-        <div className="error-card">
+      <div className={styles.rescateDfContainer}>
+        <div className={styles.rescateDfErrorCard}>
           <i className="fas fa-exclamation-triangle"></i>
           <h3>{t('error_carga')}</h3>
           <p>{error || t('rescate_no_encontrado')}</p>
-          <button onClick={() => navigate(-1)} className="btn-back">
+          <button onClick={() => navigate(-1)} className={styles.rescateDfBtnBack}>
             <i className="fas fa-arrow-left"></i> {t('volver')}
           </button>
         </div>
@@ -140,51 +139,51 @@ const RescateDetalle = ({ tipoUsuario }) => {
   }
 
   return (
-    <div className="rescate-detalle-container">
-      <div className="detalle-header">
-        <button onClick={() => navigate(-1)} className="btn-back">
+    <div className={styles.rescateDfContainer}>
+      <div className={styles.rescateDfHeader}>
+        <button onClick={() => navigate(-1)} className={styles.rescateDfBtnBack}>
           <i className="fas fa-arrow-left"></i> {t('volver')}
         </button>
         <h1>{t('detalle_rescate')}</h1>
       </div>
 
-      <div className="detalle-card">
-        <div className="detalle-badges">
-          <span className={`detalle-prioridad ${getPrioridadClass()}`}>
+      <div className={styles.rescateDfCard}>
+        <div className={styles.rescateDfBadges}>
+          <span className={`${styles.rescateDfPrioridad} ${getPrioridadClass()}`}>
             <i className="fas fa-flag"></i> {t('prioridad_label')}: {t(`prioridad_${rescate.prioridad}`)}
           </span>
-          <span className={`detalle-estado ${getEstadoClass()}`}>
+          <span className={`${styles.rescateDfEstado} ${getEstadoClass()}`}>
             <i className="fas fa-circle"></i> {t(`estado_${rescate.estado}`)}
           </span>
-          <span className="detalle-tipo">
+          <span className={styles.rescateDfTipo}>
             <i className="fas fa-tag"></i> {t(`btn_${rescate.tipo_emergencia || 'otro'}`)}
           </span>
         </div>
 
-        {/* ===== FOTO PRINCIPAL ===== */}
+        {/* FOTO PRINCIPAL */}
         {fotoPrincipal && (
-          <div className="detalle-foto-principal">
+          <div className={styles.rescateDfFotoPrincipal}>
             <label><i className="fas fa-camera"></i> {t('foto_principal')}</label>
             <img 
               src={fotoPrincipal} 
               alt="Foto principal del rescate"
-              className="foto-principal-img"
+              className={styles.rescateDfFotoPrincipalImg}
               onClick={() => window.open(fotoPrincipal, '_blank')}
             />
           </div>
         )}
 
-        {/* ===== GALERÍA DE FOTOS ===== */}
+        {/* GALERÍA DE FOTOS */}
         {galeriaFotos.length > 0 && (
-          <div className="detalle-galeria">
+          <div className={styles.rescateDfGaleria}>
             <label><i className="fas fa-images"></i> {t('galeria_fotos')} ({galeriaFotos.length})</label>
-            <div className="galeria-grid">
+            <div className={styles.rescateDfGaleriaGrid}>
               {galeriaFotos.map((foto, index) => (
                 <img 
                   key={index}
                   src={foto} 
                   alt={`Foto ${index + 1}`}
-                  className="galeria-img"
+                  className={styles.rescateDfGaleriaImg}
                   onClick={() => window.open(foto, '_blank')}
                 />
               ))}
@@ -192,25 +191,25 @@ const RescateDetalle = ({ tipoUsuario }) => {
           </div>
         )}
 
-        <div className="detalle-info">
-          <div className="info-group">
+        <div className={styles.rescateDfInfo}>
+          <div className={styles.rescateDfInfoGroup}>
             <label><i className="fas fa-map-marker-alt"></i> {t('lugar_label')}</label>
             <p>{rescate.lugar_rescate}</p>
           </div>
 
-          <div className="info-group">
+          <div className={styles.rescateDfInfoGroup}>
             <label><i className="fas fa-calendar-alt"></i> {t('fecha_label')}</label>
             <p>{formatDate(rescate.fecha_rescate)}</p>
           </div>
 
-          <div className="info-group">
+          <div className={styles.rescateDfInfoGroup}>
             <label><i className="fas fa-file-alt"></i> {t('descripcion_label')}</label>
             <p>{rescate.descripcion_rescate}</p>
           </div>
 
           {/* Datos del reportante */}
           {(rescate.nombre_reportante || rescate.telefono_reportante || rescate.email_reportante) && (
-            <div className="info-group">
+            <div className={styles.rescateDfInfoGroup}>
               <label><i className="fas fa-user"></i> {t('reportado_por')}</label>
               <p>
                 {rescate.nombre_reportante && <><strong>{rescate.nombre_reportante}</strong><br /></>}
@@ -222,15 +221,15 @@ const RescateDetalle = ({ tipoUsuario }) => {
 
           {/* Coordenadas */}
           {rescate.lat && rescate.lng && (
-            <div className="info-group">
+            <div className={styles.rescateDfInfoGroup}>
               <label><i className="fas fa-location-dot"></i> {t('coordenadas')}</label>
               <p>
-                 {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
+                {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
                 <a 
                   href={`https://www.openstreetmap.org/?mlat=${rescate.lat}&mlon=${rescate.lng}#map=15/${rescate.lat}/${rescate.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="map-link"
+                  className={styles.rescateDfMapLink}
                 >
                   <i className="fas fa-external-link-alt"></i> {t('ver_mapa')}
                 </a>
@@ -239,7 +238,7 @@ const RescateDetalle = ({ tipoUsuario }) => {
           )}
         </div>
 
-        <div className="detalle-actions">
+        <div className={styles.rescateDfActions}>
           {rescate.estado === 'pendiente' && (
             <>
               <Button onClick={handleAceptar} variant="primary" disabled={accionLoading}>

@@ -57,118 +57,6 @@
   background: rgba(30, 41, 59, 0.85);
 }
 
-.veterinarias-page .filtros-wrapper {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.veterinarias-page .search-input-wrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: var(--form-input-bg);
-  border: 1px solid var(--form-border);
-  border-radius: 50px;
-  padding: 0.75rem 1.25rem;
-  transition: var(--transition);
-}
-
-.veterinarias-page .search-input-wrapper:focus-within {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--form-focus-ring);
-}
-
-.veterinarias-page .search-input-wrapper input {
-  flex: 1;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  font-size: 1rem;
-}
-
-.veterinarias-page .search-input-wrapper input:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.veterinarias-page .filter-actions {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.veterinarias-page .filter-toggle,
-.veterinarias-page .clear-filters {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: var(--form-input-bg);
-  border: 1px solid var(--form-border);
-  border-radius: 50px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--form-text);
-}
-
-.veterinarias-page .filter-toggle:hover {
-  background: var(--color-hover);
-  transform: translateY(-2px);
-}
-
-.veterinarias-page .filter-toggle.active {
-  background: var(--gradient-primary);
-  color: white;
-  border-color: transparent;
-}
-
-.veterinarias-page .clear-filters {
-  background: var(--color-danger);
-  color: white;
-  border-color: transparent;
-}
-
-.veterinarias-page .clear-filters:hover {
-  transform: translateY(-2px);
-  filter: brightness(0.9);
-}
-
-/* ===== FILTERS PANEL ===== */
-.veterinarias-page .filters-panel {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--form-border);
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.veterinarias-page .filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.veterinarias-page .checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  font-weight: normal;
-  color: var(--form-label);
-}
-
-.veterinarias-page .checkbox-label input {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: var(--color-primary);
-}
-
 /* ===== RESULTADOS SECTION ===== */
 .veterinarias-page .resultados-section {
   padding: 40px 0;
@@ -361,26 +249,6 @@
   margin-bottom: 1.5rem;
 }
 
-.veterinarias-page .btn-outline-global {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 10px 24px;
-  background: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.veterinarias-page .btn-outline-global:hover {
-  background: var(--color-primary);
-  color: white;
-  transform: translateY(-2px);
-}
-
 /* ===== ERROR STATE ===== */
 .veterinarias-page .error-container {
   text-align: center;
@@ -460,25 +328,6 @@
     top: 60px;
   }
   
-  .veterinarias-page .filtros-wrapper {
-    flex-direction: column;
-  }
-  
-  .veterinarias-page .search-input-wrapper {
-    width: 100%;
-  }
-  
-  .veterinarias-page .filter-actions {
-    width: 100%;
-    justify-content: stretch;
-  }
-  
-  .veterinarias-page .filter-toggle,
-  .veterinarias-page .clear-filters {
-    flex: 1;
-    justify-content: center;
-  }
-  
   .veterinarias-page .veterinarias-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -505,10 +354,5 @@
   
   .veterinarias-page .resultados-count {
     font-size: 0.8rem;
-  }
-  
-  .veterinarias-page .filters-panel {
-    flex-direction: column;
-    gap: 0.75rem;
   }
 }

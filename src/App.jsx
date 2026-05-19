@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { SidebarProvider } from './contexts/SidebarContext';
-import { FiltrosProvider } from './contexts/FiltrosContext'; // <-- IMPORTAR
+import { FiltrosProvider } from './contexts/FiltrosContext'; 
 import ThemeToggle from './components/common/ThemeToggle/ThemeToggle';
 import router from './routes';
 import FloatingLanguageSelector from './components/common/FloatingButtons/FloatingLanguageSelector';
@@ -15,7 +15,7 @@ function App() {
   return (
     <AuthProvider>
       <SidebarProvider>
-        <FiltrosProvider>  {/* <-- Aquí está bien */}
+        <FiltrosProvider>
           <div className="floating-buttons">
             <FloatingLanguageSelector />
             <ThemeToggle />

@@ -7,7 +7,7 @@
 }
 
 .detalle-container-fundacion {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -21,21 +21,23 @@
   gap: 0.5rem;
   padding: 10px 20px;
   background: var(--gradient-primary);
-  border: 1px solid var(--color-border);
+  border: none;
   border-radius: 50px;
-  color: var(--color-text);
+  color: white;
   cursor: pointer;
   transition: var(--transition);
+  font-weight: 500;
 }
 
 .btn-back-fundacion:hover {
   transform: translateX(-4px);
-  border-color: 3px solid var(--color-primary);
+  filter: brightness(1.05);
 }
 
+/* Layout principal - IMAGENES ARRIBA, INFO DEBAJO */
 .detalle-content-fundacion {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   background: var(--color-card-bg);
   border-radius: var(--radius-2xl);
@@ -43,25 +45,31 @@
   border: 1px solid var(--color-border);
 }
 
-/* Imágenes */
+/* ===== SECCIÓN DE IMÁGENES - ARRIBA ===== */
 .imagenes-section-fundacion {
   padding: 1.5rem;
   background: var(--form-input-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .imagen-principal-fundacion {
   position: relative;
-  aspect-ratio: 1;
+  aspect-ratio: 16/9;
+  max-height: 500px;
   border-radius: var(--radius-xl);
   overflow: hidden;
   cursor: pointer;
   background: var(--color-card-bg);
+  width: 100%;
 }
 
 .imagen-principal-fundacion img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  background: var(--color-card-bg);
 }
 
 .image-placeholder-fundacion {
@@ -90,6 +98,7 @@
   font-size: 0.8rem;
   font-weight: 600;
   color: white;
+  z-index: 2;
 }
 
 .estado-adopcion { background: var(--gradient-primary); }
@@ -99,14 +108,13 @@
 .miniaturas-container {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1rem;
   overflow-x: auto;
   padding-bottom: 0.5rem;
 }
 
 .miniatura-item {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
@@ -127,11 +135,9 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Información */
+/* ===== SECCIÓN DE INFORMACIÓN - DEBAJO DE LAS FOTOS ===== */
 .detalle-info-fundacion {
-  padding: 1.5rem;
-  overflow-y: auto;
-  max-height: 80vh;
+  padding: 1.5rem 2rem 2rem 2rem;
 }
 
 .mascota-titulo {
@@ -144,11 +150,14 @@
   color: var(--color-text-muted);
   font-size: 0.85rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
+/* Grid de información - 3 columnas para mejor organización */
 .info-grid-fundacion {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -158,6 +167,12 @@
   background: var(--form-input-bg);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.info-item-fundacion:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .info-item-fundacion i {
@@ -170,16 +185,31 @@
   display: block;
   font-size: 0.7rem;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: var(--color-text-muted);
   margin-bottom: 0.25rem;
 }
 
+.info-item-fundacion span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+/* Secciones de información - Ocupan todo el ancho */
 .info-section-fundacion {
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-section-fundacion:last-of-type {
+  border-bottom: none;
 }
 
 .info-section-fundacion h3 {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
@@ -191,7 +221,12 @@
   color: var(--color-primary);
 }
 
-/* Badges y Tags */
+.info-section-fundacion p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Badges de salud */
 .salud-badges {
   display: flex;
   flex-wrap: wrap;
@@ -199,47 +234,6 @@
 }
 
 .salud-badge {
-  padding: 4px 12px;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.salud-badge.esterilizado { background: #3b82f6; color: white; }
-.salud-badge.desparasitado { background: #10b981; color: white; }
-.salud-badge.vacunado { background: #8b5cf6; color: white; }
-
-.enfermedad-tag {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-danger);
-  padding: 4px 12px;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.medicamento-tag {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--color-success);
-  padding: 4px 12px;
-  border-radius: 50px;
-  font-size: 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.aptitudes-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.aptitud-tag {
   padding: 6px 14px;
   border-radius: 50px;
   font-size: 0.85rem;
@@ -248,11 +242,39 @@
   gap: 0.5rem;
 }
 
-.aptitud-tag.temporal { background: var(--gradient-accent); color: white; }
-.aptitud-tag.ninos { background: #10b981; color: white; }
-.aptitud-tag.no-ninos { background: #ef4444; color: white; }
-.aptitud-tag.animales { background: #3b82f6; color: white; }
+.salud-badge.esterilizado { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+.salud-badge.desparasitado { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+.salud-badge.vacunado { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
 
+/* Enfermedades, medicamentos */
+.enfermedad-tag,
+.medicamento-tag,
+.vacuna-tag-fundacion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  margin: 0.25rem;
+}
+
+.enfermedad-tag {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+
+.medicamento-tag {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.vacuna-tag-fundacion {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+/* Requisitos */
 .requisitos-lista {
   list-style: none;
   padding: 0;
@@ -270,14 +292,57 @@
   color: var(--color-success);
 }
 
-/* Acciones */
+/* Aptitudes */
+.aptitudes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.aptitud-tag {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.aptitud-tag.temporal { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+.aptitud-tag.ninos { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+.aptitud-tag.no-ninos { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+.aptitud-tag.animales { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+.aptitud-tag.no-animales { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+/* Selector de estado */
+.estado-select-fundacion {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 16px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.estado-select-fundacion:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Botones de acción */
+.acciones-finales-fundacion {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
 .botones-container {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
 }
 
 .btn-edit-fundacion,
@@ -285,13 +350,14 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 10px 24px;
+  padding: 12px 28px;
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
   border: none;
+  font-size: 0.9rem;
 }
 
 .btn-edit-fundacion {
@@ -307,16 +373,24 @@
 .btn-edit-fundacion:hover,
 .btn-delete-fundacion:hover {
   transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
-/* Modal */
+.loading-fundacion {
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+/* Modal de imagen */
 .modal-imagen-fundacion {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   z-index: var(--z-modal);
   display: flex;
   align-items: center;
@@ -345,9 +419,43 @@
   transition: var(--transition);
 }
 
+.modal-close-fundacion:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Video link */
+.video-container {
+  margin-top: 0.5rem;
+}
+
+.video-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50px;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.video-link:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .info-grid-fundacion {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .detalle-content-fundacion {
-    grid-template-columns: 1fr;
+  .mascota-detalle-page-fundacion {
+    padding: 1rem;
   }
   
   .info-grid-fundacion {
@@ -356,5 +464,41 @@
   
   .mascota-titulo {
     font-size: 1.5rem;
+  }
+  
+  .miniaturas-container {
+    gap: 0.5rem;
+  }
+  
+  .miniatura-item {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .botones-container {
+    flex-direction: column;
+  }
+  
+  .btn-edit-fundacion,
+  .btn-delete-fundacion {
+    justify-content: center;
+  }
+  
+  .imagen-principal-fundacion {
+    aspect-ratio: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-item-fundacion span {
+    font-size: 0.85rem;
+  }
+  
+  .salud-badge,
+  .aptitud-tag,
+  .enfermedad-tag,
+  .medicamento-tag {
+    font-size: 0.75rem;
+    padding: 4px 10px;
   }
 }

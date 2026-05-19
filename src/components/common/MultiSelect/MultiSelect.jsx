@@ -1,18 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './MultiSelect.css';
 
 const MultiSelect = ({ 
   label, 
+  labelKey,
   options, 
   value = [], 
   onChange, 
-  placeholder = 'Seleccione...',
+  placeholder,
+  placeholderKey,
   required = false,
   disabled = false
 }) => {
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const containerRef = useRef(null);
+
+  const displayLabel = labelKey ? t(labelKey, label) : label;
+  const displayPlaceholder = placeholderKey ? t(placeholderKey, placeholder) : (placeholder || t('select', 'Seleccione...'));
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,7 +54,7 @@ const MultiSelect = ({
 
   return (
     <div className="multi-select" ref={containerRef}>
-      {label && <label className="multi-select-label">{label} {required && <span className="required">*</span>}</label>}
+      {displayLabel && <label className="multi-select-label">{displayLabel} {required && <span className="required">*</span>}</label>}
       
       <div className={`multi-select-container ${disabled ? 'disabled' : ''}`} onClick={() => !disabled && setIsOpen(!isOpen)}>
         <div className="multi-select-values">
@@ -61,7 +68,7 @@ const MultiSelect = ({
               </span>
             ))
           ) : (
-            <span className="multi-select-placeholder">{placeholder}</span>
+            <span className="multi-select-placeholder">{displayPlaceholder}</span>
           )}
         </div>
         <i className={`fas fa-chevron-down ${isOpen ? 'open' : ''}`}></i>
@@ -73,7 +80,7 @@ const MultiSelect = ({
             <i className="fas fa-search"></i>
             <input
               type="text"
-              placeholder="Buscar..."
+              placeholder={t('search', 'Buscar...')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onClick={(e) => e.stopPropagation()}
@@ -81,7 +88,7 @@ const MultiSelect = ({
           </div>
           <div className="multi-select-options">
             {filteredOptions.length === 0 ? (
-              <div className="multi-select-no-results">No hay resultados</div>
+              <div className="multi-select-no-results">{t('no_results', 'No hay resultados')}</div>
             ) : (
               filteredOptions.map(option => (
                 <div

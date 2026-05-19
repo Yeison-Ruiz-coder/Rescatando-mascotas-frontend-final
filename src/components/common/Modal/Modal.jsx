@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './Modal.css';
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children, showCloseButton = true }) => {
+  const { t } = useTranslation('common');
+  
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -20,9 +23,11 @@ const Modal = ({ isOpen, onClose, children }) => {
       <div className="modal-overlay" onClick={onClose} />
       <div className="modal-container">
         <div className="modal-content">
-          <button className="modal-close" onClick={onClose}>
-            <i className="fas fa-times"></i>
-          </button>
+          {showCloseButton && (
+            <button className="modal-close" onClick={onClose} aria-label={t('close', 'Cerrar')}>
+              <i className="fas fa-times"></i>
+            </button>
+          )}
           {children}
         </div>
       </div>

@@ -20,13 +20,14 @@ const COLORS = {
   cardBg: '#ffffff',
   border: 'rgba(0, 0, 0, 0.08)',
   dark: '#1b202b',
+  white: '#ffffff',
   gold: '#ff8c42',
 };
 
 // ============================================
 // LOGO EN BASE64
 // ============================================
-const LOGO_BASE64 = 'https://res.cloudinary.com/dixyebg5i/image/upload/v1778998343/logo-oscuro.png_1_ndpy2u.png'; // <--- COLOCA AQUÍ TU BASE64
+const LOGO_BASE64 = 'https://res.cloudinary.com/dixyebg5i/image/upload/v1778998343/logo-oscuro.png_1_ndpy2u.png';
 
 // ============================================
 // FUNCIÓN PARA IMÁGENES DE MASCOTAS
@@ -47,9 +48,10 @@ const styles = StyleSheet.create({
   
   header: {
     marginBottom: 25,
-    padding: 20,
-    backgroundColor: COLORS.dark,
-    borderRadius: 16,
+    padding: 15,
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -77,12 +79,6 @@ const styles = StyleSheet.create({
     objectFit: 'cover',
   },
   
-  logoText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: COLORS.dark,
-  },
-  
   headerTitle: {
     fontSize: 13,
     fontWeight: 'bold',
@@ -103,45 +99,37 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   
-  // pageBreakInside: 'avoid' evita que se corten al cambiar de página
-  card: {
-    marginBottom: 14,
-    padding: 14,
-    backgroundColor: COLORS.cardBg,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    pageBreakInside: 'avoid',
+  // ========== ESTILOS SIN CUADROS ==========
+  section: {
+    marginBottom: 18,
   },
   
-  cardTitle: {
+  sectionTitle: {
     fontSize: 11,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 8,
     color: COLORS.primary,
-    borderLeftWidth: 3,
-    borderLeftColor: COLORS.primary,
-    paddingLeft: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.primary,
+    paddingBottom: 3,
   },
   
   row: {
     flexDirection: 'row',
-    marginBottom: 6,
-    paddingVertical: 3,
-    borderBottomWidth: 0.5,
-    borderBottomColor: COLORS.border,
+    marginBottom: 5,
+    paddingVertical: 2,
   },
   
   label: {
-    width: 95,
+    width: 100,
     fontWeight: 'bold',
-    fontSize: 8,
+    fontSize: 9,
     color: COLORS.textMuted,
   },
   
   value: {
     flex: 1,
-    fontSize: 8,
+    fontSize: 9,
     color: COLORS.text,
   },
   
@@ -166,11 +154,8 @@ const styles = StyleSheet.create({
   compromisoItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
     gap: 8,
-    padding: 6,
-    backgroundColor: COLORS.background,
-    borderRadius: 6,
   },
   
   compromisoCheck: {
@@ -189,51 +174,44 @@ const styles = StyleSheet.create({
   },
   
   compromisoText: {
-    fontSize: 8,
+    fontSize: 9,
     color: COLORS.text,
     flex: 1,
   },
   
+  // Footer SIMPLE y ESTÁTICO (sin recuadro)
   footer: {
-    marginTop: 25,
-    padding: 12,
-    backgroundColor: COLORS.dark,
-    borderRadius: 12,
+    marginTop: 40,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.textLight,
     alignItems: 'center',
-    pageBreakInside: 'avoid',
   },
   
   footerText: {
     fontSize: 7,
-    color: '#ffffff',
+    color: COLORS.textMuted,
     marginBottom: 3,
     textAlign: 'center',
-    opacity: 0.8,
   },
   
   footerHighlight: {
     fontSize: 8,
-    color: COLORS.gold,
+    color: COLORS.primary,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.textLight,
-    marginVertical: 8,
-    opacity: 0.3,
-  },
-  
+  // Sección de mascota SIN cuadro
   mascotaSection: {
-    marginBottom: 14,
-    padding: 14,
-    backgroundColor: COLORS.secondary,
-    borderRadius: 12,
+    marginBottom: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 0,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    pageBreakInside: 'avoid',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
   },
   
   mascotaImage: {
@@ -249,16 +227,22 @@ const styles = StyleSheet.create({
   },
   
   mascotaNombre: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.dark,
     marginBottom: 3,
   },
   
   mascotaDetalle: {
-    fontSize: 7,
-    color: '#ffffff',
-    opacity: 0.85,
+    fontSize: 8,
+    color: COLORS.textMuted,
+  },
+  
+  textBlock: {
+    fontSize: 9,
+    color: COLORS.text,
+    marginBottom: 5,
+    lineHeight: 1.4,
   },
 });
 
@@ -266,14 +250,12 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
   const fecha = new Date().toLocaleDateString('es-ES');
   const mascotaInfo = mascota || solicitud?.solicitable || {};
   const mascotaImageUrl = getCloudinaryUrl(mascotaInfo?.foto_principal);
-  
-  // Verificar si hay logo base64
   const hasLogo = LOGO_BASE64 && LOGO_BASE64.trim() !== '';
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
+        {/* Header - CON cuadro (solo este se mantiene) */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.logoContainer}>
@@ -295,7 +277,7 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
           </View>
         </View>
 
-        {/* Mascota */}
+        {/* Sección Mascota - SIN cuadro */}
         <View style={styles.mascotaSection}>
           {mascotaImageUrl && (
             <Image style={styles.mascotaImage} src={mascotaImageUrl} />
@@ -313,9 +295,9 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
           </View>
         </View>
 
-        {/* Datos Personales */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>DATOS PERSONALES</Text>
+        {/* DATOS PERSONALES - SIN cuadro */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>DATOS PERSONALES</Text>
           <View style={styles.row}>
             <Text style={styles.label}>Nombre completo</Text>
             <Text style={styles.value}>{formData?.nombre} {formData?.apellido}</Text>
@@ -338,9 +320,9 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
           </View>
         </View>
 
-        {/* Vivienda */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>INFORMACIÓN DE VIVIENDA</Text>
+        {/* VIVIENDA - SIN cuadro */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>INFORMACIÓN DE VIVIENDA</Text>
           <View style={styles.row}>
             <Text style={styles.label}>Dirección</Text>
             <Text style={styles.value}>{formData?.direccion}, {formData?.ciudad}</Text>
@@ -367,21 +349,21 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
           </View>
         </View>
 
-        {/* Experiencia */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>EXPERIENCIA CON MASCOTAS</Text>
-          <Text style={styles.value}>{formData?.experiencia_mascotas || 'No especifica'}</Text>
+        {/* EXPERIENCIA - SIN cuadro */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>EXPERIENCIA CON MASCOTAS</Text>
+          <Text style={styles.textBlock}>{formData?.experiencia_mascotas || 'No especifica'}</Text>
         </View>
 
-        {/* Motivo */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>MOTIVO DE ADOPCIÓN</Text>
-          <Text style={styles.value}>{formData?.motivo_adopcion || 'No especifica'}</Text>
+        {/* MOTIVO - SIN cuadro */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>MOTIVO DE ADOPCIÓN</Text>
+          <Text style={styles.textBlock}>{formData?.motivo_adopcion || 'No especifica'}</Text>
         </View>
 
-        {/* Compromisos */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>COMPROMISOS ACEPTADOS</Text>
+        {/* COMPROMISOS - SIN cuadro */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>COMPROMISOS ACEPTADOS</Text>
           <View style={styles.compromisoItem}>
             <View style={styles.compromisoCheck}>
               <Text style={styles.compromisoCheckText}>✓</Text>
@@ -402,12 +384,11 @@ const SolicitudPDF = ({ solicitud, mascota, formData }) => {
           </View>
         </View>
 
-        {/* Footer */}
+        {/* Footer SIMPLE - SIN recuadro, solo línea superior */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Este documento es un resumen de tu solicitud de adopción.</Text>
           <Text style={styles.footerText}>Fecha: {fecha}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.footerHighlight}>Rescatando Mascotas Forever - Sanando su historia</Text>
+          <Text style={styles.footerHighlight}>Rescatando Mascotas Forever</Text>
         </View>
       </Page>
     </Document>

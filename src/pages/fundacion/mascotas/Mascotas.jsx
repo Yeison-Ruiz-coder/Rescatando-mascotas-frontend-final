@@ -5,23 +5,66 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useFiltros } from '../../../contexts/FiltrosContext';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import MascotaCardFundacion from '../../../components/common/MascotaCardFundacion/MascotaCardFundacion';
+import FiltrosMascotas from '../../../components/common/FiltrosMascotas/FiltrosMascotas';
 import './Mascotas.css';
 
 const Mascotas = () => {
-  const { t } = useTranslation(['fundacion', 'common']);
+  const { t } = useTranslation('fundacion');
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { filtros } = useFiltros();
   const [mascotas, setMascotas] = useState([]);
+  const [mascotasFiltradas, setMascotasFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('todos');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+
+  const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     cargarMascotas();
   }, []);
+
+  useEffect(() => {
+    if (mascotas.length > 0) {
+      let resultado = [...mascotas];
+
+      if (filtros.busqueda && filtros.busqueda.trim()) {
+        const busquedaLower = filtros.busqueda.toLowerCase().trim();
+        resultado = resultado.filter((m) =>
+          m.nombre_mascota?.toLowerCase().includes(busquedaLower) ||
+          m.especie?.toLowerCase().includes(busquedaLower) ||
+          m.raza?.toLowerCase().includes(busquedaLower)
+        );
+      }
+
+      if (filtros.especie && filtros.especie.trim()) {
+        resultado = resultado.filter((m) =>
+          m.especie?.toLowerCase() === filtros.especie.toLowerCase()
+        );
+      }
+
+      if (filtros.genero && filtros.genero.trim()) {
+        resultado = resultado.filter((m) =>
+          m.genero?.toLowerCase() === filtros.genero.toLowerCase()
+        );
+      }
+
+      setMascotasFiltradas(resultado);
+    }
+  }, [filtros, mascotas]);
 
   const cargarMascotas = async () => {
     try {
@@ -46,11 +89,11 @@ const Mascotas = () => {
       console.error('Error cargando mascotas:', error);
       
       if (error.response?.status === 403) {
-        toast.error(t('error_permisos', { defaultValue: 'No tienes permisos para ver las mascotas.' }));
+        toast.error(t('error_permisos'));
       } else if (error.response?.status === 401) {
-        toast.error(t('error_sesion', { defaultValue: 'Sesión expirada. Por favor inicia sesión nuevamente.' }));
+        toast.error(t('error_sesion'));
       } else {
-        toast.error(t('error_carga_mascotas', { defaultValue: 'Error al cargar las mascotas' }));
+        toast.error(t('error_carga_mascotas'));
       }
       
       setMascotas([]);
@@ -64,14 +107,14 @@ const Mascotas = () => {
       const response = await api.delete(`/entity/mascotas/${id}`);
       
       if (response.data.success) {
-        toast.success(t('mascota_eliminada_exito', { nombre, defaultValue: `${nombre} ha sido eliminado(a)` }));
+        toast.success(t('mascota_eliminada_exito', { nombre }));
         cargarMascotas();
       } else {
-        toast.error(response.data.message || t('error_eliminar', { defaultValue: 'Error al eliminar' }));
+        toast.error(response.data.message || t('error_eliminar'));
       }
     } catch (error) {
       console.error('Error eliminando mascota:', error);
-      toast.error(t('error_eliminar_mascota', { defaultValue: 'Error al eliminar la mascota' }));
+      toast.error(t('error_eliminar_mascota'));
     }
   };
 
@@ -82,43 +125,27 @@ const Mascotas = () => {
       });
       
       if (response.data.success) {
-        const estadoTexto = nuevoEstado === 'En adopcion' ? t('estado_en_adopcion', { defaultValue: 'En adopción' }) :
-                           nuevoEstado === 'Adoptado' ? t('estado_adoptado', { defaultValue: 'Adoptado' }) :
-                           nuevoEstado === 'Rescatada' ? t('estado_rescatada', { defaultValue: 'Rescatada' }) :
-                           t('estado_en_acogida', { defaultValue: 'En acogida' });
+        const estadoTexto = nuevoEstado === 'En adopcion' ? t('estado_en_adopcion') :
+                           nuevoEstado === 'Adoptado' ? t('estado_adoptado') :
+                           nuevoEstado === 'Rescatada' ? t('estado_rescatada') :
+                           t('estado_en_acogida');
         
-        toast.success(t('estado_actualizado_exito', { estado: estadoTexto, defaultValue: `Estado actualizado a ${estadoTexto}` }));
+        toast.success(t('estado_actualizado_exito', { estado: estadoTexto }));
         cargarMascotas();
       } else {
-        toast.error(response.data.message || t('error_actualizar_estado', { defaultValue: 'Error al actualizar estado' }));
+        toast.error(response.data.message || t('error_actualizar_estado'));
       }
     } catch (error) {
       console.error('Error actualizando estado:', error);
-      toast.error(t('error_actualizar_estado', { defaultValue: 'Error al actualizar el estado' }));
+      toast.error(t('error_actualizar_estado'));
     }
   };
-
-  const mascotasArray = Array.isArray(mascotas) ? mascotas : [];
-  
-  const mascotasFiltradas = mascotasArray.filter(mascota => {
-    if (filter === 'en_adopcion' && mascota.estado !== 'En adopción') return false;
-    if (filter === 'adoptado' && mascota.estado !== 'Adoptado') return false;
-    
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      return (mascota.nombre_mascota && mascota.nombre_mascota.toLowerCase().includes(term)) ||
-             (mascota.especie && mascota.especie.toLowerCase().includes(term)) ||
-             (mascota.raza && mascota.raza?.toLowerCase().includes(term));
-    }
-    
-    return true;
-  });
 
   if (loading) {
     return (
       <div className="mascotas-list-page">
         <div className="loading-container">
-          <LoadingSpinner text={t('cargando_mascotas', { defaultValue: 'Cargando mascotas...' })} />
+          <LoadingSpinner text={t('cargando_mascotas')} />
         </div>
       </div>
     );
@@ -126,116 +153,54 @@ const Mascotas = () => {
 
   return (
     <div className="mascotas-list-page">
-      {/* Header con estilo glassmorphism */}
       <div className="mascotas-header">
         <div className="container">
           <h1>
             <i className="fas fa-paw"></i> 
-            {t('mis_mascotas', { defaultValue: 'Mis Mascotas' })}
+            {t('mis_mascotas')}
           </h1>
           <p className="subtitle">
-            {t('gestion_mascotas', { defaultValue: 'Gestiona el registro de tus mascotas en adopción' })}
+            {t('gestion_mascotas')}
           </p>
-          {mascotasArray.length > 0 && (
+          {mascotas.length > 0 && (
             <p className="info">
               <i className="fas fa-heart" style={{ color: "var(--color-heart)" }}></i>
-              {t('mensaje_bienvenida', { total: mascotasArray.length, defaultValue: `Tienes ${mascotasArray.length} mascota(s) registradas` })}
+              {t('mensaje_bienvenida', { total: mascotas.length })}
             </p>
           )}
         </div>
       </div>
 
-      {/* Filtros section - sticky glass */}
-      <div className="filtros-section">
+      <div className="filtros-section sticky-glass glass-auto shadow-sticky">
         <div className="container">
-          <div className="filtros-container" style={{ background: 'transparent', padding: 0 }}>
-            <div className="filtros-buttons">
-              <button 
-                className={`filtro-btn ${filter === 'todos' ? 'active' : ''}`}
-                onClick={() => setFilter('todos')}
-              >
-                {t('todos', { defaultValue: 'Todos' })} ({mascotasArray.length})
-              </button>
-              <button 
-                className={`filtro-btn ${filter === 'en_adopcion' ? 'active' : ''}`}
-                onClick={() => setFilter('en_adopcion')}
-              >
-                {t('estado_en_adopcion', { defaultValue: 'En adopción' })} ({mascotasArray.filter(m => m.estado === 'En adopcion').length})
-              </button>
-              <button 
-                className={`filtro-btn ${filter === 'adoptado' ? 'active' : ''}`}
-                onClick={() => setFilter('adoptado')}
-              >
-                {t('estado_adoptado', { defaultValue: 'Adoptados' })} ({mascotasArray.filter(m => m.estado === 'Adoptado').length})
-              </button>
-            </div>
-            
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input
-                type="text"
-                placeholder={t('buscar_placeholder', { defaultValue: 'Buscar por nombre, especie o raza...' })}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <button 
-                  className="search-clear"
-                  onClick={() => setSearchTerm('')}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--color-text-muted)'
-                  }}
-                >
-                  <i className="fas fa-times-circle"></i>
-                </button>
-              )}
-            </div>
-          </div>
+          <FiltrosMascotas
+            especies={especies}
+            variant={isMobile ? "modal" : "inline"}
+          />
         </div>
       </div>
 
-      {/* Resultados section */}
       <div className="resultados-section">
         <div className="container">
           <div className="resultados-header">
             <div className="resultados-count">
-              <i className="fas fa-list"></i> Mostrando <strong>{mascotasFiltradas.length}</strong> de <strong>{mascotasArray.length}</strong> mascotas
+              <i className="fas fa-list"></i> {t('mostrando')} <strong>{mascotasFiltradas.length}</strong> {t('de')} <strong>{mascotas.length}</strong> {t('mascotas')}
             </div>
-            {/* Botón Agregar Mascota - Reemplaza el ordenar por */}
             <Link to="/fundacion/mascotas/nueva" className="btn-primary">
               <i className="fas fa-plus"></i> 
-              {t('agregar_mascota', { defaultValue: 'Agregar Mascota' })}
+              {t('agregar_mascota')}
             </Link>
           </div>
 
           {mascotasFiltradas.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-search"></i>
-              <h3>{t('sin_mascotas', { defaultValue: 'No hay mascotas para mostrar' })}</h3>
+              <h3>{t('sin_mascotas')}</h3>
               <p>
-                {searchTerm || filter !== 'todos' 
-                  ? t('sin_resultados_filtros', { defaultValue: 'No se encontraron mascotas con los filtros seleccionados' })
-                  : t('primer_mascota', { defaultValue: 'Comienza registrando tu primera mascota' })}
+                {filtros.busqueda || filtros.especie || filtros.genero
+                  ? t('sin_resultados_filtros')
+                  : t('primer_mascota')}
               </p>
-              {(searchTerm || filter !== 'todos') && (
-                <button 
-                  className="btn-secondary"
-                  onClick={() => {
-                    setSearchTerm('');
-                    setFilter('todos');
-                  }}
-                >
-                  <i className="fas fa-eraser"></i> Limpiar filtros
-                </button>
-              )}
-              {!searchTerm && filter === 'todos' && mascotasArray.length === 0 && (
-                <Link to="/fundacion/mascotas/nueva" className="btn-primary">
-                  <i className="fas fa-plus"></i> Registrar primera mascota
-                </Link>
-              )}
             </div>
           ) : (
             <div className="mascotas-grid">
