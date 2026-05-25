@@ -66,7 +66,9 @@ const PublicSidebar = () => {
           >
             <i className="fas fa-exclamation-triangle"></i>
             <span>{t("reportar_rescate")}</span>
-            <span className="sidebar-badge urgent">{t("urgente").toUpperCase()}</span>
+            <span className="sidebar-badge urgent">
+              {t("urgente").toUpperCase()}
+            </span>
           </Link>
         </div>
 
@@ -137,6 +139,13 @@ const PublicSidebar = () => {
         {isAuthenticated && (
           <>
             <div className="sidebar-section">
+              <Link
+                to="/user/dashboard"
+                className={`sidebar-item ${isActive("/user/dashboard") ? "active" : ""}`}
+              >
+                <i className="fas fa-chart-line"></i>
+                <span>{t("mi_dashboard") || "Mi Dashboard"}</span>
+              </Link>
               <div className="section-title">
                 <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
               </div>
@@ -153,19 +162,6 @@ const PublicSidebar = () => {
               >
                 <i className="fas fa-credit-card"></i>
                 <span>{t("mis_suscripciones") || "Mis Suscripciones"}</span>
-              </Link>
-            </div>
-
-            <div className="sidebar-section">
-              <div className="section-title">
-                <i className="fas fa-store me-1"></i> {t("tienda")}
-              </div>
-              <Link
-                to="/tienda"
-                className={`sidebar-item ${isActive("/tienda") ? "active" : ""}`}
-              >
-                <i className="fas fa-shopping-cart"></i>
-                <span>{t("tienda") || "Tienda"}</span>
               </Link>
             </div>
           </>

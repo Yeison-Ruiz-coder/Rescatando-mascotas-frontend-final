@@ -1,0 +1,121 @@
+/* src/components/profile/sections/VerificationSection.css */
+.profile-section {
+  width: 100%;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid;
+}
+
+[data-theme="light"] .section-header {
+  border-bottom-color: rgba(102, 126, 234, 0.15);
+}
+
+[data-theme="dark"] .section-header {
+  border-bottom-color: rgba(139, 156, 255, 0.2);
+}
+
+.section-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  border-radius: 16px;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.section-info h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme="light"] .section-info h3 {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .section-info h3 {
+  color: #f1f5f9;
+}
+
+.section-info p {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+[data-theme="light"] .section-info p {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .section-info p {
+  color: #94a3b8;
+}
+
+.verification-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .verification-card {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.verification-card.verified {
+  border-left: 4px solid var(--color-success);
+}
+
+.verification-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  border-radius: 16px;
+  color: white;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.verification-info {
+  flex: 1;
+}
+
+.verification-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+[data-theme="light"] .verification-info h4 {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .verification-info h4 {
+  color: #f1f5f9;
+}
+
+.verification-info p {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .verification-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
