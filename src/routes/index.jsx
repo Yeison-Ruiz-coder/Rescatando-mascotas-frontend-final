@@ -43,6 +43,7 @@ import SuscripcionesPublicIndex from "../pages/public/Suscripciones/Suscripcione
 // PÁGINAS DE USUARIO
 // =============================================================
 import Solicitudes from "../pages/user/Solicitudes/Solicitudes";
+import UserProfile from "../pages/user/perfil/UserProfile";
 import UserSuscripciones from "../pages/user/MisSuscripciones"; // NUEVO
 
 // =============================================================
@@ -62,6 +63,7 @@ import AdminRescatesIndex from "../pages/admin/rescates/RescatesIndex";
 import AdminRescatesPendientes from "../pages/admin/rescates/RescatesPendientes";
 import AdminRescatesMapa from "../pages/admin/rescates/RescatesMapa";
 import AdminRescatesShow from "../pages/admin/rescates/RescatesShow";
+import AdminProfile from "../pages/admin/perfil/AdminProfile";
 
 // =============================================================
 // PÁGINAS DE FUNDACIÓN
@@ -82,6 +84,7 @@ import SuscripcionesShow from "../pages/fundacion/suscripciones/SuscripcionesSho
 import RescatesDisponiblesFundacion from "../pages/fundacion/rescates/RescatesDisponibles";
 import MisRescatesFundacion from "../pages/fundacion/rescates/MisRescates";
 import RescateDetalleFundacion from "../pages/fundacion/rescates/RescateDetalle";
+import FundacionProfile from "../pages/fundacion/perfil/FundacionProfile";
 
 // =============================================================
 // PÁGINAS DE VETERINARIA
@@ -97,6 +100,7 @@ import VeterinariaSuscripcionesShow from "../pages/veterinaria/suscripciones/Sus
 import RescatesDisponiblesVet from "../pages/veterinaria/rescates/RescatesDisponibles";
 import MisRescatesVet from "../pages/veterinaria/rescates/MisRescates";
 import RescateDetalleVet from "../pages/veterinaria/rescates/RescateDetalle";
+import VeterinariaProfile from "../pages/veterinaria/perfil/VeterinariaProfile";
 
 // =============================================================
 // PLACEHOLDERS PARA PÁGINAS QUE NO TIENEN AÚN
@@ -212,7 +216,6 @@ const AdminCategorias = () => <PagePlaceholder title="Categorías" />;
 
 // Usuario placeholders
 const UserDashboard = () => <PagePlaceholder title="Dashboard Usuario" />;
-const UserProfile = () => <PagePlaceholder title="Mi Perfil" />;
 const UserCarrito = () => <PagePlaceholder title="Mi Carrito" />;
 const UserPedidos = () => <PagePlaceholder title="Mis Pedidos" />;
 const UserDonaciones = () => <PagePlaceholder title="Mis Donaciones" />;
@@ -359,7 +362,6 @@ const router = createBrowserRouter([
           { path: "carrito", element: <UserCarrito /> },
           { path: "pedidos", element: <UserPedidos /> },
           { path: "donaciones", element: <UserDonaciones /> },
-          // ✅ MIS SUSCRIPCIONES
           { path: "mis-suscripciones", element: <UserSuscripciones /> },
         ],
       },
@@ -374,28 +376,12 @@ const router = createBrowserRouter([
       {
         element: <VeterinariaLayout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/veterinaria/dashboard" replace />,
-          },
+          {index: true,element: <Navigate to="/veterinaria/dashboard" replace />,},
           { path: "dashboard", element: <DashboardVeterinaria /> },
-
-          // Rescates Veterinaria
-          {
-            path: "rescates",
-            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
-          },
-          {
-            path: "rescates/disponibles",
-            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
-          },
-          {
-            path: "rescates/mis-rescates",
-            element: <MisRescatesVet tipoUsuario="veterinaria" />,
-          },
+          {path: "rescates",element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,},
+          {path: "rescates/disponibles",element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,},
+          {path: "rescates/mis-rescates",element: <MisRescatesVet tipoUsuario="veterinaria" />,},
           { path: "rescates/:id", element: <RescateDetalleVet /> },
-
-          // Citas y Pacientes
           { path: "atenciones", element: <VetAtenciones /> },
           { path: "historiales", element: <VetHistoriales /> },
           { path: "citas", element: <Citas /> },
@@ -405,20 +391,15 @@ const router = createBrowserRouter([
           { path: "pacientes/nuevo", element: <PacienteForm /> },
           { path: "pacientes/editar/:id", element: <PacienteForm /> },
           { path: "pacientes/:id/historial", element: <HistorialMedico /> },
-
-          // Otros
           { path: "vacunas", element: <VetVacunas /> },
           { path: "productos", element: <VetProductos /> },
           { path: "pedidos", element: <VetPedidos /> },
           { path: "reportes", element: <VetReportes /> },
-          { path: "perfil", element: <div>Mi Perfil</div> },
+          { path: "perfil", element: <VeterinariaProfile /> },
 
-          // ✅ SUSCRIPCIONES VETERINARIA
+           // Suscripciones Veterinaria
           { path: "suscripciones", element: <VeterinariaSuscripcionesIndex /> },
-          {
-            path: "suscripciones/:id",
-            element: <VeterinariaSuscripcionesShow />,
-          },
+          {path: "suscripciones/:id",element: <VeterinariaSuscripcionesShow />,},
         ],
       },
     ],
@@ -432,34 +413,16 @@ const router = createBrowserRouter([
       {
         element: <FundacionLayout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/fundacion/dashboard" replace />,
-          },
+          {index: true,element: <Navigate to="/fundacion/dashboard" replace />,},
           { path: "dashboard", element: <FundDashboard /> },
-
-          // Mascotas - RUTAS CORREGIDAS
           { path: "mascotas", element: <FundMascotas /> },
-          { path: "mascotas/nueva", element: <CrearMascota /> }, // ✅ NUEVA RUTA (creación)
+          { path: "mascotas/nueva", element: <CrearMascota /> }, 
           { path: "mascotas/:id", element: <MascotaDetalleFundacion /> },
-          { path: "mascotas/editar/:id", element: <EditarMascota /> }, // ✅ NUEVA RUTA (edición)
-
-          // Rescates
-          {
-            path: "rescates",
-            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
-          },
-          {
-            path: "rescates/disponibles",
-            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
-          },
-          {
-            path: "rescates/mis-rescates",
-            element: <MisRescatesFundacion tipoUsuario="fundacion" />,
-          },
+          { path: "mascotas/editar/:id", element: <EditarMascota /> }, 
+          {path: "rescates",element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,},
+          {path: "rescates/disponibles",element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,},
+          {path: "rescates/mis-rescates",element: <MisRescatesFundacion tipoUsuario="fundacion" />,},
           { path: "rescates/:id", element: <RescateDetalleFundacion /> },
-
-          // Eventos
           { path: "eventos", element: <EventosIndex /> },
           { path: "eventos/crear", element: <EventosCreate /> },
           { path: "eventos/:id", element: <EventosShow /> },
@@ -476,7 +439,7 @@ const router = createBrowserRouter([
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
           { path: "reportes", element: <FundReportes /> },
-          { path: "perfil", element: <div>Mi Perfil</div> },
+          { path: "perfil", element: <FundacionProfile /> },
         ],
       },
     ],
@@ -523,15 +486,9 @@ const router = createBrowserRouter([
 
           // ✅ SUSCRIPCIONES ADMIN
           { path: "suscripciones", element: <AdminSuscripcionesIndex /> },
-          {
-            path: "suscripciones/crear",
-            element: <AdminSuscripcionesCreate />,
-          },
+          {path: "suscripciones/crear",element: <AdminSuscripcionesCreate />,},
           { path: "suscripciones/:id", element: <AdminSuscripcionesShow /> },
-          {
-            path: "suscripciones/:id/editar",
-            element: <AdminSuscripcionesEdit />,
-          },
+          {path: "suscripciones/:id/editar",element: <AdminSuscripcionesEdit />,},
 
           // Catálogos y configuraciones
           { path: "adopciones", element: <AdminAdopciones /> },
@@ -546,7 +503,7 @@ const router = createBrowserRouter([
           { path: "razas", element: <AdminRazas /> },
           { path: "vacunas", element: <AdminVacunas /> },
           { path: "categorias", element: <AdminCategorias /> },
-          { path: "perfil", element: <div>Mi Perfil Admin</div> },
+          { path: "perfil", element: <AdminProfile /> },
         ],
       },
     ],
