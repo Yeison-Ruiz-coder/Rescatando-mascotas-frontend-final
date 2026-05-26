@@ -320,12 +320,12 @@
   background: var(--gradient-primary);
 }
 
-.vet-sidebar .sidebar-header {
-  background: linear-gradient(135deg, #48bb78, #38a169);
+.fundacion-sidebar .sidebar-header {
+  background: var(--gradient-primary);
 }
 
 .fundacion-sidebar .sidebar-header {
-  background: linear-gradient(135deg, #ed8936, #dd6b20);
+  background: var(--gradient-primary);
 }
 
 .admin-sidebar .sidebar-header {

@@ -56,13 +56,28 @@ const PhoneVerification = ({ phone, onSendCode, onVerify }) => {
         </button>
       ) : (
         <div className="phone-verification-code">
-          <input type="text" className="form-input" placeholder={t('profile.enterCode')} value={code} onChange={(e) => setCode(e.target.value)} maxLength="6" />
-          <button className="btn-primary-global btn-sm" onClick={handleVerify} disabled={loading}>{loading ? t('common.verifying') : t('profile.verify')}</button>
-          <button className="btn-secondary-global btn-sm" onClick={() => setCodeSent(false)}>{t('common.cancel')}</button>
+          <input 
+            type="text" 
+            className="form-input" 
+            placeholder={t('profile.enterCode')} 
+            value={code} 
+            onChange={(e) => setCode(e.target.value)} 
+            maxLength="6" 
+          />
+          <button className="btn-primary-global btn-sm" onClick={handleVerify} disabled={loading}>
+            {loading ? t('common.verifying') : t('profile.verify')}
+          </button>
+          <button className="btn-secondary-global btn-sm" onClick={() => setCodeSent(false)}>
+            {t('common.cancel')}
+          </button>
         </div>
       )}
       
-      {message && <div className={`alert alert-${message.includes('exitosamente') ? 'success' : 'warning'} mt-3`}>{message}</div>}
+      {message && (
+        <div className={`alert alert-${message.includes('exitosamente') || message.includes('success') ? 'success' : 'warning'} mt-3`}>
+          {message}
+        </div>
+      )}
     </div>
   );
 };

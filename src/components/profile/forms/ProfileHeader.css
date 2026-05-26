@@ -33,21 +33,26 @@
   justify-content: center;
   cursor: pointer;
   color: white;
+  transition: var(--transition);
 }
 
-.profile-header-info {
-  flex: 1;
+.avatar-upload-btn:hover {
+  transform: scale(1.1);
 }
 
-.profile-header-info h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
+.delete-avatar-btn {
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.profile-header-info p {
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+.delete-avatar-btn:hover {
+  background: var(--color-danger);
+  color: white;
 }
 
 .role-badge {
@@ -60,15 +65,6 @@
   border-radius: 50px;
   font-size: 0.75rem;
   font-weight: 600;
-}
-
-.delete-avatar-btn {
-  background: transparent;
-  border: 1px solid var(--color-danger);
-  color: var(--color-danger);
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  cursor: pointer;
 }
 
 @media (max-width: 768px) {

@@ -55,42 +55,87 @@ const LocationForm = ({ initialData, onSubmit, isLoading }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="location-form">
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label className="form-label">{t('profile.address')}</label>
-        <input type="text" name="direccion" className="form-input" value={formData.direccion} onChange={handleChange} placeholder={t('profile.addressPlaceholder')} />
+        <input 
+          type="text" 
+          name="direccion" 
+          className="form-input" 
+          value={formData.direccion} 
+          onChange={handleChange} 
+          placeholder={t('profile.addressPlaceholder')} 
+        />
       </div>
 
       <div className="form-row">
         <div className="form-group">
           <label className="form-label">{t('profile.country')}</label>
-          <input type="text" name="pais" className="form-input" value={formData.pais} onChange={handleChange} />
+          <input 
+            type="text" 
+            name="pais" 
+            className="form-input" 
+            value={formData.pais} 
+            onChange={handleChange} 
+          />
         </div>
         <div className="form-group">
           <label className="form-label">{t('profile.city')}</label>
-          <input type="text" name="ciudad" className="form-input" value={formData.ciudad} onChange={handleChange} />
+          <input 
+            type="text" 
+            name="ciudad" 
+            className="form-input" 
+            value={formData.ciudad} 
+            onChange={handleChange} 
+          />
         </div>
       </div>
 
       <div className="form-group">
         <label className="form-label">{t('profile.postalCode')}</label>
-        <input type="text" name="codigo_postal" className="form-input" value={formData.codigo_postal} onChange={handleChange} />
+        <input 
+          type="text" 
+          name="codigo_postal" 
+          className="form-input" 
+          value={formData.codigo_postal} 
+          onChange={handleChange} 
+        />
       </div>
 
       <div className="form-group">
         <label className="form-label">{t('profile.coordinates')}</label>
         <div className="form-row">
-          <input type="text" name="lat" className="form-input" value={formData.lat} onChange={handleChange} placeholder={t('profile.latitude')} />
-          <input type="text" name="lng" className="form-input" value={formData.lng} onChange={handleChange} placeholder={t('profile.longitude')} />
+          <input 
+            type="text" 
+            name="lat" 
+            className="form-input" 
+            value={formData.lat} 
+            onChange={handleChange} 
+            placeholder={t('profile.latitude')} 
+          />
+          <input 
+            type="text" 
+            name="lng" 
+            className="form-input" 
+            value={formData.lng} 
+            onChange={handleChange} 
+            placeholder={t('profile.longitude')} 
+          />
         </div>
-        <button type="button" className="location-current-btn" onClick={getCurrentLocation} disabled={locating}>
+        <button 
+          type="button" 
+          className="location-current-btn" 
+          onClick={getCurrentLocation} 
+          disabled={locating}
+        >
           <i className={`fas fa-${locating ? 'spinner fa-pulse' : 'location-dot'}`}></i>
           {locating ? t('profile.locating') : t('profile.useCurrentLocation')}
         </button>
       </div>
 
-      <div className="form-actions">
+      <div className="form-actions-global mt-4">
         <button type="submit" className="btn-primary-global" disabled={isLoading}>
+          {isLoading && <i className="fas fa-spinner fa-pulse me-2"></i>}
           {isLoading ? t('common.saving') : t('common.save')}
         </button>
       </div>
