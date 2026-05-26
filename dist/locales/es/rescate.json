@@ -139,5 +139,11 @@
   "registrando_mascota_rescatada_en": "Registrando mascota rescatada en",
   "fotos_label": "Fotos del rescate (máximo 5)",
   "first_photo_main_hint": "La primera foto que subas será la foto principal del rescate",
-   "location_section": "Ubicación del rescate"
+  "location_section": "Ubicación del rescate",
+
+  "rescate_enviado_title": "¡Rescate reportado exitosamente!",
+  "rescate_enviado_message": "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
+  "admin_waiting_time": "Tiempo para intervención de administradores:",
+  "admin_info": "Si ninguna fundación o veterinaria responde en 30 minutos, los administradores podrán ver y gestionar este rescate.",
+  "galeria_fotos":"Galeria de fotos"
 }

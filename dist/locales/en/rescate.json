@@ -1,6 +1,6 @@
 {
   "title": "Report a Rescue",
-  "subtitle": "Your report can save a life. Complete the form with the details of the animal in emergency situation.",
+  "subtitle": "Your report can save a life. Complete the form with the details of the animal in an emergency situation.",
   "emergency_badge": "ACTIVATE IMMEDIATE RESPONSE",
   "lugar_label": "Rescue location",
   "lugar_placeholder": "Example: Central Park, 123rd Street, intersection...",
@@ -9,12 +9,12 @@
   "fecha_label": "Rescue date",
   "map_label": "Exact location on the map",
   "map_hint": "Click on the map to adjust the location. You can also move the marker.",
-
+  
   "fotos_section": "Rescue photos",
   "foto_principal_label": "Main photo (recommended)",
   "galeria_label": "Additional photo gallery",
   "fotos_hint": "Photos help better identify the animal and its condition. You can upload up to 5 additional photos (max 3MB each).",
-
+  
   "optional_data": "Optional data (to contact you and provide follow-up)",
   "nombre_label": "Your name",
   "nombre_placeholder": "Example: John Doe",
@@ -74,7 +74,7 @@
   "prioridad_herido_desc": "The animal has injuries requiring medical attention.",
   "prioridad_herido_recomendacion": "Keep distance if scared. Don't try to heal it yourself if serious.",
   "prioridad_abandonado_title": "ABANDONED ANIMAL",
-  "prioridad_abandonado_desc": "The animal is alone and needs temporary home or rescue.",
+  "prioridad_abandonado_desc": "The animal is alone and needs a temporary home or rescue.",
   "prioridad_abandonado_recomendacion": "If you can, offer water and food. Don't scare it if frightened.",
   "prioridad_otro_title": "GENERAL INFORMATION",
   "prioridad_otro_desc": "The animal doesn't seem in immediate danger, but needs help.",
@@ -134,10 +134,16 @@
   "cancelar": "Cancel",
   "registrar_mascota_rescatada": "Register rescued pet",
   "registrar_mascota_rescatada_desc": "Complete the data of the rescued pet",
-  "registrando_mascota_rescatada_en": "Registering rescued pet in",
   "rescue_info_section": "Rescue information",
   "priority_section": "Priority level",
+  "registrando_mascota_rescatada_en": "Registering rescued pet in",
   "fotos_label": "Rescue photos (up to 5)",
   "first_photo_main_hint": "The first photo you upload will be the main photo of the rescue",
-  "location_section": "Rescue location"
+  "location_section": "Rescue location",
+
+  "rescate_enviado_title": "Rescue reported successfully!",
+  "rescate_enviado_message": "Your report has been sent. Nearby foundations and veterinarians can now see it and respond.",
+  "admin_waiting_time": "Time until administrator intervention:",
+  "admin_info": "If no foundation or veterinary responds within 30 minutes, administrators will be able to view and manage this rescue.",
+  "galeria_fotos":"Photos Galery"
 }

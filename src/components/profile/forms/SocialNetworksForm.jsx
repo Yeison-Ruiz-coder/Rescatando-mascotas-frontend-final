@@ -1,7 +1,6 @@
 // src/components/profile/forms/SocialNetworksForm.jsx
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import './SocialNetworksForm.css';
 
 const SocialNetworksForm = ({ initialData, onSubmit, isLoading }) => {
   const { t } = useTranslation();
@@ -33,7 +32,9 @@ const SocialNetworksForm = ({ initialData, onSubmit, isLoading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const cleanData = Object.fromEntries(Object.entries(formData).filter(([_, v]) => v && v.trim() !== ''));
+    const cleanData = Object.fromEntries(
+      Object.entries(formData).filter(([_, v]) => v && v.trim() !== '')
+    );
     onSubmit(cleanData);
   };
 
@@ -47,19 +48,27 @@ const SocialNetworksForm = ({ initialData, onSubmit, isLoading }) => {
   ];
 
   return (
-    <form onSubmit={handleSubmit} className="social-form">
+    <form onSubmit={handleSubmit}>
       {socials.map(social => (
         <div key={social.name} className="form-group">
           <label className="form-label">
             <i className={`${social.icon} me-2`}></i>
             {t(`profile.${social.name}`)}
           </label>
-          <input type="text" name={social.name} className="form-input" value={formData[social.name]} onChange={handleChange} placeholder={social.placeholder} />
+          <input 
+            type="text" 
+            name={social.name} 
+            className="form-input" 
+            value={formData[social.name]} 
+            onChange={handleChange} 
+            placeholder={social.placeholder} 
+          />
         </div>
       ))}
 
-      <div className="form-actions">
+      <div className="form-actions-global mt-4">
         <button type="submit" className="btn-primary-global" disabled={isLoading}>
+          {isLoading && <i className="fas fa-spinner fa-pulse me-2"></i>}
           {isLoading ? t('common.saving') : t('common.save')}
         </button>
       </div>
