@@ -1,20 +1,24 @@
 /* src/components/profile/layout/ProfileLayout.css */
+/* Encapsulado: solo afecta al layout del perfil */
+
 .profile-layout-page {
   min-height: 100vh;
   background: transparent;
 }
 
-.profile-layout-container {
+/* Usa container global como base */
+.profile-layout-page .profile-layout-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }
 
-.profile-layout-header {
+/* Header del layout */
+.profile-layout-page .profile-layout-header {
   margin-bottom: 2rem;
 }
 
-.profile-layout-header h1 {
+.profile-layout-page .profile-layout-header h1 {
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -24,73 +28,199 @@
   background-clip: text;
 }
 
-.profile-layout-header p {
+.profile-layout-page .profile-layout-header p {
   color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 
-.profile-layout-grid {
+/* Grid del layout */
+.profile-layout-page .profile-layout-grid {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 2rem;
   align-items: start;
 }
 
-.profile-layout-content {
+/* Contenido principal */
+.profile-layout-page .profile-layout-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.profile-header-wrapper {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-  border-radius: 32px;
+/* Wrappers que usan card-white global */
+.profile-layout-page .profile-header-wrapper,
+.profile-layout-page .profile-section-wrapper {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  transition: var(--transition-theme);
   padding: 1.5rem;
 }
 
-[data-theme="dark"] .profile-header-wrapper {
-  background: rgba(30, 41, 59, 0.98);
-  border: 1px solid rgba(139, 156, 255, 0.2);
-}
-
-.profile-section-wrapper {
-  background: rgba(255, 255, 255, 0.95);
+/* Efecto glass opcional (si quieres mantener el blur) */
+.profile-layout-page .profile-header-wrapper,
+.profile-layout-page .profile-section-wrapper {
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-  border-radius: 32px;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
 }
 
-[data-theme="dark"] .profile-section-wrapper {
+[data-theme="dark"] .profile-layout-page .profile-header-wrapper,
+[data-theme="dark"] .profile-layout-page .profile-section-wrapper {
   background: rgba(30, 41, 59, 0.98);
-  border: 1px solid rgba(139, 156, 255, 0.2);
 }
 
+/* Responsive */
 @media (max-width: 992px) {
-  .profile-layout-grid {
+  .profile-layout-page .profile-layout-grid {
     grid-template-columns: 240px 1fr;
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .profile-layout-container {
+  .profile-layout-page .profile-layout-container {
     padding: 1rem;
   }
   
-  .profile-layout-grid {
+  .profile-layout-page .profile-layout-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
   
-  .profile-layout-header h1 {
+  .profile-layout-page .profile-layout-header h1 {
     font-size: 1.5rem;
   }
   
-  .profile-header-wrapper,
-  .profile-section-wrapper {
+  .profile-layout-page .profile-header-wrapper,
+  .profile-layout-page .profile-section-wrapper {
     padding: 1rem;
+  }
+}
+
+/* --- Estilos específicos para formularios en el layout de perfil --- */
+.profile-layout-page .profile-section-wrapper .profile-form {
+  background: var(--form-bg);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--form-border);
+}
+
+.profile-layout-page .profile-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.profile-layout-page .profile-form .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-layout-page .profile-form label {
+  color: var(--form-label);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.profile-layout-page .profile-form input,
+.profile-layout-page .profile-form textarea,
+.profile-layout-page .profile-form select {
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  color: var(--form-text);
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  transition: var(--transition-fast);
+}
+
+.profile-layout-page .profile-form input::placeholder,
+.profile-layout-page .profile-form textarea::placeholder {
+  color: var(--form-placeholder);
+}
+
+.profile-layout-page .profile-form input:focus,
+.profile-layout-page .profile-form textarea:focus,
+.profile-layout-page .profile-form select:focus {
+  outline: none;
+  box-shadow: 0 6px 18px var(--form-focus-ring);
+  border-color: var(--color-primary);
+}
+
+.profile-layout-page .profile-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.profile-layout-page .profile-form .field-hint {
+  font-size: 0.8rem;
+  color: var(--form-hint);
+}
+
+.profile-layout-page .profile-form .profile-avatar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profile-layout-page .profile-form .avatar-img {
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-layout-page .profile-form .avatar-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.profile-layout-page .profile-form .btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-accent);
+  transition: var(--transition-fast);
+}
+
+.profile-layout-page .profile-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-layout-page .profile-form .profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+/* Hacer que el formulario se vea más orgánico, menos 'perfecto' */
+.profile-layout-page .profile-section-wrapper,
+.profile-layout-page .profile-header-wrapper {
+  border-radius: 20px;
+  padding: 1.25rem;
+}
+
+/* Responsive: pasar a columna en pantallas pequeñas */
+@media (max-width: 768px) {
+  .profile-layout-page .profile-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-layout-page .profile-form .avatar-img {
+    width: 76px;
+    height: 76px;
   }
 }

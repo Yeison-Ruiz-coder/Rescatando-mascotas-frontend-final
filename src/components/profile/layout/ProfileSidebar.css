@@ -1,59 +1,47 @@
 /* src/components/profile/layout/ProfileSidebar.css */
+/* Encapsulado: solo afecta al sidebar del perfil */
+
 .profile-sidebar {
+  /* Usar clase global card-white como base */
+  background: var(--color-card-bg);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  transition: var(--transition-theme);
+  
+  /* Estilos específicos del sidebar */
   width: 280px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-radius: 32px;
-  border: 1px solid rgba(102, 126, 234, 0.15);
   padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
   height: fit-content;
   position: sticky;
   top: 100px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-[data-theme="dark"] .profile-sidebar {
-  background: rgba(30, 41, 59, 0.98);
-  border: 1px solid rgba(139, 156, 255, 0.2);
-}
-
-.sidebar-header {
+/* Header del sidebar */
+.profile-sidebar .sidebar-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0 1.5rem 1.25rem;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid var(--color-border);
 }
 
-[data-theme="light"] .sidebar-header {
-  border-bottom-color: rgba(102, 126, 234, 0.15);
-}
-
-[data-theme="dark"] .sidebar-header {
-  border-bottom-color: rgba(139, 156, 255, 0.2);
-}
-
-.sidebar-header i {
+/* ÍCONOS BLANCOS SIEMPRE (como pediste) */
+.profile-sidebar .sidebar-header i {
   font-size: 1.5rem;
-  color: var(--color-primary);
+  color: white;
 }
 
-.sidebar-header span {
+.profile-sidebar .sidebar-header span {
   font-size: 1rem;
   font-weight: 600;
+  color: white;
 }
 
-[data-theme="light"] .sidebar-header span {
-  color: var(--color-text);
-}
-
-[data-theme="dark"] .sidebar-header span {
-  color: #f1f5f9;
-}
-
-.sidebar-nav {
+/* Navegación */
+.profile-sidebar .sidebar-nav {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -61,85 +49,75 @@
   padding: 1rem 0.75rem;
 }
 
-.sidebar-item {
+/* Items del sidebar */
+.profile-sidebar .sidebar-item {
   display: flex;
   align-items: center;
   gap: 0.875rem;
   padding: 0.75rem 1rem;
   background: transparent;
   border: none;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   width: 100%;
   text-align: left;
+  color: var(--color-text-muted);
 }
 
-[data-theme="light"] .sidebar-item {
-  color: #4a5568;
-}
-
-[data-theme="dark"] .sidebar-item {
-  color: #94a3b8;
-}
-
-.sidebar-item i {
+/* ÍCONOS BLANCOS SIEMPRE para items no activos */
+.profile-sidebar .sidebar-item i {
   width: 1.25rem;
   font-size: 1rem;
+  color: var(--color-text-muted);
 }
 
-.sidebar-item:hover {
+.profile-sidebar .sidebar-item:hover {
   background: rgba(102, 126, 234, 0.1);
-  color: var(--color-primary);
+  color: white;
 }
 
-.sidebar-item.active {
+/* Item activo - usa gradiente global */
+.profile-sidebar .sidebar-item.active {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-accent);
 }
 
-.sidebar-item.active i {
+.profile-sidebar .sidebar-item.active i {
   color: white;
 }
 
-.sidebar-footer {
+/* Footer del sidebar */
+.profile-sidebar .sidebar-footer {
   margin-top: 1rem;
   padding: 1rem 1.5rem 0;
-  border-top: 1px solid;
+  border-top: 1px solid var(--color-border);
 }
 
-[data-theme="light"] .sidebar-footer {
-  border-top-color: rgba(102, 126, 234, 0.15);
-}
-
-[data-theme="dark"] .sidebar-footer {
-  border-top-color: rgba(139, 156, 255, 0.2);
-}
-
-.account-settings {
+.profile-sidebar .account-settings {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
   font-size: 0.875rem;
   cursor: pointer;
+  color: var(--color-text-muted);
+  transition: var(--transition);
 }
 
-[data-theme="light"] .account-settings {
-  color: #4a5568;
+/* ÍCONOS BLANCOS SIEMPRE para el footer */
+.profile-sidebar .account-settings i {
+  color: var(--color-text-muted);
 }
 
-[data-theme="dark"] .account-settings {
-  color: #94a3b8;
-}
-
-.account-settings:hover {
+.profile-sidebar .account-settings:hover {
   color: var(--color-primary);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .profile-sidebar {
     width: 100%;
@@ -148,19 +126,19 @@
     margin-bottom: 1.5rem;
   }
   
-  .sidebar-nav {
+  .profile-sidebar .sidebar-nav {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
   
-  .sidebar-item {
+  .profile-sidebar .sidebar-item {
     flex: 1;
     min-width: 100px;
     justify-content: center;
   }
   
-  .sidebar-footer {
+  .profile-sidebar .sidebar-footer {
     display: none;
   }
 }

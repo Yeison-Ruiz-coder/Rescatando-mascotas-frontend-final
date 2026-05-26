@@ -4,7 +4,6 @@
   "cargando": "Cargando suscripciones...",
   "cargando_suscripcion": "Cargando suscripción...",
   "suscripcion_sin_imagen": "Suscripción",
-
   "botones": {
     "crear_suscripcion": "Crear suscripción",
     "crear_primero": "Crear primera suscripción",
@@ -16,7 +15,6 @@
     "guardando": "Guardando...",
     "guardar_cambios": "Guardar cambios"
   },
-
   "mensajes": {
     "error_carga": "Error al cargar suscripciones",
     "suscripcion_creada": "Suscripción creada correctamente",
@@ -27,19 +25,16 @@
     "error_crear": "Error al crear la suscripción",
     "error_actualizar": "Error al actualizar la suscripción"
   },
-
   "errores": {
     "nombre_requerido": "El nombre es obligatorio",
     "precio_requerido": "El precio es obligatorio",
     "duracion_requerida": "La duración es obligatoria",
     "descripcion_requerida": "La descripción es obligatoria"
   },
-
   "sin_suscripciones": {
     "titulo": "No hay suscripciones",
     "mensaje": "Crea la primera suscripción del sistema"
   },
-
   "crear": {
     "titulo": "Crear suscripción",
     "subtitulo": "Agrega una nueva suscripción al sistema",
@@ -53,12 +48,10 @@
     "precio_placeholder": "Ej: 29.99",
     "duracion_placeholder": "Ej: 30 días"
   },
-
   "editar": {
     "titulo": "Editar suscripción",
     "subtitulo": "Actualiza los datos de la suscripción"
   },
-
   "ver": {
     "volver": "Volver a suscripciones",
     "nombre": "Nombre",
@@ -68,7 +61,6 @@
     "estado": "Estado",
     "creado": "Fecha de creación"
   },
-
   "filtros": {
     "todas_suscripciones": "Todas las suscripciones",
     "gestion_estados": "Gestión de estados",
@@ -78,9 +70,66 @@
   "roles": {
     "administrador": "Administrador"
   },
-
   "apadrinar": "Apadrinar",
   "apadrinar_mascota": "Apadrinar una mascota",
   "mis_suscripciones": "Mis Suscripciones",
-  "tienda": "Tienda"
+  "tienda": "Tienda",
+  "necesita_ayuda": "Necesita ayuda",
+  "sin_imagen": "Sin imagen",
+  "en_adopcion": "En adopción",
+  "adoptado": "Adoptado",
+  "rescatada": "Rescatada",
+  "sin_descripcion": "Sin descripción disponible",
+  "titulo": "Conviértete en Patrocinador",
+  "subtitulo": "Con tu apoyo, podemos seguir rescatando animales necesitados",
+  "animales_rescatados": "Animales rescatados",
+  "adopciones_exitosas": "Adopciones exitosas",
+  "patrocinadores": "Patrocinadores activos",
+  "banner_titulo": "¡Ellos te necesitan!",
+  "banner_subtitulo": "Con tu apoyo, muchos animales tendrán una segunda oportunidad",
+  "planes_titulo": "Planes de Membresía",
+  "planes_subtitulo": "Elige el plan que mejor se adapte a ti",
+  "mas_popular": "Más Popular",
+  "seleccionar_plan": "Seleccionar Plan",
+  "mascotas_titulo": "Mascotas que necesitan tu ayuda",
+  "mascotas_subtitulo": "Apadrina una mascota específica y recibe actualizaciones",
+  "mascotas_disponibles": "{{count}} mascotas esperando un padrino",
+  "mostrando": "Mostrando",
+  "de": "de",
+  "mascotas": "mascotas",
+  "ordenar_por": "Ordenar por",
+  "seleccionar_orden": "Seleccionar orden",
+  "mas_recientes": "Más recientes",
+  "nombre_az": "Nombre (A-Z)",
+  "edad_asc": "Edad (menor a mayor)",
+  "edad_desc": "Edad (mayor a menor)",
+  "sin_resultados": "No se encontraron mascotas",
+  "sin_resultados_desc": "No hay mascotas que coincidan con tu búsqueda",
+  "faq_titulo": "Preguntas Frecuentes",
+  "faq_subtitulo": "Resolvemos tus dudas sobre el apadrinamiento",
+  "faq1_pregunta": "¿Cómo funciona el apadrinamiento?",
+  "faq1_respuesta": "Al apadrinar, tu donación mensual se destina específicamente al cuidado de la mascota que elegiste.",
+  "faq2_pregunta": "¿Puedo visitar a la mascota?",
+  "faq2_respuesta": "Sí, coordinamos visitas para que puedas conocer a tu ahijado y ver su progreso.",
+  "faq3_pregunta": "¿Qué beneficios tengo?",
+  "faq3_respuesta": "Recibirás certificado digital, actualizaciones mensuales, fotos y eventos exclusivos.",
+  "faq4_pregunta": "¿Cómo cancelo mi suscripción?",
+  "faq4_respuesta": "Puedes cancelar en cualquier momento desde tu perfil. Sin compromisos a largo plazo.",
+  "login_requerido": "Por favor, inicia sesión para apadrinar",
+  "suscripcion_exitosa": "¡Gracias por tu apoyo!",
+  "apadrinar_titulo": "Apadrinar a {{nombre}}",
+  "plan_titulo": "Plan {{nombre}}",
+  "monto": "Monto a donar (COP)",
+  "monto_minimo": "Monto mínimo: $1,000 COP",
+  "frecuencia": "Frecuencia",
+  "mensual": "Mensual",
+  "trimestral": "Trimestral",
+  "anual": "Anual",
+  "mensaje_apoyo": "Mensaje de apoyo (opcional)",
+  "mensaje_placeholder": "Déjanos un mensaje de apoyo...",
+  "cancelar": "Cancelar",
+  "procesando": "Procesando...",
+  "confirmar": "Confirmar Suscripción",
+  "error_suscripcion": "Error al procesar la suscripción",
+  "error_carga_datos": "Error al cargar los datos"
 }

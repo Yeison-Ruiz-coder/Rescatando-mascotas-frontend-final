@@ -8,7 +8,12 @@ const ProfileHeader = ({ profile, onAvatarUpload, onAvatarDelete }) => {
   const fileInputRef = useRef(null);
 
   const getRoleLabel = (tipo) => {
-    const roles = { user: t('roles.user'), admin: t('roles.admin'), fundacion: t('roles.foundation'), veterinaria: t('roles.veterinary') };
+    const roles = { 
+      user: t('roles.user'), 
+      admin: t('roles.admin'), 
+      fundacion: t('roles.foundation'), 
+      veterinaria: t('roles.veterinary') 
+    };
     return roles[tipo] || tipo;
   };
 
@@ -19,7 +24,13 @@ const ProfileHeader = ({ profile, onAvatarUpload, onAvatarDelete }) => {
         <button className="avatar-upload-btn" onClick={() => fileInputRef.current?.click()}>
           <i className="fas fa-camera"></i>
         </button>
-        <input ref={fileInputRef} type="file" accept="image/*" onChange={(e) => e.target.files[0] && onAvatarUpload(e.target.files[0])} style={{ display: 'none' }} />
+        <input 
+          ref={fileInputRef} 
+          type="file" 
+          accept="image/*" 
+          onChange={(e) => e.target.files[0] && onAvatarUpload(e.target.files[0])} 
+          style={{ display: 'none' }} 
+        />
       </div>
       <div className="profile-header-info">
         <h2>{profile?.nombre} {profile?.apellidos}</h2>

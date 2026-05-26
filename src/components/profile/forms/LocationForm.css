@@ -1,8 +1,4 @@
 /* src/components/profile/forms/LocationForm.css */
-.location-form {
-  width: 100%;
-}
-
 .location-current-btn {
   display: inline-flex;
   align-items: center;
@@ -14,14 +10,7 @@
   border-radius: 50px;
   cursor: pointer;
   transition: var(--transition);
-}
-
-[data-theme="light"] .location-current-btn {
   color: var(--color-primary);
-}
-
-[data-theme="dark"] .location-current-btn {
-  color: var(--color-primary-light);
 }
 
 .location-current-btn:hover {
@@ -29,24 +18,7 @@
   background: rgba(102, 126, 234, 0.2);
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid;
-}
-
-[data-theme="light"] .form-actions {
-  border-top-color: rgba(102, 126, 234, 0.15);
-}
-
-[data-theme="dark"] .form-actions {
-  border-top-color: rgba(139, 156, 255, 0.2);
-}
-
-@media (max-width: 480px) {
-  .form-actions button {
-    width: 100%;
-  }
+.location-current-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
