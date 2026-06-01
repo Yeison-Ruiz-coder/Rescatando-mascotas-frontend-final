@@ -226,6 +226,8 @@
   "likes_contador": "{{count}} likes",
   "asistentes_contador": "{{count}} asistentes",
   "evento_global_badge": "🌍 Evento Global",
-  "evento_fundacion_badge": "🏠 Evento de Fundación",
-  "eliminando": "Eliminando..."
+  "evento_fundacion_badge": " Evento de Fundación",
+  "eliminando": "Eliminando...",
+  "mensaje_motivacional_titulo":"Participa y ayuda a cambiar vidas",
+  "mensaje_motivacional_texto":"Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!"
 }

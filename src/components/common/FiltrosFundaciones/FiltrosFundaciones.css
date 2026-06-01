@@ -1,15 +1,15 @@
 /* src/components/common/FiltrosFundaciones/FiltrosFundaciones.css */
+/* ESTILO COLLAGE + BENTO - VERSIÓN TRANSFORMADA (igual a mascotas) */
 
 /* ============================================
-   FILTROS DE FUNDACIONES - COMPACTO
+   FILTROS DE FUNDACIONES - ESTILO COLLAGE
    ============================================ */
 
 .ff-form {
-  background: var(--form-bg);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-none);
+  padding: 1rem 1.2rem;
   width: 100%;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
@@ -18,7 +18,7 @@
 .ff-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
+  gap: 0.8rem;
   align-items: end;
 }
 
@@ -30,7 +30,7 @@
 .ff-group {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .ff-group label {
@@ -39,14 +39,15 @@
   color: var(--form-label);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
-.ff-group label i {
+.ff-group label i,
+.ff-group label svg {
+  margin-right: 0.4rem;
   color: var(--color-primary);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
+  width: 12px;
+  height: 12px;
 }
 
 /* Wrapper para input con botón X */
@@ -55,40 +56,41 @@
   width: 100%;
 }
 
-.ff-search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  pointer-events: none;
-  z-index: 1;
-}
-
 .ff-select,
 .ff-input {
-  padding: 0.5rem 0.8rem;
+  padding: 0.6rem 0.8rem;
   border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   cursor: pointer;
   transition: var(--transition);
   background: var(--form-input-bg);
   color: var(--form-text);
   width: 100%;
-}
-
-.ff-search-wrapper .ff-input {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .ff-select:focus,
 .ff-input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--form-focus-ring);
+  border-color: var(--color-accent);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.ff-search-wrapper .ff-input {
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
+/* Ícono de búsqueda a la izquierda */
+.ff-search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
 }
 
 /* Botón limpiar búsqueda */
@@ -97,21 +99,24 @@
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   border: none;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-fast);
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   padding: 0;
 }
 
-.ff-clear-search i {
+.ff-clear-search i,
+.ff-clear-search svg {
   font-size: 10px;
+  width: 12px;
+  height: 12px;
   color: var(--color-text-muted);
 }
 
@@ -119,7 +124,8 @@
   background: var(--color-danger);
 }
 
-.ff-clear-search:hover i {
+.ff-clear-search:hover i,
+.ff-clear-search:hover svg {
   color: white;
 }
 
@@ -129,90 +135,85 @@
 }
 
 .ff-btn-limpiar {
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   background: var(--gradient-primary);
   color: white;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .ff-btn-limpiar:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-  filter: brightness(0.95);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
-.ff-btn-limpiar i {
-  font-size: 0.8rem;
+.ff-btn-limpiar i,
+.ff-btn-limpiar svg {
+  font-size: 0.75rem;
+  width: 14px;
+  height: 14px;
+  margin-right: 0.3rem;
 }
 
-/* Botón móvil */
+/* ===== BOTÓN MÓVIL ===== */
 .ff-btn-mobile {
-  display: none;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--form-bg);
-  border: 1px solid var(--form-border);
-  border-radius: 40px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-hard-sm);
   transition: var(--transition);
-  color: var(--form-text);
-  font-size: 0.85rem;
 }
 
 .ff-btn-mobile:hover {
-  background: var(--color-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
-/* Badge para filtros activos */
 .ff-badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  background: var(--color-danger);
+  display: inline-block;
   width: 8px;
   height: 8px;
+  background: var(--color-accent);
   border-radius: 50%;
-  border: 1.5px solid white;
+  margin-left: 4px;
 }
 
-/* Modal Overlay */
+/* ===== MODAL ===== */
 .ff-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-modal-backdrop);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
-/* Modal Container */
 .ff-modal-container {
-  background: var(--form-bg);
-  border-radius: var(--radius-2xl);
+  background: var(--bg-card);
   width: 90%;
   max-width: 500px;
-  max-height: 85vh;
-  overflow: hidden;
-  animation: ff-modalFadeIn 0.3s ease;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-hard-lg);
   border: 1px solid var(--color-border);
+  animation: ff-modalFadeIn 0.2s ease;
 }
 
 @keyframes ff-modalFadeIn {
@@ -226,57 +227,43 @@
   }
 }
 
-/* Modal Header */
 .ff-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1.2rem;
-  border-bottom: 1px solid var(--form-border);
-  background: var(--form-input-bg);
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .ff-modal-header h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--form-text);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
-.ff-modal-header h3 i {
+.ff-modal-header h3 i,
+.ff-modal-header h3 svg {
   color: var(--color-primary);
-  font-size: 1rem;
 }
 
 .ff-modal-close {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--color-danger);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: var(--color-danger);
-  transition: var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--color-text-muted);
+  transition: var(--transition);
 }
 
 .ff-modal-close:hover {
-  background: var(--color-danger);
-  color: white;
-  transform: scale(1.05);
+  color: var(--color-danger);
 }
 
-.ff-modal-close i {
-  font-size: 1rem;
-}
-
-/* Modal Body */
 .ff-modal-body {
-  padding: 1rem;
+  padding: 1.2rem;
 }
 
 .ff-modal-body .ff-form {
@@ -285,10 +272,13 @@
   margin-bottom: 0;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 1024px) {
   .ff-form {
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 1rem;
   }
   
   .ff-grid {
@@ -299,16 +289,11 @@
     font-size: 0.65rem;
   }
   
-  .ff-input,
   .ff-select,
+  .ff-input,
   .ff-btn-limpiar {
-    padding: 0.45rem 0.8rem;
+    padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
-  }
-  
-  .ff-search-wrapper .ff-input {
-    padding-left: 1.8rem;
-    padding-right: 1.6rem;
   }
 }
 
@@ -326,48 +311,39 @@
   }
   
   .ff-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
   }
   
   .ff-busqueda-group {
-    grid-column: span 1;
-  }
-  
-  .ff-buttons {
-    flex-direction: column;
-  }
-  
-  .ff-form {
-    padding: 0.5rem;
+    flex: 1 1 100%;
+    min-width: 100%;
   }
   
   .ff-group {
-    gap: 0.3rem;
+    flex: 1 1 auto;
+    min-width: 0;
   }
   
   .ff-group label {
     font-size: 0.6rem;
+    white-space: nowrap;
   }
   
-  .ff-input,
-  .ff-select {
-    padding: 0.4rem 0.7rem;
-    font-size: 0.8rem;
+  .ff-select,
+  .ff-input {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .ff-btn-limpiar {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.75rem;
   }
   
   .ff-search-wrapper .ff-input {
     padding-left: 1.8rem;
-  }
-  
-  .ff-btn-limpiar {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-  }
-  
-  .ff-search-icon {
-    left: 8px;
-    font-size: 0.75rem;
   }
   
   .ff-clear-search {
@@ -375,53 +351,37 @@
     height: 22px;
     right: 4px;
   }
-  
-  .ff-clear-search i {
-    font-size: 10px;
-  }
 }
 
 @media (max-width: 480px) {
   .ff-form {
-    padding: 0.4rem;
-  }
-  
-  .ff-grid {
-    gap: 0.4rem;
+    padding: 0.6rem;
   }
   
   .ff-group label {
     font-size: 0.55rem;
-    gap: 0.25rem;
   }
   
-  .ff-group label i {
-    font-size: 0.65rem;
+  .ff-group label i,
+  .ff-group label svg {
+    font-size: 0.6rem;
+    width: 10px;
+    height: 10px;
   }
   
-  .ff-input,
-  .ff-select {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
+  .ff-select,
+  .ff-input {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .ff-btn-limpiar {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
   }
   
   .ff-search-wrapper .ff-input {
     padding-left: 1.6rem;
-    padding-right: 1.4rem;
-  }
-  
-  .ff-btn-limpiar {
-    padding: 0.35rem 0.7rem;
-    font-size: 0.75rem;
-  }
-  
-  .ff-btn-limpiar i {
-    font-size: 0.7rem;
-  }
-  
-  .ff-search-icon {
-    left: 7px;
-    font-size: 0.7rem;
   }
   
   .ff-clear-search {
@@ -429,58 +389,4 @@
     height: 24px;
     right: 3px;
   }
-  
-  .ff-clear-search i {
-    font-size: 10px;
-  }
-  
-  /* Modal más compacto */
-  .ff-modal-container {
-    width: 95%;
-    max-height: 90vh;
-  }
-  
-  .ff-modal-header {
-    padding: 0.6rem 1rem;
-  }
-  
-  .ff-modal-header h3 {
-    font-size: 0.9rem;
-  }
-  
-  .ff-modal-body {
-    padding: 0.8rem;
-  }
-  
-  .ff-modal-close {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .ff-modal-close i {
-    font-size: 1rem;
-  }
-}
-
-/* Modo oscuro */
-[data-theme="dark"] .ff-modal-overlay {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-[data-theme="dark"] .ff-btn-mobile {
-  background: var(--form-bg);
-  border-color: var(--form-border);
-  color: var(--form-text);
-}
-
-[data-theme="dark"] .ff-clear-search {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .ff-clear-search:hover {
-  background: var(--color-danger);
-}
-
-[data-theme="dark"] .ff-modal-close {
-  background: rgba(239, 68, 68, 0.2);
 }

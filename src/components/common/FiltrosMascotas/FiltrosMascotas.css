@@ -1,15 +1,15 @@
 /* src/components/common/FiltrosMascotas/FiltrosMascotas.css */
+/* ESTILO COLLAGE + BENTO - Versión transformada */
 
 /* ============================================
-   FILTROS DE MASCOTAS - COMPACTO
+   FILTROS DE MASCOTAS - ESTILO COLLAGE
    ============================================ */
 
 .filtros-form {
-  background: var(--form-bg);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-none);
+  padding: 1rem 1.2rem;
   width: 100%;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
@@ -18,7 +18,7 @@
 .filtros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
+  gap: 0.8rem;
   align-items: end;
 }
 
@@ -30,7 +30,7 @@
 .filtro-group {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
 .filtro-group label {
@@ -44,7 +44,7 @@
 .filtro-group label i {
   margin-right: 0.4rem;
   color: var(--color-primary);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 /* Wrapper para input con botón X */
@@ -55,26 +55,28 @@
 
 .filtro-select,
 .filtro-input {
-  padding: 0.5rem 0.8rem;
+  padding: 0.6rem 0.8rem;
   border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   cursor: pointer;
   transition: var(--transition);
   background: var(--form-input-bg);
   color: var(--form-text);
   width: 100%;
-}
-
-.filtro-search-wrapper .filtro-input {
-  padding-right: 2rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .filtro-select:focus,
 .filtro-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px var(--form-focus-ring);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.filtro-search-wrapper .filtro-input {
+  padding-right: 2rem;
 }
 
 /* Botón limpiar búsqueda */
@@ -83,16 +85,16 @@
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.15);
   border: none;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-fast);
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   padding: 0;
 }
 
@@ -115,37 +117,133 @@
 }
 
 .btn-limpiar {
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   background: var(--gradient-primary);
   color: white;
   white-space: nowrap;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-limpiar:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-  filter: brightness(0.95);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
 .btn-limpiar i {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   margin-right: 0.3rem;
 }
 
+/* ===== BOTÓN MÓVIL ===== */
+.btn-filtros-mobile {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-hard-sm);
+  transition: var(--transition);
+}
+
+.btn-filtros-mobile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.badge-filtros {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-container {
+  background: var(--bg-card);
+  width: 90%;
+  max-width: 500px;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-hard-lg);
+  border: 1px solid var(--color-border);
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--color-danger);
+}
+
+.modal-body {
+  padding: 1.2rem;
+}
+
 /* ============================================
-   RESPONSIVE - COMPACTAR EN MÓVIL
+   RESPONSIVE
    ============================================ */
 
-/* Tablets */
 @media (max-width: 1024px) {
   .filtros-form {
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 1rem;
   }
   
   .filtros-grid {
@@ -159,31 +257,23 @@
   .filtro-select,
   .filtro-input,
   .btn-limpiar {
-    padding: 0.45rem 0.8rem;
+    padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
-  }
-  
-  .filtro-search-wrapper .filtro-input {
-    padding-right: 1.8rem;
   }
 }
 
-/* Móviles - TODO EN UNA SOLA LÍNEA */
 @media (max-width: 768px) {
   .filtros-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
+    gap: 0.6rem;
   }
   
-  /* Buscador ocupa todo el ancho */
   .filtro-busqueda {
     flex: 1 1 100%;
     min-width: 100%;
   }
   
-  /* Los demás filtros se comprimen */
   .filtro-group {
     flex: 1 1 auto;
     min-width: 0;
@@ -196,43 +286,19 @@
   
   .filtro-select,
   .filtro-input {
-    padding: 0.4rem 0.6rem;
+    padding: 0.45rem 0.6rem;
     font-size: 0.75rem;
-  }
-  
-  .filtro-search-wrapper .filtro-input {
-    padding-right: 1.6rem;
   }
   
   .btn-limpiar {
-    padding: 0.4rem 0.8rem;
+    padding: 0.45rem 0.8rem;
     font-size: 0.75rem;
-    white-space: nowrap;
-  }
-  
-  .btn-limpiar i {
-    font-size: 0.7rem;
-  }
-  
-  .filtro-clear-search {
-    width: 18px;
-    height: 18px;
-    right: 4px;
-  }
-  
-  .filtro-clear-search i {
-    font-size: 8px;
   }
 }
 
-/* Móviles muy pequeños */
 @media (max-width: 480px) {
   .filtros-form {
-    padding: 0.5rem;
-  }
-  
-  .filtros-grid {
-    gap: 0.4rem;
+    padding: 0.6rem;
   }
   
   .filtro-group label {
@@ -240,27 +306,17 @@
   }
   
   .filtro-group label i {
-    font-size: 0.65rem;
-    margin-right: 0.25rem;
+    font-size: 0.6rem;
   }
   
   .filtro-select,
   .filtro-input {
-    padding: 0.35rem 0.5rem;
+    padding: 0.4rem 0.5rem;
     font-size: 0.7rem;
   }
   
   .btn-limpiar {
-    padding: 0.35rem 0.6rem;
+    padding: 0.4rem 0.6rem;
     font-size: 0.7rem;
-  }
-  
-  .btn-limpiar i {
-    font-size: 0.65rem;
-  }
-  
-  .filtro-clear-search {
-    width: 16px;
-    height: 16px;
   }
 }

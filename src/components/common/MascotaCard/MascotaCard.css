@@ -1,36 +1,52 @@
 /* src/components/common/MascotaCard/MascotaCard.css */
+/* CARDS 100% FLUIDAS - Sin max-width, sin límites */
 
 .mascota-card {
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
   transition: var(--transition);
   height: 100%;
   width: 100%;
-  max-width: 380px;
+  /* IMPORTANTE: NADA DE max-width aquí */
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-border);
+  position: relative;
 }
 
 .mascota-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
-/* Variante compact */
-.mascota-card.compact {
-  border-radius: var(--radius-lg);
+/* Sticker decorativo */
+.mascota-card.featured::before {
+  content: '★';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--color-accent);
+  color: white;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: var(--shadow-hard-sm);
 }
 
+/* Variante compact */
 .mascota-card.compact .card-image {
-  height: 180px;
+  height: 160px;
 }
 
 .mascota-card.compact .card-content {
-  padding: 1rem;
+  padding: 0.9rem;
 }
 
 .mascota-card.compact .card-title {
@@ -40,13 +56,13 @@
 /* Variante featured */
 .mascota-card.featured {
   border: 2px solid var(--color-accent);
-  box-shadow: var(--shadow-accent);
+  box-shadow: var(--shadow-hard-md);
 }
 
-/* Imagen */
+/* ===== IMAGEN ===== */
 .mascota-card .card-image {
   position: relative;
-  height: 240px;
+  height: 220px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -55,11 +71,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
+  filter: grayscale(15%);
 }
 
 .mascota-card:hover .card-image img {
-  transform: scale(1.1);
+  transform: scale(1.08);
+  filter: grayscale(0%);
 }
 
 .mascota-card .image-placeholder {
@@ -79,23 +97,23 @@
   opacity: 0.7;
 }
 
-/* Badges */
+/* ===== BADGES ===== */
 .mascota-card .card-badges {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
+  bottom: 12px;
+  left: 12px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
   z-index: var(--z-elevate);
 }
 
 .mascota-card .badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  font-size: 0.7rem;
   font-weight: 600;
-  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .mascota-card .badge-primary {
@@ -104,33 +122,34 @@
 }
 
 .mascota-card .badge-dark {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   color: white;
+  backdrop-filter: none;
 }
 
 .mascota-card .badge-accent {
-  background: var(--gradient-primary);
+  background: var(--color-accent);
   color: white;
 }
 
-/* Contenido */
+/* ===== CONTENIDO ===== */
 .mascota-card .card-content {
-  padding: 1.5rem;
+  padding: 1.2rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .mascota-card .card-title {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: var(--color-text);
 }
 
 .mascota-card .card-description {
   color: var(--color-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   line-height: 1.5;
   margin-bottom: 1rem;
   display: -webkit-box;
@@ -140,18 +159,19 @@
 }
 
 .mascota-card .card-fundacion {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--color-accent);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--color-hover);
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
+  background: rgba(255, 140, 66, 0.08);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--color-accent);
 }
 
-/* Botones */
+/* ===== BOTONES ===== */
 .mascota-card .card-buttons {
   display: flex;
   gap: 0.75rem;
@@ -160,10 +180,9 @@
 
 .mascota-card .btn-card {
   flex: 1;
-  min-width: 110px;
-  padding: 10px 16px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -174,45 +193,38 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  white-space: nowrap;
 }
 
 .mascota-card .btn-card-outline {
-  background: var(--color-hover);
+  background: transparent;
   color: var(--color-primary);
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .mascota-card .btn-card-outline:hover {
   background: var(--gradient-primary);
   color: white;
-  transform: translateY(-2px);
+  transform: translateX(2px);
   border-color: transparent;
+  box-shadow: var(--shadow-hard-md);
 }
 
 .mascota-card .btn-card-primary {
   background: var(--gradient-primary);
   color: white;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .mascota-card .btn-card-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
+  transform: translateX(2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
-/* Modo oscuro - ajustes específicos */
-[data-theme="dark"] .mascota-card .badge-dark {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-[data-theme="dark"] .mascota-card .card-fundacion {
-  background: rgba(139, 156, 255, 0.1);
-}
-
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .mascota-card .card-image {
-    height: 200px;
+    height: 180px;
   }
   
   .mascota-card .card-buttons {

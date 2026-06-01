@@ -1,29 +1,39 @@
+/* ============================================
+   FORMULARIOS ESTILO COLLAGE
+   INPUTS CON BORDES PEQUEÑOS Y FOCUS CON TRANSLATE
+   ============================================ */
+
+/* ===== INPUTS BASE ===== */
 input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 textarea,
 select {
   background: var(--form-input-bg) !important;
   border: 1px solid var(--form-border) !important;
   color: var(--form-text) !important;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm) !important;
   padding: 12px 16px;
-  transition: var(--transition-fast);
+  transition: var(--transition);
   width: 100%;
 }
 
+/* ===== FOCUS - DESPLAZAMIENTO LATERAL (CLAVE DEL ESTILO COLLAGE) ===== */
 input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):focus,
 textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 3px var(--form-focus-ring) !important;
+  transform: translateX(4px);
+  box-shadow: var(--shadow-hard-sm) !important;
   background: var(--form-bg) !important;
 }
 
+/* ===== PLACEHOLDER ===== */
 input::placeholder,
 textarea::placeholder {
   color: var(--form-placeholder) !important;
 }
 
+/* ===== ESTADOS DE VALIDACIÓN ===== */
 input.error,
 textarea.error,
 select.error {
@@ -36,29 +46,36 @@ select.success {
   border-color: var(--form-success) !important;
 }
 
+/* ===== LABELS ===== */
 label,
 .form-label {
   color: var(--form-label) !important;
   font-weight: 600;
   margin-bottom: 0.5rem;
   display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+/* ===== HINTS ===== */
 .form-hint,
 small.form-hint {
   color: var(--form-hint) !important;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   margin-top: 0.25rem;
   display: block;
 }
 
+/* ===== MENSAJES DE ERROR ===== */
 .form-error-message {
   color: var(--form-error) !important;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   margin-top: 0.25rem;
   display: block;
 }
 
+/* ===== DATE INPUT (MODO OSCURO) ===== */
 @media (prefers-color-scheme: dark) {
   input[type="date"] {
     color-scheme: dark;
@@ -84,6 +101,7 @@ small.form-hint {
   color: var(--form-text) !important;
 }
 
+/* ===== CHECKBOX Y RADIO ===== */
 input[type="checkbox"],
 input[type="radio"] {
   width: 18px;

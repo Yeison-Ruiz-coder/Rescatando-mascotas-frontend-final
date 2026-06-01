@@ -1,6 +1,5 @@
 // src/components/common/FundacionCard/FundacionCard.jsx
 import React, { memo, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Building, MapPin, Phone, Users, Heart, Award, ChevronRight } from 'lucide-react';
 import './FundacionCard.css';
@@ -9,7 +8,8 @@ const FundacionCard = memo(({
   fundacion,
   getImageUrl,
   variant = 'default',
-  showActions = true
+  showActions = true,
+  onView // callback para abrir panel
 }) => {
   const { t } = useTranslation('fundaciones');
 
@@ -28,7 +28,7 @@ const FundacionCard = memo(({
   const imageUrl = useMemo(() => getImageUrl(imagen_portada), [imagen_portada, getImageUrl]);
 
   return (
-    <div className={`page-card fundacion-card ${variant}`}>
+    <div className={`fundacion-card ${variant}`}>
       {/* Imagen */}
       <div className="card-image">
         {imageUrl ? (
@@ -103,9 +103,13 @@ const FundacionCard = memo(({
 
         {showActions && (
           <div className="card-footer">
-            <Link to={`/fundaciones/${id}`} className="page-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+            <button 
+              className="btn-fundacion"
+              onClick={(e) => { e.stopPropagation(); onView?.(fundacion); }}
+              type="button"
+            >
               {t('ver_mas') || 'Ver más'} <ChevronRight size={16} />
-            </Link>
+            </button>
           </div>
         )}
       </div>

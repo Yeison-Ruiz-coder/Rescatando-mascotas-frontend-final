@@ -1,7 +1,6 @@
 // src/components/common/FiltrosEventos/FiltrosEventos.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, Filter, X, Tag } from 'lucide-react';
 import { useFiltrosEventos } from '../../../contexts/FiltrosContext';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import './FiltrosEventos.css';
@@ -65,10 +64,7 @@ const FiltrosEventos = ({ variant = 'inline' }) => {
     <form className="fe-form" onSubmit={(e) => e.preventDefault()}>
       <div className="fe-grid">
         <div className="fe-group fe-busqueda-group">
-          <label>
-            <Search size={14} />
-            {t('buscar') || 'Buscar'}
-          </label>
+          <label><i className="fas fa-search"></i> {t('buscar') || 'Buscar'}</label>
           <div className="fe-search-wrapper">
             <input
               ref={inputRef}
@@ -87,29 +83,25 @@ const FiltrosEventos = ({ variant = 'inline' }) => {
                 onClick={handleClearSearch}
                 className="fe-clear-search"
               >
-                <X size={14} />
+                <i className="fas fa-times"></i>
               </button>
             )}
           </div>
         </div>
 
         <div className="fe-group">
-          <label>
-            <Tag size={14} />
-            {t('categoria') || 'Categoría'}
-          </label>
           <CustomSelect
             options={categoriasOptions}
             value={filtros.categoria}
             onChange={handleCategoriaChange}
             name="categoria"
+            label={<><i className="fas fa-tag"></i> {t('categoria') || 'Categoría'}</>}
           />
         </div>
 
         <div className="fe-buttons">
           <button type="button" onClick={handleReset} className="fe-btn-limpiar">
-            <X size={16} />
-            {t('limpiar_filtros') || 'Limpiar'}
+            <i className="fas fa-undo-alt"></i> {t('limpiar_filtros') || 'Limpiar'}
           </button>
         </div>
       </div>
@@ -120,8 +112,7 @@ const FiltrosEventos = ({ variant = 'inline' }) => {
     return (
       <>
         <button className="fe-btn-mobile" onClick={() => setShowModal(true)}>
-          <Filter size={18} />
-          {t('filtros') || 'Filtros'}
+          <i className="fas fa-filter"></i> {t('filtros') || 'Filtros'}
           {hasActiveFilters() && <span className="fe-badge" />}
         </button>
 
@@ -129,13 +120,8 @@ const FiltrosEventos = ({ variant = 'inline' }) => {
           <div className="fe-modal-overlay" onClick={() => setShowModal(false)}>
             <div className="fe-modal-container" onClick={(e) => e.stopPropagation()}>
               <div className="fe-modal-header">
-                <h3>
-                  <Filter size={18} />
-                  {t('filtros') || 'Filtros'}
-                </h3>
-                <button className="fe-modal-close" onClick={() => setShowModal(false)}>
-                  <X size={20} />
-                </button>
+                <h3><i className="fas fa-filter"></i> {t('filtros') || 'Filtros'}</h3>
+                <button className="fe-modal-close" onClick={() => setShowModal(false)}>×</button>
               </div>
               <div className="fe-modal-body">
                 <FormContent />

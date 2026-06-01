@@ -121,7 +121,7 @@ const Login = () => {
   };
 
   const handleGoBack = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   return (

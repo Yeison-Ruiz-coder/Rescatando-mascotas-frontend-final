@@ -1,6 +1,5 @@
 // src/components/common/VeterinariaCard/VeterinariaCard.jsx
 import React, { memo, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Building, MapPin, Phone, Clock, Shield, Ambulance, ChevronRight } from 'lucide-react';
 import './VeterinariaCard.css';
@@ -9,14 +8,14 @@ const VeterinariaCard = memo(({
   veterinaria,
   getImageUrl,
   variant = 'default',
-  showActions = true
+  showActions = true,
+  onView // callback para abrir panel
 }) => {
   const { t } = useTranslation('veterinarias');
 
   const {
     id,
     Nombre_vet,
-    descripcion,
     Direccion,
     Telefono,
     ciudad,
@@ -42,6 +41,7 @@ const VeterinariaCard = memo(({
 
   return (
     <div className="veterinaria-card">
+      {/* Imagen izquierda */}
       <div className="card-image">
         {imageUrl ? (
           <img
@@ -57,76 +57,80 @@ const VeterinariaCard = memo(({
           />
         ) : null}
         <div className="image-placeholder" style={{ display: imagen_portada ? 'none' : 'flex' }}>
-          <Building size={48} />
+          <Building />
           <span>{t('veterinaria', 'Veterinaria')}</span>
         </div>
 
         <div className="image-badges">
           {verificado && (
             <span className="badge-verificado" title={t('verificado', 'Verificada')}>
-              <Shield size={14} />
+              <Shield size={12} />
             </span>
           )}
           {urgencias_24h && (
             <span className="badge-urgencia" title={t('urgencias_24h', 'Urgencias 24h')}>
-              <Ambulance size={14} />
+              <Ambulance size={12} />
             </span>
           )}
         </div>
       </div>
 
-      <div className="card-header">
-        <div>
+      {/* Contenido central */}
+      <div className="card-main">
+        <div className="card-header">
           <h3 className="card-title">{Nombre_vet}</h3>
           {ciudad && (
             <span className="card-ciudad">
-              <MapPin size={14} />
+              <MapPin />
               {ciudad}
             </span>
           )}
         </div>
-      </div>
 
-      <p className="card-descripcion">
-        {descripcion || t('sin_descripcion', 'Sin descripción disponible')}
-      </p>
-
-      {serviciosMostrar.length > 0 && (
-        <div className="card-servicios">
-          {serviciosMostrar.map((servicio, idx) => (
-            <span key={idx} className="servicio-tag">{servicio}</span>
-          ))}
-          {serviciosList.length > 3 && (
-            <span className="servicio-mas">+{serviciosList.length - 3}</span>
+        <div className="contact-info">
+          {Telefono && (
+            <div className="contact-item">
+              <Phone />
+              <span>{Telefono}</span>
+            </div>
+          )}
+          {Direccion && (
+            <div className="contact-item">
+              <MapPin />
+              <span>{Direccion}</span>
+            </div>
+          )}
+          {horario_atencion && (
+            <div className="contact-item">
+              <Clock />
+              <span>{horario_atencion}</span>
+            </div>
           )}
         </div>
-      )}
 
-      <div className="card-footer">
-        {Telefono && (
-          <div className="footer-item">
-            <Phone size={14} />
-            <span>{Telefono}</span>
-          </div>
-        )}
-        {Direccion && (
-          <div className="footer-item">
-            <MapPin size={14} />
-            <span>{Direccion}</span>
-          </div>
-        )}
-        {horario_atencion && (
-          <div className="footer-item">
-            <Clock size={14} />
-            <span>{horario_atencion}</span>
+        {serviciosMostrar.length > 0 && (
+          <div className="servicios">
+            {serviciosMostrar.map((servicio, idx) => (
+              <span key={idx} className="servicio-tag">{servicio}</span>
+            ))}
+            {serviciosList.length > 3 && (
+              <span className="servicio-mas">+{serviciosList.length - 3}</span>
+            )}
           </div>
         )}
       </div>
 
+      {/* Botón a la derecha */}
       {showActions && (
-        <Link to={`/veterinarias/${id}`} className="btn-detalle">
-          {t('ver_detalles', 'Ver detalles')} <ChevronRight size={16} />
-        </Link>
+        <div className="card-actions">
+          <button 
+            className="btn-detalle"
+            onClick={(e) => { e.stopPropagation(); onView?.(veterinaria); }}
+            type="button"
+          >
+            {t('ver_detalles', 'Ver detalles')} <ChevronRight size={14} />
+          </button>
+        </div>
       )}
     </div>
   );

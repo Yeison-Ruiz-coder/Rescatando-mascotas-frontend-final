@@ -23,7 +23,7 @@ import ResetPassword from "../pages/public/ResetPassword/ResetPassword";
 // =============================================================
 import Home from "../pages/public/Home/Home";
 import Login from "../pages/public/Login/Login";
-import MascotaDetalle from "../pages/public/MascotaDetalle/MascotaDetalle";
+import MascotaDetalle from "../pages/public/Mascotas/MascotaDetalle";
 import Register from "../pages/public/Register/Register";
 import Mascotas from "../pages/public/Mascotas/Mascotas";
 import Donaciones from "../pages/public/Donaciones/Donaciones";

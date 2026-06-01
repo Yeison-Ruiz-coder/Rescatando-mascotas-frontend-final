@@ -1,0 +1,118 @@
+/* ============================================
+   COLLAGE EFFECTS - STICKERS, SOMBRAS, ROTACIONES
+   ESTILO COLLAGE + BENTO
+   ============================================ */
+
+/* ===== STICKERS DECORATIVOS (REEMPLAZAN A LOS ICONOS IMPORTADOS) ===== */
+.collage-sticker {
+  position: absolute;
+  background: var(--color-accent);
+  color: white;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-hard-sm);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.collage-sticker-primary {
+  background: var(--color-primary);
+}
+
+.collage-sticker-heart {
+  background: var(--color-heart);
+}
+
+/* Sticker con ícono (para cuando quieras usar emojis en lugar de iconos importados) */
+.collage-sticker-icon {
+  font-size: 1rem;
+}
+
+/* ===== CINTA DECORATIVA (TAPE) ===== */
+.collage-tape {
+  position: absolute;
+  width: 40px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  opacity: 0.7;
+  top: -6px;
+  left: 20px;
+  filter: blur(1px);
+}
+
+[data-theme="dark"] .collage-tape {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== ROTACIONES SUTILES (OPCIONALES, SE PUEDEN OMITIR) ===== */
+.collage-rotate-left {
+  transform: rotate(-0.8deg);
+  transition: transform 0.3s ease;
+}
+
+.collage-rotate-right {
+  transform: rotate(0.8deg);
+  transition: transform 0.3s ease;
+}
+
+.collage-rotate-left:hover,
+.collage-rotate-right:hover {
+  transform: rotate(0deg);
+}
+
+/* ===== SOMBRAS DURAS (UTILIDADES) ===== */
+.shadow-hard-sm {
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.shadow-hard-md {
+  box-shadow: var(--shadow-hard-md);
+}
+
+.shadow-hard-lg {
+  box-shadow: var(--shadow-hard-lg);
+}
+
+/* ===== BORDES JERÁRQUICOS (UTILIDADES) ===== */
+.border-none {
+  border-radius: var(--radius-none);
+}
+
+.border-xs {
+  border-radius: var(--radius-xs);
+}
+
+.border-sm {
+  border-radius: var(--radius-sm);
+}
+
+.border-md {
+  border-radius: var(--radius-md);
+}
+
+.border-lg {
+  border-radius: var(--radius-lg);
+}
+
+.border-xl {
+  border-radius: var(--radius-xl);
+}
+
+/* ===== DIVISOR ESTILO COLLAGE ===== */
+.collage-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-heart));
+  margin: 20px 0;
+}
+
+/* ===== FONDO DE "PAPEL" PARA SIDEBAR O SECCIONES ===== */
+.paper-bg {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-hard-sm);
+}

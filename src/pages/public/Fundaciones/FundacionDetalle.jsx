@@ -12,9 +12,12 @@ import {
   PawPrint,
   ExternalLink,
   CheckCircle,
+  Users,
+  Award,
+  Clock, 
 } from "lucide-react";
 import api from "../../../services/api";
-import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
 import "./FundacionesDetalle.css";
 
 const MapaSimple = ({ direccion, nombre, lat, lng }) => {
@@ -44,7 +47,7 @@ const MapaSimple = ({ direccion, nombre, lat, lng }) => {
         src={mapUrl}
         width="100%"
         height="280"
-        style={{ border: 0, borderRadius: "12px" }}
+        style={{ border: 0, borderRadius: "8px" }}
         allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
@@ -65,14 +68,16 @@ const MapaSimple = ({ direccion, nombre, lat, lng }) => {
   );
 };
 
-const FundacionDetalle = () => {
-  const { id } = useParams();
+const FundacionDetalle = ({ fundacionId, embed = false }) => {
+  const { id: urlId } = useParams();
+  const id = fundacionId || urlId;
   const { t } = useTranslation("fundaciones");
   const [fundacion, setFundacion] = useState(null);
   const [necesidades, setNecesidades] = useState([]);
   const [mascotas, setMascotas] = useState([]);
   const [estadisticas, setEstadisticas] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
 
   const getImageUrl = useCallback((url) => {
@@ -87,8 +92,20 @@ const FundacionDetalle = () => {
     let isMounted = true;
 
     const loadData = async () => {
+      if (!id) return;
+      
       setLoading(true);
+      setLoadProgress(0);
       setError(null);
+      
+      // Simular progreso de carga
+      const progressInterval = setInterval(() => {
+        setLoadProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 100);
+      
       try {
         const response = await api.get(`/fundaciones/${id}`, {
           signal: abortController.signal,
@@ -128,31 +145,33 @@ const FundacionDetalle = () => {
           throw new Error(`No se encontró la fundación con ID ${id}`);
         }
 
-        setFundacion(fundacionData);
-        setNecesidades(necesidadesData);
-        setMascotas(mascotasData);
-        setEstadisticas(estadisticasData);
+        setLoadProgress(100);
+        setTimeout(() => {
+          setFundacion(fundacionData);
+          setNecesidades(necesidadesData);
+          setMascotas(mascotasData);
+          setEstadisticas(estadisticasData);
+          setLoading(false);
+        }, 300);
+        
       } catch (error) {
         if (error.name === "CanceledError" || error.name === "AbortError") {
           return;
         }
         console.error("Error:", error);
         if (isMounted) {
-          setError(error.message || t("error_carga"));
+          setLoadProgress(100);
+          setTimeout(() => {
+            setError(error.message || t("error_carga"));
+            setLoading(false);
+          }, 300);
         }
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        clearInterval(progressInterval);
       }
     };
 
-    if (id) {
-      loadData();
-    } else {
-      setError(t("id_no_especificado"));
-      setLoading(false);
-    }
+    loadData();
 
     return () => {
       isMounted = false;
@@ -162,9 +181,11 @@ const FundacionDetalle = () => {
 
   if (loading) {
     return (
-      <div className="detalle-loading">
-        <LoadingSpinner text={t("cargando")} />
-      </div>
+      <SimpleLoadingBar 
+        progress={loadProgress}
+        height="12px"
+        variant="gradient"
+      />
     );
   }
 
@@ -176,208 +197,242 @@ const FundacionDetalle = () => {
             <Building size={48} />
             <h4>{t("error_titulo")}</h4>
             <p>{error || t("no_encontrada")}</p>
-            <Link to="/fundaciones" className="detalle-btn-back">
-              {t("volver")}
-            </Link>
+            {!embed && <Link to="/fundaciones" className="detalle-btn-back">{t("volver")}</Link>}
           </div>
         </div>
       </div>
     );
   }
 
+  const totalMascotas = mascotas.length;
+  const totalRescatadas = estadisticas?.total_rescatadas || fundacion.total_rescatadas || totalMascotas;
+  const totalAdoptadas = estadisticas?.total_adoptadas || fundacion.total_adoptadas || 0;
+  const aniosExperiencia = estadisticas?.anios_experiencia || fundacion.anios_experiencia || 0;
+
   return (
     <div className="fundacion-detalle-page">
-      <div className="detalle-back-outer">
-        <div className="detalle-container">
+      {/* Botón volver - solo visible en modo página completa */}
+      {!embed && (
+        <div className="detalle-back-outer">
           <Link to="/fundaciones" className="detalle-back-link">
             <ArrowLeft size={16} />
             <span>{t("volver")}</span>
           </Link>
         </div>
-      </div>
+      )}
 
-      <div className="detalle-container">
-        <div className="detalle-main-card">
-          <div className="detalle-card-content-wrapper">
-            <div className="detalle-header">
-              <h1>{fundacion.Nombre_1 || fundacion.nombre || t("sin_nombre")}</h1>
-              <div className="detalle-header-info">
-                {fundacion.ciudad && (
-                  <div className="detalle-ciudad">
-                    <MapPin size={16} />
-                    <span>{fundacion.ciudad}</span>
-                  </div>
-                )}
-                {estadisticas?.verificado && (
-                  <div className="detalle-verified">
-                    <CheckCircle size={16} />
-                    <span>{t("verificado")}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="detalle-info-grid">
-              <div className="detalle-info-card">
-                <div className="detalle-card-header">
-                  <Phone size={18} />
-                  <h3>{t("contacto")}</h3>
-                </div>
-                <div className="detalle-card-content">
-                  {fundacion.Direccion && (
-                    <div className="detalle-field">
-                      <label>{t("direccion")}</label>
-                      <p>{fundacion.Direccion}</p>
-                    </div>
-                  )}
-                  {fundacion.Telefono && (
-                    <div className="detalle-field">
-                      <label>{t("telefono")}</label>
-                      <p>{fundacion.Telefono}</p>
-                    </div>
-                  )}
-                  {fundacion.Email && (
-                    <div className="detalle-field">
-                      <label>{t("email")}</label>
-                      <p>{fundacion.Email}</p>
-                    </div>
-                  )}
-                  {fundacion.horario_atencion && (
-                    <div className="detalle-field">
-                      <label>{t("horario")}</label>
-                      <p>{fundacion.horario_atencion}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="detalle-info-card">
-                <div className="detalle-card-header">
-                  <Heart size={18} />
-                  <h3>{t("datos")}</h3>
-                </div>
-                <div className="detalle-card-content">
-                  {fundacion.registro_sanitario && (
-                    <div className="detalle-field">
-                      <label>{t("registro_sanitario")}</label>
-                      <p>{fundacion.registro_sanitario}</p>
-                    </div>
-                  )}
-                  {(fundacion.capacidad_maxima || estadisticas?.capacidad_maxima) && (
-                    <div className="detalle-field">
-                      <label>{t("capacidad")}</label>
-                      <p>
-                        {fundacion.capacidad_maxima || estadisticas?.capacidad_maxima} {t("animales")}
-                      </p>
-                    </div>
-                  )}
-                  {fundacion.recibe_voluntarios !== undefined && (
-                    <div className="detalle-field">
-                      <label>{t("voluntarios")}</label>
-                      <p>{fundacion.recibe_voluntarios ? t("si_recibe") : t("no_recibe")}</p>
-                    </div>
-                  )}
-                  {fundacion.fecha_fundacion && (
-                    <div className="detalle-field">
-                      <label>{t("fundada")}</label>
-                      <p>{new Date(fundacion.fecha_fundacion).getFullYear()}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {fundacion.Descripcion && (
-              <div className="detalle-section">
-                <div className="detalle-section-header">
-                  <FileText size={18} />
-                  <h3>{t("descripcion")}</h3>
-                </div>
-                <p className="detalle-descripcion-text">{fundacion.Descripcion}</p>
+      {/* Bento Grid principal */}
+      <div className="detalle-bento-grid">
+        {/* Header - 12 columnas */}
+        <div className="detalle-header">
+          <div className="detalle-header-info">
+            {fundacion.ciudad && (
+              <div className="detalle-ciudad">
+                <MapPin size={14} />
+                <span>{fundacion.ciudad}</span>
               </div>
             )}
-
-            {necesidades.length > 0 && (
-              <div className="detalle-section">
-                <div className="detalle-section-header">
-                  <Heart size={18} />
-                  <h3>{t("necesidades")}</h3>
-                </div>
-                <div className="detalle-tags">
-                  {necesidades.map((item, index) => (
-                    <span key={index} className="detalle-tag">
-                      {item}
-                    </span>
-                  ))}
-                </div>
+            {estadisticas?.verificado && (
+              <div className="detalle-verified">
+                <CheckCircle size={14} />
+                <span>{t("verificado")}</span>
               </div>
             )}
+          </div>
+        </div>
 
+        {/* Sidebar izquierda - 4 columnas (contacto + datos + estadísticas) */}
+        <div className="detalle-sidebar">
+          {/* Contacto */}
+          <div className="detalle-info-card">
+            <div className="detalle-card-header">
+              <Phone size={16} />
+              <h3>{t("contacto")}</h3>
+            </div>
             {fundacion.Direccion && (
-              <div className="detalle-section">
-                <div className="detalle-section-header">
-                  <MapPin size={18} />
-                  <h3>{t("ubicacion")}</h3>
-                </div>
-                <div className="detalle-mapa-wrapper">
-                  <MapaSimple
-                    direccion={fundacion.Direccion}
-                    nombre={fundacion.Nombre_1}
-                    lat={fundacion.lat}
-                    lng={fundacion.lng}
-                  />
-                </div>
+              <div className="detalle-field">
+                <label>{t("direccion")}</label>
+                <p>{fundacion.Direccion}</p>
               </div>
             )}
-
-            {mascotas.length > 0 && (
-              <div className="detalle-section">
-                <div className="detalle-section-header">
-                  <PawPrint size={18} />
-                  <h3>{t("mascotas_en_adopcion")}</h3>
-                </div>
-                <div className="detalle-mascotas-grid">
-                  {mascotas.slice(0, 4).map((mascota) => (
-                    <Link
-                      key={mascota.id}
-                      to={`/mascota/${mascota.id}`}
-                      className="detalle-mascota-card"
-                    >
-                      <div className="detalle-mascota-img">
-                        {mascota.foto_principal ? (
-                          <img
-                            src={getImageUrl(mascota.foto_principal)}
-                            alt={mascota.nombre_mascota}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="detalle-mascota-placeholder">
-                            <PawPrint size={24} />
-                          </div>
-                        )}
-                      </div>
-                      <div className="detalle-mascota-info">
-                        <strong>{mascota.nombre_mascota}</strong>
-                        <span>{mascota.especie}</span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                {mascotas.length > 4 && (
-                  <Link to={`/mascotas?fundacion=${id}`} className="detalle-ver-mas">
-                    {t("ver_todas")} ({mascotas.length})
-                  </Link>
-                )}
+            {fundacion.Telefono && (
+              <div className="detalle-field">
+                <label>{t("telefono")}</label>
+                <p>{fundacion.Telefono}</p>
               </div>
             )}
+            {fundacion.Email && (
+              <div className="detalle-field">
+                <label>{t("email")}</label>
+                <p>{fundacion.Email}</p>
+              </div>
+            )}
+            {fundacion.horario_atencion && (
+              <div className="detalle-field">
+                <label>{t("horario")}</label>
+                <p>{fundacion.horario_atencion}</p>
+              </div>
+            )}
+          </div>
 
-            <div className="detalle-footer">
-              <small>
-                {t("actualizado")}: {new Date(fundacion.updated_at || Date.now()).toLocaleDateString()}
-              </small>
+          {/* Datos de la fundación */}
+          <div className="detalle-info-card">
+            <div className="detalle-card-header">
+              <Heart size={16} />
+              <h3>{t("datos")}</h3>
+            </div>
+            {fundacion.registro_sanitario && (
+              <div className="detalle-field">
+                <label>{t("registro_sanitario")}</label>
+                <p>{fundacion.registro_sanitario}</p>
+              </div>
+            )}
+            {fundacion.recibe_voluntarios !== undefined && (
+              <div className="detalle-field">
+                <label>{t("voluntarios")}</label>
+                <p>{fundacion.recibe_voluntarios ? t("si_recibe") : t("no_recibe")}</p>
+              </div>
+            )}
+            {fundacion.fecha_fundacion && (
+              <div className="detalle-field">
+                <label>{t("fundada")}</label>
+                <p>{new Date(fundacion.fecha_fundacion).getFullYear()}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Estadísticas de impacto (destacadas) */}
+          <div className="detalle-info-card">
+            <div className="detalle-card-header">
+              <Award size={16} />
+              <h3>{t("impacto")}</h3>
+            </div>
+            <div className="detalle-stats-grid">
+              <div className="detalle-stat-card">
+                <div className="detalle-stat-number">{totalMascotas}</div>
+                <div className="detalle-stat-label">{t("mascotas_actuales")}</div>
+              </div>
+              <div className="detalle-stat-card">
+                <div className="detalle-stat-number">{totalRescatadas}</div>
+                <div className="detalle-stat-label">{t("rescatadas")}</div>
+              </div>
+              <div className="detalle-stat-card">
+                <div className="detalle-stat-number">{totalAdoptadas}</div>
+                <div className="detalle-stat-label">{t("adoptadas")}</div>
+              </div>
+              <div className="detalle-stat-card">
+                <div className="detalle-stat-number">{aniosExperiencia || "—"}</div>
+                <div className="detalle-stat-label">{t("años")}</div>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Imagen - 8 columnas (derecha) */}
+        <div className="detalle-imagen-wrapper">
+          <img 
+            src={fundacion.imagen_portada ? getImageUrl(fundacion.imagen_portada) : "https://placehold.co/800x450/667eea/FFFFFF?text=Fundación"} 
+            alt={fundacion.Nombre_1} 
+            className="detalle-imagen"
+          />
+        </div>
+
+        {/* Contenido principal - 8 columnas (debajo de la imagen) */}
+        <div className="detalle-main">
+          {/* Descripción */}
+          {fundacion.Descripcion && (
+            <div className="detalle-section">
+              <div className="detalle-section-header">
+                <FileText size={16} />
+                <h3>{t("descripcion")}</h3>
+              </div>
+              <p className="detalle-descripcion-text">{fundacion.Descripcion}</p>
+            </div>
+          )}
+
+          {/* Necesidades */}
+          {necesidades.length > 0 && (
+            <div className="detalle-section">
+              <div className="detalle-section-header">
+                <Heart size={16} />
+                <h3>{t("necesidades")}</h3>
+              </div>
+              <div className="detalle-tags">
+                {necesidades.map((item, index) => (
+                  <span key={index} className="detalle-tag">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Mascotas en adopción */}
+          {mascotas.length > 0 && (
+            <div className="detalle-section">
+              <div className="detalle-section-header">
+                <PawPrint size={16} />
+                <h3>{t("mascotas_en_adopcion")}</h3>
+              </div>
+              <div className="detalle-mascotas-grid">
+                {mascotas.slice(0, 4).map((mascota) => (
+                  <Link
+                    key={mascota.id}
+                    to={`/mascota/${mascota.id}`}
+                    className="detalle-mascota-card"
+                  >
+                    <div className="detalle-mascota-img">
+                      {mascota.foto_principal ? (
+                        <img
+                          src={getImageUrl(mascota.foto_principal)}
+                          alt={mascota.nombre_mascota}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="detalle-mascota-placeholder">
+                          <PawPrint size={20} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="detalle-mascota-info">
+                      <strong>{mascota.nombre_mascota}</strong>
+                      <span>{mascota.especie}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              {mascotas.length > 4 && (
+                <Link to={`/mascotas?fundacion=${id}`} className="detalle-ver-mas">
+                  {t("ver_todas")} ({mascotas.length})
+                </Link>
+              )}
+            </div>
+          )}
+
+          {/* Mapa */}
+          {fundacion.Direccion && (
+            <div className="detalle-section">
+              <div className="detalle-section-header">
+                <MapPin size={16} />
+                <h3>{t("ubicacion")}</h3>
+              </div>
+              <div className="detalle-mapa-wrapper">
+                <MapaSimple
+                  direccion={fundacion.Direccion}
+                  nombre={fundacion.Nombre_1}
+                  lat={fundacion.lat}
+                  lng={fundacion.lng}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="detalle-footer">
+        <Clock size={14} />
+        <small>{t("actualizado")}: {new Date(fundacion.updated_at || Date.now()).toLocaleDateString()}</small>
       </div>
     </div>
   );

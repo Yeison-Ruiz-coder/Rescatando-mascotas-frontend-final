@@ -1,0 +1,85 @@
+/* src/components/common/ProgressBar/ProgressBar.css */
+
+/* ============================================
+   ESTILOS BASE
+   ============================================ */
+
+.progress-bar-container {
+  width: 100%;
+}
+
+.progress-bar-track {
+  background: var(--form-border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-xs);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animación suave */
+.progress-bar-fill.animated {
+  transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+/* Variantes de color */
+.progress-bar-fill.primary {
+  background: var(--gradient-primary);
+}
+
+.progress-bar-fill.success {
+  background: linear-gradient(90deg, var(--color-success), #34d399);
+}
+
+.progress-bar-fill.danger {
+  background: linear-gradient(90deg, var(--color-danger), #f87171);
+}
+
+.progress-bar-fill.warning {
+  background: linear-gradient(90deg, var(--color-warning), #fbbf24);
+}
+
+.progress-bar-fill.gradient {
+  background: var(--gradient-accent);
+  background-size: 200% 100%;
+  animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressShimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* Componente SimpleLoadingBar - pantalla completa */
+.simple-loading-container {
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 40px;
+}
+
+.simple-loading-card {
+  padding: 60px 40px;
+  text-align: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .simple-loading-card {
+    padding: 40px 20px;
+    max-width: 90%;
+  }
+}

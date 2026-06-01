@@ -121,7 +121,7 @@ const AdminEventosShow = () => {
                         {evento.tipo === 'admin' ? (
                             <span className="badge-admin">🌍 {t("global_event") || "Evento Global"}</span>
                         ) : (
-                            <span className="badge-fundacion">🏠 {t("foundation_event") || "Evento de Fundación"}</span>
+                            <span className="badge-fundacion"> {t("foundation_event") || "Evento de Fundación"}</span>
                         )}
                     </div>
 

@@ -1,3 +1,8 @@
+/* ============================================
+   LAYOUT BASE + BENTO GRID
+   ESTILO COLLAGE
+   ============================================ */
+
 #root {
   display: flex;
   flex-direction: column;
@@ -11,6 +16,7 @@ section {
   position: relative;
 }
 
+/* ===== CONTAINERS ORIGINALES (SE MANTIENEN POR COMPATIBILIDAD) ===== */
 .container,
 .container-fluid {
   width: 100%;
@@ -25,6 +31,20 @@ section {
 .container-xl { max-width: 1440px; }
 .container-full { max-width: 100%; padding: 0; }
 
+/* ===== NUEVO: CONTENEDOR PARA BENTO GRID (SIN MAX-WIDTH) ===== */
+.bento-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .bento-container {
+    padding: 0 16px;
+  }
+}
+
+/* ===== UTILIDADES DE ALTURA ===== */
 .full-height {
   min-height: 100vh;
   display: flex;
@@ -47,6 +67,7 @@ section {
   margin-top: calc(-1 * var(--navbar-height));
 }
 
+/* ===== CARD WHITE ORIGINAL (SE MANTIENE POR COMPATIBILIDAD) ===== */
 .card-white {
   background: var(--color-card-bg);
   border-radius: var(--radius-xl);
@@ -58,4 +79,34 @@ section {
 .card-white:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+}
+
+
+/* ============================================
+   BENTO CONTAINER - Pantalla completa
+   ============================================ */
+.bento-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 24px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* Asegurar que el root no limite el ancho */
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }

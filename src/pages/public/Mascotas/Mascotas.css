@@ -1,59 +1,117 @@
 /* src/pages/public/Mascotas/Mascotas.css */
-/* Estilos específicos para la página de mascotas - Hereda de index.css */
+/* ===== HEADER CON IMAGEN DE FONDO ===== */
 
-/* ===== HEADER SECTION ===== */
+/* ===== HEADER CON IMAGEN DE FONDO - TEXTO CENTRO IZQUIERDA ===== */
+
 .mascotas-page .mascotas-header {
-  padding: 60px 0 40px 0;
-  text-align: center;
-  background: transparent;
-  backdrop-filter: blur(2px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  padding: 110px 0 160px 0;
+  text-align: left;  /* ← Cambiado de center a left */
+  background: transparent;
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
 }
 
+/* Contenedor de la imagen de fondo */
+.mascotas-page .mascotas-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.mascotas-page .mascotas-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(30%);
+}
+
+/* Contenido del header (por encima de la imagen) */
+.mascotas-page .mascotas-header .bento-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Título - MÁS GRANDE y alineado a la izquierda */
 .mascotas-page .mascotas-header h1 {
-  font-size: 2.8rem;
+  font-size: clamp(3rem, 8vw, 12rem);  /* ← Más grande */
   font-weight: 800;
   margin-bottom: 1rem;
+  margin-left: 0;
+  text-align: left;  /* ← Alineado a la izquierda */
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  font-family: 'Space Grotesk', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.mascotas-page .mascotas-header .subtitle {
-  font-size: 1.2rem;
-  color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
-}
 
+
+/* Info (contador) - alineado a la izquierda */
 .mascotas-page .mascotas-header .info {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+  color: white;
+  font-size: 1.25rem;  /* ← Más grande */
   margin-top: 1rem;
+  margin-left: 0;
+  text-align: left;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 8px 20px;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* ===== FILTROS SECTION - USANDO CLASES GLOBALES ===== */
+[data-theme="dark"] .mascotas-page .mascotas-header::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.7)
+  );
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mascotas-page .mascotas-header h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+  
+  .mascotas-page .mascotas-header .subtitle {
+    font-size: 1rem;
+  }
+  
+  .mascotas-page .mascotas-header .info {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== FILTROS ===== */
 .mascotas-page .filtros-section {
-  padding: 10px 0;
+  padding: 20px 0;
   position: sticky;
   top: var(--navbar-height, 70px);
   z-index: 99;
-  /* Usar clases globales en su lugar, pero mantenemos por compatibilidad */
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* O puedes simplificar aún más en el JSX usando className */
-
-/* ===== RESULTADOS SECTION ===== */
+/* ===== RESULTADOS ===== */
 .mascotas-page .resultados-section {
-  padding: 40px 0;
+  padding: 40px 0 60px;
+  background: transparent;
 }
-
 
 .mascotas-page .resultados-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center ;
   margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1rem;
@@ -61,22 +119,28 @@
 
 .mascotas-page .resultados-count {
   color: var(--color-text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-left: 4%;
+  background: var(--bg-card);
+  padding: 6px 14px;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .mascotas-page .resultados-count strong {
   color: var(--color-accent);
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .mascotas-page .resultados-orden {
   display: flex;
   align-items: center;
+  margin-right: 4%;
   gap: 0.5rem;
 }
 
 .mascotas-page .resultados-orden label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  margin-right: 0.25rem;
   color: var(--color-text-muted);
 }
 
@@ -84,17 +148,46 @@
   padding: 8px 12px;
   background: var(--form-input-bg);
   border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
   color: var(--form-text);
   cursor: pointer;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* ===== GRID DE MASCOTAS ===== */
+/* ===== GRID DE MASCOTAS - FLUIDO ===== */
 .mascotas-page .mascotas-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.8rem;
+  width: 100%;
+}
+
+/* Loader sentinel para scroll infinito */
+.mascotas-page .infinite-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 0 60px;
+}
+
+/* En pantallas muy grandes, que las cards no se estiren demasiado */
+@media (min-width: 1600px) {
+  .mascotas-page .mascotas-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 2000px) {
+  .mascotas-page .mascotas-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 2400px) {
+  .mascotas-page .mascotas-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 /* ===== LOADING ===== */
@@ -108,133 +201,173 @@
 /* ===== ERROR ===== */
 .mascotas-page .error-container {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-none);
   margin: 2rem auto;
   max-width: 500px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-hard-md);
   border: 1px solid var(--color-border);
 }
 
 .mascotas-page .error-container i {
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--color-danger);
   margin-bottom: 1rem;
 }
 
 .mascotas-page .error-container h2 {
   color: var(--color-text);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
 }
 
 .mascotas-page .error-container p {
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
+  font-size: 0.85rem;
 }
 
 .mascotas-page .reload-btn {
   background: var(--gradient-primary);
   color: white;
   border: none;
-  padding: 12px 28px;
-  border-radius: var(--radius-round);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .mascotas-page .reload-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateX(2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
 /* ===== SIN RESULTADOS ===== */
 .mascotas-page .empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  width: min(100%, 720px);
+  margin: 2rem auto;
   padding: 4rem 2rem;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
-  margin: 2rem 0;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-hard-sm);
   border: 1px solid var(--color-border);
 }
 
 .mascotas-page .empty-container i {
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--color-primary);
   margin-bottom: 1rem;
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .mascotas-page .empty-container h3 {
   color: var(--form-text);
   margin-bottom: 0.5rem;
+  font-size: 1.2rem;
 }
 
 .mascotas-page .empty-container p {
   color: var(--color-text-muted);
-}
-
-/* ===== MODO OSCURO - AJUSTES ESPECÍFICOS ===== */
-[data-theme="dark"] .mascotas-page .filtros-section {
-  background: rgba(30, 41, 59, 0.9);
-}
-
-[data-theme="dark"] .mascotas-page .mascotas-header {
-  border-bottom-color: rgba(139, 156, 255, 0.15);
-}
-
-[data-theme="dark"] .mascotas-page .orden-select {
-  background: var(--form-input-bg);
-  color: var(--form-text);
-  border-color: var(--form-border);
-}
-
-[data-theme="dark"] .mascotas-page .orden-select option {
-  background: var(--form-bg);
-  color: var(--form-text);
+  font-size: 0.85rem;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .mascotas-page .mascotas-header h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
   .mascotas-page .mascotas-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
   .mascotas-page .mascotas-header {
-    padding: 40px 0 30px 0;
+    padding: 40px 0 25px;
   }
   .mascotas-page .mascotas-header h1 {
-    font-size: 1.8rem;
-  }
-  .mascotas-page .mascotas-header .subtitle {
-    font-size: 1rem;
-  }
-  .mascotas-page .filtros-section {
-    top: 60px;
-  }
-  .mascotas-page .resultados-header {
-    flex-direction: column;
-    align-items: flex-start;
+    font-size: 1.6rem;
   }
   .mascotas-page .mascotas-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1.2rem;
   }
 }
 
 @media (max-width: 480px) {
   .mascotas-page .mascotas-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
-  .mascotas-page .resultados-count {
-    font-size: 0.8rem;
+}
+
+/* ===== MENSAJE MOTIVACIONAL ===== */
+.mascotas-page .motivational-message {
+  margin-top: 80px;
+  padding: 60px 0;
+  background: var(--color-background-section);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mascotas-page .motivational-content {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.mascotas-page .motivational-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.mascotas-page .motivational-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.mascotas-page .motivational-text {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mascotas-page .motivational-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+  color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mascotas-page .motivational-message {
+    margin-top: 50px;
+    padding: 40px 0;
+  }
+  
+  .mascotas-page .motivational-title {
+    font-size: 1.4rem;
+  }
+  
+  .mascotas-page .motivational-text {
+    font-size: 0.95rem;
+  }
+  
+  .mascotas-page .motivational-icon {
+    font-size: 36px;
   }
 }

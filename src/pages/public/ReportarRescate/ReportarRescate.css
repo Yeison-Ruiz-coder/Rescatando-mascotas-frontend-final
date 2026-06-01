@@ -10,7 +10,7 @@
 }
 
 .rescate-page .container {
-  max-width: 900px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
 }
@@ -41,7 +41,7 @@
 /* FORMULARIO */
 .rescate-page .rescate-form {
   background: var(--form-bg);
-  border-radius: 32px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-border);
@@ -123,7 +123,7 @@
   gap: 0.5rem;
   padding: 1rem 0.5rem;
   border: 2px solid var(--form-border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   background: var(--form-input-bg);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -181,7 +181,8 @@
 
 /* TARJETA DE PRIORIDAD */
 .rescate-page .rescate-form .prioridad-card {
-  border-radius: 20px;
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
   padding: 1.2rem;
   margin: 1rem 0;
   border-left: 5px solid;
@@ -202,7 +203,7 @@
 
 .rescate-page .rescate-form .prioridad-badge {
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  border-radius: var(--radius-xs);
   font-size: 0.7rem;
   font-weight: 700;
   margin-left: auto;
@@ -313,7 +314,7 @@
 
 .rescate-success .success-card {
   background: var(--form-bg);
-  border-radius: 32px;
+  border-radius: var(--radius-xs);
   padding: 3rem 2rem;
   text-align: center;
   max-width: 500px;
@@ -349,7 +350,7 @@
 .rescate-success .success-card.waiting .timer-info {
   background: #fef3c7;
   border: 1px solid #f59e0b;
-  border-radius: 16px;
+  border-radius: var(--radius-xs);
   padding: 1rem;
   margin: 1.5rem 0;
   display: flex;
@@ -363,7 +364,7 @@
 .rescate-success .success-card.waiting .info-text {
   background: #f0f9ff;
   border: 1px solid #0ea5e9;
-  border-radius: 16px;
+  border-radius: var(--radius-xs);
   padding: 1rem;
   margin: 1rem 0;
   font-size: 0.9rem;
@@ -471,3 +472,4 @@
     grid-template-columns: 1fr;
   }
 }
+

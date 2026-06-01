@@ -1,3 +1,7 @@
+/* ============================================
+   PÁGINAS Y CARDS - ESTILO COLLAGE
+   ============================================ */
+
 /* Contenedor principal de todas las páginas */
 .page-container {
   width: 100%;
@@ -22,7 +26,64 @@
   }
 }
 
-/* Header de página común */
+/* ===== NUEVAS CARDS ESTILO COLLAGE ===== */
+.collage-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+  position: relative;
+  border-radius: var(--radius-none);
+}
+
+.collage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* Imagen dentro de collage card */
+.collage-card-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  margin-bottom: 16px;
+  filter: grayscale(15%);
+  transition: filter 0.3s;
+}
+
+.collage-card:hover .collage-card-image {
+  filter: grayscale(0%);
+}
+
+/* ===== CARD WHITE ORIGINAL (SE MANTIENE) ===== */
+.page-card {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid var(--color-border);
+}
+
+.page-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+
+/* ===== GRID ORIGINAL (SE MANTIENE) ===== */
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.8rem;
+  width: 100%;
+}
+
+/* ===== HEADER DE PÁGINA ===== */
 .page-header {
   margin-bottom: 2rem;
   text-align: center;
@@ -49,37 +110,7 @@
   margin: 0 auto;
 }
 
-/* Grid común para tarjetas */
-.page-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.8rem;
-  width: 100%;
-}
-
-/* Tarjetas estilo consistente */
-.page-card {
-  background: var(--color-card-bg);
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  border: 1px solid var(--color-border);
-}
-
-.page-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-accent);
-}
-
-/* Para páginas que necesiten ocupar toda la altura */
-.page-full {
-  flex: 1;
-  min-height: auto;
-}
-
-/* Botones consistentes con Home.css */
+/* ===== BOTONES DE PÁGINA ORIGINALES (SE MANTIENEN) ===== */
 .page-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -142,7 +173,7 @@
   transform: translateY(-2px);
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .page-header h1 {
     font-size: 1.6rem;
@@ -172,15 +203,15 @@
 }
 
 /* ============================================
-   FORMULARIOS GLOBALES - CLASES REUTILIZABLES
+   FORMULARIOS GLOBALES - ESTILO COLLAGE
    ============================================ */
 
-/* Contenedor de formulario */
+/* Contenedor de formulario - SIN BORDES REDONDEADOS */
 .form-container {
   background: var(--form-bg);
-  border-radius: 32px;
+  border-radius: var(--radius-none);
   padding: 2rem;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-hard-md);
   border: 1px solid var(--color-border);
   transition: var(--transition-theme);
 }
@@ -195,22 +226,24 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--form-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Inputs globales */
+/* Inputs globales - NUEVO ESTILO COLLAGE */
 .form-input,
 .form-textarea,
 .form-select-global {
   width: 100%;
   padding: 12px 16px;
   border: 1px solid var(--form-border);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   font-size: 1rem;
   background: var(--form-input-bg);
   color: var(--form-text);
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
 
 .form-input:focus,
@@ -218,7 +251,8 @@
 .form-select-global:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--form-focus-ring);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .form-input::placeholder,

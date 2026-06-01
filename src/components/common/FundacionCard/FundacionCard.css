@@ -1,29 +1,28 @@
 /* src/components/common/FundacionCard/FundacionCard.css */
-/* Estilos específicos para la card de fundaciones */
+/* ESTILO COLLAGE + BENTO - CARDS VERTICALES CON ESTADÍSTICAS */
 
-/* Card contenedor - fondo blanco, bordes redondeados */
 .fundacion-card {
   background: var(--color-card-bg);
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard-sm);
+  transition: var(--transition);
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .fundacion-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
-/* Imagen */
+/* ===== IMAGEN ===== */
 .fundacion-card .card-image {
   position: relative;
-  height: 180px;
+  height: 200px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--gradient-primary);
@@ -33,11 +32,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
+  filter: grayscale(15%);
 }
 
 .fundacion-card:hover .card-image img {
   transform: scale(1.08);
+  filter: grayscale(0%);
 }
 
 .fundacion-card .image-placeholder {
@@ -61,14 +62,14 @@
   opacity: 0.9;
 }
 
-/* Badge verificado */
+/* ===== BADGE VERIFICADO ===== */
 .fundacion-card .verified-badge {
   position: absolute;
   top: 12px;
   right: 12px;
   background: var(--color-success);
   padding: 4px 10px;
-  border-radius: 50px;
+  border-radius: var(--radius-xs);
   font-size: 0.7rem;
   font-weight: 600;
   display: inline-flex;
@@ -76,10 +77,10 @@
   gap: 0.25rem;
   color: white;
   z-index: 2;
-  backdrop-filter: blur(4px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Contenido */
+/* ===== CONTENIDO ===== */
 .fundacion-card .card-content {
   padding: 1.25rem;
   flex: 1;
@@ -103,6 +104,10 @@
   font-size: 0.75rem;
   color: var(--color-text-muted);
   margin-bottom: 0.75rem;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xs);
+  width: fit-content;
 }
 
 /* Descripción */
@@ -138,7 +143,7 @@
   flex-shrink: 0;
 }
 
-/* Estadísticas */
+/* ===== ESTADÍSTICAS ===== */
 .fundacion-card .card-stats {
   display: flex;
   gap: 1rem;
@@ -150,22 +155,25 @@
 .fundacion-card .stat {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.7rem;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--color-text-muted);
+  background: rgba(102, 126, 234, 0.05);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-xs);
 }
 
 .fundacion-card .stat svg {
   color: var(--color-primary);
 }
 
-/* Footer */
+/* ===== BOTÓN ===== */
 .fundacion-card .card-footer {
   margin-top: auto;
 }
 
-/* ✅ BOTÓN VER MÁS - MEJORADO Y VISIBLE */
-.fundacion-card .page-btn-primary {
+.fundacion-card .btn-fundacion {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -175,40 +183,34 @@
   background: var(--gradient-primary);
   color: white;
   text-decoration: none;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  border: none;
+  font-size: 0.85rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
   cursor: pointer;
-  margin-top: 0.5rem;
+  border: none;
 }
 
-.fundacion-card .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+.fundacion-card .btn-fundacion:hover {
+  transform: translateX(2px);
+  box-shadow: var(--shadow-hard-md);
   text-decoration: none;
   color: white;
-  filter: brightness(1.05);
+  filter: brightness(1.02);
 }
 
-.fundacion-card .btn-primary:active {
-  transform: translateY(-1px);
+.fundacion-card .btn-fundacion svg {
+  width: 16px;
+  height: 16px;
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .fundacion-card .card-image {
     height: 160px;
   }
   
-  .fundacion-card .btn-primary {
-    padding: 0.65rem 1rem;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
   .fundacion-card .card-content {
     padding: 1rem;
   }
@@ -217,16 +219,21 @@
     font-size: 1rem;
   }
   
-  .fundacion-card .btn-primary {
+  .fundacion-card .btn-fundacion {
     padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
   }
+  
+  .fundacion-card .stat {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
 }
 
-/* Modo oscuro */
+/* ===== MODO OSCURO ===== */
 [data-theme="dark"] .fundacion-card {
-  background: #1e293b;
-  border-color: #334155;
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
 }
 
 [data-theme="dark"] .fundacion-card .image-placeholder {
@@ -243,20 +250,20 @@
 }
 
 [data-theme="dark"] .fundacion-card .card-title {
-  color: #f1f5f9;
+  color: var(--text-primary);
 }
 
 [data-theme="dark"] .fundacion-card .card-description,
 [data-theme="dark"] .fundacion-card .card-city,
 [data-theme="dark"] .fundacion-card .info-item,
 [data-theme="dark"] .fundacion-card .stat {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
-[data-theme="dark"] .fundacion-card .btn-primary {
-  background: var(--gradient-primary);
+[data-theme="dark"] .fundacion-card .card-city {
+  background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme="dark"] .fundacion-card .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(139, 156, 255, 0.3);
+[data-theme="dark"] .fundacion-card .stat {
+  background: rgba(139, 156, 255, 0.08);
 }

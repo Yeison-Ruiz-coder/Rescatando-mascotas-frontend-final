@@ -114,6 +114,7 @@
     "tu_tipo": "Tu tipo de usuario es",
     "volver_inicio": "Volver al inicio"
   },
+
   "editar_mascota": "Editar Mascota",
   "editar_mascota_desc": "Modifica la información, fotos y detalles de tu mascota",
 
@@ -160,5 +161,21 @@
     "cancelar": "¿Estás seguro de que quieres cancelar? Los datos no guardados se perderán."
   },
 
-  "registrada_exito": "Mascota registrada exitosamente"
+  "registrada_exito": "Mascota registrada exitosamente",
+  "estado_actualizado": "Estado actualizado a",
+  "error_actualizar": "Error al actualizar estado",
+  "actualizando": "Actualizando...",
+  "raza": "Raza(s)",
+  "edad": "Edad",
+  "fecha_ingreso": "Fecha ingreso",
+  "aptitudes": "Aptitudes",
+  "no_apto_ninos": "No apto con niños",
+  "no_apto_animales": "No apto con otros animales",
+  "video": "Video",
+  "ver_video": "Ver video de {{nombre}}",
+  "estado_salud": "Estado de salud",
+  "peso": "Peso",
+  "tamaño": "Tamaño",
+  "editar": "Editar",
+  "eliminar": "Eliminar"
 }

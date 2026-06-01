@@ -1,6 +1,5 @@
 // src/components/common/MascotaCard/MascotaCard.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './MascotaCard.css';
 
@@ -8,12 +7,12 @@ const MascotaCard = ({
   mascota, 
   getImageUrl, 
   showFundacion = true,
-  variant = 'default' // 'default' | 'compact' | 'featured'
+  variant = 'default',
+  onView // callback para abrir panel
 }) => {
   const { t } = useTranslation('mascotas');
   const { nombre_mascota, descripcion, especie, genero, edad_aprox, fundacion, id } = mascota;
 
-  // Formatear edad con traducción
   const formatEdad = (edad) => {
     if (!edad) return '?';
     return t('edad_años', { edad }) || `${edad} años`;
@@ -63,12 +62,13 @@ const MascotaCard = ({
         )}
         
         <div className="card-buttons">
-          <Link
-            to={`/mascota/${id}`}
+          <button
             className="btn-card btn-card-outline"
+            onClick={(e) => { e.stopPropagation(); onView?.(mascota); }}
+            type="button"
           >
             <i className="fas fa-heart"></i> {t('conocer_mas')}
-          </Link>
+          </button>
         </div>
       </div>
     </div>

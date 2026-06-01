@@ -1,9 +1,10 @@
-
-
+/* ============================================
+   VARIABLES GLOBALES - ESTILO COLLAGE + BENTO
+   ============================================ */
 :root {
   background: transparent !important;
 
-  /* ===== COLORES PRINCIPALES ===== */
+  /* ===== COLORES PRINCIPALES (TUS COLORES, NO CAMBIAN) ===== */
   --color-primary: #667eea;
   --color-secondary: #764ba2;
   --color-primary-light: #8b9cff;
@@ -17,31 +18,49 @@
   --color-warning: #ffc107;
   --color-info: #4299e1;
 
-  /* ===== FONDOS ===== */
+  /* ===== FONDOS (TUS FONDOS, NO CAMBIAN) ===== */
   --color-light: #f7f2fc;
+  --color-background-section: #f4ecfc;
   --color-light-secondary: #f6e6ff;
   --color-card-bg: #ffffff;
   --color-border: rgba(0, 0, 0, 0.08);
   --color-hover: rgba(0, 0, 0, 0.05);
 
-  /* ===== TEXTOS ===== */
+  /* ===== TEXTOS (TUS TEXTOS, NO CAMBIAN) ===== */
   --color-text: #1b202b;
   --color-text-muted: #39414d;
   --color-text-light: #7a8592;
   --color-text-disabled: #a0aec0;
 
-  /* ===== GRADIENTES ===== */
+  /* ===== GRADIENTES (TUS GRADIENTES, NO CAMBIAN) ===== */
   --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-heart));
   --gradient-light: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
 
-  /* ===== SOMBRAS ===== */
+  /* ===== NUEVAS SOMBRAS DURAS (ESTILO COLLAGE) ===== */
+  --shadow-hard-sm: 4px 4px 0px rgba(0, 0, 0, 0.06);
+  --shadow-hard-md: 6px 6px 0px rgba(0, 0, 0, 0.08);
+  --shadow-hard-lg: 10px 10px 0px rgba(0, 0, 0, 0.1);
+  
+  /* ===== SOMBRAS ORIGINALES (SE MANTIENEN POR COMPATIBILIDAD) ===== */
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.12);
   --shadow-accent: 0 8px 20px rgba(255, 140, 66, 0.2);
   --shadow-heart: 0 8px 20px rgba(255, 107, 157, 0.2);
+
+  /* ===== NUEVO SISTEMA DE BORDES JERÁRQUICOS ===== */
+  --radius-none: 0px;      /* Contenedores principales */
+  --radius-xs: 4px;        /* Stickers, elementos muy pequeños */
+  --radius-sm: 6px;        /* Inputs, elementos pequeños */
+  --radius-md: 8px;        /* Botones medianos */
+  --radius-lg: 12px;       /* Elementos internos grandes */
+  --radius-xl: 16px;       /* Secciones internas grandes */
+  
+  /* ===== BORDES ORIGINALES (SE MANTIENEN POR COMPATIBILIDAD) ===== */
+  --radius-round: 50%;
+  --radius-2xl: 32px;
 
   /* ===== OPACIDADES DE CAPAS DECORATIVAS ===== */
   --circle-opacity-1: 0.12;
@@ -74,14 +93,6 @@
   --z-toast: 700;
   --z-tooltip: 800;
 
-  /* ===== BORDES ===== */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
-  --radius-round: 50%;
-
   /* ===== FORMULARIOS - MODO CLARO ===== */
   --form-bg: #ffffff;
   --form-input-bg: #f8fafc;
@@ -113,6 +124,8 @@
 
   /* ===== FONDOS OSCUROS ===== */
   --color-light: #1a1a2e;
+  --color-background: #0f172a;
+  --color-background-section: #070111;
   --color-light-secondary: #16213e;
   --color-card-bg: #1e293b;
   --color-border: rgba(139, 156, 255, 0.15);
@@ -129,7 +142,12 @@
   --gradient-accent: linear-gradient(135deg, #ff9f5e, #ff85b3);
   --gradient-light: linear-gradient(135deg, #1a1a2e, #16213e);
 
-  /* ===== SOMBRAS ===== */
+  /* ===== SOMBRAS DURAS MODO OSCURO ===== */
+  --shadow-hard-sm: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  --shadow-hard-md: 6px 6px 0px rgba(0, 0, 0, 0.3);
+  --shadow-hard-lg: 10px 10px 0px rgba(0, 0, 0, 0.4);
+
+  /* ===== SOMBRAS ORIGINALES MODO OSCURO ===== */
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
@@ -156,4 +174,3 @@
   --form-error: #f87171;
   --form-success: #4ade80;
 }
-

@@ -2,14 +2,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, MapPin, Calendar, FileText, Clock, Heart, Users, CalendarCheck, CheckCircle, Loader, Tag, DollarSign } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Clock, Heart, Users, CalendarCheck, DollarSign } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import api from '../../../services/api';
-import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import { SimpleLoadingBar } from '../../../components/common/ProgressBar/ProgressBar';
 import './EventosPublicShow.css';
 
-const EventosPublicShow = () => {
-  const { id } = useParams();
+const EventosPublicShow = ({ eventoId, embed = false }) => {
+  const { id: urlId } = useParams();
+  const id = eventoId || urlId;
   const { t } = useTranslation('eventos');
   const { isAuthenticated } = useAuth();
   const [evento, setEvento] = useState(null);
@@ -17,6 +18,7 @@ const EventosPublicShow = () => {
   const [liked, setLiked] = useState(false);
   const [asistencia, setAsistencia] = useState(false);
   const [error, setError] = useState(null);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   const getImageUrl = useCallback((url) => {
     if (!url) return null;
@@ -27,18 +29,42 @@ const EventosPublicShow = () => {
 
   useEffect(() => {
     const loadEvento = async () => {
+      if (!id) return;
+      
       setLoading(true);
+      setLoadProgress(0);
       setError(null);
+      
+      // Simular progreso de carga
+      const progressInterval = setInterval(() => {
+        setLoadProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 100);
+      
       try {
         const response = await api.get(`/eventos/${id}`);
         const data = response.data.data || response.data;
-        setEvento(data);
-        setAsistencia(data.usuario_confirmado || false);
+        
+        // Completar progreso
+        setLoadProgress(100);
+        setTimeout(() => {
+          setEvento(data);
+          setLiked(data.usuario_liked || false);
+          setAsistencia(data.usuario_confirmado || false);
+          setLoading(false);
+        }, 300);
+        
       } catch (error) {
         console.error('Error:', error);
-        setError(error.response?.data?.message || t('error_load'));
+        setLoadProgress(100);
+        setTimeout(() => {
+          setError(error.response?.data?.message || t('error_load'));
+          setLoading(false);
+        }, 300);
       } finally {
-        setLoading(false);
+        clearInterval(progressInterval);
       }
     };
     loadEvento();
@@ -80,22 +106,43 @@ const EventosPublicShow = () => {
     }
   }, [id, isAuthenticated, asistencia, t]);
 
+  const formatDate = (date) => {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('es-ES', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const formatTime = (date) => {
+    if (!date) return '';
+    return new Date(date).toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   if (loading) {
     return (
-      <div className="public-eventos-show-loading">
-        <LoadingSpinner />
-      </div>
+      <SimpleLoadingBar 
+        progress={loadProgress}
+        height="12px"
+        variant="gradient"
+      />
     );
   }
 
   if (error || !evento) {
     return (
       <div className="public-eventos-show-container">
+        <div className="public-eventos-show-actions-bar">
+          {!embed && <Link to="/eventos" className="public-btn-back"><ArrowLeft size={18} /> {t('volver')}</Link>}
+        </div>
         <div className="error-container">
           <Calendar size={48} />
           <h4>{t('error_titulo')}</h4>
           <p>{error || t('evento_no_encontrado')}</p>
-          <Link to="/eventos" className="public-btn-back">{t('volver')}</Link>
         </div>
       </div>
     );
@@ -103,94 +150,63 @@ const EventosPublicShow = () => {
 
   return (
     <div className="public-eventos-show-container">
-      <div className="public-eventos-show-actions-bar">
-        <Link to="/eventos" className="public-btn-back">
-          <ArrowLeft size={18} />
-          {t('volver')}
-        </Link>
-      </div>
 
-      <div className="public-eventos-show-card">
+      {/* Bento Grid principal */}
+      <div className="evento-bento-grid">
+        {/* Imagen - 8 columnas */}
         {evento.imagen_url && (
-          <div className="public-show-image">
-            <img src={getImageUrl(evento.imagen_url)} alt={evento.nombre_evento} />
+          <div className="evento-imagen-wrapper">
+            <img 
+              src={getImageUrl(evento.imagen_url)} 
+              alt={evento.nombre_evento} 
+              className="evento-imagen"
+            />
           </div>
         )}
 
-        <div className="public-show-content">
-          <div className="public-show-header">
-            <h1>{evento.nombre_evento}</h1>
-            <div className="public-evento-stats">
-              <button onClick={handleLike} className="public-stat" style={{ cursor: 'pointer', background: liked ? 'rgba(255,107,157,0.2)' : undefined }}>
-                <Heart size={16} style={{ color: liked ? 'var(--color-heart)' : undefined }} />
-                {evento.likes || 0} {t('likes')}
-              </button>
-              <span className="public-stat">
-                <Users size={16} />
-                {evento.total_asistentes || 0} {t('asistentes')}
-              </span>
+        {/* Sidebar información - 4 columnas */}
+        <div className="evento-sidebar">
+          {/* Badge de tipo */}
+          <div className="info-card">
+            <div className="evento-badge">
+              {evento.tipo === 'admin' ? (
+                <span className="badge-admin">{t('evento_global_badge') || `🌟 ${t('evento_global')}`}</span>
+              ) : (
+                <span className="badge-fundacion">{t('evento_fundacion_badge') || t('evento_fundacion')}</span>
+              )}
             </div>
           </div>
 
-          <div className="public-evento-badge">
-            {evento.tipo === 'admin' ? (
-              <span className="public-badge-admin">🌟 {t('evento_global')}</span>
-            ) : (
-              <span className="public-badge-fundacion">🏠 {t('evento_fundacion')}</span>
-            )}
-          </div>
-
-          <div className="public-asistencia-section">
-            <button 
-              onClick={handleConfirmarAsistencia} 
-              className={`public-btn-asistir ${asistencia ? 'confirmed' : ''}`}
-              disabled={!isAuthenticated}
-            >
-              <CalendarCheck size={24} />
-              {asistencia ? (
-                <>
-                  <CheckCircle size={18} />
-                  {t('asistencia.confirmada')}
-                </>
-              ) : (
-                t('asistencia.confirmar')
-              )}
-            </button>
-            {evento.total_asistentes > 0 && (
-              <div className="public-total-asistentes">
-                <Users size={16} />
-                <span>{evento.total_asistentes} {t('asistencia.personas_asistiran')}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="public-info-grid">
-            <div className="public-info-item">
-              <MapPin size={18} className="public-info-icon" />
+          {/* Fecha y lugar */}
+          <div className="info-card">
+            <div className="info-card-title">
+              <Calendar size={16} />
+              FECHA Y LUGAR
+            </div>
+            <div className="info-row">
+              <MapPin size={18} />
               <div>
                 <strong>{t('lugar')}</strong>
                 <p>{evento.lugar_evento}</p>
               </div>
             </div>
-            <div className="public-info-item">
-              <Calendar size={18} className="public-info-icon" />
+            <div className="info-row">
+              <Calendar size={18} />
               <div>
                 <strong>{t('fecha')}</strong>
-                <p>{new Date(evento.fecha_evento).toLocaleString()}</p>
+                <p>{formatDate(evento.fecha_evento)}</p>
               </div>
             </div>
-            {evento.fecha_fin && (
-              <div className="public-info-item">
-                <Clock size={18} className="public-info-icon" />
-                <div>
-                  <strong>{t('fecha_fin')}</strong>
-                  <p>{new Date(evento.fecha_fin).toLocaleString()}</p>
-                </div>
+            <div className="info-row">
+              <Clock size={18} />
+              <div>
+                <strong>{t('hora')}</strong>
+                <p>{formatTime(evento.fecha_evento)}</p>
               </div>
-            )}
+            </div>
             {evento.costo && (
-              <div className="public-info-item">
-                <DollarSign size={18} className="public-info-icon" />
+              <div className="info-row">
+                <DollarSign size={18} />
                 <div>
                   <strong>{t('costo')}</strong>
                   <p>{evento.costo}</p>
@@ -198,8 +214,8 @@ const EventosPublicShow = () => {
               </div>
             )}
             {evento.capacidad_maxima && (
-              <div className="public-info-item">
-                <Users size={18} className="public-info-icon" />
+              <div className="info-row">
+                <Users size={18} />
                 <div>
                   <strong>{t('capacidad_maxima')}</strong>
                   <p>{evento.capacidad_maxima} {t('personas')}</p>
@@ -208,37 +224,73 @@ const EventosPublicShow = () => {
             )}
           </div>
 
+          {/* Estadísticas */}
+          <div className="info-card">
+            <div className="info-card-title">
+              <Heart size={16} />
+              ESTADÍSTICAS
+            </div>
+            <div className="stats-row">
+              <button 
+                onClick={handleLike} 
+                className={`stat-btn ${liked ? 'liked' : ''}`}
+              >
+                <Heart size={16} fill={liked ? 'currentColor' : 'none'} />
+                <span>{evento.likes || 0} {t('likes')}</span>
+              </button>
+              <div className="stat-item">
+                <Users size={16} />
+                <span>{evento.total_asistentes || 0} {t('asistentes')}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Botón asistencia */}
+          <div className="info-card">
+            <div className="info-card-title">
+              <CalendarCheck size={16} />
+              ASISTENCIA
+            </div>
+            <button 
+              onClick={handleConfirmarAsistencia} 
+              className={`asistencia-btn ${asistencia ? 'confirmed' : ''}`}
+              disabled={!isAuthenticated}
+            >
+              <CalendarCheck size={18} />
+              {asistencia ? t('asistencia.confirmada') : t('asistencia.confirmar')}
+            </button>
+            {evento.total_asistentes > 0 && (
+              <div className="total-asistentes" style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                <Users size={14} /> {evento.total_asistentes} {t('asistencia.personas_asistiran')}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contenido principal - 8 columnas (debajo de la imagen) */}
+        <div className="evento-main">
+          <h1 className="evento-titulo">{evento.nombre_evento}</h1>
+          
           {evento.descripcion && (
-            <div className="public-description-section">
-              <h3>
-                <FileText size={18} />
-                {t('descripcion')}
-              </h3>
-              <p>{evento.descripcion}</p>
+            <div className="evento-descripcion">
+              {evento.descripcion}
             </div>
           )}
 
           {evento.tags && evento.tags.length > 0 && (
-            <div className="tags-section">
-              <h3>
-                <Tag size={18} />
-                {t('etiquetas')}
-              </h3>
-              <div className="tags-list">
-                {(Array.isArray(evento.tags) ? evento.tags : JSON.parse(evento.tags)).map((tag, idx) => (
-                  <span key={idx} className="tag">#{tag}</span>
-                ))}
-              </div>
+            <div className="evento-tags">
+              {(Array.isArray(evento.tags) ? evento.tags : JSON.parse(evento.tags)).map((tag, idx) => (
+                <span key={idx} className="tag">#{tag}</span>
+              ))}
             </div>
           )}
-
-          <div className="public-show-footer">
-            <small>
-              <Clock size={14} />
-              {t('publicado')}: {new Date(evento.created_at).toLocaleDateString()}
-            </small>
-          </div>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="evento-footer">
+        <Clock size={14} />
+        <small>{t('publicado')}: {new Date(evento.created_at).toLocaleDateString()}</small>
       </div>
     </div>
   );

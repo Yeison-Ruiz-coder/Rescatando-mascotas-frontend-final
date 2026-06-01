@@ -1,3 +1,25 @@
+/* ============================================
+   BOTONES ESTILO COLLAGE
+   BORDES MENOS REDONDOS, SOMBRAS DURAS
+   ============================================ */
+
+/* Base de botón */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: var(--transition);
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: var(--radius-md);
+}
+
+/* ===== BOTÓN PRIMARIO (GRADIENTE) ===== */
 .btn-primary-global {
   display: inline-flex;
   align-items: center;
@@ -5,22 +27,24 @@
   padding: 12px 28px;
   background: var(--gradient-primary);
   color: white;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   text-decoration: none;
   transition: var(--transition);
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-primary-global:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-hard-md);
   text-decoration: none;
   color: white;
 }
 
+/* ===== BOTÓN SECUNDARIO ===== */
 .btn-secondary-global {
   display: inline-flex;
   align-items: center;
@@ -29,18 +53,21 @@
   background: var(--form-input-bg);
   color: var(--form-text);
   border: 1px solid var(--form-border);
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   transition: var(--transition);
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-secondary-global:hover {
   background: var(--color-hover);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
+/* ===== BOTÓN OUTLINE ===== */
 .btn-outline-global {
   display: inline-flex;
   align-items: center;
@@ -49,7 +76,7 @@
   background: transparent;
   color: var(--color-primary);
   border: 2px solid var(--color-primary);
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   text-decoration: none;
   transition: var(--transition);
@@ -60,10 +87,11 @@
 .btn-outline-global:hover {
   border-color: var(--color-accent);
   background: rgba(255, 140, 66, 0.1);
-  transform: translateY(-2px);
+  transform: translateX(-3px);
   color: var(--color-accent);
 }
 
+/* ===== BOTÓN ÉXITO ===== */
 .btn-success-global {
   display: inline-flex;
   align-items: center;
@@ -72,18 +100,21 @@
   background: var(--color-success);
   color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   transition: var(--transition);
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-success-global:hover {
   transform: translateY(-2px);
   filter: brightness(0.9);
+  box-shadow: var(--shadow-hard-md);
 }
 
+/* ===== BOTÓN PELIGRO ===== */
 .btn-danger-global {
   display: inline-flex;
   align-items: center;
@@ -92,31 +123,38 @@
   background: var(--color-danger);
   color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   transition: var(--transition);
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-danger-global:hover {
   transform: translateY(-2px);
   filter: brightness(0.9);
+  box-shadow: var(--shadow-hard-md);
 }
 
+/* ===== TAMAÑOS ===== */
 .btn-sm {
   padding: 6px 16px;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
 }
 
 .btn-lg {
   padding: 14px 36px;
-  font-size: 1.125rem;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
 }
 
+/* ===== ESTADO DESHABILITADO ===== */
 button:disabled,
 .btn-disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
+  box-shadow: none !important;
 }

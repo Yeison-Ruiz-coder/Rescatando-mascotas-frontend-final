@@ -13,5 +13,6 @@
 @import './decorations/paws.css';
 @import './components/status-badges.css';
 @import './utilities.css';
-@import './components/date-select-global.css'
-
+@import './components/date-select-global.css';
+@import './bento-grid.css';
+@import './collage-effects.css';

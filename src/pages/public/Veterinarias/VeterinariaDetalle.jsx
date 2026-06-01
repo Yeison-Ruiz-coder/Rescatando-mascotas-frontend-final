@@ -4,14 +4,16 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, MapPin, Phone, Mail, Clock, Shield, Ambulance, Star, Stethoscope, Info, ExternalLink } from 'lucide-react';
 import api from '../../../services/api';
-import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import { SimpleLoadingBar } from '../../../components/common/ProgressBar/ProgressBar';
 import './VeterinariaDetalle.css';
 
-const VeterinariaDetalle = () => {
-  const { id } = useParams();
+const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
+  const { id: urlId } = useParams();
+  const id = veterinariaId || urlId;
   const { t } = useTranslation('veterinarias');
   const [veterinaria, setVeterinaria] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
 
   const extractData = (response) => {
@@ -55,8 +57,19 @@ const VeterinariaDetalle = () => {
 
   useEffect(() => {
     const loadVeterinaria = async () => {
+      if (!id) return;
+      
       setLoading(true);
+      setLoadProgress(0);
       setError(null);
+      
+      // Simular progreso de carga
+      const progressInterval = setInterval(() => {
+        setLoadProgress(prev => {
+          if (prev >= 90) return prev;
+          return prev + Math.random() * 15;
+        });
+      }, 100);
       
       try {
         const response = await api.get(`/veterinarias/${id}`);
@@ -67,46 +80,56 @@ const VeterinariaDetalle = () => {
         }
         
         if (!data || Object.keys(data).length === 0) {
-          setError(t('no_encontrada'));
+          setLoadProgress(100);
+          setTimeout(() => {
+            setError(t('no_encontrada'));
+            setLoading(false);
+          }, 300);
         } else {
-          setVeterinaria(data);
+          setLoadProgress(100);
+          setTimeout(() => {
+            setVeterinaria(data);
+            setLoading(false);
+          }, 300);
         }
       } catch (err) {
         console.error('Error cargando veterinaria:', err);
-        if (err.response?.status === 404) {
-          setError(t('no_encontrada'));
-        } else {
-          setError(err.response?.data?.message || t('error_carga'));
-        }
+        setLoadProgress(100);
+        setTimeout(() => {
+          if (err.response?.status === 404) {
+            setError(t('no_encontrada'));
+          } else {
+            setError(err.response?.data?.message || t('error_carga'));
+          }
+          setLoading(false);
+        }, 300);
       } finally {
-        setLoading(false);
+        clearInterval(progressInterval);
       }
     };
 
-    if (id) loadVeterinaria();
+    loadVeterinaria();
   }, [id, t]);
 
   if (loading) {
     return (
-      <div className="veterinarias-detalle-page">
-        <div className="veterinarias-detalle-loading">
-          <LoadingSpinner text={t('cargando')} />
-        </div>
-      </div>
+      <SimpleLoadingBar 
+        progress={loadProgress}
+        height="12px"
+        variant="gradient"
+      />
     );
   }
 
   if (error || !veterinaria) {
     return (
       <div className="veterinarias-detalle-page">
-        <div className="veterinarias-detalle-container">
-          <div className="veterinarias-detalle-error-card">
+        <div className="veterinarias-detalle-bento-grid">
+          <div className="error-card">
             <MapPin size={48} />
             <h3>{error || t('no_encontrada')}</h3>
             <p>{t('error_mensaje')}</p>
-            <Link to="/veterinarias" className="back-link">
-              ← {t('volver')}
-            </Link>
+            {!embed && <Link to="/veterinarias" className="back-link">← {t('volver')}</Link>}
           </div>
         </div>
       </div>
@@ -117,202 +140,200 @@ const VeterinariaDetalle = () => {
 
   return (
     <div className="veterinarias-detalle-page">
-      <div className="veterinarias-detalle-back-outer">
-        <div className="veterinarias-detalle-container">
+      {/* Botón volver - solo visible en modo página completa */}
+      {!embed && (
+        <div className="veterinarias-detalle-back-outer">
           <Link to="/veterinarias" className="veterinarias-detalle-back-link">
             <ArrowLeft size={16} />
             <span>{t('volver')}</span>
           </Link>
         </div>
-      </div>
+      )}
 
-      <div className="veterinarias-detalle-container">
-        <div className="veterinarias-detalle-main-card">
-          <div className="veterinarias-detalle-card-content-wrapper">
-            <div className="veterinarias-detalle-header">
-              <h1>{veterinaria.Nombre_vet}</h1>
-              <div className="veterinarias-detalle-header-info">
-                {veterinaria.ciudad && (
-                  <div className="veterinarias-detalle-ciudad">
-                    <MapPin size={16} />
-                    <span>{veterinaria.ciudad}</span>
-                  </div>
-                )}
-                <div className="veterinarias-detalle-badges">
-                  {veterinaria.urgencias_24h && (
-                    <span className="veterinarias-detalle-badge veterinarias-detalle-badge-urgente">
-                      <Ambulance size={14} />
-                      {t('urgencias_24h')}
-                    </span>
-                  )}
-                  {veterinaria.verificado && (
-                    <span className="veterinarias-detalle-badge veterinarias-detalle-badge-verificado">
-                      <Shield size={14} />
-                      {t('verificado')}
-                    </span>
-                  )}
-                  {veterinaria.acepta_seguros && (
-                    <span className="veterinarias-detalle-badge veterinarias-detalle-badge-seguro">
-                      <Shield size={14} />
-                      {t('acepta_seguros')}
-                    </span>
-                  )}
-                </div>
-              </div>
+      {/* Bento Grid principal */}
+      <div className="veterinarias-detalle-bento-grid">
+        {/* Imagen - 8 columnas */}
+        <div className="veterinarias-detalle-imagen-wrapper">
+          <img 
+            src="https://placehold.co/800x450/667eea/FFFFFF?text=Veterinaria" 
+            alt={veterinaria.Nombre_vet} 
+            className="veterinarias-detalle-imagen"
+          />
+        </div>
+
+        {/* Sidebar - 4 columnas */}
+        <div className="veterinarias-detalle-sidebar">
+          {/* Contacto */}
+          <div className="veterinarias-detalle-info-card">
+            <div className="veterinarias-detalle-card-header">
+              <Phone size={16} />
+              <h3>{t('contacto')}</h3>
             </div>
-
-            <div className="veterinarias-detalle-info-grid">
-              <div className="veterinarias-detalle-info-card">
-                <div className="veterinarias-detalle-card-header">
-                  <Phone size={18} />
-                  <h3>{t('contacto')}</h3>
-                </div>
-                <div className="veterinarias-detalle-card-content">
-                  {veterinaria.Direccion && (
-                    <div className="veterinarias-detalle-field">
-                      <label>{t('direccion')}</label>
-                      <p>{veterinaria.Direccion}</p>
-                    </div>
-                  )}
-                  {veterinaria.Telefono && (
-                    <div className="veterinarias-detalle-field">
-                      <label>{t('telefono')}</label>
-                      <p>{veterinaria.Telefono}</p>
-                    </div>
-                  )}
-                  {veterinaria.Email && (
-                    <div className="veterinarias-detalle-field">
-                      <label>{t('email')}</label>
-                      <p>{veterinaria.Email}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="veterinarias-detalle-info-card">
-                <div className="veterinarias-detalle-card-header">
-                  <Clock size={18} />
-                  <h3>{t('horario')}</h3>
-                </div>
-                <div className="veterinarias-detalle-card-content">
-                  <div className="veterinarias-detalle-field">
-                    <label>{t('atencion')}</label>
-                    <p>{getHorario()}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {veterinaria.descripcion && (
-              <div className="veterinarias-detalle-section">
-                <div className="veterinarias-detalle-section-header">
-                  <Info size={18} />
-                  <h3>{t('sobre_nosotros')}</h3>
-                </div>
-                <p className="veterinarias-detalle-descripcion-text">{veterinaria.descripcion}</p>
-              </div>
-            )}
-
-            {servicios.length > 0 && (
-              <div className="veterinarias-detalle-section">
-                <div className="veterinarias-detalle-section-header">
-                  <Stethoscope size={18} />
-                  <h3>{t('servicios')}</h3>
-                </div>
-                <div className="veterinarias-detalle-servicios-grid">
-                  {servicios.map((servicio, index) => (
-                    <span key={index} className="veterinarias-detalle-servicio-badge">
-                      ✓ {servicio}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {(veterinaria.anios_experiencia || veterinaria.equipo_medico) && (
-              <div className="veterinarias-detalle-section">
-                <div className="veterinarias-detalle-section-header">
-                  <Info size={18} />
-                  <h3>{t('info_adicional')}</h3>
-                </div>
-                <div className="veterinarias-detalle-info-adicional">
-                  {veterinaria.anios_experiencia && (
-                    <div className="veterinarias-detalle-info-item">
-                      <strong>{t('anios_experiencia')}:</strong>
-                      <span>{veterinaria.anios_experiencia}</span>
-                    </div>
-                  )}
-                  {veterinaria.equipo_medico && (
-                    <div className="veterinarias-detalle-info-item">
-                      <strong>{t('equipo_medico')}:</strong>
-                      <span>{veterinaria.equipo_medico}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
             {veterinaria.Direccion && (
-              <div className="veterinarias-detalle-section">
-                <div className="veterinarias-detalle-section-header">
-                  <MapPin size={18} />
-                  <h3>{t('ubicacion')}</h3>
-                </div>
-                <div className="veterinarias-detalle-mapa-wrapper">
-                  <div className="veterinarias-detalle-mapa-container">
-                    <iframe
-                      title={`Mapa de ${veterinaria.Nombre_vet}`}
-                      src={`https://maps.google.com/maps?q=${encodeURIComponent(veterinaria.Direccion)}&output=embed`}
-                      width="100%"
-                      height="280"
-                      style={{ border: 0, borderRadius: "12px" }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    />
-                  </div>
-                  <div className="veterinarias-detalle-mapa-footer">
-                    <a 
-                      href={`https://maps.google.com/?q=${encodeURIComponent(veterinaria.Direccion)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="veterinarias-detalle-mapa-link"
-                    >
-                      <MapPin size={14} />
-                      {t('abrir_maps')}
-                      <ExternalLink size={12} />
-                    </a>
-                  </div>
-                </div>
+              <div className="veterinarias-detalle-field">
+                <label>{t('direccion')}</label>
+                <p>{veterinaria.Direccion}</p>
               </div>
             )}
-
-            {veterinaria.valoracion_promedio > 0 && (
-              <div className="veterinarias-detalle-valoracion">
-                <div className="veterinarias-detalle-valoracion-header">
-                  <Star size={18} />
-                  <h3>{t('valoracion')}</h3>
-                </div>
-                <div className="veterinarias-detalle-rating">
-                  <span className="veterinarias-detalle-rating-stars">
-                    {'★'.repeat(Math.round(veterinaria.valoracion_promedio))}
-                    {'☆'.repeat(5 - Math.round(veterinaria.valoracion_promedio))}
-                  </span>
-                  <span className="veterinarias-detalle-rating-number">{veterinaria.valoracion_promedio}/5</span>
-                  <span className="veterinarias-detalle-rating-count">
-                    ({veterinaria.total_valoraciones || 0} {t('valoraciones')})
-                  </span>
-                </div>
+            {veterinaria.Telefono && (
+              <div className="veterinarias-detalle-field">
+                <label>{t('telefono')}</label>
+                <p>{veterinaria.Telefono}</p>
               </div>
             )}
+            {veterinaria.Email && (
+              <div className="veterinarias-detalle-field">
+                <label>{t('email')}</label>
+                <p>{veterinaria.Email}</p>
+              </div>
+            )}
+          </div>
 
-            <div className="veterinarias-detalle-footer">
-              <small>
-                {t('actualizado')}: {new Date(veterinaria.updated_at || Date.now()).toLocaleDateString()}
-              </small>
+          {/* Horario */}
+          <div className="veterinarias-detalle-info-card">
+            <div className="veterinarias-detalle-card-header">
+              <Clock size={16} />
+              <h3>{t('horario')}</h3>
+            </div>
+            <div className="veterinarias-detalle-field">
+              <label>{t('atencion')}</label>
+              <p>{getHorario()}</p>
             </div>
           </div>
+
+          {/* Badges */}
+          {(veterinaria.urgencias_24h || veterinaria.verificado || veterinaria.acepta_seguros) && (
+            <div className="veterinarias-detalle-info-card">
+              <div className="veterinarias-detalle-card-header">
+                <Shield size={16} />
+                <h3>{t('servicios_destacados')}</h3>
+              </div>
+              <div className="veterinarias-detalle-header-badges">
+                {veterinaria.urgencias_24h && (
+                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-urgente">
+                    <Ambulance size={12} />
+                    {t('urgencias_24h')}
+                  </span>
+                )}
+                {veterinaria.verificado && (
+                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-verificado">
+                    <Shield size={12} />
+                    {t('verificado')}
+                  </span>
+                )}
+                {veterinaria.acepta_seguros && (
+                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-seguro">
+                    <Shield size={12} />
+                    {t('acepta_seguros')}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Valoración */}
+          {veterinaria.valoracion_promedio > 0 && (
+            <div className="veterinarias-detalle-info-card">
+              <div className="veterinarias-detalle-card-header">
+                <Star size={16} />
+                <h3>{t('valoracion')}</h3>
+              </div>
+              <div className="veterinarias-detalle-rating">
+                <span className="veterinarias-detalle-rating-stars">
+                  {'★'.repeat(Math.round(veterinaria.valoracion_promedio))}
+                  {'☆'.repeat(5 - Math.round(veterinaria.valoracion_promedio))}
+                </span>
+                <span className="veterinarias-detalle-rating-number">{veterinaria.valoracion_promedio}/5</span>
+                <span className="veterinarias-detalle-rating-count">
+                  ({veterinaria.total_valoraciones || 0} {t('valoraciones')})
+                </span>
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Contenido principal - 8 columnas */}
+        <div className="veterinarias-detalle-main">
+          <h1 className="veterinarias-detalle-titulo">{veterinaria.Nombre_vet}</h1>
+          
+          {veterinaria.descripcion && (
+            <div className="veterinarias-detalle-descripcion">
+              {veterinaria.descripcion}
+            </div>
+          )}
+
+          {servicios.length > 0 && (
+            <>
+              <h3 className="veterinarias-detalle-card-header" style={{ marginBottom: '12px' }}>
+                <Stethoscope size={18} />
+                <h3 style={{ fontSize: '1rem', margin: 0 }}>{t('servicios')}</h3>
+              </h3>
+              <div className="veterinarias-detalle-servicios-grid">
+                {servicios.map((servicio, index) => (
+                  <span key={index} className="veterinarias-detalle-servicio-badge">
+                    ✓ {servicio}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+
+          {(veterinaria.anios_experiencia || veterinaria.equipo_medico) && (
+            <div className="veterinarias-detalle-info-adicional">
+              {veterinaria.anios_experiencia && (
+                <div className="veterinarias-detalle-info-item">
+                  <strong>{t('anios_experiencia')}:</strong>
+                  <span>{veterinaria.anios_experiencia}</span>
+                </div>
+              )}
+              {veterinaria.equipo_medico && (
+                <div className="veterinarias-detalle-info-item">
+                  <strong>{t('equipo_medico')}:</strong>
+                  <span>{veterinaria.equipo_medico}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {veterinaria.Direccion && (
+            <>
+              <h3 className="veterinarias-detalle-card-header" style={{ marginBottom: '12px' }}>
+                <MapPin size={18} />
+                <h3 style={{ fontSize: '1rem', margin: 0 }}>{t('ubicacion')}</h3>
+              </h3>
+              <div className="veterinarias-detalle-mapa-container">
+                <iframe
+                  title={`Mapa de ${veterinaria.Nombre_vet}`}
+                  src={`https://maps.google.com/maps?q=${encodeURIComponent(veterinaria.Direccion)}&output=embed`}
+                  width="100%"
+                  height="280"
+                  style={{ border: 0, borderRadius: "8px" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <div style={{ textAlign: 'right', marginTop: '8px' }}>
+                <a 
+                  href={`https://maps.google.com/?q=${encodeURIComponent(veterinaria.Direccion)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="veterinarias-detalle-mapa-link"
+                >
+                  <MapPin size={12} />
+                  {t('abrir_maps')}
+                  <ExternalLink size={10} />
+                </a>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="veterinarias-detalle-footer">
+        <Clock size={14} />
+        <small>{t('actualizado')}: {new Date(veterinaria.updated_at || Date.now()).toLocaleDateString()}</small>
       </div>
     </div>
   );

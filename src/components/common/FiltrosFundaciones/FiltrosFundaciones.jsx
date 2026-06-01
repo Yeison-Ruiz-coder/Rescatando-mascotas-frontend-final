@@ -1,7 +1,6 @@
 // src/components/common/FiltrosFundaciones/FiltrosFundaciones.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, Filter, X, MapPin } from 'lucide-react';
 import { useFiltrosFundaciones } from '../../../contexts/FiltrosContext';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import './FiltrosFundaciones.css';
@@ -58,10 +57,7 @@ const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
     <form className="ff-form" onSubmit={(e) => e.preventDefault()}>
       <div className="ff-grid">
         <div className="ff-group ff-busqueda-group">
-          <label>
-            <Search size={14} />
-            {t('buscar')}
-          </label>
+          <label><i className="fas fa-search"></i> {t('buscar')}</label>
           <div className="ff-search-wrapper">
             <input
               ref={inputRef}
@@ -76,7 +72,7 @@ const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
             />
             {busquedaLocal && (
               <button type="button" onClick={handleClearSearch} className="ff-clear-search">
-                <X size={14} />
+                <i className="fas fa-times"></i>
               </button>
             )}
           </div>
@@ -88,19 +84,13 @@ const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
             value={filtros.ciudad || ''}
             onChange={handleCiudadChange}
             name="ciudad"
-            label={
-              <>
-                <MapPin size={14} />
-                {t('ciudad')}
-              </>
-            }
+            label={<><i className="fas fa-map-marker-alt"></i> {t('ciudad')}</>}
           />
         </div>
 
         <div className="ff-buttons">
           <button type="button" onClick={handleReset} className="ff-btn-limpiar">
-            <X size={16} />
-            {t('limpiar')}
+            <i className="fas fa-undo-alt"></i> {t('limpiar')}
           </button>
         </div>
       </div>
@@ -111,8 +101,7 @@ const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
     return (
       <>
         <button className="ff-btn-mobile" onClick={() => setShowModal(true)}>
-          <Filter size={18} />
-          {t('filtros')}
+          <i className="fas fa-filter"></i> {t('filtros')}
           {hasActiveFilters() && <span className="ff-badge" />}
         </button>
 
@@ -120,13 +109,8 @@ const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
           <div className="ff-modal-overlay" onClick={() => setShowModal(false)}>
             <div className="ff-modal-container" onClick={(e) => e.stopPropagation()}>
               <div className="ff-modal-header">
-                <h3>
-                  <Filter size={18} />
-                  {t('filtros')}
-                </h3>
-                <button className="ff-modal-close" onClick={() => setShowModal(false)}>
-                  <X size={20} />
-                </button>
+                <h3><i className="fas fa-filter"></i> {t('filtros')}</h3>
+                <button className="ff-modal-close" onClick={() => setShowModal(false)}>×</button>
               </div>
               <div className="ff-modal-body">
                 <FormContent />

@@ -1,0 +1,79 @@
+/* ============================================
+   BENTO GRID - PANTALLA COMPLETA (12 COLUMNAS)
+   ESTILO COLLAGE - SIN MAX-WIDTH RESTRICTIVO
+   ============================================ */
+
+/* Grid principal - ocupa todo el ancho disponible */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  width: 100%;
+  padding: 0 24px;
+}
+
+/* Eliminar padding en contenedores full-width opcionales */
+.bento-grid-full {
+  padding: 0;
+}
+
+/* ===== TAMAÑOS DE COLUMNAS ===== */
+.bento-1 { grid-column: span 1; }
+.bento-2 { grid-column: span 2; }
+.bento-3 { grid-column: span 3; }
+.bento-4 { grid-column: span 4; }
+.bento-5 { grid-column: span 5; }
+.bento-6 { grid-column: span 6; }
+.bento-7 { grid-column: span 7; }
+.bento-8 { grid-column: span 8; }
+.bento-9 { grid-column: span 9; }
+.bento-10 { grid-column: span 10; }
+.bento-11 { grid-column: span 11; }
+.bento-12 { grid-column: span 12; }
+
+/* ===== FILAS MÚLTIPLES ===== */
+.bento-row-2 { grid-row: span 2; }
+.bento-row-3 { grid-row: span 3; }
+.bento-row-4 { grid-row: span 4; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .bento-grid {
+    gap: 20px;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    padding: 0 16px;
+  }
+  
+  /* En móvil, todos los elementos ocupan el ancho completo */
+  .bento-1, .bento-2, .bento-3, .bento-4, .bento-5,
+  .bento-6, .bento-7, .bento-8, .bento-9, .bento-10,
+  .bento-11, .bento-12 {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-grid {
+    gap: 12px;
+    padding: 0 12px;
+  }
+}
+
+/* ===== UTILIDADES DEL GRID ===== */
+.bento-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bento-sticky {
+  position: sticky;
+  top: calc(var(--navbar-height) + 20px);
+}

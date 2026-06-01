@@ -1,8 +1,12 @@
 // src/pages/public/Mascotas/Mascotas.jsx
-import React, { useState, useEffect } from "react";
+// MODIFICADO para usar Bento Grid y pantalla completa con SlideUpPanel
+
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../../../services/api";
 import MascotaCard from "../../../components/common/MascotaCard/MascotaCard";
+import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
+import MascotaDetalle from "./MascotaDetalle";
 import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
@@ -11,7 +15,7 @@ import "./Mascotas.css";
 
 const Mascotas = () => {
   const { t } = useTranslation("mascotas");
-  const { filtros } = useFiltros(); // <-- Usar el contexto
+  const { filtros } = useFiltros();
   const [mascotas, setMascotas] = useState([]);
   const [mascotasFiltradas, setMascotasFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +24,13 @@ const Mascotas = () => {
   const [orden, setOrden] = useState("reciente");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const loaderRef = useRef(null);
+  
+  // Estado para el panel deslizable
+  const [selectedMascota, setSelectedMascota] = useState(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
 
@@ -44,7 +54,30 @@ const Mascotas = () => {
     fetchMascotas();
   }, [currentPage]);
 
-  // Aplicar filtros cuando cambian los filtros o el orden
+  // IntersectionObserver para scroll infinito
+  useEffect(() => {
+    if (!loaderRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.isIntersecting &&
+            !loading &&
+            !loadingMore &&
+            currentPage < totalPages
+          ) {
+            setCurrentPage((p) => p + 1);
+          }
+        });
+      },
+      { root: null, rootMargin: "200px", threshold: 0.1 },
+    );
+
+    const el = loaderRef.current;
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loaderRef, loading, loadingMore, currentPage, totalPages]);
+
   useEffect(() => {
     if (mascotas.length > 0) {
       let resultado = [...mascotas];
@@ -68,7 +101,6 @@ const Mascotas = () => {
         );
       }
 
-      // Ordenar
       switch (orden) {
         case "nombre":
           resultado.sort((a, b) =>
@@ -95,15 +127,30 @@ const Mascotas = () => {
     }
   }, [filtros, orden, mascotas]);
 
+  const handleOpenPanel = (mascota) => {
+    setSelectedMascota(mascota);
+    setIsPanelOpen(true);
+  };
+
+  const handleClosePanel = () => {
+    setIsPanelOpen(false);
+    setSelectedMascota(null);
+  };
+
   const fetchMascotas = async () => {
     try {
-      setLoading(true);
+      if (currentPage === 1) setLoading(true);
+      else setLoadingMore(true);
+
       const response = await api.get(`/mascotas?page=${currentPage}`);
 
       if (response.data.success) {
         const mascotasData = response.data.data.data || [];
-        setMascotas(mascotasData);
-        setMascotasFiltradas(mascotasData);
+        if (currentPage === 1) {
+          setMascotas(mascotasData);
+        } else {
+          setMascotas((prev) => [...prev, ...mascotasData]);
+        }
 
         setPagination({
           currentPage: response.data.data.current_page,
@@ -119,6 +166,7 @@ const Mascotas = () => {
       setError(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -141,7 +189,7 @@ const Mascotas = () => {
   if (error) {
     return (
       <div className="mascotas-page">
-        <div className="container">
+        <div className="bento-container">
           <div className="error-container">
             <i className="fas fa-paw"></i>
             <h2>{t("error_carga")}</h2>
@@ -159,11 +207,14 @@ const Mascotas = () => {
   }
 
   return (
-    <div className="mascotas-page ">
+    <div className="mascotas-page">
+      {/* Header con imagen de fondo */}
       <div className="mascotas-header">
-        <div className="container">
+        <div className="mascotas-hero">
+          <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} />
+        </div>
+        <div className="bento-container">
           <h1>{t("titulo")}</h1>
-          <p className="subtitle">{t("subtitulo")}</p>
           {pagination && pagination.total > 0 && (
             <p className="info">
               <i
@@ -176,9 +227,9 @@ const Mascotas = () => {
         </div>
       </div>
 
-      {/* Filtros section - usando clases globales */}
-      <div className="filtros-section sticky-glass glass-auto shadow-sticky">
-        <div className="container">
+      {/* Filtros section */}
+      <div className="filtros-section">
+        <div className="bento-container">
           <FiltrosMascotas
             especies={especies}
             variant={isMobile ? "modal" : "inline"}
@@ -186,8 +237,9 @@ const Mascotas = () => {
         </div>
       </div>
 
+      {/* Resultados section */}
       <div className="resultados-section">
-        <div className="container">
+        <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
               <i className="fas fa-list"></i> {t("mostrando")}{" "}
@@ -214,20 +266,53 @@ const Mascotas = () => {
               <p>{t("sin_resultados_desc")}</p>
             </div>
           ) : (
-            <div className="mascotas-grid">
-              {mascotasFiltradas.map((mascota) => (
-                <MascotaCard
-                  key={mascota.id}
-                  mascota={mascota}
-                  getImageUrl={getImageUrl}
-                  showFundacion={true}
-                  variant="default"
-                />
-              ))}
-            </div>
+            <>
+              <div className="mascotas-grid">
+                {mascotasFiltradas.map((mascota) => (
+                  <MascotaCard
+                    key={mascota.id}
+                    mascota={mascota}
+                    getImageUrl={getImageUrl}
+                    showFundacion={true}
+                    variant="default"
+                    onView={(mascota) => handleOpenPanel(mascota)}
+                  />
+                ))}
+              </div>
+
+              <div ref={loaderRef} className="infinite-loader">
+                {loadingMore && (
+                  <LoadingSpinner text={t("cargando_mas") || "Cargando..."} />
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
+
+      {/* Mensaje motivacional al final de la página */}
+      <div className="motivational-message">
+        <div className="bento-container">
+          <div className="motivational-content">
+            <i className="fas fa-paw motivational-icon"></i>
+            <h3 className="motivational-title">
+              {t("mensaje_motivacional_titulo")}
+            </h3>
+            <p className="motivational-text">
+              {t("mensaje_motivacional_texto")}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Panel deslizable para detalle */}
+      <SlideUpPanel 
+        isOpen={isPanelOpen} 
+        onClose={handleClosePanel}
+        title={selectedMascota?.nombre_mascota || t("detalle_mascota")}
+      >
+        <MascotaDetalle mascotaId={selectedMascota?.id} embed={true} />
+      </SlideUpPanel>
     </div>
   );
 };

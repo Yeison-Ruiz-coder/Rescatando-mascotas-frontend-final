@@ -225,6 +225,8 @@
   "likes_contador": "{{count}} likes",
   "asistentes_contador": "{{count}} attendees",
   "evento_global_badge": "🌍 Global Event",
-  "evento_fundacion_badge": "🏠 Foundation Event",
-  "eliminando": "Deleting..."
+  "evento_fundacion_badge": " Foundation Event",
+  "eliminando": "Deleting...",
+  "mensaje_motivacional_titulo": "Join and help change lives",
+  "mensaje_motivacional_texto": "Events are a great chance to learn, connect, and contribute to animal welfare. Don't miss them!"
 }

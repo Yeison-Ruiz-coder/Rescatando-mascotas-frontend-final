@@ -202,5 +202,15 @@
   "tamano_pequeño": "Small",
   "tamano_mediano": "Medium",
   "tamano_grande": "Large",
-  "tamano_muy_grande": "Very large"
+  "tamano_muy_grande": "Very large",
+  "mensaje_motivacional_titulo": "You can make a difference",
+  "mensaje_motivacional_texto": "Every adoption is a love story that begins. These animals just need a chance and a safe home. Will you be the one to change their life?",
+  "info_basica": "Basic information",
+  "historia": "Story",
+  "detalles": "Details",
+  "compatibilidad": "Compatibility",
+  "mascotas_relacionadas": "Related Pets",
+  "no_hay_mascotas_relacionadas": "No related pets available at this time",
+  "acciones": "Actions",
+  "fundacion": "Foundation"
 }

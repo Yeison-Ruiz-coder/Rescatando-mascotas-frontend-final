@@ -1,26 +1,24 @@
 /* src/components/common/FiltrosEventos/FiltrosEventos.css */
+/* ESTILO COLLAGE + BENTO - VERSIÓN TRANSFORMADA (igual a mascotas) */
 
 /* ============================================
-   FILTROS DE EVENTOS - VERSIÓN DELGADA Y COMPACTA
+   FILTROS DE EVENTOS - ESTILO COLLAGE
    ============================================ */
 
-/* Contenedor principal del formulario */
 .fe-form {
-  background: var(--form-bg);
-  border-radius: var(--radius-lg);
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-none);
+  padding: 1rem 1.2rem;
   width: 100%;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   position: relative;
 }
 
-/* Grid de filtros - Más compacto */
 .fe-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
+  gap: 0.8rem;
   align-items: end;
 }
 
@@ -29,236 +27,193 @@
   grid-column: span 2;
 }
 
-/* Grupo general de filtro */
 .fe-group {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
 }
 
-/* Labels - Más pequeños */
 .fe-group label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--form-label);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 0;
 }
 
+.fe-group label i,
 .fe-group label svg {
+  margin-right: 0.4rem;
   color: var(--color-primary);
+  font-size: 0.7rem;
   width: 12px;
   height: 12px;
 }
 
-/* Wrapper del input de búsqueda */
+/* Wrapper para input con botón X */
 .fe-search-wrapper {
   position: relative;
-  display: flex;
-  align-items: center;
   width: 100%;
 }
 
-/* Ícono de lupa */
-.fe-search-icon {
-  position: absolute;
-  left: 10px;
-  color: var(--color-text-muted);
-  width: 14px;
-  height: 14px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Input de búsqueda - Más delgado */
+.fe-select,
 .fe-input {
-  width: 100%;
-  padding: 0.5rem 1.8rem 0.5rem 2rem;
-  background: var(--form-input-bg);
+  padding: 0.6rem 0.8rem;
   border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  color: var(--form-text);
+  cursor: pointer;
   transition: var(--transition);
+  background: var(--form-input-bg);
+  color: var(--form-text);
+  width: 100%;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Eliminar íconos nativos */
-.fe-input::-webkit-search-cancel-button,
-.fe-input::-webkit-search-decoration,
-.fe-input::-webkit-search-results-button,
-.fe-input::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none;
-}
-
-.fe-input[type="search"] {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.fe-input::-ms-clear,
-.fe-input::-ms-reveal {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
+.fe-select:focus,
 .fe-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 2px var(--form-focus-ring);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-hard-md);
 }
 
-.fe-input::placeholder {
-  color: var(--form-placeholder);
-  font-size: 0.8rem;
+.fe-search-wrapper .fe-input {
+  padding-right: 2rem;
+  padding-left: 2rem;
 }
 
-/* Botón limpiar búsqueda - Más pequeño pero visible */
+/* Ícono de búsqueda a la izquierda */
+.fe-search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+/* Botón limpiar búsqueda */
 .fe-clear-search {
   position: absolute;
   right: 6px;
-  background: rgba(0, 0, 0, 0.1);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.15);
   border: none;
   cursor: pointer;
-  color: var(--color-text-muted);
-  padding: 2px;
-  border-radius: 50%;
+  border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-fast);
-  z-index: 1;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+}
+
+.fe-clear-search i,
+.fe-clear-search svg {
+  font-size: 10px;
+  width: 12px;
+  height: 12px;
+  color: var(--color-text-muted);
 }
 
 .fe-clear-search:hover {
-  color: white;
   background: var(--color-danger);
-  transform: scale(1.1);
 }
 
-.fe-clear-search svg {
-  width: 12px;
-  height: 12px;
+.fe-clear-search:hover i,
+.fe-clear-search:hover svg {
+  color: white;
 }
 
-/* Select */
-.fe-select {
-  width: 100%;
-  padding: 0.5rem 0.8rem;
-  background: var(--form-input-bg);
-  border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  color: var(--form-text);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.fe-select:focus {
-  outline: none;
-  border-color: var(--color-accent);
-}
-
-/* Botón limpiar filtros - Más delgado */
 .fe-buttons {
   display: flex;
   gap: 0.5rem;
 }
 
 .fe-btn-limpiar {
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   border: none;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   background: var(--gradient-primary);
   color: white;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+  white-space: nowrap;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .fe-btn-limpiar:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
-  filter: brightness(0.95);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
+.fe-btn-limpiar i,
 .fe-btn-limpiar svg {
+  font-size: 0.75rem;
   width: 14px;
   height: 14px;
+  margin-right: 0.3rem;
 }
 
-/* Botón móvil */
+/* ===== BOTÓN MÓVIL ===== */
 .fe-btn-mobile {
-  display: none;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--form-bg);
-  border: 1px solid var(--form-border);
-  border-radius: 40px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
   cursor: pointer;
-  font-weight: 500;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-hard-sm);
   transition: var(--transition);
-  color: var(--form-text);
-  font-size: 0.85rem;
 }
 
 .fe-btn-mobile:hover {
-  background: var(--color-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
-/* Badge para filtros activos */
 .fe-badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  background: var(--color-danger);
+  display: inline-block;
   width: 8px;
   height: 8px;
+  background: var(--color-accent);
   border-radius: 50%;
-  border: 1.5px solid white;
+  margin-left: 4px;
 }
 
-/* Modal Overlay */
+/* ===== MODAL ===== */
 .fe-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: var(--z-modal-backdrop);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
-/* Modal Container */
 .fe-modal-container {
-  background: var(--form-bg);
-  border-radius: var(--radius-2xl);
+  background: var(--bg-card);
   width: 90%;
   max-width: 500px;
-  max-height: 85vh;
-  overflow: hidden;
-  animation: fe-modalFadeIn 0.3s ease;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-hard-lg);
   border: 1px solid var(--color-border);
-  position: relative;
+  animation: fe-modalFadeIn 0.2s ease;
 }
 
 @keyframes fe-modalFadeIn {
@@ -272,62 +227,43 @@
   }
 }
 
-/* Modal Header - Más delgado */
 .fe-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1.2rem;
-  border-bottom: 1px solid var(--form-border);
-  background: var(--form-input-bg);
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .fe-modal-header h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--form-text);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
+.fe-modal-header h3 i,
 .fe-modal-header h3 svg {
   color: var(--color-primary);
-  width: 16px;
-  height: 16px;
 }
 
-/* Modal Close Button - Más visible */
 .fe-modal-close {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid var(--color-danger);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: var(--color-danger);
-  transition: var(--transition-fast);
-  line-height: 1;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--color-text-muted);
+  transition: var(--transition);
 }
 
 .fe-modal-close:hover {
-  background: var(--color-danger);
-  color: white;
-  transform: scale(1.05);
+  color: var(--color-danger);
 }
 
-.fe-modal-close svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Modal Body */
 .fe-modal-body {
-  padding: 1rem;
+  padding: 1.2rem;
 }
 
 .fe-modal-body .fe-form {
@@ -337,13 +273,12 @@
 }
 
 /* ============================================
-   RESPONSIVE - VERSIÓN MUY DELGADA
+   RESPONSIVE
    ============================================ */
 
-/* Tablets (768px - 1024px) */
 @media (max-width: 1024px) {
   .fe-form {
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 1rem;
   }
   
   .fe-grid {
@@ -354,24 +289,14 @@
     font-size: 0.65rem;
   }
   
-  .fe-input,
   .fe-select,
+  .fe-input,
   .fe-btn-limpiar {
-    padding: 0.45rem 0.8rem;
+    padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
-  }
-  
-  .fe-input {
-    padding-left: 1.8rem;
-    padding-right: 1.6rem;
-  }
-  
-  .fe-btn-limpiar {
-    padding: 0.45rem 1rem;
   }
 }
 
-/* Móviles grandes (640px - 768px) */
 @media (max-width: 768px) {
   .fe-btn-mobile {
     display: flex;
@@ -386,49 +311,39 @@
   }
   
   .fe-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
   }
   
   .fe-busqueda-group {
-    grid-column: span 1;
-  }
-  
-  .fe-buttons {
-    flex-direction: column;
-  }
-  
-  .fe-form {
-    padding: 0.5rem;
+    flex: 1 1 100%;
+    min-width: 100%;
   }
   
   .fe-group {
-    gap: 0.3rem;
+    flex: 1 1 auto;
+    min-width: 0;
   }
   
   .fe-group label {
     font-size: 0.6rem;
+    white-space: nowrap;
   }
   
-  .fe-input,
-  .fe-select {
-    padding: 0.4rem 0.7rem;
-    font-size: 0.8rem;
-  }
-  
+  .fe-select,
   .fe-input {
-    padding-left: 1.8rem;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.75rem;
   }
   
   .fe-btn-limpiar {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.75rem;
   }
   
-  .fe-search-icon {
-    width: 12px;
-    height: 12px;
-    left: 8px;
+  .fe-search-wrapper .fe-input {
+    padding-left: 1.8rem;
   }
   
   .fe-clear-search {
@@ -436,120 +351,42 @@
     height: 22px;
     right: 4px;
   }
-  
-  .fe-clear-search svg {
-    width: 12px;
-    height: 12px;
-  }
 }
 
-/* Móviles pequeños (menos de 480px) */
 @media (max-width: 480px) {
   .fe-form {
-    padding: 0.4rem;
-  }
-  
-  .fe-grid {
-    gap: 0.4rem;
+    padding: 0.6rem;
   }
   
   .fe-group label {
     font-size: 0.55rem;
-    gap: 0.25rem;
   }
   
+  .fe-group label i,
   .fe-group label svg {
+    font-size: 0.6rem;
     width: 10px;
     height: 10px;
   }
   
-  .fe-input,
-  .fe-select {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
-  }
-  
+  .fe-select,
   .fe-input {
-    padding-left: 1.6rem;
-    padding-right: 1.4rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.7rem;
   }
   
   .fe-btn-limpiar {
-    padding: 0.35rem 0.7rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
   }
   
-  .fe-btn-limpiar svg {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .fe-search-icon {
-    width: 11px;
-    height: 11px;
-    left: 7px;
+  .fe-search-wrapper .fe-input {
+    padding-left: 1.6rem;
   }
   
   .fe-clear-search {
     width: 24px;
     height: 24px;
     right: 3px;
-    background: rgba(239, 68, 68, 0.15);
   }
-  
-  .fe-clear-search svg {
-    width: 12px;
-    height: 12px;
-  }
-  
-  /* Modal más compacto */
-  .fe-modal-container {
-    width: 95%;
-    max-height: 90vh;
-  }
-  
-  .fe-modal-header {
-    padding: 0.6rem 1rem;
-  }
-  
-  .fe-modal-header h3 {
-    font-size: 0.9rem;
-  }
-  
-  .fe-modal-body {
-    padding: 0.8rem;
-  }
-  
-  .fe-modal-close {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .fe-modal-close svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-/* Modo oscuro */
-[data-theme="dark"] .fe-modal-overlay {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-[data-theme="dark"] .fe-btn-mobile {
-  background: var(--form-bg);
-  border-color: var(--form-border);
-  color: var(--form-text);
-}
-
-[data-theme="dark"] .fe-clear-search {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .fe-clear-search:hover {
-  background: var(--color-danger);
-}
-
-[data-theme="dark"] .fe-modal-close {
-  background: rgba(239, 68, 68, 0.2);
 }
