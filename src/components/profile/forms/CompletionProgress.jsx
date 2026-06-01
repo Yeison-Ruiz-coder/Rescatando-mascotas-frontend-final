@@ -8,7 +8,13 @@ const CompletionProgress = ({ status }) => {
   const { percentage, missing_fields, verification_status } = status;
 
   const getFieldLabel = (field) => {
-    const labels = { nombre: t('profile.name'), telefono: t('profile.phone'), direccion: t('profile.address'), ciudad: t('profile.city'), phone_verification: t('profile.phoneVerification') };
+    const labels = { 
+      nombre: t('profile.name'), 
+      telefono: t('profile.phone'), 
+      direccion: t('profile.address'), 
+      ciudad: t('profile.city'), 
+      phone_verification: t('profile.phoneVerification') 
+    };
     return labels[field] || field;
   };
 
@@ -26,7 +32,9 @@ const CompletionProgress = ({ status }) => {
         <div className="completion-missing">
           <p>{t('profile.missingFields')}:</p>
           <div className="completion-missing-badges">
-            {missing_fields.map(field => <span key={field} className="missing-badge">{getFieldLabel(field)}</span>)}
+            {missing_fields.map(field => (
+              <span key={field} className="missing-badge">{getFieldLabel(field)}</span>
+            ))}
           </div>
         </div>
       )}
