@@ -153,10 +153,7 @@
   grid-column: span 4;  /* 4 columnas = 3 cards por fila en desktop */
 }
 
-/* Card destacada - más grande */
-.evento-grid-item.featured {
-  grid-column: span 6;  /* 6 columnas = más ancha */
-}
+
 
 /* Card compacta - más pequeña */
 .evento-grid-item.compact {

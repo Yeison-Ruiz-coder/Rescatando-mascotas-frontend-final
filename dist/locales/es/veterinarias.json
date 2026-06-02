@@ -45,5 +45,7 @@
   "sin_resultados": {
     "titulo": "No se encontraron veterinarias",
     "mensaje": "Intenta con otros términos de búsqueda"
-  }
+  },
+  "mensaje_motivacional_titulo":"Tu mascota merece el mejor cuidado",
+  "mensaje_motivacional_texto":"Encuentra las mejores veterinarias cerca de ti. Profesionales comprometidos con la salud y bienestar de tu mejor amigo."
 }

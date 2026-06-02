@@ -16,6 +16,17 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
 
+  const getImagenUrl = () => {
+    if (!veterinaria) return 'https://placehold.co/800x450/667eea/FFFFFF?text=Veterinaria';
+    return (
+      veterinaria.imagen_portada ||
+      veterinaria.imagen ||
+      veterinaria.foto_principal ||
+      veterinaria.imagenUrl ||
+      'https://placehold.co/800x450/667eea/FFFFFF?text=Veterinaria'
+    );
+  };
+
   const extractData = (response) => {
     if (response?.data && !Array.isArray(response.data)) return response.data;
     if (Array.isArray(response)) return response[0];
@@ -137,6 +148,7 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
   }
 
   const servicios = getServiciosList();
+  const imageUrl = getImagenUrl();
 
   return (
     <div className="veterinarias-detalle-page">
@@ -152,10 +164,10 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
 
       {/* Bento Grid principal */}
       <div className="veterinarias-detalle-bento-grid">
-        {/* Imagen - 8 columnas */}
+        {/* Imagen - tarjeta compacta */}
         <div className="veterinarias-detalle-imagen-wrapper">
           <img 
-            src="https://placehold.co/800x450/667eea/FFFFFF?text=Veterinaria" 
+            src={imageUrl} 
             alt={veterinaria.Nombre_vet} 
             className="veterinarias-detalle-imagen"
           />

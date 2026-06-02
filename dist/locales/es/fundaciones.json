@@ -148,5 +148,7 @@
   "mascota_eliminada_exito": "{{nombre}} ha sido eliminado(a)",
   "error_eliminar_mascota": "Error al eliminar la mascota",
   "agregar_mascota": "Agregar Mascota",
-  "menos_de_un_año": "Menos de 1 año"
+  "menos_de_un_año": "Menos de 1 año",
+  "mensaje_motivacional_titulo":"Apoya a las fundaciones que ayudan",
+  "mensaje_motivacional_texto": "Cada fundación trabaja incansablemente para rescatar y dar hogar a animales necesitados. Conoce su labor y súmate a su causa."
 }

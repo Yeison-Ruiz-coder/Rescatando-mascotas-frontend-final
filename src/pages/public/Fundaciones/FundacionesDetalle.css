@@ -95,7 +95,7 @@
 
 /* ===== SIDEBAR (izquierda - 4 columnas) ===== */
 .detalle-sidebar {
-  grid-column: span 4;
+  grid-column: span 6;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -201,31 +201,33 @@
 
 /* ===== IMAGEN (derecha - 8 columnas) ===== */
 .detalle-imagen-wrapper {
-  grid-column: span 8;
+  grid-column: span 6;
   position: relative;
+  min-height: 220px;
   border-radius: var(--radius-xs);
   overflow: hidden;
   box-shadow: var(--shadow-hard-md);
   border: 1px solid var(--color-border);
-  background: var(--gradient-primary);
+  background: var(--color-card-bg);
 }
 
 .detalle-imagen {
   width: 100%;
   aspect-ratio: 16/9;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
-  filter: grayscale(15%);
-  transition: filter 0.3s ease;
+  background: var(--color-card-bg);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .detalle-imagen:hover {
   filter: grayscale(0%);
+  transform: scale(1.01);
 }
 
-/* ===== CONTENIDO PRINCIPAL (8 columnas, debajo de la imagen) ===== */
+/* ===== CONTENIDO PRINCIPAL (12 columnas, debajo de la imagen) ===== */
 .detalle-main {
-  grid-column: span 8;
+  grid-column: span 12;
   margin-top: 24px;
 }
 
@@ -293,7 +295,7 @@
 
 /* Mapa */
 .detalle-mapa-wrapper {
-  padding: 16px 20px;
+  width: 100%;
 }
 
 .detalle-mapa-container {

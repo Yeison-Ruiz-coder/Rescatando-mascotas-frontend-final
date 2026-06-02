@@ -41,6 +41,8 @@
   "horario_24h": "Open 24 hours, 7 days a week",
   "horario_consultar": "Contact for hours",
   "acepta_seguros": "Accepts insurance",
+  "mensaje_motivacional_titulo": "Your pet deserves the best care",
+  "mensaje_motivacional_texto": "Find trusted veterinary clinics near you. Professionals committed to your pet's health and wellbeing.",
 
   "sin_resultados": {
     "titulo": "No veterinary clinics found",

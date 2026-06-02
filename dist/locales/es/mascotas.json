@@ -202,5 +202,15 @@
   "tamano_pequeño": "Pequeño",
   "tamano_mediano": "Mediano",
   "tamano_grande": "Grande",
-  "tamano_muy_grande": "Muy grande"
+  "tamano_muy_grande": "Muy grande",
+  "mensaje_motivacional_titulo": "Tú puedes marcar la diferencia",
+  "mensaje_motivacional_texto": "Cada adopción es una historia de amor que comienza. Estos animales solo necesitan una oportunidad y un hogar donde sentirse seguros. ¿Serás tú quien cambie su vida?",
+  "info_basica": "Información básica",
+  "historia": "Historia",
+  "detalles": "Detalles",
+  "compatibilidad": "Compatibilidad",
+  "mascotas_relacionadas": "Mascotas Relacionadas",
+  "no_hay_mascotas_relacionadas": "No hay mascotas relacionadas en este momento",
+  "acciones": "Acciones",
+  "fundacion": "Fundación"
 }

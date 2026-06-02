@@ -228,7 +228,6 @@ const FundacionesIndex = () => {
               </span>
             </div>
           </div>
-          // Resultados section - parte del grid
           {fundacionesFiltradas.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-building"></i>

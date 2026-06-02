@@ -307,7 +307,6 @@ const EventosPublicIndex = () => {
               />
             </div>
           </div>
-          // Resultados section - parte del grid
           {eventosFiltrados.length === 0 ? (
             <div className="public-eventos-empty">
               <i className="fas fa-calendar-alt"></i>

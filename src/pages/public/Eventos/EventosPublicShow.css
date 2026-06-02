@@ -41,18 +41,20 @@
 
 /* ===== IMAGEN (ocupa 8 columnas en desktop) ===== */
 .evento-imagen-wrapper {
-  grid-column: span 8;
+  grid-column: span 6;
   position: relative;
+  min-height: 220px;
   border-radius: var(--radius-xs);
   overflow: hidden;
   box-shadow: var(--shadow-hard-md);
   border: 1px solid var(--color-border);
-  background: var(--gradient-primary);
+  background: var(--color-card-bg);
+  cursor: zoom-in;
 }
 
 .evento-imagen {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
   display: block;
   filter: grayscale(15%);
@@ -63,9 +65,10 @@
   filter: grayscale(0%);
 }
 
-/* ===== SIDEBAR DE INFORMACIÓN (ocupa 4 columnas) ===== */
+
+/* ===== SIDEBAR DE INFORMACIÓN (ocupa 6 columnas) ===== */
 .evento-sidebar {
-  grid-column: span 4;
+  grid-column: span 6;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -240,7 +243,7 @@
 
 /* ===== SECCIÓN PRINCIPAL (descripción y tags) ===== */
 .evento-main {
-  grid-column: span 8;
+  grid-column: span 12;
   margin-top: 24px;
 }
 

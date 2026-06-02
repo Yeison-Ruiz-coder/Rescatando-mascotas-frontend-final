@@ -57,6 +57,8 @@
   "id_no_especificado": "Foundation ID not specified",
   "reintentar": "Retry",
   "sin_nombre": "No name",
+  "mensaje_motivacional_titulo": "Support the foundations that help",
+  "mensaje_motivacional_texto": "Each foundation works tirelessly to rescue and shelter animals in need. Learn about their work and join the cause.",
 
   "sin_resultados": {
     "titulo": "No foundations found",
