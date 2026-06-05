@@ -1,7 +1,5 @@
 // src/pages/public/Mascotas/Mascotas.jsx
-// MODIFICADO para usar Bento Grid y pantalla completa con SlideUpPanel
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../../../services/api";
 import MascotaCard from "../../../components/common/MascotaCard/MascotaCard";
@@ -10,122 +8,113 @@ import MascotaDetalle from "./MascotaDetalle";
 import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
-import { useFiltros } from "../../../contexts/FiltrosContext";
 import "./Mascotas.css";
 
 const Mascotas = () => {
   const { t } = useTranslation("mascotas");
-  const { filtros } = useFiltros();
+  
   const [mascotas, setMascotas] = useState([]);
-  const [mascotasFiltradas, setMascotasFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [pagination, setPagination] = useState(null);
+  const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 });
+  const [currentFilters, setCurrentFilters] = useState({});
   const [orden, setOrden] = useState("reciente");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const loaderRef = useRef(null);
   
-  // Estado para el panel deslizable
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
 
   const opcionesOrden = [
-    { value: "reciente", label: t("mas_recientes") || "Más recientes" },
-    { value: "nombre", label: t("nombre_asc") || "Nombre (A-Z)" },
-    { value: "edad_asc", label: t("edad_asc") || "Edad (menor a mayor)" },
-    { value: "edad_desc", label: t("edad_desc") || "Edad (mayor a menor)" },
+    { value: "reciente", label: "Más recientes" },
+    { value: "nombre", label: "Nombre (A-Z)" },
+    { value: "edad_asc", label: "Edad (menor a mayor)" },
+    { value: "edad_desc", label: "Edad (mayor a menor)" },
   ];
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
+  // Función para cargar mascotas - ESTABLE con useCallback
+  const loadMascotas = useCallback(async (filters = {}, page = 1, sortOrder = "reciente") => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const params = {
+        page: page,
+        per_page: 12,
+      };
+      
+      if (filters.buscar) params.buscar = filters.buscar;
+      if (filters.especie) params.especie = filters.especie;
+      if (filters.genero) params.genero = filters.genero;
+      if (filters.tamano) params.tamano = filters.tamano;
+      
+      switch (sortOrder) {
+        case "nombre": params.sort = "nombre_mascota"; break;
+        case "edad_asc": params.sort = "edad_aprox"; break;
+        case "edad_desc": params.sort = "-edad_aprox"; break;
+        default: params.sort = "-created_at";
+      }
+      
+      console.log("📡 API Request:", params);
+      
+      const response = await api.get('/mascotas', { params });
+      
+      let mascotasData = [];
+      let paginationData = { current_page: 1, last_page: 1, total: 0 };
+      
+      if (response.data?.data?.data) {
+        mascotasData = response.data.data.data;
+        paginationData = {
+          current_page: response.data.data.current_page,
+          last_page: response.data.data.last_page,
+          total: response.data.data.total,
+        };
+      } else if (response.data?.data) {
+        mascotasData = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        mascotasData = response.data;
+      }
+      
+      setMascotas(mascotasData);
+      setPagination(paginationData);
+      
+    } catch (err) {
+      console.error("❌ Error:", err);
+      setError(err.response?.data?.message || err.message || "Error al cargar mascotas");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  // Carga inicial - SOLO UNA VEZ
   useEffect(() => {
-    fetchMascotas();
-  }, [currentPage]);
+    loadMascotas({}, 1, "reciente");
+  }, []); // ← Array vacío
 
-  // IntersectionObserver para scroll infinito
-  useEffect(() => {
-    if (!loaderRef.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (
-            entry.isIntersecting &&
-            !loading &&
-            !loadingMore &&
-            currentPage < totalPages
-          ) {
-            setCurrentPage((p) => p + 1);
-          }
-        });
-      },
-      { root: null, rootMargin: "200px", threshold: 0.1 },
-    );
+  // Manejar cambio de filtros (desde el componente)
+  const handleFilterChange = useCallback((newFilters) => {
+    console.log("📝 Filtros aplicados:", newFilters);
+    setCurrentFilters(newFilters);
+    setCurrentPage(1);
+    loadMascotas(newFilters, 1, orden);
+  }, [loadMascotas, orden]);
 
-    const el = loaderRef.current;
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [loaderRef, loading, loadingMore, currentPage, totalPages]);
+  // Manejar cambio de orden
+  const handleOrdenChange = useCallback((newOrden) => {
+    console.log("📝 Orden cambiado:", newOrden);
+    setOrden(newOrden);
+    setCurrentPage(1);
+    loadMascotas(currentFilters, 1, newOrden);
+  }, [loadMascotas, currentFilters]);
 
-  useEffect(() => {
-    if (mascotas.length > 0) {
-      let resultado = [...mascotas];
-
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter((m) =>
-          m.nombre_mascota?.toLowerCase().includes(busquedaLower),
-        );
-      }
-
-      if (filtros.especie && filtros.especie.trim()) {
-        resultado = resultado.filter(
-          (m) => m.especie?.toLowerCase() === filtros.especie.toLowerCase(),
-        );
-      }
-
-      if (filtros.genero && filtros.genero.trim()) {
-        resultado = resultado.filter(
-          (m) => m.genero?.toLowerCase() === filtros.genero.toLowerCase(),
-        );
-      }
-
-      switch (orden) {
-        case "nombre":
-          resultado.sort((a, b) =>
-            a.nombre_mascota?.localeCompare(b.nombre_mascota),
-          );
-          break;
-        case "edad_asc":
-          resultado.sort(
-            (a, b) =>
-              (parseInt(a.edad_aprox) || 0) - (parseInt(b.edad_aprox) || 0),
-          );
-          break;
-        case "edad_desc":
-          resultado.sort(
-            (a, b) =>
-              (parseInt(b.edad_aprox) || 0) - (parseInt(a.edad_aprox) || 0),
-          );
-          break;
-        default:
-          break;
-      }
-
-      setMascotasFiltradas(resultado);
-    }
-  }, [filtros, orden, mascotas]);
+  // Manejar cambio de página
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage === currentPage) return;
+    setCurrentPage(newPage);
+    loadMascotas(currentFilters, newPage, orden);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage, currentFilters, orden, loadMascotas]);
 
   const handleOpenPanel = (mascota) => {
     setSelectedMascota(mascota);
@@ -137,46 +126,14 @@ const Mascotas = () => {
     setSelectedMascota(null);
   };
 
-  const fetchMascotas = async () => {
-    try {
-      if (currentPage === 1) setLoading(true);
-      else setLoadingMore(true);
-
-      const response = await api.get(`/mascotas?page=${currentPage}`);
-
-      if (response.data.success) {
-        const mascotasData = response.data.data.data || [];
-        if (currentPage === 1) {
-          setMascotas(mascotasData);
-        } else {
-          setMascotas((prev) => [...prev, ...mascotasData]);
-        }
-
-        setPagination({
-          currentPage: response.data.data.current_page,
-          lastPage: response.data.data.last_page,
-          total: response.data.data.total,
-          perPage: response.data.data.per_page,
-        });
-        setTotalPages(response.data.data.last_page);
-      }
-      setError(null);
-    } catch (err) {
-      console.error("Error:", err);
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  };
-
   const getImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
-    return `${import.meta.env.VITE_STORAGE_URL || "http://rescatando-mascotas-forever.test/storage"}/${path}`;
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
   };
 
-  if (loading) {
+  if (loading && mascotas.length === 0) {
     return (
       <div className="mascotas-page">
         <div className="loading-container">
@@ -192,13 +149,10 @@ const Mascotas = () => {
         <div className="bento-container">
           <div className="error-container">
             <i className="fas fa-paw"></i>
-            <h2>{t("error_carga")}</h2>
+            <h2>Error</h2>
             <p>{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="reload-btn"
-            >
-              <i className="fas fa-sync-alt"></i> {t("reintentar")}
+            <button onClick={() => loadMascotas(currentFilters, currentPage, orden)} className="reload-btn">
+              <i className="fas fa-sync-alt"></i> Reintentar
             </button>
           </div>
         </div>
@@ -208,108 +162,109 @@ const Mascotas = () => {
 
   return (
     <div className="mascotas-page">
-      {/* Header con imagen de fondo */}
       <div className="mascotas-header">
         <div className="mascotas-hero">
           <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
           <h1>{t("titulo")}</h1>
-          {pagination && pagination.total > 0 && (
+          {pagination.total > 0 && (
             <p className="info">
-              <i
-                className="fas fa-heart"
-                style={{ color: "var(--color-heart)" }}
-              ></i>{" "}
-              {t("mensaje_bienvenida", { total: pagination.total })}
+              <i className="fas fa-heart"></i> {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
           )}
         </div>
       </div>
 
-      {/* Filtros section */}
+      {/* Filtros */}
       <div className="filtros-section">
         <div className="bento-container">
-          <FiltrosMascotas
+          <FiltrosMascotas 
+            onFilterChange={handleFilterChange} 
             especies={especies}
-            variant={isMobile ? "modal" : "inline"}
           />
         </div>
       </div>
 
-      {/* Resultados section */}
+      {/* Resultados */}
       <div className="resultados-section">
         <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
-              <i className="fas fa-list"></i> {t("mostrando")}{" "}
-              <strong>{mascotasFiltradas.length}</strong> {t("de")}{" "}
-              <strong>{mascotas.length}</strong> {t("mascotas")}
+              <i className="fas fa-list"></i> Mostrando <strong>{mascotas.length}</strong> de <strong>{pagination.total}</strong> mascotas
             </div>
             <div className="resultados-orden">
-              <label>
-                <i className="fas fa-sort"></i> {t("ordenar_por")}:
-              </label>
+              <label><i className="fas fa-sort"></i> Ordenar por:</label>
               <CustomSelect
                 options={opcionesOrden}
                 value={orden}
-                onChange={(e) => setOrden(e.target.value)}
+                onChange={(e) => handleOrdenChange(e.target.value)}
                 name="orden"
               />
             </div>
           </div>
 
-          {mascotasFiltradas.length === 0 ? (
+          {mascotas.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-search"></i>
-              <h3>{t("sin_resultados")}</h3>
-              <p>{t("sin_resultados_desc")}</p>
+              <h3>No se encontraron mascotas</h3>
+              <p>Intenta con otros filtros</p>
             </div>
           ) : (
             <>
               <div className="mascotas-grid">
-                {mascotasFiltradas.map((mascota) => (
+                {mascotas.map((mascota) => (
                   <MascotaCard
                     key={mascota.id}
                     mascota={mascota}
                     getImageUrl={getImageUrl}
                     showFundacion={true}
                     variant="default"
-                    onView={(mascota) => handleOpenPanel(mascota)}
+                    onView={handleOpenPanel}
                   />
                 ))}
               </div>
 
-              <div ref={loaderRef} className="infinite-loader">
-                {loadingMore && (
-                  <LoadingSpinner text={t("cargando_mas") || "Cargando..."} />
-                )}
-              </div>
+              {pagination.last_page > 1 && (
+                <div className="pagination-container">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-btn"
+                  >
+                    <i className="fas fa-chevron-left"></i> Anterior
+                  </button>
+                  <span className="pagination-info">
+                    Página {currentPage} de {pagination.last_page}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === pagination.last_page}
+                    className="pagination-btn"
+                  >
+                    Siguiente <i className="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>
       </div>
 
-      {/* Mensaje motivacional al final de la página */}
       <div className="motivational-message">
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>
-            <h3 className="motivational-title">
-              {t("mensaje_motivacional_titulo")}
-            </h3>
-            <p className="motivational-text">
-              {t("mensaje_motivacional_texto")}
-            </p>
+            <h3 className="motivational-title">{t("mensaje_motivacional_titulo")}</h3>
+            <p className="motivational-text">{t("mensaje_motivacional_texto")}</p>
           </div>
         </div>
       </div>
 
-      {/* Panel deslizable para detalle */}
-      <SlideUpPanel 
-        isOpen={isPanelOpen} 
+      <SlideUpPanel
+        isOpen={isPanelOpen}
         onClose={handleClosePanel}
-        title={selectedMascota?.nombre_mascota || t("detalle_mascota")}
+        title={selectedMascota?.nombre_mascota || "Detalle"}
       >
         <MascotaDetalle mascotaId={selectedMascota?.id} embed={true} />
       </SlideUpPanel>

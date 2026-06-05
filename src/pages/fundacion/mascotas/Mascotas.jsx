@@ -1,11 +1,10 @@
 // src/pages/fundacion/mascotas/Mascotas.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useFiltros } from '../../../contexts/FiltrosContext';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import MascotaCardFundacion from '../../../components/common/MascotaCardFundacion/MascotaCardFundacion';
@@ -16,10 +15,10 @@ const Mascotas = () => {
   const { t } = useTranslation('fundacion');
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { filtros } = useFiltros();
   const [mascotas, setMascotas] = useState([]);
   const [mascotasFiltradas, setMascotasFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentFilters, setCurrentFilters] = useState({});
   const [isMobile, setIsMobile] = useState(false);
 
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
@@ -33,38 +32,33 @@ const Mascotas = () => {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  useEffect(() => {
-    cargarMascotas();
-  }, []);
+  // Aplicar filtros a los datos cargados
+  const applyFilters = useCallback((filters, data) => {
+    let resultado = [...data];
 
-  useEffect(() => {
-    if (mascotas.length > 0) {
-      let resultado = [...mascotas];
-
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter((m) =>
-          m.nombre_mascota?.toLowerCase().includes(busquedaLower) ||
-          m.especie?.toLowerCase().includes(busquedaLower) ||
-          m.raza?.toLowerCase().includes(busquedaLower)
-        );
-      }
-
-      if (filtros.especie && filtros.especie.trim()) {
-        resultado = resultado.filter((m) =>
-          m.especie?.toLowerCase() === filtros.especie.toLowerCase()
-        );
-      }
-
-      if (filtros.genero && filtros.genero.trim()) {
-        resultado = resultado.filter((m) =>
-          m.genero?.toLowerCase() === filtros.genero.toLowerCase()
-        );
-      }
-
-      setMascotasFiltradas(resultado);
+    if (filters.buscar && filters.buscar.trim()) {
+      const busquedaLower = filters.buscar.toLowerCase().trim();
+      resultado = resultado.filter((m) =>
+        m.nombre_mascota?.toLowerCase().includes(busquedaLower) ||
+        m.especie?.toLowerCase().includes(busquedaLower) ||
+        m.raza?.toLowerCase().includes(busquedaLower)
+      );
     }
-  }, [filtros, mascotas]);
+
+    if (filters.especie && filters.especie.trim()) {
+      resultado = resultado.filter((m) =>
+        m.especie?.toLowerCase() === filters.especie.toLowerCase()
+      );
+    }
+
+    if (filters.genero && filters.genero.trim()) {
+      resultado = resultado.filter((m) =>
+        m.genero?.toLowerCase() === filters.genero.toLowerCase()
+      );
+    }
+
+    setMascotasFiltradas(resultado);
+  }, []);
 
   const cargarMascotas = async () => {
     try {
@@ -84,6 +78,7 @@ const Mascotas = () => {
       }
       
       setMascotas(mascotasData);
+      applyFilters(currentFilters, mascotasData);
       
     } catch (error) {
       console.error('Error cargando mascotas:', error);
@@ -97,10 +92,21 @@ const Mascotas = () => {
       }
       
       setMascotas([]);
+      setMascotasFiltradas([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    cargarMascotas();
+  }, []);
+
+  // Cuando cambian los filtros, aplicarlos
+  const handleFilterChange = useCallback((filters) => {
+    setCurrentFilters(filters);
+    applyFilters(filters, mascotas);
+  }, [mascotas, applyFilters]);
 
   const handleEliminar = async (id, nombre) => {
     try {
@@ -175,6 +181,7 @@ const Mascotas = () => {
         <div className="container">
           <FiltrosMascotas
             especies={especies}
+            onFilterChange={handleFilterChange}
             variant={isMobile ? "modal" : "inline"}
           />
         </div>
@@ -197,7 +204,7 @@ const Mascotas = () => {
               <i className="fas fa-search"></i>
               <h3>{t('sin_mascotas')}</h3>
               <p>
-                {filtros.busqueda || filtros.especie || filtros.genero
+                {currentFilters.buscar || currentFilters.especie || currentFilters.genero
                   ? t('sin_resultados_filtros')
                   : t('primer_mascota')}
               </p>

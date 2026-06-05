@@ -19,22 +19,17 @@ import {
 } from "lucide-react";
 import api from "../../../services/api";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
-import {
-  FiltrosProvider,
-  useFiltrosEventos,
-} from "../../../contexts/FiltrosContext";
 import "./EventosIndex.css";
 
-// Componente interno que usa el contexto
-const AdminEventosIndexContent = () => {
+const AdminEventosIndex = () => {
   const { t } = useTranslation("eventos");
-  const { filtros } = useFiltrosEventos();
   const [eventos, setEventos] = useState([]);
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [estadisticas, setEstadisticas] = useState(null);
+  const [currentFilters, setCurrentFilters] = useState({});
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -55,6 +50,35 @@ const AdminEventosIndexContent = () => {
     return url.startsWith("/storage")
       ? `${baseUrl}${url}`
       : `${baseUrl}/storage/${url}`;
+  }, []);
+
+  // Aplicar filtros a los eventos
+  const applyFilters = useCallback((filters, data) => {
+    if (!data.length) {
+      setEventosFiltrados([]);
+      return;
+    }
+    
+    let resultado = [...data];
+
+    if (filters.buscar && filters.buscar.trim()) {
+      const busquedaLower = filters.buscar.toLowerCase().trim();
+      resultado = resultado.filter(
+        (e) =>
+          e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
+          e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
+          e.categoria?.toLowerCase().includes(busquedaLower) ||
+          e.fundacion?.Nombre_1?.toLowerCase().includes(busquedaLower)
+      );
+    }
+
+    if (filters.categoria && filters.categoria.trim()) {
+      resultado = resultado.filter(
+        (e) => e.categoria?.toLowerCase() === filters.categoria.toLowerCase()
+      );
+    }
+
+    setEventosFiltrados(resultado);
   }, []);
 
   const loadEventos = useCallback(async () => {
@@ -84,8 +108,8 @@ const AdminEventosIndexContent = () => {
           : [];
 
       setEventos(eventosArray);
-      setEventosFiltrados(eventosArray);
       setEstadisticas(statsData);
+      applyFilters(currentFilters, eventosArray);
     } catch (error) {
       console.error("Error:", error);
       setError(error.response?.data?.message || t("error_load"));
@@ -94,38 +118,20 @@ const AdminEventosIndexContent = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, currentFilters, applyFilters]);
 
   useEffect(() => {
     loadEventos();
   }, [loadEventos]);
 
+  // Cuando cambian los filtros, reaplicar
   useEffect(() => {
-    if (eventos.length > 0) {
-      let resultado = [...eventos];
+    applyFilters(currentFilters, eventos);
+  }, [currentFilters, eventos, applyFilters]);
 
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter(
-          (e) =>
-            e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
-            e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
-            e.categoria?.toLowerCase().includes(busquedaLower) ||
-            e.fundacion?.Nombre_1?.toLowerCase().includes(busquedaLower),
-        );
-      }
-
-      if (filtros.categoria && filtros.categoria.trim()) {
-        resultado = resultado.filter(
-          (e) => e.categoria?.toLowerCase() === filtros.categoria.toLowerCase(),
-        );
-      }
-
-      setEventosFiltrados(resultado);
-    } else if (eventos.length === 0) {
-      setEventosFiltrados([]);
-    }
-  }, [filtros, eventos]);
+  const handleFilterChange = useCallback((filters) => {
+    setCurrentFilters(filters);
+  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm(t("confirm_delete"))) return;
@@ -224,7 +230,10 @@ const AdminEventosIndexContent = () => {
 
       <div className="admin-eventos-filtros-section">
         <div className="container">
-          <FiltrosEventos variant={isMobile ? "modal" : "inline"} />
+          <FiltrosEventos 
+            onFilterChange={handleFilterChange}
+            variant={isMobile ? "modal" : "inline"} 
+          />
         </div>
       </div>
 
@@ -369,14 +378,6 @@ const AdminEventosIndexContent = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-const AdminEventosIndex = () => {
-  return (
-    <FiltrosProvider>
-      <AdminEventosIndexContent />
-    </FiltrosProvider>
   );
 };
 

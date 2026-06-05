@@ -7,53 +7,89 @@ import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import FundacionDetalle from "./FundacionDetalle";
 import FiltrosFundaciones from "../../../components/common/FiltrosFundaciones/FiltrosFundaciones";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
-import { useFiltrosFundaciones } from "../../../contexts/FiltrosContext";
 import "./FundacionesIndex.css";
 
 const FundacionesIndex = () => {
   const { t } = useTranslation("fundaciones");
-  const { filtros } = useFiltrosFundaciones();
+  
   const [fundaciones, setFundaciones] = useState([]);
-  const [fundacionesFiltradas, setFundacionesFiltradas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [ciudades, setCiudades] = useState([]);
   const [error, setError] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Estado para el panel deslizable
+  const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 });
+  const [currentFilters, setCurrentFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ciudades, setCiudades] = useState([]);
+  
   const [selectedFundacion, setSelectedFundacion] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
+  // Cargar fundaciones
+  const loadFundaciones = useCallback(async (filters = {}, page = 1) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const params = {
+        page: page,
+        per_page: 12,
+      };
+      
+      if (filters.buscar) params.buscar = filters.buscar;
+      if (filters.ciudad) params.ciudad = filters.ciudad;
+      
+      console.log("📡 API Request Fundaciones:", params);
+      
+      const response = await api.get('/fundaciones', { params });
+      
+      let fundacionesData = [];
+      let paginationData = { current_page: 1, last_page: 1, total: 0 };
+      
+      if (response.data?.data?.data) {
+        fundacionesData = response.data.data.data;
+        paginationData = {
+          current_page: response.data.data.current_page,
+          last_page: response.data.data.last_page,
+          total: response.data.data.total,
+        };
+      } else if (response.data?.data) {
+        fundacionesData = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        fundacionesData = response.data;
+      }
+      
+      setFundaciones(fundacionesData);
+      setPagination(paginationData);
+      
+      // Extraer ciudades únicas para el filtro
+      const uniqueCiudades = [...new Set(fundacionesData.map(f => f.ciudad).filter(Boolean))];
+      setCiudades(uniqueCiudades);
+      
+    } catch (err) {
+      console.error("❌ Error:", err);
+      setError(err.response?.data?.message || err.message || "Error al cargar fundaciones");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  // Carga inicial
   useEffect(() => {
-    if (fundaciones.length > 0) {
-      let resultado = [...fundaciones];
+    loadFundaciones({}, 1);
+  }, []);
 
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter(
-          (f) =>
-            f.Nombre_1?.toLowerCase().includes(busquedaLower) ||
-            f.Descripcion?.toLowerCase().includes(busquedaLower) ||
-            f.ciudad?.toLowerCase().includes(busquedaLower),
-        );
-      }
+  const handleFilterChange = useCallback((newFilters) => {
+    console.log("📝 Filtros aplicados:", newFilters);
+    setCurrentFilters(newFilters);
+    setCurrentPage(1);
+    loadFundaciones(newFilters, 1);
+  }, [loadFundaciones]);
 
-      if (filtros.ciudad && filtros.ciudad.trim()) {
-        resultado = resultado.filter((f) => f.ciudad === filtros.ciudad);
-      }
-
-      setFundacionesFiltradas(resultado);
-    }
-  }, [filtros, fundaciones]);
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage === currentPage) return;
+    setCurrentPage(newPage);
+    loadFundaciones(currentFilters, newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage, currentFilters, loadFundaciones]);
 
   const handleOpenPanel = (fundacion) => {
     setSelectedFundacion(fundacion);
@@ -65,99 +101,14 @@ const FundacionesIndex = () => {
     setSelectedFundacion(null);
   };
 
-  const extractData = (response) => {
-    if (response?.success === true && response?.data) {
-      if (response.data.data && Array.isArray(response.data.data)) {
-        return response.data.data;
-      }
-      if (Array.isArray(response.data)) {
-        return response.data;
-      }
-    }
-    if (Array.isArray(response)) return response;
-    if (response?.data && Array.isArray(response.data)) return response.data;
-    if (response?.data?.data && Array.isArray(response.data.data))
-      return response.data.data;
-    return [];
+  const getImageUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http")) return path;
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
   };
 
-  const getImageUrl = useCallback((url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
-  }, []);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    let isMounted = true;
-
-    const loadFundaciones = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await api.get("/fundaciones", {
-          signal: abortController.signal,
-        });
-
-        if (!isMounted) return;
-
-        let fundacionesData = extractData(response.data);
-
-        const fundacionesConMascotas = await Promise.all(
-          fundacionesData.map(async (fundacion) => {
-            try {
-              const mascotasRes = await api.get(
-                `/mascotas/fundacion/${fundacion.id}`,
-                {
-                  signal: abortController.signal,
-                },
-              );
-              let mascotasData = extractData(mascotasRes.data);
-              return { ...fundacion, total_mascotas: mascotasData.length };
-            } catch (error) {
-              return { ...fundacion, total_mascotas: 0 };
-            }
-          }),
-        );
-
-        if (!isMounted) return;
-
-        setFundaciones(fundacionesConMascotas);
-        setFundacionesFiltradas(fundacionesConMascotas);
-
-        const uniqueCiudades = [
-          ...new Set(
-            fundacionesConMascotas.map((f) => f.ciudad).filter(Boolean),
-          ),
-        ];
-        setCiudades(uniqueCiudades);
-      } catch (error) {
-        if (
-          error.name !== "CanceledError" &&
-          error.name !== "AbortError" &&
-          isMounted
-        ) {
-          setError(error.message || t("error_carga"));
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    loadFundaciones();
-    return () => {
-      isMounted = false;
-      abortController.abort();
-    };
-  }, [t]);
-
-  if (loading) {
+  if (loading && fundaciones.length === 0) {
     return (
       <div className="fundaciones-page">
         <div className="loading-container">
@@ -172,13 +123,10 @@ const FundacionesIndex = () => {
       <div className="fundaciones-page">
         <div className="bento-container">
           <div className="error-container">
-            <i className="fas fa-building fa-3x"></i>
+            <i className="fas fa-building"></i>
             <h2>{t("error_carga")}</h2>
             <p>{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="reload-btn"
-            >
+            <button onClick={() => loadFundaciones(currentFilters, currentPage)} className="reload-btn">
               <i className="fas fa-sync-alt"></i> {t("reintentar")}
             </button>
           </div>
@@ -189,86 +137,94 @@ const FundacionesIndex = () => {
 
   return (
     <div className="fundaciones-page">
-      {/* Header con imagen de fondo */}
       <div className="fundaciones-header">
         <div className="fundaciones-hero">
           <img src="/img/hover/perro-fundacion.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
           <h1>{t("titulo")}</h1>
-          {fundaciones.length > 0 && (
+          {pagination.total > 0 && (
             <p className="info">
-              <i className="fas fa-heart"></i>{" "}
-              {t("mensaje_bienvenida", { total: fundaciones.length })}
+              <i className="fas fa-heart"></i> {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
           )}
         </div>
       </div>
 
-      {/* Filtros section */}
       <div className="filtros-section">
         <div className="bento-container">
-          <FiltrosFundaciones
+          <FiltrosFundaciones 
+            onFilterChange={handleFilterChange} 
             ciudades={ciudades}
-            variant={isMobile ? "modal" : "inline"}
           />
         </div>
       </div>
 
-      {/* Resultados section */}
       <div className="resultados-section">
         <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
-              <i className="fas fa-heart"></i>
-              <span>
-                {t("mostrando")} <strong>{fundacionesFiltradas.length}</strong>{" "}
-                {t("de")} <strong>{fundaciones.length}</strong>{" "}
-                {t("fundaciones")}
-              </span>
+              <i className="fas fa-list"></i> Mostrando <strong>{fundaciones.length}</strong> de <strong>{pagination.total}</strong> fundaciones
             </div>
           </div>
-          {fundacionesFiltradas.length === 0 ? (
+
+          {fundaciones.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-building"></i>
               <h3>{t("sin_resultados.titulo")}</h3>
               <p>{t("sin_resultados.mensaje")}</p>
             </div>
           ) : (
-            <div className="fundaciones-grid">
-              {fundacionesFiltradas.map((fundacion) => (
-                <FundacionCard
-                  key={fundacion.id}
-                  fundacion={fundacion}
-                  getImageUrl={getImageUrl}
-                  variant="default"
-                  showActions={true}
-                  onView={(fundacion) => handleOpenPanel(fundacion)} // ← Solo aquí
-                />
-              ))}
-            </div>
+            <>
+              <div className="fundaciones-grid">
+                {fundaciones.map((fundacion) => (
+                  <FundacionCard
+                    key={fundacion.id}
+                    fundacion={fundacion}
+                    getImageUrl={getImageUrl}
+                    variant="default"
+                    showActions={true}
+                    onView={handleOpenPanel}
+                  />
+                ))}
+              </div>
+
+              {pagination.last_page > 1 && (
+                <div className="pagination-container">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-btn"
+                  >
+                    <i className="fas fa-chevron-left"></i> Anterior
+                  </button>
+                  <span className="pagination-info">
+                    Página {currentPage} de {pagination.last_page}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === pagination.last_page}
+                    className="pagination-btn"
+                  >
+                    Siguiente <i className="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
 
-      {/* Mensaje motivacional */}
       <div className="motivational-message">
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>
-            <h3 className="motivational-title">
-              {t("mensaje_motivacional_titulo") ||
-                "Apoya a las fundaciones que ayudan"}
-            </h3>
-            <p className="motivational-text">
-              {t("mensaje_motivacional_texto") ||
-                "Cada fundación trabaja incansablemente para rescatar y dar hogar a animales necesitados. Conoce su labor y súmate a su causa."}
-            </p>
+            <h3 className="motivational-title">{t("mensaje_motivacional_titulo")}</h3>
+            <p className="motivational-text">{t("mensaje_motivacional_texto")}</p>
           </div>
         </div>
       </div>
 
-      {/* Panel deslizable para detalle */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

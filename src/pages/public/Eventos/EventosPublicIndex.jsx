@@ -1,53 +1,156 @@
 // src/pages/public/Eventos/EventosPublicIndex.jsx
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useFiltrosEventos } from "../../../contexts/FiltrosContext";
 import api from "../../../services/api";
 import EventoCard from "../../../components/common/EventoCard/EventoCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import EventosPublicShow from "./EventosPublicShow";
-import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
+import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import "./EventosPublicIndex.css";
 
 const EventosPublicIndex = () => {
   const { t } = useTranslation("eventos");
   const { isAuthenticated } = useAuth();
-  const { filtros, limpiarFiltros } = useFiltrosEventos();
+  
   const [eventos, setEventos] = useState([]);
-  const [eventosFiltrados, setEventosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [orden, setOrden] = useState("reciente");
-  const [isMobile, setIsMobile] = useState(false);
+  const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 });
+  const [currentFilters, setCurrentFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   const [likedEvents, setLikedEvents] = useState({});
   const [asistenciaEvents, setAsistenciaEvents] = useState({});
-
-  // Estado para el panel deslizable
+  
   const [selectedEvento, setSelectedEvento] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const opcionesOrden = useMemo(
-    () => [
-      { value: "reciente", label: t("mas_recientes") },
-      { value: "antiguos", label: t("mas_antiguos") },
-      { value: "nombre", label: t("nombre_az") },
-      { value: "capacidad", label: t("mayor_capacidad") },
-    ],
-    [t],
-  );
-
-  const getImageUrl = useCallback((url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
+  const loadEventos = useCallback(async (filters = {}, page = 1) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const params = {
+        page: page,
+        per_page: 12,
+      };
+      
+      if (filters.buscar) params.buscar = filters.buscar;
+      if (filters.tipo) params.tipo = filters.tipo;
+      if (filters.proximos) params.proximos = filters.proximos;
+      
+      params.sort = '-fecha_evento';
+      
+      console.log("📡 API Request Eventos:", params);
+      
+      const response = await api.get('/eventos', { params });
+      
+      let eventosData = [];
+      let paginationData = { current_page: 1, last_page: 1, total: 0 };
+      
+      if (response.data?.data?.data) {
+        eventosData = response.data.data.data;
+        paginationData = {
+          current_page: response.data.data.current_page,
+          last_page: response.data.data.last_page,
+          total: response.data.data.total,
+        };
+      } else if (response.data?.data) {
+        eventosData = response.data.data;
+      } else if (Array.isArray(response.data)) {
+        eventosData = response.data;
+      }
+      
+      setEventos(eventosData);
+      setPagination(paginationData);
+      
+      const asistenciaMap = {};
+      eventosData.forEach((evento) => {
+        if (evento.usuario_confirmado) {
+          asistenciaMap[evento.id] = true;
+        }
+      });
+      setAsistenciaEvents(asistenciaMap);
+      
+    } catch (err) {
+      console.error("❌ Error:", err);
+      setError(err.response?.data?.message || err.message || "Error al cargar eventos");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadEventos({}, 1);
+  }, []);
+
+  const handleFilterChange = useCallback((newFilters) => {
+    console.log("📝 Filtros aplicados:", newFilters);
+    setCurrentFilters(newFilters);
+    setCurrentPage(1);
+    loadEventos(newFilters, 1);
+  }, [loadEventos]);
+
+  const handlePageChange = useCallback((newPage) => {
+    if (newPage === currentPage) return;
+    setCurrentPage(newPage);
+    loadEventos(currentFilters, newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage, currentFilters, loadEventos]);
+
+  const handleLike = useCallback(async (id) => {
+    if (!isAuthenticated) {
+      alert(t("like.login_requerido"));
+      return;
+    }
+    try {
+      await api.post(`/eventos/${id}/like`);
+      setLikedEvents((prev) => ({ ...prev, [id]: !prev[id] }));
+      setEventos((prev) =>
+        prev.map((evento) =>
+          evento.id === id
+            ? { ...evento, likes: (evento.likes || 0) + (likedEvents[id] ? -1 : 1) }
+            : evento
+        )
+      );
+    } catch (error) {
+      console.error("Error al dar like:", error);
+    }
+  }, [isAuthenticated, likedEvents, t]);
+
+  const handleConfirmarAsistencia = useCallback(async (id) => {
+    if (!isAuthenticated) {
+      alert(t("asistencia.login_requerido"));
+      return;
+    }
+    try {
+      if (asistenciaEvents[id]) {
+        await api.delete(`/eventos/${id}/cancelar-asistencia`);
+        setAsistenciaEvents((prev) => ({ ...prev, [id]: false }));
+        setEventos((prev) =>
+          prev.map((evento) =>
+            evento.id === id
+              ? { ...evento, total_asistentes: Math.max(0, (evento.total_asistentes || 0) - 1) }
+              : evento
+          )
+        );
+      } else {
+        await api.post(`/eventos/${id}/confirmar-asistencia`);
+        setAsistenciaEvents((prev) => ({ ...prev, [id]: true }));
+        setEventos((prev) =>
+          prev.map((evento) =>
+            evento.id === id
+              ? { ...evento, total_asistentes: (evento.total_asistentes || 0) + 1 }
+              : evento
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.response?.data?.message || t("asistencia.error"));
+    }
+  }, [isAuthenticated, asistenciaEvents, t]);
 
   const handleOpenPanel = (evento) => {
     setSelectedEvento(evento);
@@ -59,185 +162,18 @@ const EventosPublicIndex = () => {
     setSelectedEvento(null);
   };
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
-
-  const loadEventos = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await api.get(`/eventos`);
-
-      let eventosData = [];
-      if (response.data && response.data.success !== undefined) {
-        eventosData = response.data.data?.data || response.data.data || [];
-      } else if (response.data && response.data.data) {
-        eventosData = response.data.data.data || response.data.data;
-      } else if (Array.isArray(response.data)) {
-        eventosData = response.data;
-      }
-
-      setEventos(eventosData);
-      setEventosFiltrados(eventosData);
-
-      const asistenciaMap = {};
-      eventosData.forEach((evento) => {
-        if (evento.usuario_confirmado) {
-          asistenciaMap[evento.id] = true;
-        }
-      });
-      setAsistenciaEvents(asistenciaMap);
-    } catch (error) {
-      console.error("Error:", error);
-      setError(error.response?.data?.message || t("error_carga"));
-      setEventos([]);
-      setEventosFiltrados([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
-
-  useEffect(() => {
-    loadEventos();
-  }, [loadEventos]);
-
-  useEffect(() => {
-    if (eventos.length > 0) {
-      let resultado = [...eventos];
-
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter(
-          (e) =>
-            e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
-            e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
-            e.categoria?.toLowerCase().includes(busquedaLower),
-        );
-      }
-
-      if (filtros.categoria && filtros.categoria.trim()) {
-        resultado = resultado.filter(
-          (e) => e.categoria?.toLowerCase() === filtros.categoria.toLowerCase(),
-        );
-      }
-
-      switch (orden) {
-        case "nombre":
-          resultado.sort((a, b) =>
-            a.nombre_evento?.localeCompare(b.nombre_evento),
-          );
-          break;
-        case "antiguos":
-          resultado.sort(
-            (a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento),
-          );
-          break;
-        case "capacidad":
-          resultado.sort(
-            (a, b) => (b.capacidad_maxima || 0) - (a.capacidad_maxima || 0),
-          );
-          break;
-        default:
-          resultado.sort(
-            (a, b) => new Date(b.fecha_evento) - new Date(a.fecha_evento),
-          );
-          break;
-      }
-
-      setEventosFiltrados(resultado);
-    }
-  }, [filtros, orden, eventos]);
-
-  const handleLike = useCallback(
-    async (id) => {
-      if (!isAuthenticated) {
-        alert(t("like.login_requerido"));
-        return;
-      }
-      try {
-        await api.post(`/eventos/${id}/like`);
-        setLikedEvents((prev) => ({ ...prev, [id]: !prev[id] }));
-        setEventos((prev) =>
-          prev.map((evento) =>
-            evento.id === id
-              ? {
-                  ...evento,
-                  likes: (evento.likes || 0) + (likedEvents[id] ? -1 : 1),
-                }
-              : evento,
-          ),
-        );
-      } catch (error) {
-        console.error("Error al dar like:", error);
-      }
-    },
-    [isAuthenticated, likedEvents, t],
-  );
-
-  const handleConfirmarAsistencia = useCallback(
-    async (id) => {
-      if (!isAuthenticated) {
-        alert(t("asistencia.login_requerido"));
-        return;
-      }
-
-      try {
-        if (asistenciaEvents[id]) {
-          await api.delete(`/eventos/${id}/cancelar-asistencia`);
-          setAsistenciaEvents((prev) => ({ ...prev, [id]: false }));
-          setEventos((prev) =>
-            prev.map((evento) =>
-              evento.id === id
-                ? {
-                    ...evento,
-                    total_asistentes: Math.max(
-                      0,
-                      (evento.total_asistentes || 0) - 1,
-                    ),
-                  }
-                : evento,
-            ),
-          );
-        } else {
-          await api.post(`/eventos/${id}/confirmar-asistencia`);
-          setAsistenciaEvents((prev) => ({ ...prev, [id]: true }));
-          setEventos((prev) =>
-            prev.map((evento) =>
-              evento.id === id
-                ? {
-                    ...evento,
-                    total_asistentes: (evento.total_asistentes || 0) + 1,
-                  }
-                : evento,
-            ),
-          );
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert(error.response?.data?.message || t("asistencia.error"));
-      }
-    },
-    [isAuthenticated, asistenciaEvents, t],
-  );
-
-  const handleClearFilters = () => {
-    limpiarFiltros();
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return url.startsWith("/storage") ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
   };
 
-  const hasActiveFilters = filtros.busqueda || filtros.categoria;
-
-  if (loading) {
+  if (loading && eventos.length === 0) {
     return (
       <div className="public-eventos-page">
         <div className="public-eventos-loading">
-          <div className="spinner"></div>
-          <p>{t("cargando_eventos")}</p>
+          <LoadingSpinner text={t("cargando_eventos")} />
         </div>
       </div>
     );
@@ -248,12 +184,11 @@ const EventosPublicIndex = () => {
       <div className="public-eventos-page">
         <div className="bento-container">
           <div className="public-eventos-error">
-            <i className="fas fa-calendar-alt fa-3x"></i>
+            <i className="fas fa-calendar-alt"></i>
             <h4>{t("error_titulo")}</h4>
             <p>{error}</p>
-            <button onClick={loadEventos} className="public-btn-retry">
-              <i className="fas fa-sync-alt"></i>
-              {t("reintentar")}
+            <button onClick={() => loadEventos(currentFilters, currentPage)} className="public-btn-retry">
+              <i className="fas fa-sync-alt"></i> {t("reintentar")}
             </button>
           </div>
         </div>
@@ -263,118 +198,103 @@ const EventosPublicIndex = () => {
 
   return (
     <div className="public-eventos-page">
-      {/* Header con imagen de fondo */}
       <div className="public-eventos-header">
         <div className="public-eventos-hero">
           <img src="/img/hover/eventos.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
           <h1>{t("titulo")}</h1>
-          {eventos.length > 0 && (
+          {pagination.total > 0 && (
             <p className="info">
-              <i className="fas fa-heart"></i>{" "}
-              {t("total_eventos", { total: eventos.length })}
+              <i className="fas fa-heart"></i> {t("total_eventos", { total: pagination.total })}
             </p>
           )}
         </div>
       </div>
 
-      {/* Filtros section */}
       <div className="public-eventos-filtros-section">
         <div className="bento-container">
-          <FiltrosEventos variant={isMobile ? "modal" : "inline"} />
+          <FiltrosEventos onFilterChange={handleFilterChange} />
         </div>
       </div>
 
-      {/* Resultados section */}
       <div className="public-eventos-resultados-section">
         <div className="bento-container">
           <div className="public-eventos-resultados-header">
             <div className="public-eventos-resultados-count">
-              <i className="fas fa-list"></i>
-              {t("mostrando")} <strong>{eventosFiltrados.length}</strong>{" "}
-              {t("de")} <strong>{eventos.length}</strong> {t("eventos")}
-            </div>
-            <div className="public-eventos-resultados-orden">
-              <label>
-                <i className="fas fa-sort"></i> {t("ordenar_por")}:
-              </label>
-              <CustomSelect
-                options={opcionesOrden}
-                value={orden}
-                onChange={(e) => setOrden(e.target.value)}
-                name="orden"
-              />
+              <i className="fas fa-list"></i> Mostrando <strong>{eventos.length}</strong> de <strong>{pagination.total}</strong> eventos
             </div>
           </div>
-          {eventosFiltrados.length === 0 ? (
+
+          {eventos.length === 0 ? (
             <div className="public-eventos-empty">
               <i className="fas fa-calendar-alt"></i>
               <h3>{t("sin_resultados")}</h3>
               <p>{t("sin_resultados_desc")}</p>
-              {hasActiveFilters && (
-                <button
-                  onClick={handleClearFilters}
-                  className="public-btn-limpiar-empty"
-                >
-                  <i className="fas fa-times"></i>
-                  {t("limpiar_filtros")}
-                </button>
-              )}
             </div>
           ) : (
-            <div className="public-eventos-grid">
-              {eventosFiltrados.map((evento, index) => {
-                let sizeVariant = "default";
-                if (index === 0) {
-                  sizeVariant = "featured";
-                } else if (index % 5 === 0) {
-                  sizeVariant = "compact";
-                }
+            <>
+              <div className="public-eventos-grid">
+                {eventos.map((evento, index) => {
+                  let sizeVariant = "default";
+                  if (index === 0) sizeVariant = "featured";
+                  else if (index % 5 === 0) sizeVariant = "compact";
+                  
+                  return (
+                    <div key={evento.id} className={`evento-grid-item ${sizeVariant}`}>
+                      <EventoCard
+                        evento={evento}
+                        getImageUrl={getImageUrl}
+                        variant="default"
+                        isAuthenticated={isAuthenticated}
+                        liked={likedEvents[evento.id]}
+                        asistencia={asistenciaEvents[evento.id]}
+                        onLike={handleLike}
+                        onConfirmarAsistencia={handleConfirmarAsistencia}
+                        onView={handleOpenPanel}
+                        showActions={true}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
 
-                return (
-                  <div
-                    key={evento.id}
-                    className={`evento-grid-item ${sizeVariant}`}
+              {pagination.last_page > 1 && (
+                <div className="pagination-container">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="pagination-btn"
                   >
-                    <EventoCard
-                      evento={evento}
-                      getImageUrl={getImageUrl}
-                      variant="default"
-                      isAuthenticated={isAuthenticated}
-                      liked={likedEvents[evento.id]}
-                      asistencia={asistenciaEvents[evento.id]}
-                      onLike={handleLike}
-                      onConfirmarAsistencia={handleConfirmarAsistencia}
-                      onView={(evento) => handleOpenPanel(evento)} // ← Solo aquí
-                      showActions={true}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+                    <i className="fas fa-chevron-left"></i> Anterior
+                  </button>
+                  <span className="pagination-info">
+                    Página {currentPage} de {pagination.last_page}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === pagination.last_page}
+                    className="pagination-btn"
+                  >
+                    Siguiente <i className="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
 
-      {/* Mensaje motivacional */}
       <div className="public-eventos-motivational">
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>
-            <h3 className="motivational-title">
-              {t("mensaje_motivacional_titulo") ||
-                "Participa y ayuda a cambiar vidas"}
-            </h3>
-            <p className="motivational-text">
-              {t("mensaje_motivacional_texto") ||
-                "Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!"}
-            </p>
+            <h3 className="motivational-title">{t("mensaje_motivacional_titulo")}</h3>
+            <p className="motivational-text">{t("mensaje_motivacional_texto")}</p>
           </div>
         </div>
       </div>
 
-      {/* Panel deslizable para detalle del evento */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

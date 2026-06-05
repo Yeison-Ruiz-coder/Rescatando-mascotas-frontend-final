@@ -1,130 +1,172 @@
 // src/components/common/FiltrosMascotas/FiltrosMascotas.jsx
-import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFiltros } from '../../../contexts/FiltrosContext';
-import CustomSelect from '../CustomSelect/CustomSelect';
-import './FiltrosMascotas.css';
+import React, { useState } from 'react';
 
-const FiltrosMascotas = ({ especies = [], variant = 'inline' }) => {
-  const { t } = useTranslation('mascotas');
-  const { filtros, actualizarFiltros, limpiarFiltros } = useFiltros();
-  const [showModal, setShowModal] = useState(false);
-  const [busquedaLocal, setBusquedaLocal] = useState(filtros.busqueda);
-  const inputRef = useRef(null);
+const FiltrosMascotas = ({ onFilterChange, especies = [] }) => {
+  // Estado local - CADA input tiene su propio estado
+  const [buscar, setBuscar] = useState('');
+  const [especie, setEspecie] = useState('');
+  const [genero, setGenero] = useState('');
+  const [tamano, setTamano] = useState('');
 
-  const especiesOptions = [
-    { value: '', label: t('todas_especies') || 'Todas las especies' },
-    ...especies.map(esp => ({ value: esp, label: esp }))
-  ];
-
-  const generosOptions = [
-    { value: '', label: t('todos_generos') || 'Todos los géneros' },
-    { value: 'Macho', label: t('macho') || 'Macho' },
-    { value: 'Hembra', label: t('hembra') || 'Hembra' }
-  ];
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-
-  const handleBusquedaChange = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const value = e.target.value;
-    setBusquedaLocal(value);
-    actualizarFiltros({ busqueda: value });
+  // Cuando hace clic en Buscar
+  const handleSearch = () => {
+    const filtros = {};
+    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (especie) filtros.especie = especie;
+    if (genero) filtros.genero = genero;
+    if (tamano) filtros.tamano = tamano;
+    onFilterChange(filtros);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    actualizarFiltros({ [name]: value });
+  // Limpiar todo
+  const handleClear = () => {
+    setBuscar('');
+    setEspecie('');
+    setGenero('');
+    setTamano('');
+    onFilterChange({});
   };
 
-  const handleReset = () => {
-    setBusquedaLocal('');
-    limpiarFiltros();
-    if (inputRef.current) {
-      inputRef.current.focus();
+  // Enter para buscar
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
-  const FormContent = () => (
-    <form className="filtros-form" onSubmit={(e) => e.preventDefault()}>
-      <div className="filtros-grid">
-        <div className="filtro-group filtro-busqueda">
-          <label><i className="fas fa-search"></i> {t('buscar') || 'Buscar'}</label>
-          <input
-            ref={inputRef}
-            type="text"
-            name="busqueda"
-            value={busquedaLocal}
-            onChange={handleBusquedaChange}
-            placeholder={t('buscar_placeholder') || 'Buscar por nombre...'}
-            className="filtro-input"
-            autoComplete="off"
-            autoFocus={true}  // ← IMPORTANTE: mantener esto
-          />
-        </div>
-
-        <div className="filtro-group">
-          <CustomSelect
-            options={especiesOptions}
-            value={filtros.especie}
-            onChange={handleChange}
-            name="especie"
-            label={<><i className="fas fa-paw"></i> {t('especie') || 'Especie'}</>}
-          />
-        </div>
-
-        <div className="filtro-group">
-          <CustomSelect
-            options={generosOptions}
-            value={filtros.genero}
-            onChange={handleChange}
-            name="genero"
-            label={<><i className="fas fa-venus-mars"></i> {t('genero') || 'Género'}</>}
-          />
-        </div>
-
-        <div className="filtro-buttons">
-          <button type="button" onClick={handleReset} className="btn-limpiar">
-            <i className="fas fa-undo-alt"></i> {t('limpiar') || 'Limpiar'}
-          </button>
-        </div>
+  return (
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '1rem',
+      alignItems: 'end',
+      background: 'var(--bg-card)',
+      padding: '1rem',
+      borderRadius: '8px'
+    }}>
+      {/* Buscador */}
+      <div style={{ gridColumn: 'span 2' }}>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          🔍 Buscar
+        </label>
+        <input
+          type="text"
+          value={buscar}
+          onChange={(e) => setBuscar(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Buscar por nombre..."
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+          autoComplete="off"
+        />
       </div>
-    </form>
-  );
 
-  if (variant === 'modal') {
-    const hasActiveFilters = filtros.especie || filtros.genero || filtros.busqueda;
-    
-    return (
-      <>
-        <button className="btn-filtros-mobile" onClick={() => setShowModal(true)}>
-          <i className="fas fa-filter"></i> {t('filtros') || 'Filtros'}
-          {hasActiveFilters && <span className="badge-filtros">●</span>}
+      {/* Especie */}
+      <div>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          🐾 Especie
+        </label>
+        <select
+          value={especie}
+          onChange={(e) => setEspecie(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+        >
+          <option value="">Todas las especies</option>
+          {especies.map(esp => (
+            <option key={esp} value={esp}>{esp}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Género */}
+      <div>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          ⚥ Género
+        </label>
+        <select
+          value={genero}
+          onChange={(e) => setGenero(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+        >
+          <option value="">Todos</option>
+          <option value="Macho">Macho</option>
+          <option value="Hembra">Hembra</option>
+        </select>
+      </div>
+
+      {/* Tamaño */}
+      <div>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          📏 Tamaño
+        </label>
+        <select
+          value={tamano}
+          onChange={(e) => setTamano(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+        >
+          <option value="">Todos</option>
+          <option value="Pequeño">Pequeño</option>
+          <option value="Mediano">Mediano</option>
+          <option value="Grande">Grande</option>
+        </select>
+      </div>
+
+      {/* Botones */}
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button
+          onClick={handleSearch}
+          style={{
+            padding: '0.6rem 1.2rem',
+            background: '#10b981',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          🔍 Buscar
         </button>
-
-        {showModal && (
-          <div className="modal-overlay" onClick={() => setShowModal(false)}>
-            <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h3><i className="fas fa-filter"></i> {t('filtros') || 'Filtros'}</h3>
-                <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
-              </div>
-              <div className="modal-body">
-                <FormContent />
-              </div>
-            </div>
-          </div>
-        )}
-      </>
-    );
-  }
-
-  return <FormContent />;
+        <button
+          onClick={handleClear}
+          style={{
+            padding: '0.6rem 1.2rem',
+            background: '#6b7280',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          🗑️ Limpiar
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default FiltrosMascotas;

@@ -1,23 +1,26 @@
-// src/components/common/FiltrosEventos/FiltrosEventos.jsx
+// src/components/common/FiltrosVeterinarias/FiltrosVeterinarias.jsx
 import React, { useState } from 'react';
 
-const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
+const FiltrosVeterinarias = ({ onFilterChange, ciudades = [] }) => {
   const [buscar, setBuscar] = useState('');
-  const [tipo, setTipo] = useState('');
-  const [proximos, setProximos] = useState(false);
+  const [ciudad, setCiudad] = useState('');
+  const [urgencias, setUrgencias] = useState(false);
+  const [verificado, setVerificado] = useState(false);
 
   const handleSearch = () => {
     const filtros = {};
     if (buscar.trim()) filtros.buscar = buscar.trim();
-    if (tipo) filtros.tipo = tipo;
-    if (proximos) filtros.proximos = 'true';
+    if (ciudad) filtros.ciudad = ciudad;
+    if (urgencias) filtros.urgencias = 'true';
+    if (verificado) filtros.verificado = 'true';
     onFilterChange(filtros);
   };
 
   const handleClear = () => {
     setBuscar('');
-    setTipo('');
-    setProximos(false);
+    setCiudad('');
+    setUrgencias(false);
+    setVerificado(false);
     onFilterChange({});
   };
 
@@ -26,15 +29,6 @@ const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
       handleSearch();
     }
   };
-
-  const tiposOptions = [
-    { value: '', label: 'Todos los tipos' },
-    { value: 'Adopción', label: 'Adopción' },
-    { value: 'Kermés', label: 'Kermés' },
-    { value: 'Charla', label: 'Charla' },
-    { value: 'Jornada', label: 'Jornada' },
-    { value: 'Taller', label: 'Taller' },
-  ];
 
   return (
     <div style={{ 
@@ -56,7 +50,7 @@ const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
           value={buscar}
           onChange={(e) => setBuscar(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Buscar por nombre, lugar o descripción..."
+          placeholder="Buscar por nombre o dirección..."
           style={{
             width: '100%',
             padding: '0.6rem',
@@ -68,14 +62,14 @@ const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
         />
       </div>
 
-      {/* Tipo */}
+      {/* Ciudad */}
       <div>
         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-          🏷️ Tipo
+          📍 Ciudad
         </label>
         <select
-          value={tipo}
-          onChange={(e) => setTipo(e.target.value)}
+          value={ciudad}
+          onChange={(e) => setCiudad(e.target.value)}
           style={{
             width: '100%',
             padding: '0.6rem',
@@ -84,25 +78,36 @@ const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
             fontSize: '0.9rem'
           }}
         >
-          {tiposOptions.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <option value="">Todas las ciudades</option>
+          {ciudades.map(ciu => (
+            <option key={ciu} value={ciu}>{ciu}</option>
           ))}
         </select>
       </div>
 
-      {/* Checkbox próximos */}
+      {/* Checkboxes */}
       <div>
         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
-          📅 Filtro
+          ⚕️ Servicios
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-          <input
-            type="checkbox"
-            checked={proximos}
-            onChange={(e) => setProximos(e.target.checked)}
-          />
-          Solo eventos próximos
-        </label>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+            <input
+              type="checkbox"
+              checked={urgencias}
+              onChange={(e) => setUrgencias(e.target.checked)}
+            />
+            Urgencias 24h
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+            <input
+              type="checkbox"
+              checked={verificado}
+              onChange={(e) => setVerificado(e.target.checked)}
+            />
+            Verificado
+          </label>
+        </div>
       </div>
 
       {/* Botones */}
@@ -140,4 +145,4 @@ const FiltrosEventos = ({ onFilterChange, tipos = [] }) => {
   );
 };
 
-export default FiltrosEventos;
+export default FiltrosVeterinarias;

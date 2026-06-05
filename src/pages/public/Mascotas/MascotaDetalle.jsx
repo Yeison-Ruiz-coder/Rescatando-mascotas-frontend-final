@@ -35,47 +35,36 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
     fetchMascotaDetalle();
   }, [id]);
 
+  // src/pages/public/Mascotas/MascotaDetalle.jsx
+  // Solo cambiar la función fetchMascotaDetalle para usar fields
+
   const fetchMascotaDetalle = async () => {
     try {
       setLoading(true);
-      setLoadProgress(0);
-      
-      // Simular progreso de carga
-      const progressInterval = setInterval(() => {
-        setLoadProgress(prev => {
-          if (prev >= 90) return prev;
-          return prev + Math.random() * 15;
-        });
-      }, 100);
-      
-      const response = await api.get(`/mascotas/${id}`);
+
+      // 🔥 OPTIMIZACIÓN: Usar fields para traer SOLO lo necesario
+      const response = await api.get(`/mascotas/${id}`, {
+        params: {
+          fields:
+            "id,nombre_mascota,descripcion,especie,genero,edad_aprox,tamaño,estado,esterilizado,desparasitado,vacunado,apto_con_ninos,apto_con_otros_animales,lugar_rescate,caracteristicas,necesita_hogar_temporal,foto_principal,galeria_fotos,updated_at,fundacion_id",
+          include: "fundacion,vacunas,razas",
+        },
+      });
 
       if (response.data.success) {
         const data = response.data.data;
-        setLoadProgress(100);
-        setTimeout(() => {
-          setMascota(data);
-          setVacunas(data.vacunas || []);
-          setFundacion(data.fundacion || null);
-          setRazas(data.razas || []);
-          setLoading(false);
-        }, 300);
+        setMascota(data);
+        setVacunas(data.vacunas || []);
+        setFundacion(data.fundacion || null);
+        setRazas(data.razas || []);
       } else {
-        setLoadProgress(100);
-        setTimeout(() => {
-          setError(t("no_encontrada"));
-          setLoading(false);
-        }, 300);
+        setError(t("no_encontrada"));
       }
-      
-      clearInterval(progressInterval);
     } catch (err) {
       console.error("Error:", err);
-      setLoadProgress(100);
-      setTimeout(() => {
-        setError(err.response?.data?.message || t("error_carga"));
-        setLoading(false);
-      }, 300);
+      setError(err.response?.data?.message || t("error_carga"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -167,7 +156,7 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
 
   if (loading) {
     return (
-      <SimpleLoadingBar 
+      <SimpleLoadingBar
         progress={loadProgress}
         height="12px"
         variant="gradient"
@@ -184,7 +173,10 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
             <h2>{t("error_titulo")}</h2>
             <p>{error || t("no_encontrada")}</p>
             {!embed && (
-              <button onClick={() => navigate("/mascotas")} className="md-btn-back-simple">
+              <button
+                onClick={() => navigate("/mascotas")}
+                className="md-btn-back-simple"
+              >
                 <ArrowLeft size={16} /> {t("volver_lista")}
               </button>
             )}
@@ -199,7 +191,10 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
       {/* Botón volver */}
       {!embed && (
         <div className="md-back-outer">
-          <button onClick={() => navigate("/mascotas")} className="md-back-link">
+          <button
+            onClick={() => navigate("/mascotas")}
+            className="md-back-link"
+          >
             <ArrowLeft size={16} />
             <span>{t("volver")}</span>
           </button>
@@ -229,7 +224,12 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
 
         <div className="md-info-column">
           <MascotaSalud mascota={mascota} t={t} />
-          <MascotaDetalles mascota={mascota} razas={razas} vacunas={vacunas} t={t} />
+          <MascotaDetalles
+            mascota={mascota}
+            razas={razas}
+            vacunas={vacunas}
+            t={t}
+          />
         </div>
       </div>
 

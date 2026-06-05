@@ -1,12 +1,10 @@
 /* src/pages/public/Mascotas/Mascotas.css */
 /* ===== HEADER CON IMAGEN DE FONDO ===== */
 
-/* ===== HEADER CON IMAGEN DE FONDO - TEXTO CENTRO IZQUIERDA ===== */
-
 .mascotas-page .mascotas-header {
   position: relative;
   padding: 110px 0 160px 0;
-  text-align: left;  /* ← Cambiado de center a left */
+  text-align: left;
   background: transparent;
   border-bottom: 1px solid var(--color-border);
   overflow: hidden;
@@ -15,7 +13,6 @@
   align-items: center;
 }
 
-/* Contenedor de la imagen de fondo */
 .mascotas-page .mascotas-hero {
   position: absolute;
   top: 0;
@@ -32,20 +29,18 @@
   filter: grayscale(30%);
 }
 
-/* Contenido del header (por encima de la imagen) */
 .mascotas-page .mascotas-header .bento-container {
   position: relative;
   z-index: 2;
   width: 100%;
 }
 
-/* Título - MÁS GRANDE y alineado a la izquierda */
 .mascotas-page .mascotas-header h1 {
-  font-size: clamp(3rem, 8vw, 12rem);  /* ← Más grande */
+  font-size: clamp(3rem, 8vw, 12rem);
   font-weight: 800;
   margin-bottom: 1rem;
   margin-left: 0;
-  text-align: left;  /* ← Alineado a la izquierda */
+  text-align: left;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
@@ -54,12 +49,9 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-
-/* Info (contador) - alineado a la izquierda */
 .mascotas-page .mascotas-header .info {
   color: white;
-  font-size: 1.25rem;  /* ← Más grande */
+  font-size: 1.25rem;
   margin-top: 1rem;
   margin-left: 0;
   text-align: left;
@@ -70,26 +62,7 @@
 }
 
 [data-theme="dark"] .mascotas-page .mascotas-header::before {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.7)
-  );
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .mascotas-page .mascotas-header h1 {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-  
-  .mascotas-page .mascotas-header .subtitle {
-    font-size: 1rem;
-  }
-  
-  .mascotas-page .mascotas-header .info {
-    font-size: 0.85rem;
-  }
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
 }
 
 /* ===== FILTROS ===== */
@@ -111,7 +84,7 @@
 .mascotas-page .resultados-header {
   display: flex;
   justify-content: space-between;
-  align-items: center ;
+  align-items: center;
   margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1rem;
@@ -144,18 +117,7 @@
   color: var(--color-text-muted);
 }
 
-.mascotas-page .orden-select {
-  padding: 8px 12px;
-  background: var(--form-input-bg);
-  border: 1px solid var(--form-border);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  color: var(--form-text);
-  cursor: pointer;
-  box-shadow: var(--shadow-hard-sm);
-}
-
-/* ===== GRID DE MASCOTAS - FLUIDO ===== */
+/* ===== GRID DE MASCOTAS ===== */
 .mascotas-page .mascotas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -163,15 +125,6 @@
   width: 100%;
 }
 
-/* Loader sentinel para scroll infinito */
-.mascotas-page .infinite-loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 28px 0 60px;
-}
-
-/* En pantallas muy grandes, que las cards no se estiren demasiado */
 @media (min-width: 1600px) {
   .mascotas-page .mascotas-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -184,13 +137,45 @@
   }
 }
 
-@media (min-width: 2400px) {
-  .mascotas-page .mascotas-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
+/* ===== PAGINACIÓN (UNIFICADA) ===== */
+.mascotas-page .pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
 }
 
-/* ===== LOADING ===== */
+.mascotas-page .pagination-btn {
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.mascotas-page .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.mascotas-page .pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.mascotas-page .pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* ===== LOADING, ERROR, EMPTY ===== */
 .mascotas-page .loading-container {
   display: flex;
   justify-content: center;
@@ -198,7 +183,6 @@
   min-height: 400px;
 }
 
-/* ===== ERROR ===== */
 .mascotas-page .error-container {
   text-align: center;
   padding: 3rem 2rem;
@@ -222,12 +206,6 @@
   font-size: 1.3rem;
 }
 
-.mascotas-page .error-container p {
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-}
-
 .mascotas-page .reload-btn {
   background: var(--gradient-primary);
   color: white;
@@ -245,7 +223,6 @@
   box-shadow: var(--shadow-hard-md);
 }
 
-/* ===== SIN RESULTADOS ===== */
 .mascotas-page .empty-container {
   display: flex;
   flex-direction: column;
@@ -268,15 +245,42 @@
   opacity: 0.7;
 }
 
-.mascotas-page .empty-container h3 {
-  color: var(--form-text);
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+/* ===== MENSAJE MOTIVACIONAL ===== */
+.mascotas-page .motivational-message {
+  margin-top: 80px;
+  padding: 60px 0;
+  background: var(--color-background-section);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.mascotas-page .empty-container p {
+.mascotas-page .motivational-content {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.mascotas-page .motivational-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.8;
+  color: var(--color-primary);
+}
+
+.mascotas-page .motivational-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.mascotas-page .motivational-text {
+  font-size: 1.1rem;
   color: var(--color-text-muted);
-  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -300,74 +304,32 @@
     grid-template-columns: 1fr;
     gap: 1.2rem;
   }
+  .mascotas-page .resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .mascotas-page .resultados-count,
+  .mascotas-page .resultados-orden {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .mascotas-page .motivational-title {
+    font-size: 1.4rem;
+  }
+  .mascotas-page .motivational-text {
+    font-size: 0.95rem;
+  }
+  .mascotas-page .motivational-icon {
+    font-size: 36px;
+  }
 }
 
 @media (max-width: 480px) {
   .mascotas-page .mascotas-header h1 {
     font-size: 1.4rem;
   }
-}
-
-/* ===== MENSAJE MOTIVACIONAL ===== */
-.mascotas-page .motivational-message {
-  margin-top: 80px;
-  padding: 60px 0;
-  background: var(--color-background-section);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.mascotas-page .motivational-content {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.mascotas-page .motivational-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-  opacity: 0.8;
-}
-
-.mascotas-page .motivational-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--color-text);
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.mascotas-page .motivational-text {
-  font-size: 1.1rem;
-  color: var(--color-text-muted);
-  line-height: 1.5;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.mascotas-page .motivational-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-  opacity: 0.8;
-  color: var(--color-primary);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
   .mascotas-page .motivational-message {
     margin-top: 50px;
     padding: 40px 0;
-  }
-  
-  .mascotas-page .motivational-title {
-    font-size: 1.4rem;
-  }
-  
-  .mascotas-page .motivational-text {
-    font-size: 0.95rem;
-  }
-  
-  .mascotas-page .motivational-icon {
-    font-size: 36px;
   }
 }

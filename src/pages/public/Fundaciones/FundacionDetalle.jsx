@@ -92,84 +92,63 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
     let isMounted = true;
 
     const loadData = async () => {
-      if (!id) return;
-      
-      setLoading(true);
-      setLoadProgress(0);
-      setError(null);
-      
-      // Simular progreso de carga
-      const progressInterval = setInterval(() => {
-        setLoadProgress(prev => {
-          if (prev >= 90) return prev;
-          return prev + Math.random() * 15;
-        });
-      }, 100);
-      
-      try {
-        const response = await api.get(`/fundaciones/${id}`, {
-          signal: abortController.signal,
-        });
-
-        if (!isMounted) return;
-
-        let fundacionData = null;
-        let necesidadesData = [];
-        let mascotasData = [];
-        let estadisticasData = null;
-
-        if (response.data && response.data.fundacion) {
-          fundacionData = response.data.fundacion;
-          necesidadesData = response.data.necesidades || [];
-          mascotasData = response.data.mascotas || [];
-          estadisticasData = response.data.estadisticas || null;
-        } else if (response.data && response.data.id && response.data.Nombre_1) {
-          fundacionData = response.data;
-          necesidadesData = response.data.necesidades_actuales || [];
-        } else if (
-          response.data &&
-          response.data.success === true &&
-          response.data.data
-        ) {
-          if (response.data.data.fundacion) {
-            fundacionData = response.data.data.fundacion;
-            necesidadesData = response.data.data.necesidades || [];
-            mascotasData = response.data.data.mascotas || [];
-          } else {
-            fundacionData = response.data.data;
-            necesidadesData = fundacionData.necesidades_actuales || [];
-          }
-        }
-
-        if (!fundacionData) {
-          throw new Error(`No se encontró la fundación con ID ${id}`);
-        }
-
-        setLoadProgress(100);
-        setTimeout(() => {
-          setFundacion(fundacionData);
-          setNecesidades(necesidadesData);
-          setMascotas(mascotasData);
-          setEstadisticas(estadisticasData);
-          setLoading(false);
-        }, 300);
-        
-      } catch (error) {
-        if (error.name === "CanceledError" || error.name === "AbortError") {
-          return;
-        }
-        console.error("Error:", error);
-        if (isMounted) {
-          setLoadProgress(100);
-          setTimeout(() => {
-            setError(error.message || t("error_carga"));
-            setLoading(false);
-          }, 300);
-        }
-      } finally {
-        clearInterval(progressInterval);
+  if (!id) return;
+  
+  setLoading(true);
+  setError(null);
+  
+  try {
+    // 🔥 OPTIMIZACIÓN: Usar fields para traer SOLO lo necesario
+    const response = await api.get(`/fundaciones/${id}`, {
+      params: {
+        fields: 'id,Nombre_1,Descripcion,ciudad,Direccion,Telefono,Email,horario_atencion,registro_sanitario,recibe_voluntarios,fecha_fundacion,imagen_portada,updated_at,lat,lng,total_rescatadas,total_adoptadas,anios_experiencia',
+        include: 'mascotas,necesidades'
       }
-    };
+    });
+
+    let fundacionData = null;
+    let necesidadesData = [];
+    let mascotasData = [];
+    let estadisticasData = null;
+
+    if (response.data && response.data.fundacion) {
+      fundacionData = response.data.fundacion;
+      necesidadesData = response.data.necesidades || [];
+      mascotasData = response.data.mascotas || [];
+      estadisticasData = response.data.estadisticas || null;
+    } else if (response.data && response.data.id && response.data.Nombre_1) {
+      fundacionData = response.data;
+      necesidadesData = response.data.necesidades_actuales || [];
+    } else if (response.data && response.data.success === true && response.data.data) {
+      if (response.data.data.fundacion) {
+        fundacionData = response.data.data.fundacion;
+        necesidadesData = response.data.data.necesidades || [];
+        mascotasData = response.data.data.mascotas || [];
+      } else {
+        fundacionData = response.data.data;
+        necesidadesData = fundacionData.necesidades_actuales || [];
+      }
+    }
+
+    if (!fundacionData) {
+      throw new Error(`No se encontró la fundación con ID ${id}`);
+    }
+
+    setFundacion(fundacionData);
+    setNecesidades(necesidadesData);
+    setMascotas(mascotasData);
+    setEstadisticas(estadisticasData);
+    
+  } catch (error) {
+    if (error.name === "CanceledError" || error.name === "AbortError") {
+      return;
+    }
+    console.error("Error:", error);
+    setError(error.message || t("error_carga"));
+  } finally {
+    setLoading(false);
+  }
+};
 
     loadData();
 

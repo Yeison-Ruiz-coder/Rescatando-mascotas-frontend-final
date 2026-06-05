@@ -1,0 +1,77 @@
+REVISIÓN GENERAL DEL FRONTEND PÚBLICO
+====================================
+
+Objetivo:
+Revisar y corregir la parte pública de la aplicación página por página, manteniendo consistencia visual, rendimiento y claridad del código.
+
+PUNTOS CLAVE A TENER EN CUENTA
+=============================
+
+1. OPTIMIZACIÓN Y RENDIMIENTO
+- El frontend debe consultar solo los campos necesarios en cada listado.
+- Usar parámetros como fields, include, filter, sort y perPage cuando el backend lo soporte.
+- Evitar consultas pesadas, N+1 requests y traer datos completos innecesariamente.
+- Usar paginación y carga diferida cuando haya muchas tarjetas o secciones.
+- Revisar componentes que renderizan listas grandes y optimizar re-renders.
+- Evitar cálculos pesados sobre arrays en cada render.
+
+2. USO DE i18n (traducciones)
+- Todo texto visible debe venir desde useTranslation() y claves de los JSON de locales.
+- Evitar strings hardcodeados en JSX, botones, mensajes, placeholders y textos estáticos.
+- Mantener una estructura clara de namespaces por módulo (eventos, mascotas, fundaciones, auth, etc.).
+- Si un texto aparece en varias páginas, revisar si debe ir en un namespace común o específico.
+
+3. USO DE CLASES GLOBALES Y VARIABLES DE COLOR
+- El proyecto ya tiene un sistema centralizado de variables de color en src/styles/variables.css.
+- Debe usarse preferiblemente var(--color-...) y var(--gradient-...), no colores fijos repetidos.
+- El tema claro/oscuro debe seguir funcionando con las variables globales.
+- Si se agregan estilos nuevos, revisar que respeten el sistema de colores existente y no rompan el tema.
+
+4. ENCAPSULACIÓN DE ESTILOS POR PÁGINA
+- Cada página pública debe tener su propio CSS o un enfoque de clases bien definidos para evitar conflictos.
+- Evitar selectores genéricos como .button, .card, .title, .container sin prefijo o contexto.
+- Preferir clases específicas por página o componente, con nombres claros y únicos.
+- Revisar que los estilos de una página no afecten a otra por herencia o selectores demasiado amplios.
+
+5. CONSISTENCIA VISUAL DE LA PARTE PÚBLICA
+- Mantener un estilo uniforme entre páginas: tarjetas, botones, espaciados, tipografía y secciones motivacionales.
+- Revisar si hay diferencias de diseño entre páginas que deberían compartir el mismo sistema visual.
+- Asegurar que los componentes reutilizables sean coherentes en toda la app.
+
+6. COMPONENTES Y REUTILIZACIÓN
+- Revisar si hay componentes repetidos que podrían unificarse para reducir duplicación de lógica y estilos.
+- Mantener los cards, filtros, paneles y loaders con una estructura consistente.
+- Evitar que cada página tenga lógica casi duplicada si ya existe un patrón reutilizable.
+
+7. ESTRUCTURA Y MANTENIMIENTO DEL CÓDIGO
+- Revisar si hay código duplicado, lógica difícil de leer o estilos mezclados en los mismos archivos.
+- Mantener separada la lógica de negocio, la UI y los estilos.
+- Preferir claridad y mantenibilidad por sobre soluciones temporales.
+
+8. REVISIÓN RECOMENDADA POR PÁGINA
+- Mascotas: revisar carga de tarjetas, filtros, paginación y uso de imágenes.
+- Fundaciones: revisar carga de listas, total de mascotas y consistencia de cards.
+- Eventos: revisar carga de eventos, filtros, likes/asistencia y optimización visual.
+- Veterinarias: revisar listas, filtros por ciudad y consistencia de tarjetas.
+
+9. CRITERIO DE CALIDAD PARA LA IA
+- Corregir primero rendimiento y carga innecesaria.
+- Luego corregir consistencia visual y uso de variables globales.
+- Después refinar i18n y encapsulación de clases.
+- Finalmente validar que no existan estilos que se sobrepongan entre páginas.
+
+10. RESULTADO ESPERADO
+- Páginas más rápidas.
+- Menor carga de datos innecesarios.
+- Mejor uso de traducciones.
+- Menos conflictos de estilos.
+- Código más limpio, mantenible y escalable.
+
+INSTRUCCIÓN PARA LA IA
+---------------------
+Revisa cada página pública una por una y aplica mejoras enfocadas en:
+1. rendimiento,
+2. uso correcto de i18n,
+3. uso de variables globales para colores y sombras,
+4. encapsulación de estilos por página/componente,
+5. consistencia visual y limpieza del código.

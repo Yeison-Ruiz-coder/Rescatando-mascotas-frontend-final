@@ -1,11 +1,10 @@
 // src/pages/public/suscripciones/SuscripcionesPublicIndex.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import api from '../../../services/api';
 import { useAuth } from '../../../contexts/AuthContext';
-import { useFiltros } from '../../../contexts/FiltrosContext';
 import { toast } from 'react-toastify';
 import MascotaApadrinarCard from '../../../components/common/MascotaApadrinarCard/MascotaApadrinarCard';
 import FiltrosMascotas from '../../../components/common/FiltrosMascotas/FiltrosMascotas';
@@ -15,7 +14,6 @@ import './SuscripcionesPublicIndex.css';
 const SuscripcionesPublicIndex = () => {
   const { t } = useTranslation('suscripciones');
   const { isAuthenticated, user } = useAuth();
-  const { filtros } = useFiltros();
   const navigate = useNavigate();
   
   const [membresias, setMembresias] = useState([]);
@@ -26,6 +24,7 @@ const SuscripcionesPublicIndex = () => {
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [orden, setOrden] = useState("reciente");
+  const [currentFilters, setCurrentFilters] = useState({});
   const [isMobile, setIsMobile] = useState(false);
 
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
@@ -46,52 +45,49 @@ const SuscripcionesPublicIndex = () => {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  const [mascotasResultado, setMascotasResultado] = useState([]);
-
-  useEffect(() => {
-    if (mascotas.length > 0) {
-      let resultado = [...mascotas];
-
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter((m) =>
-          m.nombre_mascota?.toLowerCase().includes(busquedaLower)
-        );
-      }
-
-      if (filtros.especie && filtros.especie.trim()) {
-        resultado = resultado.filter(
-          (m) => m.especie?.toLowerCase() === filtros.especie.toLowerCase()
-        );
-      }
-
-      if (filtros.genero && filtros.genero.trim()) {
-        resultado = resultado.filter(
-          (m) => m.genero?.toLowerCase() === filtros.genero.toLowerCase()
-        );
-      }
-
-      switch (orden) {
-        case "nombre":
-          resultado.sort((a, b) => a.nombre_mascota?.localeCompare(b.nombre_mascota));
-          break;
-        case "edad_asc":
-          resultado.sort((a, b) => (parseInt(a.edad_aprox) || 0) - (parseInt(b.edad_aprox) || 0));
-          break;
-        case "edad_desc":
-          resultado.sort((a, b) => (parseInt(b.edad_aprox) || 0) - (parseInt(a.edad_aprox) || 0));
-          break;
-        default:
-          break;
-      }
-
-      setMascotasResultado(resultado);
+  // Aplicar filtros a mascotas
+  const applyFilters = useCallback((filters, data, sortOrder) => {
+    if (!data.length) {
+      return [];
     }
-  }, [filtros, orden, mascotas]);
+    
+    let resultado = [...data];
+
+    if (filters.buscar && filters.buscar.trim()) {
+      const busquedaLower = filters.buscar.toLowerCase().trim();
+      resultado = resultado.filter((m) =>
+        m.nombre_mascota?.toLowerCase().includes(busquedaLower)
+      );
+    }
+
+    if (filters.especie && filters.especie.trim()) {
+      resultado = resultado.filter(
+        (m) => m.especie?.toLowerCase() === filters.especie.toLowerCase()
+      );
+    }
+
+    if (filters.genero && filters.genero.trim()) {
+      resultado = resultado.filter(
+        (m) => m.genero?.toLowerCase() === filters.genero.toLowerCase()
+      );
+    }
+
+    switch (sortOrder) {
+      case "nombre":
+        resultado.sort((a, b) => a.nombre_mascota?.localeCompare(b.nombre_mascota));
+        break;
+      case "edad_asc":
+        resultado.sort((a, b) => (parseInt(a.edad_aprox) || 0) - (parseInt(b.edad_aprox) || 0));
+        break;
+      case "edad_desc":
+        resultado.sort((a, b) => (parseInt(b.edad_aprox) || 0) - (parseInt(a.edad_aprox) || 0));
+        break;
+      default:
+        break;
+    }
+
+    return resultado;
+  }, []);
 
   const cargarDatos = async () => {
     try {
@@ -114,7 +110,6 @@ const SuscripcionesPublicIndex = () => {
       
       const mascotasDisponibles = mascotasData.filter(m => m.estado !== 'Adoptado');
       setMascotas(mascotasDisponibles);
-      setMascotasResultado(mascotasDisponibles);
       
     } catch (error) {
       console.error('Error:', error);
@@ -123,6 +118,16 @@ const SuscripcionesPublicIndex = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
+
+  const handleFilterChange = useCallback((filters) => {
+    setCurrentFilters(filters);
+  }, []);
+
+  const mascotasFiltradas = applyFilters(currentFilters, mascotas, orden);
 
   const handleApadrinar = (mascota) => {
     if (!isAuthenticated) {
@@ -251,7 +256,7 @@ const SuscripcionesPublicIndex = () => {
           <h2>{t('mascotas_titulo')}</h2>
           <p>{t('mascotas_subtitulo')}</p>
           <div className="badge-count">
-            🐾 {t('mascotas_disponibles', { count: mascotasResultado.length })}
+            🐾 {t('mascotas_disponibles', { count: mascotasFiltradas.length })}
           </div>
         </div>
 
@@ -260,6 +265,7 @@ const SuscripcionesPublicIndex = () => {
           <div className="container">
             <FiltrosMascotas
               especies={especies}
+              onFilterChange={handleFilterChange}
               variant={isMobile ? "modal" : "inline"}
             />
           </div>
@@ -268,7 +274,7 @@ const SuscripcionesPublicIndex = () => {
         {/* Resultados header */}
         <div className="results-header">
           <div className="results-count">
-            <i className="fas fa-list"></i> {t('mostrando')} <strong>{mascotasResultado.length}</strong> {t('de')} <strong>{mascotas.length}</strong> {t('mascotas')}
+            <i className="fas fa-list"></i> {t('mostrando')} <strong>{mascotasFiltradas.length}</strong> {t('de')} <strong>{mascotas.length}</strong> {t('mascotas')}
           </div>
           <div className="results-orden">
             <label>
@@ -286,7 +292,7 @@ const SuscripcionesPublicIndex = () => {
 
         {/* Grid de mascotas */}
         <div className="mascotas-grid-full">
-          {mascotasResultado.map((mascota) => (
+          {mascotasFiltradas.map((mascota) => (
             <MascotaApadrinarCard
               key={mascota.id}
               mascota={mascota}
@@ -297,7 +303,7 @@ const SuscripcionesPublicIndex = () => {
           ))}
         </div>
 
-        {mascotasResultado.length === 0 && (
+        {mascotasFiltradas.length === 0 && (
           <div className="empty-container">
             <i className="fas fa-search"></i>
             <h3>{t('sin_resultados')}</h3>

@@ -6,17 +6,16 @@ import api from "../../../services/api";
 import EventoCard from "../../../components/common/EventoCard/EventoCard";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
-import { useFiltrosEventos } from "../../../contexts/FiltrosContext";
 import "./EventosIndex.css";
 
 const EventosIndex = () => {
   const { t, i18n } = useTranslation("eventos");
-  const { filtros, limpiarFiltros } = useFiltrosEventos();
   const [eventos, setEventos] = useState([]);
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orden, setOrden] = useState("reciente");
+  const [currentFilters, setCurrentFilters] = useState({});
   const [isMobile, setIsMobile] = useState(false);
 
   const opcionesOrden = useMemo(() => [
@@ -46,6 +45,50 @@ const EventosIndex = () => {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
+  // Aplicar filtros locales
+  const applyFilters = useCallback((filters, data, sortOrder) => {
+    if (!data.length) {
+      setEventosFiltrados([]);
+      return;
+    }
+    
+    let resultado = [...data];
+
+    if (filters.buscar && filters.buscar.trim()) {
+      const busquedaLower = filters.buscar.toLowerCase().trim();
+      resultado = resultado.filter(
+        (e) =>
+          e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
+          e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
+          e.categoria?.toLowerCase().includes(busquedaLower)
+      );
+    }
+
+    if (filters.categoria && filters.categoria.trim()) {
+      resultado = resultado.filter(
+        (e) => e.categoria?.toLowerCase() === filters.categoria.toLowerCase()
+      );
+    }
+
+    // Ordenar
+    switch (sortOrder) {
+      case "nombre":
+        resultado.sort((a, b) => a.nombre_evento?.localeCompare(b.nombre_evento));
+        break;
+      case "antiguos":
+        resultado.sort((a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento));
+        break;
+      case "capacidad":
+        resultado.sort((a, b) => (b.capacidad_maxima || 0) - (a.capacidad_maxima || 0));
+        break;
+      default:
+        resultado.sort((a, b) => new Date(b.fecha_evento) - new Date(a.fecha_evento));
+        break;
+    }
+
+    setEventosFiltrados(resultado);
+  }, []);
+
   // Cargar eventos
   const loadEventos = useCallback(async () => {
     setLoading(true);
@@ -63,7 +106,7 @@ const EventosIndex = () => {
       }
 
       setEventos(eventosData);
-      setEventosFiltrados(eventosData);
+      applyFilters(currentFilters, eventosData, orden);
     } catch (error) {
       console.error("Error:", error);
       setError(error.response?.data?.message || t("error_carga"));
@@ -72,58 +115,27 @@ const EventosIndex = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, currentFilters, orden, applyFilters]);
 
   useEffect(() => {
     loadEventos();
   }, [loadEventos]);
 
-  // Aplicar filtros locales (búsqueda y categoría)
+  // Cuando cambian filtros u orden, reaplicar
   useEffect(() => {
-    if (eventos.length > 0) {
-      let resultado = [...eventos];
+    applyFilters(currentFilters, eventos, orden);
+  }, [currentFilters, orden, eventos, applyFilters]);
 
-      if (filtros.busqueda && filtros.busqueda.trim()) {
-        const busquedaLower = filtros.busqueda.toLowerCase().trim();
-        resultado = resultado.filter(
-          (e) =>
-            e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
-            e.lugar_evento?.toLowerCase().includes(busquedaLower) ||
-            e.categoria?.toLowerCase().includes(busquedaLower)
-        );
-      }
+  const handleFilterChange = useCallback((filters) => {
+    setCurrentFilters(filters);
+  }, []);
 
-      if (filtros.categoria && filtros.categoria.trim()) {
-        resultado = resultado.filter(
-          (e) => e.categoria?.toLowerCase() === filtros.categoria.toLowerCase()
-        );
-      }
-
-      // Ordenar
-      switch (orden) {
-        case "nombre":
-          resultado.sort((a, b) => a.nombre_evento?.localeCompare(b.nombre_evento));
-          break;
-        case "antiguos":
-          resultado.sort((a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento));
-          break;
-        case "capacidad":
-          resultado.sort((a, b) => (b.capacidad_maxima || 0) - (a.capacidad_maxima || 0));
-          break;
-        default:
-          resultado.sort((a, b) => new Date(b.fecha_evento) - new Date(a.fecha_evento));
-          break;
-      }
-
-      setEventosFiltrados(resultado);
-    } else if (eventos.length === 0) {
-      setEventosFiltrados([]);
-    }
-  }, [filtros, orden, eventos]);
-
-  // Limpiar filtros locales
   const handleClearFilters = () => {
-    limpiarFiltros();
+    setCurrentFilters({});
+  };
+
+  const handleOrdenChange = (newOrden) => {
+    setOrden(newOrden);
   };
 
   if (loading) {
@@ -175,7 +187,10 @@ const EventosIndex = () => {
 
       <div className="fundacion-eventos-filtros-section sticky-glass glass-auto shadow-sticky">
         <div className="container">
-          <FiltrosEventos variant={isMobile ? "modal" : "inline"} />
+          <FiltrosEventos 
+            onFilterChange={handleFilterChange}
+            variant={isMobile ? "modal" : "inline"} 
+          />
         </div>
       </div>
 
@@ -192,7 +207,7 @@ const EventosIndex = () => {
               <CustomSelect
                 options={opcionesOrden}
                 value={orden}
-                onChange={(e) => setOrden(e.target.value)}
+                onChange={(e) => handleOrdenChange(e.target.value)}
                 name="orden"
               />
             </div>
@@ -203,7 +218,7 @@ const EventosIndex = () => {
               <Calendar size={64} />
               <h3>{t("sin_resultados")}</h3>
               <p>{t("sin_resultados_desc")}</p>
-              {(filtros.busqueda || filtros.categoria) && (
+              {(currentFilters.buscar || currentFilters.categoria) && (
                 <button onClick={handleClearFilters} className="fundacion-btn-limpiar-empty">
                   <X size={16} />
                   {t("limpiar_filtros")}

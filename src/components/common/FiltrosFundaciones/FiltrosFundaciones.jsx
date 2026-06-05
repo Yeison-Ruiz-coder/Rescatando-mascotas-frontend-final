@@ -1,128 +1,117 @@
 // src/components/common/FiltrosFundaciones/FiltrosFundaciones.jsx
-import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFiltrosFundaciones } from '../../../contexts/FiltrosContext';
-import CustomSelect from '../CustomSelect/CustomSelect';
-import './FiltrosFundaciones.css';
+import React, { useState } from 'react';
 
-const FiltrosFundaciones = ({ ciudades = [], variant = 'inline' }) => {
-  const { t } = useTranslation('fundaciones');
-  const { filtros, actualizarFiltros, limpiarFiltros } = useFiltrosFundaciones();
-  const [showModal, setShowModal] = useState(false);
-  const [busquedaLocal, setBusquedaLocal] = useState(filtros.busqueda);
-  const inputRef = useRef(null);
+const FiltrosFundaciones = ({ onFilterChange, ciudades = [] }) => {
+  const [buscar, setBuscar] = useState('');
+  const [ciudad, setCiudad] = useState('');
 
-  const ciudadesOptions = [
-    { value: '', label: t('todas_ciudades') },
-    ...ciudades.map(ciudad => ({ value: ciudad, label: ciudad }))
-  ];
+  const handleSearch = () => {
+    const filtros = {};
+    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (ciudad) filtros.ciudad = ciudad;
+    onFilterChange(filtros);
+  };
 
-  useEffect(() => {
-    if (inputRef.current && variant === 'inline') {
-      inputRef.current.focus();
+  const handleClear = () => {
+    setBuscar('');
+    setCiudad('');
+    onFilterChange({});
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
-  }, [variant]);
-
-  useEffect(() => {
-    setBusquedaLocal(filtros.busqueda || '');
-  }, [filtros.busqueda]);
-
-  const handleBusquedaChange = (e) => {
-    const value = e.target.value;
-    setBusquedaLocal(value);
-    actualizarFiltros({ busqueda: value });
   };
 
-  const handleCiudadChange = (e) => {
-    actualizarFiltros({ ciudad: e.target.value });
-  };
-
-  const handleClearSearch = () => {
-    setBusquedaLocal('');
-    actualizarFiltros({ busqueda: '' });
-    inputRef.current?.focus();
-  };
-
-  const handleReset = () => {
-    setBusquedaLocal('');
-    limpiarFiltros();
-    inputRef.current?.focus();
-  };
-
-  const hasActiveFilters = () => {
-    return filtros.busqueda || filtros.ciudad;
-  };
-
-  const FormContent = () => (
-    <form className="ff-form" onSubmit={(e) => e.preventDefault()}>
-      <div className="ff-grid">
-        <div className="ff-group ff-busqueda-group">
-          <label><i className="fas fa-search"></i> {t('buscar')}</label>
-          <div className="ff-search-wrapper">
-            <input
-              ref={inputRef}
-              type="text"
-              name="busqueda"
-              value={busquedaLocal}
-              onChange={handleBusquedaChange}
-              placeholder={t('buscar_placeholder')}
-              className="ff-input"
-              autoComplete="off"
-              autoFocus={true}
-            />
-            {busquedaLocal && (
-              <button type="button" onClick={handleClearSearch} className="ff-clear-search">
-                <i className="fas fa-times"></i>
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="ff-group">
-          <CustomSelect
-            options={ciudadesOptions}
-            value={filtros.ciudad || ''}
-            onChange={handleCiudadChange}
-            name="ciudad"
-            label={<><i className="fas fa-map-marker-alt"></i> {t('ciudad')}</>}
-          />
-        </div>
-
-        <div className="ff-buttons">
-          <button type="button" onClick={handleReset} className="ff-btn-limpiar">
-            <i className="fas fa-undo-alt"></i> {t('limpiar')}
-          </button>
-        </div>
+  return (
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+      gap: '1rem',
+      alignItems: 'end',
+      background: 'var(--bg-card)',
+      padding: '1rem',
+      borderRadius: '8px'
+    }}>
+      {/* Buscador */}
+      <div style={{ gridColumn: 'span 2' }}>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          🔍 Buscar
+        </label>
+        <input
+          type="text"
+          value={buscar}
+          onChange={(e) => setBuscar(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Buscar por nombre o descripción..."
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+          autoComplete="off"
+        />
       </div>
-    </form>
-  );
 
-  if (variant === 'modal') {
-    return (
-      <>
-        <button className="ff-btn-mobile" onClick={() => setShowModal(true)}>
-          <i className="fas fa-filter"></i> {t('filtros')}
-          {hasActiveFilters() && <span className="ff-badge" />}
+      {/* Ciudad */}
+      <div>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.75rem', fontWeight: 'bold' }}>
+          📍 Ciudad
+        </label>
+        <select
+          value={ciudad}
+          onChange={(e) => setCiudad(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '0.6rem',
+            border: '1px solid #ccc',
+            borderRadius: '6px',
+            fontSize: '0.9rem'
+          }}
+        >
+          <option value="">Todas las ciudades</option>
+          {ciudades.map(ciu => (
+            <option key={ciu} value={ciu}>{ciu}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Botones */}
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button
+          onClick={handleSearch}
+          style={{
+            padding: '0.6rem 1.2rem',
+            background: '#10b981',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          🔍 Buscar
         </button>
-
-        {showModal && (
-          <div className="ff-modal-overlay" onClick={() => setShowModal(false)}>
-            <div className="ff-modal-container" onClick={(e) => e.stopPropagation()}>
-              <div className="ff-modal-header">
-                <h3><i className="fas fa-filter"></i> {t('filtros')}</h3>
-                <button className="ff-modal-close" onClick={() => setShowModal(false)}>×</button>
-              </div>
-              <div className="ff-modal-body">
-                <FormContent />
-              </div>
-            </div>
-          </div>
-        )}
-      </>
-    );
-  }
-
-  return <FormContent />;
+        <button
+          onClick={handleClear}
+          style={{
+            padding: '0.6rem 1.2rem',
+            background: '#6b7280',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          🗑️ Limpiar
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default FiltrosFundaciones;
