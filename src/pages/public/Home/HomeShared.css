@@ -1,0 +1,97 @@
+/* src/pages/public/Home/HomeShared.css */
+/* ============================================
+   ESTILOS COMPARTIDOS DE LA PÁGINA HOME
+   Usa prefijo "hp-" (home-page) para evitar conflictos
+   ============================================ */
+
+/* Contenedor principal de la página Home */
+.hp-home-modern {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Contenedor de secciones */
+.hp-section-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Títulos de sección */
+.hp-section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtítulos de sección */
+.hp-section-subtitle {
+  font-size: 1.125rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  margin-bottom: 3rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== ANIMACIONES REVEAL ===== */
+.hp-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: hp-reveal-animation 0.6s ease forwards;
+}
+
+@keyframes hp-reveal-animation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Delays */
+.hp-delay-0 { animation-delay: 0s; }
+.hp-delay-100 { animation-delay: 0.1s; }
+.hp-delay-200 { animation-delay: 0.2s; }
+.hp-delay-300 { animation-delay: 0.3s; }
+.hp-delay-400 { animation-delay: 0.4s; }
+.hp-delay-500 { animation-delay: 0.5s; }
+
+/* Spinner */
+.hp-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: hp-spin 1s linear infinite;
+}
+
+@keyframes hp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hp-section-title {
+    font-size: 1.75rem;
+  }
+  
+  .hp-section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hp-section-container {
+    padding: 0 16px;
+  }
+}

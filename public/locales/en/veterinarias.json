@@ -47,5 +47,31 @@
   "sin_resultados": {
     "titulo": "No veterinary clinics found",
     "mensaje": "Try different search terms"
-  }
+  },
+  "servicio": "Service",
+  "equipo": "Equipment",
+  "convenio": "Agreement",
+  "consulta": "Consultation",
+  "cobertura": "Coverage",
+  "radio_atencion": "Service radius",
+  "red_social": "Social network",
+  "años_experiencia": "years of experience",
+  "amplia_experiencia": "Extensive experience",
+  "nueva": "New in market",
+  "mejor_valorado": "Top rated",
+  "recomendado": "Recommended",
+  "opiniones": "reviews",
+  "tiene_ubicacion": "Location available",
+  "tiene_logo": "Has logo",
+  "tiene_galeria": "Has photo gallery",
+  "precio_economico": "Economic price",
+  "precio_alto": "High price",
+  
+  "dia_lunes": "Monday",
+  "dia_martes": "Tuesday",
+  "dia_miercoles": "Wednesday",
+  "dia_jueves": "Thursday",
+  "dia_viernes": "Friday",
+  "dia_sabado": "Saturday",
+  "dia_domingo": "Sunday"
 }

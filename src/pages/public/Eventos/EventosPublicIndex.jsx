@@ -13,42 +13,46 @@ import "./EventosPublicIndex.css";
 const EventosPublicIndex = () => {
   const { t } = useTranslation("eventos");
   const { isAuthenticated } = useAuth();
-  
+
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 });
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    total: 0,
+  });
   const [currentFilters, setCurrentFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [likedEvents, setLikedEvents] = useState({});
   const [asistenciaEvents, setAsistenciaEvents] = useState({});
-  
+
   const [selectedEvento, setSelectedEvento] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const loadEventos = useCallback(async (filters = {}, page = 1) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const params = {
         page: page,
         per_page: 12,
       };
-      
+
       if (filters.buscar) params.buscar = filters.buscar;
       if (filters.tipo) params.tipo = filters.tipo;
       if (filters.proximos) params.proximos = filters.proximos;
-      
-      params.sort = '-fecha_evento';
-      
+
+      params.sort = "-fecha_evento";
+
       console.log("📡 API Request Eventos:", params);
-      
-      const response = await api.get('/eventos', { params });
-      
+
+      const response = await api.get("/eventos", { params });
+
       let eventosData = [];
       let paginationData = { current_page: 1, last_page: 1, total: 0 };
-      
+
       if (response.data?.data?.data) {
         eventosData = response.data.data.data;
         paginationData = {
@@ -61,10 +65,10 @@ const EventosPublicIndex = () => {
       } else if (Array.isArray(response.data)) {
         eventosData = response.data;
       }
-      
+
       setEventos(eventosData);
       setPagination(paginationData);
-      
+
       const asistenciaMap = {};
       eventosData.forEach((evento) => {
         if (evento.usuario_confirmado) {
@@ -72,85 +76,110 @@ const EventosPublicIndex = () => {
         }
       });
       setAsistenciaEvents(asistenciaMap);
-      
     } catch (err) {
       console.error("❌ Error:", err);
-      setError(err.response?.data?.message || err.message || "Error al cargar eventos");
+      setError(
+        err.response?.data?.message || err.message || t("error_carga"),
+      );
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadEventos({}, 1);
   }, []);
 
-  const handleFilterChange = useCallback((newFilters) => {
-    console.log("📝 Filtros aplicados:", newFilters);
-    setCurrentFilters(newFilters);
-    setCurrentPage(1);
-    loadEventos(newFilters, 1);
-  }, [loadEventos]);
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      console.log("📝 Filtros aplicados:", newFilters);
+      setCurrentFilters(newFilters);
+      setCurrentPage(1);
+      loadEventos(newFilters, 1);
+    },
+    [loadEventos],
+  );
 
-  const handlePageChange = useCallback((newPage) => {
-    if (newPage === currentPage) return;
-    setCurrentPage(newPage);
-    loadEventos(currentFilters, newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage, currentFilters, loadEventos]);
+  const handlePageChange = useCallback(
+    (newPage) => {
+      if (newPage === currentPage) return;
+      setCurrentPage(newPage);
+      loadEventos(currentFilters, newPage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [currentPage, currentFilters, loadEventos],
+  );
 
-  const handleLike = useCallback(async (id) => {
-    if (!isAuthenticated) {
-      alert(t("like.login_requerido"));
-      return;
-    }
-    try {
-      await api.post(`/eventos/${id}/like`);
-      setLikedEvents((prev) => ({ ...prev, [id]: !prev[id] }));
-      setEventos((prev) =>
-        prev.map((evento) =>
-          evento.id === id
-            ? { ...evento, likes: (evento.likes || 0) + (likedEvents[id] ? -1 : 1) }
-            : evento
-        )
-      );
-    } catch (error) {
-      console.error("Error al dar like:", error);
-    }
-  }, [isAuthenticated, likedEvents, t]);
-
-  const handleConfirmarAsistencia = useCallback(async (id) => {
-    if (!isAuthenticated) {
-      alert(t("asistencia.login_requerido"));
-      return;
-    }
-    try {
-      if (asistenciaEvents[id]) {
-        await api.delete(`/eventos/${id}/cancelar-asistencia`);
-        setAsistenciaEvents((prev) => ({ ...prev, [id]: false }));
-        setEventos((prev) =>
-          prev.map((evento) =>
-            evento.id === id
-              ? { ...evento, total_asistentes: Math.max(0, (evento.total_asistentes || 0) - 1) }
-              : evento
-          )
-        );
-      } else {
-        await api.post(`/eventos/${id}/confirmar-asistencia`);
-        setAsistenciaEvents((prev) => ({ ...prev, [id]: true }));
-        setEventos((prev) =>
-          prev.map((evento) =>
-            evento.id === id
-              ? { ...evento, total_asistentes: (evento.total_asistentes || 0) + 1 }
-              : evento
-          )
-        );
+  const handleLike = useCallback(
+    async (id) => {
+      if (!isAuthenticated) {
+        alert(t("like.login_requerido"));
+        return;
       }
-    } catch (error) {
-      console.error("Error:", error);
-      alert(error.response?.data?.message || t("asistencia.error"));
-    }
-  }, [isAuthenticated, asistenciaEvents, t]);
+      try {
+        await api.post(`/eventos/${id}/like`);
+        setLikedEvents((prev) => ({ ...prev, [id]: !prev[id] }));
+        setEventos((prev) =>
+          prev.map((evento) =>
+            evento.id === id
+              ? {
+                  ...evento,
+                  likes: (evento.likes || 0) + (likedEvents[id] ? -1 : 1),
+                }
+              : evento,
+          ),
+        );
+      } catch (error) {
+        console.error("Error al dar like:", error);
+      }
+    },
+    [isAuthenticated, likedEvents, t],
+  );
+
+  const handleConfirmarAsistencia = useCallback(
+    async (id) => {
+      if (!isAuthenticated) {
+        alert(t("asistencia.login_requerido"));
+        return;
+      }
+      try {
+        if (asistenciaEvents[id]) {
+          await api.delete(`/eventos/${id}/cancelar-asistencia`);
+          setAsistenciaEvents((prev) => ({ ...prev, [id]: false }));
+          setEventos((prev) =>
+            prev.map((evento) =>
+              evento.id === id
+                ? {
+                    ...evento,
+                    total_asistentes: Math.max(
+                      0,
+                      (evento.total_asistentes || 0) - 1,
+                    ),
+                  }
+                : evento,
+            ),
+          );
+        } else {
+          await api.post(`/eventos/${id}/confirmar-asistencia`);
+          setAsistenciaEvents((prev) => ({ ...prev, [id]: true }));
+          setEventos((prev) =>
+            prev.map((evento) =>
+              evento.id === id
+                ? {
+                    ...evento,
+                    total_asistentes: (evento.total_asistentes || 0) + 1,
+                  }
+                : evento,
+            ),
+          );
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert(error.response?.data?.message || t("asistencia.error"));
+      }
+    },
+    [isAuthenticated, asistenciaEvents, t],
+  );
 
   const handleOpenPanel = (evento) => {
     setSelectedEvento(evento);
@@ -165,14 +194,18 @@ const EventosPublicIndex = () => {
   const getImageUrl = (url) => {
     if (!url) return null;
     if (url.startsWith("http")) return url;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage") ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
+    const baseUrl =
+      import.meta.env.VITE_STORAGE_URL ||
+      "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return url.startsWith("/storage")
+      ? `${baseUrl}${url}`
+      : `${baseUrl}/storage/${url}`;
   };
 
   if (loading && eventos.length === 0) {
     return (
-      <div className="public-eventos-page">
-        <div className="public-eventos-loading">
+      <div className="eventos-page">
+        <div className="eventos-loading">
           <LoadingSpinner text={t("cargando_eventos")} />
         </div>
       </div>
@@ -181,13 +214,16 @@ const EventosPublicIndex = () => {
 
   if (error) {
     return (
-      <div className="public-eventos-page">
+      <div className="eventos-page">
         <div className="bento-container">
-          <div className="public-eventos-error">
+          <div className="eventos-error">
             <i className="fas fa-calendar-alt"></i>
             <h4>{t("error_titulo")}</h4>
             <p>{error}</p>
-            <button onClick={() => loadEventos(currentFilters, currentPage)} className="public-btn-retry">
+            <button
+              onClick={() => loadEventos(currentFilters, currentPage)}
+              className="eventos-reload-btn"
+            >
               <i className="fas fa-sync-alt"></i> {t("reintentar")}
             </button>
           </div>
@@ -197,86 +233,86 @@ const EventosPublicIndex = () => {
   }
 
   return (
-    <div className="public-eventos-page">
-      <div className="public-eventos-header">
-        <div className="public-eventos-hero">
+    <div className="eventos-page">
+      <div className="eventos-header">
+        <div className="eventos-hero">
           <img src="/img/hover/eventos.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
           <h1>{t("titulo")}</h1>
           {pagination.total > 0 && (
-            <p className="info">
-              <i className="fas fa-heart"></i> {t("total_eventos", { total: pagination.total })}
+            <p className="eventos-info">
+              <i className="fas fa-heart"></i>{" "}
+              {t("total_eventos", { total: pagination.total })}
             </p>
           )}
         </div>
       </div>
 
-      <div className="public-eventos-filtros-section">
+      <div className="eventos-filtros-section">
         <div className="bento-container">
-          <FiltrosEventos onFilterChange={handleFilterChange} />
+          <FiltrosEventos
+            onFilterChange={handleFilterChange}
+            eventos={eventos}
+            isLoading={loading}
+          />
         </div>
       </div>
 
-      <div className="public-eventos-resultados-section">
+      <div className="eventos-resultados-section">
         <div className="bento-container">
-          <div className="public-eventos-resultados-header">
-            <div className="public-eventos-resultados-count">
-              <i className="fas fa-list"></i> Mostrando <strong>{eventos.length}</strong> de <strong>{pagination.total}</strong> eventos
+          <div className="eventos-resultados-header">
+            <div className="eventos-resultados-count">
+              <i className="fas fa-list"></i> {t("mostrando")}{" "}
+              <strong>{eventos.length}</strong> {t("de")}{" "}
+              <strong>{pagination.total}</strong> {t("eventos")}
             </div>
           </div>
 
           {eventos.length === 0 ? (
-            <div className="public-eventos-empty">
+            <div className="eventos-empty">
               <i className="fas fa-calendar-alt"></i>
               <h3>{t("sin_resultados")}</h3>
               <p>{t("sin_resultados_desc")}</p>
             </div>
           ) : (
             <>
-              <div className="public-eventos-grid">
-                {eventos.map((evento, index) => {
-                  let sizeVariant = "default";
-                  if (index === 0) sizeVariant = "featured";
-                  else if (index % 5 === 0) sizeVariant = "compact";
-                  
-                  return (
-                    <div key={evento.id} className={`evento-grid-item ${sizeVariant}`}>
-                      <EventoCard
-                        evento={evento}
-                        getImageUrl={getImageUrl}
-                        variant="default"
-                        isAuthenticated={isAuthenticated}
-                        liked={likedEvents[evento.id]}
-                        asistencia={asistenciaEvents[evento.id]}
-                        onLike={handleLike}
-                        onConfirmarAsistencia={handleConfirmarAsistencia}
-                        onView={handleOpenPanel}
-                        showActions={true}
-                      />
-                    </div>
-                  );
-                })}
+              <div className="eventos-grid">
+                {eventos.map((evento) => (
+                  <EventoCard
+                    key={evento.id}
+                    evento={evento}
+                    getImageUrl={getImageUrl}
+                    variant="default"
+                    isAuthenticated={isAuthenticated}
+                    liked={likedEvents[evento.id]}
+                    asistencia={asistenciaEvents[evento.id]}
+                    onLike={handleLike}
+                    onConfirmarAsistencia={handleConfirmarAsistencia}
+                    onView={handleOpenPanel}
+                    showActions={true}
+                  />
+                ))}
               </div>
 
               {pagination.last_page > 1 && (
-                <div className="pagination-container">
+                <div className="eventos-pagination-container">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="pagination-btn"
+                    className="eventos-pagination-btn"
                   >
-                    <i className="fas fa-chevron-left"></i> Anterior
+                    <i className="fas fa-chevron-left"></i> {t("volver") || "Anterior"}
                   </button>
-                  <span className="pagination-info">
-                    Página {currentPage} de {pagination.last_page}
+                  <span className="eventos-pagination-info">
+                    {t("pagina") || "Página"} {currentPage} {t("de") || "de"} {pagination.last_page}
                   </span>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === pagination.last_page}
-                    className="pagination-btn"
+                    className="eventos-pagination-btn"
                   >
-                    Siguiente <i className="fas fa-chevron-right"></i>
+                    {t("siguiente") || "Siguiente"} <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
               )}
@@ -285,12 +321,16 @@ const EventosPublicIndex = () => {
         </div>
       </div>
 
-      <div className="public-eventos-motivational">
+      <div className="eventos-motivational">
         <div className="bento-container">
-          <div className="motivational-content">
-            <i className="fas fa-paw motivational-icon"></i>
-            <h3 className="motivational-title">{t("mensaje_motivacional_titulo")}</h3>
-            <p className="motivational-text">{t("mensaje_motivacional_texto")}</p>
+          <div className="eventos-motivational-content">
+            <i className="fas fa-paw eventos-motivational-icon"></i>
+            <h3 className="eventos-motivational-title">
+              {t("mensaje_motivacional_titulo")}
+            </h3>
+            <p className="eventos-motivational-text">
+              {t("mensaje_motivacional_texto")}
+            </p>
           </div>
         </div>
       </div>

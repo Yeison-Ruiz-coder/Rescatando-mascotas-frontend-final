@@ -1,18 +1,31 @@
+/* src/styles/index.css */
+/* ============================================
+   ENTRY POINT - IMPORTA TODOS LOS ESTILOS
+   ============================================ */
+
 @import './variables.css';
 @import './reset.css';
 @import './layout.css';
 @import './typography.css';
-@import './components/buttons.css';
-@import './components/forms.css';
-@import './components/modals.css';
-@import './components/alerts.css';
-@import './components/pagination.css';
 @import './animations.css';
+
+/* COMPONENTES GLOBALES */
+@import './components/forms.css';
+@import './components/alerts.css';
+@import './components/modals.css';
+@import './components/pagination.css';
+@import './components/status-badges.css';
+@import './components/date-select-global.css';
+
+/* DECORACIONES */
 @import './decorations/circles.css';
 @import './decorations/particles.css';
 @import './decorations/paws.css';
-@import './components/status-badges.css';
-@import './utilities.css';
-@import './components/date-select-global.css';
+
+/* LAYOUTS ESPECIALES */
 @import './bento-grid.css';
 @import './collage-effects.css';
+@import './pages.css';
+
+/* UTILITIES (siempre al final) */
+@import './utilities.css';

@@ -1,7 +1,8 @@
 /* src/components/common/EventoCard/EventoCard.css */
 /* ESTILO SIMPLE - IMAGEN FULL, NOMBRE, FECHA, BOTONES */
+/* PREFIJO ÚNICO: .ec- (EventoCard) */
 
-.evento-card {
+.ec-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
@@ -15,14 +16,14 @@
   position: relative;
 }
 
-.evento-card:hover {
+.ec-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
 /* ===== IMAGEN ===== */
-.evento-card .card-image {
+.ec-card .ec-image {
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
@@ -30,7 +31,7 @@
   flex-shrink: 0;
 }
 
-.evento-card .card-image img {
+.ec-card .ec-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -38,12 +39,12 @@
   filter: grayscale(15%);
 }
 
-.evento-card:hover .card-image img {
+.ec-card:hover .ec-image img {
   transform: scale(1.05);
   filter: grayscale(0%);
 }
 
-.evento-card .image-placeholder {
+.ec-card .ec-placeholder {
   width: 100%;
   height: 100%;
   background: var(--gradient-primary);
@@ -53,13 +54,13 @@
   color: white;
 }
 
-.evento-card .image-placeholder i {
+.ec-card .ec-placeholder i {
   font-size: 3rem;
   opacity: 0.7;
 }
 
-/* ===== BADGE DE FECHA (esquina superior izquierda) ===== */
-.evento-card .fecha-badge {
+/* ===== BADGE DE FECHA ===== */
+.ec-card .ec-fecha-badge {
   position: absolute;
   top: 12px;
   left: 12px;
@@ -72,20 +73,20 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.evento-card .fecha-dia {
+.ec-card .ec-fecha-dia {
   font-size: 1.1rem;
   font-weight: 700;
   color: white;
   line-height: 1;
 }
 
-.evento-card .fecha-mes {
+.ec-card .ec-fecha-mes {
   font-size: 0.6rem;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
 }
 
-.evento-card .fecha-hora {
+.ec-card .ec-fecha-hora {
   font-size: 0.6rem;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 4px;
@@ -94,14 +95,14 @@
 }
 
 /* ===== CONTENIDO ===== */
-.evento-card .card-content {
+.ec-card .ec-content {
   padding: 1rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.evento-card .evento-titulo {
+.ec-card .ec-titulo {
   font-size: 1rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -113,7 +114,7 @@
   overflow: hidden;
 }
 
-.evento-card .evento-lugar {
+.ec-card .ec-lugar {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -122,19 +123,19 @@
   margin-bottom: 0.75rem;
 }
 
-.evento-card .evento-lugar i {
+.ec-card .ec-lugar i {
   color: var(--color-primary);
   font-size: 0.65rem;
 }
 
 /* ===== BOTONES ===== */
-.evento-card .evento-buttons {
+.ec-card .ec-buttons {
   display: flex;
   gap: 0.5rem;
   margin-top: auto;
 }
 
-.evento-card .btn-card {
+.ec-card .ec-btn {
   flex: 1;
   padding: 8px 10px;
   border-radius: var(--radius-md);
@@ -151,14 +152,14 @@
   gap: 0.4rem;
 }
 
-.evento-card .btn-outline {
+.ec-card .ec-btn-outline {
   background: transparent;
   color: var(--color-primary);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-hard-sm);
 }
 
-.evento-card .btn-outline:hover {
+.ec-card .ec-btn-outline:hover {
   background: var(--gradient-primary);
   color: white;
   transform: translateX(2px);
@@ -166,67 +167,81 @@
   box-shadow: var(--shadow-hard-md);
 }
 
-.evento-card .btn-asistir {
+.ec-card .ec-btn-asistir {
   background: var(--color-success);
   color: white;
   box-shadow: var(--shadow-hard-sm);
 }
 
-.evento-card .btn-asistir:hover {
+.ec-card .ec-btn-asistir:hover {
   transform: translateX(2px);
   box-shadow: var(--shadow-hard-md);
   filter: brightness(1.05);
 }
 
-.evento-card .btn-asistir.confirmed {
+.ec-card .ec-btn-asistir.ec-confirmed {
   background: var(--color-primary);
 }
 
-.evento-card .btn-like {
+.ec-card .ec-btn-like {
   background: transparent;
   color: var(--color-danger);
   border: 1px solid rgba(239, 68, 68, 0.3);
   box-shadow: var(--shadow-hard-sm);
 }
 
-.evento-card .btn-like.liked {
+.ec-card .ec-btn-like.ec-liked {
   background: var(--color-danger);
   color: white;
 }
 
-.evento-card .btn-like:hover {
+.ec-card .ec-btn-like:hover {
   transform: translateX(2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-/* ===== VARIANTE DESTACADA (borde izquierdo) ===== */
-.evento-card.featured {
+/* ===== VARIANTE DESTACADA ===== */
+.ec-card.ec-featured {
   border-left: 4px solid var(--color-accent);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .evento-card .card-content {
+  .ec-card .ec-content {
     padding: 0.75rem;
   }
   
-  .evento-card .evento-titulo {
+  .ec-card .ec-titulo {
     font-size: 0.9rem;
   }
   
-  .evento-card .evento-buttons {
+  .ec-card .ec-buttons {
     flex-direction: column;
   }
   
-  .evento-card .btn-card {
+  .ec-card .ec-btn {
     width: 100%;
   }
   
-  .evento-card .fecha-badge {
+  .ec-card .ec-fecha-badge {
     padding: 4px 8px;
   }
   
-  .evento-card .fecha-dia {
+  .ec-card .ec-fecha-dia {
     font-size: 0.9rem;
   }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .ec-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .ec-card .ec-titulo {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .ec-card .ec-lugar {
+  color: var(--color-text-muted);
 }

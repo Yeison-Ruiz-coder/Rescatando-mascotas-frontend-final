@@ -1,49 +1,52 @@
 /* src/pages/public/Eventos/EventosPublicIndex.css */
-/* ===== HEADER CON IMAGEN DE FONDO - ESTILO IDÉNTICO A MASCOTAS ===== */
+/* ===== HEADER - ESTILO IDÉNTICO A MASCOTAS ===== */
 
-.public-eventos-page {
-  min-height: calc(100vh - var(--navbar-height, 70px));
+.eventos-page {
+  min-height: 100vh;
+  background: transparent;
 }
 
 /* ===== HEADER SECTION ===== */
-.public-eventos-header {
+.eventos-page .eventos-header {
   position: relative;
-  padding: 110px 0 160px 0;
+  padding: 0;
   text-align: left;
   background: transparent;
   border-bottom: 1px solid var(--color-border);
   overflow: hidden;
-  min-height: 400px;
+  min-height: 500px;
   display: flex;
   align-items: center;
 }
 
-/* Contenedor de la imagen de fondo */
-.public-eventos-hero {
+.eventos-page .eventos-hero {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
+  overflow: hidden;
 }
 
-.public-eventos-hero img {
+.eventos-page .eventos-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(30%);
+  filter: grayscale(30%) brightness(0.7);
 }
 
-/* Contenido del header */
-.public-eventos-header .bento-container {
+.eventos-page .eventos-header .bento-container {
   position: relative;
   z-index: 2;
   width: 100%;
+  max-width: 50%;
+  margin-left: 0;
+  margin-right: auto;
+  margin-top: 20px;
 }
 
-/* Título */
-.public-eventos-header h1 {
+.eventos-page .eventos-header h1 {
   font-size: clamp(3rem, 8vw, 12rem);
   font-weight: 800;
   margin-bottom: 1rem;
@@ -52,42 +55,39 @@
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
-  color: rgb(155, 0, 0);
+  color: var(--color-danger);
   font-family: 'Space Grotesk', sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
-/* Info (contador) */
-.public-eventos-header .info {
+.eventos-page .eventos-header .eventos-info {
   color: white;
   font-size: 1.25rem;
   margin-top: 1rem;
   margin-left: 0;
   text-align: left;
   display: inline-block;
-  background: rgba(0, 24, 1, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   padding: 8px 20px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-hard-sm);
+  max-width: 100%;
+  word-break: break-word;
 }
 
-.public-eventos-header .info i {
+.eventos-page .eventos-header .eventos-info i {
   margin-right: 0.5rem;
   color: var(--color-heart);
 }
 
-[data-theme="dark"] .public-eventos-header::before {
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.7)
-  );
+[data-theme="dark"] .eventos-page .eventos-header::before {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
 }
 
 /* ===== FILTROS SECTION ===== */
-.public-eventos-filtros-section {
+.eventos-page .eventos-filtros-section {
   padding: 20px 0;
   position: sticky;
   top: var(--navbar-height, 70px);
@@ -97,11 +97,12 @@
 }
 
 /* ===== RESULTADOS SECTION ===== */
-.public-eventos-resultados-section {
+.eventos-page .eventos-resultados-section {
   padding: 40px 0 60px;
+  background: transparent;
 }
 
-.public-eventos-resultados-header {
+.eventos-page .eventos-resultados-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,133 +111,98 @@
   gap: 1rem;
 }
 
-.public-eventos-resultados-count {
+.eventos-page .eventos-resultados-count {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   color: var(--color-text-muted);
   font-size: 0.85rem;
-  background: var(--bg-card);
+  background: var(--color-card-bg);
   padding: 6px 14px;
   box-shadow: var(--shadow-hard-sm);
 }
 
-.public-eventos-resultados-count strong {
+.eventos-page .eventos-resultados-count strong {
   color: var(--color-accent);
   font-size: 1rem;
 }
 
-.public-eventos-resultados-orden {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.public-eventos-resultados-orden label {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-/* ===== GRID DE EVENTOS - ASIMÉTRICO ===== */
-.public-eventos-grid {
+/* ===== GRID DE EVENTOS ===== */
+.eventos-page .eventos-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);  /* ← 3 columnas fijas en desktop */
+  gap: 1.8rem;
   width: 100%;
 }
 
-/* Tamaños de cards dentro del grid */
-.evento-grid-item {
-  grid-column: span 4;  /* 4 columnas = 3 cards por fila en desktop */
+/* ===== PAGINACIÓN ===== */
+.eventos-page .eventos-pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
 }
 
-
-
-/* Card compacta - más pequeña */
-.evento-grid-item.compact {
-  grid-column: span 3;  /* 3 columnas = más pequeña */
+.eventos-page .eventos-pagination-btn {
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Responsive - Tablet */
-@media (max-width: 1024px) {
-  .public-eventos-grid {
-    gap: 1.25rem;
-  }
-  
-  .evento-grid-item,
-  .evento-grid-item.featured,
-  .evento-grid-item.compact {
-    grid-column: span 6;  /* 2 cards por fila en tablet */
-  }
+.eventos-page .eventos-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
-/* Responsive - Móvil */
-@media (max-width: 768px) {
-  .public-eventos-grid {
-    gap: 1rem;
-  }
-  
-  .evento-grid-item,
-  .evento-grid-item.featured,
-  .evento-grid-item.compact {
-    grid-column: span 12;  /* 1 card por fila en móvil */
-  }
+.eventos-page .eventos-pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.eventos-page .eventos-pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 /* ===== ESTADO VACÍO ===== */
-.public-eventos-empty {
+.eventos-page .eventos-empty {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--color-card-bg);
   border-radius: var(--radius-none);
-  margin: 2rem 0;
   box-shadow: var(--shadow-hard-sm);
   border: 1px solid var(--color-border);
 }
 
-.public-eventos-empty i {
+.eventos-page .eventos-empty i {
   font-size: 3rem;
   color: var(--color-primary);
   margin-bottom: 1rem;
   opacity: 0.7;
 }
 
-.public-eventos-empty h3 {
-  color: var(--form-text);
+.eventos-page .eventos-empty h3 {
+  color: var(--color-text);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
 
-.public-eventos-empty p {
+.eventos-page .eventos-empty p {
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
-.public-btn-limpiar-empty {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  background: rgba(239, 68, 68, 0.1);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  color: var(--color-danger);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: var(--transition-fast);
-}
-
-.public-btn-limpiar-empty:hover {
-  background: rgba(239, 68, 68, 0.2);
-  transform: translateY(-2px);
-}
-
 /* ===== ESTADO DE ERROR ===== */
-.public-eventos-error {
+.eventos-page .eventos-error {
   text-align: center;
   padding: 3rem 2rem;
   background: var(--color-card-bg);
@@ -247,27 +213,24 @@
   border: 1px solid var(--color-border);
 }
 
-.public-eventos-error i {
+.eventos-page .eventos-error i {
   font-size: 3rem;
   color: var(--color-danger);
   margin-bottom: 1rem;
 }
 
-.public-eventos-error h4 {
+.eventos-page .eventos-error h4 {
   color: var(--color-text);
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
 }
 
-.public-eventos-error p {
+.eventos-page .eventos-error p {
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
-.public-btn-retry {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+.eventos-page .eventos-reload-btn {
   background: var(--gradient-primary);
   color: white;
   border: none;
@@ -279,38 +242,21 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.public-btn-retry:hover {
+.eventos-page .eventos-reload-btn:hover {
   transform: translateX(2px);
   box-shadow: var(--shadow-hard-md);
 }
 
 /* ===== LOADING ===== */
-.public-eventos-loading {
+.eventos-page .eventos-loading {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 400px;
-  gap: 1rem;
-}
-
-.public-eventos-loading .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* ===== MENSAJE MOTIVACIONAL ===== */
-.public-eventos-motivational {
+.eventos-page .eventos-motivational {
   margin-top: 80px;
   padding: 60px 0;
   background: var(--color-background-section);
@@ -318,28 +264,27 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.public-eventos-motivational .motivational-content {
+.eventos-page .eventos-motivational-content {
   text-align: center;
   max-width: 700px;
   margin: 0 auto;
 }
 
-.public-eventos-motivational .motivational-icon {
+.eventos-page .eventos-motivational-icon {
   font-size: 48px;
   margin-bottom: 20px;
   opacity: 0.8;
   color: var(--color-primary);
 }
 
-.public-eventos-motivational .motivational-title {
+.eventos-page .eventos-motivational-title {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--color-text);
-  font-family: 'Space Grotesk', sans-serif;
 }
 
-.public-eventos-motivational .motivational-text {
+.eventos-page .eventos-motivational-text {
   font-size: 1.1rem;
   color: var(--color-text-muted);
   line-height: 1.5;
@@ -347,134 +292,77 @@
   margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .public-eventos-motivational {
-    margin-top: 50px;
-    padding: 40px 0;
-  }
-  
-  .public-eventos-motivational .motivational-title {
-    font-size: 1.4rem;
-  }
-  
-  .public-eventos-motivational .motivational-text {
-    font-size: 0.95rem;
-  }
-  
-  .public-eventos-motivational .motivational-icon {
-    font-size: 36px;
-  }
-}
-
-/* ===== FILTROS MÓVILES ===== */
-.public-btn-filtros-mobile {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.6rem 1rem;
-  background: var(--form-bg);
-  border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--form-text);
-  cursor: pointer;
-  transition: var(--transition-fast);
-  position: relative;
-}
-
-.public-btn-filtros-mobile:hover {
-  background: var(--color-hover);
-  border-color: var(--color-primary);
-}
-
-.public-badge-filtros {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 10px;
-  height: 10px;
-  background: var(--color-danger);
-  border-radius: 50%;
-}
-
-.public-filtros-mobile-panel {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: var(--form-bg);
-  border-radius: var(--radius-lg);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.public-filtro-input,
-.public-filtro-select {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--form-border);
-  border-radius: var(--radius-md);
-  background: var(--form-input-bg);
-  color: var(--form-text);
-  font-size: 0.9rem;
-}
-
-.public-btn-limpiar-mobile {
-  padding: 0.6rem;
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--color-danger);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 500;
-}
-
-/* ===== RESPONSIVE GENERAL ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .public-eventos-header h1 {
-    font-size: 2.2rem;
+  .eventos-page .eventos-header h1 {
+    font-size: 5.1rem;
+  }
+  .eventos-page .eventos-grid {
+    grid-template-columns: repeat(2, 1fr);  /* ← 2 columnas en tablet */
+    gap: 1.5rem;
+  }
+  .eventos-page .eventos-header .eventos-info {
+    font-size: 1rem;
+    padding: 6px 16px;
   }
 }
 
 @media (max-width: 768px) {
-  .public-eventos-header {
-    padding: 60px 0 80px;
+  .eventos-page .eventos-header {
+    padding: 60px 0 80px 0;
+    min-height: auto;
   }
   
-  .public-eventos-header h1 {
-    font-size: 1.8rem;
+  .eventos-page .eventos-header .bento-container {
+    max-width: 68%;
   }
   
-  .public-eventos-filtros-section {
+  .eventos-page .eventos-header h1 {
+    font-size: clamp(2.9rem, 8vw, 3.4rem);
+    margin-bottom: 0.75rem;
+  }
+  
+  .eventos-page .eventos-header .eventos-info {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+  
+  .eventos-page .eventos-filtros-section {
     top: 60px;
   }
   
-  .public-eventos-resultados-header {
+  .eventos-page .eventos-resultados-header {
     flex-direction: column;
     align-items: flex-start;
   }
   
-  .public-btn-filtros-mobile {
-    display: flex;
+  .eventos-page .eventos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
   
-  .public-filtros-inline {
-    display: none;
+  .eventos-page .eventos-motivational {
+    margin-top: 50px;
+    padding: 40px 0;
+  }
+  
+  .eventos-page .eventos-motivational-title {
+    font-size: 1.4rem;
+  }
+  
+  .eventos-page .eventos-motivational-text {
+    font-size: 0.95rem;
+  }
+  
+  .eventos-page .eventos-motivational-icon {
+    font-size: 36px;
   }
 }
 
-@media (max-width: 480px) {
-  .public-eventos-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .public-eventos-resultados-count {
-    font-size: 0.8rem;
-  }
-  
-  .public-eventos-empty {
-    padding: 2rem 1rem;
-  }
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .eventos-page .eventos-empty,
+[data-theme="dark"] .eventos-page .eventos-error {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
 }

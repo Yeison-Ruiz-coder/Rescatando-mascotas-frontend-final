@@ -121,7 +121,7 @@ const ReportarRescate = () => {
   if (submitSuccess) {
     if (waitingForAdmin) {
       return (
-        <div className="rescate-success">
+        <div className="rescate-r9x7-success">
           <div className="success-card waiting">
             <i className="fas fa-clock" />
             <h2>{t("rescate_enviado_title")}</h2>
@@ -144,7 +144,7 @@ const ReportarRescate = () => {
 
     if (rescateDisponibleParaAdmin) {
       return (
-        <div className="rescate-success">
+        <div className="rescate-r9x7-success">
           <div className="success-card available">
             <i className="fas fa-users" />
             <h2>{t("available_title")}</h2>
@@ -160,7 +160,7 @@ const ReportarRescate = () => {
     }
 
     return (
-      <div className="rescate-success">
+      <div className="rescate-r9x7-success">
         <div className="success-card">
           <i className="fas fa-check-circle" />
           <h2>{t("success_title")}</h2>
@@ -174,8 +174,8 @@ const ReportarRescate = () => {
   }
 
   return (
-    <div className="rescate-page">
-      <div className="container">
+    <div className="rescate-r9x7">
+      <div className="rescate-container">
         <div className="rescate-header">
           <h1>
             <i className="fas fa-paw" /> {t("title")}

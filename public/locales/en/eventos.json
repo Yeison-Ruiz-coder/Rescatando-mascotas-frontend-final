@@ -228,5 +228,17 @@
   "evento_fundacion_badge": " Foundation Event",
   "eliminando": "Deleting...",
   "mensaje_motivacional_titulo": "Join and help change lives",
-  "mensaje_motivacional_texto": "Events are a great chance to learn, connect, and contribute to animal welfare. Don't miss them!"
+  "mensaje_motivacional_texto": "Events are a great chance to learn, connect, and contribute to animal welfare. Don't miss them!",
+  "buscar_placeholder": "Search events...",
+  "cargando": "Loading events...",
+  "tipo_fundacion": "Foundation event",
+  "tipo_admin": "Official event",
+  "gratis": "Free",
+  "capacidad_pequeña": "Small capacity",
+  "capacidad_grande": "Large capacity",
+  "hasta": "Until",
+  "eventos_proximos": "Upcoming events",
+  "eventos_pasados": "Past events",
+  "eventos_hoy": "Events today",
+  "evento_popular": "Popular event"
 }

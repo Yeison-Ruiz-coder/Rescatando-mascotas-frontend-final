@@ -94,8 +94,10 @@
     }
   },
 
-
-
+  "perro": "Perro",
+  "gato": "Gato",
+  "conejo": "Conejo",
+  "otro": "Otro",
 
   "pendientes_titulo": "Solicitudes Pendientes",
   "pendientes_descripcion": "Revisa y aprueba las solicitudes de fundaciones y veterinarias",

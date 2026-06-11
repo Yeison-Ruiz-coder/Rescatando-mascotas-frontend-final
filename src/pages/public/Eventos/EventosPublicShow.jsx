@@ -35,7 +35,6 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
       setLoadProgress(0);
       setError(null);
       
-      // Simular progreso de carga
       const progressInterval = setInterval(() => {
         setLoadProgress(prev => {
           if (prev >= 90) return prev;
@@ -47,7 +46,6 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
         const response = await api.get(`/eventos/${id}`);
         const data = response.data.data || response.data;
         
-        // Completar progreso
         setLoadProgress(100);
         setTimeout(() => {
           setEvento(data);
@@ -123,23 +121,30 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
     });
   };
 
+  // ✅ Mostrar ProgressBar mientras carga
   if (loading) {
     return (
-      <SimpleLoadingBar 
-        progress={loadProgress}
-        height="12px"
-        variant="gradient"
-      />
+      <div style={{ width: '100%', padding: '20px 0' }}>
+        <SimpleLoadingBar 
+          progress={loadProgress}
+          height="12px"
+          variant="gradient"
+        />
+      </div>
     );
   }
 
   if (error || !evento) {
     return (
-      <div className="public-eventos-show-container">
-        <div className="public-eventos-show-actions-bar">
-          {!embed && <Link to="/eventos" className="public-btn-back"><ArrowLeft size={18} /> {t('volver')}</Link>}
-        </div>
-        <div className="error-container">
+      <div className="eventos-show-container">
+        {!embed && (
+          <div className="eventos-show-actions-bar">
+            <Link to="/eventos" className="eventos-show-btn-back">
+              <ArrowLeft size={18} /> {t('volver')}
+            </Link>
+          </div>
+        )}
+        <div className="eventos-show-error">
           <Calendar size={48} />
           <h4>{t('error_titulo')}</h4>
           <p>{error || t('evento_no_encontrado')}</p>
@@ -149,55 +154,61 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
   }
 
   return (
-    <div className="public-eventos-show-container">
+    <div className="eventos-show-container">
+      {!embed && (
+        <div className="eventos-show-actions-bar">
+          <Link to="/eventos" className="eventos-show-btn-back">
+            <ArrowLeft size={18} /> {t('volver')}
+          </Link>
+        </div>
+      )}
 
-      {/* Bento Grid principal */}
-      <div className="evento-bento-grid">
-        {/* Imagen - 8 columnas */}
+      <div className="eventos-show-bento-grid">
         {evento.imagen_url && (
-          <div className="evento-imagen-wrapper">
+          <div className="eventos-show-imagen-wrapper">
             <img 
               src={getImageUrl(evento.imagen_url)} 
               alt={evento.nombre_evento} 
-              className="evento-imagen"
+              className="eventos-show-imagen"
             />
           </div>
         )}
 
-        {/* Sidebar información - 4 columnas */}
-        <div className="evento-sidebar">
-          {/* Badge de tipo */}
-          <div className="info-card">
-            <div className="evento-badge">
+        <div className="eventos-show-sidebar">
+          <div className="eventos-show-info-card">
+            <div className="eventos-show-badge">
               {evento.tipo === 'admin' ? (
-                <span className="badge-admin">{t('evento_global_badge') || `🌟 ${t('evento_global')}`}</span>
+                <span className="eventos-show-badge-admin">
+                  {t('evento_global_badge') || '🌍 Evento Global'}
+                </span>
               ) : (
-                <span className="badge-fundacion">{t('evento_fundacion_badge') || t('evento_fundacion')}</span>
+                <span className="eventos-show-badge-fundacion">
+                  {t('evento_fundacion_badge') || '🏢 Evento de Fundación'}
+                </span>
               )}
             </div>
           </div>
 
-          {/* Fecha y lugar */}
-          <div className="info-card">
-            <div className="info-card-title">
+          <div className="eventos-show-info-card">
+            <div className="eventos-show-info-card-title">
               <Calendar size={16} />
-              FECHA Y LUGAR
+              {t('fecha_lugar') || 'FECHA Y LUGAR'}
             </div>
-            <div className="info-row">
+            <div className="eventos-show-info-row">
               <MapPin size={18} />
               <div>
                 <strong>{t('lugar')}</strong>
                 <p>{evento.lugar_evento}</p>
               </div>
             </div>
-            <div className="info-row">
+            <div className="eventos-show-info-row">
               <Calendar size={18} />
               <div>
                 <strong>{t('fecha')}</strong>
                 <p>{formatDate(evento.fecha_evento)}</p>
               </div>
             </div>
-            <div className="info-row">
+            <div className="eventos-show-info-row">
               <Clock size={18} />
               <div>
                 <strong>{t('hora')}</strong>
@@ -205,7 +216,7 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
               </div>
             </div>
             {evento.costo && (
-              <div className="info-row">
+              <div className="eventos-show-info-row">
                 <DollarSign size={18} />
                 <div>
                   <strong>{t('costo')}</strong>
@@ -214,7 +225,7 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
               </div>
             )}
             {evento.capacidad_maxima && (
-              <div className="info-row">
+              <div className="eventos-show-info-row">
                 <Users size={18} />
                 <div>
                   <strong>{t('capacidad_maxima')}</strong>
@@ -224,71 +235,67 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
             )}
           </div>
 
-          {/* Estadísticas */}
-          <div className="info-card">
-            <div className="info-card-title">
+          <div className="eventos-show-info-card">
+            <div className="eventos-show-info-card-title">
               <Heart size={16} />
-              ESTADÍSTICAS
+              {t('estadisticas') || 'ESTADÍSTICAS'}
             </div>
-            <div className="stats-row">
+            <div className="eventos-show-stats-row">
               <button 
                 onClick={handleLike} 
-                className={`stat-btn ${liked ? 'liked' : ''}`}
+                className={`eventos-show-stat-btn ${liked ? 'eventos-show-liked' : ''}`}
               >
                 <Heart size={16} fill={liked ? 'currentColor' : 'none'} />
                 <span>{evento.likes || 0} {t('likes')}</span>
               </button>
-              <div className="stat-item">
+              <div className="eventos-show-stat-item">
                 <Users size={16} />
                 <span>{evento.total_asistentes || 0} {t('asistentes')}</span>
               </div>
             </div>
           </div>
 
-          {/* Botón asistencia */}
-          <div className="info-card">
-            <div className="info-card-title">
+          <div className="eventos-show-info-card">
+            <div className="eventos-show-info-card-title">
               <CalendarCheck size={16} />
-              ASISTENCIA
+              {t('asistencia_titulo') || 'ASISTENCIA'}
             </div>
             <button 
               onClick={handleConfirmarAsistencia} 
-              className={`asistencia-btn ${asistencia ? 'confirmed' : ''}`}
+              className={`eventos-show-asistencia-btn ${asistencia ? 'eventos-show-confirmed' : ''}`}
               disabled={!isAuthenticated}
             >
               <CalendarCheck size={18} />
               {asistencia ? t('asistencia.confirmada') : t('asistencia.confirmar')}
             </button>
             {evento.total_asistentes > 0 && (
-              <div className="total-asistentes" style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+              <div className="eventos-show-total-asistentes">
                 <Users size={14} /> {evento.total_asistentes} {t('asistencia.personas_asistiran')}
               </div>
             )}
           </div>
         </div>
 
-        {/* Contenido principal - 8 columnas (debajo de la imagen) */}
-        <div className="evento-main">
-          <h1 className="evento-titulo">{evento.nombre_evento}</h1>
+        <div className="eventos-show-main">
+          <h1 className="eventos-show-titulo">{evento.nombre_evento}</h1>
           
           {evento.descripcion && (
-            <div className="evento-descripcion">
+            <div className="eventos-show-descripcion">
               {evento.descripcion}
             </div>
           )}
 
           {evento.tags && evento.tags.length > 0 && (
-            <div className="evento-tags">
+            <div className="eventos-show-tags">
               {(Array.isArray(evento.tags) ? evento.tags : JSON.parse(evento.tags)).map((tag, idx) => (
-                <span key={idx} className="tag">#{tag}</span>
+                <span key={idx} className="eventos-show-tag">#{tag}</span>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="evento-footer">
+      <div className="eventos-show-footer">
         <Clock size={14} />
         <small>{t('publicado')}: {new Date(evento.created_at).toLocaleDateString()}</small>
       </div>

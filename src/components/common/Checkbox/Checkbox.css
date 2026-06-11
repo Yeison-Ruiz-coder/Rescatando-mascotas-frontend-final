@@ -1,0 +1,79 @@
+/* src/components/common/Checkbox/Checkbox.css */
+.checkbox-collage {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  font-size: 0.9rem;
+  color: var(--form-text);
+}
+
+.checkbox-collage input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  background: var(--form-input-bg);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-collage input:checked ~ .checkbox-custom {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+}
+
+.checkbox-custom::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  display: none;
+}
+
+.checkbox-collage input:checked ~ .checkbox-custom::after {
+  display: block;
+}
+
+.checkbox-collage input:focus ~ .checkbox-custom {
+  box-shadow: var(--shadow-hard-sm);
+  transform: translateX(2px);
+}
+
+.checkbox-collage input:disabled {
+  cursor: not-allowed;
+}
+
+.checkbox-collage input:disabled ~ .checkbox-custom {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkbox-label {
+  user-select: none;
+}
+
+.checkbox-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-group-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}

@@ -1,0 +1,343 @@
+/* src/components/common/FiltrosVeterinarias/FiltrosVeterinarias.css */
+
+.fv-container {
+  width: 100%;
+  position: relative;
+  background: transparent;
+  padding: 0;
+}
+
+.fv-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-fixed);
+}
+
+.fv-progress .progress-bar-container {
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.fv-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 56px;
+}
+
+.fv-search-box {
+  display: flex;
+  align-items: center;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: var(--radius-2xl);
+  transition: var(--transition-fast);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard-sm);
+  height: 48px;
+  min-height: 48px;
+}
+
+.fv-search-box:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.fv-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  width: 48px;
+}
+
+.fv-search-icon i {
+  font-size: 1rem;
+}
+
+.fv-search-input {
+  flex: 1;
+  padding: 0;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--form-text);
+  font-weight: 400;
+  height: 48px;
+  line-height: 48px;
+}
+
+.fv-search-input::placeholder {
+  color: var(--form-placeholder);
+  font-weight: 400;
+}
+
+.fv-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  border-radius: var(--radius-2xl);
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+
+.fv-clear-btn:hover {
+  background: var(--color-hover);
+  color: var(--color-danger);
+}
+
+.fv-clear-btn i {
+  font-size: 1rem;
+}
+
+.fv-search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--form-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+  height: 48px;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.fv-search-btn:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-primary);
+}
+
+.fv-search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fv-search-btn i {
+  font-size: 1rem;
+}
+
+.fv-sugerencias-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard-md);
+  max-height: 350px;
+  overflow-y: auto;
+  z-index: var(--z-dropdown);
+  animation: fvFadeIn 0.15s ease;
+  pointer-events: auto;
+}
+
+@keyframes fvFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fv-sugerencia-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.fv-sugerencia-item:hover,
+.fv-sugerencia-item.fv-selected {
+  background: var(--color-hover);
+}
+
+.fv-sugerencia-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.fv-sugerencia-icon i {
+  font-size: 0.9rem;
+}
+
+.fv-sugerencia-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--form-text);
+  white-space: normal;
+  word-break: break-word;
+}
+
+.fv-sugerencias-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fv-sugerencias-dropdown::-webkit-scrollbar-track {
+  background: var(--color-hover);
+  border-radius: var(--radius-xs);
+}
+
+.fv-sugerencias-dropdown::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-xs);
+}
+
+.fv-limpiar-wrapper {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.fv-btn-limpiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--form-border);
+  color: var(--color-text-muted);
+  padding: 8px 20px;
+  border-radius: var(--radius-2xl);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  height: 40px;
+}
+
+.fv-btn-limpiar:hover {
+  background: var(--color-hover);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.fv-btn-limpiar i {
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fv-search-wrapper {
+    max-width: 100%;
+  }
+  
+  .fv-search-box {
+    height: 44px;
+    min-height: 44px;
+  }
+  
+  .fv-search-input {
+    font-size: 0.9rem;
+    height: 44px;
+    line-height: 44px;
+  }
+  
+  .fv-search-icon {
+    width: 40px;
+    padding: 0 10px;
+  }
+  
+  .fv-search-icon i {
+    font-size: 0.9rem;
+  }
+  
+  .fv-search-btn {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 0.85rem;
+  }
+  
+  .fv-search-btn i {
+    font-size: 0.9rem;
+  }
+  
+  .fv-sugerencias-dropdown {
+    max-height: 300px;
+  }
+  
+  .fv-sugerencia-item {
+    padding: 10px 12px;
+  }
+  
+  .fv-sugerencia-text {
+    font-size: 0.85rem;
+  }
+  
+  .fv-clear-btn {
+    width: 36px;
+    height: 36px;
+    margin: 0 2px;
+  }
+  
+  .fv-limpiar-wrapper {
+    min-height: 40px;
+  }
+  
+  .fv-btn-limpiar {
+    height: 36px;
+    padding: 6px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fv-search-btn span {
+    display: none;
+  }
+  
+  .fv-search-btn {
+    padding: 0 12px;
+  }
+  
+  .fv-btn-limpiar {
+    padding: 6px 16px;
+    font-size: 0.8rem;
+  }
+  
+  .fv-search-box {
+    height: 42px;
+    min-height: 42px;
+  }
+  
+  .fv-search-input {
+    height: 42px;
+    line-height: 42px;
+  }
+  
+  .fv-search-btn {
+    height: 42px;
+  }
+}
+
+[data-theme="dark"] .fv-sugerencias-dropdown {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+.fv-container:focus-within {
+  outline: none;
+}

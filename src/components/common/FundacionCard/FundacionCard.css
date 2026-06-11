@@ -1,7 +1,8 @@
 /* src/components/common/FundacionCard/FundacionCard.css */
 /* ESTILO COLLAGE + BENTO - CARDS VERTICALES CON ESTADÍSTICAS */
+/* PREFIJO ÚNICO: .fc- (FundacionCard) */
 
-.fundacion-card {
+.fc-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
@@ -13,14 +14,14 @@
   height: 100%;
 }
 
-.fundacion-card:hover {
+.fc-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
 /* ===== IMAGEN ===== */
-.fundacion-card .card-image {
+.fc-card .fc-image {
   position: relative;
   height: 200px;
   overflow: hidden;
@@ -28,7 +29,7 @@
   background: var(--gradient-primary);
 }
 
-.fundacion-card .card-image img {
+.fc-card .fc-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -36,12 +37,12 @@
   filter: grayscale(15%);
 }
 
-.fundacion-card:hover .card-image img {
+.fc-card:hover .fc-image img {
   transform: scale(1.08);
   filter: grayscale(0%);
 }
 
-.fundacion-card .image-placeholder {
+.fc-card .fc-placeholder {
   width: 100%;
   height: 100%;
   background: var(--gradient-primary);
@@ -53,17 +54,17 @@
   color: white;
 }
 
-.fundacion-card .image-placeholder svg {
+.fc-card .fc-placeholder svg {
   opacity: 0.7;
 }
 
-.fundacion-card .image-placeholder span {
+.fc-card .fc-placeholder span {
   font-size: 0.85rem;
   opacity: 0.9;
 }
 
 /* ===== BADGE VERIFICADO ===== */
-.fundacion-card .verified-badge {
+.fc-card .fc-verified-badge {
   position: absolute;
   top: 12px;
   right: 12px;
@@ -81,7 +82,7 @@
 }
 
 /* ===== CONTENIDO ===== */
-.fundacion-card .card-content {
+.fc-card .fc-content {
   padding: 1.25rem;
   flex: 1;
   display: flex;
@@ -89,7 +90,7 @@
 }
 
 /* Título */
-.fundacion-card .card-title {
+.fc-card .fc-title {
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
@@ -97,7 +98,7 @@
 }
 
 /* Ciudad */
-.fundacion-card .card-city {
+.fc-card .fc-city {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -111,7 +112,7 @@
 }
 
 /* Descripción */
-.fundacion-card .card-description {
+.fc-card .fc-description {
   color: var(--color-text-muted);
   font-size: 0.85rem;
   line-height: 1.5;
@@ -123,14 +124,14 @@
 }
 
 /* Información de contacto */
-.fundacion-card .card-info {
+.fc-card .fc-info {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.fundacion-card .info-item {
+.fc-card .fc-info-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -138,13 +139,13 @@
   color: var(--color-text-muted);
 }
 
-.fundacion-card .info-item svg {
+.fc-card .fc-info-item svg {
   color: var(--color-primary);
   flex-shrink: 0;
 }
 
 /* ===== ESTADÍSTICAS ===== */
-.fundacion-card .card-stats {
+.fc-card .fc-stats {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
@@ -152,7 +153,7 @@
   border-top: 1px solid var(--color-border);
 }
 
-.fundacion-card .stat {
+.fc-card .fc-stat {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -164,16 +165,16 @@
   border-radius: var(--radius-xs);
 }
 
-.fundacion-card .stat svg {
+.fc-card .fc-stat svg {
   color: var(--color-primary);
 }
 
 /* ===== BOTÓN ===== */
-.fundacion-card .card-footer {
+.fc-card .fc-footer {
   margin-top: auto;
 }
 
-.fundacion-card .btn-fundacion {
+.fc-card .fc-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -192,7 +193,7 @@
   border: none;
 }
 
-.fundacion-card .btn-fundacion:hover {
+.fc-card .fc-btn:hover {
   transform: translateX(2px);
   box-shadow: var(--shadow-hard-md);
   text-decoration: none;
@@ -200,70 +201,70 @@
   filter: brightness(1.02);
 }
 
-.fundacion-card .btn-fundacion svg {
+.fc-card .fc-btn svg {
   width: 16px;
   height: 16px;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .fundacion-card .card-image {
+  .fc-card .fc-image {
     height: 160px;
   }
   
-  .fundacion-card .card-content {
+  .fc-card .fc-content {
     padding: 1rem;
   }
   
-  .fundacion-card .card-title {
+  .fc-card .fc-title {
     font-size: 1rem;
   }
   
-  .fundacion-card .btn-fundacion {
+  .fc-card .fc-btn {
     padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
   }
   
-  .fundacion-card .stat {
+  .fc-card .fc-stat {
     font-size: 0.7rem;
     padding: 0.2rem 0.5rem;
   }
 }
 
 /* ===== MODO OSCURO ===== */
-[data-theme="dark"] .fundacion-card {
+[data-theme="dark"] .fc-card {
   background: var(--color-card-bg);
   border-color: var(--color-border);
 }
 
-[data-theme="dark"] .fundacion-card .image-placeholder {
+[data-theme="dark"] .fc-card .fc-placeholder {
   background: var(--gradient-primary);
 }
 
-[data-theme="dark"] .fundacion-card .info-item svg,
-[data-theme="dark"] .fundacion-card .stat svg {
+[data-theme="dark"] .fc-card .fc-info-item svg,
+[data-theme="dark"] .fc-card .fc-stat svg {
   color: var(--color-primary-light);
 }
 
-[data-theme="dark"] .fundacion-card .verified-badge {
+[data-theme="dark"] .fc-card .fc-verified-badge {
   background: var(--color-success);
 }
 
-[data-theme="dark"] .fundacion-card .card-title {
-  color: var(--text-primary);
+[data-theme="dark"] .fc-card .fc-title {
+  color: var(--color-text);
 }
 
-[data-theme="dark"] .fundacion-card .card-description,
-[data-theme="dark"] .fundacion-card .card-city,
-[data-theme="dark"] .fundacion-card .info-item,
-[data-theme="dark"] .fundacion-card .stat {
-  color: var(--text-muted);
+[data-theme="dark"] .fc-card .fc-description,
+[data-theme="dark"] .fc-card .fc-city,
+[data-theme="dark"] .fc-card .fc-info-item,
+[data-theme="dark"] .fc-card .fc-stat {
+  color: var(--color-text-muted);
 }
 
-[data-theme="dark"] .fundacion-card .card-city {
+[data-theme="dark"] .fc-card .fc-city {
   background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme="dark"] .fundacion-card .stat {
+[data-theme="dark"] .fc-card .fc-stat {
   background: rgba(139, 156, 255, 0.08);
 }

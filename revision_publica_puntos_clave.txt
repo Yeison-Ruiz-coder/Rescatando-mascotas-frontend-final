@@ -74,4 +74,4 @@ Revisa cada página pública una por una y aplica mejoras enfocadas en:
 2. uso correcto de i18n,
 3. uso de variables globales para colores y sombras,
 4. encapsulación de estilos por página/componente,
-5. consistencia visual y limpieza del código.
+5. consistencia visual y limpieza del código.a

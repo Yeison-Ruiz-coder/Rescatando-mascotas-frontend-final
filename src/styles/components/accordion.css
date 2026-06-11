@@ -1,0 +1,57 @@
+/* src/styles/components/accordion.css */
+.accordion-collage {
+  width: 100%;
+}
+
+.accordion-item {
+  border: 1px solid var(--color-border);
+  margin-bottom: 8px;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.accordion-item:hover {
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.accordion-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: var(--transition-fast);
+  background: var(--form-input-bg);
+}
+
+.accordion-header:hover {
+  background: var(--color-hover);
+  padding-left: 24px;
+}
+
+.accordion-icon {
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  transition: transform 0.3s ease;
+}
+
+.accordion-icon.open {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 20px;
+}
+
+.accordion-content.open {
+  max-height: 1000px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+}

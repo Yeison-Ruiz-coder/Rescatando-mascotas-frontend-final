@@ -35,36 +35,62 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
     fetchMascotaDetalle();
   }, [id]);
 
-  // src/pages/public/Mascotas/MascotaDetalle.jsx
-  // Solo cambiar la función fetchMascotaDetalle para usar fields
-
   const fetchMascotaDetalle = async () => {
-    try {
-      setLoading(true);
+    if (!id) return;
 
+    setLoading(true);
+    setLoadProgress(0);
+    setError(null);
+
+    // Simular progreso de carga (igual que en VeterinariaDetalle)
+    const progressInterval = setInterval(() => {
+      setLoadProgress((prev) => {
+        if (prev >= 90) return prev;
+        return prev + Math.random() * 15;
+      });
+    }, 100);
+
+    try {
       // 🔥 OPTIMIZACIÓN: Usar fields para traer SOLO lo necesario
       const response = await api.get(`/mascotas/${id}`, {
         params: {
           fields:
-            "id,nombre_mascota,descripcion,especie,genero,edad_aprox,tamaño,estado,esterilizado,desparasitado,vacunado,apto_con_ninos,apto_con_otros_animales,lugar_rescate,caracteristicas,necesita_hogar_temporal,foto_principal,galeria_fotos,updated_at,fundacion_id",
+            "id,nombre_mascota,descripcion,especie,genero,edad_aprox,tamano,estado,esterilizado,desparasitado,vacunado,apto_con_ninos,apto_con_otros_animales,lugar_rescate,necesita_hogar_temporal,foto_principal,galeria_fotos,updated_at,fundacion_id",
           include: "fundacion,vacunas,razas",
         },
       });
 
       if (response.data.success) {
         const data = response.data.data;
-        setMascota(data);
-        setVacunas(data.vacunas || []);
-        setFundacion(data.fundacion || null);
-        setRazas(data.razas || []);
+
+        setLoadProgress(100);
+        setTimeout(() => {
+          setMascota(data);
+          setVacunas(data.vacunas || []);
+          setFundacion(data.fundacion || null);
+          setRazas(data.razas || []);
+          setLoading(false);
+        }, 300);
       } else {
-        setError(t("no_encontrada"));
+        setLoadProgress(100);
+        setTimeout(() => {
+          setError(t("no_encontrada"));
+          setLoading(false);
+        }, 300);
       }
     } catch (err) {
       console.error("Error:", err);
-      setError(err.response?.data?.message || t("error_carga"));
+      setLoadProgress(100);
+      setTimeout(() => {
+        if (err.response?.status === 404) {
+          setError(t("no_encontrada"));
+        } else {
+          setError(err.response?.data?.message || t("error_carga"));
+        }
+        setLoading(false);
+      }, 300);
     } finally {
-      setLoading(false);
+      clearInterval(progressInterval);
     }
   };
 
@@ -242,7 +268,12 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
         t={t}
       />
 
-      <MascotasRelacionadas mascotaId={id} t={t} />
+      <MascotasRelacionadas
+        mascotaId={id}
+        especie={mascota?.especie}
+        mascotaActual={mascota}
+        t={t}
+      />
 
       {/* Footer */}
       <div className="md-footer">

@@ -1,3 +1,8 @@
+/* src/styles/animations.css */
+/* ============================================
+   ANIMACIONES GLOBALES - NO ELIMINAR
+   ============================================ */
+
 @keyframes floatCircle {
   0%, 100% { transform: translateY(0px) translateX(0px); }
   33% { transform: translateY(-30px) translateX(20px); }
@@ -65,9 +70,21 @@
   to { transform: rotate(360deg); }
 }
 
+/* ANIMACIONES BASE - GLOBALES */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
@@ -80,13 +97,42 @@
   to { transform: translateX(0); }
 }
 
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* CLASES DE ANIMACIÓN */
 .fade-in {
   animation: fadeIn 0.3s ease;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .slide-in {
@@ -96,3 +142,24 @@
 .slide-in-right {
   animation: slideInRight 0.3s ease;
 }
+
+.slide-in-up {
+  animation: slideInUp 0.3s ease;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ANIMACIONES CON RETRASO */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* DURACIONES */
+.duration-fast { animation-duration: 0.2s; }
+.duration-normal { animation-duration: 0.3s; }
+.duration-slow { animation-duration: 0.5s; }
+.duration-slower { animation-duration: 0.8s; }

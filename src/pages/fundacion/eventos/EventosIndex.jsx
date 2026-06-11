@@ -189,7 +189,8 @@ const EventosIndex = () => {
         <div className="container">
           <FiltrosEventos 
             onFilterChange={handleFilterChange}
-            variant={isMobile ? "modal" : "inline"} 
+            eventos={eventos}
+            isLoading={loading}
           />
         </div>
       </div>

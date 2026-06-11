@@ -9,7 +9,7 @@ const FundacionCard = memo(({
   getImageUrl,
   variant = 'default',
   showActions = true,
-  onView // callback para abrir panel
+  onView
 }) => {
   const { t } = useTranslation('fundaciones');
 
@@ -28,9 +28,8 @@ const FundacionCard = memo(({
   const imageUrl = useMemo(() => getImageUrl(imagen_portada), [imagen_portada, getImageUrl]);
 
   return (
-    <div className={`fundacion-card ${variant}`}>
-      {/* Imagen */}
-      <div className="card-image">
+    <div className={`fc-card ${variant}`}>
+      <div className="fc-image">
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -39,72 +38,71 @@ const FundacionCard = memo(({
             onError={(e) => {
               e.target.onerror = null;
               e.target.style.display = 'none';
-              const placeholder = e.target.parentElement?.querySelector('.image-placeholder');
+              const placeholder = e.target.parentElement?.querySelector('.fc-placeholder');
               if (placeholder) placeholder.style.display = 'flex';
             }}
           />
         ) : null}
-        <div className="image-placeholder" style={{ display: imagen_portada ? 'none' : 'flex' }}>
+        <div className="fc-placeholder" style={{ display: imagen_portada ? 'none' : 'flex' }}>
           <Building size={48} />
           <span>{t('fundacion') || 'Fundación'}</span>
         </div>
 
         {verificado && (
-          <div className="verified-badge">
+          <div className="fc-verified-badge">
             <Award size={14} />
             <span>{t('verificado') || 'Verificada'}</span>
           </div>
         )}
       </div>
 
-      {/* Contenido */}
-      <div className="card-content">
-        <h3 className="card-title">{Nombre_1}</h3>
+      <div className="fc-content">
+        <h3 className="fc-title">{Nombre_1}</h3>
         
         {ciudad && (
-          <div className="card-city">
+          <div className="fc-city">
             <MapPin size={14} />
             <span>{ciudad}</span>
           </div>
         )}
         
-        <p className="card-description">
+        <p className="fc-description">
           {Descripcion
             ? Descripcion.substring(0, 100)
             : t('sin_descripcion') || 'Sin descripción'}
           {Descripcion?.length > 100 ? '...' : ''}
         </p>
 
-        <div className="card-info">
+        <div className="fc-info">
           {Direccion && (
-            <div className="info-item">
+            <div className="fc-info-item">
               <MapPin size={14} />
               <span>{Direccion}</span>
             </div>
           )}
           {Telefono && (
-            <div className="info-item">
+            <div className="fc-info-item">
               <Phone size={14} />
               <span>{Telefono}</span>
             </div>
           )}
         </div>
 
-        <div className="card-stats">
-          <div className="stat">
+        <div className="fc-stats">
+          <div className="fc-stat">
             <Users size={14} />
             <span>{total_mascotas} {t('mascotas') || 'mascotas'}</span>
           </div>
-          <div className="stat">
+          <div className="fc-stat">
             <Heart size={14} />
             <span>{t('rescatadas') || 'rescatadas'}</span>
           </div>
         </div>
 
         {showActions && (
-          <div className="card-footer">
+          <div className="fc-footer">
             <button 
-              className="btn-fundacion"
+              className="fc-btn"
               onClick={(e) => { e.stopPropagation(); onView?.(fundacion); }}
               type="button"
             >

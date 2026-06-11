@@ -229,5 +229,17 @@
   "evento_fundacion_badge": " Evento de Fundación",
   "eliminando": "Eliminando...",
   "mensaje_motivacional_titulo":"Participa y ayuda a cambiar vidas",
-  "mensaje_motivacional_texto":"Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!"
+  "mensaje_motivacional_texto":"Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!",
+  "buscar_placeholder": "Buscar eventos...",
+  "cargando": "Cargando eventos...",
+  "tipo_fundacion": "Evento de fundación",
+  "tipo_admin": "Evento oficial",
+  "gratis": "Gratis",
+  "capacidad_pequeña": "Aforo pequeño",
+  "capacidad_grande": "Aforo grande",
+  "hasta": "Hasta",
+  "eventos_proximos": "Eventos próximos",
+  "eventos_pasados": "Eventos pasados",
+  "eventos_hoy": "Eventos hoy",
+  "evento_popular": "Evento popular"
 }

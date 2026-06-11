@@ -1,237 +1,260 @@
 /* src/components/common/MascotaCard/MascotaCard.css */
-/* CARDS 100% FLUIDAS - Sin max-width, sin límites */
 
-.mascota-card {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  overflow: hidden;
-  box-shadow: var(--shadow-hard-sm);
-  transition: var(--transition);
-  height: 100%;
-  width: 100%;
-  /* IMPORTANTE: NADA DE max-width aquí */
-  display: flex;
-  flex-direction: column;
+.mascard-card {
   position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--color-card-bg);
 }
 
-.mascota-card:hover {
+.mascard-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-hard-md);
-  border-color: var(--color-primary);
-}
-
-/* Sticker decorativo */
-.mascota-card.featured::before {
-  content: '★';
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--color-accent);
-  color: white;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  z-index: 10;
-  box-shadow: var(--shadow-hard-sm);
-}
-
-/* Variante compact */
-.mascota-card.compact .card-image {
-  height: 160px;
-}
-
-.mascota-card.compact .card-content {
-  padding: 0.9rem;
-}
-
-.mascota-card.compact .card-title {
-  font-size: 1rem;
-}
-
-/* Variante featured */
-.mascota-card.featured {
-  border: 2px solid var(--color-accent);
   box-shadow: var(--shadow-hard-md);
 }
 
 /* ===== IMAGEN ===== */
-.mascota-card .card-image {
-  position: relative;
-  height: 220px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.mascota-card .card-image img {
+.mascard-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
-  filter: grayscale(15%);
+  transition: transform 0.5s ease;
 }
 
-.mascota-card:hover .card-image img {
-  transform: scale(1.08);
-  filter: grayscale(0%);
+.mascard-card:hover .mascard-image {
+  transform: scale(1.06);
 }
 
-.mascota-card .image-placeholder {
+.mascard-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: var(--gradient-primary);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  color: white;
-}
-
-.mascota-card .image-placeholder i {
   font-size: 3rem;
+  color: white;
   opacity: 0.7;
 }
 
-/* ===== BADGES ===== */
-.mascota-card .card-badges {
+/* ===== NOMBRE ===== */
+.mascard-name {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  z-index: var(--z-elevate);
+  top: 16px;
+  left: 16px;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  padding: 8px 18px;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 32px);
 }
 
-.mascota-card .badge {
-  padding: 4px 10px;
-  border-radius: var(--radius-xs);
+.mascard-card:hover .mascard-name {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* ===== BADGES ===== */
+.mascard-badges {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 5;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mascard-badge {
+  padding: 5px 14px;
+  border-radius: 40px;
   font-size: 0.7rem;
   font-weight: 600;
-  box-shadow: var(--shadow-hard-sm);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
 }
 
-.mascota-card .badge-primary {
-  background: var(--gradient-primary);
-  color: white;
+.mascard-badge-specie {
+  background: rgba(102, 126, 234, 0.85);
 }
 
-.mascota-card .badge-dark {
-  background: rgba(0, 0, 0, 0.75);
-  color: white;
-  backdrop-filter: none;
+.mascard-badge-gender {
+  background: rgba(0, 0, 0, 0.7);
 }
 
-.mascota-card .badge-accent {
-  background: var(--color-accent);
-  color: white;
+.mascard-badge-age {
+  background: rgba(255, 140, 66, 0.85);
 }
 
-/* ===== CONTENIDO ===== */
-.mascota-card .card-content {
-  padding: 1.2rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.mascard-card:hover .mascard-badge {
+  transform: translateY(-2px);
 }
 
-.mascota-card .card-title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--color-text);
+/* ===== OVERLAY HOVER ===== */
+.mascard-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85), transparent);
+  padding: 50px 16px 20px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-.mascota-card .card-description {
-  color: var(--color-text-muted);
+.mascard-overlay.visible {
+  transform: translateY(0);
+}
+
+.mascard-overlay-desc {
+  color: #ffffff !important;
   font-size: 0.8rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  line-height: 1.45;
+  margin-bottom: 12px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.mascota-card .card-fundacion {
-  font-size: 0.75rem;
-  color: var(--color-accent);
-  margin-bottom: 1rem;
+.mascard-overlay-fundacion,
+.mascard-overlay-ubicacion {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 140, 66, 0.08);
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  border-left: 2px solid var(--color-accent);
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  margin-bottom: 8px;
 }
 
-/* ===== BOTONES ===== */
-.mascota-card .card-buttons {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: auto;
-}
-
-.mascota-card .btn-card {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  transition: var(--transition);
-  cursor: pointer;
-  border: none;
+/* ===== BOTÓN ===== */
+.mascard-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-}
-
-.mascota-card .btn-card-outline {
-  background: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-hard-sm);
-}
-
-.mascota-card .btn-card-outline:hover {
+  gap: 10px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 16px;
   background: var(--gradient-primary);
-  color: white;
-  transform: translateX(2px);
-  border-color: transparent;
-  box-shadow: var(--shadow-hard-md);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
 
-.mascota-card .btn-card-primary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: var(--shadow-hard-sm);
+.mascard-btn:hover {
+  gap: 14px;
+  transform: translateX(4px);
 }
 
-.mascota-card .btn-card-primary:hover {
-  transform: translateX(2px);
-  box-shadow: var(--shadow-hard-md);
+/* ===== COMPACT ===== */
+.mascard-card.compact {
+  aspect-ratio: 4 / 3;
 }
 
-/* ===== RESPONSIVE ===== */
+.mascard-card.compact .mascard-name {
+  top: 12px;
+  left: 12px;
+  padding: 5px 14px;
+  font-size: 0.85rem;
+}
+
+.mascard-card.compact .mascard-badge {
+  padding: 3px 10px;
+  font-size: 0.65rem;
+}
+
+.mascard-card.compact .mascard-overlay {
+  padding: 35px 12px 12px;
+}
+
+.mascard-card.compact .mascard-overlay-desc {
+  font-size: 0.7rem;
+  -webkit-line-clamp: 1;
+}
+
+/* ===== RESPONSIVE MÓVIL ===== */
 @media (max-width: 768px) {
-  .mascota-card .card-image {
-    height: 180px;
+  .mascard-overlay {
+    transform: translateY(0);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.7));
+    padding: 40px 12px 12px;
   }
   
-  .mascota-card .card-buttons {
+  /* Badges arriba a la derecha en móvil */
+  .mascard-badges {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    bottom: auto;
+    left: auto;
+    display: flex;
     flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
   }
   
-  .mascota-card .btn-card {
-    width: 100%;
+  .mascard-badge {
+    padding: 4px 12px;
+    font-size: 0.65rem;
+    border-radius: 20px;
+  }
+  
+  .mascard-name {
+    top: 16px;
+    left: 16px;
+    right: auto;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    max-width: calc(100% - 100px);
+  }
+  
+  .mascard-overlay-desc {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+  }
+}
+
+/* Móvil muy pequeño */
+@media (max-width: 480px) {
+  .mascard-badges {
+    top: 12px;
+    right: 12px;
+    gap: 6px;
+  }
+  
+  .mascard-badge {
+    padding: 3px 10px;
+    font-size: 0.6rem;
+  }
+  
+  .mascard-name {
+    top: 12px;
+    left: 12px;
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    max-width: calc(100% - 80px);
   }
 }

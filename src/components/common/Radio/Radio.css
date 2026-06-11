@@ -1,0 +1,80 @@
+/* src/components/common/Radio/Radio.css */
+.radio-collage {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  font-size: 0.9rem;
+  color: var(--form-text);
+}
+
+.radio-collage input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  background: var(--form-input-bg);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.radio-custom::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  display: none;
+}
+
+.radio-collage input:checked ~ .radio-custom {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+}
+
+.radio-collage input:checked ~ .radio-custom::after {
+  display: block;
+}
+
+.radio-collage input:focus ~ .radio-custom {
+  box-shadow: var(--shadow-hard-sm);
+  transform: translateX(2px);
+}
+
+.radio-collage input:disabled {
+  cursor: not-allowed;
+}
+
+.radio-collage input:disabled ~ .radio-custom {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radio-label {
+  user-select: none;
+}
+
+.radio-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-group-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}

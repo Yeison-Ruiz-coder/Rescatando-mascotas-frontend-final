@@ -180,9 +180,10 @@ const Mascotas = () => {
       <div className="filtros-section sticky-glass glass-auto shadow-sticky">
         <div className="container">
           <FiltrosMascotas
+            onFilterChange={handleFilterChange} 
             especies={especies}
-            onFilterChange={handleFilterChange}
-            variant={isMobile ? "modal" : "inline"}
+            mascotas={mascotas}
+            isLoading={loading}
           />
         </div>
       </div>

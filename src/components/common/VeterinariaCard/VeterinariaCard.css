@@ -1,7 +1,8 @@
 /* src/components/common/VeterinariaCard/VeterinariaCard.css */
-/* ESTILO TARJETA HORIZONTAL - TIPO TARJETA DE CRÉDITO */
+/* ESTILO TARJETA - IMAGEN IZQUIERDA, BOTÓN ABAJO */
+/* PREFIJO ÚNICO: .vc- (VeterinariaCard) */
 
-.veterinaria-card {
+.vc-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
@@ -13,17 +14,16 @@
   flex-direction: row;
   align-items: stretch;
   position: relative;
-  min-height: 180px;
 }
 
-.veterinaria-card:hover {
+.vc-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
-/* ===== IMAGEN (lateral izquierdo) ===== */
-.veterinaria-card .card-image {
+/* ===== IMAGEN (lateral izquierdo) - TAMAÑO FIJO ===== */
+.vc-card .vc-image {
   position: relative;
   width: 160px;
   flex-shrink: 0;
@@ -31,7 +31,7 @@
   background: var(--gradient-primary);
 }
 
-.veterinaria-card .card-image img {
+.vc-card .vc-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -39,12 +39,12 @@
   filter: grayscale(15%);
 }
 
-.veterinaria-card:hover .card-image img {
+.vc-card:hover .vc-image img {
   transform: scale(1.05);
   filter: grayscale(0%);
 }
 
-.veterinaria-card .image-placeholder {
+.vc-card .vc-placeholder {
   width: 100%;
   height: 100%;
   background: var(--gradient-primary);
@@ -52,238 +52,328 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   color: white;
 }
 
-.veterinaria-card .image-placeholder svg {
-  width: 40px;
-  height: 40px;
+.vc-card .vc-placeholder svg {
+  width: 48px;
+  height: 48px;
   opacity: 0.7;
 }
 
-.veterinaria-card .image-placeholder span {
-  font-size: 0.7rem;
+.vc-card .vc-placeholder span {
+  font-size: 0.8rem;
   opacity: 0.9;
 }
 
 /* Badges en la imagen */
-.veterinaria-card .image-badges {
+.vc-card .vc-badges {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   display: flex;
-  gap: 0.25rem;
+  gap: 0.5rem;
   z-index: 2;
 }
 
-.veterinaria-card .badge-verificado,
-.veterinaria-card .badge-urgencia {
+.vc-card .vc-badge-verificado,
+.vc-card .vc-badge-urgencia {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-xs);
   backdrop-filter: blur(4px);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
-.veterinaria-card .badge-verificado {
+.vc-card .vc-badge-verificado {
   background: rgba(16, 185, 129, 0.9);
   color: white;
 }
 
-.veterinaria-card .badge-urgencia {
+.vc-card .vc-badge-urgencia {
   background: rgba(239, 68, 68, 0.9);
   color: white;
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
-.veterinaria-card .card-main {
+/* ===== CONTENIDO PRINCIPAL (derecha) - OCUPA TODO EL RESTO ===== */
+.vc-card .vc-main {
   flex: 1;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  min-width: 0;
 }
 
-.veterinaria-card .card-header {
+/* Header con título y ciudad */
+.vc-card .vc-header {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  justify-content: space-between;
   flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.veterinaria-card .card-title {
+.vc-card .vc-title {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text);
+  margin: 0;
+  word-break: break-word;
 }
 
-.veterinaria-card .card-ciudad {
+.vc-card .vc-ciudad {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   font-size: 0.7rem;
   color: var(--color-text-muted);
   background: rgba(0, 0, 0, 0.05);
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   border-radius: var(--radius-xs);
+  flex-shrink: 0;
 }
 
-.veterinaria-card .card-ciudad svg {
-  width: 10px;
-  height: 10px;
+.vc-card .vc-ciudad svg {
+  width: 12px;
+  height: 12px;
 }
 
-/* ===== INFORMACIÓN DE CONTACTO ===== */
-.veterinaria-card .contact-info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 1.5rem;
-  margin-bottom: 0.5rem;
+/* Información de contacto - en 2 columnas en desktop, 1 en móvil */
+.vc-card .vc-contact-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.veterinaria-card .contact-item {
+.vc-card .vc-contact-item {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.5rem;
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
-.veterinaria-card .contact-item svg {
+.vc-card .vc-contact-item svg {
   width: 14px;
   height: 14px;
   color: var(--color-primary);
   flex-shrink: 0;
 }
 
-/* ===== SERVICIOS ===== */
-.veterinaria-card .servicios {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.25rem;
+.vc-card .vc-contact-item span {
+  word-break: break-word;
 }
 
-.veterinaria-card .servicio-tag {
+/* Servicios */
+.vc-card .vc-servicios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.vc-card .vc-servicio-tag {
   background: rgba(102, 126, 234, 0.1);
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border-radius: var(--radius-xs);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
   color: var(--color-primary);
 }
 
-.veterinaria-card .servicio-mas {
+.vc-card .vc-servicio-mas {
   background: var(--color-primary);
   color: white;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.7rem;
   border-radius: var(--radius-xs);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 600;
 }
 
-/* ===== BOTÓN ===== */
-.veterinaria-card .card-actions {
+/* ===== BOTÓN - ABAJO DE TODO, ANCHO COMPLETO ===== */
+.vc-card .vc-actions {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.vc-card .vc-btn {
   display: flex;
   align-items: center;
-  padding-right: 1rem;
-}
-
-.veterinaria-card .btn-detalle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1.2rem;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 1rem;
   background: var(--gradient-primary);
   color: white;
-  text-decoration: none;
+  border: none;
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   transition: var(--transition);
   box-shadow: var(--shadow-hard-sm);
-  white-space: nowrap;
-}
-
-.veterinaria-card .btn-detalle:hover {
-  transform: translateX(2px);
-  box-shadow: var(--shadow-hard-md);
+  cursor: pointer;
   text-decoration: none;
-  color: white;
+  outline: none;
 }
 
-.veterinaria-card .btn-detalle svg {
-  width: 14px;
-  height: 14px;
+.vc-card .vc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+  background: var(--gradient-primary);
+}
+
+.vc-card .vc-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Tablet (menos de 1024px) */
 @media (max-width: 1024px) {
-  .veterinaria-card .contact-info {
-    gap: 0.5rem 1rem;
+  .vc-card .vc-image {
+    width: 140px;
   }
   
-  .veterinaria-card .btn-detalle {
-    padding: 0.5rem 1rem;
+  .vc-card .vc-main {
+    padding: 0.85rem;
+  }
+  
+  .vc-card .vc-title {
+    font-size: 1rem;
+  }
+  
+  .vc-card .vc-contact-info {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem 0.8rem;
+  }
+  
+  .vc-card .vc-contact-item {
     font-size: 0.7rem;
+  }
+  
+  .vc-card .vc-servicio-tag,
+  .vc-card .vc-servicio-mas {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  .vc-card .vc-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.75rem;
   }
 }
 
+/* Móvil (menos de 768px) - Cambia a 1 columna en contacto */
 @media (max-width: 768px) {
-  .veterinaria-card {
-    flex-direction: column;
-    min-height: auto;
+  .vc-card .vc-image {
+    width: 130px;
   }
   
-  .veterinaria-card .card-image {
+  .vc-card .vc-main {
+    padding: 0.75rem;
+  }
+  
+  .vc-card .vc-contact-info {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  
+  .vc-card .vc-contact-item {
+    font-size: 0.7rem;
+  }
+  
+  .vc-card .vc-servicios {
+    gap: 0.35rem;
+  }
+  
+  .vc-card .vc-servicio-tag,
+  .vc-card .vc-servicio-mas {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .vc-card .vc-btn {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.7rem;
+  }
+  
+  .vc-card .vc-actions {
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Móvil muy pequeño (menos de 480px) */
+@media (max-width: 480px) {
+  .vc-card {
+    flex-direction: column;
+  }
+  
+  .vc-card .vc-image {
     width: 100%;
     height: 160px;
   }
   
-  .veterinaria-card .card-main {
+  .vc-card .vc-main {
     padding: 0.85rem;
   }
   
-  .veterinaria-card .contact-info {
-    flex-direction: column;
-    gap: 0.35rem;
+  .vc-card .vc-title {
+    font-size: 1rem;
   }
   
-  .veterinaria-card .card-actions {
-    padding: 0 0.85rem 0.85rem 0.85rem;
+  .vc-card .vc-contact-info {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
   }
   
-  .veterinaria-card .btn-detalle {
-    width: 100%;
-    justify-content: center;
+  .vc-card .vc-contact-item {
+    font-size: 0.75rem;
+  }
+  
+  .vc-card .vc-servicios {
+    margin-bottom: 0.5rem;
+  }
+  
+  .vc-card .vc-btn {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .vc-card .vc-ciudad {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
   }
 }
 
 /* ===== MODO OSCURO ===== */
-[data-theme="dark"] .veterinaria-card {
+[data-theme="dark"] .vc-card {
   background: var(--color-card-bg);
   border-color: var(--color-border);
 }
 
-[data-theme="dark"] .veterinaria-card .card-title {
-  color: var(--text-primary);
+[data-theme="dark"] .vc-card .vc-title {
+  color: var(--color-text);
 }
 
-[data-theme="dark"] .veterinaria-card .card-ciudad,
-[data-theme="dark"] .veterinaria-card .contact-item {
-  color: var(--text-muted);
+[data-theme="dark"] .vc-card .vc-ciudad,
+[data-theme="dark"] .vc-card .vc-contact-item {
+  color: var(--color-text-muted);
 }
 
-[data-theme="dark"] .veterinaria-card .servicio-tag {
+[data-theme="dark"] .vc-card .vc-ciudad {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .vc-card .vc-servicio-tag {
   background: rgba(139, 156, 255, 0.15);
   color: var(--color-primary-light);
-}
-
-[data-theme="dark"] .veterinaria-card .card-ciudad {
-  background: rgba(255, 255, 255, 0.08);
 }

@@ -1,6 +1,10 @@
 /* src/pages/public/Mascotas/MascotaDetalle.css */
-/* ===== ESTRUCTURA REFACTORIZADA - LAYOUT LINEAL ===== */
+/* ============================================
+   VERSIÓN REFACTORIZADA - USA VARIABLES GLOBALES
+   ELIMINADOS COLORES FIJOS Y CLASES REDUNDANTES
+   ============================================ */
 
+/* ===== PÁGINA PRINCIPAL ===== */
 .md-page {
   width: 100%;
   background: transparent;
@@ -21,14 +25,13 @@
   text-decoration: none;
   font-size: 0.875rem;
   padding: 0.6rem 1.2rem;
-  background: var(--bg-card);
+  background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   transition: var(--transition);
   box-shadow: var(--shadow-hard-sm);
   font-weight: 500;
   cursor: pointer;
-  font-family: inherit;
 }
 
 .md-back-link:hover {
@@ -37,10 +40,7 @@
   border-color: var(--color-primary);
 }
 
-/* ===== BENTO GRID PRINCIPAL - ELIMINADO ===== */
-/* El layout ahora es lineal con componentes apilados verticalmente */
-
-/* ===== HERO SECTION - IMAGEN PRINCIPAL ===== */
+/* ===== HERO SECTION ===== */
 .mh-hero {
   padding: 0;
   margin-bottom: 0;
@@ -75,6 +75,7 @@
   filter: grayscale(0%);
 }
 
+/* Badge de estado - usando variables */
 .mh-estado-badge {
   position: absolute;
   top: 14px;
@@ -92,12 +93,8 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.mh-estado-badge i {
-  font-size: 0.9rem;
-}
-
 .md-estado-adopcion {
-  background: #09993e !important;
+  background: var(--color-success) !important;
 }
 
 .md-estado-acogida {
@@ -105,7 +102,7 @@
 }
 
 .md-estado-adoptado {
-  background: #94a3b8 !important;
+  background: var(--color-text-disabled) !important;
 }
 
 /* Galería de miniaturas */
@@ -115,7 +112,6 @@
   gap: 10px;
   flex-wrap: wrap;
   justify-content: flex-start;
-  align-items: center;
   margin-top: 12px;
 }
 
@@ -131,7 +127,6 @@
   transition: var(--transition);
   opacity: 0.82;
   background: var(--color-card-bg);
-  padding: 0;
 }
 
 .mh-thumb-active {
@@ -151,11 +146,9 @@
   object-fit: cover;
 }
 
-/* ===== SECCIONES VERTICALES - LAYOUT NATURAL ===== */
-/* Base para todas las secciones */
+/* ===== SECCIONES VERTICALES ===== */
 .mr-resumen,
 .mh-historia,
-.md-detalles,
 .mc-compatibilidad,
 .ms-salud,
 .ma-acciones,
@@ -164,10 +157,17 @@
   padding: 0 24px;
   margin-bottom: 32px;
 }
-
+.md-detalles {
+  padding: 0 24px;
+  margin-bottom: 32px;
+  margin-top: -19px;  /* ← Agrega esto para subir la sección */
+  position: relative;
+  z-index: 3;  /* ← Para que quede por encima */
+}
+/* Grid de 2 columnas para desktop */
 .md-info-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   padding: 0 24px;
   align-items: start;
@@ -179,24 +179,7 @@
   gap: 20px;
 }
 
-.md-info-column > section {
-  margin-bottom: 0;
-}
-
-/* Contenedor interior */
-.mr-container,
-.mh-container,
-.md-container,
-.mc-container,
-.ms-container,
-.ma-container,
-.mf-container,
-.mrr-container {
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-/* Títulos de secciones */
+/* Títulos de secciones - usando gradient global */
 .mr-titulo,
 .mh-titulo,
 .md-titulo,
@@ -212,15 +195,9 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 /* ===== RESUMEN SECTION ===== */
-.mr-resumen {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
 .mr-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -272,11 +249,6 @@
 }
 
 /* ===== HISTORIA SECTION ===== */
-.mh-historia {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
 .mh-contenido {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
@@ -288,16 +260,7 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.mh-contenido p {
-  margin: 0;
-}
-
 /* ===== DETALLES SECTION ===== */
-.md-detalles {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
 .md-contenido {
   display: flex;
   flex-direction: column;
@@ -312,34 +275,6 @@
   border-radius: var(--radius-xs);
   padding: 18px;
   box-shadow: var(--shadow-hard-sm);
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.mc-card {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  padding: 18px 20px;
-  text-align: center;
-  box-shadow: var(--shadow-hard-sm);
-  transition: var(--transition);
-}
-
-.ms-item {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  padding: 14px;
-  box-shadow: var(--shadow-hard-sm);
-  display: block;
-  min-height: auto;
-}
-
-.md-bloque {
-  padding: 18px;
 }
 
 .md-bloque-titulo {
@@ -368,7 +303,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 0;
 }
 
 .md-tag {
@@ -389,11 +323,6 @@
 }
 
 /* ===== COMPATIBILIDAD SECTION ===== */
-.mc-compatibilidad {
-  padding: 0 24px;
-  margin-bottom: 32px;
-}
-
 .mc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -435,11 +364,6 @@
 }
 
 /* ===== SALUD SECTION ===== */
-.ms-salud {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
 .ms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -475,57 +399,21 @@
 }
 
 .ms-si {
-  color: #09993e !important;
+  color: var(--color-success) !important;
   font-weight: 600;
 }
 
 .ms-no {
-  color: #dc2626 !important;
+  color: var(--color-danger) !important;
   font-weight: 600;
 }
 
-.ms-vacunas {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  padding: 18px;
-  box-shadow: var(--shadow-hard-sm);
-}
-
-.ms-vacunas h3 {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0 0 12px 0;
-}
-
-.ms-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.ms-tag {
-  background: rgba(102, 126, 234, 0.1);
-  padding: 0.3rem 0.85rem;
-  border-radius: var(--radius-xs);
-  font-size: 0.75rem;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border);
-}
-
 /* ===== ACCIONES SECTION ===== */
-.ma-acciones {
-  padding: 0 24px;
-  margin-bottom: 32px;
-}
-
 .ma-container {
   max-width: 640px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-
   text-align: center;
 }
 
@@ -549,20 +437,18 @@
   width: 100%;
   max-width: 520px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
-  font-family: inherit;
 }
 
 .ma-btn-adoptar {
-  background: linear-gradient(135deg, #f97316, #d97706);
+  background: var(--gradient-accent);
   color: white;
 }
 
 .ma-btn-adoptar:hover {
   transform: translateY(-2px);
   box-shadow: 0 22px 48px rgba(0, 0, 0, 0.18);
-  background: linear-gradient(135deg, #ef4444, #d97706);
 }
 
 .ma-btn-acogida {
@@ -586,10 +472,6 @@
   gap: 8px;
 }
 
-.ma-mensaje i {
-  font-size: 1.2rem;
-}
-
 .ma-mensaje-adoptado {
   background: #f0fdf4;
   color: #166534;
@@ -602,20 +484,19 @@
   border: 1px solid #fde68a;
 }
 
+[data-theme="dark"] .ma-mensaje-adoptado {
+  background: #064e3b;
+  color: #86efac;
+  border-color: #065f46;
+}
+
+[data-theme="dark"] .ma-mensaje-no-disponible {
+  background: #78350f;
+  color: #fde68a;
+  border-color: #854d0e;
+}
+
 /* ===== FUNDACION SECTION ===== */
-.mf-fundacion {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
-.mf-card {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  padding: 20px;
-  box-shadow: var(--shadow-hard-sm);
-}
-
 .mf-info {
   display: flex;
   flex-direction: column;
@@ -652,19 +533,13 @@
 .mf-item a {
   color: var(--color-primary);
   text-decoration: none;
-  transition: var(--transition);
 }
 
 .mf-item a:hover {
   text-decoration: underline;
 }
 
-/* ===== MASCOTAS RELACIONADAS SECTION ===== */
-.mrr-relacionadas {
-  padding: 0 24px;
-  margin-bottom: 48px;
-}
-
+/* ===== MASCOTAS RELACIONADAS ===== */
 .mrr-placeholder {
   text-align: center;
   padding: 32px 20px;
@@ -722,11 +597,6 @@
   font-size: 1.3rem;
 }
 
-.md-error-card p {
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-}
-
 .md-btn-back-simple {
   display: inline-flex;
   align-items: center;
@@ -750,7 +620,6 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .md-back-outer,
-  .mh-hero,
   .mr-resumen,
   .mh-historia,
   .md-detalles,
@@ -789,12 +658,7 @@
     height: 500px;
   }
 
-  .mh-thumbs {
-    gap: 8px;
-  }
-
-  .mh-thumb,
-  .mh-thumb-active {
+  .mh-thumb {
     width: 90px;
     height: 90px;
   }
@@ -802,7 +666,6 @@
 
 @media (max-width: 480px) {
   .md-back-outer,
-  .mh-hero,
   .mr-resumen,
   .mh-historia,
   .md-detalles,
@@ -831,26 +694,9 @@
     height: 380px;
   }
 
-  .mh-thumbs {
-    gap: 6px;
-  }
-
-  .mh-thumb,
-  .mh-thumb-active {
+  .mh-thumb {
     width: 80px;
     height: 80px;
-  }
-
-  .mr-stat,
-  .ms-item {
-    padding: 12px;
-  }
-
-  .mh-contenido,
-  .md-bloque,
-  .mc-card,
-  .mf-card {
-    padding: 16px;
   }
 
   .ma-btn {
@@ -858,109 +704,20 @@
     font-size: 0.85rem;
   }
 }
-  
-  .md-card {
-    padding: 16px;
-  }
-  
-  .md-back-outer {
-    padding: 0 16px;
-  }
-  
-  .md-stats-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
 
-
-@media (max-width: 480px) {
-  .md-titulo {
-    font-size: 1.3rem;
-  }
-  
-  .md-card {
-    padding: 14px;
-  }
-  
-  .md-btn-adoptar,
-  .md-btn-acogida {
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
-  
-  .md-thumb {
-    width: 55px;
-    height: 55px;
-  }
-}
-
-/* ===== DESKTOP SPACING ===== */
+/* Desktop spacing */
 @media (min-width: 1200px) {
-  .md-info-grid,
-  .md-info-column,
-  .md-contenido,
-  .mr-grid,
-  .mc-grid,
-  .ms-grid {
+  .md-info-grid {
     gap: 24px;
   }
 
   .mc-grid,
   .mr-grid,
   .ms-grid {
-    grid-gap: 24px;
+    gap: 24px;
   }
 
   .mh-thumbs {
     gap: 12px;
   }
-  /* Nudge right-column 'Detalles' up a few pixels to align with left column */
-  .md-info-column:nth-child(2) .md-detalles {
-    margin-top: -20px;
-  }
-  /* Lower Historia and Acciones a crear más espacio visual en desktop */
-  .mh-historia {
-    margin-top: 40px;
-    width: 98%;
-    margin-left: 1%;
-    
-  }
-
-  .ma-acciones {
-    margin-top: 50px;
-    margin-bottom: 60px;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    
-  }
-}
-
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .md-card,
-[data-theme="dark"] .md-descripcion,
-[data-theme="dark"] .md-section {
-  background: var(--color-card-bg);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .md-tag {
-  background: rgba(139, 156, 255, 0.15);
-  color: var(--color-primary-light);
-}
-
-[data-theme="dark"] .md-mensaje-adoptado {
-  background: #064e3b;
-  color: #86efac;
-  border-color: #065f46;
-}
-
-[data-theme="dark"] .md-mensaje-no-disponible {
-  background: #78350f;
-  color: #fde68a;
-  border-color: #854d0e;
-}
-
-[data-theme="dark"] .md-stat-card {
-  background: rgba(139, 156, 255, 0.08);
 }

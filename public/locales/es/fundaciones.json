@@ -150,5 +150,25 @@
   "agregar_mascota": "Agregar Mascota",
   "menos_de_un_año": "Menos de 1 año",
   "mensaje_motivacional_titulo":"Apoya a las fundaciones que ayudan",
-  "mensaje_motivacional_texto": "Cada fundación trabaja incansablemente para rescatar y dar hogar a animales necesitados. Conoce su labor y súmate a su causa."
+  "mensaje_motivacional_texto": "Cada fundación trabaja incansablemente para rescatar y dar hogar a animales necesitados. Conoce su labor y súmate a su causa.",
+  "capacidad_pequeña": "Capacidad pequeña",
+  "capacidad_mediana": "Capacidad mediana",
+  "capacidad_grande": "Capacidad grande",
+  "necesita": "Necesita",
+  "recibe_voluntarios": "Recibe voluntarios",
+  "no_recibe_voluntarios": "No recibe voluntarios",
+  "tiene_ubicacion": "Ubicación disponible",
+  "radio_atencion": "Radio de atención",
+  "fundada_en": "Fundada en",
+  "fundacion_antigua": "Fundación con trayectoria",
+  "fundacion_nueva": "Fundación nueva",
+  "tiene_imagen": "Tiene imagen de portada",
+  
+  "dia_lunes": "Lunes",
+  "dia_martes": "Martes",
+  "dia_miercoles": "Miércoles",
+  "dia_jueves": "Jueves",
+  "dia_viernes": "Viernes",
+  "dia_sabado": "Sábado",
+  "dia_domingo": "Domingo"
 }

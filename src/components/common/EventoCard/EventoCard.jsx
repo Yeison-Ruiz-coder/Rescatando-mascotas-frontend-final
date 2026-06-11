@@ -12,7 +12,7 @@ const EventoCard = memo(({
   asistencia = false,
   onLike,
   onConfirmarAsistencia,
-  onView, // callback para abrir panel
+  onView,
   showActions = true
 }) => {
   const { t } = useTranslation('eventos');
@@ -25,7 +25,6 @@ const EventoCard = memo(({
     imagen_url
   } = evento;
 
-  // Formatear fecha
   const fechaFormateada = useMemo(() => {
     if (!fecha_evento) return { dia: '?', mes: '?', hora: '?' };
     const fecha = new Date(fecha_evento);
@@ -36,7 +35,6 @@ const EventoCard = memo(({
     };
   }, [fecha_evento]);
 
-  // URL de imagen
   const imageUrl = useMemo(() => {
     if (!imagen_url) return null;
     try {
@@ -46,39 +44,38 @@ const EventoCard = memo(({
     }
   }, [imagen_url, getImageUrl]);
 
+  const cardVariant = variant === 'featured' ? 'ec-featured' : '';
+
   return (
-    <div className={`evento-card ${variant}`}>
-      {/* Imagen */}
-      <div className="card-image">
+    <div className={`ec-card ${cardVariant}`}>
+      <div className="ec-image">
         {imageUrl ? (
           <img src={imageUrl} alt={nombre_evento} loading="lazy" />
         ) : (
-          <div className="image-placeholder">
+          <div className="ec-placeholder">
             <i className="fas fa-calendar-alt"></i>
           </div>
         )}
         
-        {/* Badge de fecha sobre la imagen */}
-        <div className="fecha-badge">
-          <div className="fecha-dia">{fechaFormateada.dia}</div>
-          <div className="fecha-mes">{fechaFormateada.mes}</div>
-          <div className="fecha-hora">{fechaFormateada.hora}</div>
+        <div className="ec-fecha-badge">
+          <div className="ec-fecha-dia">{fechaFormateada.dia}</div>
+          <div className="ec-fecha-mes">{fechaFormateada.mes}</div>
+          <div className="ec-fecha-hora">{fechaFormateada.hora}</div>
         </div>
       </div>
 
-      {/* Contenido */}
-      <div className="card-content">
-        <h3 className="evento-titulo">{nombre_evento}</h3>
+      <div className="ec-content">
+        <h3 className="ec-titulo">{nombre_evento}</h3>
         
-        <div className="evento-lugar">
+        <div className="ec-lugar">
           <i className="fas fa-map-marker-alt"></i>
           <span>{lugar_evento || t('lugar_no_disponible')}</span>
         </div>
         
         {showActions && (
-          <div className="evento-buttons">
+          <div className="ec-buttons">
             <button
-              className="btn-card btn-outline"
+              className="ec-btn ec-btn-outline"
               onClick={(e) => { e.stopPropagation(); onView?.(evento); }}
               type="button"
             >
@@ -87,7 +84,7 @@ const EventoCard = memo(({
             
             <button
               onClick={(e) => { e.stopPropagation(); onLike?.(id); }}
-              className={`btn-card btn-like ${liked ? 'liked' : ''}`}
+              className={`ec-btn ec-btn-like ${liked ? 'ec-liked' : ''}`}
               type="button"
             >
               <i className="fas fa-heart"></i>
@@ -95,7 +92,7 @@ const EventoCard = memo(({
 
             <button
               onClick={(e) => { e.stopPropagation(); onConfirmarAsistencia?.(id); }}
-              className={`btn-card btn-asistir ${asistencia ? 'confirmed' : ''}`}
+              className={`ec-btn ec-btn-asistir ${asistencia ? 'ec-confirmed' : ''}`}
               disabled={!isAuthenticated}
               title={!isAuthenticated ? (t('login_requerido') || 'Inicia sesión') : ''}
               type="button"

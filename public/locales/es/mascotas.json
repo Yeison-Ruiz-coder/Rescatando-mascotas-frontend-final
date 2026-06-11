@@ -212,5 +212,16 @@
   "mascotas_relacionadas": "Mascotas Relacionadas",
   "no_hay_mascotas_relacionadas": "No hay mascotas relacionadas en este momento",
   "acciones": "Acciones",
-  "fundacion": "Fundación"
+  "fundacion": "Fundación",
+  "cachorro": "Cachorro",
+  "adulto": "Adulto",
+  "adulto_mayor": "Adulto mayor",
+  "no_esterilizado": "No esterilizado",
+  "no_vacunado": "No vacunado",
+  "no_desparasitado": "No desparasitado",
+  "no_apto_con_ninos": "No apto con niños",
+  "apto_con_mascotas": "Apto con otras mascotas",
+  "no_apto_con_mascotas": "No apto con otras mascotas",
+  "actualizado": "Actualizado",
+  "nombre": "Nombre"
 }

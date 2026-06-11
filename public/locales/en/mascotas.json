@@ -212,5 +212,16 @@
   "mascotas_relacionadas": "Related Pets",
   "no_hay_mascotas_relacionadas": "No related pets available at this time",
   "acciones": "Actions",
-  "fundacion": "Foundation"
+  "fundacion": "Foundation",
+  "cachorro": "Puppy",
+  "adulto": "Adult",
+  "adulto_mayor": "Senior",
+  "no_esterilizado": "Not spayed/neutered",
+  "no_vacunado": "Not vaccinated",
+  "no_desparasitado": "Not dewormed",
+  "no_apto_con_ninos": "Not good with children",
+  "apto_con_mascotas": "Good with other pets",
+  "no_apto_con_mascotas": "Not good with other pets",
+  "actualizado": "Updated",
+  "nombre": "Name"
 }

@@ -63,5 +63,25 @@
   "sin_resultados": {
     "titulo": "No foundations found",
     "mensaje": "Try different search terms"
-  }
+  },
+
+  "capacidad_pequeña": "Small capacity",
+  "capacidad_mediana": "Medium capacity",
+  "capacidad_grande": "Large capacity",
+  "necesita": "Needs",
+  "recibe_voluntarios": "Accepts volunteers",
+  "no_recibe_voluntarios": "Does not accept volunteers",
+  "tiene_ubicacion": "Location available",
+  "radio_atencion": "Service radius",
+  "fundada_en": "Founded in",
+  "fundacion_antigua": "Long-standing foundation",
+  "fundacion_nueva": "New foundation",
+  "tiene_imagen": "Has cover image",
+  "dia_lunes": "Monday",
+  "dia_martes": "Tuesday",
+  "dia_miercoles": "Wednesday",
+  "dia_jueves": "Thursday",
+  "dia_viernes": "Friday",
+  "dia_sabado": "Saturday",
+  "dia_domingo": "Sunday"
 }

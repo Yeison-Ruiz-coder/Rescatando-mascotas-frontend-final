@@ -3,9 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { rescateService } from '../../../services/rescateService';
-import Button from '../../../components/common/Button/Button';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
-// Eliminar import del modal
+// Eliminar import del modal y del Button
 import './RescateDetalle.css';
 
 const RescateDetalle = ({ tipoUsuario }) => {
@@ -191,25 +190,25 @@ const RescateDetalle = ({ tipoUsuario }) => {
         <div className="detalle-actions">
           {rescate.estado === 'pendiente' && (
             <>
-              <Button onClick={handleAceptar} variant="primary" disabled={accionLoading}>
+              <button onClick={handleAceptar} className="btn-primary" disabled={accionLoading}>
                 {accionLoading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-check-circle"></i>}
                 {t('aceptar_rescate')}
-              </Button>
-              <Button onClick={handleRechazar} variant="danger" disabled={accionLoading}>
+              </button>
+              <button onClick={handleRechazar} className="btn-danger" disabled={accionLoading}>
                 <i className="fas fa-times-circle"></i> {t('rechazar_rescate')}
-              </Button>
+              </button>
             </>
           )}
 
           {rescate.estado === 'en_proceso' && (
-            <Button onClick={handleRegistrarMascota} variant="primary">
+            <button onClick={handleRegistrarMascota} className="btn-primary">
               <i className="fas fa-paw"></i> {t('registrar_mascota')}
-            </Button>
+            </button>
           )}
 
-          <Button onClick={() => navigate(-1)} variant="secondary">
+          <button onClick={() => navigate(-1)} className="btn-secondary">
             <i className="fas fa-arrow-left"></i> {t('volver')}
-          </Button>
+          </button>
         </div>
       </div>
 

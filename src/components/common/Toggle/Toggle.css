@@ -1,0 +1,81 @@
+/* src/components/common/Toggle/Toggle.css */
+.toggle-collage {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.toggle-collage input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--form-border);
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+/* Tamaños */
+.toggle-collage .toggle-slider:before {
+  height: calc(100% - 6px);
+  width: calc(100% - 6px);
+  left: 3px;
+  bottom: 3px;
+  background: white;
+}
+
+.toggle-collage input:checked + .toggle-slider {
+  background: var(--gradient-primary);
+}
+
+.toggle-collage input:checked + .toggle-slider:before {
+  transform: translateX(calc(100% - 0px));
+}
+
+.toggle-collage input:focus + .toggle-slider {
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
+}
+
+.toggle-collage input:disabled {
+  cursor: not-allowed;
+}
+
+.toggle-collage input:disabled + .toggle-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Wrapper con label */
+.toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.toggle-wrapper-reverse {
+  flex-direction: row-reverse;
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  color: var(--form-text);
+  user-select: none;
+}

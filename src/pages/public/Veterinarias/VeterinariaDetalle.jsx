@@ -74,7 +74,6 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
       setLoadProgress(0);
       setError(null);
       
-      // Simular progreso de carga
       const progressInterval = setInterval(() => {
         setLoadProgress(prev => {
           if (prev >= 90) return prev;
@@ -122,25 +121,36 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
     loadVeterinaria();
   }, [id, t]);
 
+  // ✅ Mostrar ProgressBar mientras carga
   if (loading) {
     return (
-      <SimpleLoadingBar 
-        progress={loadProgress}
-        height="12px"
-        variant="gradient"
-      />
+      <div style={{ width: '100%', padding: '20px 0' }}>
+        <SimpleLoadingBar 
+          progress={loadProgress}
+          height="12px"
+          variant="gradient"
+        />
+      </div>
     );
   }
 
   if (error || !veterinaria) {
     return (
-      <div className="veterinarias-detalle-page">
-        <div className="veterinarias-detalle-bento-grid">
-          <div className="error-card">
+      <div className="vd-container">
+        {!embed && (
+          <div className="vd-actions-bar">
+            <Link to="/veterinarias" className="vd-btn-back">
+              <ArrowLeft size={16} />
+              <span>{t('volver')}</span>
+            </Link>
+          </div>
+        )}
+        <div className="vd-bento-grid">
+          <div className="vd-error">
             <MapPin size={48} />
             <h3>{error || t('no_encontrada')}</h3>
             <p>{t('error_mensaje')}</p>
-            {!embed && <Link to="/veterinarias" className="back-link">← {t('volver')}</Link>}
+            {!embed && <Link to="/veterinarias" className="vd-btn-back" style={{ marginTop: '1rem' }}>← {t('volver')}</Link>}
           </div>
         </div>
       </div>
@@ -151,90 +161,83 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
   const imageUrl = getImagenUrl();
 
   return (
-    <div className="veterinarias-detalle-page">
-      {/* Botón volver - solo visible en modo página completa */}
+    <div className="vd-container">
       {!embed && (
-        <div className="veterinarias-detalle-back-outer">
-          <Link to="/veterinarias" className="veterinarias-detalle-back-link">
+        <div className="vd-actions-bar">
+          <Link to="/veterinarias" className="vd-btn-back">
             <ArrowLeft size={16} />
             <span>{t('volver')}</span>
           </Link>
         </div>
       )}
 
-      {/* Bento Grid principal */}
-      <div className="veterinarias-detalle-bento-grid">
-        {/* Imagen - tarjeta compacta */}
-        <div className="veterinarias-detalle-imagen-wrapper">
+      <div className="vd-bento-grid">
+        <div className="vd-imagen-wrapper">
           <img 
             src={imageUrl} 
             alt={veterinaria.Nombre_vet} 
-            className="veterinarias-detalle-imagen"
+            className="vd-imagen"
           />
         </div>
 
-        {/* Sidebar - 4 columnas */}
-        <div className="veterinarias-detalle-sidebar">
-          {/* Contacto */}
-          <div className="veterinarias-detalle-info-card">
-            <div className="veterinarias-detalle-card-header">
+        <div className="vd-sidebar">
+          <div className="vd-info-card">
+            <div className="vd-card-header">
               <Phone size={16} />
               <h3>{t('contacto')}</h3>
             </div>
             {veterinaria.Direccion && (
-              <div className="veterinarias-detalle-field">
+              <div className="vd-field">
                 <label>{t('direccion')}</label>
                 <p>{veterinaria.Direccion}</p>
               </div>
             )}
             {veterinaria.Telefono && (
-              <div className="veterinarias-detalle-field">
+              <div className="vd-field">
                 <label>{t('telefono')}</label>
                 <p>{veterinaria.Telefono}</p>
               </div>
             )}
             {veterinaria.Email && (
-              <div className="veterinarias-detalle-field">
+              <div className="vd-field">
                 <label>{t('email')}</label>
                 <p>{veterinaria.Email}</p>
               </div>
             )}
           </div>
 
-          {/* Horario */}
-          <div className="veterinarias-detalle-info-card">
-            <div className="veterinarias-detalle-card-header">
+          <div className="vd-info-card">
+            <div className="vd-card-header">
               <Clock size={16} />
               <h3>{t('horario')}</h3>
             </div>
-            <div className="veterinarias-detalle-field">
+            <div className="vd-field">
               <label>{t('atencion')}</label>
               <p>{getHorario()}</p>
             </div>
           </div>
 
-          {/* Badges */}
           {(veterinaria.urgencias_24h || veterinaria.verificado || veterinaria.acepta_seguros) && (
-            <div className="veterinarias-detalle-info-card">
-              <div className="veterinarias-detalle-card-header">
+            <div className="vd-info-card">
+              <div className="vd-card-header">
                 <Shield size={16} />
                 <h3>{t('servicios_destacados')}</h3>
               </div>
-              <div className="veterinarias-detalle-header-badges">
+              <div className="vd-badges">
                 {veterinaria.urgencias_24h && (
-                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-urgente">
+                  <span className="vd-badge vd-badge-urgente">
                     <Ambulance size={12} />
                     {t('urgencias_24h')}
                   </span>
                 )}
                 {veterinaria.verificado && (
-                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-verificado">
+                  <span className="vd-badge vd-badge-verificado">
                     <Shield size={12} />
                     {t('verificado')}
                   </span>
                 )}
                 {veterinaria.acepta_seguros && (
-                  <span className="veterinarias-detalle-badge veterinarias-detalle-badge-seguro">
+                  <span className="vd-badge vd-badge-seguro">
                     <Shield size={12} />
                     {t('acepta_seguros')}
                   </span>
@@ -243,20 +246,19 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
             </div>
           )}
 
-          {/* Valoración */}
           {veterinaria.valoracion_promedio > 0 && (
-            <div className="veterinarias-detalle-info-card">
-              <div className="veterinarias-detalle-card-header">
+            <div className="vd-info-card">
+              <div className="vd-card-header">
                 <Star size={16} />
                 <h3>{t('valoracion')}</h3>
               </div>
-              <div className="veterinarias-detalle-rating">
-                <span className="veterinarias-detalle-rating-stars">
+              <div className="vd-rating">
+                <span className="vd-rating-stars">
                   {'★'.repeat(Math.round(veterinaria.valoracion_promedio))}
                   {'☆'.repeat(5 - Math.round(veterinaria.valoracion_promedio))}
                 </span>
-                <span className="veterinarias-detalle-rating-number">{veterinaria.valoracion_promedio}/5</span>
-                <span className="veterinarias-detalle-rating-count">
+                <span className="vd-rating-number">{veterinaria.valoracion_promedio}/5</span>
+                <span className="vd-rating-count">
                   ({veterinaria.total_valoraciones || 0} {t('valoraciones')})
                 </span>
               </div>
@@ -264,25 +266,24 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
           )}
         </div>
 
-        {/* Contenido principal - 8 columnas */}
-        <div className="veterinarias-detalle-main">
-          <h1 className="veterinarias-detalle-titulo">{veterinaria.Nombre_vet}</h1>
+        <div className="vd-main">
+          <h1 className="vd-titulo">{veterinaria.Nombre_vet}</h1>
           
           {veterinaria.descripcion && (
-            <div className="veterinarias-detalle-descripcion">
+            <div className="vd-descripcion">
               {veterinaria.descripcion}
             </div>
           )}
 
           {servicios.length > 0 && (
             <>
-              <h3 className="veterinarias-detalle-card-header" style={{ marginBottom: '12px' }}>
+              <div className="vd-card-header" style={{ marginBottom: '12px' }}>
                 <Stethoscope size={18} />
                 <h3 style={{ fontSize: '1rem', margin: 0 }}>{t('servicios')}</h3>
-              </h3>
-              <div className="veterinarias-detalle-servicios-grid">
+              </div>
+              <div className="vd-servicios-grid">
                 {servicios.map((servicio, index) => (
-                  <span key={index} className="veterinarias-detalle-servicio-badge">
+                  <span key={index} className="vd-servicio-badge">
                     ✓ {servicio}
                   </span>
                 ))}
@@ -291,15 +292,15 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
           )}
 
           {(veterinaria.anios_experiencia || veterinaria.equipo_medico) && (
-            <div className="veterinarias-detalle-info-adicional">
+            <div className="vd-info-adicional">
               {veterinaria.anios_experiencia && (
-                <div className="veterinarias-detalle-info-item">
+                <div className="vd-info-item">
                   <strong>{t('anios_experiencia')}:</strong>
                   <span>{veterinaria.anios_experiencia}</span>
                 </div>
               )}
               {veterinaria.equipo_medico && (
-                <div className="veterinarias-detalle-info-item">
+                <div className="vd-info-item">
                   <strong>{t('equipo_medico')}:</strong>
                   <span>{veterinaria.equipo_medico}</span>
                 </div>
@@ -309,11 +310,11 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
 
           {veterinaria.Direccion && (
             <>
-              <h3 className="veterinarias-detalle-card-header" style={{ marginBottom: '12px' }}>
+              <div className="vd-card-header" style={{ marginBottom: '12px' }}>
                 <MapPin size={18} />
                 <h3 style={{ fontSize: '1rem', margin: 0 }}>{t('ubicacion')}</h3>
-              </h3>
-              <div className="veterinarias-detalle-mapa-container">
+              </div>
+              <div className="vd-mapa-container">
                 <iframe
                   title={`Mapa de ${veterinaria.Nombre_vet}`}
                   src={`https://maps.google.com/maps?q=${encodeURIComponent(veterinaria.Direccion)}&output=embed`}
@@ -330,7 +331,7 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
                   href={`https://maps.google.com/?q=${encodeURIComponent(veterinaria.Direccion)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="veterinarias-detalle-mapa-link"
+                  className="vd-mapa-link"
                 >
                   <MapPin size={12} />
                   {t('abrir_maps')}
@@ -342,8 +343,7 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="veterinarias-detalle-footer">
+      <div className="vd-footer">
         <Clock size={14} />
         <small>{t('actualizado')}: {new Date(veterinaria.updated_at || Date.now()).toLocaleDateString()}</small>
       </div>

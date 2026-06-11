@@ -1,0 +1,95 @@
+/* src/pages/public/Home/components/AnimatedStats.css */
+/* ============================================
+   ANIMATED STATS - HOME PAGE
+   Prefijo "as" (animated-stats)
+   ============================================ */
+
+.as-stats-modern {
+  padding: 60px 0;
+  background: var(--color-light);
+  position: relative;
+}
+
+.as-stats-container-modern {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.as-stats-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.as-stats-card-modern {
+  text-align: center;
+  padding: 32px 24px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.as-stats-card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.as-stats-icon-modern {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 20px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.as-stats-icon-modern i {
+  font-size: 2rem;
+  color: white;
+}
+
+.as-stats-number-modern {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.as-stats-label-modern {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .as-stats-grid-modern {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .as-stats-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .as-stats-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .as-stats-number-modern {
+    font-size: 2rem;
+  }
+  
+  .as-stats-card-modern {
+    padding: 24px 20px;
+  }
+}

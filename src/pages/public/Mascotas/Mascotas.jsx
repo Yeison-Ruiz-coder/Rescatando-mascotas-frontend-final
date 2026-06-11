@@ -11,7 +11,7 @@ import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpi
 import "./Mascotas.css";
 
 const Mascotas = () => {
-  const { t } = useTranslation("mascotas");
+  const { t } = useTranslation(['mascotas', 'common']);
   
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,20 +20,52 @@ const Mascotas = () => {
   const [currentFilters, setCurrentFilters] = useState({});
   const [orden, setOrden] = useState("reciente");
   const [currentPage, setCurrentPage] = useState(1);
+  const [especies, setEspecies] = useState([]);
+  const [cargandoEspecies, setCargandoEspecies] = useState(true);
   
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
-
   const opcionesOrden = [
-    { value: "reciente", label: "Más recientes" },
-    { value: "nombre", label: "Nombre (A-Z)" },
-    { value: "edad_asc", label: "Edad (menor a mayor)" },
-    { value: "edad_desc", label: "Edad (mayor a menor)" },
+    { value: "reciente", label: t('mas_recientes', 'Más recientes') },
+    { value: "nombre", label: t('nombre_az', 'Nombre (A-Z)') },
+    { value: "edad_asc", label: t('edad_menor', 'Edad (menor a mayor)') },
+    { value: "edad_desc", label: t('edad_mayor', 'Edad (mayor a menor)') },
   ];
 
-  // Función para cargar mascotas - ESTABLE con useCallback
+  // Función para cargar especies desde la API
+  const loadEspecies = useCallback(async () => {
+    try {
+      const response = await api.get('/mascotas/especies', {
+        params: { fields: 'especie' }  // 🔥 Optimización: solo traer especies
+      });
+      if (response.data?.success && response.data?.data) {
+        setEspecies(response.data.data);
+      } else {
+        // 🔥 i18n en fallback
+        setEspecies([
+          t('perro', 'Perro'),
+          t('gato', 'Gato'),
+          t('conejo', 'Conejo'),
+          t('ave', 'Ave'),
+          t('otro', 'Otro')
+        ]);
+      }
+    } catch (error) {
+      console.error("Error cargando especies:", error);
+      setEspecies([
+        t('perro', 'Perro'),
+        t('gato', 'Gato'),
+        t('conejo', 'Conejo'),
+        t('ave', 'Ave'),
+        t('otro', 'Otro')
+      ]);
+    } finally {
+      setCargandoEspecies(false);
+    }
+  }, [t]);
+
+  // Función para cargar mascotas - OPTIMIZADA
   const loadMascotas = useCallback(async (filters = {}, page = 1, sortOrder = "reciente") => {
     setLoading(true);
     setError(null);
@@ -42,21 +74,26 @@ const Mascotas = () => {
       const params = {
         page: page,
         per_page: 12,
+        // 🔥 OPTIMIZACIÓN CRÍTICA: Solo los campos necesarios para la card
+        fields: 'id,nombre_mascota,especie,genero,edad_aprox,foto_principal,descripcion,lugar_rescate',
+        // 🔥 Incluir relaciones para evitar N+1
+        include: 'fundacion',
+        sort: '',
       };
       
+      // Filtros
       if (filters.buscar) params.buscar = filters.buscar;
       if (filters.especie) params.especie = filters.especie;
       if (filters.genero) params.genero = filters.genero;
       if (filters.tamano) params.tamano = filters.tamano;
       
+      // Ordenamiento
       switch (sortOrder) {
         case "nombre": params.sort = "nombre_mascota"; break;
         case "edad_asc": params.sort = "edad_aprox"; break;
         case "edad_desc": params.sort = "-edad_aprox"; break;
         default: params.sort = "-created_at";
       }
-      
-      console.log("📡 API Request:", params);
       
       const response = await api.get('/mascotas', { params });
       
@@ -81,34 +118,45 @@ const Mascotas = () => {
       
     } catch (err) {
       console.error("❌ Error:", err);
-      setError(err.response?.data?.message || err.message || "Error al cargar mascotas");
+      setError(err.response?.data?.message || err.message || t('error_carga', 'Error al cargar mascotas'));
     } finally {
       setLoading(false);
     }
+  }, [t]);
+
+  // Optimización de imagen con Cloudinary
+  const getOptimizedImageUrl = useCallback((path) => {
+    if (!path) return null;
+    if (path.startsWith('http')) {
+      // Optimización para Cloudinary
+      if (path.includes('cloudinary.com') && path.includes('/upload/')) {
+        return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
+      }
+      return path;
+    }
+    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
   }, []);
 
-  // Carga inicial - SOLO UNA VEZ
+  // Carga inicial
   useEffect(() => {
+    loadEspecies();
     loadMascotas({}, 1, "reciente");
-  }, []); // ← Array vacío
+  }, [loadEspecies, loadMascotas]);
 
-  // Manejar cambio de filtros (desde el componente)
+  // Manejadores
   const handleFilterChange = useCallback((newFilters) => {
-    console.log("📝 Filtros aplicados:", newFilters);
     setCurrentFilters(newFilters);
     setCurrentPage(1);
     loadMascotas(newFilters, 1, orden);
   }, [loadMascotas, orden]);
 
-  // Manejar cambio de orden
   const handleOrdenChange = useCallback((newOrden) => {
-    console.log("📝 Orden cambiado:", newOrden);
     setOrden(newOrden);
     setCurrentPage(1);
     loadMascotas(currentFilters, 1, newOrden);
   }, [loadMascotas, currentFilters]);
 
-  // Manejar cambio de página
   const handlePageChange = useCallback((newPage) => {
     if (newPage === currentPage) return;
     setCurrentPage(newPage);
@@ -116,28 +164,22 @@ const Mascotas = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage, currentFilters, orden, loadMascotas]);
 
-  const handleOpenPanel = (mascota) => {
+  const handleOpenPanel = useCallback((mascota) => {
     setSelectedMascota(mascota);
     setIsPanelOpen(true);
-  };
+  }, []);
 
-  const handleClosePanel = () => {
+  const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
     setSelectedMascota(null);
-  };
+  }, []);
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
-  };
-
-  if (loading && mascotas.length === 0) {
+  // Estados de carga y error
+  if ((loading || cargandoEspecies) && mascotas.length === 0) {
     return (
       <div className="mascotas-page">
         <div className="loading-container">
-          <LoadingSpinner text={t("cargando")} />
+          <LoadingSpinner text={t('cargando', 'Cargando...')} />
         </div>
       </div>
     );
@@ -149,10 +191,10 @@ const Mascotas = () => {
         <div className="bento-container">
           <div className="error-container">
             <i className="fas fa-paw"></i>
-            <h2>Error</h2>
+            <h2>{t('error', 'Error')}</h2>
             <p>{error}</p>
             <button onClick={() => loadMascotas(currentFilters, currentPage, orden)} className="reload-btn">
-              <i className="fas fa-sync-alt"></i> Reintentar
+              <i className="fas fa-sync-alt"></i> {t('reintentar', 'Reintentar')}
             </button>
           </div>
         </div>
@@ -162,9 +204,10 @@ const Mascotas = () => {
 
   return (
     <div className="mascotas-page">
+      {/* Header */}
       <div className="mascotas-header">
         <div className="mascotas-hero">
-          <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} />
+          <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} loading="eager" />
         </div>
         <div className="bento-container">
           <h1>{t("titulo")}</h1>
@@ -182,6 +225,8 @@ const Mascotas = () => {
           <FiltrosMascotas 
             onFilterChange={handleFilterChange} 
             especies={especies}
+            mascotas={mascotas}
+            isLoading={loading}
           />
         </div>
       </div>
@@ -191,10 +236,10 @@ const Mascotas = () => {
         <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
-              <i className="fas fa-list"></i> Mostrando <strong>{mascotas.length}</strong> de <strong>{pagination.total}</strong> mascotas
+              <i className="fas fa-list"></i> {t('mostrando', 'Mostrando')} <strong>{mascotas.length}</strong> {t('de', 'de')} <strong>{pagination.total}</strong> {t('mascotas', 'mascotas')}
             </div>
             <div className="resultados-orden">
-              <label><i className="fas fa-sort"></i> Ordenar por:</label>
+              <label><i className="fas fa-sort"></i> {t('ordenar_por', 'Ordenar por')}:</label>
               <CustomSelect
                 options={opcionesOrden}
                 value={orden}
@@ -207,8 +252,8 @@ const Mascotas = () => {
           {mascotas.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-search"></i>
-              <h3>No se encontraron mascotas</h3>
-              <p>Intenta con otros filtros</p>
+              <h3>{t('no_resultados', 'No se encontraron mascotas')}</h3>
+              <p>{t('intenta_otros_filtros', 'Intenta con otros filtros')}</p>
             </div>
           ) : (
             <>
@@ -217,8 +262,7 @@ const Mascotas = () => {
                   <MascotaCard
                     key={mascota.id}
                     mascota={mascota}
-                    getImageUrl={getImageUrl}
-                    showFundacion={true}
+                    getImageUrl={getOptimizedImageUrl}
                     variant="default"
                     onView={handleOpenPanel}
                   />
@@ -232,17 +276,17 @@ const Mascotas = () => {
                     disabled={currentPage === 1}
                     className="pagination-btn"
                   >
-                    <i className="fas fa-chevron-left"></i> Anterior
+                    <i className="fas fa-chevron-left"></i> {t('anterior', 'Anterior')}
                   </button>
                   <span className="pagination-info">
-                    Página {currentPage} de {pagination.last_page}
+                    {t('pagina', 'Página')} {currentPage} {t('de', 'de')} {pagination.last_page}
                   </span>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === pagination.last_page}
                     className="pagination-btn"
                   >
-                    Siguiente <i className="fas fa-chevron-right"></i>
+                    {t('siguiente', 'Siguiente')} <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
               )}
@@ -251,6 +295,7 @@ const Mascotas = () => {
         </div>
       </div>
 
+      {/* Mensaje motivacional */}
       <div className="motivational-message">
         <div className="bento-container">
           <div className="motivational-content">
@@ -261,12 +306,15 @@ const Mascotas = () => {
         </div>
       </div>
 
+      {/* Panel deslizable */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}
-        title={selectedMascota?.nombre_mascota || "Detalle"}
+        title={selectedMascota?.nombre_mascota || t('detalle', 'Detalle')}
       >
-        <MascotaDetalle mascotaId={selectedMascota?.id} embed={true} />
+        {selectedMascota && (
+          <MascotaDetalle mascotaId={selectedMascota.id} embed={true} />
+        )}
       </SlideUpPanel>
     </div>
   );

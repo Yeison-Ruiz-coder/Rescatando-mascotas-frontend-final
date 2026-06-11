@@ -1,0 +1,117 @@
+/* src/pages/public/Home/components/BentoFeatures.css */
+/* ============================================
+   BENTO FEATURES - HOME PAGE
+   Prefijo "bf" (bento-features)
+   ============================================ */
+
+.bf-bento-section {
+  padding: 80px 0;
+  background: var(--color-light);
+}
+
+/* 🔥 Contenedor con ancho limitado y centrado */
+.bf-bento-container {
+  max-width: 1200px;  /* ← Ancho máximo que quieras */
+  margin: 0 auto;     /* ← Centrado */
+  padding: 0 24px;
+}
+
+.bf-bento-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.bf-bento-item {
+  padding: 28px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.bf-bento-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.bf-bento-large {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.bf-bento-medium {
+  grid-column: span 1;
+}
+
+.bf-bento-small {
+  grid-column: span 1;
+}
+
+.bf-bento-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.bf-bento-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bf-bento-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--color-text);
+}
+
+.bf-bento-description {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .bf-bento-grid-modern {
+    gap: 20px;
+  }
+  
+  .bf-bento-container {
+    max-width: 960px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bf-bento-section {
+    padding: 60px 0;
+  }
+  
+  .bf-bento-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .bf-bento-large {
+    grid-column: span 2;
+  }
+  
+  .bf-bento-container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bf-bento-grid-modern {
+    grid-template-columns: 1fr;
+  }
+  
+  .bf-bento-large {
+    grid-column: span 1;
+  }
+}

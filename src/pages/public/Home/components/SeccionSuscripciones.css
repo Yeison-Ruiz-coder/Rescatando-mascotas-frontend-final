@@ -1,0 +1,132 @@
+/* src/pages/public/Home/components/SeccionSuscripciones.css */
+/* ============================================
+   SECCION SUSCRIPCIONES - HOME PAGE
+   Prefijo "ss" (seccion-suscripciones)
+   ============================================ */
+
+.ss-suscripciones-section {
+  padding: 80px 0;
+  background: transparent;
+}
+
+.ss-suscripciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.ss-suscripcion-card {
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+  position: relative;
+}
+
+.ss-suscripcion-card.ss-featured {
+  border: 2px solid var(--color-primary);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.ss-suscripcion-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+.ss-suscripcion-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.ss-suscripcion-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text);
+}
+
+.ss-suscripcion-price {
+  margin-bottom: 20px;
+}
+
+.ss-suscripcion-price .ss-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.ss-suscripcion-price .ss-period {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
+.ss-suscripcion-description {
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+  min-height: 60px;
+}
+
+.ss-suscripcion-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.ss-suscripcion-btn:hover {
+  transform: translateX(5px);
+  text-decoration: none;
+  color: white;
+}
+
+.ss-suscripciones-footer {
+  text-align: center;
+}
+
+.ss-suscripciones-login-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.ss-suscripciones-login-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .ss-suscripciones-section {
+    padding: 60px 0;
+  }
+  
+  .ss-suscripciones-grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ss-suscripciones-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ss-suscripcion-card.ss-featured {
+    transform: scale(1);
+  }
+}

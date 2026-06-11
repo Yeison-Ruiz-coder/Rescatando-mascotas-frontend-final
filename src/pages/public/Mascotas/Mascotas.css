@@ -1,17 +1,15 @@
-/* src/pages/public/Mascotas/Mascotas.css */
-/* ===== HEADER CON IMAGEN DE FONDO ===== */
-/* Estilo inspirado en el header de veterinarias, con ajustes para mascotas */
 
+/* ===== HEADER - Texto a la izquierda, sin desbordar ===== */
 .mascotas-page .mascotas-header {
   position: relative;
-  padding: 110px 0 160px 0;
+  padding: 0;  /* ← Eliminar padding para que el flex center funcione mejor */
   text-align: left;
   background: transparent;
   border-bottom: 1px solid var(--color-border);
   overflow: hidden;
-  min-height: 400px;
+  min-height: 700px;  /* ← Altura fija para centrar verticalmente */
   display: flex;
-  align-items: center;
+  align-items: center;  /* ← Centrado vertical */
 }
 
 .mascotas-page .mascotas-hero {
@@ -21,19 +19,24 @@
   width: 100%;
   height: 100%;
   z-index: 0;
+  overflow: hidden;
 }
 
 .mascotas-page .mascotas-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(30%);
+  filter: grayscale(30%) brightness(0.7);
 }
 
 .mascotas-page .mascotas-header .bento-container {
   position: relative;
   z-index: 2;
   width: 100%;
+  max-width: 50%;
+  margin-left: 0;
+  margin-right: auto;
+  margin-top: 20px;  /* ← Pequeño ajuste opcional */
 }
 
 .mascotas-page .mascotas-header h1 {
@@ -48,6 +51,8 @@
   color: transparent;
   font-family: 'Space Grotesk', sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .mascotas-page .mascotas-header .info {
@@ -59,7 +64,10 @@
   display: inline-block;
   background: rgba(0, 0, 0, 0.7);
   padding: 8px 20px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-hard-sm);
+  max-width: 100%;
+  word-break: break-word;
 }
 
 [data-theme="dark"] .mascotas-page .mascotas-header::before {
@@ -94,8 +102,7 @@
 .mascotas-page .resultados-count {
   color: var(--color-text-muted);
   font-size: 0.85rem;
-  margin-left: 4%;
-  background: var(--bg-card);
+  background: var(--color-card-bg);
   padding: 6px 14px;
   box-shadow: var(--shadow-hard-sm);
 }
@@ -108,17 +115,16 @@
 .mascotas-page .resultados-orden {
   display: flex;
   align-items: center;
-  margin-right: 4%;
   gap: 0.5rem;
 }
 
 .mascotas-page .resultados-orden label {
   font-size: 0.8rem;
-  margin-right: 0.25rem;
   color: var(--color-text-muted);
 }
 
-/* ===== GRID DE MASCOTAS ===== */
+/* ===== GRID DE MASCOTAS (usa Bento Grid) ===== */
+/* Reemplazar .mascotas-grid por .bento-grid cuando sea posible */
 .mascotas-page .mascotas-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -126,19 +132,7 @@
   width: 100%;
 }
 
-@media (min-width: 1600px) {
-  .mascotas-page .mascotas-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (min-width: 2000px) {
-  .mascotas-page .mascotas-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-/* ===== PAGINACIÓN (UNIFICADA) ===== */
+/* ===== PAGINACIÓN ===== */
 .mascotas-page .pagination-container {
   display: flex;
   justify-content: center;
@@ -176,7 +170,7 @@
   font-size: 0.9rem;
 }
 
-/* ===== LOADING, ERROR, EMPTY ===== */
+/* ===== ESTADOS (LOADING, ERROR, EMPTY) ===== */
 .mascotas-page .loading-container {
   display: flex;
   justify-content: center;
@@ -199,12 +193,6 @@
   font-size: 3rem;
   color: var(--color-danger);
   margin-bottom: 1rem;
-}
-
-.mascotas-page .error-container h2 {
-  color: var(--color-text);
-  margin-bottom: 0.8rem;
-  font-size: 1.3rem;
 }
 
 .mascotas-page .reload-btn {
@@ -273,7 +261,6 @@
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--color-text);
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .mascotas-page .motivational-text {
@@ -287,50 +274,34 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .mascotas-page .mascotas-header h1 {
-    font-size: 2rem;
+    font-size: 4rem;
   }
   .mascotas-page .mascotas-grid {
     gap: 1.5rem;
   }
+  .mascotas-page .mascotas-header .info {
+    font-size: 1rem; /* ← Subtítulo pequeño */
+    padding: 6px 16px;
+  }
 }
-
+/* ===== RESPONSIVE MÓVIL - Texto ocupa gran parte ===== */
 @media (max-width: 768px) {
   .mascotas-page .mascotas-header {
-    padding: 40px 0 25px;
+    padding: 60px 0 80px 0;
+    min-height: auto;
   }
+  
+  .mascotas-page .mascotas-header .bento-container {
+    max-width: 68%; /* ← En móvil ocupa la mayor parte */
+  }
+  
   .mascotas-page .mascotas-header h1 {
-    font-size: 1.6rem;
+    font-size: clamp(3rem, 8vw, 2.5rem); /* ← Grande pero proporcionado */
+    margin-bottom: 0.75rem;
   }
-  .mascotas-page .mascotas-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-  .mascotas-page .resultados-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .mascotas-page .resultados-count,
-  .mascotas-page .resultados-orden {
-    margin-left: 0;
-    margin-right: 0;
-  }
-  .mascotas-page .motivational-title {
-    font-size: 1.4rem;
-  }
-  .mascotas-page .motivational-text {
-    font-size: 0.95rem;
-  }
-  .mascotas-page .motivational-icon {
-    font-size: 36px;
-  }
-}
-
-@media (max-width: 480px) {
-  .mascotas-page .mascotas-header h1 {
-    font-size: 1.4rem;
-  }
-  .mascotas-page .motivational-message {
-    margin-top: 50px;
-    padding: 40px 0;
+  
+  .mascotas-page .mascotas-header .info {
+    font-size: 0.55rem; /* ← Subtítulo pequeño */
+    padding: 6px 16px;
   }
 }

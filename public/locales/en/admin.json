@@ -93,7 +93,10 @@
       "archivo_invalido": "File must be an image"
     }
   },
-
+  "perro": "Dog",
+  "gato": "Cat",
+  "conejo": "Rabbit",
+  "otro": "Other",
   "pendientes_titulo": "Pending Requests",
   "pendientes_descripcion": "Review and approve foundation and veterinary requests",
   "sin_solicitudes": "No pending requests",
@@ -117,5 +120,4 @@
   "error_rechazar": "Error rejecting user",
   "capacidad": "Maximum capacity",
   "servicios_ofrecidos": "Services offered"
-
 }

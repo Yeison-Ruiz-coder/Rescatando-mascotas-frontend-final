@@ -47,5 +47,31 @@
     "mensaje": "Intenta con otros términos de búsqueda"
   },
   "mensaje_motivacional_titulo":"Tu mascota merece el mejor cuidado",
-  "mensaje_motivacional_texto":"Encuentra las mejores veterinarias cerca de ti. Profesionales comprometidos con la salud y bienestar de tu mejor amigo."
+  "mensaje_motivacional_texto":"Encuentra las mejores veterinarias cerca de ti. Profesionales comprometidos con la salud y bienestar de tu mejor amigo.",
+  "servicio": "Servicio",
+  "equipo": "Equipo",
+  "convenio": "Convenio",
+  "consulta": "Consulta",
+  "cobertura": "Cobertura",
+  "radio_atencion": "Radio de atención",
+  "red_social": "Red social",
+  "años_experiencia": "años de experiencia",
+  "amplia_experiencia": "Amplia experiencia",
+  "nueva": "Nueva en el mercado",
+  "mejor_valorado": "Mejor valorado",
+  "recomendado": "Recomendado",
+  "opiniones": "opiniones",
+  "tiene_ubicacion": "Ubicación disponible",
+  "tiene_logo": "Tiene logo",
+  "tiene_galeria": "Tiene galería de fotos",
+  "precio_economico": "Precio económico",
+  "precio_alto": "Precio elevado",
+  
+  "dia_lunes": "Lunes",
+  "dia_martes": "Martes",
+  "dia_miercoles": "Miércoles",
+  "dia_jueves": "Jueves",
+  "dia_viernes": "Viernes",
+  "dia_sabado": "Sábado",
+  "dia_domingo": "Domingo"
 }

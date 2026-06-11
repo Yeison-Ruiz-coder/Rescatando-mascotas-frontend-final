@@ -1,75 +1,115 @@
 // src/components/common/MascotaCard/MascotaCard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './MascotaCard.css';
 
 const MascotaCard = ({ 
   mascota, 
   getImageUrl, 
-  showFundacion = true,
   variant = 'default',
-  onView // callback para abrir panel
+  onView 
 }) => {
-  const { t } = useTranslation('mascotas');
-  const { nombre_mascota, descripcion, especie, genero, edad_aprox, fundacion, id } = mascota;
+  const { t } = useTranslation(['mascotas', 'common']);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  
+  const { 
+    nombre_mascota, 
+    descripcion, 
+    especie, 
+    genero, 
+    edad_aprox, 
+    fundacion, 
+    foto_principal,
+    lugar_rescate 
+  } = mascota;
 
   const formatEdad = (edad) => {
     if (!edad) return '?';
-    return t('edad_años', { edad }) || `${edad} años`;
+    if (edad < 1) return t('cachorro', 'Cachorro');
+    if (edad === 1) return t('1_año', '1 año');
+    return t('edad_años', { edad: Math.floor(edad) });
   };
 
+  const getImage = () => {
+    if (!foto_principal || imgError) return null;
+    if (typeof getImageUrl === 'function') return getImageUrl(foto_principal);
+    return foto_principal;
+  };
+
+  const imageUrl = getImage();
+
   return (
-    <div className={`mascota-card ${variant}`}>
-      <div className="card-image">
-        {getImageUrl(mascota.foto_principal) ? (
-          <img
-            src={getImageUrl(mascota.foto_principal)}
-            alt={nombre_mascota}
-          />
-        ) : (
-          <div className="image-placeholder">
-            <i className="fas fa-paw fa-3x"></i>
-            <span>{t('sin_imagen')}</span>
-          </div>
-        )}
-        <div className="card-badges">
-          <span className="badge badge-primary">
-            {especie || t('especie') || 'Mascota'}
-          </span>
-          <span className="badge badge-dark">
-            {genero === 'Macho' ? t('macho') : genero === 'Hembra' ? t('hembra') : genero || 'N/A'}
-          </span>
-          <span className="badge badge-accent">
-            {formatEdad(edad_aprox)}
-          </span>
+    <div 
+      className={`mascard-card ${variant}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Imagen con lazy loading y manejo de error */}
+      {imageUrl ? (
+        <img 
+          src={imageUrl}
+          alt={nombre_mascota}
+          className="mascard-image"
+          loading="lazy"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <div className="mascard-placeholder">
+          <span>🐾</span>
         </div>
+      )}
+
+      {/* Nombre de la mascota */}
+      <div className="mascard-name">
+        {nombre_mascota}
       </div>
-      
-      <div className="card-content">
-        <h3 className="card-title">{nombre_mascota}</h3>
-        <p className="card-description">
-          {descripcion
-            ? descripcion.substring(0, 120)
-            : t('sin_descripcion')}
-          {descripcion?.length > 120 ? '...' : ''}
-        </p>
+
+      {/* Badges informativos */}
+      <div className="mascard-badges">
+        <span className="mascard-badge mascard-badge-specie">
+          {especie || t('mascota', 'Mascota')}
+        </span>
+        <span className="mascard-badge mascard-badge-gender">
+          {genero === 'Macho' ? t('macho', 'Macho') : genero === 'Hembra' ? t('hembra', 'Hembra') : '?'}
+        </span>
+        <span className="mascard-badge mascard-badge-age">
+          {formatEdad(edad_aprox)}
+        </span>
+      </div>
+
+      {/* Overlay al hover */}
+      <div className={`mascard-overlay ${isHovered ? 'visible' : ''}`}>
+        {descripcion && (
+          <p className="mascard-overlay-desc">
+            {descripcion.length > 100 ? descripcion.substring(0, 100) + '...' : descripcion}
+          </p>
+        )}
         
-        {showFundacion && fundacion && (
-          <div className="card-fundacion">
-            <i className="fas fa-home"></i>
-            <span>{t('rescatado_por')}: {fundacion.Nombre_1 || 'Fundación'}</span>
+        {fundacion && (
+          <div className="mascard-overlay-fundacion">
+            <span>🏠</span>
+            <span>{fundacion.Nombre_1 || t('fundacion', 'Fundación')}</span>
           </div>
         )}
         
-        <div className="card-buttons">
-          <button
-            className="btn-card btn-card-outline"
-            onClick={(e) => { e.stopPropagation(); onView?.(mascota); }}
-            type="button"
-          >
-            <i className="fas fa-heart"></i> {t('conocer_mas')}
-          </button>
-        </div>
+        {lugar_rescate && (
+          <div className="mascard-overlay-ubicacion">
+            <span>📍</span>
+            <span>{lugar_rescate}</span>
+          </div>
+        )}
+        
+        <button
+          className="mascard-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onView?.(mascota);
+          }}
+        >
+          {t('conocer_mas', 'Conocer más')}
+          <span>→</span>
+        </button>
       </div>
     </div>
   );

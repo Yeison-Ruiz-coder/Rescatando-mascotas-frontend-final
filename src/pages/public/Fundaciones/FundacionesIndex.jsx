@@ -11,15 +11,19 @@ import "./FundacionesIndex.css";
 
 const FundacionesIndex = () => {
   const { t } = useTranslation("fundaciones");
-  
+
   const [fundaciones, setFundaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 });
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    total: 0,
+  });
   const [currentFilters, setCurrentFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [ciudades, setCiudades] = useState([]);
-  
+
   const [selectedFundacion, setSelectedFundacion] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
@@ -27,23 +31,23 @@ const FundacionesIndex = () => {
   const loadFundaciones = useCallback(async (filters = {}, page = 1) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const params = {
         page: page,
         per_page: 12,
       };
-      
+
       if (filters.buscar) params.buscar = filters.buscar;
       if (filters.ciudad) params.ciudad = filters.ciudad;
-      
+
       console.log("📡 API Request Fundaciones:", params);
-      
-      const response = await api.get('/fundaciones', { params });
-      
+
+      const response = await api.get("/fundaciones", { params });
+
       let fundacionesData = [];
       let paginationData = { current_page: 1, last_page: 1, total: 0 };
-      
+
       if (response.data?.data?.data) {
         fundacionesData = response.data.data.data;
         paginationData = {
@@ -56,17 +60,22 @@ const FundacionesIndex = () => {
       } else if (Array.isArray(response.data)) {
         fundacionesData = response.data;
       }
-      
+
       setFundaciones(fundacionesData);
       setPagination(paginationData);
-      
+
       // Extraer ciudades únicas para el filtro
-      const uniqueCiudades = [...new Set(fundacionesData.map(f => f.ciudad).filter(Boolean))];
+      const uniqueCiudades = [
+        ...new Set(fundacionesData.map((f) => f.ciudad).filter(Boolean)),
+      ];
       setCiudades(uniqueCiudades);
-      
     } catch (err) {
       console.error("❌ Error:", err);
-      setError(err.response?.data?.message || err.message || "Error al cargar fundaciones");
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Error al cargar fundaciones",
+      );
     } finally {
       setLoading(false);
     }
@@ -77,19 +86,25 @@ const FundacionesIndex = () => {
     loadFundaciones({}, 1);
   }, []);
 
-  const handleFilterChange = useCallback((newFilters) => {
-    console.log("📝 Filtros aplicados:", newFilters);
-    setCurrentFilters(newFilters);
-    setCurrentPage(1);
-    loadFundaciones(newFilters, 1);
-  }, [loadFundaciones]);
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      console.log("📝 Filtros aplicados:", newFilters);
+      setCurrentFilters(newFilters);
+      setCurrentPage(1);
+      loadFundaciones(newFilters, 1);
+    },
+    [loadFundaciones],
+  );
 
-  const handlePageChange = useCallback((newPage) => {
-    if (newPage === currentPage) return;
-    setCurrentPage(newPage);
-    loadFundaciones(currentFilters, newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage, currentFilters, loadFundaciones]);
+  const handlePageChange = useCallback(
+    (newPage) => {
+      if (newPage === currentPage) return;
+      setCurrentPage(newPage);
+      loadFundaciones(currentFilters, newPage);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [currentPage, currentFilters, loadFundaciones],
+  );
 
   const handleOpenPanel = (fundacion) => {
     setSelectedFundacion(fundacion);
@@ -104,8 +119,12 @@ const FundacionesIndex = () => {
   const getImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
+    const baseUrl =
+      import.meta.env.VITE_STORAGE_URL ||
+      "https://rescatando-mascotas-backend-final-production.up.railway.app";
+    return path.startsWith("/storage")
+      ? `${baseUrl}${path}`
+      : `${baseUrl}/storage/${path}`;
   };
 
   if (loading && fundaciones.length === 0) {
@@ -126,7 +145,10 @@ const FundacionesIndex = () => {
             <i className="fas fa-building"></i>
             <h2>{t("error_carga")}</h2>
             <p>{error}</p>
-            <button onClick={() => loadFundaciones(currentFilters, currentPage)} className="reload-btn">
+            <button
+              onClick={() => loadFundaciones(currentFilters, currentPage)}
+              className="reload-btn"
+            >
               <i className="fas fa-sync-alt"></i> {t("reintentar")}
             </button>
           </div>
@@ -145,7 +167,8 @@ const FundacionesIndex = () => {
           <h1>{t("titulo")}</h1>
           {pagination.total > 0 && (
             <p className="info">
-              <i className="fas fa-heart"></i> {t("mensaje_bienvenida", { total: pagination.total })}
+              <i className="fas fa-heart"></i>{" "}
+              {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
           )}
         </div>
@@ -153,9 +176,11 @@ const FundacionesIndex = () => {
 
       <div className="filtros-section">
         <div className="bento-container">
-          <FiltrosFundaciones 
-            onFilterChange={handleFilterChange} 
+          <FiltrosFundaciones
+            onFilterChange={handleFilterChange}
             ciudades={ciudades}
+            fundaciones={fundaciones}
+            isLoading={loading}
           />
         </div>
       </div>
@@ -164,7 +189,9 @@ const FundacionesIndex = () => {
         <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
-              <i className="fas fa-list"></i> Mostrando <strong>{fundaciones.length}</strong> de <strong>{pagination.total}</strong> fundaciones
+              <i className="fas fa-list"></i> Mostrando{" "}
+              <strong>{fundaciones.length}</strong> de{" "}
+              <strong>{pagination.total}</strong> fundaciones
             </div>
           </div>
 
@@ -219,8 +246,12 @@ const FundacionesIndex = () => {
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>
-            <h3 className="motivational-title">{t("mensaje_motivacional_titulo")}</h3>
-            <p className="motivational-text">{t("mensaje_motivacional_texto")}</p>
+            <h3 className="motivational-title">
+              {t("mensaje_motivacional_titulo")}
+            </h3>
+            <p className="motivational-text">
+              {t("mensaje_motivacional_texto")}
+            </p>
           </div>
         </div>
       </div>

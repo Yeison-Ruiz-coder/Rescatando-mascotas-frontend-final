@@ -1,25 +1,23 @@
 /* src/pages/public/Fundaciones/FundacionesIndex.css */
-/* ===== HEADER CON IMAGEN DE FONDO - ESTILO COLLAGE ===== */
+/* ===== HEADER CON IMAGEN DE FONDO - ESTILO IDÉNTICO A MASCOTAS ===== */
 
 .fundaciones-page {
   min-height: 100vh;
   background: transparent;
 }
-
-/* ===== HEADER SECTION - ESTILO IDÉNTICO A MASCOTAS ===== */
+/* ===== HEADER - Texto a la izquierda, sin desbordar ===== */
 .fundaciones-page .fundaciones-header {
   position: relative;
-  padding: 110px 0 160px 0;
+  padding: 0;
   text-align: left;
   background: transparent;
   border-bottom: 1px solid var(--color-border);
   overflow: hidden;
-  min-height: 400px;
+  min-height: 500px;
   display: flex;
   align-items: center;
 }
 
-/* Contenedor de la imagen de fondo */
 .fundaciones-page .fundaciones-hero {
   position: absolute;
   top: 0;
@@ -27,23 +25,25 @@
   width: 100%;
   height: 100%;
   z-index: 0;
+  overflow: hidden;
 }
 
 .fundaciones-page .fundaciones-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(30%);
 }
 
-/* Contenido del header */
 .fundaciones-page .fundaciones-header .bento-container {
   position: relative;
   z-index: 2;
   width: 100%;
+  max-width: 60%;
+  margin-left: 0;
+  margin-right: auto;
+  margin-top: 20px;
 }
 
-/* Título */
 .fundaciones-page .fundaciones-header h1 {
   font-size: clamp(3rem, 8vw, 12rem);
   font-weight: 800;
@@ -54,27 +54,25 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  word-break: break-word;
 }
 
-/* Info (contador) */
 .fundaciones-page .fundaciones-header .info {
-  font-size: 1.1rem;
   color: white;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-left: 0;
+  text-align: left;
   display: inline-block;
-  background: rgba(48, 32, 2, 0.7);
+  background: rgba(133, 109, 1, 0.7);
   padding: 8px 20px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-hard-sm);
-}
-
-.fundaciones-page .fundaciones-header .info i {
-  color: rgb(255, 208, 0);
-}
-
-.fundaciones-page .fundaciones-header .info i {
-  margin-right: 0.5rem;
+  max-width: 100%;
+  word-break: break-word;
 }
 
 [data-theme="dark"] .fundaciones-page .fundaciones-header::before {
@@ -84,19 +82,21 @@
     rgba(0, 0, 0, 0.7)
   );
 }
+
 /* ===== FILTROS SECTION ===== */
 .fundaciones-page .filtros-section {
   padding: 20px 0;
   position: sticky;
   top: var(--navbar-height, 70px);
   z-index: 99;
-  background: var(--bg-primary);
+  background: var(--bg-card);
   border-bottom: 1px solid var(--color-border);
 }
 
 /* ===== RESULTADOS SECTION ===== */
 .fundaciones-page .resultados-section {
   padding: 40px 0 60px;
+  background: transparent;
 }
 
 .fundaciones-page .resultados-header {
@@ -132,23 +132,110 @@
   width: 100%;
 }
 
-@media (min-width: 1600px) {
-  .fundaciones-page .fundaciones-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+/* ===== TARJETA DE FUNDACIÓN ===== */
+.fundaciones-page .fundacion-card {
+  transition: var(--transition);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-@media (max-width: 1024px) {
-  .fundaciones-page .fundaciones-grid {
-    gap: 1.5rem;
-  }
+.fundaciones-page .fundacion-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
+  border-color: var(--color-primary);
 }
 
-@media (max-width: 768px) {
-  .fundaciones-page .fundaciones-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
+.fundaciones-page .fundacion-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+}
+
+.fundaciones-page .fundacion-card:hover h3 {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fundaciones-page .fundacion-card .fundacion-ciudad {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.fundaciones-page .fundacion-card:hover .fundacion-ciudad {
+  color: var(--color-primary);
+}
+
+.fundaciones-page .fundacion-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.fundaciones-page .fundacion-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.fundaciones-page .fundacion-stat i {
+  color: var(--color-primary);
+}
+
+.fundaciones-page .fundacion-card:hover .fundacion-stat i {
+  color: var(--color-accent);
+}
+
+/* ===== PAGINACIÓN ===== */
+.fundaciones-page .pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.fundaciones-page .pagination-btn {
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.fundaciones-page .pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fundaciones-page .pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.fundaciones-page .pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 /* ===== EMPTY STATE ===== */
@@ -169,7 +256,7 @@
 }
 
 .fundaciones-page .empty-container h3 {
-  color: var(--form-text);
+  color: var(--color-text);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
@@ -260,7 +347,6 @@
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--color-text);
-  font-family: 'Space Grotesk', sans-serif;
 }
 
 .fundaciones-page .motivational-text {
@@ -270,62 +356,73 @@
   max-width: 600px;
   margin: 0 auto;
 }
-
-@media (max-width: 768px) {
-  .fundaciones-page .motivational-message {
-    margin-top: 50px;
-    padding: 40px 0;
-  }
-  
-  .fundaciones-page .motivational-title {
-    font-size: 1.4rem;
-  }
-  
-  .fundaciones-page .motivational-text {
-    font-size: 0.95rem;
-  }
-  
-  .fundaciones-page .motivational-icon {
-    font-size: 36px;
-  }
-}
-
-/* ===== RESPONSIVE GENERAL ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .fundaciones-page .fundaciones-header h1 {
-    font-size: 2.2rem;
+    font-size: 5rem;
+  }
+  .fundaciones-page .fundaciones-grid {
+    gap: 1.5rem;
+  }
+  .fundaciones-page .fundaciones-header .info {
+    font-size: 0.85rem;
+    padding: 6px 16px;
+  }
+  .fundaciones-page .fundaciones-header .bento-container {
+    max-width: 85%;
   }
 }
 
+/* ===== RESPONSIVE MÓVIL - Texto ocupa gran parte ===== */
 @media (max-width: 768px) {
   .fundaciones-page .fundaciones-header {
-    padding: 60px 0 80px;
+    padding: 60px 0 80px 0;
+    min-height: auto;
   }
-  
+
+  .fundaciones-page .fundaciones-header .bento-container {
+    max-width: 80%;
+    object-position: top;
+  }
+
   .fundaciones-page .fundaciones-header h1 {
-    font-size: 1.8rem;
+    font-size: clamp(3rem, 8vw, 3.5rem);
+    margin-bottom: 0.75rem;
   }
-  
-  .fundaciones-page .fundaciones-header .subtitle {
-    font-size: 1rem;
+
+  .fundaciones-page .fundaciones-header .info {
+    font-size: 0.55rem;
+    padding: 6px 12px;
   }
-  
+
   .fundaciones-page .filtros-section {
     top: 60px;
   }
-  
+
   .fundaciones-page .resultados-header {
     flex-direction: column;
     align-items: flex-start;
   }
-}
 
-@media (max-width: 480px) {
-  .fundaciones-page .fundaciones-header h1 {
-    font-size: 1.5rem;
+  .fundaciones-page .fundaciones-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
-  
-  .fundaciones-page .resultados-count {
-    font-size: 0.8rem;
+
+  .fundaciones-page .motivational-message {
+    margin-top: 50px;
+    padding: 40px 0;
+  }
+
+  .fundaciones-page .motivational-title {
+    font-size: 1.4rem;
+  }
+
+  .fundaciones-page .motivational-text {
+    font-size: 0.95rem;
+  }
+
+  .fundaciones-page .motivational-icon {
+    font-size: 36px;
   }
 }
