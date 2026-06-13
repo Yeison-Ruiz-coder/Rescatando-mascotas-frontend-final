@@ -18,13 +18,30 @@ const TimelineEventos = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   
+  const trackRef = useRef(null);
+  const containerRef = useRef(null);
   const autoPlayRef = useRef(null);
+  const transitionTimeoutRef = useRef(null);
+
+  // 🔥 ANCHOS FIJOS - IGUALES QUE EL CSS
+  const CARD_WIDTH = 340;  // ← Cambiado de 240 a 340 (coincide con CSS)
+  const GAP = 24;
+  const SLIDE_WIDTH = CARD_WIDTH + GAP;
 
   const getImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith('http')) return path;
     const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
     return path.startsWith('/storage') ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return { day: '??', month: '???' };
+    const date = new Date(dateString);
+    return {
+      day: date.getDate(),
+      month: date.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase(),
+    };
   };
 
   useEffect(() => {
@@ -35,8 +52,8 @@ const TimelineEventos = () => {
       try {
         const params = {
           page: 1,
-          per_page: 10,
-          sort: '-fecha_evento'
+          per_page: 12,
+          sort: 'fecha_evento'
         };
         
         const response = await api.get('/eventos', { params });
@@ -73,49 +90,102 @@ const TimelineEventos = () => {
     fetchEventos();
   }, []);
 
-  // Obtener las 3 cards visibles
-  const getVisibleCards = useCallback(() => {
-    if (eventos.length === 0) return [];
+  // Calcular offset para centrar la card actual
+  const calculateOffset = useCallback(() => {
+    if (!containerRef.current) return 0;
     
-    const prevIndex = currentIndex === 0 ? eventos.length - 1 : currentIndex - 1;
-    const nextIndex = currentIndex === eventos.length - 1 ? 0 : currentIndex + 1;
+    const containerWidth = containerRef.current.offsetWidth;
+    const centerOffset = (containerWidth / 2) - (CARD_WIDTH / 2);
+    const scrollOffset = -(currentIndex * SLIDE_WIDTH) + centerOffset;
     
-    return [
-      { evento: eventos[prevIndex], position: 'prev', index: prevIndex },
-      { evento: eventos[currentIndex], position: 'center', index: currentIndex },
-      { evento: eventos[nextIndex], position: 'next', index: nextIndex }
-    ];
-  }, [eventos, currentIndex]);
+    return scrollOffset;
+  }, [currentIndex]);
 
+  // Mover el track
+  const moveToIndex = useCallback((index, withTransition = true) => {
+    if (!trackRef.current) return;
+    
+    setCurrentIndex(index);
+    
+    const offset = calculateOffset();
+    
+    if (withTransition) {
+      trackRef.current.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)';
+    } else {
+      trackRef.current.style.transition = 'none';
+    }
+    
+    trackRef.current.style.transform = `translateX(${offset}px)`;
+  }, [calculateOffset]);
+
+  // Siguiente con loop infinito
   const next = useCallback(() => {
-    if (isTransitioning) return;
+    if (isTransitioning || eventos.length === 0) return;
     
     setIsTransitioning(true);
     let newIndex = currentIndex + 1;
     if (newIndex >= eventos.length) {
       newIndex = 0;
     }
-    setCurrentIndex(newIndex);
     
-    setTimeout(() => {
+    moveToIndex(newIndex, true);
+    
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  }, [currentIndex, eventos.length, isTransitioning]);
+  }, [currentIndex, eventos.length, isTransitioning, moveToIndex]);
 
+  // Anterior con loop infinito
   const prev = useCallback(() => {
-    if (isTransitioning) return;
+    if (isTransitioning || eventos.length === 0) return;
     
     setIsTransitioning(true);
     let newIndex = currentIndex - 1;
     if (newIndex < 0) {
       newIndex = eventos.length - 1;
     }
-    setCurrentIndex(newIndex);
     
-    setTimeout(() => {
+    moveToIndex(newIndex, true);
+    
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  }, [currentIndex, eventos.length, isTransitioning]);
+  }, [currentIndex, eventos.length, isTransitioning, moveToIndex]);
+
+  const goToIndex = useCallback((index) => {
+    if (isTransitioning || index === currentIndex) return;
+    
+    setIsTransitioning(true);
+    moveToIndex(index, true);
+    
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
+  }, [currentIndex, isTransitioning, moveToIndex]);
+
+  // Recalcular posición al redimensionar
+  useEffect(() => {
+    const handleResize = () => {
+      if (eventos.length > 0) {
+        moveToIndex(currentIndex, false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [eventos.length, currentIndex, moveToIndex]);
+
+  // Inicializar posición
+  useEffect(() => {
+    if (eventos.length > 0 && trackRef.current) {
+      setTimeout(() => {
+        moveToIndex(currentIndex, false);
+      }, 100);
+    }
+  }, [eventos, currentIndex, moveToIndex]);
 
   // Auto-play
   useEffect(() => {
@@ -196,31 +266,23 @@ const TimelineEventos = () => {
     }
   };
 
-  const visibleCards = getVisibleCards();
-
-  // Render skeleton
   if (loading) {
     return (
       <section className="te-timeline-section">
         <div className="te-container">
           <h2 className="te-title">
-            {t('eventos.titulo') || 'Próximos Eventos'}
+            {t('eventos.titulo') || 'Línea de Tiempo'}
           </h2>
           <p className="te-subtitle">
-            {t('eventos.subtitulo') || 'Participa en nuestros eventos y sé parte del cambio'}
+            {t('eventos.subtitulo') || 'Sigue nuestros eventos en el tiempo'}
           </p>
           <div className="te-skeleton-wrapper">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="te-skeleton-card">
                 <div className="te-skeleton-image"></div>
                 <div className="te-skeleton-content">
                   <div className="te-skeleton-title"></div>
                   <div className="te-skeleton-location"></div>
-                  <div className="te-skeleton-buttons">
-                    <div className="te-skeleton-btn"></div>
-                    <div className="te-skeleton-btn"></div>
-                    <div className="te-skeleton-btn"></div>
-                  </div>
                 </div>
               </div>
             ))}
@@ -235,10 +297,10 @@ const TimelineEventos = () => {
       <section className="te-timeline-section">
         <div className="te-container">
           <h2 className="te-title">
-            {t('eventos.titulo') || 'Próximos Eventos'}
+            {t('eventos.titulo') || 'Línea de Tiempo'}
           </h2>
           <p className="te-subtitle">
-            {t('eventos.subtitulo') || 'Participa en nuestros eventos y sé parte del cambio'}
+            {t('eventos.subtitulo') || 'Sigue nuestros eventos en el tiempo'}
           </p>
           <div className="te-timeline-error">
             <i className="fas fa-exclamation-triangle"></i>
@@ -257,10 +319,10 @@ const TimelineEventos = () => {
       <section className="te-timeline-section">
         <div className="te-container">
           <h2 className="te-title">
-            {t('eventos.titulo') || 'Próximos Eventos'}
+            {t('eventos.titulo') || 'Línea de Tiempo'}
           </h2>
           <p className="te-subtitle">
-            {t('eventos.subtitulo') || 'Participa en nuestros eventos y sé parte del cambio'}
+            {t('eventos.subtitulo') || 'Sigue nuestros eventos en el tiempo'}
           </p>
           <div className="te-timeline-empty">
             <i className="fas fa-calendar-alt"></i>
@@ -279,10 +341,10 @@ const TimelineEventos = () => {
     >
       <div className="te-container">
         <h2 className="te-title te-reveal">
-          {t('eventos.titulo') || 'Próximos Eventos'}
+          {t('eventos.titulo') || 'Línea de Tiempo'}
         </h2>
         <p className="te-subtitle te-reveal te-delay-100">
-          {t('eventos.subtitulo') || 'Participa en nuestros eventos y sé parte del cambio'}
+          {t('eventos.subtitulo') || 'Sigue nuestros eventos en el tiempo'}
         </p>
 
         <div className="te-wrapper">
@@ -294,26 +356,49 @@ const TimelineEventos = () => {
             <i className="fas fa-chevron-left"></i>
           </button>
           
-          <div className="te-cards-container">
-            {visibleCards.map(({ evento, position }) => (
-              <div 
-                key={`${evento.id}-${position}`} 
-                className={`te-card-wrapper te-card-${position}`}
-              >
-                <EventoCard
-                  evento={evento}
-                  getImageUrl={getImageUrl}
-                  variant={position === 'center' ? 'featured' : 'default'}
-                  isAuthenticated={isAuthenticated}
-                  liked={likedEvents[evento.id]}
-                  asistencia={asistenciaEvents[evento.id]}
-                  onLike={handleLike}
-                  onConfirmarAsistencia={handleConfirmarAsistencia}
-                  onView={(e) => console.log('Ver evento:', e.id)}
-                  showActions={true}
-                />
-              </div>
-            ))}
+          <div className="te-timeline-container" ref={containerRef}>
+            <div className="te-timeline-track" ref={trackRef}>
+              {eventos.map((evento, index) => {
+                const fecha = formatDate(evento.fecha_evento);
+                const isActive = index === currentIndex;
+                const distance = Math.abs(index - currentIndex);
+                
+                let opacityClass = '';
+                if (distance === 0) opacityClass = 'te-opacity-center';
+                else if (distance === 1) opacityClass = 'te-opacity-near';
+                else if (distance === 2) opacityClass = 'te-opacity-far';
+                else opacityClass = 'te-opacity-away';
+                
+                return (
+                  <div 
+                    key={evento.id} 
+                    className={`te-timeline-item ${opacityClass}`}
+                    onClick={() => goToIndex(index)}
+                  >
+                    <div className="te-timeline-marker">
+                      <div className={`te-timeline-dot ${isActive ? 'te-active' : ''}`}></div>
+                      <div className="te-timeline-date">
+                        <span className="te-date-day">{fecha.day}</span>
+                        <span className="te-date-month">{fecha.month}</span>
+                      </div>
+                    </div>
+                    
+                    <EventoCard
+                      evento={evento}
+                      getImageUrl={getImageUrl}
+                      variant={isActive ? 'featured' : 'default'}
+                      isAuthenticated={isAuthenticated}
+                      liked={likedEvents[evento.id]}
+                      asistencia={asistenciaEvents[evento.id]}
+                      onLike={handleLike}
+                      onConfirmarAsistencia={handleConfirmarAsistencia}
+                      onView={(e) => console.log('Ver evento:', e.id)}
+                      showActions={true}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
           
           <button 
@@ -323,6 +408,18 @@ const TimelineEventos = () => {
           >
             <i className="fas fa-chevron-right"></i>
           </button>
+        </div>
+
+        <div className="te-progress">
+          <div className="te-progress-bar">
+            <div 
+              className="te-progress-fill" 
+              style={{ width: `${((currentIndex + 1) / eventos.length) * 100}%` }}
+            ></div>
+          </div>
+          <div className="te-progress-text">
+            {currentIndex + 1} de {eventos.length} eventos
+          </div>
         </div>
 
         <div className="te-footer">

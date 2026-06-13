@@ -66,5 +66,15 @@
   "mascotas_disponibles": "Mascotas Disponibles",
   "mascotas_subtitle": "Conoce las mascotas esperando su hogar para siempre",
   "sin_mascotas": "No hay mascotas disponibles en este momento. ¡Vuelve pronto!",
-  "ver_todas": "Ver Todas las Mascotas"
+  "ver_todas": "Ver Todas las Mascotas",
+  "eventos": {
+    "titulo": "Próximos Eventos",
+    "subtitulo": "Participa en nuestros eventos y sé parte del cambio",
+    "ver_todos": "Ver todos los eventos",
+    "error": "No se pudieron cargar los eventos",
+    "reintentar": "Reintentar",
+    "empty": "Próximamente tendremos nuevos eventos",
+    "anterior": "Anterior",
+    "siguiente": "Siguiente"
+  }
 }

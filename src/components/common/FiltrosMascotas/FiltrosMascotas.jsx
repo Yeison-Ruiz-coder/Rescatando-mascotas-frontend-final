@@ -9,7 +9,7 @@ const FiltrosMascotas = ({
   onFilterChange, 
   mascotas = [],
   isLoading = false,
-  especies = []  // Recibir especies desde el padre
+  especies = []
 }) => {
   const { t } = useTranslation('mascotas');
   
@@ -28,7 +28,6 @@ const FiltrosMascotas = ({
   const timeoutRef = useRef(null);
   const mascotasRef = useRef(mascotas);
 
-  // Opciones para los selects
   const opcionesGenero = [
     { value: '', label: t('todos', 'Todos') },
     { value: 'Macho', label: t('macho', 'Macho') },
@@ -43,18 +42,16 @@ const FiltrosMascotas = ({
     { value: 'muy_grande', label: t('muy_grande', 'Muy grande') }
   ];
 
-  // Opciones para especies (dinámicas desde el backend)
   const opcionesEspecies = [
     { value: '', label: t('todas', 'Todas') },
     ...especies.map(esp => ({ value: esp, label: esp }))
   ];
 
-  // Mantener referencia actualizada
   useEffect(() => {
     mascotasRef.current = mascotas;
   }, [mascotas]);
 
-  // 🔥 Función que aplica TODOS los filtros
+  // 🔥 Función que aplica TODOS los filtros - SOLO se llama MANUALMENTE
   const aplicarFiltros = useCallback(() => {
     const filtros = {};
     if (buscar.trim()) filtros.buscar = buscar.trim();
@@ -65,7 +62,94 @@ const FiltrosMascotas = ({
     setMostrarSugerencias(false);
   }, [buscar, especie, genero, tamano, onFilterChange]);
 
-  // Función para obtener sugerencias
+  // ✅ Función que SOLO actualiza el estado del texto, NO aplica filtros
+  const handleBuscarChange = (e) => {
+    setBuscar(e.target.value);
+  };
+
+  // ✅ Función para aplicar filtros desde el botón
+  const handleBuscarClick = () => {
+    aplicarFiltros();
+  };
+
+  // ✅ Función para aplicar filtros desde Enter
+  const handleKeyDown = (e) => {
+    if (!mostrarSugerencias || sugerencias.length === 0) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        aplicarFiltros();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSugerenciaSeleccionada(prev => 
+          prev < sugerencias.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSugerenciaSeleccionada(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (sugerenciaSeleccionada >= 0) {
+          const sugerencia = sugerencias[sugerenciaSeleccionada];
+          setBuscar(sugerencia);
+          setMostrarSugerencias(false);
+          aplicarFiltros();
+        } else {
+          aplicarFiltros();
+        }
+        break;
+      case 'Escape':
+        setMostrarSugerencias(false);
+        setSugerenciaSeleccionada(-1);
+        break;
+    }
+  };
+
+  // ✅ Función para cuando se selecciona una sugerencia
+  const seleccionarSugerencia = (sugerencia) => {
+    setBuscar(sugerencia);
+    setMostrarSugerencias(false);
+    aplicarFiltros();
+  };
+
+  // ✅ Función que limpia todos los filtros
+  const limpiarTodo = () => {
+    setBuscar('');
+    setEspecie('');
+    setGenero('');
+    setTamano('');
+    onFilterChange({});
+    setSugerencias([]);
+    setMostrarSugerencias(false);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  };
+
+  // ✅ Función para aplicar filtros cuando cambian los SELECTS
+  const handleSelectChange = (tipo, valor) => {
+    if (tipo === 'especie') setEspecie(valor);
+    if (tipo === 'genero') setGenero(valor);
+    if (tipo === 'tamano') setTamano(valor);
+    
+    // Aplicar filtros inmediatamente cuando cambia un select
+    const nuevosFiltros = {};
+    if (buscar.trim()) nuevosFiltros.buscar = buscar.trim();
+    if (tipo === 'especie' && valor) nuevosFiltros.especie = valor;
+    else if (tipo !== 'especie' && especie) nuevosFiltros.especie = especie;
+    if (tipo === 'genero' && valor) nuevosFiltros.genero = valor;
+    else if (tipo !== 'genero' && genero) nuevosFiltros.genero = genero;
+    if (tipo === 'tamano' && valor) nuevosFiltros.tamano = valor;
+    else if (tipo !== 'tamano' && tamano) nuevosFiltros.tamano = tamano;
+    
+    onFilterChange(nuevosFiltros);
+  };
+
+  // Obtener sugerencias (solo para mostrar, NO aplica filtros)
   const obtenerSugerencias = useCallback((texto) => {
     if (!texto.trim() || texto.length < 2) return [];
 
@@ -86,18 +170,12 @@ const FiltrosMascotas = ({
       if (mascota.lugar_rescate?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(mascota.lugar_rescate);
       }
-      if (mascota.tamano?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.tamano);
-      }
-      if (mascota.genero?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.genero);
-      }
     });
 
     return Array.from(palabrasUnicas).slice(0, 10);
   }, []);
 
-  // Efecto para manejar la búsqueda con debounce
+  // Efecto para obtener sugerencias con debounce (NO aplica filtros)
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -131,63 +209,6 @@ const FiltrosMascotas = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Aplicar filtros cuando cambian los selects
-  useEffect(() => {
-    aplicarFiltros();
-  }, [especie, genero, tamano, aplicarFiltros]);
-
-  const handleKeyDown = (e) => {
-    if (!mostrarSugerencias || sugerencias.length === 0) {
-      if (e.key === 'Enter') aplicarFiltros();
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSugerenciaSeleccionada(prev => 
-          prev < sugerencias.length - 1 ? prev + 1 : prev
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setSugerenciaSeleccionada(prev => prev > 0 ? prev - 1 : -1);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (sugerenciaSeleccionada >= 0) {
-          const sugerencia = sugerencias[sugerenciaSeleccionada];
-          setBuscar(sugerencia);
-          setMostrarSugerencias(false);
-          aplicarFiltros();
-        } else {
-          aplicarFiltros();
-        }
-        break;
-      case 'Escape':
-        setMostrarSugerencias(false);
-        setSugerenciaSeleccionada(-1);
-        break;
-    }
-  };
-
-  const seleccionarSugerencia = (sugerencia) => {
-    setBuscar(sugerencia);
-    setMostrarSugerencias(false);
-    aplicarFiltros();
-  };
-
-  const limpiarTodo = () => {
-    setBuscar('');
-    setEspecie('');
-    setGenero('');
-    setTamano('');
-    onFilterChange({});
-    setSugerencias([]);
-    setMostrarSugerencias(false);
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  };
-
   const hayFiltrosActivos = buscar || especie || genero || tamano;
 
   return (
@@ -198,9 +219,8 @@ const FiltrosMascotas = ({
         </div>
       )}
 
-      {/* Fila superior: Búsqueda + Filtros a la derecha */}
       <div className="fm-filters-row">
-        {/* Buscador - ocupa más espacio */}
+        {/* Buscador */}
         <div className="fm-search-wrapper">
           <div className="fm-search-box">
             <span className="fm-search-icon">
@@ -212,7 +232,7 @@ const FiltrosMascotas = ({
               className="fm-search-input"
               placeholder={t("buscar_placeholder", "Buscar mascotas...")}
               value={buscar}
-              onChange={(e) => setBuscar(e.target.value)}
+              onChange={handleBuscarChange}
               onKeyDown={handleKeyDown}
               onFocus={() => {
                 if (buscar.length >= 2 && sugerencias.length > 0) {
@@ -226,7 +246,7 @@ const FiltrosMascotas = ({
                 <i className="fas fa-times"></i>
               </button>
             )}
-            <button className="fm-search-btn" onClick={aplicarFiltros} disabled={isLoading}>
+            <button className="fm-search-btn" onClick={handleBuscarClick} disabled={isLoading}>
               <i className="fas fa-search"></i>
               <span>{isLoading ? '...' : t("buscar", "Buscar")}</span>
             </button>
@@ -257,19 +277,19 @@ const FiltrosMascotas = ({
           <CustomSelect
             options={opcionesEspecies}
             value={especie}
-            onChange={(e) => setEspecie(e.target.value)}
+            onChange={(e) => handleSelectChange('especie', e.target.value)}
             placeholder={t('especie', 'Especie')}
           />
           <CustomSelect
             options={opcionesGenero}
             value={genero}
-            onChange={(e) => setGenero(e.target.value)}
+            onChange={(e) => handleSelectChange('genero', e.target.value)}
             placeholder={t('genero', 'Género')}
           />
           <CustomSelect
             options={opcionesTamano}
             value={tamano}
-            onChange={(e) => setTamano(e.target.value)}
+            onChange={(e) => handleSelectChange('tamano', e.target.value)}
             placeholder={t('tamano', 'Tamaño')}
           />
         </div>

@@ -66,5 +66,15 @@
   "mascotas_disponibles": "Available Pets",
   "mascotas_subtitle": "Meet the pets waiting for their forever home",
   "sin_mascotas": "No pets available at the moment. Check back soon!",
-  "ver_todas": "View All Pets"
+  "ver_todas": "View All Pets",
+  "eventos": {
+    "titulo": "Upcoming Events",
+    "subtitulo": "Join our events and be part of the change",
+    "ver_todos": "View all events",
+    "error": "Could not load events",
+    "reintentar": "Retry",
+    "empty": "New events coming soon",
+    "anterior": "Previous",
+    "siguiente": "Next"
+  }
 }
