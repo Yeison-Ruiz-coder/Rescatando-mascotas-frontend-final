@@ -22,7 +22,11 @@ const EventoCard = memo(({
     nombre_evento,
     lugar_evento,
     fecha_evento,
-    imagen_url
+    imagen_url,
+    descripcion_corta = '',
+    capacidad_total = 0,
+    estado_evento = 'proximo',
+    es_gratuito = false
   } = evento;
 
   const fechaFormateada = useMemo(() => {
@@ -46,8 +50,77 @@ const EventoCard = memo(({
 
   const cardVariant = variant === 'featured' ? 'ec-featured' : '';
 
+  const getEstadoClase = () => {
+    const estados = {
+      proximo: 'ec-estado-proximo',
+      hoy: 'ec-estado-hoy',
+      finalizado: 'ec-estado-finalizado',
+      agotado: 'ec-estado-agotado'
+    };
+    return estados[estado_evento] || 'ec-estado-proximo';
+  };
+
+  const getEstadoTexto = () => {
+    const textos = {
+      proximo: 'Próximo',
+      hoy: 'Hoy',
+      finalizado: 'Finalizado',
+      agotado: 'Cupos agotados'
+    };
+    return textos[estado_evento] || 'Próximo';
+  };
+
+  const getEstadoIcono = () => {
+    const iconos = {
+      proximo: 'far fa-clock',
+      hoy: 'fas fa-calendar-day',
+      finalizado: 'fas fa-check-circle',
+      agotado: 'fas fa-ticket-alt'
+    };
+    return iconos[estado_evento] || 'far fa-clock';
+  };
+
+  const botonDeshabilitado = estado_evento === 'finalizado' || estado_evento === 'agotado';
+  
+  const infoCapacidad = () => {
+    if (!capacidad_total || capacidad_total === 0) return null;
+    return `${capacidad_total} cupos`;
+  };
+
+  // Click en toda la card (fondo)
+  const handleCardClick = () => {
+    if (!botonDeshabilitado && onView) {
+      onView(evento);
+    }
+  };
+
+  // Click en el botón del overlay
+  const handleOverlayClick = (e) => {
+    e.stopPropagation();
+    if (!botonDeshabilitado && onView) {
+      onView(evento);
+    }
+  };
+
+  const textoBoton = () => {
+    if (estado_evento === 'finalizado') return 'Finalizado';
+    if (estado_evento === 'agotado') return 'Sin cupos';
+    return 'Ver detalles';
+  };
+
   return (
-    <div className={`ec-card ${cardVariant}`}>
+    <div 
+      className={`ec-card ${cardVariant}`} 
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+    >
       <div className="ec-image">
         {imageUrl ? (
           <img src={imageUrl} alt={nombre_evento} loading="lazy" />
@@ -64,45 +137,56 @@ const EventoCard = memo(({
         </div>
       </div>
 
+      {/* Contenido normal (siempre visible) */}
       <div className="ec-content">
-        <h3 className="ec-titulo">{nombre_evento}</h3>
-        
-        <div className="ec-lugar">
-          <i className="fas fa-map-marker-alt"></i>
-          <span>{lugar_evento || t('lugar_no_disponible')}</span>
+        <div className={`ec-estado-badge ${getEstadoClase()}`}>
+          <i className={getEstadoIcono()}></i>
+          <span>{getEstadoTexto()}</span>
+          {es_gratuito && (
+            <>
+              <span>•</span>
+              <i className="fas fa-gift"></i>
+              <span>Gratis</span>
+            </>
+          )}
         </div>
-        
-        {showActions && (
-          <div className="ec-buttons">
-            <button
-              className="ec-btn ec-btn-outline"
-              onClick={(e) => { e.stopPropagation(); onView?.(evento); }}
-              type="button"
-            >
-              <i className="fas fa-eye"></i> <span>{t('ver_detalles')}</span>
-            </button>
-            
-            <button
-              onClick={(e) => { e.stopPropagation(); onLike?.(id); }}
-              className={`ec-btn ec-btn-like ${liked ? 'ec-liked' : ''}`}
-              type="button"
-            >
-              <i className="fas fa-heart"></i>
-            </button>
 
-            <button
-              onClick={(e) => { e.stopPropagation(); onConfirmarAsistencia?.(id); }}
-              className={`ec-btn ec-btn-asistir ${asistencia ? 'ec-confirmed' : ''}`}
-              disabled={!isAuthenticated}
-              title={!isAuthenticated ? (t('login_requerido') || 'Inicia sesión') : ''}
-              type="button"
-            >
-              <i className="fas fa-calendar-check"></i>
-              <span>{asistencia ? t('confirmado') : t('asistire')}</span>
-            </button>
-          </div>
+        <h3 className="ec-titulo">{nombre_evento}</h3>
+
+        {descripcion_corta && (
+          <p className="ec-descripcion">{descripcion_corta}</p>
         )}
+
+        <div className="ec-info-grid">
+          {lugar_evento && (
+            <div className="ec-info-item">
+              <i className="fas fa-map-marker-alt"></i>
+              <span>{lugar_evento}</span>
+            </div>
+          )}
+          {infoCapacidad() && (
+            <div className="ec-info-item">
+              <i className="fas fa-users"></i>
+              <span>{infoCapacidad()}</span>
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Overlay hover (solo visible en desktop al pasar mouse) */}
+      {showActions && (
+        <div className="ec-overlay">
+          <button
+            className="ec-overlay-btn"
+            onClick={handleOverlayClick}
+            disabled={botonDeshabilitado}
+            type="button"
+          >
+            <i className="fas fa-eye"></i>
+            <span>{textoBoton()}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 });

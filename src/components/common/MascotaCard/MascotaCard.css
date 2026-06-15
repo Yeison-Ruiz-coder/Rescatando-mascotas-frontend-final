@@ -194,46 +194,62 @@
   font-size: 0.7rem;
   -webkit-line-clamp: 1;
 }
-
 /* ===== RESPONSIVE MÓVIL ===== */
 @media (max-width: 768px) {
   .mascard-overlay {
     transform: translateY(0);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.7));
-    padding: 40px 12px 12px;
+     background: linear-gradient(to top, 
+      rgba(0, 0, 0, 0.6) 0%,      /* Parte inferior: 60% opaco */
+      rgba(0, 0, 0, 0.3) 50%,     /* Medio: 30% opaco */
+      transparent 100%);           /* Superior: completamente transparente - ¡ADIÓS LÍNEA! */
+    padding: 20px 12px 8px; /* Reducido de 40px a 20px arriba, y de 12px a 8px abajo */
   }
   
   /* Badges arriba a la derecha en móvil */
   .mascard-badges {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 12px;      /* Reducido de 16px a 12px */
+    right: 12px;    /* Reducido de 16px a 12px */
     bottom: auto;
     left: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 8px;
+    gap: 6px;       /* Reducido de 8px a 6px */
   }
   
   .mascard-badge {
-    padding: 4px 12px;
-    font-size: 0.65rem;
+    padding: 3px 10px;   /* Reducido de 4px 12px a 3px 10px */
+    font-size: 0.6rem;   /* Reducido de 0.65rem a 0.6rem */
     border-radius: 20px;
   }
   
   .mascard-name {
-    top: 16px;
-    left: 16px;
+    top: 12px;           /* Reducido de 16px a 12px */
+    left: 12px;          /* Reducido de 16px a 12px */
     right: auto;
-    font-size: 0.85rem;
-    padding: 6px 14px;
-    max-width: calc(100% - 100px);
+    font-size: 0.8rem;   /* Reducido de 0.85rem a 0.8rem */
+    padding: 4px 12px;   /* Reducido de 6px 14px a 4px 12px */
+    max-width: calc(100% - 80px);
   }
   
   .mascard-overlay-desc {
-    font-size: 0.75rem;
-    -webkit-line-clamp: 2;
+    font-size: 0.7rem;   /* Reducido de 0.75rem a 0.7rem */
+    -webkit-line-clamp: 1;  /* Cambiado de 2 a 1 línea */
+    margin-bottom: 4px;     /* Agregado margen pequeño */
+  }
+  
+  /* Ocultar fundación y ubicación en móvil para ahorrar espacio */
+  .mascard-overlay-fundacion,
+  .mascard-overlay-ubicacion {
+    display: none;
+  }
+  
+  .mascard-btn {
+    margin-top: 6px;     /* Reducido de 14px a 6px */
+    padding: 6px 12px;   /* Reducido de 10px 16px a 6px 12px */
+    font-size: 0.7rem;   /* Reducido de 0.8rem a 0.7rem */
+    gap: 6px;            /* Reducido de 10px a 6px */
   }
 }
 

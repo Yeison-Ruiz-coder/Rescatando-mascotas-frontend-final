@@ -65,11 +65,11 @@ const HeroCarousel = () => {
               </div>
               <div className="hc-carousel-content-modern">
                 <div className="hc-container-modern">
-                  <div className="hc-carousel-text-modern">
+                  <div className="hc-carousel-text-modern reveal-up delay-200">
                     <h2 className="hc-carousel-pre-title-modern">{slide.title}</h2>
                     <h1 className="hc-carousel-title-modern">{slide.highlight}</h1>
                     <p className="hc-carousel-description-modern">{slide.description}</p>
-                    <Link to={slide.ctaLink} className="hc-carousel-btn-modern">
+                    <Link to={slide.ctaLink} className="hc-carousel-btn-modern reveal-scale delay-400">
                       <i className="fas fa-heart"></i> {slide.ctaText}
                     </Link>
                   </div>

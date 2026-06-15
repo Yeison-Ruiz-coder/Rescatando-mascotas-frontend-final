@@ -42,7 +42,6 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
     setLoadProgress(0);
     setError(null);
 
-    // Simular progreso de carga (igual que en VeterinariaDetalle)
     const progressInterval = setInterval(() => {
       setLoadProgress((prev) => {
         if (prev >= 90) return prev;
@@ -51,7 +50,6 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
     }, 100);
 
     try {
-      // 🔥 OPTIMIZACIÓN: Usar fields para traer SOLO lo necesario
       const response = await api.get(`/mascotas/${id}`, {
         params: {
           fields:
@@ -192,7 +190,7 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
 
   if (error || !mascota) {
     return (
-      <div className="md-page">
+      <div className={`md-page ${embed ? 'md-embed' : ''}`}>
         <div className="md-bento-grid">
           <div className="md-error-card">
             <i className="fas fa-paw fa-3x"></i>
@@ -213,10 +211,10 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
   }
 
   return (
-    <div className="md-page">
-      {/* Botón volver */}
+    <div className={`md-page ${embed ? 'md-embed' : ''}`}>
+      {/* Botón volver - oculto en embed */}
       {!embed && (
-        <div className="md-back-outer">
+        <div className="md-back-outer reveal-up delay-100">
           <button
             onClick={() => navigate("/mascotas")}
             className="md-back-link"
@@ -273,16 +271,19 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
         especie={mascota?.especie}
         mascotaActual={mascota}
         t={t}
+        isEmbed={embed}
       />
 
-      {/* Footer */}
-      <div className="md-footer">
-        <i className="far fa-clock"></i>
-        <small>
-          {t("actualizado")}:{" "}
-          {new Date(mascota.updated_at || Date.now()).toLocaleDateString()}
-        </small>
-      </div>
+      {/* Footer - oculto en embed */}
+      {!embed && (
+        <div className="md-footer reveal-up delay-300">
+          <i className="far fa-clock"></i>
+          <small>
+            {t("actualizado")}:{" "}
+            {new Date(mascota.updated_at || Date.now()).toLocaleDateString()}
+          </small>
+        </div>
+      )}
     </div>
   );
 };

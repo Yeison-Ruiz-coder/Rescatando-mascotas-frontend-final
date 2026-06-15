@@ -1,3 +1,4 @@
+// src/pages/public/Mascotas/components/MascotaHero.jsx
 import React from "react";
 
 const MascotaHero = ({
@@ -12,7 +13,7 @@ const MascotaHero = ({
   images,
 }) => {
   return (
-    <div className="mh-hero">
+    <div className="mh-hero reveal-up">
       <div className="mh-imagen-container">
         <div className={`mh-estado-badge md-estado-${estadoClass}`}>
           <i className={`fas ${estadoIcon}`}></i>
@@ -22,7 +23,7 @@ const MascotaHero = ({
       </div>
 
       {images && images.length > 1 && (
-        <div className="mh-thumbs">
+        <div className="mh-thumbs stagger-children">
           {images.map((img, idx) => (
             <button
               key={idx}

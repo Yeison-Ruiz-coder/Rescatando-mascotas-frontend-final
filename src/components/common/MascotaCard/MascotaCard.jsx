@@ -101,7 +101,7 @@ const MascotaCard = ({
         )}
         
         <button
-          className="mascard-btn"
+          className="mascard-btn reveal-up delay-100"
           onClick={(e) => {
             e.stopPropagation();
             onView?.(mascota);

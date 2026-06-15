@@ -63,9 +63,9 @@ const AnimatedStats = ({ stats }) => {
   return (
     <section className="as-stats-modern">
       <div className="as-stats-container-modern">
-        <div className="as-stats-grid-modern">
+        <div className="as-stats-grid-modern stagger-children">
           {statsData.map((stat, index) => (
-            <div key={index} className="as-stats-card-modern hp-reveal">
+            <div key={index} className="as-stats-card-modern">
               <div className="as-stats-icon-modern">
                 <i className={stat.icon}></i>
               </div>

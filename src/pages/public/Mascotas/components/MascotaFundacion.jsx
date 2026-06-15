@@ -1,10 +1,11 @@
+// src/pages/public/Mascotas/components/MascotaFundacion.jsx
 import React from "react";
 
 const MascotaFundacion = ({ fundacion, t }) => {
   if (!fundacion) return null;
 
   return (
-    <section className="mf-fundacion">
+    <section className="mf-fundacion reveal-up delay-200">
       <div className="mf-container">
         <h2 className="mf-titulo">{t("fundacion")}</h2>
 

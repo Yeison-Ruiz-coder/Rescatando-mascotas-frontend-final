@@ -13,11 +13,11 @@ const FiltrosMascotas = ({
 }) => {
   const { t } = useTranslation('mascotas');
   
-  // Estados de filtros
   const [buscar, setBuscar] = useState('');
   const [especie, setEspecie] = useState('');
   const [genero, setGenero] = useState('');
   const [tamano, setTamano] = useState('');
+  const [progress, setProgress] = useState(0);
   
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
@@ -27,6 +27,36 @@ const FiltrosMascotas = ({
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
   const mascotasRef = useRef(mascotas);
+  const progressIntervalRef = useRef(null);
+
+  // Efecto para animar la barra de progreso
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(0);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      
+      progressIntervalRef.current = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) return 90;
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+    } else {
+      setProgress(100);
+      setTimeout(() => {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
+      }, 500);
+    }
+    
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [isLoading]);
 
   const opcionesGenero = [
     { value: '', label: t('todos', 'Todos') },
@@ -51,7 +81,6 @@ const FiltrosMascotas = ({
     mascotasRef.current = mascotas;
   }, [mascotas]);
 
-  // 🔥 Función que aplica TODOS los filtros - SOLO se llama MANUALMENTE
   const aplicarFiltros = useCallback(() => {
     const filtros = {};
     if (buscar.trim()) filtros.buscar = buscar.trim();
@@ -62,17 +91,14 @@ const FiltrosMascotas = ({
     setMostrarSugerencias(false);
   }, [buscar, especie, genero, tamano, onFilterChange]);
 
-  // ✅ Función que SOLO actualiza el estado del texto, NO aplica filtros
   const handleBuscarChange = (e) => {
     setBuscar(e.target.value);
   };
 
-  // ✅ Función para aplicar filtros desde el botón
   const handleBuscarClick = () => {
     aplicarFiltros();
   };
 
-  // ✅ Función para aplicar filtros desde Enter
   const handleKeyDown = (e) => {
     if (!mostrarSugerencias || sugerencias.length === 0) {
       if (e.key === 'Enter') {
@@ -111,14 +137,12 @@ const FiltrosMascotas = ({
     }
   };
 
-  // ✅ Función para cuando se selecciona una sugerencia
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
     aplicarFiltros();
   };
 
-  // ✅ Función que limpia todos los filtros
   const limpiarTodo = () => {
     setBuscar('');
     setEspecie('');
@@ -130,13 +154,11 @@ const FiltrosMascotas = ({
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   };
 
-  // ✅ Función para aplicar filtros cuando cambian los SELECTS
   const handleSelectChange = (tipo, valor) => {
     if (tipo === 'especie') setEspecie(valor);
     if (tipo === 'genero') setGenero(valor);
     if (tipo === 'tamano') setTamano(valor);
     
-    // Aplicar filtros inmediatamente cuando cambia un select
     const nuevosFiltros = {};
     if (buscar.trim()) nuevosFiltros.buscar = buscar.trim();
     if (tipo === 'especie' && valor) nuevosFiltros.especie = valor;
@@ -149,7 +171,6 @@ const FiltrosMascotas = ({
     onFilterChange(nuevosFiltros);
   };
 
-  // Obtener sugerencias (solo para mostrar, NO aplica filtros)
   const obtenerSugerencias = useCallback((texto) => {
     if (!texto.trim() || texto.length < 2) return [];
 
@@ -175,7 +196,6 @@ const FiltrosMascotas = ({
     return Array.from(palabrasUnicas).slice(0, 10);
   }, []);
 
-  // Efecto para obtener sugerencias con debounce (NO aplica filtros)
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -195,7 +215,6 @@ const FiltrosMascotas = ({
     };
   }, [buscar, obtenerSugerencias]);
 
-  // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sugerenciasRef.current && 
@@ -212,16 +231,13 @@ const FiltrosMascotas = ({
   const hayFiltrosActivos = buscar || especie || genero || tamano;
 
   return (
-    <div className="fm-container">
-      {isLoading && (
-        <div className="fm-progress">
-          <ProgressBar progress={100} height="3px" animated={true} variant="gradient" />
-        </div>
-      )}
-
+    <div className="fm-container reveal-up delay-100">
       <div className="fm-filters-row">
         {/* Buscador */}
         <div className="fm-search-wrapper">
+          <label className="fm-filter-label">
+            <i className="fas fa-search"></i> {t("buscar_mascota", "Buscar mascota")}
+          </label>
           <div className="fm-search-box">
             <span className="fm-search-icon">
               <i className="fas fa-search"></i>
@@ -230,7 +246,7 @@ const FiltrosMascotas = ({
               ref={inputRef}
               type="text"
               className="fm-search-input"
-              placeholder={t("buscar_placeholder", "Buscar mascotas...")}
+              placeholder={t("buscar_placeholder", "Nombre, especie, ubicación...")}
               value={buscar}
               onChange={handleBuscarChange}
               onKeyDown={handleKeyDown}
@@ -252,6 +268,13 @@ const FiltrosMascotas = ({
             </button>
           </div>
 
+          {/* Progress Bar - DENTRO del buscador */}
+          {isLoading && (
+            <div className="fm-progress-inline">
+              <ProgressBar progress={progress} height="3px" animated={true} variant="gradient" />
+            </div>
+          )}
+
           {/* Sugerencias */}
           {mostrarSugerencias && sugerencias.length > 0 && (
             <div ref={sugerenciasRef} className="fm-sugerencias-dropdown">
@@ -272,33 +295,50 @@ const FiltrosMascotas = ({
           )}
         </div>
 
-        {/* Filtros a la derecha */}
+        {/* Selects con etiquetas */}
         <div className="fm-selects-group">
-          <CustomSelect
-            options={opcionesEspecies}
-            value={especie}
-            onChange={(e) => handleSelectChange('especie', e.target.value)}
-            placeholder={t('especie', 'Especie')}
-          />
-          <CustomSelect
-            options={opcionesGenero}
-            value={genero}
-            onChange={(e) => handleSelectChange('genero', e.target.value)}
-            placeholder={t('genero', 'Género')}
-          />
-          <CustomSelect
-            options={opcionesTamano}
-            value={tamano}
-            onChange={(e) => handleSelectChange('tamano', e.target.value)}
-            placeholder={t('tamano', 'Tamaño')}
-          />
+          <div className="fm-select-item">
+            <label className="fm-filter-label">
+              <i className="fas fa-paw"></i> {t("especie", "Especie")}
+            </label>
+            <CustomSelect
+              options={opcionesEspecies}
+              value={especie}
+              onChange={(e) => handleSelectChange('especie', e.target.value)}
+              placeholder={t('seleccionar_especie', 'Seleccionar especie')}
+            />
+          </div>
+          
+          <div className="fm-select-item">
+            <label className="fm-filter-label">
+              <i className="fas fa-venus-mars"></i> {t("genero", "Género")}
+            </label>
+            <CustomSelect
+              options={opcionesGenero}
+              value={genero}
+              onChange={(e) => handleSelectChange('genero', e.target.value)}
+              placeholder={t('seleccionar_genero', 'Seleccionar género')}
+            />
+          </div>
+          
+          <div className="fm-select-item">
+            <label className="fm-filter-label">
+              <i className="fas fa-ruler"></i> {t("tamano", "Tamaño")}
+            </label>
+            <CustomSelect
+              options={opcionesTamano}
+              value={tamano}
+              onChange={(e) => handleSelectChange('tamano', e.target.value)}
+              placeholder={t('seleccionar_tamano', 'Seleccionar tamaño')}
+            />
+          </div>
         </div>
       </div>
 
       {/* Botón limpiar filtros */}
       {hayFiltrosActivos && (
         <div className="fm-limpiar-wrapper">
-          <button className="fm-btn-limpiar" onClick={limpiarTodo}>
+          <button className="fm-btn-limpiar reveal-up delay-200" onClick={limpiarTodo}>
             <i className="fas fa-trash-alt"></i>
             <span>{t("limpiar_todo", "Limpiar filtros")}</span>
           </button>

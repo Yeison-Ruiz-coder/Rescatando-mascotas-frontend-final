@@ -1,12 +1,13 @@
+// src/pages/public/Mascotas/components/MascotaResumen.jsx
 import React from "react";
 
 const MascotaResumen = ({ mascota, t }) => {
   return (
-    <section className="mr-resumen">
+    <section className="mr-resumen reveal-up">
       <div className="mr-container">
         <h1 className="mr-titulo">{mascota.nombre_mascota}</h1>
         
-        <div className="mr-grid">
+        <div className="mr-grid stagger-children">
           <div className="mr-stat">
             <i className="fas fa-paw"></i>
             <div className="mr-stat-content">

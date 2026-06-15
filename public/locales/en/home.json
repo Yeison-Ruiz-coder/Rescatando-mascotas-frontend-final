@@ -7,7 +7,7 @@
     "process": "See Our Process",
     "slide1_title": "Give them a second chance",
     "slide1_highlight": "They are waiting for you",
-    "slide1_desc": "Every animal deserves a home full of love. Adopt and change a life.",
+    "slide1_desc": "Every animal deserves a loving home. Adopt and change a life.",
     "slide2_title": "Be part of the change",
     "slide2_highlight": "Report a rescue",
     "slide2_desc": "Your report can save a life. Act now and help an animal in need.",
@@ -39,21 +39,21 @@
   },
   "testimonios": {
     "title": "What Our Adopters Say",
-    "subtitle": "Real stories from families who found their perfect companion",
+    "subtitle": "Real stories from families who have found their perfect companion",
     "maria": {
-      "name": "Maria Gonzalez",
+      "name": "María González",
       "role": "Adopter",
       "text": "Adopting Luna was the best decision we ever made. She has brought so much joy to our family!"
     },
     "carlos": {
-      "name": "Carlos Rodriguez",
+      "name": "Carlos Rodríguez",
       "role": "Volunteer",
       "text": "Being part of this rescue organization has been incredibly rewarding. Every life we save matters."
     },
     "ana": {
-      "name": "Ana Lopez",
+      "name": "Ana López",
       "role": "Foundation Partner",
-      "text": "Their dedication to animal welfare is inspiring. We have witnessed countless success stories."
+      "text": "Their dedication to animal welfare is inspiring. We've seen countless success stories."
     }
   },
   "cta": {
@@ -67,14 +67,43 @@
   "mascotas_subtitle": "Meet the pets waiting for their forever home",
   "sin_mascotas": "No pets available at the moment. Check back soon!",
   "ver_todas": "View All Pets",
+  "sin_descripcion": "No description available",
+  "destacada": "Featured",
+  "adoptar_ahora": "Adopt Now",
+  "ver_todas_sub": "+100 waiting for you",
+  "estado_en_adopcion": "Available for adoption",
+  "estado_adoptado": "Adopted",
+  "estado_en_proceso": "In process",
+  "anos": "years",
   "eventos": {
     "titulo": "Upcoming Events",
-    "subtitulo": "Join our events and be part of the change",
+    "detalle": "Event details",
+    "subtitulo": "Participate in our events and be part of the change",
     "ver_todos": "View all events",
     "error": "Could not load events",
     "reintentar": "Retry",
     "empty": "New events coming soon",
     "anterior": "Previous",
     "siguiente": "Next"
+  },
+  "aliados": {
+    "titulo": "They make the change possible",
+    "subtitulo": "Veterinaries and foundations working tirelessly for animal welfare",
+    "veterinarias": "Partner Veterinaries",
+    "veterinarias_sub": "Guaranteed care and health",
+    "fundaciones": "Partner Foundations",
+    "fundaciones_sub": "Rescuing and giving a second chance",
+    "ver_veterinarias": "View all veterinaries",
+    "ver_fundaciones": "View all foundations",
+    "sin_veterinarias": "More veterinaries will join this cause soon",
+    "sin_fundaciones": "More foundations will join this cause soon",
+    "mensaje_footer": "Every ally is a step towards a better future for animals"
+  },
+  "reportar": {
+    "title": "Did you see an animal in danger?",
+    "description": "Your report can save a life. Act now and help an animal in need.",
+    "atencion": "24/7 Attention",
+    "respuesta": "Response time",
+    "btn": "Report Now"
   }
 }

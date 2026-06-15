@@ -341,3 +341,23 @@
 .ff-container:focus-within {
   outline: none;
 }
+
+.ff-progress-inline {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.ff-progress-inline .progress-bar-container {
+  border-radius: 20px;
+  overflow: hidden;
+  width: 565px;
+  height: 6px;
+}
+
+@media (max-width: 768px) {
+  .ff-progress-inline .progress-bar-container {
+    width: 90%;
+  }
+}

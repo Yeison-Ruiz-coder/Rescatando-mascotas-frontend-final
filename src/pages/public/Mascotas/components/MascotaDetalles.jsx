@@ -1,3 +1,4 @@
+// src/pages/public/Mascotas/components/MascotaDetalles.jsx
 import React from "react";
 
 const MascotaDetalles = ({ mascota, razas, vacunas, t }) => {
@@ -10,11 +11,11 @@ const MascotaDetalles = ({ mascota, razas, vacunas, t }) => {
   if (!hasDetalles) return null;
 
   return (
-    <section className="md-detalles">
+    <section className="md-detalles reveal-up delay-150">
       <div className="md-container">
         <h2 className="md-titulo">{t("detalles")}</h2>
 
-        <div className="md-contenido">
+        <div className="md-contenido stagger-children">
           {razas && razas.length > 0 && (
             <div className="md-bloque">
               <h3 className="md-bloque-titulo">

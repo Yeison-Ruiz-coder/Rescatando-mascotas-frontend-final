@@ -1,0 +1,385 @@
+/* src/pages/public/Home/components/FeaturedMascotas.css */
+/* ============================================
+   FEATURED MASCOTAS - DISEÑO PROFESIONAL
+   ============================================ */
+
+.fm-section {
+  padding: 60px 0;
+  background: transparent;
+  position: relative;
+}
+
+.fm-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== HEADER ===== */
+.fm-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.fm-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fm-subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== MASCOTA DESTACADA ===== */
+.fm-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-hard-sm);
+  margin-bottom: 56px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fm-featured:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.fm-featured-image {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.fm-featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.fm-featured:hover .fm-featured-image img {
+  transform: scale(1.03);
+}
+
+.fm-featured-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: var(--gradient-accent);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 40px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-hard-sm);
+  z-index: 2;
+}
+
+.fm-featured-info {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fm-featured-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-text);
+}
+
+.fm-featured-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.fm-featured-details span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.fm-featured-details i {
+  width: 18px;
+  color: var(--color-primary);
+}
+
+.fm-featured-description {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.fm-featured-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-hard-sm);
+  width: fit-content;
+}
+
+.fm-featured-btn:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* ===== ESTADOS (badges) usando tus variables ===== */
+.fm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.fm-status-en-adopcion {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--color-success);
+}
+
+.fm-status-adoptado {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+
+.fm-status-en-proceso {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-warning);
+}
+
+[data-theme="dark"] .fm-status-en-adopcion {
+  background: rgba(74, 222, 128, 0.2);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .fm-status-adoptado {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+[data-theme="dark"] .fm-status-en-proceso {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+/* ===== GRID SECUNDARIO ===== */
+.fm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* ===== CARD "VER TODAS" ===== */
+.fm-view-all-card {
+  background: var(--gradient-primary);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  min-height: 180px;
+}
+
+.fm-view-all-link {
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fm-view-all-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+}
+
+.fm-view-all-icon {
+  font-size: 2rem;
+  color: white;
+  animation: fm-pulse 2s infinite;
+}
+
+@keyframes fm-pulse {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+.fm-view-all-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.fm-view-all-sub {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.fm-view-all-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* ===== SKELETONS ===== */
+.fm-skeleton-title,
+.fm-skeleton-subtitle,
+.fm-featured-skeleton,
+.fm-card-skeleton {
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: fm-skeleton-loading 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes fm-skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.fm-skeleton-title {
+  width: 300px;
+  height: 40px;
+  margin: 0 auto 12px;
+}
+
+.fm-skeleton-subtitle {
+  width: 200px;
+  height: 24px;
+  margin: 0 auto;
+}
+
+.fm-featured-skeleton {
+  width: 100%;
+  height: 400px;
+  margin-bottom: 56px;
+}
+
+.fm-grid-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.fm-card-skeleton {
+  height: 320px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .fm-featured {
+    gap: 24px;
+  }
+  
+  .fm-featured-info {
+    padding: 24px;
+  }
+  
+  .fm-featured-name {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .fm-section {
+    padding: 40px 0;
+  }
+  
+  .fm-title {
+    font-size: 1.8rem;
+  }
+  
+  .fm-subtitle {
+    font-size: 1rem;
+  }
+  
+  .fm-featured {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 40px;
+  }
+  
+  .fm-featured-image {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .fm-featured-info {
+    padding: 24px;
+  }
+  
+  .fm-featured-name {
+    font-size: 1.4rem;
+  }
+  
+  .fm-featured-details {
+    gap: 12px;
+  }
+  
+  .fm-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fm-container {
+    padding: 0 16px;
+  }
+  
+  .fm-title {
+    font-size: 1.5rem;
+  }
+  
+  .fm-featured-info {
+    padding: 20px;
+  }
+  
+  .fm-featured-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .fm-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fm-view-all-content {
+    padding: 32px;
+  }
+}
+

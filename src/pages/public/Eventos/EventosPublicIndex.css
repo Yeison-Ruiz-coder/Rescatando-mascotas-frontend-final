@@ -130,9 +130,101 @@
 /* ===== GRID DE EVENTOS ===== */
 .eventos-page .eventos-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);  /* ← 3 columnas fijas en desktop */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.8rem;
   width: 100%;
+}
+
+/* ===== CARDS CON DIFERENTES TAMAÑOS SEGÚN IMPORTANCIA ===== */
+
+/* Card tamaño normal */
+.evento-card-normal {
+  grid-column: span 1;
+}
+
+/* Card tamaño importante (más grande) */
+.evento-card-importante {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+/* Card tamaño muy importante (todavía más grande) */
+.evento-card-muy-importante {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Estilo especial para cards importantes */
+.evento-card-importante .ec-card,
+.evento-card-muy-importante .ec-card {
+  height: 100%;
+  box-shadow: var(--shadow-hard-md);
+  border: 2px solid var(--color-heart);
+  transition: all 0.3s ease;
+}
+
+.evento-card-importante .ec-card:hover,
+.evento-card-muy-importante .ec-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hard-lg);
+  border-color: var(--color-accent);
+}
+
+/* Ajustes para cards importantes en el contenido */
+.evento-card-importante .ec-card .ec-titulo,
+.evento-card-muy-importante .ec-card .ec-titulo {
+  font-size: 1.3rem !important;
+}
+
+.evento-card-importante .ec-card .ec-descripcion,
+.evento-card-muy-importante .ec-card .ec-descripcion {
+  font-size: 0.85rem !important;
+  -webkit-line-clamp: 3 !important;
+}
+
+.evento-card-importante .ec-card .ec-image,
+.evento-card-muy-importante .ec-card .ec-image {
+  aspect-ratio: 16 / 9 !important;
+}
+
+/* Badge de importancia */
+.importancia-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #ff4757, #ff6b6b);
+  color: white;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-hard-sm);
+  animation: pulse-importante 2s infinite;
+}
+
+.importancia-badge i {
+  font-size: 0.8rem;
+}
+
+.importancia-badge.muy-importante {
+  background: linear-gradient(135deg, #ff0000, #ff4757);
+  font-size: 0.85rem;
+  padding: 8px 18px;
+}
+
+@keyframes pulse-importante {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+  }
 }
 
 /* ===== PAGINACIÓN ===== */
@@ -297,10 +389,16 @@
   .eventos-page .eventos-header h1 {
     font-size: 5.1rem;
   }
-  .eventos-page .eventos-grid {
-    grid-template-columns: repeat(2, 1fr);  /* ← 2 columnas en tablet */
-    gap: 1.5rem;
+  
+  .evento-card-importante {
+    grid-column: span 2;
   }
+  
+  .evento-card-muy-importante {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  
   .eventos-page .eventos-header .eventos-info {
     font-size: 1rem;
     padding: 6px 16px;
@@ -341,6 +439,23 @@
     gap: 1.2rem;
   }
   
+  .evento-card-importante,
+  .evento-card-muy-importante {
+    grid-column: span 1;
+  }
+  
+  .importancia-badge {
+    top: 12px;
+    right: 12px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+  }
+  
+  .importancia-badge.muy-importante {
+    font-size: 0.75rem;
+    padding: 6px 14px;
+  }
+  
   .eventos-page .eventos-motivational {
     margin-top: 50px;
     padding: 40px 0;
@@ -359,6 +474,18 @@
   }
 }
 
+@media (max-width: 480px) {
+  .importancia-badge {
+    top: 8px;
+    right: 8px;
+    padding: 3px 10px;
+    font-size: 0.65rem;
+  }
+  
+  .importancia-badge i {
+    font-size: 0.7rem;
+  }
+}
 
 /* ===== MODO OSCURO ===== */
 [data-theme="dark"] .eventos-page .eventos-empty,

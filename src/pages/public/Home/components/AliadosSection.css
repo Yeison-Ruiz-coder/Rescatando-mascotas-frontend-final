@@ -1,0 +1,522 @@
+/* src/pages/public/Home/components/AliadosSection.css */
+/* ============================================
+   ALIADOS SECTION - VERSIÓN CONSISTENTE
+   Prefijo: .al- (aliados)
+   Usa exclusivamente tus variables globales
+   ============================================ */
+
+.al-section {
+  padding: 64px 0;
+  background: transparent;
+  position: relative;
+}
+
+.al-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== HEADER ===== */
+.al-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.al-icon-top {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+  opacity: 0.8;
+  animation: al-float 3s ease-in-out infinite;
+}
+
+@keyframes al-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.al-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.al-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ===== GRID PRINCIPAL ===== */
+.al-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+/* ===== TARJETA DE ALIADO ===== */
+.al-card {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-hard-sm);
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-border);
+}
+
+.al-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-md);
+  border-color: var(--color-primary);
+}
+
+/* Header de la tarjeta */
+.al-card-header {
+  padding: 28px 28px 0 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: none;
+}
+
+.al-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.al-card-title-wrapper {
+  flex: 1;
+}
+
+.al-card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 4px 0;
+}
+
+.al-card-sub {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Lista de items */
+.al-list {
+  padding: 16px 0 8px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.al-item {
+  padding: 16px 28px;
+  margin: 0;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.al-item:last-child {
+  border-bottom: none;
+}
+
+.al-item:hover {
+  background: var(--color-hover);
+  transform: translateX(4px);
+}
+
+/* Avatar para cada aliado */
+.al-item-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.al-item-content {
+  flex: 1;
+}
+
+.al-item-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.al-item-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Badges - usando tus colores */
+.al-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 40px;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.al-badge-urgencia {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.al-badge-verificado {
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--color-success);
+}
+
+.al-badge-voluntarios {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary);
+}
+
+/* Info adicional */
+.al-item-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.al-item-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.al-item-location i {
+  font-size: 0.65rem;
+  color: var(--color-primary);
+}
+
+.al-item-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  background: rgba(102, 126, 234, 0.1);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* Footer con enlace */
+.al-card-footer {
+  padding: 20px 28px 28px 28px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-card-bg);
+  text-align: center;
+}
+
+.al-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  padding: 10px 24px;
+  border-radius: 40px;
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.al-link i {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.al-link:hover {
+  gap: 14px;
+  background: var(--gradient-primary);
+  color: white;
+  text-decoration: none;
+}
+
+.al-link:hover i {
+  transform: translateX(4px);
+  color: white;
+}
+
+/* Estado vacío */
+.al-empty {
+  text-align: center;
+  padding: 48px 28px;
+}
+
+.al-empty-icon {
+  font-size: 3rem;
+  opacity: 0.4;
+  margin-bottom: 16px;
+  color: var(--color-primary);
+}
+
+.al-empty p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* Mensaje motivacional footer */
+.al-footer-message {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--color-border);
+}
+
+.al-footer-message span {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.al-footer-message i {
+  color: var(--color-heart);
+  font-size: 0.9rem;
+}
+
+/* ===== SKELETONS ===== */
+.al-skeleton {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.al-skeleton-card {
+  background: var(--color-card-bg);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.al-skeleton-header {
+  padding: 28px;
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.al-skeleton-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 20px;
+}
+
+.al-skeleton-title {
+  width: 200px;
+  height: 24px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.al-skeleton-sub {
+  width: 120px;
+  height: 16px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.al-skeleton-item {
+  padding: 16px 28px;
+  display: flex;
+  gap: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.al-skeleton-avatar {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 16px;
+}
+
+.al-skeleton-text {
+  flex: 1;
+}
+
+.al-skeleton-name {
+  width: 70%;
+  height: 18px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.al-skeleton-detail {
+  width: 50%;
+  height: 14px;
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: al-skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes al-skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .al-grid {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .al-section {
+    padding: 48px 0;
+  }
+  
+  .al-title {
+    font-size: 1.5rem;
+  }
+  
+  .al-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .al-header {
+    margin-bottom: 32px;
+  }
+  
+  .al-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .al-skeleton {
+    grid-template-columns: 1fr;
+  }
+  
+  .al-card-header {
+    padding: 20px 20px 0 20px;
+  }
+  
+  .al-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+  }
+  
+  .al-card-title {
+    font-size: 1.1rem;
+  }
+  
+  .al-item {
+    padding: 14px 20px;
+  }
+  
+  .al-card-footer {
+    padding: 16px 20px 20px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .al-container {
+    padding: 0 16px;
+  }
+  
+  .al-card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+  
+  .al-card-title {
+    font-size: 1rem;
+  }
+  
+  .al-item-name {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .al-item-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .al-footer-message span {
+    font-size: 0.7rem;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .al-badge-urgencia {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
+[data-theme="dark"] .al-badge-verificado {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .al-badge-voluntarios {
+  background: rgba(139, 156, 255, 0.15);
+  color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .al-item-stats {
+  background: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .al-link {
+  background: rgba(139, 156, 255, 0.1);
+}
+
+[data-theme="dark"] .al-link:hover {
+  background: var(--gradient-primary);
+}

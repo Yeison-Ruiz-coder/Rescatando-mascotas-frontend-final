@@ -1,0 +1,238 @@
+/* src/pages/public/Home/components/EventosSection.css */
+/* ============================================
+   EVENTOS SECTION - TIMELINE VERTICAL CON EVENTOCARD
+   Prefijo: .es- (EventosSection)
+   ============================================ */
+
+.es-section {
+  padding: 64px 0;
+  background: transparent;
+}
+
+.es-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.es-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  letter-spacing: -0.01em;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Timeline vertical - línea central */
+.es-timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+/* Línea vertical central con gradiente */
+.es-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-primary) 10%,
+    var(--color-heart) 50%,
+    var(--color-primary) 90%,
+    transparent
+  );
+  border-radius: 3px;
+}
+
+/* Cada item del timeline */
+.es-timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Wrapper de la card - ocupa 45% del ancho */
+.es-timeline-card-wrapper {
+  width: 45%;
+  position: relative;
+}
+
+/* Alternar izquierda/derecha */
+.es-timeline-left .es-timeline-card-wrapper {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.es-timeline-right .es-timeline-card-wrapper {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/* Punto en la línea con gradiente */
+.es-timeline-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background: var(--gradient-primary);
+  border: 3px solid var(--color-card-bg);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.es-timeline-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, white, rgba(255, 255, 255, 0.8));
+  border-radius: 50%;
+}
+
+/* Línea conectora con gradiente */
+.es-timeline-left .es-timeline-card-wrapper::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-heart));
+  transform: translateY(-50%);
+}
+
+.es-timeline-right .es-timeline-card-wrapper::after {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-heart));
+  transform: translateY(-50%);
+}
+
+/* Efecto hover en la línea conectora */
+.es-timeline-card-wrapper:hover::after {
+  background: linear-gradient(90deg, var(--color-accent), var(--color-heart));
+  width: 35px;
+  transition: width 0.3s ease;
+}
+
+/* Skeleton loading */
+.es-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.es-skeleton-item {
+  display: flex;
+  justify-content: center;
+}
+
+.es-skeleton-card {
+  width: 45%;
+  height: 280px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Estado vacío */
+.es-empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--form-input-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.es-empty p {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .es-section {
+    padding: 48px 0;
+  }
+  
+  .es-container {
+    padding: 0 16px;
+  }
+  
+  .es-title {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+  }
+  
+  /* Ocultar línea en móvil */
+  .es-timeline::before {
+    display: none;
+  }
+  
+  /* Items en columna en móvil */
+  .es-timeline-item {
+    margin-bottom: 24px;
+  }
+  
+  .es-timeline-left .es-timeline-card-wrapper,
+  .es-timeline-right .es-timeline-card-wrapper {
+    width: 100%;
+    margin: 0;
+  }
+  
+  /* Ocultar conectores y puntos en móvil */
+  .es-timeline-dot,
+  .es-timeline-left .es-timeline-card-wrapper::after,
+  .es-timeline-right .es-timeline-card-wrapper::after {
+    display: none;
+  }
+  
+  /* Borde izquierdo en móvil para dar sensación de timeline */
+  .es-timeline-card-wrapper {
+    border-left: 4px solid var(--color-primary);
+    padding-left: 16px;
+  }
+  
+  .es-skeleton-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .es-section {
+    padding: 40px 0;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .es-timeline-dot {
+  border-color: var(--color-card-bg);
+}
