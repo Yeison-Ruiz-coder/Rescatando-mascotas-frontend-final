@@ -14,18 +14,49 @@ const FiltrosFundaciones = ({
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerenciaSeleccionada, setSugerenciaSeleccionada] = useState(-1);
+  const [progress, setProgress] = useState(0);
   
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
   const fundacionesRef = useRef(fundaciones);
+  const progressIntervalRef = useRef(null);
+
+  // Efecto para animar la barra de progreso
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(0);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      
+      progressIntervalRef.current = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) return 90;
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+    } else {
+      setProgress(100);
+      setTimeout(() => {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
+      }, 500);
+    }
+    
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [isLoading]);
 
   // Mantener referencia actualizada
   useEffect(() => {
     fundacionesRef.current = fundaciones;
   }, [fundaciones]);
 
-  // Función para obtener sugerencias - CON TODOS LOS CAMPOS
+  // Función para obtener sugerencias
   const obtenerSugerencias = useCallback((texto) => {
     if (!texto.trim() || texto.length < 2) return [];
 
@@ -34,7 +65,6 @@ const FiltrosFundaciones = ({
     const fundacionesActuales = fundacionesRef.current;
 
     fundacionesActuales.forEach(fundacion => {
-      // ===== CAMPOS BÁSICOS =====
       if (fundacion.Nombre_1?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(fundacion.Nombre_1);
       }
@@ -44,38 +74,28 @@ const FiltrosFundaciones = ({
       if (fundacion.ciudad?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(fundacion.ciudad);
       }
-
-      // ===== CONTACTO =====
       if (fundacion.Telefono?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(fundacion.Telefono);
       }
       if (fundacion.Email?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(fundacion.Email);
       }
-
-      // ===== REGISTROS =====
       if (fundacion.registro_sanitario?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(`${t('registro_sanitario', 'Registro sanitario')}: ${fundacion.registro_sanitario}`);
       }
-
-      // ===== CAPACIDAD =====
-      if (fundacion.capacidad_maxima) {
-        const capacidadStr = fundacion.capacidad_maxima.toString();
-        if (capacidadStr.includes(textoLower)) {
-          palabrasUnicas.add(`${fundacion.capacidad_maxima} ${t('animales', 'animales')}`);
-        }
-        if (textoLower.includes('pequeña') && fundacion.capacidad_maxima < 50) {
-          palabrasUnicas.add(t('capacidad_pequeña', 'Capacidad pequeña'));
-        }
-        if (textoLower.includes('mediana') && fundacion.capacidad_maxima >= 50 && fundacion.capacidad_maxima < 150) {
-          palabrasUnicas.add(t('capacidad_mediana', 'Capacidad mediana'));
-        }
-        if (textoLower.includes('grande') && fundacion.capacidad_maxima >= 150) {
-          palabrasUnicas.add(t('capacidad_grande', 'Capacidad grande'));
-        }
+      if (fundacion.horario_atencion?.toLowerCase().includes(textoLower)) {
+        palabrasUnicas.add(`${t('horario', 'Horario')}: ${fundacion.horario_atencion}`);
       }
+      
+      // Búsqueda por días de la semana
+      const diasSemana = ['lunes', 'martes', 'miércoles', 'miercoles', 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
+      diasSemana.forEach(dia => {
+        if (textoLower.includes(dia) && fundacion.horario_atencion?.toLowerCase().includes(dia)) {
+          palabrasUnicas.add(t(`dia_${dia.replace('á', 'a')}`, dia.charAt(0).toUpperCase() + dia.slice(1)));
+        }
+      });
 
-      // ===== NECESIDADES ACTUALES (JSON) =====
+      // Necesidades actuales
       if (fundacion.necesidades_actuales) {
         let necesidades = [];
         try {
@@ -91,20 +111,7 @@ const FiltrosFundaciones = ({
         });
       }
 
-      // ===== HORARIO =====
-      if (fundacion.horario_atencion?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(`${t('horario', 'Horario')}: ${fundacion.horario_atencion}`);
-      }
-      
-      // Búsqueda por días de la semana
-      const diasSemana = ['lunes', 'martes', 'miércoles', 'miercoles', 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
-      diasSemana.forEach(dia => {
-        if (textoLower.includes(dia) && fundacion.horario_atencion?.toLowerCase().includes(dia)) {
-          palabrasUnicas.add(t(`dia_${dia.replace('á', 'a')}`, dia.charAt(0).toUpperCase() + dia.slice(1)));
-        }
-      });
-
-      // ===== VOLUNTARIOS =====
+      // Voluntarios
       if (textoLower.includes('voluntario') || textoLower.includes('voluntarios') || textoLower.includes('ayudar')) {
         if (fundacion.recibe_voluntarios === true) {
           palabrasUnicas.add(t('recibe_voluntarios', 'Recibe voluntarios'));
@@ -113,29 +120,14 @@ const FiltrosFundaciones = ({
         }
       }
 
-      // ===== VERIFICACIÓN =====
+      // Verificado
       if (textoLower.includes('verificado') || textoLower.includes('oficial') || textoLower.includes('confiable')) {
         if (fundacion.verificado === true) {
           palabrasUnicas.add(t('verificado', 'Verificado'));
         }
       }
 
-      // ===== UBICACIÓN (lat/lng) =====
-      if (fundacion.lat && fundacion.lng) {
-        if (textoLower.includes('cerca') || textoLower.includes('cercano') || textoLower.includes('ubicado')) {
-          palabrasUnicas.add(t('tiene_ubicacion', 'Ubicación disponible'));
-        }
-      }
-
-      // ===== RADIO DE ATENCIÓN =====
-      if (fundacion.radio_atencion) {
-        const radioStr = fundacion.radio_atencion.toString();
-        if (radioStr.includes(textoLower)) {
-          palabrasUnicas.add(`${t('radio_atencion', 'Radio de atención')}: ${fundacion.radio_atencion} km`);
-        }
-      }
-
-      // ===== FECHA DE FUNDACIÓN =====
+      // Fecha de fundación
       if (fundacion.fecha_fundacion) {
         const fecha = new Date(fundacion.fecha_fundacion);
         const año = fecha.getFullYear().toString();
@@ -146,22 +138,6 @@ const FiltrosFundaciones = ({
         }
         if (mes?.toLowerCase().includes(textoLower)) {
           palabrasUnicas.add(mes);
-        }
-        
-        // Antigüedad
-        const añosAntiguedad = new Date().getFullYear() - fecha.getFullYear();
-        if (textoLower.includes('antigua') && añosAntiguedad > 10) {
-          palabrasUnicas.add(t('fundacion_antigua', 'Fundación con trayectoria'));
-        }
-        if (textoLower.includes('nueva') && añosAntiguedad < 3) {
-          palabrasUnicas.add(t('fundacion_nueva', 'Fundación nueva'));
-        }
-      }
-
-      // ===== VERIFICAR SI TIENE IMAGEN =====
-      if (textoLower.includes('imagen') || textoLower.includes('foto') || textoLower.includes('portada')) {
-        if (fundacion.imagen_portada) {
-          palabrasUnicas.add(t('tiene_imagen', 'Tiene imagen de portada'));
         }
       }
     });
@@ -227,7 +203,7 @@ const FiltrosFundaciones = ({
       case 'Enter':
         e.preventDefault();
         if (sugerenciaSeleccionada >= 0) {
-          const sugerenciaLimpia = sugerencias[sugerenciaSeleccionada].replace(/^(Registro sanitario:|Necesita:|Horario:|Radio de atención:|Fundada en:)\s*/, '');
+          const sugerenciaLimpia = sugerencias[sugerenciaSeleccionada].replace(/^(Registro sanitario:|Necesita:|Horario:|Fundada en:)\s*/, '');
           seleccionarSugerencia(sugerenciaLimpia);
         } else {
           handleSearch();
@@ -265,12 +241,6 @@ const FiltrosFundaciones = ({
 
   return (
     <div className="ff-container">
-      {isLoading && (
-        <div className="ff-progress">
-          <ProgressBar progress={100} height="3px" animated={true} variant="gradient" />
-        </div>
-      )}
-
       <div className="ff-search-wrapper">
         <div className="ff-search-box">
           <span className="ff-search-icon">
@@ -302,13 +272,20 @@ const FiltrosFundaciones = ({
           </button>
         </div>
 
+        {/* Progress Bar - DENTRO del buscador */}
+        {isLoading && (
+          <div className="ff-progress-inline">
+            <ProgressBar progress={progress} height="3px" animated={true} variant="gradient" />
+          </div>
+        )}
+
         {mostrarSugerencias && sugerencias.length > 0 && (
           <div ref={sugerenciasRef} className="ff-sugerencias-dropdown">
             {sugerencias.map((sugerencia, index) => (
               <div
                 key={index}
                 className={`ff-sugerencia-item ${index === sugerenciaSeleccionada ? 'ff-selected' : ''}`}
-                onClick={() => seleccionarSugerencia(sugerencia.replace(/^(Registro sanitario:|Necesita:|Horario:|Radio de atención:|Fundada en:)\s*/, ''))}
+                onClick={() => seleccionarSugerencia(sugerencia.replace(/^(Registro sanitario:|Necesita:|Horario:|Fundada en:)\s*/, ''))}
                 onMouseEnter={() => setSugerenciaSeleccionada(index)}
               >
                 <span className="ff-sugerencia-icon">

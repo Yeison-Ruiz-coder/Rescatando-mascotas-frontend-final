@@ -1,3 +1,5 @@
+/* src/styles/decorations/circles.css */
+
 body::before {
   content: "";
   position: fixed;
@@ -18,8 +20,8 @@ body::before {
 [data-theme="dark"] body::before {
   background: radial-gradient(
     ellipse at 20% 30%,
-    rgba(139, 156, 255, 0.12) 0%,
-    rgba(118, 75, 162, 0.08) 50%,
+    rgba(139, 156, 255, 0.04) 0%,
+    rgba(118, 75, 162, 0.02) 50%,
     transparent 100%
   );
 }
@@ -49,6 +51,10 @@ body::before {
 .circle-5 { width: 150px; height: 150px; top: 60%; right: 25%; animation-duration: 15s; animation-delay: -7s; }
 .circle-6 { width: 180px; height: 180px; top: 15%; left: 20%; background: radial-gradient(circle, rgba(118, 75, 162, var(--circle-opacity-2)), transparent); animation-duration: 17s; animation-delay: -12s; }
 
+[data-theme="dark"] .circle {
+  background: radial-gradient(circle, rgba(139, 156, 255, 0.05), transparent);
+}
+
 .blob {
   position: fixed;
   pointer-events: none;
@@ -61,9 +67,9 @@ body::before {
 .blob-2 { bottom: 5%; right: -80px; width: 400px; height: 400px; background: rgba(118, 75, 162, 0.12); border-radius: 35% 65% 39% 61% / 56% 32% 68% 44%; filter: blur(40px); animation-duration: 30s; }
 .blob-3 { top: 50%; right: 15%; width: 250px; height: 250px; background: rgba(139, 156, 255, 0.1); border-radius: 40% 60% 38% 62% / 53% 45% 55% 47%; filter: blur(35px); animation-duration: 22s; }
 
-[data-theme="dark"] .blob-1 { background: rgba(139, 156, 255, 0.25); }
-[data-theme="dark"] .blob-2 { background: rgba(118, 75, 162, 0.22); }
-[data-theme="dark"] .blob-3 { background: rgba(155, 107, 196, 0.2); }
+[data-theme="dark"] .blob-1 { background: rgba(139, 156, 255, 0.08); }
+[data-theme="dark"] .blob-2 { background: rgba(118, 75, 162, 0.06); }
+[data-theme="dark"] .blob-3 { background: rgba(155, 107, 196, 0.05); }
 
 .vignette {
   position: fixed;

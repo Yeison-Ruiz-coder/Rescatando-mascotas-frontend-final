@@ -6,7 +6,7 @@
 
 .as-stats-modern {
   padding: 60px 0;
-  background: var(--color-light);
+  background: transparent;
   position: relative;
 }
 
@@ -37,15 +37,36 @@
   box-shadow: var(--shadow-hard-md);
 }
 
+/* Cada stat card con un color de ícono diferente */
+.as-stats-card-modern:nth-child(1) .as-stats-icon-modern {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+.as-stats-card-modern:nth-child(2) .as-stats-icon-modern {
+  background: linear-gradient(135deg, var(--color-heart), var(--color-primary));
+}
+
+.as-stats-card-modern:nth-child(3) .as-stats-icon-modern {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-heart));
+}
+
+.as-stats-card-modern:nth-child(4) .as-stats-icon-modern {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+}
+
 .as-stats-icon-modern {
   width: 70px;
   height: 70px;
   margin: 0 auto 20px;
-  background: var(--gradient-primary);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.as-stats-card-modern:hover .as-stats-icon-modern {
+  transform: scale(1.05) rotate(5deg);
 }
 
 .as-stats-icon-modern i {
@@ -58,6 +79,14 @@
   font-weight: 800;
   color: var(--color-primary);
   margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.as-stats-card-modern:hover .as-stats-number-modern {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .as-stats-label-modern {

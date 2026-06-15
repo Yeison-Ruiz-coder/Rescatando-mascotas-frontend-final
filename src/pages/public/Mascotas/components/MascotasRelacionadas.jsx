@@ -5,7 +5,7 @@ import MascotaCard from "../../../../components/common/MascotaCard/MascotaCard";
 import SlideUpPanel from "../../../../components/common/SlideUpPanel/SlideUpPanel";
 import MascotaDetalle from "../MascotaDetalle";
 
-const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
+const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = false }) => {
   const [mascotasRelacionadas, setMascotasRelacionadas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +23,6 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
     setError(null);
     
     try {
-      // 🔥 OPTIMIZACIÓN: Solo campos necesarios
       const response = await api.get('/mascotas', {
         params: {
           especie: especie,
@@ -57,7 +56,6 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
   const getImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) {
-      // Optimización para Cloudinary
       if (path.includes('cloudinary.com') && path.includes('/upload/')) {
         return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
       }
@@ -67,9 +65,17 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
     return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
   };
 
-  const handleOpenPanel = (mascota) => {
-    setSelectedMascota(mascota);
-    setIsPanelOpen(true);
+  const handleOpenMascota = (mascota) => {
+    if (isEmbed) {
+      // ✅ Cuando estamos en embed (dentro de un panel), cerramos el panel actual
+      // y abrimos el nuevo en el mismo panel (recargando el contenido)
+      // Para evitar redirección, forzamos la apertura del nuevo panel
+      setSelectedMascota(mascota);
+      setIsPanelOpen(true);
+    } else {
+      setSelectedMascota(mascota);
+      setIsPanelOpen(true);
+    }
   };
 
   const handleClosePanel = () => {
@@ -93,7 +99,7 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
   }
 
   if (error) {
-    return null; // No mostrar nada si hay error
+    return null;
   }
 
   if (mascotasRelacionadas.length === 0) {
@@ -119,14 +125,14 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t }) => {
                 mascota={mascota}
                 getImageUrl={getImageUrl}
                 variant="default"
-                onView={handleOpenPanel}
+                onView={handleOpenMascota}
               />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Panel deslizable para detalles */}
+      {/* Panel deslizable - siempre se muestra sin restricciones */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

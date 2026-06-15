@@ -11,30 +11,26 @@ const ReportarRescate = () => {
     <section className="rr-reportar-rescate-section">
       <div className="rr-reportar-rescate-container">
         <div className="rr-reportar-rescate-content">
-          <div className="rr-reportar-rescate-icon">
+          <div className="rr-reportar-rescate-icon reveal-scale delay-100">
             <i className="fas fa-ambulance"></i>
           </div>
-          <h2 className="rr-reportar-rescate-title hp-reveal">
+          <h2 className="rr-reportar-rescate-title reveal-up delay-200">
             {t('reportar.title') || '¿Viste un animal en peligro?'}
           </h2>
-          <p className="rr-reportar-rescate-text hp-reveal hp-delay-100">
+          <p className="rr-reportar-rescate-text reveal-up delay-300">
             {t('reportar.description') || 'Tu reporte puede salvar una vida. Actúa ahora y ayuda a un animal necesitado.'}
           </p>
-          <div className="rr-reportar-rescate-stats hp-reveal hp-delay-200">
+          <div className="rr-reportar-rescate-stats stagger-children">
             <div className="rr-stat">
               <span className="rr-stat-number">24/7</span>
-              <span className="rr-stat-label">{t('reportar.atencion') || 'Atención'}</span>
-            </div>
-            <div className="rr-stat">
-              <span className="rr-stat-number">+500</span>
-              <span className="rr-stat-label">{t('reportar.rescates') || 'Rescates atendidos'}</span>
+              <span className="rr-stat-label">{t('reportar.atencion') || 'Atención continua'}</span>
             </div>
             <div className="rr-stat">
               <span className="rr-stat-number">15min</span>
               <span className="rr-stat-label">{t('reportar.respuesta') || 'Tiempo de respuesta'}</span>
             </div>
           </div>
-          <Link to="/rescates/reportar" className="rr-reportar-rescate-btn hp-reveal hp-delay-300">
+          <Link to="/rescates/reportar" className="rr-reportar-rescate-btn reveal-up delay-400">
             <i className="fas fa-phone-alt"></i>
             {t('reportar.btn') || 'Reportar Ahora'}
           </Link>

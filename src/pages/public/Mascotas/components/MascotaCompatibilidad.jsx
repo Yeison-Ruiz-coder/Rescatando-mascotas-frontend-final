@@ -1,3 +1,4 @@
+// src/pages/public/Mascotas/components/MascotaCompatibilidad.jsx
 import React from "react";
 
 const MascotaCompatibilidad = ({ mascota, t }) => {
@@ -7,11 +8,11 @@ const MascotaCompatibilidad = ({ mascota, t }) => {
   if (!hasCompatibilidad) return null;
 
   return (
-    <section className="mc-compatibilidad">
+    <section className="mc-compatibilidad reveal-up delay-100">
       <div className="mc-container">
         <h2 className="mc-titulo">{t("compatibilidad")}</h2>
 
-        <div className="mc-grid">
+        <div className="mc-grid stagger-children">
           {mascota.apto_con_ninos && (
             <div className="mc-card">
               <div className="mc-icono">

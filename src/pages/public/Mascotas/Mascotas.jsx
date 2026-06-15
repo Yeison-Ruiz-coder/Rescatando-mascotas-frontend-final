@@ -37,12 +37,11 @@ const Mascotas = () => {
   const loadEspecies = useCallback(async () => {
     try {
       const response = await api.get('/mascotas/especies', {
-        params: { fields: 'especie' }  // 🔥 Optimización: solo traer especies
+        params: { fields: 'especie' }
       });
       if (response.data?.success && response.data?.data) {
         setEspecies(response.data.data);
       } else {
-        // 🔥 i18n en fallback
         setEspecies([
           t('perro', 'Perro'),
           t('gato', 'Gato'),
@@ -73,21 +72,17 @@ const Mascotas = () => {
     try {
       const params = {
         page: page,
-        per_page: 12,
-        // 🔥 OPTIMIZACIÓN CRÍTICA: Solo los campos necesarios para la card
+        per_page: 24,
         fields: 'id,nombre_mascota,especie,genero,edad_aprox,foto_principal,descripcion,lugar_rescate',
-        // 🔥 Incluir relaciones para evitar N+1
         include: 'fundacion',
         sort: '',
       };
       
-      // Filtros
       if (filters.buscar) params.buscar = filters.buscar;
       if (filters.especie) params.especie = filters.especie;
       if (filters.genero) params.genero = filters.genero;
       if (filters.tamano) params.tamano = filters.tamano;
       
-      // Ordenamiento
       switch (sortOrder) {
         case "nombre": params.sort = "nombre_mascota"; break;
         case "edad_asc": params.sort = "edad_aprox"; break;
@@ -128,7 +123,6 @@ const Mascotas = () => {
   const getOptimizedImageUrl = useCallback((path) => {
     if (!path) return null;
     if (path.startsWith('http')) {
-      // Optimización para Cloudinary
       if (path.includes('cloudinary.com') && path.includes('/upload/')) {
         return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
       }
@@ -138,13 +132,11 @@ const Mascotas = () => {
     return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
   }, []);
 
-  // Carga inicial
   useEffect(() => {
     loadEspecies();
     loadMascotas({}, 1, "reciente");
   }, [loadEspecies, loadMascotas]);
 
-  // Manejadores
   const handleFilterChange = useCallback((newFilters) => {
     setCurrentFilters(newFilters);
     setCurrentPage(1);
@@ -174,7 +166,6 @@ const Mascotas = () => {
     setSelectedMascota(null);
   }, []);
 
-  // Estados de carga y error
   if ((loading || cargandoEspecies) && mascotas.length === 0) {
     return (
       <div className="mascotas-page">
@@ -204,22 +195,22 @@ const Mascotas = () => {
 
   return (
     <div className="mascotas-page">
-      {/* Header */}
-      <div className="mascotas-header">
+      {/* Header con animación */}
+      <div className="mascotas-header reveal-up">
         <div className="mascotas-hero">
           <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} loading="eager" />
         </div>
         <div className="bento-container">
-          <h1>{t("titulo")}</h1>
+          <h1 className="reveal-up delay-200">{t("titulo")}</h1>
           {pagination.total > 0 && (
-            <p className="info">
+            <p className="info reveal-up delay-300">
               <i className="fas fa-heart"></i> {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
           )}
         </div>
       </div>
 
-      {/* Filtros */}
+      {/* Filtros - sticky sin animación */}
       <div className="filtros-section">
         <div className="bento-container">
           <FiltrosMascotas 
@@ -234,7 +225,7 @@ const Mascotas = () => {
       {/* Resultados */}
       <div className="resultados-section">
         <div className="bento-container">
-          <div className="resultados-header">
+          <div className="resultados-header reveal-up delay-100">
             <div className="resultados-count">
               <i className="fas fa-list"></i> {t('mostrando', 'Mostrando')} <strong>{mascotas.length}</strong> {t('de', 'de')} <strong>{pagination.total}</strong> {t('mascotas', 'mascotas')}
             </div>
@@ -250,14 +241,14 @@ const Mascotas = () => {
           </div>
 
           {mascotas.length === 0 ? (
-            <div className="empty-container">
+            <div className="empty-container reveal-up">
               <i className="fas fa-search"></i>
               <h3>{t('no_resultados', 'No se encontraron mascotas')}</h3>
               <p>{t('intenta_otros_filtros', 'Intenta con otros filtros')}</p>
             </div>
           ) : (
             <>
-              <div className="mascotas-grid">
+              <div className="mascotas-grid stagger-children">
                 {mascotas.map((mascota) => (
                   <MascotaCard
                     key={mascota.id}
@@ -270,7 +261,7 @@ const Mascotas = () => {
               </div>
 
               {pagination.last_page > 1 && (
-                <div className="pagination-container">
+                <div className="pagination-container reveal-up delay-200">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -296,7 +287,7 @@ const Mascotas = () => {
       </div>
 
       {/* Mensaje motivacional */}
-      <div className="motivational-message">
+      <div className="motivational-message reveal-up delay-300">
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>

@@ -2,14 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import HeroCarousel from './components/HeroCarousel';
 import AnimatedStats from './components/AnimatedStats';
-import MasonryMascotas from './components/MasonryMascotas';
-import BentoFeatures from './components/BentoFeatures';
-import TimelineEventos from './components/TimelineEventos';
-import VeterinariasDestacadas from './components/VeterinariasDestacadas';
-import FundacionesDestacadas from './components/FundacionesDestacadas';
+import FeaturedMascotas from './components/FeaturedMascotas';
+import EventosSection from './components/EventosSection';      // ← nuevo
+import AliadosSection from './components/AliadosSection';      // ← nuevo
 import ReportarRescate from './components/ReportarRescate';
-import SeccionSuscripciones from './components/SeccionSuscripciones';
-import FinalCTA from './components/FinalCTA';
 import './HomeShared.css';
 
 const Home = () => {
@@ -49,14 +45,10 @@ const Home = () => {
     <div className="hp-home-modern">
       <HeroCarousel />
       <AnimatedStats stats={stats} />
-      <MasonryMascotas />
-      <BentoFeatures />
-      <TimelineEventos />
-      <VeterinariasDestacadas />
-      <FundacionesDestacadas />
+      <EventosSection />        {/* ← Nuevo: eventos relevantes */}
+      <FeaturedMascotas />
+      <AliadosSection />        {/* ← Nuevo: unifica vets + fundaciones */}
       <ReportarRescate />
-      <SeccionSuscripciones />
-      <FinalCTA />
     </div>
   );
 };

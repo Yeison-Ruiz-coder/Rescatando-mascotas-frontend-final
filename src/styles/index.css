@@ -8,6 +8,7 @@
 @import './layout.css';
 @import './typography.css';
 @import './animations.css';
+@import './animations-reveal.css';
 
 /* COMPONENTES GLOBALES */
 @import './components/forms.css';

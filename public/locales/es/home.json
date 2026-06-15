@@ -67,8 +67,17 @@
   "mascotas_subtitle": "Conoce las mascotas esperando su hogar para siempre",
   "sin_mascotas": "No hay mascotas disponibles en este momento. ¡Vuelve pronto!",
   "ver_todas": "Ver Todas las Mascotas",
+  "sin_descripcion": "Sin descripción disponible",
+  "destacada": "Destacada",
+  "adoptar_ahora": "Adoptar ahora",
+  "ver_todas_sub": "+ de 100 esperando por ti",
+  "estado_en_adopcion": "En adopción",
+  "estado_adoptado": "Adoptado",
+  "estado_en_proceso": "En proceso",
+  "anos": "años",
   "eventos": {
-    "titulo": "Próximos Eventos",
+    "titulo": "Próximos eventos",
+    "detalle": "Detalle del evento",
     "subtitulo": "Participa en nuestros eventos y sé parte del cambio",
     "ver_todos": "Ver todos los eventos",
     "error": "No se pudieron cargar los eventos",
@@ -76,5 +85,25 @@
     "empty": "Próximamente tendremos nuevos eventos",
     "anterior": "Anterior",
     "siguiente": "Siguiente"
+  },
+  "aliados": {
+    "titulo": "Ellos hacen posible el cambio",
+    "subtitulo": "Veterinarias y fundaciones que trabajan incansablemente por el bienestar animal",
+    "veterinarias": "Veterinarias aliadas",
+    "veterinarias_sub": "Cuidado y salud garantizada",
+    "fundaciones": "Fundaciones colaboradoras",
+    "fundaciones_sub": "Rescatando y dando una segunda oportunidad",
+    "ver_veterinarias": "Conocer todas las veterinarias",
+    "ver_fundaciones": "Conocer todas las fundaciones",
+    "sin_veterinarias": "Pronto más veterinarias se unirán a esta causa",
+    "sin_fundaciones": "Pronto más fundaciones se unirán a esta causa",
+    "mensaje_footer": "Cada aliado es un paso más hacia un futuro mejor para los animales"
+  },
+  "reportar": {
+    "title": "¿Viste un animal en peligro?",
+    "description": "Tu reporte puede salvar una vida. Actúa ahora y ayuda a un animal necesitado.",
+    "atencion": "Atención continua",
+    "respuesta": "Tiempo de respuesta",
+    "btn": "Reportar Ahora"
   }
 }

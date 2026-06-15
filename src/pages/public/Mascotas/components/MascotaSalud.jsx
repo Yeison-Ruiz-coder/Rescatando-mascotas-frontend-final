@@ -1,12 +1,13 @@
+// src/pages/public/Mascotas/components/MascotaSalud.jsx
 import React from "react";
 
 const MascotaSalud = ({ mascota, t }) => {
   return (
-    <section className="ms-salud">
+    <section className="ms-salud reveal-up delay-150">
       <div className="ms-container">
         <h2 className="ms-titulo">{t("salud_cuidados")}</h2>
 
-        <div className="ms-grid">
+        <div className="ms-grid stagger-children">
           <div className="ms-item">
             <label>{t("esterilizado")}</label>
             <p className={mascota.esterilizado ? "ms-si" : "ms-no"}>

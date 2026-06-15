@@ -1,0 +1,158 @@
+/* src/styles/animations-reveal.css */
+/* ============================================
+   ANIMACIONES DE REVEAL - ENTRADAS SUAVES
+   ============================================ */
+
+/* ===== ANIMACIONES BASE ===== */
+
+/* Fade In Up (aparece desde abajo) */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade In Down (aparece desde arriba) */
+@keyframes reveal-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade In Left (aparece desde izquierda) */
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade In Right (aparece desde derecha) */
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale In (aparece con zoom) */
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fade In simple */
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== CLASES DE ANIMACIÓN ===== */
+
+/* Animación por defecto (aparece desde abajo) */
+.reveal-up {
+  opacity: 0;
+  animation: reveal-up 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.reveal-down {
+  opacity: 0;
+  animation: reveal-down 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.reveal-left {
+  opacity: 0;
+  animation: reveal-left 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.reveal-right {
+  opacity: 0;
+  animation: reveal-right 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.reveal-scale {
+  opacity: 0;
+  animation: reveal-scale 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.reveal-fade {
+  opacity: 0;
+  animation: reveal-fade 0.4s ease forwards;
+}
+
+/* ===== DELAYS (retrasos) ===== */
+.delay-0 { animation-delay: 0s; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+
+/* ===== DURACIONES ===== */
+.duration-fast { animation-duration: 0.3s !important; }
+.duration-normal { animation-duration: 0.6s !important; }
+.duration-slow { animation-duration: 0.9s !important; }
+.duration-slower { animation-duration: 1.2s !important; }
+
+/* ===== UTILIDADES ===== */
+/* Forzar que el elemento sea visible si la animación no corre */
+.reveal-up, .reveal-down, .reveal-left, .reveal-right, .reveal-scale, .reveal-fade {
+  will-change: transform, opacity;
+}
+
+/* Evitar que los elementos se vean antes de la animación */
+.reveal-up, .reveal-down, .reveal-left, .reveal-right, .reveal-scale, .reveal-fade {
+  opacity: 0;
+}
+
+/* ===== ANIMACIONES PARA STAGGER (efecto escalera) ===== */
+.stagger-children > * {
+  opacity: 0;
+  animation: reveal-up 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.45s; }
+.stagger-children > *:nth-child(11) { animation-delay: 0.5s; }
+.stagger-children > *:nth-child(12) { animation-delay: 0.55s; }

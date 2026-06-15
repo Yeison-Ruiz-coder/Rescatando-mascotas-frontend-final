@@ -7,19 +7,37 @@
   padding: 0;
 }
 
-.fe-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--z-fixed);
+/* Progress Bar dentro del buscador - CORTA Y CENTRADA */
+.fe-progress-inline {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.fe-progress .progress-bar-container {
-  border-radius: 0;
+.fe-progress-inline .progress-bar-container {
+  border-radius: 20px;
   overflow: hidden;
+  width: 565px;
+  height: 6px;
+}
+/* ===== ETIQUETA ===== */
+.fe-filter-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
 }
 
+.fe-filter-label i {
+  margin-right: 4px;
+  font-size: 0.65rem;
+  color: var(--color-primary);
+}
+
+/* ===== BUSCADOR ===== */
 .fe-search-wrapper {
   position: relative;
   width: 100%;
@@ -131,10 +149,7 @@
   cursor: not-allowed;
 }
 
-.fe-search-btn i {
-  font-size: 1rem;
-}
-
+/* ===== SUGERENCIAS ===== */
 .fe-sugerencias-dropdown {
   position: absolute;
   top: calc(100% + 8px);
@@ -191,6 +206,7 @@
   word-break: break-word;
 }
 
+/* Scrollbar */
 .fe-sugerencias-dropdown::-webkit-scrollbar {
   width: 6px;
 }
@@ -205,6 +221,7 @@
   border-radius: var(--radius-xs);
 }
 
+/* ===== BOTÓN LIMPIAR ===== */
 .fe-limpiar-wrapper {
   margin-top: 1rem;
   display: flex;
@@ -236,11 +253,7 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.fe-btn-limpiar i {
-  font-size: 0.85rem;
-}
-
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .fe-search-wrapper {
     max-width: 100%;
@@ -272,26 +285,13 @@
     font-size: 0.85rem;
   }
   
-  .fe-search-btn i {
-    font-size: 0.9rem;
-  }
-  
-  .fe-sugerencias-dropdown {
-    max-height: 300px;
-  }
-  
-  .fe-sugerencia-item {
-    padding: 10px 12px;
-  }
-  
-  .fe-sugerencia-text {
-    font-size: 0.85rem;
-  }
-  
   .fe-clear-btn {
     width: 36px;
     height: 36px;
-    margin: 0 2px;
+  }
+  
+  .fe-filter-label {
+    font-size: 0.65rem;
   }
   
   .fe-limpiar-wrapper {
@@ -333,6 +333,7 @@
   }
 }
 
+/* Modo oscuro */
 [data-theme="dark"] .fe-sugerencias-dropdown {
   background: var(--color-card-bg);
   border-color: var(--color-border);

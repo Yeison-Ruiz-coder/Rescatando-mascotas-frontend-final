@@ -14,18 +14,49 @@ const FiltrosVeterinarias = ({
   const [sugerencias, setSugerencias] = useState([]);
   const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [sugerenciaSeleccionada, setSugerenciaSeleccionada] = useState(-1);
+  const [progress, setProgress] = useState(0);
   
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
   const veterinariasRef = useRef(veterinarias);
+  const progressIntervalRef = useRef(null);
+
+  // Efecto para animar la barra de progreso
+  useEffect(() => {
+    if (isLoading) {
+      setProgress(0);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      
+      progressIntervalRef.current = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 90) return 90;
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+    } else {
+      setProgress(100);
+      setTimeout(() => {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
+      }, 500);
+    }
+    
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, [isLoading]);
 
   // Mantener referencia actualizada
   useEffect(() => {
     veterinariasRef.current = veterinarias;
   }, [veterinarias]);
 
-  // Función para obtener sugerencias - CON TODOS LOS CAMPOS
+  // Función para obtener sugerencias
   const obtenerSugerencias = useCallback((texto) => {
     if (!texto.trim() || texto.length < 2) return [];
 
@@ -34,17 +65,9 @@ const FiltrosVeterinarias = ({
     const veterinariasActuales = veterinariasRef.current;
 
     veterinariasActuales.forEach(veterinaria => {
-      // ===== CAMPOS BÁSICOS =====
+      // Campos básicos
       if (veterinaria.Nombre_vet?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(veterinaria.Nombre_vet);
-      }
-      if (veterinaria.descripcion?.toLowerCase().includes(textoLower)) {
-        const palabras = veterinaria.descripcion.split(' ').slice(0, 3);
-        palabras.forEach(palabra => {
-          if (palabra.toLowerCase().includes(textoLower) && palabra.length > 3) {
-            palabrasUnicas.add(palabra);
-          }
-        });
       }
       if (veterinaria.Direccion?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(veterinaria.Direccion);
@@ -55,22 +78,14 @@ const FiltrosVeterinarias = ({
       if (veterinaria.departamento?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(veterinaria.departamento);
       }
-
-      // ===== CONTACTO =====
       if (veterinaria.Telefono?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(veterinaria.Telefono);
       }
       if (veterinaria.Email?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(veterinaria.Email);
       }
-      if (veterinaria.whatsapp?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(`WhatsApp: ${veterinaria.whatsapp}`);
-      }
-      if (veterinaria.sitio_web?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.sitio_web);
-      }
 
-      // ===== SERVICIOS (JSON) =====
+      // Servicios
       if (veterinaria.servicios) {
         let servicios = [];
         try {
@@ -86,184 +101,38 @@ const FiltrosVeterinarias = ({
         });
       }
 
-      // ===== SERVICIOS DETALLADOS (JSON) =====
-      if (veterinaria.servicios_detallados) {
-        let serviciosDetallados = [];
-        try {
-          serviciosDetallados = typeof veterinaria.servicios_detallados === 'string' 
-            ? JSON.parse(veterinaria.servicios_detallados) 
-            : veterinaria.servicios_detallados;
-        } catch(e) { serviciosDetallados = []; }
-        
-        serviciosDetallados.forEach(servicio => {
-          if (servicio?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(servicio);
-          }
-        });
-      }
-
-      // ===== EQUIPO MÉDICO (JSON) =====
-      if (veterinaria.equipo_medico) {
-        let equipo = [];
-        try {
-          equipo = typeof veterinaria.equipo_medico === 'string' 
-            ? JSON.parse(veterinaria.equipo_medico) 
-            : veterinaria.equipo_medico;
-        } catch(e) { equipo = []; }
-        
-        equipo.forEach(item => {
-          if (item?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('equipo', 'Equipo')}: ${item}`);
-          }
-        });
-      }
-
-      // ===== HORARIO =====
+      // Horario
       if (veterinaria.horario_atencion?.toLowerCase().includes(textoLower)) {
         palabrasUnicas.add(`${t('horario', 'Horario')}: ${veterinaria.horario_atencion}`);
       }
-      
-      // Búsqueda por días de la semana
-      const diasSemana = ['lunes', 'martes', 'miércoles', 'miercoles', 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
-      diasSemana.forEach(dia => {
-        if (textoLower.includes(dia) && veterinaria.horario_atencion?.toLowerCase().includes(dia)) {
-          palabrasUnicas.add(t(`dia_${dia.replace('á', 'a')}`, dia.charAt(0).toUpperCase() + dia.slice(1)));
-        }
-      });
 
-      // ===== EXPERIENCIA =====
-      if (veterinaria.anios_experiencia) {
-        const expStr = veterinaria.anios_experiencia.toString();
-        if (expStr.includes(textoLower)) {
-          palabrasUnicas.add(`${veterinaria.anios_experiencia} ${t('años_experiencia', 'años de experiencia')}`);
-        }
-        if (textoLower.includes('experiencia') || textoLower.includes('trayectoria')) {
-          if (veterinaria.anios_experiencia > 10) {
-            palabrasUnicas.add(t('amplia_experiencia', 'Amplia experiencia'));
-          } else if (veterinaria.anios_experiencia < 3) {
-            palabrasUnicas.add(t('nueva', 'Nueva en el mercado'));
-          }
-        }
-      }
-
-      // ===== URGENCIAS 24H =====
-      if (textoLower.includes('urgencia') || textoLower.includes('emergencia') || textoLower.includes('24h') || textoLower.includes('24 horas')) {
+      // Urgencias 24h
+      if (textoLower.includes('urgencia') || textoLower.includes('emergencia') || textoLower.includes('24h')) {
         if (veterinaria.urgencias_24h === true) {
           palabrasUnicas.add(t('urgencias_24h', 'Urgencias 24 horas'));
         }
       }
 
-      // ===== CONVENIOS (JSON) =====
-      if (veterinaria.convenios) {
-        let convenios = [];
-        try {
-          convenios = typeof veterinaria.convenios === 'string' 
-            ? JSON.parse(veterinaria.convenios) 
-            : veterinaria.convenios;
-        } catch(e) { convenios = []; }
-        
-        convenios.forEach(convenio => {
-          if (convenio?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('convenio', 'Convenio')}: ${convenio}`);
-          }
-        });
-      }
-
-      // ===== PRECIO CONSULTA =====
-      if (veterinaria.precio_consulta) {
-        const precioStr = veterinaria.precio_consulta.toString();
-        if (precioStr.includes(textoLower)) {
-          palabrasUnicas.add(`${t('consulta', 'Consulta')}: $${veterinaria.precio_consulta}`);
-        }
-        if (textoLower.includes('económico') && veterinaria.precio_consulta < 30000) {
-          palabrasUnicas.add(t('precio_economico', 'Precio económico'));
-        }
-        if (textoLower.includes('caro') && veterinaria.precio_consulta > 80000) {
-          palabrasUnicas.add(t('precio_alto', 'Precio elevado'));
-        }
-      }
-
-      // ===== SEGUROS =====
-      if (textoLower.includes('seguro') || textoLower.includes('aseguradora')) {
-        if (veterinaria.acepta_seguros === true) {
-          palabrasUnicas.add(t('acepta_seguros', 'Acepta seguros'));
-        }
-      }
-
-      // ===== VALORACIONES =====
-      if (veterinaria.valoracion_promedio > 0) {
-        if (textoLower.includes('valoración') || textoLower.includes('calificación') || textoLower.includes('puntuación')) {
-          palabrasUnicas.add(`${t('valoracion', 'Valoración')}: ${veterinaria.valoracion_promedio} ★`);
-        }
-        if (textoLower.includes('mejor') && veterinaria.valoracion_promedio >= 4.5) {
-          palabrasUnicas.add(t('mejor_valorado', 'Mejor valorado'));
-        }
-        if (textoLower.includes('recomendado') && veterinaria.valoracion_promedio >= 4) {
-          palabrasUnicas.add(t('recomendado', 'Recomendado'));
-        }
-      }
-
-      if (veterinaria.total_valoraciones > 0 && (textoLower.includes('opinión') || textoLower.includes('reseña'))) {
-        palabrasUnicas.add(`${veterinaria.total_valoraciones} ${t('opiniones', 'opiniones')}`);
-      }
-
-      // ===== VERIFICACIÓN =====
-      if (textoLower.includes('verificado') || textoLower.includes('oficial') || textoLower.includes('confiable')) {
+      // Verificado
+      if (textoLower.includes('verificado') || textoLower.includes('oficial')) {
         if (veterinaria.verificado === true) {
           palabrasUnicas.add(t('verificado', 'Verificado'));
         }
       }
 
-      // ===== REDES SOCIALES =====
-      if (veterinaria.redes_sociales) {
-        let redes = [];
-        try {
-          redes = typeof veterinaria.redes_sociales === 'string' 
-            ? JSON.parse(veterinaria.redes_sociales) 
-            : veterinaria.redes_sociales;
-        } catch(e) { redes = []; }
-        
- Object.keys(redes).forEach(red => {
-          if (red?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('red_social', 'Red social')}: ${red}`);
-          }
-        });
-      }
-
-      // ===== COBERTURA ZONA (JSON) =====
-      if (veterinaria.cobertura_zona) {
-        let coberturas = [];
-        try {
-          coberturas = typeof veterinaria.cobertura_zona === 'string' 
-            ? JSON.parse(veterinaria.cobertura_zona) 
-            : veterinaria.cobertura_zona;
-        } catch(e) { coberturas = []; }
-        
-        coberturas.forEach(cobertura => {
-          if (cobertura?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('cobertura', 'Cobertura')}: ${cobertura}`);
-          }
-        });
-      }
-
-      // ===== UBICACIÓN (lat/lng/radio) =====
-      if (veterinaria.lat && veterinaria.lng) {
-        if (textoLower.includes('cerca') || textoLower.includes('cercano') || textoLower.includes('ubicado')) {
-          palabrasUnicas.add(t('tiene_ubicacion', 'Ubicación disponible'));
+      // Años de experiencia
+      if (veterinaria.anios_experiencia) {
+        const expStr = veterinaria.anios_experiencia.toString();
+        if (expStr.includes(textoLower)) {
+          palabrasUnicas.add(`${veterinaria.anios_experiencia} ${t('años_experiencia', 'años de experiencia')}`);
         }
       }
 
-      if (veterinaria.radio_atencion && (textoLower.includes('radio') || textoLower.includes('cobertura'))) {
-        palabrasUnicas.add(`${t('radio_atencion', 'Radio de atención')}: ${veterinaria.radio_atencion} km`);
-      }
-
-      // ===== LOGO O IMÁGENES =====
-      if (textoLower.includes('logo') || textoLower.includes('imagen') || textoLower.includes('foto')) {
-        if (veterinaria.logo) {
-          palabrasUnicas.add(t('tiene_logo', 'Tiene logo'));
-        }
-        if (veterinaria.galeria_fotos && JSON.parse(veterinaria.galeria_fotos)?.length > 0) {
-          palabrasUnicas.add(t('tiene_galeria', 'Tiene galería de fotos'));
+      // Precio consulta
+      if (veterinaria.precio_consulta) {
+        const precioStr = veterinaria.precio_consulta.toString();
+        if (precioStr.includes(textoLower)) {
+          palabrasUnicas.add(`${t('consulta', 'Consulta')}: $${veterinaria.precio_consulta}`);
         }
       }
     });
@@ -329,7 +198,7 @@ const FiltrosVeterinarias = ({
       case 'Enter':
         e.preventDefault();
         if (sugerenciaSeleccionada >= 0) {
-          const sugerenciaLimpia = sugerencias[sugerenciaSeleccionada].replace(/^(Servicio:|Equipo:|Horario:|Convenio:|Consulta:|Cobertura:|Radio de atención:|Red social:|WhatsApp:)\s*/, '');
+          const sugerenciaLimpia = sugerencias[sugerenciaSeleccionada].replace(/^(Servicio:|Horario:|Consulta:)\s*/, '');
           seleccionarSugerencia(sugerenciaLimpia);
         } else {
           handleSearch();
@@ -367,12 +236,6 @@ const FiltrosVeterinarias = ({
 
   return (
     <div className="fv-container">
-      {isLoading && (
-        <div className="fv-progress">
-          <ProgressBar progress={100} height="3px" animated={true} variant="gradient" />
-        </div>
-      )}
-
       <div className="fv-search-wrapper">
         <div className="fv-search-box">
           <span className="fv-search-icon">
@@ -404,13 +267,20 @@ const FiltrosVeterinarias = ({
           </button>
         </div>
 
+        {/* Progress Bar - DENTRO del buscador */}
+        {isLoading && (
+          <div className="fv-progress-inline">
+            <ProgressBar progress={progress} height="3px" animated={true} variant="gradient" />
+          </div>
+        )}
+
         {mostrarSugerencias && sugerencias.length > 0 && (
           <div ref={sugerenciasRef} className="fv-sugerencias-dropdown">
             {sugerencias.map((sugerencia, index) => (
               <div
                 key={index}
                 className={`fv-sugerencia-item ${index === sugerenciaSeleccionada ? 'fv-selected' : ''}`}
-                onClick={() => seleccionarSugerencia(sugerencia.replace(/^(Servicio:|Equipo:|Horario:|Convenio:|Consulta:|Cobertura:|Radio de atención:|Red social:|WhatsApp:)\s*/, ''))}
+                onClick={() => seleccionarSugerencia(sugerencia.replace(/^(Servicio:|Horario:|Consulta:)\s*/, ''))}
                 onMouseEnter={() => setSugerenciaSeleccionada(index)}
               >
                 <span className="fv-sugerencia-icon">

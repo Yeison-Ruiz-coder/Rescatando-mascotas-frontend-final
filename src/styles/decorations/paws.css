@@ -1,3 +1,6 @@
+/* src/styles/decorations/paws.css */
+/* OPACIDADES REDUCIDAS - MÁS SUTIL EN AMBOS MODOS */
+
 .paw-background-fixed {
   position: fixed;
   top: 0;
@@ -96,21 +99,38 @@
 .paw-orbit-group-4 .paw-2 { bottom: 5px; left: 20%; transform: rotate(25deg); animation-delay: -1s; }
 .paw-orbit-group-4 .paw-3 { top: 35%; left: -20px; transform: rotate(-30deg); animation-delay: -2s; }
 
-[data-theme="dark"] .paw-fixed,
-[data-theme="dark"] .paw-orbital-img {
-  filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255, 255, 255, 0.2));
+/* ===== OPACIDADES POR DEFECTO (MODO CLARO - MUY SUTIL) ===== */
+.paw-fixed { 
+  opacity: 0.02 !important;
 }
 
-[data-theme="dark"] .paw-fixed { opacity: 0.35; }
-[data-theme="dark"] .paw-orbital-img { opacity: 0.4; }
+.paw-orbital-img { 
+  opacity: 0.015 !important;
+}
 
+/* ===== MODO OSCURO - CASI INVISIBLE ===== */
+[data-theme="dark"] .paw-fixed,
+[data-theme="dark"] .paw-orbital-img {
+  filter: brightness(0) invert(1);
+}
+
+[data-theme="dark"] .paw-fixed { 
+  opacity: 0.008 !important;
+}
+
+[data-theme="dark"] .paw-orbital-img { 
+  opacity: 0.005 !important;
+}
+
+/* Hover - solo un poco más visibles */
 .paw-fixed:hover,
 .paw-orbital-img:hover {
-  opacity: 0.5 !important;
-  transform: scale(1.1) rotate(10deg);
+  opacity: 0.08 !important;
+  transform: scale(1.05) rotate(5deg);
 }
 
 [data-theme="dark"] .paw-fixed:hover,
 [data-theme="dark"] .paw-orbital-img:hover {
-  filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5)) !important;
+  opacity: 0.015 !important;
+  transform: scale(1.02) rotate(2deg);
 }

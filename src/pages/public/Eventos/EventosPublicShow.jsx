@@ -121,7 +121,6 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
     });
   };
 
-  // ✅ Mostrar ProgressBar mientras carga
   if (loading) {
     return (
       <div style={{ width: '100%', padding: '20px 0' }}>
@@ -138,13 +137,13 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
     return (
       <div className="eventos-show-container">
         {!embed && (
-          <div className="eventos-show-actions-bar">
+          <div className="eventos-show-actions-bar reveal-up">
             <Link to="/eventos" className="eventos-show-btn-back">
               <ArrowLeft size={18} /> {t('volver')}
             </Link>
           </div>
         )}
-        <div className="eventos-show-error">
+        <div className="eventos-show-error reveal-up">
           <Calendar size={48} />
           <h4>{t('error_titulo')}</h4>
           <p>{error || t('evento_no_encontrado')}</p>
@@ -154,9 +153,9 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
   }
 
   return (
-    <div className="eventos-show-container">
+    <div className={`eventos-show-container ${embed ? 'eventos-show-embed' : ''}`}>
       {!embed && (
-        <div className="eventos-show-actions-bar">
+        <div className="eventos-show-actions-bar reveal-up">
           <Link to="/eventos" className="eventos-show-btn-back">
             <ArrowLeft size={18} /> {t('volver')}
           </Link>
@@ -165,7 +164,7 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
 
       <div className="eventos-show-bento-grid">
         {evento.imagen_url && (
-          <div className="eventos-show-imagen-wrapper">
+          <div className="eventos-show-imagen-wrapper reveal-up delay-100">
             <img 
               src={getImageUrl(evento.imagen_url)} 
               alt={evento.nombre_evento} 
@@ -175,7 +174,8 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
         )}
 
         <div className="eventos-show-sidebar">
-          <div className="eventos-show-info-card">
+          {/* Badge de tipo */}
+          <div className="eventos-show-info-card reveal-up delay-150">
             <div className="eventos-show-badge">
               {evento.tipo === 'admin' ? (
                 <span className="eventos-show-badge-admin">
@@ -189,7 +189,8 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
             </div>
           </div>
 
-          <div className="eventos-show-info-card">
+          {/* Información de fecha y lugar */}
+          <div className="eventos-show-info-card reveal-up delay-200">
             <div className="eventos-show-info-card-title">
               <Calendar size={16} />
               {t('fecha_lugar') || 'FECHA Y LUGAR'}
@@ -235,39 +236,61 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
             )}
           </div>
 
-          <div className="eventos-show-info-card">
+          {/* ESTADÍSTICAS - Cards estáticas + Botones interactivos */}
+          <div className="eventos-show-info-card reveal-up delay-250">
             <div className="eventos-show-info-card-title">
               <Heart size={16} />
               {t('estadisticas') || 'ESTADÍSTICAS'}
             </div>
-            <div className="eventos-show-stats-row">
-              <button 
-                onClick={handleLike} 
-                className={`eventos-show-stat-btn ${liked ? 'eventos-show-liked' : ''}`}
-              >
-                <Heart size={16} fill={liked ? 'currentColor' : 'none'} />
-                <span>{evento.likes || 0} {t('likes')}</span>
-              </button>
-              <div className="eventos-show-stat-item">
-                <Users size={16} />
-                <span>{evento.total_asistentes || 0} {t('asistentes')}</span>
+
+            {/* Cards estáticas (solo información) */}
+            <div className="eventos-show-metrics-grid">
+              <div className="eventos-show-metric-card" data-type="like">
+                <div className="eventos-show-metric-icon">
+                  <Heart size={24} />
+                </div>
+                <div className="eventos-show-metric-value">
+                  {evento.likes || 0}
+                </div>
+                <div className="eventos-show-metric-label">
+                  ME GUSTA
+                </div>
+              </div>
+
+              <div className="eventos-show-metric-card" data-type="asistencia">
+                <div className="eventos-show-metric-icon">
+                  <CalendarCheck size={24} />
+                </div>
+                <div className="eventos-show-metric-value">
+                  {evento.total_asistentes || 0}
+                </div>
+                <div className="eventos-show-metric-label">
+                  ASISTIRÁN
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="eventos-show-info-card">
-            <div className="eventos-show-info-card-title">
-              <CalendarCheck size={16} />
-              {t('asistencia_titulo') || 'ASISTENCIA'}
+            {/* Botones interactivos */}
+            <div className="eventos-show-buttons-row">
+              <button 
+                onClick={handleLike} 
+                className={`eventos-show-small-like ${liked ? 'active' : ''}`}
+              >
+                <Heart size={14} />
+                <span>{liked ? 'QUITAR ME GUSTA' : 'ME GUSTA'}</span>
+              </button>
+
+              <button 
+                onClick={handleConfirmarAsistencia} 
+                className={`eventos-show-small-asistencia ${asistencia ? 'active' : ''}`}
+                disabled={!isAuthenticated}
+              >
+                <CalendarCheck size={14} />
+                <span>{asistencia ? 'CANCELAR ASISTENCIA' : 'CONFIRMAR ASISTENCIA'}</span>
+              </button>
             </div>
-            <button 
-              onClick={handleConfirmarAsistencia} 
-              className={`eventos-show-asistencia-btn ${asistencia ? 'eventos-show-confirmed' : ''}`}
-              disabled={!isAuthenticated}
-            >
-              <CalendarCheck size={18} />
-              {asistencia ? t('asistencia.confirmada') : t('asistencia.confirmar')}
-            </button>
+
+            {/* Mensaje informativo */}
             {evento.total_asistentes > 0 && (
               <div className="eventos-show-total-asistentes">
                 <Users size={14} /> {evento.total_asistentes} {t('asistencia.personas_asistiran')}
@@ -276,7 +299,8 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
           </div>
         </div>
 
-        <div className="eventos-show-main">
+        {/* Contenido principal */}
+        <div className="eventos-show-main reveal-up delay-350">
           <h1 className="eventos-show-titulo">{evento.nombre_evento}</h1>
           
           {evento.descripcion && (
@@ -286,7 +310,7 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
           )}
 
           {evento.tags && evento.tags.length > 0 && (
-            <div className="eventos-show-tags">
+            <div className="eventos-show-tags stagger-children">
               {(Array.isArray(evento.tags) ? evento.tags : JSON.parse(evento.tags)).map((tag, idx) => (
                 <span key={idx} className="eventos-show-tag">#{tag}</span>
               ))}
@@ -295,10 +319,12 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
         </div>
       </div>
 
-      <div className="eventos-show-footer">
-        <Clock size={14} />
-        <small>{t('publicado')}: {new Date(evento.created_at).toLocaleDateString()}</small>
-      </div>
+      {!embed && (
+        <div className="eventos-show-footer reveal-up delay-400">
+          <Clock size={14} />
+          <small>{t('publicado')}: {new Date(evento.created_at).toLocaleDateString()}</small>
+        </div>
+      )}
     </div>
   );
 };

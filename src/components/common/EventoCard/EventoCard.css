@@ -1,49 +1,43 @@
 /* src/components/common/EventoCard/EventoCard.css */
-/* ESTILO SIMPLE - IMAGEN FULL, NOMBRE, FECHA, BOTONES */
+/* ESTILO CON OVERLAY HOVER - IMAGEN FULL, TEXTO SUPERPUESTO */
 /* PREFIJO ÚNICO: .ec- (EventoCard) */
 
 .ec-card {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
-  overflow: hidden;
-  box-shadow: var(--shadow-hard-sm);
-  transition: var(--transition);
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .ec-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hard-md);
-  border-color: var(--color-primary);
 }
 
-/* ===== IMAGEN ===== */
+/* Contenedor de imagen */
 .ec-card .ec-image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  flex-shrink: 0;
+  background: var(--form-input-bg);
 }
 
 .ec-card .ec-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
-  filter: grayscale(15%);
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .ec-card:hover .ec-image img {
-  transform: scale(1.05);
-  filter: grayscale(0%);
+  transform: scale(1.03);
 }
 
+/* Placeholder */
 .ec-card .ec-placeholder {
   width: 100%;
   height: 100%;
@@ -56,192 +50,327 @@
 
 .ec-card .ec-placeholder i {
   font-size: 3rem;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
-/* ===== BADGE DE FECHA ===== */
+/* Badge de fecha */
 .ec-card .ec-fecha-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+  top: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px;
+  border-radius: 40px;
   text-align: center;
-  z-index: 2;
+  z-index: 3;
   box-shadow: var(--shadow-hard-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .ec-card .ec-fecha-dia {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: white;
   line-height: 1;
 }
 
 .ec-card .ec-fecha-mes {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.5px;
 }
 
 .ec-card .ec-fecha-hora {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* ===== CONTENIDO ===== */
+/* ===== CONTENIDO NORMAL (siempre visible) ===== */
 .ec-card .ec-content {
-  padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+background: linear-gradient(
+  to top,
+  rgba(0, 0, 0, 0.95) 0%,
+  rgba(0, 0, 0, 0.85) 30%,
+  rgba(0, 0, 0, 0.3) 70%,
+  transparent 100%
+);
+  padding: 20px 16px 16px 16px;
+  z-index: 2;
 }
 
+/* Badge de estado */
+.ec-card .ec-estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 40px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: white;
+  margin-bottom: 8px;
+}
+
+.ec-card .ec-estado-badge i {
+  font-size: 0.65rem;
+}
+
+.ec-card .ec-estado-badge.ec-estado-proximo {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+.ec-card .ec-estado-badge.ec-estado-hoy {
+  background: rgba(251, 191, 36, 0.25);
+}
+
+.ec-card .ec-estado-badge.ec-estado-finalizado {
+  background: rgba(107, 114, 128, 0.25);
+}
+
+.ec-card .ec-estado-badge.ec-estado-agotado {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+/* Título */
 .ec-card .ec-titulo {
   font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--color-text);
   line-height: 1.3;
+  color: white;
+  margin: 0 0 4px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.ec-card .ec-lugar {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+/* Descripción */
+.ec-card .ec-descripcion {
   font-size: 0.7rem;
-  color: var(--color-text-muted);
-  margin-bottom: 0.75rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 8px 0;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-.ec-card .ec-lugar i {
-  color: var(--color-primary);
-  font-size: 0.65rem;
-}
-
-/* ===== BOTONES ===== */
-.ec-card .ec-buttons {
+/* Grid de información */
+.ec-card .ec-info-grid {
   display: flex;
-  gap: 0.5rem;
-  margin-top: auto;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 }
 
-.ec-card .ec-btn {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: var(--radius-md);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  transition: var(--transition);
-  cursor: pointer;
-  border: none;
+.ec-card .ec-info-item {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.ec-card .ec-info-item i {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ===== OVERLAY HOVER (botón que aparece al pasar mouse) ===== */
+.ec-card .ec-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.ec-card .ec-btn-outline {
-  background: transparent;
+.ec-card:hover .ec-overlay {
+  opacity: 1;
+}
+
+.ec-card .ec-overlay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  background: white;
   color: var(--color-primary);
-  border: 1px solid var(--color-border);
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
   box-shadow: var(--shadow-hard-sm);
+  border: none;
+  cursor: pointer;
 }
 
-.ec-card .ec-btn-outline:hover {
+.ec-card .ec-overlay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
   background: var(--gradient-primary);
   color: white;
-  transform: translateX(2px);
-  border-color: transparent;
-  box-shadow: var(--shadow-hard-md);
 }
 
-.ec-card .ec-btn-asistir {
-  background: var(--color-success);
-  color: white;
-  box-shadow: var(--shadow-hard-sm);
+.ec-card .ec-overlay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.ec-card .ec-btn-asistir:hover {
-  transform: translateX(2px);
-  box-shadow: var(--shadow-hard-md);
-  filter: brightness(1.05);
+.ec-card .ec-overlay-btn i {
+  font-size: 0.8rem;
 }
 
-.ec-card .ec-btn-asistir.ec-confirmed {
-  background: var(--color-primary);
-}
-
-.ec-card .ec-btn-like {
-  background: transparent;
-  color: var(--color-danger);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  box-shadow: var(--shadow-hard-sm);
-}
-
-.ec-card .ec-btn-like.ec-liked {
-  background: var(--color-danger);
-  color: white;
-}
-
-.ec-card .ec-btn-like:hover {
-  transform: translateX(2px);
-  box-shadow: var(--shadow-hard-md);
+/* Ocultar botones antiguos */
+.ec-card .ec-buttons,
+.ec-card .ec-btn-outline,
+.ec-card .ec-btn-like,
+.ec-card .ec-btn-asistir,
+.ec-card .ec-lugar,
+.ec-card .ec-cta {
+  display: none;
 }
 
 /* ===== VARIANTE DESTACADA ===== */
 .ec-card.ec-featured {
-  border-left: 4px solid var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent), var(--shadow-hard-sm);
 }
 
 /* ===== RESPONSIVE ===== */
+/* Desktop: overlay solo en hover */
+@media (min-width: 769px) {
+  .ec-card .ec-overlay {
+    opacity: 0;
+  }
+  
+  .ec-card:hover .ec-overlay {
+    opacity: 1;
+  }
+}
+
+/* Móvil: sin overlay, card clickeable normal */
 @media (max-width: 768px) {
+  .ec-card .ec-overlay {
+    display: none;
+  }
+  
   .ec-card .ec-content {
-    padding: 0.75rem;
+    padding: 16px 12px 12px 12px;
   }
   
   .ec-card .ec-titulo {
     font-size: 0.9rem;
   }
   
-  .ec-card .ec-buttons {
-    flex-direction: column;
-  }
-  
-  .ec-card .ec-btn {
-    width: 100%;
-  }
-  
   .ec-card .ec-fecha-badge {
-    padding: 4px 8px;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
   }
   
   .ec-card .ec-fecha-dia {
-    font-size: 0.9rem;
+    font-size: 1rem;
+  }
+  
+  .ec-card .ec-descripcion {
+    font-size: 0.65rem;
+  }
+  
+  .ec-card .ec-info-item {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ec-card .ec-content {
+    padding: 12px 10px 10px 10px;
+  }
+  
+  .ec-card .ec-titulo {
+    font-size: 0.85rem;
+  }
+  
+  .ec-card .ec-info-grid {
+    gap: 6px;
   }
 }
 
 /* ===== MODO OSCURO ===== */
-[data-theme="dark"] .ec-card {
+[data-theme="dark"] .ec-card .ec-overlay-btn {
   background: var(--color-card-bg);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .ec-card .ec-titulo {
   color: var(--color-text);
 }
 
-[data-theme="dark"] .ec-card .ec-lugar {
-  color: var(--color-text-muted);
+[data-theme="dark"] .ec-card .ec-overlay-btn:hover {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+/* Añade al final de EventoCard.css */
+
+/* Variante para cards importantes (featured) */
+.ec-card.ec-featured {
+  border: 2px solid var(--color-heart);
+  box-shadow: var(--shadow-hard-lg);
+  transition: all 0.3s ease;
+}
+
+.ec-card.ec-featured .ec-titulo {
+  color: var(--color-heart);
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+}
+
+.ec-card.ec-featured .ec-fecha-badge {
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.9), rgba(255, 107, 107, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ec-card.ec-featured:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hard-xl);
+}
+
+/* Badge de importancia integrado */
+.ec-card.ec-featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 71, 87, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
