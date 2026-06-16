@@ -1,3 +1,4 @@
+// src/contexts/AuthContext.jsx
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import authService from '../services/authService';
 
@@ -17,20 +18,42 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkAuth = () => {
-      const currentUser = authService.getCurrentUser();
+    const checkAuth = async () => {
+      console.log('=== VERIFICANDO AUTENTICACIÓN ===');
+      
       const token = authService.getToken();
-      const authenticated = authService.isAuthenticated();
       
-      console.log('=== VERIFICACIÓN DE AUTENTICACIÓN ===');
-      console.log('Token existe:', !!token);
-      console.log('Usuario:', currentUser);
-      console.log('Autenticado:', authenticated);
-      console.log('=====================================');
+      if (!token) {
+        console.log('No hay token almacenado');
+        setUser(null);
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
       
-      setUser(currentUser);
-      setIsAuthenticated(authenticated);
-      setLoading(false);
+      console.log('Token encontrado, verificando con backend...');
+      
+      try {
+        const isValid = await authService.verifyToken();
+        
+        if (isValid) {
+          const currentUser = authService.getCurrentUser();
+          console.log('Token válido - Usuario:', currentUser);
+          setUser(currentUser);
+          setIsAuthenticated(true);
+        } else {
+          console.log('Token inválido o expirado');
+          authService.logout();
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error verificando token:', error);
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
     };
 
     checkAuth();
@@ -38,37 +61,112 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     console.log('Iniciando login...');
-    const result = await authService.login(credentials);
+    setLoading(true);
     
-    if (result.success) {
-      const currentUser = authService.getCurrentUser();
-      const token = authService.getToken();
+    try {
+      const result = await authService.login(credentials);
       
-      console.log('Login exitoso - Token guardado:', !!token);
-      console.log('Login exitoso - Usuario:', currentUser);
+      if (result.success) {
+        const currentUser = authService.getCurrentUser();
+        const token = authService.getToken();
+        
+        console.log('Login exitoso - Token guardado:', !!token);
+        console.log('Login exitoso - Usuario:', currentUser);
+        
+        setUser(currentUser);
+        setIsAuthenticated(true);
+        setLoading(false);
+        
+        return { success: true, user: currentUser };
+      }
       
-      setUser(currentUser);
-      setIsAuthenticated(true);
+      console.log('Login fallido:', result.message);
+      setLoading(false);
       
-      return { success: true, user: currentUser };
+      return { 
+        success: false, 
+        message: result.message || 'Credenciales incorrectas. Por favor, verifica tu correo y contraseña'
+      };
+    } catch (error) {
+      console.error('Error en login:', error);
+      setLoading(false);
+      
+      let errorMessage = 'Error al iniciar sesión. Intenta nuevamente';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        const errorObj = error.response.data.errors;
+        errorMessage = Object.values(errorObj).flat()[0] || errorMessage;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      return { 
+        success: false, 
+        message: errorMessage
+      };
     }
-    
-    console.log('Login fallido:', result.error);
-    return result;
   };
 
+  // 🔥 REGISTER CORREGIDO - Maneja fundaciones/veterinarias
   const register = async (userData) => {
     console.log('Iniciando registro...');
-    const result = await authService.register(userData);
+    setLoading(true);
     
-    if (result.success) {
-      const currentUser = authService.getCurrentUser();
-      setUser(currentUser);
-      setIsAuthenticated(true);
-      return { success: true, user: currentUser };
+    try {
+      const result = await authService.register(userData);
+      
+      if (result.success) {
+        const requiereAprobacion = result.requiereAprobacion || 
+                                   (result.user?.tipo === 'fundacion' || result.user?.tipo === 'veterinaria');
+        
+        // 🔥 Si NO requiere aprobación (usuario normal), autenticar automáticamente
+        if (!requiereAprobacion && result.token) {
+          const currentUser = authService.getCurrentUser();
+          setUser(currentUser);
+          setIsAuthenticated(true);
+          console.log('✅ Registro exitoso - Usuario autenticado');
+        } else {
+          // 🔥 Si requiere aprobación (fundación/veterinaria), NO autenticar
+          setUser(null);
+          setIsAuthenticated(false);
+          console.log('⏳ Registro pendiente de aprobación - No autenticado');
+        }
+        
+        setLoading(false);
+        return { 
+          success: true, 
+          user: result.user,
+          token: result.token,
+          requiereAprobacion: requiereAprobacion,
+          message: result.message
+        };
+      }
+      
+      setLoading(false);
+      return { 
+        success: false, 
+        message: result.message || 'Error al registrar usuario'
+      };
+    } catch (error) {
+      console.error('Error en registro:', error);
+      setLoading(false);
+      
+      let errorMessage = 'Error al registrarse. Intenta nuevamente';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        const errorObj = error.response.data.errors;
+        errorMessage = Object.values(errorObj).flat()[0] || errorMessage;
+      }
+      
+      return { 
+        success: false, 
+        message: errorMessage
+      };
     }
-    
-    return result;
   };
 
   const logout = () => {

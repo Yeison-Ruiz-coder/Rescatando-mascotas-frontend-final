@@ -47,7 +47,6 @@
   "compromiso1": "Proporcionar cuidados adecuados, alimentación nutritiva y agua limpia",
   "compromiso2": "Llevar a la mascota al veterinario regularmente para vacunas y revisiones",
   "compromiso3": "Nunca abandonar la mascota y buscar ayuda en caso de dificultades",
-  "compromiso4": "Permitir seguimiento de la fundación para verificar el bienestar de la mascota",
   
   "anterior": "Anterior",
   "siguiente": "Siguiente",
@@ -82,6 +81,8 @@
   "especie": "Especie",
   "genero": "Género",
   "edad": "Edad",
+  "tamaño": "Tamaño",
+  "años": "años",
   
   "solicitud_exitosa": "¡Solicitud Enviada Correctamente!",
   "solicitud_en_revision": "Tu solicitud está siendo revisada por nuestro equipo. Nos contactaremos contigo pronto.",
@@ -114,18 +115,24 @@
   "compromiso_esterilizacion_requerido": "Debes aceptar el compromiso de esterilización",
   "compromiso_seguimiento_requerido": "Debes aceptar el compromiso de seguimiento",
   
-  "salud_cuidados": "Salud y Cuidados",
-  "vacunas": "Vacunas",
-  "vacunas_registradas": "vacunas registradas",
-  "en_proceso": "En proceso",
-  "proxima_dosis": "Próxima dosis",
-  "lugar_rescate": "Lugar de rescate",
-  "cuidados_especiales": "Cuidados especiales",
-  "apto_con_ninos": "Apto con niños",
-  "apto_con_otros": "Apto con otros animales",
-  "condiciones_especiales": "Condiciones especiales",
-  "fundacion_responsable": "Fundación responsable",
-  "contactar_fundacion": "Contactar fundación",
-  "sin_fundacion": "Sin fundación",
-  "sin_fundacion_desc": "Esta mascota no está asociada a ninguna fundación"
+  "tips_adopcion": "Tips para la adopción",
+  "tip_preparar_hogar": "Prepara tu hogar antes de que llegue",
+  "tip_gastos_veterinarios": "Considera los gastos veterinarios",
+  "tip_tiempo_dedicacion": "Dedica tiempo de calidad",
+  "tip_amor_incondicional": "Ofrece amor incondicional",
+  
+  "documentos_necesarios": "Documentos necesarios",
+  "doc_identidad": "Copia de identificación",
+  "doc_comprobante_domicilio": "Comprobante de domicilio",
+  "doc_compromiso": "Carta de compromiso",
+  
+  "completa_campos": "Completa todos los campos requeridos",
+  "solicitud_enviada": "¡Solicitud enviada con éxito!",
+  "error_envio": "Error al enviar la solicitud",
+  "error_titulo": "Error",
+  "mascota_no_encontrada": "Mascota no encontrada",
+  "volver": "Volver",
+  "cargando": "Cargando...",
+  "generando_pdf": "Generando PDF...",
+  "error_carga_solicitud": "Error al cargar la solicitud"
 }

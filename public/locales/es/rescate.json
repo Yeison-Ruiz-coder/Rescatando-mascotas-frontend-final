@@ -145,5 +145,18 @@
   "rescate_enviado_message": "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
   "admin_waiting_time": "Tiempo para intervención de administradores:",
   "admin_info": "Si ninguna fundación o veterinaria responde en 30 minutos, los administradores podrán ver y gestionar este rescate.",
-  "galeria_fotos":"Galeria de fotos"
+  "galeria_fotos":"Galeria de fotos",
+  "motivational_title": "¡Tu reporte puede salvar una vida!",
+  "motivational_message": "Cada minuto cuenta. Tu reporte nos ayuda a llegar a tiempo y brindar la atención que estos animales necesitan. ¡No te quedes callado, actúa ahora!",
+  "tips_title": "Tips importantes:",
+  "tip1": "Toma fotos claras del animal y del lugar",
+  "tip2": "Describe la ubicación con la mayor precisión posible",
+  "tip3": "No te acerques si el animal está agresivo o herido",
+  "tip4": "Comparte el reporte en redes sociales si es posible",
+  "tip5": "Mantente atento a tu teléfono por si necesitan más información",
+  "emergency_contacts": "Contactos de emergencia:",
+  "rescue_phone": "123-456-7890",
+  "vet_phone": "098-765-4321",
+  "animal_police": "112",
+  "footer_message": "Juntos podemos hacer la diferencia"
 }

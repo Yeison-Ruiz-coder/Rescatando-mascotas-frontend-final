@@ -69,24 +69,7 @@ const Paso4Revision = ({ formData, mascota, t, getImageUrl }) => {
         </div>
       </div>
 
-      <div className="revision-mascota">
-        <h3>{t('mascota_a_adoptar')}</h3>
-        <div className="revision-mascota-contenido">
-          {mascota?.foto_principal && (
-            <img 
-              src={getImageUrl(mascota.foto_principal)} 
-              alt={mascota.nombre_mascota} 
-              className="revision-mascota-img" 
-            />
-          )}
-          <div className="revision-mascota-info">
-            <h4>{mascota?.nombre_mascota}</h4>
-            <p><strong>{t('especie')}:</strong> {mascota?.especie}</p>
-            <p><strong>{t('genero')}:</strong> {mascota?.genero}</p>
-            <p><strong>{t('edad')}:</strong> {mascota?.edad_aprox} {t('años')}</p>
-          </div>
-        </div>
-      </div>
+      {/* SECCIÓN ELIMINADA - Ya no mostramos la mascota aquí porque está en la columna derecha */}
 
       <div className="aviso-importante">
         <i className="fas fa-info-circle"></i>

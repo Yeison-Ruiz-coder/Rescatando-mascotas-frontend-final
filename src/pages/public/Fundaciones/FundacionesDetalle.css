@@ -32,7 +32,7 @@
 .fundacion-detalle-page .detalle-back-link:hover {
   transform: translateX(-3px);
   box-shadow: var(--shadow-hard-md);
-  border-color: var(--color-primary);
+  border-color: var(--color-fundacion-primary);
 }
 
 /* ===== BENTO GRID PRINCIPAL ===== */
@@ -84,10 +84,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--color-success);
+  color: #10b981;
   font-size: 0.8rem;
   font-weight: 500;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.12);
   padding: 0.2rem 0.8rem;
   border-radius: var(--radius-xs);
 }
@@ -123,7 +123,8 @@
 }
 
 .fundacion-detalle-page .detalle-card-header svg {
-  color: var(--color-primary);
+  color: var(--color-fundacion-primary);
+  opacity: 0.8;
 }
 
 .fundacion-detalle-page .detalle-card-header h3 {
@@ -172,20 +173,25 @@
   border-radius: var(--radius-xs);
   padding: 16px;
   text-align: center;
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .fundacion-detalle-page .detalle-stat-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-sm);
-  border-color: var(--color-primary);
+  border-color: var(--color-fundacion-primary);
 }
 
 .fundacion-detalle-page .detalle-stat-number {
   font-size: 1.8rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--color-fundacion-primary);
+  opacity: 0.85;
   line-height: 1;
+}
+
+.fundacion-detalle-page .detalle-stat-card:hover .detalle-stat-number {
+  opacity: 1;
 }
 
 .fundacion-detalle-page .detalle-stat-label {
@@ -205,7 +211,7 @@
   overflow: hidden;
   box-shadow: var(--shadow-hard-md);
   border: 1px solid var(--color-border);
-  background: var(--color-card-bg);
+  background: transparent;
 }
 
 .fundacion-detalle-page .detalle-imagen {
@@ -247,7 +253,8 @@
 }
 
 .fundacion-detalle-page .detalle-section-header svg {
-  color: var(--color-primary);
+  color: var(--color-fundacion-primary);
+  opacity: 0.8;
 }
 
 .fundacion-detalle-page .detalle-section-header h3 {
@@ -280,11 +287,11 @@
   font-size: 0.7rem;
   color: var(--color-primary);
   border: 1px solid var(--color-border);
-  transition: var(--transition);
+  transition: all 0.3s ease;
 }
 
 .fundacion-detalle-page .detalle-tag:hover {
-  background: var(--gradient-primary);
+  background: var(--color-fundacion-gradient);
   color: white;
   transform: translateY(-2px);
   border-color: transparent;
@@ -312,19 +319,22 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: var(--gradient-primary);
+  background: var(--color-fundacion-gradient);
+  opacity: 0.9;
   color: white;
   text-decoration: none;
   border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-weight: 500;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   box-shadow: var(--shadow-hard-sm);
 }
 
 .fundacion-detalle-page .detalle-mapa-link-externo:hover {
   transform: translateX(2px);
   box-shadow: var(--shadow-hard-md);
+  opacity: 1;
+  background: var(--color-fundacion-primary);
 }
 
 /* ===== MASCOTAS EN ADOPCIÓN ===== */
@@ -343,14 +353,14 @@
   background: var(--color-light-secondary);
   border-radius: var(--radius-xs);
   padding: 12px;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   border: 1px solid var(--color-border);
 }
 
 .fundacion-detalle-page .detalle-mascota-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hard-md);
-  border-color: var(--color-primary);
+  border-color: var(--color-fundacion-primary);
 }
 
 .fundacion-detalle-page .detalle-mascota-img {
@@ -370,7 +380,8 @@
 .fundacion-detalle-page .detalle-mascota-placeholder {
   width: 100%;
   height: 100%;
-  background: var(--gradient-primary);
+  background: var(--color-fundacion-gradient);
+  opacity: 0.9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -428,7 +439,8 @@
 }
 
 .fundacion-detalle-page .detalle-footer svg {
-  color: var(--color-primary);
+  color: var(--color-fundacion-primary);
+  opacity: 0.7;
 }
 
 /* ===== ERROR Y LOADING ===== */
@@ -568,8 +580,4 @@
 
 [data-theme="dark"] .fundacion-detalle-page .detalle-ciudad {
   background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .fundacion-detalle-page .detalle-verified {
-  background: rgba(16, 185, 129, 0.15);
 }

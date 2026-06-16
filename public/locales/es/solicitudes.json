@@ -37,14 +37,5 @@
 
   "generando_pdf": "Generando PDF...",
   "descargar_pdf": "Descargar PDF",
-  "error_pdf": "Error PDF",
-
-  "id": "ID",
-  "mascota": "Mascota",
-  "fecha_solicitud": "Fecha",
-  "fecha_completa": "Fecha de solicitud",
-  "estado": "Estado",
-  "acciones": "Acciones",
-  "ocultar": "Ocultar",
-  "ver_detalle": "Ver detalle"
+  "error_pdf": "Error PDF"
 }

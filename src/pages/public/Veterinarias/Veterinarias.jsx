@@ -158,14 +158,14 @@ const Veterinarias = () => {
 
   return (
     <div className="veterinarias-page">
-      <div className="veterinarias-header">
+      <div className="veterinarias-header reveal-up delay-100">
         <div className="veterinarias-hero">
           <img src="/img/hover/perro-veterinaria.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
-          <h1>{t("titulo")}</h1>
+          <h1 className="reveal-up delay-200">{t("titulo")}</h1>
           {pagination.total > 0 && (
-            <p className="veterinarias-info">
+            <p className="veterinarias-info reveal-up delay-300">
               <i className="fas fa-star"></i>{" "}
               {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
@@ -173,7 +173,7 @@ const Veterinarias = () => {
         </div>
       </div>
 
-      <div className="veterinarias-filtros-section">
+      <div className="veterinarias-filtros-section reveal-up delay-100">
         <div className="bento-container">
           <FiltrosVeterinarias
             onFilterChange={handleFilterChange}
@@ -186,7 +186,7 @@ const Veterinarias = () => {
 
       <div className="veterinarias-resultados-section">
         <div className="bento-container">
-          <div className="veterinarias-resultados-header">
+          <div className="veterinarias-resultados-header reveal-up delay-200">
             <div className="veterinarias-resultados-count">
               <i className="fas fa-list"></i> Mostrando{" "}
               <strong>{veterinarias.length}</strong> de{" "}
@@ -195,14 +195,14 @@ const Veterinarias = () => {
           </div>
 
           {veterinarias.length === 0 ? (
-            <div className="veterinarias-empty">
+            <div className="veterinarias-empty reveal-up">
               <i className="fas fa-building"></i>
               <h3>{t("sin_resultados.titulo")}</h3>
               <p>{t("sin_resultados.mensaje")}</p>
             </div>
           ) : (
             <>
-              <div className="veterinarias-grid">
+              <div className="veterinarias-grid stagger-children">
                 {veterinarias.map((veterinaria) => (
                   <VeterinariaCard
                     key={veterinaria.id}
@@ -215,7 +215,7 @@ const Veterinarias = () => {
               </div>
 
               {pagination.last_page > 1 && (
-                <div className="veterinarias-pagination-container">
+                <div className="veterinarias-pagination-container reveal-up delay-300">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -240,7 +240,7 @@ const Veterinarias = () => {
         </div>
       </div>
 
-      <div className="veterinarias-motivational">
+      <div className="veterinarias-motivational reveal-up delay-400">
         <div className="bento-container">
           <div className="veterinarias-motivational-content">
             <i className="fas fa-paw veterinarias-motivational-icon"></i>

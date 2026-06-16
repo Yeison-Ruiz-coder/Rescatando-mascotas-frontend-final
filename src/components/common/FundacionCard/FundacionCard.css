@@ -1,270 +1,249 @@
 /* src/components/common/FundacionCard/FundacionCard.css */
-/* ESTILO COLLAGE + BENTO - CARDS VERTICALES CON ESTADÍSTICAS */
-/* PREFIJO ÚNICO: .fc- (FundacionCard) */
+/* ESTILO CONSISTENTE CON EVENTOCARD Y MASCOTACARD */
+/* COLOR DISTINTIVO: ROJO/CORAL (sutil) - USANDO VARIABLES GLOBALES */
 
 .fc-card {
-  background: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  box-shadow: var(--shadow-hard-sm);
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .fc-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hard-md);
-  border-color: var(--color-primary);
+  outline: 1px solid var(--color-fundacion-outline);
+  outline-offset: 2px;
 }
 
-/* ===== IMAGEN ===== */
 .fc-card .fc-image {
   position: relative;
-  height: 200px;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  flex-shrink: 0;
-  background: var(--gradient-primary);
+  background: var(--form-input-bg);
 }
 
 .fc-card .fc-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
-  filter: grayscale(15%);
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .fc-card:hover .fc-image img {
-  transform: scale(1.08);
-  filter: grayscale(0%);
+  transform: scale(1.03);
 }
 
 .fc-card .fc-placeholder {
   width: 100%;
   height: 100%;
-  background: var(--gradient-primary);
+  background: var(--color-fundacion-light);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  color: white;
+  color: var(--color-fundacion-primary);
 }
 
 .fc-card .fc-placeholder svg {
-  opacity: 0.7;
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
 }
 
-.fc-card .fc-placeholder span {
-  font-size: 0.85rem;
-  opacity: 0.9;
-}
-
-/* ===== BADGE VERIFICADO ===== */
 .fc-card .fc-verified-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--color-success);
-  padding: 4px 10px;
-  border-radius: var(--radius-xs);
+  top: 16px;
+  right: 16px;
+  background: var(--color-fundacion-bg);
+  backdrop-filter: blur(4px);
+  padding: 6px 12px;
+  border-radius: 40px;
+  z-index: 3;
+  box-shadow: var(--shadow-hard-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.7rem;
   font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
   color: white;
-  z-index: 2;
-  box-shadow: var(--shadow-hard-sm);
 }
 
-/* ===== CONTENIDO ===== */
+.fc-card .fc-verified-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
 .fc-card .fc-content {
-  padding: 1.25rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.85) 30%,
+    rgba(0, 0, 0, 0.3) 70%,
+    transparent 100%
+  );
+  padding: 20px 16px 16px 16px;
+  z-index: 2;
 }
 
-/* Título */
-.fc-card .fc-title {
-  font-size: 1.2rem;
+.fc-card .fc-titulo {
+  font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
-  color: var(--color-text);
-}
-
-/* Ciudad */
-.fc-card .fc-city {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  margin-bottom: 0.75rem;
-  background: rgba(0, 0, 0, 0.03);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-xs);
-  width: fit-content;
-}
-
-/* Descripción */
-.fc-card .fc-description {
-  color: var(--color-text-muted);
-  font-size: 0.85rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  line-height: 1.3;
+  color: white;
+  margin: 0 0 4px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Información de contacto */
-.fc-card .fc-info {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.fc-card .fc-info-item {
-  display: flex;
+.fc-card .fc-ciudad {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
+  gap: 4px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  width: fit-content;
 }
 
-.fc-card .fc-info-item svg {
-  color: var(--color-primary);
-  flex-shrink: 0;
+.fc-card .fc-ciudad svg {
+  width: 10px;
+  height: 10px;
 }
 
-/* ===== ESTADÍSTICAS ===== */
+.fc-card .fc-descripcion {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 8px 0;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
 .fc-card .fc-stats {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .fc-card .fc-stat {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  background: rgba(102, 126, 234, 0.05);
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--radius-xs);
+  gap: 4px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  padding: 3px 8px;
+  border-radius: 20px;
 }
 
 .fc-card .fc-stat svg {
-  color: var(--color-primary);
+  width: 10px;
+  height: 10px;
+  color: var(--color-fundacion-primary);
+  opacity: 0.8;
 }
 
-/* ===== BOTÓN ===== */
-.fc-card .fc-footer {
-  margin-top: auto;
-}
-
-.fc-card .fc-btn {
-  display: inline-flex;
+.fc-card .fc-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: var(--gradient-primary);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fc-card:hover .fc-overlay {
+  opacity: 1;
+}
+
+.fc-card .fc-overlay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  background: var(--color-fundacion-bg);
   color: white;
-  text-decoration: none;
-  border-radius: var(--radius-md);
+  border-radius: 40px;
+  font-size: 0.9rem;
   font-weight: 600;
-  font-size: 0.85rem;
-  transition: var(--transition);
+  transition: all 0.2s ease;
   box-shadow: var(--shadow-hard-sm);
-  cursor: pointer;
   border: none;
+  cursor: pointer;
 }
 
-.fc-card .fc-btn:hover {
-  transform: translateX(2px);
+.fc-card .fc-overlay-btn:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
-  text-decoration: none;
-  color: white;
-  filter: brightness(1.02);
+  background: var(--color-fundacion-primary);
 }
 
-.fc-card .fc-btn svg {
+.fc-card .fc-overlay-btn svg {
   width: 16px;
   height: 16px;
 }
 
-/* ===== RESPONSIVE ===== */
+@media (min-width: 769px) {
+  .fc-card .fc-overlay {
+    opacity: 0;
+  }
+  .fc-card:hover .fc-overlay {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
-  .fc-card .fc-image {
-    height: 160px;
+  .fc-card .fc-overlay {
+    display: none;
   }
-  
   .fc-card .fc-content {
-    padding: 1rem;
+    padding: 16px 12px 12px 12px;
   }
-  
-  .fc-card .fc-title {
-    font-size: 1rem;
+  .fc-card .fc-titulo {
+    font-size: 0.9rem;
   }
-  
-  .fc-card .fc-btn {
-    padding: 0.6rem 0.8rem;
-    font-size: 0.8rem;
+  .fc-card .fc-descripcion {
+    font-size: 0.65rem;
   }
-  
   .fc-card .fc-stat {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+  .fc-card .fc-verified-badge {
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    font-size: 0.65rem;
   }
 }
 
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .fc-card {
-  background: var(--color-card-bg);
-  border-color: var(--color-border);
-}
-
-[data-theme="dark"] .fc-card .fc-placeholder {
-  background: var(--gradient-primary);
-}
-
-[data-theme="dark"] .fc-card .fc-info-item svg,
-[data-theme="dark"] .fc-card .fc-stat svg {
-  color: var(--color-primary-light);
-}
-
-[data-theme="dark"] .fc-card .fc-verified-badge {
-  background: var(--color-success);
-}
-
-[data-theme="dark"] .fc-card .fc-title {
-  color: var(--color-text);
-}
-
-[data-theme="dark"] .fc-card .fc-description,
-[data-theme="dark"] .fc-card .fc-city,
-[data-theme="dark"] .fc-card .fc-info-item,
-[data-theme="dark"] .fc-card .fc-stat {
-  color: var(--color-text-muted);
-}
-
-[data-theme="dark"] .fc-card .fc-city {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme="dark"] .fc-card .fc-stat {
-  background: rgba(139, 156, 255, 0.08);
+[data-theme="dark"] .fc-card .fc-overlay {
+  background: rgba(0, 0, 0, 0.9);
 }

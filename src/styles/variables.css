@@ -5,12 +5,14 @@
   background: transparent !important;
 
   /* ===== COLORES PRINCIPALES (TUS COLORES, NO CAMBIAN) ===== */
+  /* Estos colores se usan para elementos clave como botones, enlaces, badges, etc. aplicar de manera llamativa a los elementos como cards,pages,etc */
   --color-primary: #667eea;
   --color-secondary: #764ba2;
   --color-primary-light: #8b9cff;
   --color-secondary-light: #9b6bc4;
 
   /* ===== COLORES CÁLIDOS ===== */
+  /* Estos colores se usan para acentos, badges, bordes, etc. aplicar de manera sutil a los elementos como cards,pages,etc */
   --color-accent: #ff8c42;
   --color-heart: #ff6b9d;
   --color-success: #2ecc71;
@@ -18,7 +20,7 @@
   --color-warning: #ffc107;
   --color-info: #4299e1;
 
-  /* ===== FONDOS (TUS FONDOS, NO CAMBIAN) ===== */
+  /* ===== FONDOS ===== */
   --color-light: #f7f2fc;
   --color-background-section: #f4ecfc;
   --color-light-secondary: #f6e6ff;
@@ -26,23 +28,21 @@
   --color-border: rgba(0, 0, 0, 0.08);
   --color-hover: rgba(0, 0, 0, 0.05);
 
-  /* ===== TEXTOS (TUS TEXTOS, NO CAMBIAN) ===== */
+  /* ===== TEXTOS ===== */
   --color-text: #1b202b;
   --color-text-muted: #39414d;
   --color-text-light: #7a8592;
   --color-text-disabled: #a0aec0;
 
-  /* ===== GRADIENTES (TUS GRADIENTES, NO CAMBIAN) ===== */
+  /* ===== GRADIENTES ===== */
   --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   --gradient-accent: linear-gradient(135deg, var(--color-accent), var(--color-heart));
   --gradient-light: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
 
-  /* ===== NUEVAS SOMBRAS DURAS (ESTILO COLLAGE) ===== */
+  /* ===== SOMBRAS ===== */
   --shadow-hard-sm: 4px 4px 0px rgba(0, 0, 0, 0.06);
   --shadow-hard-md: 6px 6px 0px rgba(0, 0, 0, 0.08);
   --shadow-hard-lg: 10px 10px 0px rgba(0, 0, 0, 0.1);
-  
-  /* ===== SOMBRAS ORIGINALES (SE MANTIENEN POR COMPATIBILIDAD) ===== */
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.1);
@@ -50,19 +50,17 @@
   --shadow-accent: 0 8px 20px rgba(255, 140, 66, 0.2);
   --shadow-heart: 0 8px 20px rgba(255, 107, 157, 0.2);
 
-  /* ===== NUEVO SISTEMA DE BORDES JERÁRQUICOS ===== */
-  --radius-none: 0px;      /* Contenedores principales */
-  --radius-xs: 4px;        /* Stickers, elementos muy pequeños */
-  --radius-sm: 6px;        /* Inputs, elementos pequeños */
-  --radius-md: 8px;        /* Botones medianos */
-  --radius-lg: 12px;       /* Elementos internos grandes */
-  --radius-xl: 16px;       /* Secciones internas grandes */
-  
-  /* ===== BORDES ORIGINALES (SE MANTIENEN POR COMPATIBILIDAD) ===== */
+  /* ===== BORDES ===== */
+  --radius-none: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-round: 50%;
   --radius-2xl: 32px;
 
-  /* ===== OPACIDADES DE CAPAS DECORATIVAS ===== */
+  /* ===== OPACIDADES ===== */
   --circle-opacity-1: 0.12;
   --circle-opacity-2: 0.1;
   --blob-opacity: 0.1;
@@ -93,7 +91,7 @@
   --z-toast: 700;
   --z-tooltip: 800;
 
-  /* ===== FORMULARIOS - MODO CLARO ===== */
+  /* ===== FORMULARIOS ===== */
   --form-bg: #ffffff;
   --form-input-bg: #f8fafc;
   --form-border: #e2e8f0;
@@ -105,6 +103,28 @@
   --form-focus-ring-dark: rgba(102, 126, 234, 0.25);
   --form-error: #dc2626;
   --form-success: #16a34a;
+
+  /* ===== COLORES DISTINTIVOS POR TIPO DE CARD ===== */
+  
+  /* Fundaciones (Rojo/Coral) */
+  --color-fundacion-primary: #ff4757;
+  --color-fundacion-secondary: #ff6b81;
+  --color-fundacion-gradient: linear-gradient(135deg, var(--color-fundacion-primary), var(--color-fundacion-secondary));
+  --color-fundacion-bg: rgba(255, 71, 87, 0.85);
+  --color-fundacion-light: rgba(255, 71, 87, 0.15);
+  --color-fundacion-outline: rgba(255, 71, 87, 0.3);
+  
+  /* Veterinarias (Verde/Teal) */
+  --color-veterinaria-primary: #2ecc71;
+  --color-veterinaria-secondary: #27ae60;
+  --color-veterinaria-gradient: linear-gradient(135deg, var(--color-veterinaria-primary), var(--color-veterinaria-secondary));
+  --color-veterinaria-bg: rgba(46, 204, 113, 0.85);
+  --color-veterinaria-light: rgba(46, 204, 113, 0.12);
+  --color-veterinaria-outline: rgba(46, 204, 113, 0.3);
+  
+  /* Badges especiales */
+  --color-badge-verified: linear-gradient(135deg, #10b981, #059669);
+  --color-badge-urgencia: linear-gradient(135deg, #ff4757, #ff0000);
 }
 
 [data-theme="dark"] {
@@ -114,7 +134,7 @@
   --color-primary-light: #a0b0ff;
   --color-secondary-light: #c49ae0;
 
-  /* ===== COLORES CÁLIDOS (se mantienen) ===== */
+  /* ===== COLORES CÁLIDOS ===== */
   --color-accent: #ff9f5e;
   --color-heart: #ff85b3;
   --color-success: #3ee681;
@@ -142,18 +162,16 @@
   --gradient-accent: linear-gradient(135deg, #ff9f5e, #ff85b3);
   --gradient-light: linear-gradient(135deg, #1a1a2e, #16213e);
 
-  /* ===== SOMBRAS DURAS MODO OSCURO ===== */
+  /* ===== SOMBRAS ===== */
   --shadow-hard-sm: 4px 4px 0px rgba(0, 0, 0, 0.2);
   --shadow-hard-md: 6px 6px 0px rgba(0, 0, 0, 0.3);
   --shadow-hard-lg: 10px 10px 0px rgba(0, 0, 0, 0.4);
-
-  /* ===== SOMBRAS ORIGINALES MODO OSCURO ===== */
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.5);
 
-  /* ===== OPACIDADES DE CAPAS (ajustadas) ===== */
+  /* ===== OPACIDADES ===== */
   --circle-opacity-1: 0.25;
   --circle-opacity-2: 0.22;
   --blob-opacity: 0.2;
@@ -161,7 +179,7 @@
   --vignette-opacity: 0.05;
   --paw-opacity: 0.22;
 
-  /* ===== FORMULARIOS - MODO OSCURO ===== */
+  /* ===== FORMULARIOS ===== */
   --form-bg: #1e293b;
   --form-input-bg: #0f172a;
   --form-border: #334155;
@@ -173,4 +191,8 @@
   --form-focus-ring-dark: rgba(139, 156, 255, 0.35);
   --form-error: #f87171;
   --form-success: #4ade80;
+
+  /* ===== COLORES DISTINTIVOS MODO OSCURO ===== */
+  --color-fundacion-light: rgba(255, 71, 87, 0.25);
+  --color-veterinaria-light: rgba(46, 204, 113, 0.2);
 }
