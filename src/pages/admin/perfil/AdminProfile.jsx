@@ -1,44 +1,71 @@
 // src/pages/admin/perfil/AdminProfile.jsx
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useCallback } from 'react';
 import { useProfile } from '../../../hooks/useProfile';
-import ProfileLayout from '../../../components/profile/layout/ProfileLayout';
+import { ProfileContainer } from '../../../components/profile';
 import {
   PersonalSection,
   LocationSection,
   SocialSection,
   SecuritySection,
 } from '../../../components/profile/sections';
-import './AdminProfile.css';
 
 const AdminProfile = () => {
-  const { t } = useTranslation();
-  const { profile, loading, updateProfile, updateAvatar, deleteAvatar, updateLocation, updateSocialNetworks, changePassword } = useProfile();
+  const { 
+    profile, 
+    loading, 
+    updateProfile, 
+    updateAvatar, 
+    deleteAvatar, 
+    updateLocation, 
+    updateSocialNetworks, 
+    changePassword
+  } = useProfile();
+  
   const [activeSection, setActiveSection] = useState('personal');
   const [saving, setSaving] = useState(false);
 
-  const handlePersonalSubmit = async (data) => { setSaving(true); try { await updateProfile(data); } finally { setSaving(false); } };
-  const handleLocationSubmit = async (data) => { setSaving(true); try { await updateLocation(data); } finally { setSaving(false); } };
-  const handleSocialSubmit = async (data) => { setSaving(true); try { await updateSocialNetworks(data); } finally { setSaving(false); } };
+  const sectionMap = {
+    personal: PersonalSection,
+    location: LocationSection,
+    social: SocialSection,
+    security: SecuritySection,
+  };
 
-  if (loading && !profile) return <div className="admin-profile-loading"><div className="spinner"></div></div>;
+  const handleSave = useCallback(async (data) => {
+    setSaving(true);
+    try {
+      const actions = {
+        personal: () => updateProfile(data),
+        location: () => updateLocation(data),
+        social: () => updateSocialNetworks(data),
+      };
+      await actions[activeSection]?.();
+    } finally {
+      setSaving(false);
+    }
+  }, [activeSection, updateProfile, updateLocation, updateSocialNetworks]);
+
+  const sectionProps = {
+    personal: { profile, onSave: handleSave, saving },
+    location: { profile, onSave: handleSave, saving },
+    social: { profile, onSave: handleSave, saving },
+    security: { onChangePassword: changePassword, saving },
+  };
+
+  const SectionComponent = sectionMap[activeSection] || PersonalSection;
 
   return (
-    <ProfileLayout
+    <ProfileContainer
+      profile={profile}
+      loading={loading}
       activeSection={activeSection}
       onSectionChange={setActiveSection}
       role="admin"
-      profile={profile}
       onAvatarUpload={updateAvatar}
       onAvatarDelete={deleteAvatar}
-      title={t('profile.adminProfile')}
-      description={t('profile.adminProfileDescription')}
     >
-      {activeSection === 'personal' && <PersonalSection profile={profile} onSubmit={handlePersonalSubmit} isLoading={saving} />}
-      {activeSection === 'location' && <LocationSection profile={profile} onSubmit={handleLocationSubmit} isLoading={saving} />}
-      {activeSection === 'social' && <SocialSection profile={profile} onSubmit={handleSocialSubmit} isLoading={saving} />}
-      {activeSection === 'security' && <SecuritySection onChangePassword={changePassword} isLoading={saving} />}
-    </ProfileLayout>
+      <SectionComponent {...sectionProps[activeSection]} />
+    </ProfileContainer>
   );
 };
 

@@ -1,48 +1,80 @@
 // src/pages/user/perfil/UserProfile.jsx
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useCallback } from 'react';
 import { useProfile } from '../../../hooks/useProfile';
-import ProfileLayout from '../../../components/profile/layout/ProfileLayout';
+import { ProfileContainer } from '../../../components/profile';
 import {
   PersonalSection,
   LocationSection,
   SocialSection,
   SecuritySection,
-  PreferencesSection,
   VerificationSection,
+  PreferencesSection,
 } from '../../../components/profile/sections';
-import './UserProfile.css';
 
 const UserProfile = () => {
-  const { t } = useTranslation();
-  const { profile, loading, updateProfile, updateAvatar, deleteAvatar, updateLocation, updateSocialNetworks, changePassword, sendPhoneVerification, confirmPhoneVerification, completionStatus } = useProfile();
+  const { 
+    profile, 
+    loading, 
+    updateProfile, 
+    updateAvatar, 
+    deleteAvatar, 
+    updateLocation, 
+    updateSocialNetworks, 
+    changePassword,
+    sendPhoneVerification,
+    confirmPhoneVerification
+  } = useProfile();
+  
   const [activeSection, setActiveSection] = useState('personal');
   const [saving, setSaving] = useState(false);
 
-  const handlePersonalSubmit = async (data) => { setSaving(true); try { await updateProfile(data); } finally { setSaving(false); } };
-  const handleLocationSubmit = async (data) => { setSaving(true); try { await updateLocation(data); } finally { setSaving(false); } };
-  const handleSocialSubmit = async (data) => { setSaving(true); try { await updateSocialNetworks(data); } finally { setSaving(false); } };
+  const sectionMap = {
+    personal: PersonalSection,
+    location: LocationSection,
+    social: SocialSection,
+    verification: VerificationSection,
+    preferences: PreferencesSection,
+    security: SecuritySection,
+  };
 
-  if (loading && !profile) return <div className="user-profile-loading"><div className="spinner"></div></div>;
+  const handleSave = useCallback(async (data) => {
+    setSaving(true);
+    try {
+      const actions = {
+        personal: () => updateProfile(data),
+        location: () => updateLocation(data),
+        social: () => updateSocialNetworks(data),
+        preferences: () => updateProfile(data),
+      };
+      await actions[activeSection]?.();
+    } finally {
+      setSaving(false);
+    }
+  }, [activeSection, updateProfile, updateLocation, updateSocialNetworks]);
+
+  const sectionProps = {
+    personal: { profile, onSave: handleSave, saving },
+    location: { profile, onSave: handleSave, saving },
+    social: { profile, onSave: handleSave, saving },
+    verification: { profile, onSendPhoneCode: sendPhoneVerification, onVerifyPhone: confirmPhoneVerification },
+    preferences: { profile, onSave: handleSave, saving },
+    security: { onChangePassword: changePassword, saving },
+  };
+
+  const SectionComponent = sectionMap[activeSection] || PersonalSection;
 
   return (
-    <ProfileLayout
+    <ProfileContainer
+      profile={profile}
+      loading={loading}
       activeSection={activeSection}
       onSectionChange={setActiveSection}
       role="user"
-      profile={profile}
       onAvatarUpload={updateAvatar}
       onAvatarDelete={deleteAvatar}
-      title={t('profile.userProfile')}
-      description={t('profile.userProfileDescription')}
     >
-      {activeSection === 'personal' && <PersonalSection profile={profile} onSubmit={handlePersonalSubmit} isLoading={saving} />}
-      {activeSection === 'location' && <LocationSection profile={profile} onSubmit={handleLocationSubmit} isLoading={saving} />}
-      {activeSection === 'social' && <SocialSection profile={profile} onSubmit={handleSocialSubmit} isLoading={saving} />}
-      {activeSection === 'preferences' && <PreferencesSection profile={profile} onSubmit={updateProfile} isLoading={saving} />}
-      {activeSection === 'verification' && <VerificationSection profile={profile} onSendCode={sendPhoneVerification} onVerify={confirmPhoneVerification} />}
-      {activeSection === 'security' && <SecuritySection onChangePassword={changePassword} isLoading={saving} />}
-    </ProfileLayout>
+      <SectionComponent {...sectionProps[activeSection]} />
+    </ProfileContainer>
   );
 };
 
