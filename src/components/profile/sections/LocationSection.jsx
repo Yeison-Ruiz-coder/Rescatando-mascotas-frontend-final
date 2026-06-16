@@ -1,23 +1,84 @@
 // src/components/profile/sections/LocationSection.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import LocationForm from '../forms/LocationForm';
-import './LocationSection.css';
 
-const LocationSection = ({ profile, onSubmit, isLoading }) => {
+const LocationSection = ({ profile, onSave, saving }) => {
   const { t } = useTranslation();
+  const [form, setForm] = useState({ direccion: '', ciudad: '', pais: '', codigo_postal: '' });
+
+  useEffect(() => {
+    if (profile) {
+      setForm({
+        direccion: profile.direccion || '',
+        ciudad: profile.ciudad || '',
+        pais: profile.pais || '',
+        codigo_postal: profile.codigo_postal || '',
+      });
+    }
+  }, [profile]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(form);
+  };
 
   return (
-    <div className="profile-section">
-      <div className="section-header">
-        <div className="section-icon"><i className="fas fa-map-marker-alt"></i></div>
-        <div className="section-info">
+    <section className="profile-section">
+      <div className="profile-section-header">
+        <div className="profile-section-icon">
+          <i className="fas fa-map-marker-alt"></i>
+        </div>
+        <div>
           <h3>{t('profile.location')}</h3>
           <p>{t('profile.locationDescription')}</p>
         </div>
       </div>
-      <LocationForm initialData={profile} onSubmit={onSubmit} isLoading={isLoading} />
-    </div>
+      <form onSubmit={handleSubmit} className="profile-form">
+        <div className="profile-form-group">
+          <label>{t('profile.address')}</label>
+          <input 
+            type="text" 
+            value={form.direccion} 
+            onChange={(e) => setForm({ ...form, direccion: e.target.value })} 
+          />
+        </div>
+        <div className="profile-form-row">
+          <div className="profile-form-group">
+            <label>{t('profile.city')}</label>
+            <input 
+              type="text" 
+              value={form.ciudad} 
+              onChange={(e) => setForm({ ...form, ciudad: e.target.value })} 
+            />
+          </div>
+          <div className="profile-form-group">
+            <label>{t('profile.country')}</label>
+            <input 
+              type="text" 
+              value={form.pais} 
+              onChange={(e) => setForm({ ...form, pais: e.target.value })} 
+            />
+          </div>
+        </div>
+        <div className="profile-form-group">
+          <label>{t('profile.postalCode')}</label>
+          <input 
+            type="text" 
+            value={form.codigo_postal} 
+            onChange={(e) => setForm({ ...form, codigo_postal: e.target.value })} 
+          />
+        </div>
+        <div className="profile-form-actions">
+          <button type="submit" className="btn btn-primary" disabled={saving}>
+            {saving ? (
+              <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>
+            ) : (
+              t('common.save')
+            )}
+          </button>
+        </div>
+      </form>
+    </section>
   );
 };
 

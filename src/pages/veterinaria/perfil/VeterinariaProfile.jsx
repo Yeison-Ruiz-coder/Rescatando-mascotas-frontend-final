@@ -1,9 +1,8 @@
 // src/pages/veterinaria/perfil/VeterinariaProfile.jsx
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useProfile } from '../../../hooks/useProfile';
 import { veterinariaProfileService } from '../../../services/veterinariaProfileService';
-import ProfileLayout from '../../../components/profile/layout/ProfileLayout';
+import { ProfileContainer } from '../../../components/profile';
 import {
   PersonalSection,
   LocationSection,
@@ -12,269 +11,150 @@ import {
   VeterinarySection,
   ServicesSection,
   ScheduleSection,
-  MediaSection,
+  LogoSection,
 } from '../../../components/profile/sections';
-import './VeterinariaProfile.css';
 
 const VeterinariaProfile = () => {
-  const { t } = useTranslation();
   const { 
     profile, 
     loading, 
+    updateProfile, 
     updateAvatar, 
     deleteAvatar, 
-    updateProfile,
-    updateLocation,
-    updateSocialNetworks,
-    changePassword,
-    completionStatus
+    updateLocation, 
+    updateSocialNetworks, 
+    changePassword
   } = useProfile();
   
-  const [veterinariaData, setVeterinariaData] = useState(null);
   const [activeSection, setActiveSection] = useState('personal');
-  const [loadingVet, setLoadingVet] = useState(false);
   const [saving, setSaving] = useState(false);
-
-  const loadVeterinariaProfile = async () => {
-    setLoadingVet(true);
-    try {
-      const data = await veterinariaProfileService.getProfile();
-      setVeterinariaData(data);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoadingVet(false);
-    }
-  };
+  const [veterinariaData, setVeterinariaData] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    loadVeterinariaProfile();
-  }, []);
+    if (!profile || loaded) return;
+    const loadData = async () => {
+      try {
+        const data = await veterinariaProfileService.getProfile();
+        setVeterinariaData(data?.veterinaria || {});
+        setLoaded(true);
+      } catch (error) {
+        console.error('Error loading veterinaria data:', error);
+      }
+    };
+    loadData();
+  }, [profile, loaded]);
 
-  const handlePersonalInfoSubmit = async (data) => {
+  const sectionMap = {
+    personal: PersonalSection,
+    location: LocationSection,
+    social: SocialSection,
+    veterinary: VeterinarySection,
+    services: ServicesSection,
+    schedule: ScheduleSection,
+    logo: LogoSection,
+    security: SecuritySection,
+  };
+
+  const handleSave = useCallback(async (data) => {
     setSaving(true);
     try {
-      await updateProfile(data);
+      const actions = {
+        personal: () => updateProfile(data),
+        location: () => updateLocation(data),
+        social: () => updateSocialNetworks(data),
+      };
+      await actions[activeSection]?.();
     } finally {
       setSaving(false);
     }
-  };
+  }, [activeSection, updateProfile, updateLocation, updateSocialNetworks]);
 
-  const handleLocationSubmit = async (data) => {
-    setSaving(true);
-    try {
-      await updateLocation(data);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleSocialSubmit = async (data) => {
-    setSaving(true);
-    try {
-      await updateSocialNetworks(data);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleUpdateGeneral = async (data) => {
+  const handleUpdateVeterinaria = useCallback(async (data) => {
     setSaving(true);
     try {
       const result = await veterinariaProfileService.updateGeneralInfo(data);
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, ...result } 
-      }));
+      setVeterinariaData(prev => ({ ...prev, ...result }));
     } finally {
       setSaving(false);
     }
-  };
+  }, []);
 
-  const handleUpdateServices = async (data) => {
+  const handleUpdateServices = useCallback(async (data) => {
     setSaving(true);
     try {
       const result = await veterinariaProfileService.updateServices(data);
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, ...result } 
-      }));
+      setVeterinariaData(prev => ({ ...prev, ...result }));
     } finally {
       setSaving(false);
     }
-  };
+  }, []);
 
-  const handleUpdateSchedule = async (schedule, urgencias) => {
+  const handleUpdateSchedule = useCallback(async (schedule, extra) => {
     setSaving(true);
     try {
-      const result = await veterinariaProfileService.updateSchedule(schedule, urgencias);
+      const result = await veterinariaProfileService.updateSchedule(schedule, extra);
       setVeterinariaData(prev => ({ 
         ...prev, 
-        veterinaria: { 
-          ...prev.veterinaria, 
-          horario_atencion: result.horario_atencion,
-          urgencias_24h: result.urgencias_24h
-        } 
+        horario_atencion: result.horario_atencion, 
+        urgencias24h: result.urgencias24h 
       }));
     } finally {
       setSaving(false);
     }
-  };
+  }, []);
 
-  const handleUploadLogo = async (file) => {
+  const handleUploadLogo = useCallback(async (file) => {
     setSaving(true);
     try {
       const result = await veterinariaProfileService.uploadLogo(file);
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, logo: result.logo } 
-      }));
+      setVeterinariaData(prev => ({ ...prev, logo: result.logo }));
     } finally {
       setSaving(false);
     }
-  };
+  }, []);
 
-  const handleDeleteLogo = async () => {
+  const handleDeleteLogo = useCallback(async () => {
     setSaving(true);
     try {
       await veterinariaProfileService.deleteLogo();
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, logo: null } 
-      }));
+      setVeterinariaData(prev => ({ ...prev, logo: null }));
     } finally {
       setSaving(false);
     }
+  }, []);
+
+  const sectionProps = {
+    personal: { profile, onSave: handleSave, saving },
+    location: { profile, onSave: handleSave, saving },
+    social: { profile, onSave: handleSave, saving },
+    veterinary: { veterinariaData, onUpdate: handleUpdateVeterinaria, saving },
+    services: { veterinariaData, onUpdate: handleUpdateServices, saving },
+    schedule: { 
+      horario: veterinariaData?.horario_atencion, 
+      extra: veterinariaData?.urgencias24h, 
+      onUpdate: handleUpdateSchedule, 
+      saving, 
+      type: 'veterinaria' 
+    },
+    logo: { logo: veterinariaData?.logo, onUploadLogo: handleUploadLogo, onDeleteLogo: handleDeleteLogo, saving },
+    security: { onChangePassword: changePassword, saving },
   };
 
-  const handleAddGalleryPhotos = async (files) => {
-    setSaving(true);
-    try {
-      const result = await veterinariaProfileService.addGalleryPhotos(files);
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, galeria_fotos: result.galeria_fotos } 
-      }));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleRemoveGalleryPhoto = async (photoUrl) => {
-    setSaving(true);
-    try {
-      const result = await veterinariaProfileService.removeGalleryPhoto(photoUrl);
-      setVeterinariaData(prev => ({ 
-        ...prev, 
-        veterinaria: { ...prev.veterinaria, galeria_fotos: result.galeria_fotos } 
-      }));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (loading || loadingVet) {
-    return (
-      <div className="veterinaria-profile-page">
-        <div className="container">
-          <div className="skeleton" style={{ height: '400px', borderRadius: '32px' }}></div>
-        </div>
-      </div>
-    );
-  }
-
-  const veterinaria = veterinariaData?.veterinaria || {};
+  const SectionComponent = sectionMap[activeSection] || PersonalSection;
 
   return (
-    <ProfileLayout
+    <ProfileContainer
+      profile={profile}
+      loading={loading}
       activeSection={activeSection}
       onSectionChange={setActiveSection}
       role="veterinaria"
-      profile={profile}
       onAvatarUpload={updateAvatar}
       onAvatarDelete={deleteAvatar}
-      completionStatus={completionStatus}
-      title={t('profile.veterinaryProfile')}
-      description={t('profile.veterinaryProfileDescription')}
     >
-      {/* Sección: Información Personal */}
-      {activeSection === 'personal' && (
-        <PersonalSection
-          profile={profile}
-          onSubmit={handlePersonalInfoSubmit}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Ubicación */}
-      {activeSection === 'location' && (
-        <LocationSection
-          profile={profile}
-          onSubmit={handleLocationSubmit}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Redes Sociales */}
-      {activeSection === 'social' && (
-        <SocialSection
-          profile={profile}
-          onSubmit={handleSocialSubmit}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Datos de Veterinaria */}
-      {activeSection === 'veterinary' && (
-        <VeterinarySection
-          veterinariaData={veterinaria}
-          onUpdate={handleUpdateGeneral}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Servicios */}
-      {activeSection === 'services' && (
-        <ServicesSection
-          veterinariaData={veterinaria}
-          onUpdate={handleUpdateServices}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Horarios */}
-      {activeSection === 'schedule' && (
-        <ScheduleSection
-          horario={veterinaria.horario_atencion}
-          urgencias24h={veterinaria.urgencias_24h}
-          onUpdate={handleUpdateSchedule}
-          isLoading={saving}
-          type="veterinaria"
-        />
-      )}
-
-      {/* Sección: Multimedia */}
-      {activeSection === 'media' && (
-        <MediaSection
-          type="veterinaria"
-          logo={veterinaria.logo}
-          gallery={veterinaria.galeria_fotos || []}
-          onUploadLogo={handleUploadLogo}
-          onDeleteLogo={handleDeleteLogo}
-          onAddGalleryPhotos={handleAddGalleryPhotos}
-          onRemoveGalleryPhoto={handleRemoveGalleryPhoto}
-          isLoading={saving}
-        />
-      )}
-
-      {/* Sección: Seguridad */}
-      {activeSection === 'security' && (
-        <SecuritySection
-          onChangePassword={changePassword}
-          isLoading={saving}
-        />
-      )}
-    </ProfileLayout>
+      <SectionComponent {...sectionProps[activeSection]} />
+    </ProfileContainer>
   );
 };
 

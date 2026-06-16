@@ -1,50 +1,58 @@
 // src/components/profile/sections/NeedsSection.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import './NeedsSection.css';
 
-const NeedsSection = ({ necesidades, onUpdate, isLoading }) => {
+const NeedsSection = ({ necesidades, onUpdate, saving }) => {
   const { t } = useTranslation();
+  const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    setSelected(necesidades || []);
+  }, [necesidades]);
 
   const needsList = [
-    { id: 'alimento', icon: 'fas fa-utensils' },
-    { id: 'medicinas', icon: 'fas fa-pills' },
-    { id: 'voluntarios', icon: 'fas fa-hands-helping' },
-    { id: 'donaciones', icon: 'fas fa-hand-holding-heart' },
-    { id: 'mantenimiento', icon: 'fas fa-tools' },
-    { id: 'transporte', icon: 'fas fa-truck' },
-    { id: 'juguetes', icon: 'fas fa-puzzle-piece' },
-    { id: 'camas', icon: 'fas fa-bed' },
-    { id: 'correas', icon: 'fas fa-dog' },
-    { id: 'jaulas', icon: 'fas fa-home' },
+    { id: 'alimento', icon: 'fa-utensils', label: t('profile.need_alimento') },
+    { id: 'medicinas', icon: 'fa-pills', label: t('profile.need_medicinas') },
+    { id: 'voluntarios', icon: 'fa-hands-helping', label: t('profile.need_voluntarios') },
+    { id: 'donaciones', icon: 'fa-hand-holding-heart', label: t('profile.need_donaciones') },
+    { id: 'mantenimiento', icon: 'fa-tools', label: t('profile.need_mantenimiento') },
+    { id: 'transporte', icon: 'fa-truck', label: t('profile.need_transporte') },
   ];
 
-  const handleToggle = (needId) => {
-    const current = necesidades || [];
-    const newNeeds = current.includes(needId) ? current.filter(n => n !== needId) : [...current, needId];
-    onUpdate(newNeeds);
+  const toggleNeed = (id) => {
+    const newSelected = selected.includes(id) 
+      ? selected.filter(n => n !== id) 
+      : [...selected, id];
+    setSelected(newSelected);
+    onUpdate(newSelected);
   };
 
   return (
-    <div className="profile-section">
-      <div className="section-header">
-        <div className="section-icon"><i className="fas fa-heart"></i></div>
-        <div className="section-info">
+    <section className="profile-section">
+      <div className="profile-section-header">
+        <div className="profile-section-icon">
+          <i className="fas fa-heart"></i>
+        </div>
+        <div>
           <h3>{t('profile.currentNeeds')}</h3>
           <p>{t('profile.needsDescription')}</p>
         </div>
       </div>
-
-      <div className="needs-grid">
-        {needsList.map(need => (
-          <label key={need.id} className="need-card">
-            <input type="checkbox" checked={necesidades?.includes(need.id) || false} onChange={() => handleToggle(need.id)} disabled={isLoading} />
-            <i className={need.icon}></i>
-            <span>{t(`profile.need_${need.id}`)}</span>
+      <div className="profile-needs-grid">
+        {needsList.map((need) => (
+          <label key={need.id} className="profile-need-card">
+            <input 
+              type="checkbox" 
+              checked={selected.includes(need.id)} 
+              onChange={() => toggleNeed(need.id)} 
+              disabled={saving} 
+            />
+            <i className={`fas ${need.icon}`}></i>
+            <span>{need.label}</span>
           </label>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
