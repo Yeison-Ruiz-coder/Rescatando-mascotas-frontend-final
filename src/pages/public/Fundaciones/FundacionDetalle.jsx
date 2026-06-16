@@ -1,3 +1,4 @@
+// src/pages/public/Fundaciones/FundacionDetalle.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -14,7 +15,7 @@ import {
   CheckCircle,
   Users,
   Award,
-  Clock, 
+  Clock,
 } from "lucide-react";
 import api from "../../../services/api";
 import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
@@ -98,7 +99,6 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
       setLoadProgress(0);
       setError(null);
       
-      // Simular progreso de carga (igual que en VeterinariaDetalle)
       const progressInterval = setInterval(() => {
         setLoadProgress(prev => {
           if (prev >= 90) return prev;
@@ -107,7 +107,6 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
       }, 100);
       
       try {
-        // 🔥 OPTIMIZACIÓN: Usar fields para traer SOLO lo necesario
         const response = await api.get(`/fundaciones/${id}`, {
           params: {
             fields: 'id,Nombre_1,Descripcion,ciudad,Direccion,Telefono,Email,horario_atencion,registro_sanitario,recibe_voluntarios,fecha_fundacion,imagen_portada,updated_at,lat,lng,total_rescatadas,total_adoptadas,anios_experiencia',
@@ -207,9 +206,8 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
 
   return (
     <div className="fundacion-detalle-page">
-      {/* Botón volver - solo visible en modo página completa */}
       {!embed && (
-        <div className="detalle-back-outer">
+        <div className="detalle-back-outer reveal-up delay-100">
           <Link to="/fundaciones" className="detalle-back-link">
             <ArrowLeft size={16} />
             <span>{t("volver")}</span>
@@ -217,10 +215,10 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
         </div>
       )}
 
-      {/* Bento Grid principal */}
       <div className="detalle-bento-grid">
-        {/* Header - 12 columnas */}
-        <div className="detalle-header">
+        {/* Header - Título y información básica */}
+        <div className="detalle-header reveal-up delay-150">
+          <h1>{fundacion.Nombre_1}</h1>
           <div className="detalle-header-info">
             {fundacion.ciudad && (
               <div className="detalle-ciudad">
@@ -228,7 +226,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
                 <span>{fundacion.ciudad}</span>
               </div>
             )}
-            {estadisticas?.verificado && (
+            {fundacion.verificado && (
               <div className="detalle-verified">
                 <CheckCircle size={14} />
                 <span>{t("verificado")}</span>
@@ -237,10 +235,10 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
           </div>
         </div>
 
-        {/* Sidebar izquierda - 4 columnas (contacto + datos + estadísticas) */}
+        {/* Sidebar izquierda */}
         <div className="detalle-sidebar">
           {/* Contacto */}
-          <div className="detalle-info-card">
+          <div className="detalle-info-card reveal-left delay-200">
             <div className="detalle-card-header">
               <Phone size={16} />
               <h3>{t("contacto")}</h3>
@@ -272,7 +270,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
           </div>
 
           {/* Datos de la fundación */}
-          <div className="detalle-info-card">
+          <div className="detalle-info-card reveal-left delay-250">
             <div className="detalle-card-header">
               <Heart size={16} />
               <h3>{t("datos")}</h3>
@@ -297,8 +295,8 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
             )}
           </div>
 
-          {/* Estadísticas de impacto (destacadas) */}
-          <div className="detalle-info-card">
+          {/* Estadísticas de impacto */}
+          <div className="detalle-info-card reveal-left delay-300">
             <div className="detalle-card-header">
               <Award size={16} />
               <h3>{t("impacto")}</h3>
@@ -324,8 +322,8 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
           </div>
         </div>
 
-        {/* Imagen - 8 columnas (derecha) */}
-        <div className="detalle-imagen-wrapper">
+        {/* Imagen */}
+        <div className="detalle-imagen-wrapper reveal-scale delay-200">
           <img 
             src={fundacion.imagen_portada ? getImageUrl(fundacion.imagen_portada) : "https://placehold.co/800x450/667eea/FFFFFF?text=Fundación"} 
             alt={fundacion.Nombre_1} 
@@ -333,11 +331,11 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
           />
         </div>
 
-        {/* Contenido principal - 8 columnas (debajo de la imagen) */}
+        {/* Contenido principal */}
         <div className="detalle-main">
           {/* Descripción */}
           {fundacion.Descripcion && (
-            <div className="detalle-section">
+            <div className="detalle-section reveal-up delay-200">
               <div className="detalle-section-header">
                 <FileText size={16} />
                 <h3>{t("descripcion")}</h3>
@@ -348,7 +346,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
 
           {/* Necesidades */}
           {necesidades.length > 0 && (
-            <div className="detalle-section">
+            <div className="detalle-section reveal-up delay-250">
               <div className="detalle-section-header">
                 <Heart size={16} />
                 <h3>{t("necesidades")}</h3>
@@ -365,12 +363,12 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
 
           {/* Mascotas en adopción */}
           {mascotas.length > 0 && (
-            <div className="detalle-section">
+            <div className="detalle-section reveal-up delay-300">
               <div className="detalle-section-header">
                 <PawPrint size={16} />
                 <h3>{t("mascotas_en_adopcion")}</h3>
               </div>
-              <div className="detalle-mascotas-grid">
+              <div className="detalle-mascotas-grid stagger-children">
                 {mascotas.slice(0, 4).map((mascota) => (
                   <Link
                     key={mascota.id}
@@ -407,7 +405,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
 
           {/* Mapa */}
           {fundacion.Direccion && (
-            <div className="detalle-section">
+            <div className="detalle-section reveal-up delay-350">
               <div className="detalle-section-header">
                 <MapPin size={16} />
                 <h3>{t("ubicacion")}</h3>
@@ -426,7 +424,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
       </div>
 
       {/* Footer */}
-      <div className="detalle-footer">
+      <div className="detalle-footer reveal-fade delay-400">
         <Clock size={14} />
         <small>{t("actualizado")}: {new Date(fundacion.updated_at || Date.now()).toLocaleDateString()}</small>
       </div>

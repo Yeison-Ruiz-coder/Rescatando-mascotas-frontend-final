@@ -1,5 +1,5 @@
 // src/pages/user/Solicitudes/Solicitudes.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { toast } from 'react-toastify';
@@ -14,31 +14,46 @@ const Solicitudes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filaAbierta, setFilaAbierta] = useState(null);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    perPage: 10,
+    total: 0,
+    lastPage: 1
+  });
 
-  useEffect(() => {
-    fetchSolicitudes();
-  }, []);
-
-  const toggleDetalle = (id) => {
-    setFilaAbierta(filaAbierta === id ? null : id);
-  };
-
-  const fetchSolicitudes = async () => {
+  const fetchSolicitudes = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await api.get('/user/solicitudes');
+      // OPTIMIZACIÓN: Paginación y campos específicos
+      const response = await api.get('/user/solicitudes', {
+        params: {
+          page: page,
+          perPage: pagination.perPage,
+          sort: 'created_at',
+          order: 'desc',
+          fields: 'id,estado,created_at,contenido,solicitable_id,solicitable_type,nombre_solicitante,email_solicitante,telefono_solicitante,razon_rechazo,notas_internas,datos_adicionales'
+        }
+      });
 
       if (response.data.success) {
-        const solicitudesData = response.data.data || [];
-        const solicitudesList = solicitudesData.data || solicitudesData;
+        const data = response.data.data;
+        const solicitudesList = data.data || data || [];
         setSolicitudes(Array.isArray(solicitudesList) ? solicitudesList : []);
+        
+        // Actualizar paginación
+        setPagination({
+          currentPage: data.current_page || page,
+          perPage: data.per_page || pagination.perPage,
+          total: data.total || solicitudesList.length,
+          lastPage: data.last_page || 1
+        });
       } else {
         throw new Error(response.data.message || t('error_respuesta'));
       }
     } catch (err) {
-      console.error('❌ Error al cargar solicitudes:', err);
+      console.error('Error al cargar solicitudes:', err);
       
       let errorMessage = t('error_cargar_solicitudes');
       
@@ -69,6 +84,21 @@ const Solicitudes = () => {
       toast.error(errorMessage);
     } finally {
       setLoading(false);
+    }
+  }, [pagination.perPage, t]);
+
+  useEffect(() => {
+    fetchSolicitudes();
+  }, [fetchSolicitudes]);
+
+  const toggleDetalle = (id) => {
+    setFilaAbierta(filaAbierta === id ? null : id);
+  };
+
+  const cambiarPagina = (nuevaPagina) => {
+    if (nuevaPagina >= 1 && nuevaPagina <= pagination.lastPage) {
+      fetchSolicitudes(nuevaPagina);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -152,10 +182,73 @@ const Solicitudes = () => {
     };
   };
 
+  const renderPagination = () => {
+    if (pagination.lastPage <= 1) return null;
+
+    const pages = [];
+    const maxVisible = 5;
+    let startPage = Math.max(1, pagination.currentPage - Math.floor(maxVisible / 2));
+    let endPage = Math.min(pagination.lastPage, startPage + maxVisible - 1);
+
+    if (endPage - startPage + 1 < maxVisible) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return (
+      <div className="solicitudes-pagination">
+        <button
+          onClick={() => cambiarPagina(pagination.currentPage - 1)}
+          disabled={pagination.currentPage === 1}
+          className="solicitudes-pagination-btn"
+        >
+          <i className="fas fa-chevron-left"></i>
+        </button>
+        
+        {startPage > 1 && (
+          <>
+            <button onClick={() => cambiarPagina(1)} className="solicitudes-pagination-btn">1</button>
+            {startPage > 2 && <span className="solicitudes-pagination-dots">...</span>}
+          </>
+        )}
+        
+        {pages.map(page => (
+          <button
+            key={page}
+            onClick={() => cambiarPagina(page)}
+            className={`solicitudes-pagination-btn ${pagination.currentPage === page ? 'active' : ''}`}
+          >
+            {page}
+          </button>
+        ))}
+        
+        {endPage < pagination.lastPage && (
+          <>
+            {endPage < pagination.lastPage - 1 && <span className="solicitudes-pagination-dots">...</span>}
+            <button onClick={() => cambiarPagina(pagination.lastPage)} className="solicitudes-pagination-btn">
+              {pagination.lastPage}
+            </button>
+          </>
+        )}
+        
+        <button
+          onClick={() => cambiarPagina(pagination.currentPage + 1)}
+          disabled={pagination.currentPage === pagination.lastPage}
+          className="solicitudes-pagination-btn"
+        >
+          <i className="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="solicitudes-page">
-        <div className="loading-container">
+        <div className="solicitudes-loading">
           <LoadingSpinner text={t('cargando_solicitudes')} />
         </div>
       </div>
@@ -166,16 +259,16 @@ const Solicitudes = () => {
     return (
       <div className="solicitudes-page">
         <div className="solicitudes-wrapper">
-          <div className="error-message">
+          <div className="solicitudes-error">
             <i className="fas fa-exclamation-triangle"></i>
             <h2>{t('error_titulo')}</h2>
             <p>{error}</p>
-            <div className="error-actions">
-              <button onClick={fetchSolicitudes} className="btn-retry">
+            <div className="solicitudes-error-actions">
+              <button onClick={() => fetchSolicitudes()} className="solicitudes-retry-btn">
                 <i className="fas fa-redo"></i> {t('reintentar')}
               </button>
-              <a href="/mascotas" className="btn-ver-mascotas">
-                {t('ver_mascotas_disponibles')}
+              <a href="/mascotas" className="solicitudes-mascotas-btn">
+                <i className="fas fa-paw"></i> {t('ver_mascotas_disponibles')}
               </a>
             </div>
           </div>
@@ -188,128 +281,132 @@ const Solicitudes = () => {
     <div className="solicitudes-page">
       <div className="solicitudes-wrapper">
         <div className="solicitudes-header">
-          <h1>🐾 {t('titulo')}</h1>
+          <h1>
+            <i className="fas fa-clipboard-list"></i> {t('titulo')}
+          </h1>
           <p>{t('subtitulo')}</p>
         </div>
 
         {solicitudes.length === 0 ? (
-          <div className="no-solicitudes">
+          <div className="solicitudes-vacio">
             <i className="fas fa-clipboard-list"></i>
             <h2>{t('sin_solicitudes')}</h2>
             <p>{t('sin_solicitudes_desc')}</p>
-            <a href="/mascotas" className="btn-ver-mascotas">
+            <a href="/mascotas" className="solicitudes-vacio-btn">
               <i className="fas fa-paw"></i> {t('ver_mascotas_disponibles')}
             </a>
           </div>
         ) : (
-          <div className="solicitudes-table">
-            {/* Header de la tabla */}
-            <div className="solicitudes-table-header">
-              <div>{t('id') || 'ID'}</div>
-              <div>{t('mascota') || 'Mascota'}</div>
-              <div>{t('fecha_solicitud') || 'Fecha'}</div>
-              <div>{t('estado') || 'Estado'}</div>
-              <div>{t('acciones') || 'Acciones'}</div>
-            </div>
+          <>
+            <div className="solicitudes-table-container">
+              <div className="solicitudes-table">
+                <div className="solicitudes-table-header">
+                  <div>{t('id')}</div>
+                  <div>{t('mascota')}</div>
+                  <div>{t('fecha_solicitud')}</div>
+                  <div>{t('estado')}</div>
+                  <div>{t('acciones')}</div>
+                </div>
 
-            {/* Filas de solicitudes */}
-            {solicitudes.map((solicitud) => {
-              const estadoBadge = getEstadoBadge(solicitud.estado);
-              const pdfData = preparePDFData(solicitud);
-              const mascotaNombre = pdfData.mascota?.nombre_mascota || 
-                                    solicitud.solicitable?.nombre_mascota || 
-                                    t('mascota_no_disponible');
-              const isOpen = filaAbierta === solicitud.id;
+                {solicitudes.map((solicitud) => {
+                  const estadoBadge = getEstadoBadge(solicitud.estado);
+                  const pdfData = preparePDFData(solicitud);
+                  const mascotaNombre = pdfData.mascota?.nombre_mascota || 
+                                        solicitud.solicitable?.nombre_mascota || 
+                                        t('mascota_no_disponible');
+                  const isOpen = filaAbierta === solicitud.id;
 
-              return (
-                <React.Fragment key={solicitud.id}>
-                  <div className="solicitud-row">
-                    <div className="solicitud-id">#{solicitud.id}</div>
-                    <div className="solicitud-mascota-nombre">
-                      <i className="fas fa-paw"></i> {mascotaNombre}
-                    </div>
-                    <div className="solicitud-fecha">
-                      <i className="fas fa-calendar-alt"></i> {formatFecha(solicitud.created_at || solicitud.fecha_solicitud)}
-                    </div>
-                    <div>
-                      <span className={`solicitud-estado ${estadoBadge.class}`}>
-                        <i className={`fas ${estadoBadge.icon}`}></i>
-                        {estadoBadge.text}
-                      </span>
-                    </div>
-                    <div className="solicitud-actions">
-                      <button 
-                        className="btn-ver-detalle"
-                        onClick={() => toggleDetalle(solicitud.id)}
-                      >
-                        <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
-                        {isOpen ? t('ocultar') : t('ver_detalle')}
-                      </button>
-                      <PDFDownloadLink
-                        document={
-                          <SolicitudPDF
-                            solicitud={pdfData.solicitud}
-                            mascota={pdfData.mascota}
-                            formData={pdfData.formData}
-                          />
-                        }
-                        fileName={`solicitud-adopcion-${solicitud.id}.pdf`}
-                        className="btn-pdf-solicitud"
-                      >
-                        {({ loading: pdfLoading, error: pdfError }) => {
-                          if (pdfError) {
-                            return (
-                              <span className="btn-pdf-error">
-                                <i className="fas fa-exclamation-triangle"></i>
-                              </span>
-                            );
-                          }
-                          return pdfLoading ? (
-                            <i className="fas fa-spinner fa-spin"></i>
-                          ) : (
-                            <>
-                              <i className="fas fa-file-pdf"></i> PDF
-                            </>
-                          );
-                        }}
-                      </PDFDownloadLink>
-                    </div>
-                  </div>
-
-                  {/* Detalle desplegable */}
-                  <div className={`solicitud-detalle ${isOpen ? 'abierto' : ''}`}>
-                    <div className="solicitud-detalle-grid">
-                      <div className="detalle-item">
-                        <label>{t('fecha_completa') || 'Fecha de solicitud'}</label>
-                        <p>{formatFechaCompleta(solicitud.created_at || solicitud.fecha_solicitud)}</p>
+                  return (
+                    <React.Fragment key={solicitud.id}>
+                      <div className="solicitudes-row">
+                        <div className="solicitudes-id">#{solicitud.id}</div>
+                        <div className="solicitudes-mascota">
+                          <i className="fas fa-paw"></i> {mascotaNombre}
+                        </div>
+                        <div className="solicitudes-fecha">
+                          <i className="fas fa-calendar-alt"></i> {formatFecha(solicitud.created_at)}
+                        </div>
+                        <div>
+                          <span className={`solicitudes-estado ${estadoBadge.class}`}>
+                            <i className={`fas ${estadoBadge.icon}`}></i>
+                            {estadoBadge.text}
+                          </span>
+                        </div>
+                        <div className="solicitudes-acciones">
+                          <button 
+                            className="solicitudes-detalle-btn"
+                            onClick={() => toggleDetalle(solicitud.id)}
+                          >
+                            <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+                            {isOpen ? t('ocultar') : t('ver_detalle')}
+                          </button>
+                          <PDFDownloadLink
+                            document={
+                              <SolicitudPDF
+                                solicitud={pdfData.solicitud}
+                                mascota={pdfData.mascota}
+                                formData={pdfData.formData}
+                              />
+                            }
+                            fileName={`solicitud-adopcion-${solicitud.id}.pdf`}
+                            className="solicitudes-pdf-btn"
+                          >
+                            {({ loading: pdfLoading, error: pdfError }) => {
+                              if (pdfError) {
+                                return (
+                                  <span className="solicitudes-pdf-error">
+                                    <i className="fas fa-exclamation-triangle"></i>
+                                  </span>
+                                );
+                              }
+                              return pdfLoading ? (
+                                <i className="fas fa-spinner fa-spin"></i>
+                              ) : (
+                                <>
+                                  <i className="fas fa-file-pdf"></i> PDF
+                                </>
+                              );
+                            }}
+                          </PDFDownloadLink>
+                        </div>
                       </div>
-                      
-                      {solicitud.contenido && (
-                        <div className="detalle-item">
-                          <label>{t('tu_mensaje') || 'Motivo / Mensaje'}</label>
-                          <p className="mensaje">{solicitud.contenido}</p>
+
+                      <div className={`solicitudes-detalle ${isOpen ? 'abierto' : ''}`}>
+                        <div className="solicitudes-detalle-grid">
+                          <div className="solicitudes-detalle-item">
+                            <label>{t('fecha_completa')}</label>
+                            <p>{formatFechaCompleta(solicitud.created_at)}</p>
+                          </div>
+                          
+                          {solicitud.contenido && (
+                            <div className="solicitudes-detalle-item">
+                              <label>{t('tu_mensaje')}</label>
+                              <p className="solicitudes-mensaje">{solicitud.contenido}</p>
+                            </div>
+                          )}
+                          
+                          {solicitud.razon_rechazo && (
+                            <div className="solicitudes-detalle-item">
+                              <label>{t('razon_rechazo')}</label>
+                              <p className="solicitudes-rechazo">{solicitud.razon_rechazo}</p>
+                            </div>
+                          )}
+                          
+                          {solicitud.notas_internas && (
+                            <div className="solicitudes-detalle-item">
+                              <label>{t('notas_adicionales')}</label>
+                              <p className="solicitudes-notas">{solicitud.notas_internas}</p>
+                            </div>
+                          )}
                         </div>
-                      )}
-                      
-                      {solicitud.razon_rechazo && (
-                        <div className="detalle-item">
-                          <label>{t('razon_rechazo') || 'Razón del rechazo'}</label>
-                          <p className="rechazo">{solicitud.razon_rechazo}</p>
-                        </div>
-                      )}
-                      
-                      {solicitud.notas_internas && (
-                        <div className="detalle-item">
-                          <label>{t('notas_adicionales') || 'Notas adicionales'}</label>
-                          <p className="notas">{solicitud.notas_internas}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </React.Fragment>
-              );
-            })}
-          </div>
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            </div>
+            {renderPagination()}
+          </>
         )}
       </div>
     </div>

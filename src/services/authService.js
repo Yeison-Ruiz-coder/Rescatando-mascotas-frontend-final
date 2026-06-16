@@ -1,4 +1,7 @@
+// src/services/authService.js
 import api from './api';
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
 
 const authService = {
   // Login
@@ -32,21 +35,34 @@ const authService = {
     }
   },
 
-  // Register
+  // 🔥 REGISTER CORREGIDO - Maneja fundaciones/veterinarias
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
       
-      if (response.data.success && response.data.data.token) {
-        const { token, user } = response.data.data;
+      if (response.data.success) {
+        const data = response.data.data;
+        const user = data.user;
+        const token = data.token || null;
+        const requiereAprobacion = data.requiere_aprobacion || 
+                                   (user?.tipo === 'fundacion' || user?.tipo === 'veterinaria');
         
-        localStorage.setItem('auth_token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        // 🔥 SOLO guardar token si existe (usuarios normales)
+        if (token) {
+          localStorage.setItem('auth_token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+        } else {
+          // Para fundaciones/veterinarias, limpiar cualquier token previo
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('user');
+        }
         
         return {
           success: true,
-          user,
-          token
+          user: user,
+          token: token,
+          requiereAprobacion: requiereAprobacion,
+          message: response.data.message
         };
       }
       
@@ -56,6 +72,17 @@ const authService = {
       };
     } catch (error) {
       console.error('Register error:', error);
+      
+      // Manejar errores de validación del backend
+      if (error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const firstError = Object.values(errors).flat()[0];
+        return {
+          success: false,
+          message: firstError || 'Error de validación'
+        };
+      }
+      
       return {
         success: false,
         message: error.response?.data?.message || 'Error de conexión'
@@ -78,9 +105,7 @@ const authService = {
     }
   },
 
-  
-
-  // 🔥 RECUPERAR CONTRASEÑA - Enviar enlace 🔥
+  // 🔥 RECUPERAR CONTRASEÑA
   forgotPassword: async (email) => {
     try {
       const response = await api.post('/auth/password/email', { email });
@@ -97,7 +122,7 @@ const authService = {
     }
   },
 
-  // 🔥 RESTABLECER CONTRASEÑA 🔥
+  // 🔥 RESTABLECER CONTRASEÑA
   resetPassword: async (token, email, password, passwordConfirmation) => {
     try {
       const response = await api.post('/auth/password/reset', {
@@ -145,6 +170,11 @@ const authService = {
       return response.data.success;
     } catch (error) {
       console.error('Error verifying token:', error);
+      // Si el token es inválido, limpiar
+      if (error.response?.status === 401) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+      }
       return false;
     }
   }

@@ -1,14 +1,13 @@
 // src/components/common/FundacionCard/FundacionCard.jsx
 import React, { memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Building, MapPin, Phone, Users, Heart, Award, ChevronRight } from 'lucide-react';
+import { Building, MapPin, Users, Heart, Award, ChevronRight } from 'lucide-react';
 import './FundacionCard.css';
 
 const FundacionCard = memo(({
   fundacion,
   getImageUrl,
   variant = 'default',
-  showActions = true,
   onView
 }) => {
   const { t } = useTranslation('fundaciones');
@@ -17,99 +16,99 @@ const FundacionCard = memo(({
     id,
     Nombre_1,
     Descripcion,
-    Direccion,
-    Telefono,
     ciudad,
     total_mascotas = 0,
     verificado = false,
     imagen_portada
   } = fundacion;
 
-  const imageUrl = useMemo(() => getImageUrl(imagen_portada), [imagen_portada, getImageUrl]);
+  const imageUrl = useMemo(() => {
+    if (!imagen_portada) return null;
+    try {
+      return getImageUrl(imagen_portada);
+    } catch (error) {
+      return null;
+    }
+  }, [imagen_portada, getImageUrl]);
+
+  const handleCardClick = () => {
+    onView?.(fundacion);
+  };
+
+  const handleOverlayClick = (e) => {
+    e.stopPropagation();
+    onView?.(fundacion);
+  };
 
   return (
-    <div className={`fc-card ${variant}`}>
+    <div 
+      className="fc-card" 
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+    >
       <div className="fc-image">
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={Nombre_1}
-            loading="lazy"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.style.display = 'none';
-              const placeholder = e.target.parentElement?.querySelector('.fc-placeholder');
-              if (placeholder) placeholder.style.display = 'flex';
-            }}
-          />
-        ) : null}
-        <div className="fc-placeholder" style={{ display: imagen_portada ? 'none' : 'flex' }}>
-          <Building size={48} />
-          <span>{t('fundacion') || 'Fundación'}</span>
-        </div>
-
+          <img src={imageUrl} alt={Nombre_1} loading="lazy" />
+        ) : (
+          <div className="fc-placeholder">
+            <Building />
+          </div>
+        )}
+        
         {verificado && (
           <div className="fc-verified-badge">
-            <Award size={14} />
-            <span>{t('verificado') || 'Verificada'}</span>
+            <Award />
+            <span>{t('verificado', 'Verificada')}</span>
           </div>
         )}
       </div>
 
+      {/* Contenido normal (siempre visible) */}
       <div className="fc-content">
-        <h3 className="fc-title">{Nombre_1}</h3>
+        <h3 className="fc-titulo">{Nombre_1}</h3>
         
         {ciudad && (
-          <div className="fc-city">
-            <MapPin size={14} />
+          <div className="fc-ciudad">
+            <MapPin />
             <span>{ciudad}</span>
           </div>
         )}
-        
-        <p className="fc-description">
-          {Descripcion
-            ? Descripcion.substring(0, 100)
-            : t('sin_descripcion') || 'Sin descripción'}
-          {Descripcion?.length > 100 ? '...' : ''}
-        </p>
 
-        <div className="fc-info">
-          {Direccion && (
-            <div className="fc-info-item">
-              <MapPin size={14} />
-              <span>{Direccion}</span>
-            </div>
-          )}
-          {Telefono && (
-            <div className="fc-info-item">
-              <Phone size={14} />
-              <span>{Telefono}</span>
-            </div>
-          )}
-        </div>
+        {Descripcion && (
+          <p className="fc-descripcion">
+            {Descripcion.length > 100 ? Descripcion.substring(0, 100) + '...' : Descripcion}
+          </p>
+        )}
 
         <div className="fc-stats">
           <div className="fc-stat">
-            <Users size={14} />
-            <span>{total_mascotas} {t('mascotas') || 'mascotas'}</span>
+            <Users />
+            <span>{total_mascotas} {t('mascotas', 'mascotas')}</span>
           </div>
           <div className="fc-stat">
-            <Heart size={14} />
-            <span>{t('rescatadas') || 'rescatadas'}</span>
+            <Heart />
+            <span>{t('rescatadas', 'rescatadas')}</span>
           </div>
         </div>
+      </div>
 
-        {showActions && (
-          <div className="fc-footer">
-            <button 
-              className="fc-btn"
-              onClick={(e) => { e.stopPropagation(); onView?.(fundacion); }}
-              type="button"
-            >
-              {t('ver_mas') || 'Ver más'} <ChevronRight size={16} />
-            </button>
-          </div>
-        )}
+      {/* Overlay hover */}
+      <div className="fc-overlay">
+        <button
+          className="fc-overlay-btn"
+          onClick={handleOverlayClick}
+          type="button"
+        >
+          <span>{t('conocer', 'Conocer fundación')}</span>
+          <ChevronRight />
+        </button>
       </div>
     </div>
   );

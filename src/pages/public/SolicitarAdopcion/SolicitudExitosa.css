@@ -1,0 +1,321 @@
+/* src/pages/public/SolicitarAdopcion/SolicitudExitosa.css */
+/* ============================================
+   SOLICITUD EXITOSA - VERSIÓN SIMPLIFICADA
+   ============================================ */
+
+.sx-exitosa-wrapper {
+  min-height: 100vh;
+  background: transparent;
+  padding: 40px 24px;
+  width: 100%;
+}
+
+.sx-collage-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  padding: 40px;
+  box-shadow: var(--shadow-hard-md);
+  border-radius: var(--radius-none);
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.sx-collage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+/* Icono de éxito */
+.sx-exitosa-icono {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  animation: sx-bounceIn 0.6s ease;
+}
+
+.sx-exitosa-icono i {
+  color: var(--color-success);
+}
+
+@keyframes sx-bounceIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Títulos */
+.sx-exitosa-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sx-exitosa-mensaje {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Detalles */
+.sx-solicitud-detalles {
+  background: var(--form-input-bg);
+  border-left: 4px solid var(--color-success);
+  padding: 20px 24px;
+  margin: 24px 0;
+  text-align: left;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.sx-solicitud-detalles p {
+  margin: 10px 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sx-solicitud-detalles p strong {
+  min-width: 130px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.sx-estado-badge {
+  display: inline-block;
+  background: var(--color-warning);
+  color: #92400e;
+  padding: 4px 12px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+[data-theme="dark"] .sx-estado-badge {
+  background: #f59e0b;
+  color: #1a1a2e;
+}
+
+/* Botón PDF */
+.sx-pdf-container {
+  margin: 24px 0;
+}
+
+.sx-btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-danger);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.sx-btn-pdf:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* Botones de acción */
+.sx-exitosa-botones {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.sx-btn-primario,
+.sx-btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.sx-btn-primario {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.sx-btn-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.sx-btn-secundario {
+  background: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+}
+
+.sx-btn-secundario:hover {
+  background: var(--color-accent);
+  color: white;
+  transform: translateX(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* Pasos siguientes */
+.sx-pasos-siguientes {
+  background: var(--form-input-bg);
+  padding: 24px;
+  margin-top: 30px;
+  text-align: left;
+  border-left: 4px solid var(--color-secondary);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.sx-pasos-siguientes h3 {
+  color: var(--color-text);
+  margin: 0 0 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sx-pasos-siguientes h3 i {
+  color: var(--color-secondary);
+}
+
+.sx-pasos-siguientes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sx-pasos-siguientes li {
+  padding: 12px 0 12px 32px;
+  color: var(--color-text-muted);
+  position: relative;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.sx-pasos-siguientes li:last-child {
+  border-bottom: none;
+}
+
+.sx-pasos-siguientes li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Sticker */
+.sx-collage-sticker {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--gradient-success);
+  color: white;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-hard-sm);
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transform: rotate(3deg);
+}
+
+/* Loading */
+.sx-loading-text {
+  text-align: center;
+  padding: 40px;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sx-exitosa-wrapper {
+    padding: 20px 16px;
+  }
+  
+  .sx-collage-card {
+    padding: 28px 20px;
+  }
+  
+  .sx-exitosa-title {
+    font-size: 1.6rem;
+  }
+  
+  .sx-exitosa-icono {
+    font-size: 4rem;
+  }
+  
+  .sx-solicitud-detalles p {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .sx-solicitud-detalles p strong {
+    min-width: auto;
+  }
+  
+  .sx-exitosa-botones {
+    flex-direction: column;
+  }
+  
+  .sx-btn-primario,
+  .sx-btn-secundario {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .sx-collage-card {
+    padding: 20px 16px;
+  }
+  
+  .sx-exitosa-title {
+    font-size: 1.4rem;
+  }
+  
+  .sx-exitosa-icono {
+    font-size: 3rem;
+  }
+  
+  .sx-exitosa-mensaje {
+    font-size: 0.9rem;
+  }
+  
+  .sx-btn-pdf {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,7 +1,36 @@
 // src/pages/public/SolicitarAdopcion/components/Paso2InformacionAdicional.jsx
-import React from 'react';
+import React, { useState } from 'react';
+import CustomSelect from '../../../../components/common/CustomSelect/CustomSelect';
 
 const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) => {
+  const [touched, setTouched] = useState({});
+
+  const handleBlur = (fieldName) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+  };
+
+  // Opciones para los selects
+  const estadoCivilOptions = [
+    { value: 'soltero', label: t('soltero') },
+    { value: 'casado', label: t('casado') },
+    { value: 'union_libre', label: t('union_libre') },
+    { value: 'divorciado', label: t('divorciado') },
+    { value: 'viudo', label: t('viudo') }
+  ];
+
+  const tipoViviendaOptions = [
+    { value: 'casa', label: t('casa') },
+    { value: 'apartamento', label: t('apartamento') },
+    { value: 'finca', label: t('finca') },
+    { value: 'otra', label: t('otra') }
+  ];
+
+  const esPropietarioOptions = [
+    { value: 'si', label: t('si') },
+    { value: 'no', label: t('no') },
+    { value: 'familiar', label: t('arrendamos') }
+  ];
+
   return (
     <div className="paso-contenido">
       <h2>{t('informacion_adicional')}</h2>
@@ -15,6 +44,7 @@ const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) 
             name="direccion"
             value={formData.direccion}
             onChange={handleInputChange}
+            onBlur={() => handleBlur('direccion')}
             placeholder={t('ingresa_direccion')}
             className={errores.direccion ? 'error' : ''}
           />
@@ -28,6 +58,7 @@ const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) 
             name="ciudad"
             value={formData.ciudad}
             onChange={handleInputChange}
+            onBlur={() => handleBlur('ciudad')}
             placeholder={t('ingresa_ciudad')}
             className={errores.ciudad ? 'error' : ''}
           />
@@ -56,17 +87,15 @@ const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) 
           />
         </div>
 
-        <div className="form-grupo">
-          <label>{t('estado_civil')}</label>
-          <select name="estado_civil" value={formData.estado_civil} onChange={handleInputChange}>
-            <option value="">{t('selecciona')}</option>
-            <option value="soltero">{t('soltero')}</option>
-            <option value="casado">{t('casado')}</option>
-            <option value="union_libre">{t('union_libre')}</option>
-            <option value="divorciado">{t('divorciado')}</option>
-            <option value="viudo">{t('viudo')}</option>
-          </select>
-        </div>
+        {/* CustomSelect para Estado Civil */}
+        <CustomSelect
+          name="estado_civil"
+          value={formData.estado_civil}
+          onChange={handleInputChange}
+          options={estadoCivilOptions}
+          placeholder={t('selecciona')}
+          label={t('estado_civil')}
+        />
 
         <div className="form-grupo">
           <label>{t('cantidad_hijos')}</label>
@@ -80,32 +109,25 @@ const Paso2InformacionAdicional = ({ formData, handleInputChange, errores, t }) 
           />
         </div>
 
-        <div className="form-grupo">
-          <label>{t('tipo_vivienda')} *</label>
-          <select 
-            name="tipo_vivienda" 
-            value={formData.tipo_vivienda} 
-            onChange={handleInputChange}
-            className={errores.tipo_vivienda ? 'error' : ''}
-          >
-            <option value="">{t('selecciona')}</option>
-            <option value="casa">{t('casa')}</option>
-            <option value="apartamento">{t('apartamento')}</option>
-            <option value="finca">{t('finca')}</option>
-            <option value="otra">{t('otra')}</option>
-          </select>
-          {errores.tipo_vivienda && <small className="error-mensaje">{errores.tipo_vivienda}</small>}
-        </div>
+        {/* CustomSelect para Tipo de Vivienda */}
+        <CustomSelect
+          name="tipo_vivienda"
+          value={formData.tipo_vivienda}
+          onChange={handleInputChange}
+          options={tipoViviendaOptions}
+          placeholder={t('selecciona')}
+          label={t('tipo_vivienda')}
+        />
 
-        <div className="form-grupo">
-          <label>{t('es_propietario')}</label>
-          <select name="es_propietario" value={formData.es_propietario} onChange={handleInputChange}>
-            <option value="">{t('selecciona')}</option>
-            <option value="si">{t('si')}</option>
-            <option value="no">{t('no')}</option>
-            <option value="familiar">{t('arrendamos')}</option>
-          </select>
-        </div>
+        {/* CustomSelect para Es Propietario */}
+        <CustomSelect
+          name="es_propietario"
+          value={formData.es_propietario}
+          onChange={handleInputChange}
+          options={esPropietarioOptions}
+          placeholder={t('selecciona')}
+          label={t('es_propietario')}
+        />
       </div>
     </div>
   );

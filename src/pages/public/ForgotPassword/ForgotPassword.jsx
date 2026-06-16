@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Button from '../../../components/common/Button/Button';
-import Input from '../../../components/common/Input/Input';
 import authService from '../../../services/authService';
 import './ForgotPassword.css';
 
@@ -14,9 +12,9 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  
-  // Estados para imágenes y frases
-  const [currentBackground, setCurrentBackground] = useState(1);
+  const [submitted, setSubmitted] = useState(false);
+
+  const [currentBackground, setCurrentBackground] = useState(0);
   const [currentQuote, setCurrentQuote] = useState(0);
 
   const backgroundImages = [
@@ -36,13 +34,8 @@ const ForgotPassword = () => {
   ];
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    
     const interval = setInterval(() => {
-      setCurrentBackground((prev) => {
-        const nextIndex = (prev) % backgroundImages.length + 1;
-        return nextIndex;
-      });
+      setCurrentBackground((prev) => (prev + 1) % backgroundImages.length);
     }, 5000);
 
     const quoteInterval = setInterval(() => {
@@ -50,21 +43,24 @@ const ForgotPassword = () => {
     }, 5000);
 
     return () => {
-      document.body.style.overflow = 'auto';
       clearInterval(interval);
       clearInterval(quoteInterval);
     };
-  }, []);
+  }, [backgroundImages.length, motivationalQuotes.length]);
 
-  useEffect(() => {
-    const container = document.querySelector('.forgot-container');
-    if (container) {
-      container.style.backgroundImage = `url('${backgroundImages[currentBackground - 1]}')`;
-    }
-  }, [currentBackground]);
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
+
+    if (!email || !validateEmail(email)) {
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -73,109 +69,147 @@ const ForgotPassword = () => {
     if (result.success) {
       setSuccess(true);
     } else {
-      setError(result.message);
+      setError(result.message || t('error_conexion'));
     }
-    
+
     setLoading(false);
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleGoHome = () => {
+    navigate('/');
+  };
+
+  const handleGoToLogin = () => {
+    navigate('/login');
   };
 
   if (success) {
     return (
-      <div className="forgot-container">
-        <div className="forgot-overlay"></div>
-        <div className="forgot-card">
-          <div className="success-icon">
-            <i className="fas fa-envelope"></i>
+      <div className="forgot-page">
+        <div className="forgot-success-fullscreen">
+          <div className="forgot-success-card">
+            <div className="forgot-success-icon">
+              <i className="fas fa-envelope"></i>
+            </div>
+            <h2>{t('forgot.check_your_email')}</h2>
+            <p>
+              {t('forgot.reset_link_sent')} <strong>{email}</strong>
+            </p>
+            <div className="forgot-success-buttons">
+              <button onClick={handleGoToLogin} className="forgot-btn-success">
+                <i className="fas fa-arrow-left"></i>
+                {t('forgot.back_to_login')}
+              </button>
+            </div>
           </div>
-          <h2>{t('forgot.check_your_email')}</h2>
-          <p>{t('forgot.reset_link_sent')} <strong>{email}</strong></p>
-          <button onClick={handleGoBack} className="back-to-login-btn">
-            <i className="fas fa-arrow-left"></i>
-            {t('forgot.back_to_login')}
-          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="forgot-container">
-      <div className="forgot-overlay"></div>
-      
-      <button 
-        className="forgot-back-button"
-        onClick={handleGoBack}
-        aria-label={t('buttons.back')}
-      >
-        <i className="fas fa-arrow-left"></i>
-        <span>{t('buttons.back')}</span>
-      </button>
-      
-      <div className="forgot-card">
-        <div className="forgot-header">
-          <div className="forgot-logo-wrapper">
-            <img src="/img/logo-claro.png" alt="Logo" className="forgot-logo" />
+    <div className="forgot-page">
+      <div className="forgot-grid">
+        <div
+          className="forgot-left"
+          style={{ backgroundImage: `url('${backgroundImages[currentBackground]}')` }}
+        >
+          <div className="forgot-left-content">
+            <div className="forgot-logo-container">
+              <img
+                src="/img/logo-claro.png"
+                alt="Rescatando Mascotas Forever"
+                className="forgot-logo"
+              />
+              <h1>
+                Rescatando
+                <br />
+                Mascotas Forever
+              </h1>
+              <p>Sanando su historia</p>
+            </div>
+
+            <div className="forgot-quote-container">
+              <i className="fas fa-quote-left"></i>
+              <p>{motivationalQuotes[currentQuote]}</p>
+            </div>
+
+            <div className="forgot-image-indicators">
+              {backgroundImages.map((_, index) => (
+                <span
+                  key={index}
+                  className={`forgot-indicator ${currentBackground === index ? 'active' : ''}`}
+                  onClick={() => setCurrentBackground(index)}
+                />
+              ))}
+            </div>
           </div>
-          <h1 className="forgot-title">{t('forgot.title')}</h1>
-          <p className="forgot-subtitle">{t('forgot.subtitle')}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="forgot-form">
-          <div className="input-group">
-            <i className="fas fa-envelope input-icon"></i>
-            <Input
-              label={t('email')}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder={t('placeholders.email')}
-            />
+        <div className="forgot-right">
+          <button
+            className="forgot-home-btn"
+            onClick={handleGoHome}
+            aria-label={t('home_button')}
+          >
+            <i className="fas fa-home"></i>
+            <span>{t('home_button')}</span>
+          </button>
+
+          <div className="forgot-card">
+            <h2>{t('forgot.title')}</h2>
+            <p className="forgot-subtitle">{t('forgot.subtitle')}</p>
+
+            {error && (
+              <div className="forgot-error-general">
+                <i className="fas fa-exclamation-circle"></i>
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="forgot-form">
+              <div className="forgot-form-group">
+                <label>{t('email')}</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (submitted && error) setError('');
+                  }}
+                  placeholder={t('placeholders.email')}
+                  className={submitted && !email ? 'error' : ''}
+                  required
+                />
+                {submitted && !email && (
+                  <span className="forgot-field-error">
+                    {t('email_requerido') || 'El email es requerido'}
+                  </span>
+                )}
+                {submitted && email && !validateEmail(email) && (
+                  <span className="forgot-field-error">
+                    {t('email_invalido') || 'Ingresa un correo electrónico válido'}
+                  </span>
+                )}
+              </div>
+
+              <button type="submit" className="forgot-btn" disabled={loading}>
+                {loading ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i>
+                    {t('loading')}
+                  </>
+                ) : (
+                  t('forgot.send_link')
+                )}
+              </button>
+
+              <div className="forgot-login-link">
+                <Link to="/login">{t('forgot.back_to_login')}</Link>
+              </div>
+            </form>
           </div>
-
-          {error && (
-            <div className="error-general">
-              <i className="fas fa-exclamation-circle"></i>
-              {error}
-            </div>
-          )}
-
-          <Button type="submit" disabled={loading} className="forgot-button">
-            {loading ? <i className="fas fa-spinner fa-spin"></i> : t('forgot.send_link')}
-          </Button>
-
-          <div className="forgot-links">
-            <Link to="/login"> {t('forgot.back_to_login')}</Link>
-          </div>
-        </form>
-      </div>
-      
-      <div className="forgot-motivational-text">
-        <p className="forgot-motivational-quote">
-          <i className="fas fa-paw"></i>
-          <span>{motivationalQuotes[currentQuote]}</span>
-          <i className="fas fa-heart"></i>
-        </p>
-      </div>
-      
-      <div className="forgot-decoration">
-        <div className="forgot-decoration-circle circle-1"></div>
-        <div className="forgot-decoration-circle circle-2"></div>
-        <div className="forgot-decoration-circle circle-3"></div>
-      </div>
-      
-      <div className="forgot-image-indicators">
-        {backgroundImages.map((_, index) => (
-          <span 
-            key={index}
-            className={`forgot-indicator ${currentBackground === index + 1 ? 'active' : ''}`}
-            onClick={() => setCurrentBackground(index + 1)}
-          />
-        ))}
+        </div>
       </div>
     </div>
   );

@@ -27,7 +27,6 @@ const FundacionesIndex = () => {
   const [selectedFundacion, setSelectedFundacion] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  // Cargar fundaciones
   const loadFundaciones = useCallback(async (filters = {}, page = 1) => {
     setLoading(true);
     setError(null);
@@ -64,7 +63,6 @@ const FundacionesIndex = () => {
       setFundaciones(fundacionesData);
       setPagination(paginationData);
 
-      // Extraer ciudades únicas para el filtro
       const uniqueCiudades = [
         ...new Set(fundacionesData.map((f) => f.ciudad).filter(Boolean)),
       ];
@@ -81,7 +79,6 @@ const FundacionesIndex = () => {
     }
   }, []);
 
-  // Carga inicial
   useEffect(() => {
     loadFundaciones({}, 1);
   }, []);
@@ -159,14 +156,14 @@ const FundacionesIndex = () => {
 
   return (
     <div className="fundaciones-page">
-      <div className="fundaciones-header">
+      <div className="fundaciones-header reveal-up delay-100">
         <div className="fundaciones-hero">
           <img src="/img/hover/perro-fundacion.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
-          <h1>{t("titulo")}</h1>
+          <h1 className="reveal-up delay-200">{t("titulo")}</h1>
           {pagination.total > 0 && (
-            <p className="info">
+            <p className="info reveal-up delay-300">
               <i className="fas fa-heart"></i>{" "}
               {t("mensaje_bienvenida", { total: pagination.total })}
             </p>
@@ -174,7 +171,7 @@ const FundacionesIndex = () => {
         </div>
       </div>
 
-      <div className="filtros-section">
+      <div className="filtros-section reveal-up delay-100">
         <div className="bento-container">
           <FiltrosFundaciones
             onFilterChange={handleFilterChange}
@@ -187,7 +184,7 @@ const FundacionesIndex = () => {
 
       <div className="resultados-section">
         <div className="bento-container">
-          <div className="resultados-header">
+          <div className="resultados-header reveal-up delay-200">
             <div className="resultados-count">
               <i className="fas fa-list"></i> Mostrando{" "}
               <strong>{fundaciones.length}</strong> de{" "}
@@ -196,14 +193,14 @@ const FundacionesIndex = () => {
           </div>
 
           {fundaciones.length === 0 ? (
-            <div className="empty-container">
+            <div className="empty-container reveal-up">
               <i className="fas fa-building"></i>
               <h3>{t("sin_resultados.titulo")}</h3>
               <p>{t("sin_resultados.mensaje")}</p>
             </div>
           ) : (
             <>
-              <div className="fundaciones-grid">
+              <div className="fundaciones-grid stagger-children">
                 {fundaciones.map((fundacion) => (
                   <FundacionCard
                     key={fundacion.id}
@@ -217,7 +214,7 @@ const FundacionesIndex = () => {
               </div>
 
               {pagination.last_page > 1 && (
-                <div className="pagination-container">
+                <div className="pagination-container reveal-up delay-300">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -242,7 +239,7 @@ const FundacionesIndex = () => {
         </div>
       </div>
 
-      <div className="motivational-message">
+      <div className="motivational-message reveal-up delay-400">
         <div className="bento-container">
           <div className="motivational-content">
             <i className="fas fa-paw motivational-icon"></i>
