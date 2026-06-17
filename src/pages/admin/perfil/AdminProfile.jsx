@@ -1,5 +1,5 @@
 // src/pages/admin/perfil/AdminProfile.jsx
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useProfile } from '../../../hooks/useProfile';
 import { ProfileContainer } from '../../../components/profile';
 import {
@@ -45,12 +45,18 @@ const AdminProfile = () => {
     }
   }, [activeSection, updateProfile, updateLocation, updateSocialNetworks]);
 
-  const sectionProps = {
+  // ✅ OPTIMIZADO: sectionProps con useMemo
+  const sectionProps = useMemo(() => ({
     personal: { profile, onSave: handleSave, saving },
     location: { profile, onSave: handleSave, saving },
     social: { profile, onSave: handleSave, saving },
     security: { onChangePassword: changePassword, saving },
-  };
+  }), [
+    profile, 
+    saving, 
+    handleSave, 
+    changePassword
+  ]);
 
   const SectionComponent = sectionMap[activeSection] || PersonalSection;
 

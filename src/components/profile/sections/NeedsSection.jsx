@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const NeedsSection = ({ necesidades, onUpdate, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
@@ -38,9 +38,9 @@ const NeedsSection = ({ necesidades, onUpdate, saving }) => {
           <p>{t('profile.needsDescription')}</p>
         </div>
       </div>
-      <div className="profile-needs-grid">
+      <div className="form-checkboxes-grid">
         {needsList.map((need) => (
-          <label key={need.id} className="profile-need-card">
+          <label key={need.id} className="form-checkbox-card">
             <input 
               type="checkbox" 
               checked={selected.includes(need.id)} 

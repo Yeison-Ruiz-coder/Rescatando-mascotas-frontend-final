@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SocialSection = ({ profile, onSave, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [form, setForm] = useState({ facebook: '', instagram: '', twitter: '', linkedin: '' });
 
   useEffect(() => {
@@ -35,19 +35,22 @@ const SocialSection = ({ profile, onSave, saving }) => {
           <p>{t('profile.socialNetworksDescription')}</p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
+      <form onSubmit={handleSubmit} className="form">
         {socials.map((social) => (
-          <div key={social.id} className="profile-social-input">
-            <i className={social.icon}></i>
+          <div key={social.id} className="form-group">
+            <label className="form-label">
+              <i className={social.icon}></i> {social.label}
+            </label>
             <input 
               type="text" 
+              className="form-input"
               value={form[social.id] || ''} 
               onChange={(e) => setForm({ ...form, [social.id]: e.target.value })} 
               placeholder={social.label} 
             />
           </div>
         ))}
-        <div className="profile-form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? (
               <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>

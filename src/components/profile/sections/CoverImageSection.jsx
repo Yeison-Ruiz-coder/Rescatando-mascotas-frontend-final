@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const CoverImageSection = ({ coverImage, onUploadCover, onDeleteCover, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -24,8 +24,8 @@ const CoverImageSection = ({ coverImage, onUploadCover, onDeleteCover, saving })
         </div>
       </div>
 
-      <div className="profile-form-group">
-        <label>{t('profile.coverImage')}</label>
+      <div className="form-group">
+        <label className="form-label">{t('profile.coverImage')}</label>
         {coverImage && (
           <div className="profile-cover-preview">
             <img src={coverImage} alt={t('profile.coverImage')} />

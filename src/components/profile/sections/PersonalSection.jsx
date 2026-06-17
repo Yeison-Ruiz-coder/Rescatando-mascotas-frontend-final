@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const PersonalSection = ({ profile, onSave, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [form, setForm] = useState({ nombre: '', apellidos: '', email: '', telefono: '' });
 
   useEffect(() => {
@@ -33,44 +33,48 @@ const PersonalSection = ({ profile, onSave, saving }) => {
           <p>{t('profile.personalInfoDescription')}</p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="profile-form-row">
-          <div className="profile-form-group">
-            <label>{t('profile.name')}</label>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label">{t('profile.name')}</label>
             <input 
               type="text" 
+              className="form-input"
               value={form.nombre} 
               onChange={(e) => setForm({ ...form, nombre: e.target.value })} 
               required 
             />
           </div>
-          <div className="profile-form-group">
-            <label>{t('profile.lastName')}</label>
+          <div className="form-group">
+            <label className="form-label">{t('profile.lastName')}</label>
             <input 
               type="text" 
+              className="form-input"
               value={form.apellidos} 
               onChange={(e) => setForm({ ...form, apellidos: e.target.value })} 
             />
           </div>
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.email')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.email')}</label>
           <input 
             type="email" 
+            className="form-input"
             value={form.email} 
             onChange={(e) => setForm({ ...form, email: e.target.value })} 
             required 
           />
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.phone')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.phone')}</label>
           <input 
             type="tel" 
+            className="form-input"
             value={form.telefono} 
             onChange={(e) => setForm({ ...form, telefono: e.target.value })} 
           />
         </div>
-        <div className="profile-form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? (
               <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>
