@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const VeterinarySection = ({ veterinariaData, onUpdate, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -28,51 +28,56 @@ const VeterinarySection = ({ veterinariaData, onUpdate, saving }) => {
           <p>{t('profile.veterinaryDataDescription')}</p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="profile-form-group">
-          <label>{t('profile.veterinaryName')}</label>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-group">
+          <label className="form-label">{t('profile.veterinaryName')}</label>
           <input 
             type="text" 
+            className="form-input"
             value={form.Nombre_vet || ''} 
             onChange={(e) => setForm({ ...form, Nombre_vet: e.target.value })} 
           />
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.description')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.description')}</label>
           <textarea 
+            className="form-textarea"
             value={form.descripcion || ''} 
             onChange={(e) => setForm({ ...form, descripcion: e.target.value })} 
             rows="4" 
           />
         </div>
-        <div className="profile-form-row">
-          <div className="profile-form-group">
-            <label>{t('profile.yearsExperience')}</label>
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label">{t('profile.yearsExperience')}</label>
             <input 
               type="number" 
+              className="form-input"
               value={form.anios_experiencia || 0} 
               onChange={(e) => setForm({ ...form, anios_experiencia: parseInt(e.target.value) || 0 })} 
             />
           </div>
-          <div className="profile-form-group">
-            <label>{t('profile.consultationPrice')}</label>
+          <div className="form-group">
+            <label className="form-label">{t('profile.consultationPrice')}</label>
             <input 
               type="number" 
               step="0.01" 
+              className="form-input"
               value={form.precio_consulta || 0} 
               onChange={(e) => setForm({ ...form, precio_consulta: parseFloat(e.target.value) || 0 })} 
             />
           </div>
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.address')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.address')}</label>
           <input 
             type="text" 
+            className="form-input"
             value={form.Direccion || ''} 
             onChange={(e) => setForm({ ...form, Direccion: e.target.value })} 
           />
         </div>
-        <div className="profile-form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? (
               <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>

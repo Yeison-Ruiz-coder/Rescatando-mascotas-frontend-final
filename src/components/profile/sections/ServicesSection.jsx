@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ServicesSection = ({ veterinariaData, onUpdate, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [form, setForm] = useState({ 
     servicios: [], 
     servicios_detallados: '', 
@@ -61,12 +61,12 @@ const ServicesSection = ({ veterinariaData, onUpdate, saving }) => {
           <p>{t('profile.servicesDescription')}</p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="profile-form-group">
-          <label>{t('profile.mainServices')}</label>
-          <div className="profile-services-grid">
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-group">
+          <label className="form-label">{t('profile.mainServices')}</label>
+          <div className="form-checkboxes-grid">
             {servicesList.map((service) => (
-              <label key={service.id} className="profile-service-card">
+              <label key={service.id} className="form-checkbox-card">
                 <input 
                   type="checkbox" 
                   checked={form.servicios?.includes(t(`profile.service_${service.id}`)) || false} 
@@ -79,27 +79,29 @@ const ServicesSection = ({ veterinariaData, onUpdate, saving }) => {
             ))}
           </div>
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.detailedServices')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.detailedServices')}</label>
           <textarea 
+            className="form-textarea"
             value={form.servicios_detallados} 
             onChange={(e) => setForm({ ...form, servicios_detallados: e.target.value })} 
             rows="3" 
             placeholder={t('profile.detailedServicesPlaceholder')} 
           />
-          <small className="profile-form-hint">{t('profile.commaSeparated')}</small>
+          <span className="form-hint">{t('profile.commaSeparated')}</span>
         </div>
-        <div className="profile-form-group">
-          <label>{t('profile.medicalTeam')}</label>
+        <div className="form-group">
+          <label className="form-label">{t('profile.medicalTeam')}</label>
           <textarea 
+            className="form-textarea"
             value={form.equipo_medico} 
             onChange={(e) => setForm({ ...form, equipo_medico: e.target.value })} 
             rows="3" 
             placeholder={t('profile.medicalTeamPlaceholder')} 
           />
-          <small className="profile-form-hint">{t('profile.commaSeparated')}</small>
+          <span className="form-hint">{t('profile.commaSeparated')}</span>
         </div>
-        <div className="profile-form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? (
               <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>

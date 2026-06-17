@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ProfileHeader = ({ profile, onAvatarUpload, onAvatarDelete }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const fileInputRef = useRef(null);
 
   const getRoleLabel = (tipo) => {

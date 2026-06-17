@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const VerificationSection = ({ profile, onSendPhoneCode, onVerifyPhone }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [code, setCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ const VerificationSection = ({ profile, onSendPhoneCode, onVerifyPhone }) => {
           <h4>{t('profile.emailVerification')}</h4>
           <p>{profile?.email}</p>
         </div>
-        <span className="profile-badge profile-badge-success">
+        <span className="badge badge-success">
           <i className="fas fa-check-circle"></i> {t('profile.verified')}
         </span>
       </div>
@@ -78,7 +78,7 @@ const VerificationSection = ({ profile, onSendPhoneCode, onVerifyPhone }) => {
           <p>{profile?.telefono || t('profile.noPhoneRegistered')}</p>
         </div>
         {profile?.telefono_verificado ? (
-          <span className="profile-badge profile-badge-success">
+          <span className="badge badge-success">
             <i className="fas fa-check-circle"></i> {t('profile.verified')}
           </span>
         ) : (
@@ -92,6 +92,7 @@ const VerificationSection = ({ profile, onSendPhoneCode, onVerifyPhone }) => {
               <div className="profile-phone-code">
                 <input 
                   type="text" 
+                  className="form-input"
                   placeholder={t('profile.enterCode')} 
                   value={code} 
                   onChange={(e) => setCode(e.target.value)} 
@@ -106,7 +107,7 @@ const VerificationSection = ({ profile, onSendPhoneCode, onVerifyPhone }) => {
               </div>
             )}
             {message && (
-              <p className={`profile-message ${message.includes('exitosamente') ? 'success' : 'error'}`}>
+              <p className={`form-message ${message.includes('exitosamente') ? 'success' : 'error'}`}>
                 {message}
               </p>
             )}

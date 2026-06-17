@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ScheduleSection = ({ horario, extra, onUpdate, saving, type }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const [form, setForm] = useState({ horario: '', extra: false });
 
   useEffect(() => {
@@ -29,19 +29,20 @@ const ScheduleSection = ({ horario, extra, onUpdate, saving, type }) => {
           <p>{t('profile.scheduleDescription')}</p>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="profile-form">
-        <div className="profile-form-group">
-          <label>{t('profile.scheduleHours')}</label>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form-group">
+          <label className="form-label">{t('profile.scheduleHours')}</label>
           <textarea 
+            className="form-textarea"
             rows="4" 
             value={form.horario} 
             onChange={(e) => setForm({ ...form, horario: e.target.value })} 
             placeholder={t('profile.schedulePlaceholder')} 
           />
-          <small className="profile-form-hint">{t('profile.scheduleExample')}</small>
+          <span className="form-hint">{t('profile.scheduleExample')}</span>
         </div>
-        <div className="profile-form-group">
-          <label className="profile-checkbox">
+        <div className="form-group">
+          <label className="form-checkbox">
             <input 
               type="checkbox" 
               checked={form.extra} 
@@ -53,7 +54,7 @@ const ScheduleSection = ({ horario, extra, onUpdate, saving, type }) => {
             </span>
           </label>
         </div>
-        <div className="profile-form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? (
               <><i className="fas fa-spinner fa-spin"></i> {t('common.saving')}</>

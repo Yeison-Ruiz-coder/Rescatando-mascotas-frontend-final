@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const LogoSection = ({ logo, onUploadLogo, onDeleteLogo, saving }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -24,8 +24,8 @@ const LogoSection = ({ logo, onUploadLogo, onDeleteLogo, saving }) => {
         </div>
       </div>
 
-      <div className="profile-form-group">
-        <label>{t('profile.logo')}</label>
+      <div className="form-group">
+        <label className="form-label">{t('profile.logo')}</label>
         <div className="profile-logo-section">
           {logo && (
             <div className="profile-logo-preview">
@@ -55,7 +55,7 @@ const LogoSection = ({ logo, onUploadLogo, onDeleteLogo, saving }) => {
             <span>{logo ? t('profile.changeLogo') : t('profile.uploadLogo')}</span>
           </div>
         </div>
-        <small className="profile-form-hint">{t('profile.logoHint')}</small>
+        <span className="form-hint">{t('profile.logoHint')}</span>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ProfileSidebar = ({ activeSection, onSectionChange, role }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
 
   const sectionsConfig = useMemo(() => ({
     user: [
