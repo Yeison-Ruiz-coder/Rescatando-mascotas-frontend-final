@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Calendar, List, Heart, Loader, X } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import EventoCard from "../../../components/common/EventoCard/EventoCard";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
@@ -25,15 +26,7 @@ const EventosIndex = () => {
     { value: "capacidad", label: t("mayor_capacidad") },
   ], [t, i18n.language]);
 
-  const getImageUrl = useCallback((url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || 
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
-  }, []);
+  const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
   // Detectar móvil
   useEffect(() => {

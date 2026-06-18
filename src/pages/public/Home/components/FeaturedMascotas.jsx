@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../../../../services/api';
+import { getImageUrl as buildImageUrl } from '../../../../utils/imageUtils';
 import SlideUpPanel from '../../../../components/common/SlideUpPanel/SlideUpPanel';
 import MascotaDetalle from '../../Mascotas/MascotaDetalle';
 import MascotaCard from '../../../../components/common/MascotaCard/MascotaCard';
@@ -16,17 +17,7 @@ const FeaturedMascotas = memo(() => {
   const [selectedMascota, setSelectedMascota] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const getOptimizedImageUrl = useCallback((path) => {
-    if (!path) return null;
-    if (path.startsWith('http')) {
-      if (path.includes('cloudinary.com') && path.includes('/upload/')) {
-        return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
-      }
-      return path;
-    }
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
-  }, []);
+  const getOptimizedImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   const handleOpenPanel = useCallback((mascota) => {
     setSelectedMascota(mascota);

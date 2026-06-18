@@ -16,6 +16,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
 import "./VeterinariaDetalle.css";
 
@@ -28,23 +29,7 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    
-    let cleanPath = path;
-    if (cleanPath.startsWith("/storage")) {
-      cleanPath = cleanPath;
-    } else if (cleanPath.startsWith("storage")) {
-      cleanPath = "/" + cleanPath;
-    } else {
-      cleanPath = "/storage/" + cleanPath;
-    }
-    
-    return `${baseUrl}${cleanPath}`;
-  };
+  const getImageUrl = (path) => buildImageUrl(path);
 
   const getImagenUrl = () => {
     if (!veterinaria) return "https://placehold.co/800x450/667eea/FFFFFF?text=Veterinaria";

@@ -55,27 +55,29 @@
 
 /* CONTENIDO - Posicionamiento absoluto para control total */
 .hc-carousel-content-modern {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 2;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: white;
+  padding: 2rem;
 }
 
-/* Contenedor del texto con posición absoluta */
+/* Contenedor del texto centrado correctamente */
 .hc-carousel-text-modern {
-  position: absolute;
-  top: 5%;
-  left: 30%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 800px;
+  position: relative;
+  width: min(100%, 820px);
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
   animation: hc-fade-in-up 0.8s ease;
-  padding: 24px 32px;
+  padding: clamp(1rem, 2vw, 2rem);
   border-radius: 24px;
   backdrop-filter: blur(2px);
 }
@@ -83,11 +85,11 @@
 @keyframes hc-fade-in-up {
   from {
     opacity: 0;
-    transform: translateX(-50%) translateY(30px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 
@@ -114,10 +116,11 @@
   font-size: 1.125rem;
   margin-bottom: 2rem;
   color: rgba(255, 255, 255, 0.95);
-  max-width: 600px;
+  max-width: 620px;
   margin-left: auto;
   margin-right: auto;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  line-height: 1.6;
 }
 
 .hc-carousel-btn-modern {
@@ -223,10 +226,14 @@
   .hc-carousel-title-modern {
     font-size: 3rem;
   }
-  
+
+  .hc-carousel-content-modern {
+    padding: 1.5rem;
+  }
+
   .hc-carousel-text-modern {
-    top: 25%;
-    padding: 20px 24px;
+    width: min(100%, 700px);
+    padding: 1.25rem 1.5rem;
   }
 }
 
@@ -235,36 +242,41 @@
     height: 70vh;
     min-height: 500px;
   }
-  
+
+  .hc-carousel-content-modern {
+    padding: 1rem;
+  }
+
   .hc-carousel-title-modern {
     font-size: 2rem;
   }
-  
+
   .hc-carousel-pre-title-modern {
     font-size: 1rem;
   }
-  
+
   .hc-carousel-description-modern {
     font-size: 1rem;
-    padding: 0 16px;
+    line-height: 1.5;
+    padding: 0 0.5rem;
   }
-  
+
   .hc-carousel-nav-modern {
     width: 40px;
     height: 40px;
   }
-  
+
   .hc-carousel-prev-modern {
     left: 16px;
   }
-  
+
   .hc-carousel-next-modern {
     right: 16px;
   }
-  
+
   .hc-carousel-text-modern {
-    top: 20%;
-    padding: 16px 20px;
+    width: 100%;
+    padding: 1rem;
     border-radius: 20px;
   }
 }
@@ -274,42 +286,47 @@
     height: 60vh;
     min-height: 400px;
   }
-  
+
+  .hc-carousel-content-modern {
+    padding: 0.75rem;
+  }
+
   .hc-carousel-title-modern {
     font-size: 1.5rem;
   }
-  
+
   .hc-carousel-pre-title-modern {
     font-size: 0.875rem;
     letter-spacing: 2px;
   }
-  
+
   .hc-carousel-description-modern {
     font-size: 0.875rem;
+    line-height: 1.4;
     margin-bottom: 1.5rem;
   }
-  
+
   .hc-carousel-btn-modern {
     padding: 10px 24px;
     font-size: 0.875rem;
   }
-  
+
   .hc-carousel-nav-modern {
     width: 32px;
     height: 32px;
   }
-  
+
   .hc-carousel-dot-modern {
     width: 30px;
   }
-  
+
   .hc-carousel-dot-modern.hc-active {
     width: 40px;
   }
-  
+
   .hc-carousel-text-modern {
-    top: 15%;
-    padding: 12px 16px;
+    width: 100%;
+    padding: 0.75rem;
     border-radius: 16px;
   }
 }

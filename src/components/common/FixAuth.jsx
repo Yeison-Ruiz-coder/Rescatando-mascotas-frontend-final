@@ -7,9 +7,9 @@ const FixAuth = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     const storedUser = localStorage.getItem('user');
-    
+
     if (storedUser && !token) {
       console.warn(t('user_without_token', 'Usuario sin token - limpiando...'));
       localStorage.removeItem('user');

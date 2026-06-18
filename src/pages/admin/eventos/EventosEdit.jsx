@@ -18,6 +18,7 @@ import {
   Layers,
 } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import "./EventosForm.css";
 
 const AdminEventosEdit = () => {
@@ -62,16 +63,7 @@ const AdminEventosEdit = () => {
     }
   };
 
-  const getImageUrl = useCallback((url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
-  }, []);
+  const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
@@ -212,9 +204,7 @@ const AdminEventosEdit = () => {
     formDataToSend.append("_method", "PUT");
 
     try {
-      await api.post(`/admin/eventos/${id}`, formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await api.post(`/admin/eventos/${id}`, formDataToSend);
       navigate(`/admin/eventos/${id}`);
     } catch (error) {
       if (error.response?.data?.errors) setErrors(error.response.data.errors);

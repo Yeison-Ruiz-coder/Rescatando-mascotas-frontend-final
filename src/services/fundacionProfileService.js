@@ -25,9 +25,7 @@ export const fundacionProfileService = {
   uploadCoverImage: async (file) => {
     const formData = new FormData();
     formData.append('imagen_portada', file);
-    const response = await api.post('/fundacion/profile/cover', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post('/fundacion/profile/cover', formData);
     return response.data.data;
   },
 

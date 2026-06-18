@@ -79,7 +79,7 @@ const DebugAuth = () => {
       <div>
         <strong>{t('token_in_localstorage', 'Token en localStorage')}:</strong>
         <div style={{ wordBreak: 'break-all' }}>
-          {localStorage.getItem('token') || t('no_token', 'No hay token')}
+          {localStorage.getItem('auth_token') || t('no_token', 'No hay token')}
         </div>
       </div>
     </div>

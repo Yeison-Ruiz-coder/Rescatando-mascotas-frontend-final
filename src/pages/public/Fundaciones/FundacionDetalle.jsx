@@ -18,6 +18,7 @@ import {
   Clock,
 } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl } from "../../../utils/imageUtils";
 import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
 import "./FundacionesDetalle.css";
 
@@ -81,11 +82,9 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
 
-  const getImageUrl = useCallback((url) => {
+  const resolveImageUrl = useCallback((url) => {
     if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
-    return url.startsWith("/storage") ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
+    return getImageUrl(url);
   }, []);
 
   useEffect(() => {
@@ -325,7 +324,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
         {/* Imagen */}
         <div className="detalle-imagen-wrapper reveal-scale delay-200">
           <img 
-            src={fundacion.imagen_portada ? getImageUrl(fundacion.imagen_portada) : "https://placehold.co/800x450/667eea/FFFFFF?text=Fundación"} 
+            src={fundacion.imagen_portada ? resolveImageUrl(fundacion.imagen_portada) : "https://placehold.co/800x450/667eea/FFFFFF?text=Fundación"} 
             alt={fundacion.Nombre_1} 
             className="detalle-imagen"
           />
@@ -378,7 +377,7 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
                     <div className="detalle-mascota-img">
                       {mascota.foto_principal ? (
                         <img
-                          src={getImageUrl(mascota.foto_principal)}
+                          src={resolveImageUrl(mascota.foto_principal)}
                           alt={mascota.nombre_mascota}
                           loading="lazy"
                         />

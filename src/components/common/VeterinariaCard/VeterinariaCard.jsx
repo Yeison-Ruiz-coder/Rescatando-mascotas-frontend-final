@@ -1,5 +1,5 @@
 // src/components/common/VeterinariaCard/VeterinariaCard.jsx
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Building, MapPin, Phone, Clock, Shield, Ambulance, ChevronRight } from 'lucide-react';
 import './VeterinariaCard.css';
@@ -11,6 +11,7 @@ const VeterinariaCard = memo(({
   onView
 }) => {
   const { t } = useTranslation('veterinarias');
+  const [imgError, setImgError] = useState(false);
 
   const {
     id,
@@ -53,13 +54,13 @@ const VeterinariaCard = memo(({
   const serviciosMostrar = serviciosList.slice(0, 2);
 
   const imageUrl = useMemo(() => {
-    if (!logo) return null;
+    if (!logo || imgError) return null;
     try {
       return getImageUrl(logo);
     } catch (error) {
       return null;
     }
-  }, [logo, getImageUrl]);
+  }, [logo, getImageUrl, imgError]);
 
   const handleCardClick = () => {
     onView?.(veterinaria);
@@ -85,7 +86,7 @@ const VeterinariaCard = memo(({
     >
       <div className="vc-image">
         {imageUrl ? (
-          <img src={imageUrl} alt={Nombre_vet} loading="lazy" />
+          <img src={imageUrl} alt={Nombre_vet} loading="lazy" onError={() => setImgError(true)} />
         ) : (
           <div className="vc-placeholder">
             <Building />

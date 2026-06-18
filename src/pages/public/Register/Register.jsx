@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
+import { publicApi } from "../../../services/api";
 import { toast } from "react-toastify";
 import "./Register.css";
 
@@ -45,10 +46,6 @@ const Register = () => {
 
   const [currentBackground, setCurrentBackground] = useState(0);
   const [currentQuote, setCurrentQuote] = useState(0);
-
-  // 🔥 URL DE LA API EN RAILWAY
-  const API_URL =
-    "https://rescatando-mascotas-backend-final-production.up.railway.app";
 
   const backgroundImages = [
     "/img/login/login1.jpg",
@@ -109,21 +106,11 @@ const Register = () => {
     }
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/auth/check-email?email=${encodeURIComponent(email)}`,
-      );
+      const response = await publicApi.get('/auth/check-email', {
+        params: { email },
+      });
 
-      if (!response.ok) {
-        console.warn(
-          "⚠️ El endpoint no respondió correctamente:",
-          response.status,
-        );
-        setEmailChecked(false);
-        return false;
-      }
-
-      const data = await response.json();
-      console.log("📡 Respuesta del backend:", data);
+      const data = response.data;
 
       if (data.data?.exists) {
         setEmailExists(true);

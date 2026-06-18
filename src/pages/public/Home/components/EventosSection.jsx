@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import api from '../../../../services/api';
+import { getImageUrl as buildImageUrl } from '../../../../utils/imageUtils';
 import EventoCard from '../../../../components/common/EventoCard/EventoCard';
 import SlideUpPanel from '../../../../components/common/SlideUpPanel/SlideUpPanel';
 import EventosPublicShow from '../../Eventos/EventosPublicShow';
@@ -17,15 +18,7 @@ const EventosSection = memo(({ isAuthenticated = false }) => {
   const [likedEvents, setLikedEvents] = useState({});
   const [attendingEvents, setAttendingEvents] = useState({});
 
-  const getImageUrl = useCallback((imagePath) => {
-    if (!imagePath) return null;
-    if (imagePath.startsWith('http')) return imagePath;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || 
-      'https://rescatando-mascotas-backend-final-production.up.railway.app';
-    return imagePath.startsWith('/storage') 
-      ? `${baseUrl}${imagePath}` 
-      : `${baseUrl}/storage/${imagePath}`;
-  }, []);
+  const getImageUrl = useCallback((imagePath) => buildImageUrl(imagePath), []);
 
   const normalizeEvento = (evento) => {
     return {

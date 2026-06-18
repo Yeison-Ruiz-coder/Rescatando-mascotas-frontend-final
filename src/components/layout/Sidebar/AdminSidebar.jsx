@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
+import { getImageUrl } from '../../../utils/imageUtils';
 import './Sidebar.css';
 
 const AdminSidebar = () => {
@@ -29,23 +30,40 @@ const AdminSidebar = () => {
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
+    if (!user || user.tipo !== 'admin') return;
+
+    let cancelled = false;
+    const controller = new AbortController();
+
     const fetchPendingCount = async () => {
+      const token = localStorage.getItem('auth_token');
+      if (!token) return;
+
       try {
         const response = await fetch('/api/admin/usuarios/pendientes/count', {
+          signal: controller.signal,
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+            'Authorization': `Bearer ${token}`
           }
         });
         const data = await response.json();
-        if (data.success) {
-          setPendingCount(data.count);
+        if (!cancelled && data.success) {
+          setPendingCount(data.count || 0);
         }
       } catch (error) {
-        console.error('Error fetching pending count:', error);
+        if (!cancelled && error.name !== 'AbortError') {
+          console.error('Error fetching pending count:', error);
+        }
       }
     };
+
     fetchPendingCount();
-  }, []);
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [user]);
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({
@@ -63,9 +81,10 @@ const AdminSidebar = () => {
   };
 
   const getAvatarUrl = () => {
-    if (!user?.avatar) return `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Admin')}&background=667eea&color=fff&bold=true&size=50`;
-    if (user.avatar.startsWith('http')) return user.avatar;
-    return `/storage/${user.avatar}`;
+    if (!user?.avatar) {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Admin')}&background=667eea&color=fff&bold=true&size=50`;
+    }
+    return getImageUrl(user.avatar);
   };
 
   return (

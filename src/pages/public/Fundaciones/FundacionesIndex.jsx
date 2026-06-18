@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import api from "../../../services/api";
 import FundacionCard from "../../../components/common/FundacionCard/FundacionCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
-import FundacionDetalle from "./FundacionDetalle";
 import FiltrosFundaciones from "../../../components/common/FiltrosFundaciones/FiltrosFundaciones";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import FundacionDetalle from "./FundacionDetalle";
 import "./FundacionesIndex.css";
 
 const FundacionesIndex = () => {
@@ -113,16 +114,7 @@ const FundacionesIndex = () => {
     setSelectedFundacion(null);
   };
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage")
-      ? `${baseUrl}${path}`
-      : `${baseUrl}/storage/${path}`;
-  };
+  const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   if (loading && fundaciones.length === 0) {
     return (

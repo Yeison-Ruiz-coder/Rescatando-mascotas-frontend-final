@@ -1,5 +1,5 @@
 // src/components/common/FundacionCard/FundacionCard.jsx
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Building, MapPin, Users, Heart, Award, ChevronRight } from 'lucide-react';
 import './FundacionCard.css';
@@ -11,6 +11,7 @@ const FundacionCard = memo(({
   onView
 }) => {
   const { t } = useTranslation('fundaciones');
+  const [imgError, setImgError] = useState(false);
 
   const {
     id,
@@ -23,13 +24,13 @@ const FundacionCard = memo(({
   } = fundacion;
 
   const imageUrl = useMemo(() => {
-    if (!imagen_portada) return null;
+    if (!imagen_portada || imgError) return null;
     try {
       return getImageUrl(imagen_portada);
     } catch (error) {
       return null;
     }
-  }, [imagen_portada, getImageUrl]);
+  }, [imagen_portada, getImageUrl, imgError]);
 
   const handleCardClick = () => {
     onView?.(fundacion);
@@ -55,7 +56,7 @@ const FundacionCard = memo(({
     >
       <div className="fc-image">
         {imageUrl ? (
-          <img src={imageUrl} alt={Nombre_1} loading="lazy" />
+          <img src={imageUrl} alt={Nombre_1} loading="lazy" onError={() => setImgError(true)} />
         ) : (
           <div className="fc-placeholder">
             <Building />

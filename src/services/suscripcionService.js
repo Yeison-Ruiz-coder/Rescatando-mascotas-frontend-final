@@ -6,11 +6,11 @@ export const suscripcionService = {
   
   /**
    * Obtener planes de membresía
-   * GET /api/public/planes-membresia
+   * GET /api/suscripciones/planes
    */
   getPlanesMembresia: async () => {
     try {
-      const response = await api.get('/public/planes-membresia');
+      const response = await api.get('/suscripciones/planes');
       return response.data.data || response.data;
     } catch (error) {
       console.error('Error getPlanesMembresia:', error);
@@ -34,11 +34,11 @@ export const suscripcionService = {
   
   /**
    * Crear una nueva suscripción
-   * POST /api/public/suscripciones-crear
+   * POST /api/suscripciones/user/crear
    */
   createPublicSuscripcion: async (data) => {
     try {
-      const response = await api.post('/public/suscripciones-crear', data);
+      const response = await api.post('/suscripciones/user/crear', data);
       return response.data;
     } catch (error) {
       console.error('Error createPublicSuscripcion:', error);
@@ -48,11 +48,11 @@ export const suscripcionService = {
   
   /**
    * Obtener suscripciones del usuario autenticado
-   * GET /api/user/mis-suscripciones
+   * GET /api/suscripciones/user/mis-suscripciones
    */
   getUserSuscripciones: async () => {
     try {
-      const response = await api.get('/user/mis-suscripciones');
+      const response = await api.get('/suscripciones/user/mis-suscripciones');
       return response.data.data || response.data;
     } catch (error) {
       console.error('Error getUserSuscripciones:', error);
@@ -62,11 +62,11 @@ export const suscripcionService = {
   
   /**
    * Cancelar una suscripción
-   * POST /api/user/suscripciones/{id}/cancelar
+   * PATCH /api/suscripciones/user/{id}/cancelar
    */
   cancelUserSuscripcion: async (id) => {
     try {
-      const response = await api.post(`/user/suscripciones/${id}/cancelar`);
+      const response = await api.patch(`/suscripciones/user/${id}/cancelar`);
       return response.data;
     } catch (error) {
       console.error('Error cancelUserSuscripcion:', error);

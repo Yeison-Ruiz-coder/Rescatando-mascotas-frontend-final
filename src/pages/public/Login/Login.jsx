@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
+import { publicApi } from '../../../services/api';
 import './Login.css';
 
 const Login = () => {
@@ -25,9 +26,6 @@ const Login = () => {
   // 🔥 VERIFICACIÓN DE EMAIL
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [emailExists, setEmailExists] = useState(null); // null = no verificado, true = existe, false = no existe
-  
-  // 🔥 URL DE LA API EN RAILWAY
-  const API_URL = 'https://rescatando-mascotas-backend-final-production.up.railway.app';
   
   // Imágenes rotativas
   const backgroundImages = [
@@ -78,15 +76,10 @@ const Login = () => {
     if (!email || !validateEmail(email)) return false;
     
     try {
-      const response = await fetch(`${API_URL}/api/auth/check-email?email=${encodeURIComponent(email)}`);
-      
-      if (!response.ok) {
-        console.warn('⚠️ El endpoint no respondió correctamente:', response.status);
-        return false;
-      }
-      
-      const data = await response.json();
-      return data.data?.exists === true;
+      const response = await publicApi.get('/auth/check-email', {
+        params: { email }
+      });
+      return response.data?.data?.exists === true;
     } catch (error) {
       console.error("Error checking email:", error);
       return false;

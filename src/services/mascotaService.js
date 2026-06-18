@@ -21,17 +21,13 @@ const mascotaService = {
 
   // Crear nueva mascota
   createMascota: async (formData) => {
-    const response = await api.post('/entity/mascotas', formData, {
-      headers: { 'Content-Type': undefined },
-    });
+    const response = await api.post('/entity/mascotas', formData);
     return response.data;
   },
 
   // Actualizar mascota
   updateMascota: async (id, formData) => {
-    const response = await api.post(`/entity/mascotas/${id}?_method=PUT`, formData, {
-      headers: { 'Content-Type': undefined },
-    });
+    const response = await api.post(`/entity/mascotas/${id}?_method=PUT`, formData);
     return response.data;
   },
 
