@@ -125,9 +125,7 @@ const AdminEventosCreate = () => {
         if (imagen) formDataToSend.append('imagen', imagen);
 
         try {
-            const response = await api.post('/admin/eventos', formDataToSend, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const response = await api.post('/admin/eventos', formDataToSend);
             const evento = response.data.data || response.data;
             navigate(`/admin/eventos/${evento.id}`);
         } catch (error) {

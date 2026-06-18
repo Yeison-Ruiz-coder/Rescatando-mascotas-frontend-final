@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../services/api";
+import { getImageUrl } from "../utils/imageUtils";
 
 const useEditarMascota = (id) => {
   const { t } = useTranslation("nuevaMascota");
@@ -43,16 +44,14 @@ const useEditarMascota = (id) => {
   // FUNCIONES AUXILIARES
   // ============================================
 
-  const getImageUrl = useCallback((path) => {
+  const getImageUrlForPath = useCallback((path) => {
     if (!path) return null;
     if (Array.isArray(path)) {
       path = path.find((p) => p && typeof p === "string") || null;
       if (!path) return null;
     }
     if (typeof path !== "string") return null;
-    if (path.startsWith("http")) return path;
-    const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
-    return `${baseUrl}/storage/${path}`;
+    return getImageUrl(path);
   }, []);
 
   const normalizeEstado = (estado) => {
@@ -280,7 +279,7 @@ const useEditarMascota = (id) => {
             galeriaArray = galeriaArray.filter((item) => item && typeof item === "string");
 
             const fotosExistentes = galeriaArray.map((foto) => ({
-              url: getImageUrl(foto),
+              url: getImageUrlForPath(foto),
               path: foto,
               existente: true,
             }));
@@ -320,7 +319,7 @@ const useEditarMascota = (id) => {
               requisitos_adopcion: normalizeArray(mascota.requisitos_adopcion),
               hogar_recomendado: mascota.hogar_recomendado || "",
               foto_principal: null,
-              foto_principal_preview: getImageUrl(fotoPrincipal),
+              foto_principal_preview: getImageUrlForPath(fotoPrincipal),
               galeria_fotos: [],
               galeria_fotos_previews: [],
               video_url: mascota.video_url || "",
@@ -470,9 +469,7 @@ const useEditarMascota = (id) => {
       }
 
       try {
-        const response = await api.post(`/entity/mascotas/${id}`, formDataToSend, {
-          headers: { "Content-Type": undefined },
-        });
+        const response = await api.post(`/entity/mascotas/${id}`, formDataToSend);
 
         if (response.data.success) {
           toast.success(t("mensajes.actualizada_exito"));

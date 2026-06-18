@@ -1,8 +1,9 @@
 // src/pages/public/Mascotas/components/MascotasRelacionadas.jsx
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import api from "../../../../services/api";
 import MascotaCard from "../../../../components/common/MascotaCard/MascotaCard";
 import SlideUpPanel from "../../../../components/common/SlideUpPanel/SlideUpPanel";
+import { getImageUrl as buildImageUrl } from "../../../../utils/imageUtils";
 import MascotaDetalle from "../MascotaDetalle";
 
 const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = false }) => {
@@ -53,17 +54,7 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = 
     }
   };
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) {
-      if (path.includes('cloudinary.com') && path.includes('/upload/')) {
-        return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
-      }
-      return path;
-    }
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
-  };
+  const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   const handleOpenMascota = (mascota) => {
     if (isEmbed) {

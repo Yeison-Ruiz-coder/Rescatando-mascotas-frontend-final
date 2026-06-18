@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import MascotaApadrinarCard from "../../../components/common/MascotaApadrinarCard/MascotaApadrinarCard";
 import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import "./SuscripcionesPublicIndex.css";
 
 const SuscripcionesPublicIndex = () => {
@@ -176,16 +177,7 @@ const SuscripcionesPublicIndex = () => {
     setShowModal(true);
   };
 
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith("http")) return path;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage")
-      ? `${baseUrl}${path}`
-      : `${baseUrl}/storage/${path}`;
-  };
+  const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   if (loading) {
     return (

@@ -13,12 +13,7 @@ export const rescateService = {
       console.error("Error: se esperaba FormData para crear rescate");
       return Promise.reject(new Error("Formato de datos incorrecto"));
     }
-    // Para FormData, no establecer Content-Type para que axios lo maneje automáticamente
-    return publicApi.post("/rescates/reportar", formData, {
-      headers: {
-        'Content-Type': undefined, // Permite que axios establezca multipart/form-data automáticamente
-      },
-    });
+    return publicApi.post("/rescates/reportar", formData);
   },
 
   getRescatePublico: (id) => publicApi.get(`/rescates/${id}`),
@@ -64,11 +59,7 @@ export const rescateService = {
       console.error("Error: formData no es una instancia de FormData");
       return Promise.reject(new Error("Formato de datos incorrecto"));
     }
-    return api.post(`/entity/rescates/${id}/registrar-mascota`, formData, {
-      headers: {
-        'Content-Type': undefined,
-      },
-    });
+    return api.post(`/entity/rescates/${id}/registrar-mascota`, formData);
   },
 
   // ========== LADO ADMINISTRADOR ==========

@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, MapPin, Calendar, FileText, Clock, Heart, Users, Edit, Trash2, Loader, Mail, Phone, Tag, DollarSign } from 'lucide-react';
 import api from '../../../services/api';
+import { getImageUrl as buildImageUrl } from '../../../utils/imageUtils';
 import './EventosShow.css';
 
 const AdminEventosShow = () => {
@@ -15,12 +16,7 @@ const AdminEventosShow = () => {
     const [error, setError] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
-    const getImageUrl = useCallback((url) => {
-        if (!url) return null;
-        if (url.startsWith('http')) return url;
-        const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
-        return url.startsWith('/storage') ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
-    }, []);
+    const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
     useEffect(() => {
         const loadEvento = async () => {

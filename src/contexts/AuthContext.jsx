@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.jsx
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import authService from '../services/authService';
 
 const AuthContext = createContext();
@@ -14,35 +14,32 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const hasCheckedAuth = useRef(false);
 
   useEffect(() => {
+    if (hasCheckedAuth.current) return;
+    hasCheckedAuth.current = true;
+
     const checkAuth = async () => {
-      console.log('=== VERIFICANDO AUTENTICACIÓN ===');
-      
       const token = authService.getToken();
       
       if (!token) {
-        console.log('No hay token almacenado');
         setUser(null);
         setIsAuthenticated(false);
         setLoading(false);
         return;
       }
       
-      console.log('Token encontrado, verificando con backend...');
-      
       try {
         const isValid = await authService.verifyToken();
         
         if (isValid) {
           const currentUser = authService.getCurrentUser();
-          console.log('Token válido - Usuario:', currentUser);
           setUser(currentUser);
           setIsAuthenticated(true);
         } else {
-          console.log('Token inválido o expirado');
           authService.logout();
           setUser(null);
           setIsAuthenticated(false);
@@ -60,7 +57,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    console.log('Iniciando login...');
     setLoading(true);
     
     try {
@@ -70,9 +66,6 @@ export const AuthProvider = ({ children }) => {
         const currentUser = authService.getCurrentUser();
         const token = authService.getToken();
         
-        console.log('Login exitoso - Token guardado:', !!token);
-        console.log('Login exitoso - Usuario:', currentUser);
-        
         setUser(currentUser);
         setIsAuthenticated(true);
         setLoading(false);
@@ -80,7 +73,6 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: currentUser };
       }
       
-      console.log('Login fallido:', result.message);
       setLoading(false);
       
       return { 
@@ -111,7 +103,6 @@ export const AuthProvider = ({ children }) => {
 
   // 🔥 REGISTER CORREGIDO - Maneja fundaciones/veterinarias
   const register = async (userData) => {
-    console.log('Iniciando registro...');
     setLoading(true);
     
     try {
@@ -121,17 +112,15 @@ export const AuthProvider = ({ children }) => {
         const requiereAprobacion = result.requiereAprobacion || 
                                    (result.user?.tipo === 'fundacion' || result.user?.tipo === 'veterinaria');
         
-        // 🔥 Si NO requiere aprobación (usuario normal), autenticar automáticamente
+        // Si NO requiere aprobación (usuario normal), autenticar automáticamente
         if (!requiereAprobacion && result.token) {
           const currentUser = authService.getCurrentUser();
           setUser(currentUser);
           setIsAuthenticated(true);
-          console.log('✅ Registro exitoso - Usuario autenticado');
         } else {
-          // 🔥 Si requiere aprobación (fundación/veterinaria), NO autenticar
+          // Si requiere aprobación (fundación/veterinaria), NO autenticar
           setUser(null);
           setIsAuthenticated(false);
-          console.log('⏳ Registro pendiente de aprobación - No autenticado');
         }
         
         setLoading(false);

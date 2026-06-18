@@ -22,9 +22,7 @@ export const profileService = {
       }
     });
     
-    const response = await api.put('/user/profile', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.put('/user/profile', formData);
     return response.data.data;
   },
 
@@ -32,9 +30,7 @@ export const profileService = {
   updateAvatar: async (file) => {
     const formData = new FormData();
     formData.append('avatar', file);
-    const response = await api.post('/user/profile/avatar', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post('/user/profile/avatar', formData);
     return response.data.data;
   },
 

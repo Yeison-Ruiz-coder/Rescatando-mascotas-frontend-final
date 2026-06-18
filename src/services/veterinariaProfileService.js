@@ -27,9 +27,7 @@ export const veterinariaProfileService = {
   uploadLogo: async (file) => {
     const formData = new FormData();
     formData.append('logo', file);
-    const response = await api.post('/veterinaria/profile/logo', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post('/veterinaria/profile/logo', formData);
     return response.data.data;
   },
 
@@ -43,9 +41,7 @@ export const veterinariaProfileService = {
     files.forEach(file => {
       formData.append('fotos[]', file);
     });
-    const response = await api.post('/veterinaria/profile/gallery', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post('/veterinaria/profile/gallery', formData);
     return response.data.data;
   },
 

@@ -5,9 +5,10 @@ import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import EventoCard from "../../../components/common/EventoCard/EventoCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
-import EventosPublicShow from "./EventosPublicShow";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import EventosPublicShow from "./EventosPublicShow";
 import "./EventosPublicIndex.css";
 
 const EventosPublicIndex = () => {
@@ -308,16 +309,7 @@ const EventosPublicIndex = () => {
     setSelectedEvento(null);
   };
 
-  const getImageUrl = (url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
-  };
+  const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
   if (loading && eventos.length === 0) {
     return (

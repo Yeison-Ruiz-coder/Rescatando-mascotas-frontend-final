@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, MapPin, Calendar, Clock, Heart, Users, CalendarCheck, DollarSign } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import api from '../../../services/api';
+import { getImageUrl } from '../../../utils/imageUtils';
 import { SimpleLoadingBar } from '../../../components/common/ProgressBar/ProgressBar';
 import './EventosPublicShow.css';
 
@@ -20,11 +21,9 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
   const [error, setError] = useState(null);
   const [loadProgress, setLoadProgress] = useState(0);
 
-  const getImageUrl = useCallback((url) => {
+  const resolveImageUrl = useCallback((url) => {
     if (!url) return null;
-    if (url.startsWith('http')) return url;
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
-    return url.startsWith('/storage') ? `${baseUrl}${url}` : `${baseUrl}/storage/${url}`;
+    return getImageUrl(url);
   }, []);
 
   useEffect(() => {

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../../../services/api";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import MascotaCard from "../../../components/common/MascotaCard/MascotaCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import MascotaDetalle from "./MascotaDetalle";
@@ -72,7 +73,7 @@ const Mascotas = () => {
     try {
       const params = {
         page: page,
-        per_page: 24,
+        per_page: 12,
         fields: 'id,nombre_mascota,especie,genero,edad_aprox,foto_principal,descripcion,lugar_rescate',
         include: 'fundacion',
         sort: '',
@@ -119,18 +120,7 @@ const Mascotas = () => {
     }
   }, [t]);
 
-  // Optimización de imagen con Cloudinary
-  const getOptimizedImageUrl = useCallback((path) => {
-    if (!path) return null;
-    if (path.startsWith('http')) {
-      if (path.includes('cloudinary.com') && path.includes('/upload/')) {
-        return path.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_fill/');
-      }
-      return path;
-    }
-    const baseUrl = import.meta.env.VITE_STORAGE_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return path.startsWith("/storage") ? `${baseUrl}${path}` : `${baseUrl}/storage/${path}`;
-  }, []);
+  const getOptimizedImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   useEffect(() => {
     loadEspecies();

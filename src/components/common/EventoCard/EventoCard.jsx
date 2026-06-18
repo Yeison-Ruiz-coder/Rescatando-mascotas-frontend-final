@@ -1,5 +1,5 @@
 // src/components/common/EventoCard/EventoCard.jsx
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './EventoCard.css';
 
@@ -16,6 +16,7 @@ const EventoCard = memo(({
   showActions = true
 }) => {
   const { t } = useTranslation('eventos');
+  const [imgError, setImgError] = useState(false);
 
   const {
     id,
@@ -40,13 +41,13 @@ const EventoCard = memo(({
   }, [fecha_evento]);
 
   const imageUrl = useMemo(() => {
-    if (!imagen_url) return null;
+    if (!imagen_url || imgError) return null;
     try {
       return getImageUrl(imagen_url);
     } catch (error) {
       return null;
     }
-  }, [imagen_url, getImageUrl]);
+  }, [imagen_url, getImageUrl, imgError]);
 
   const cardVariant = variant === 'featured' ? 'ec-featured' : '';
 
@@ -123,7 +124,7 @@ const EventoCard = memo(({
     >
       <div className="ec-image">
         {imageUrl ? (
-          <img src={imageUrl} alt={nombre_evento} loading="lazy" />
+          <img src={imageUrl} alt={nombre_evento} loading="lazy" onError={() => setImgError(true)} />
         ) : (
           <div className="ec-placeholder">
             <i className="fas fa-calendar-alt"></i>

@@ -18,6 +18,7 @@ import {
   Image,
 } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
 import "./EventosIndex.css";
 
@@ -41,16 +42,7 @@ const AdminEventosIndex = () => {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-  const getImageUrl = useCallback((url) => {
-    if (!url) return null;
-    if (url.startsWith("http")) return url;
-    const baseUrl =
-      import.meta.env.VITE_STORAGE_URL ||
-      "https://rescatando-mascotas-backend-final-production.up.railway.app";
-    return url.startsWith("/storage")
-      ? `${baseUrl}${url}`
-      : `${baseUrl}/storage/${url}`;
-  }, []);
+  const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
   // Aplicar filtros a los eventos
   const applyFilters = useCallback((filters, data) => {

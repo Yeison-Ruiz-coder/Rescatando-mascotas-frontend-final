@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import { rescateService } from '../services/rescateService';
+import { getImageUrl } from '../utils/imageUtils';
 
 const useCrearMascota = () => {
   const { t } = useTranslation('nuevaMascota');
@@ -80,13 +81,6 @@ const useCrearMascota = () => {
     destacada: false,
     rescate_id: rescateId || null,
   });
-
-  const getImageUrl = (path) => {
-    if (!path) return null;
-    if (path.startsWith('http')) return path;
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    return `${baseUrl}/storage/${path}`;
-  };
 
   // ============================================
   // VALIDACIÓN DE PASOS
@@ -327,9 +321,7 @@ const useCrearMascota = () => {
       if (rescateId) {
         response = await rescateService.registrarMascota(rescateId, formDataToSend);
       } else {
-        response = await api.post('/entity/mascotas', formDataToSend, {
-          headers: { 'Content-Type': undefined },
-        });
+        response = await api.post('/entity/mascotas', formDataToSend);
       }
       
       if (response.data.success) {

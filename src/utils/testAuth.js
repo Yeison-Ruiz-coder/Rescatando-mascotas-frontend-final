@@ -1,5 +1,5 @@
 export const testUserType = async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('auth_token');
   if (!token) {
     console.log('No hay token');
     return;

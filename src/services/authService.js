@@ -1,8 +1,6 @@
 // src/services/authService.js
 import api from './api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://rescatando-mascotas-backend-final-production.up.railway.app';
-
 const authService = {
   // Login
   login: async (credentials) => {

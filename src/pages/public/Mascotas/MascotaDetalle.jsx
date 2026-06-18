@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "lucide-react";
 import api from "../../../services/api";
+import { getImageUrl } from "../../../utils/imageUtils";
 import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
 import MascotaHero from "./components/MascotaHero";
 import MascotaResumen from "./components/MascotaResumen";
@@ -92,16 +93,15 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
     }
   };
 
-  const getImageUrl = (path) => {
+  const getImageUrlForPath = (path) => {
     if (!path) return null;
-    if (path.startsWith("http")) return path;
-    return `${import.meta.env.VITE_STORAGE_URL || "http://rescatando-mascotas-forever.test/storage"}/${path}`;
+    return getImageUrl(path);
   };
 
   const getAllImages = () => {
     const images = [];
     if (mascota?.foto_principal) {
-      images.push(getImageUrl(mascota.foto_principal));
+      images.push(getImageUrlForPath(mascota.foto_principal));
     }
     if (mascota?.galeria_fotos) {
       try {
@@ -111,7 +111,7 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
         }
         if (Array.isArray(galeria)) {
           galeria.forEach((foto) => {
-            if (foto) images.push(getImageUrl(foto));
+            if (foto) images.push(getImageUrlForPath(foto));
           });
         }
       } catch (e) {

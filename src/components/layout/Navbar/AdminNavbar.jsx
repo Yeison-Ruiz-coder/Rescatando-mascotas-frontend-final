@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useSidebar } from '../../../contexts/SidebarContext';
+import { getImageUrl } from '../../../utils/imageUtils';
 import './AdminNavbar.css';
 
 const AdminNavbar = () => {
@@ -48,10 +49,11 @@ const AdminNavbar = () => {
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   const getAvatarUrl = () => {
-    const defaultName = user?.nombre || 'Admin';
-    if (!user?.avatar) return `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=667eea&color=fff&bold=true&size=40`;
-    if (user.avatar.startsWith('http')) return user.avatar;
-    return `/storage/${user.avatar}`;
+    if (!user?.avatar) {
+      const defaultName = user?.nombre || 'Admin';
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=667eea&color=fff&bold=true&size=40`;
+    }
+    return getImageUrl(user.avatar);
   };
 
   const getUserRole = () => {

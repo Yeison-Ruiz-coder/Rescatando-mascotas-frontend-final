@@ -1,5 +1,5 @@
 // src/routes/index.js
-import React from "react";
+import React, { lazy } from "react";
 import { createBrowserRouter, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -15,92 +15,92 @@ import AdminRoute from "./AdminRoute";
 import VeterinariaRoute from "./VeterinariaRoute";
 import FundacionRoute from "./FundacionRoute";
 
-import ForgotPassword from "../pages/public/ForgotPassword/ForgotPassword";
-import ResetPassword from "../pages/public/ResetPassword/ResetPassword";
+const ForgotPassword = lazy(() => import("../pages/public/ForgotPassword/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/public/ResetPassword/ResetPassword"));
 
 // =============================================================
 // PÁGINAS PÚBLICAS
 // =============================================================
-import Home from "../pages/public/Home/Home";
-import Login from "../pages/public/Login/Login";
-import MascotaDetalle from "../pages/public/Mascotas/MascotaDetalle";
-import Register from "../pages/public/Register/Register";
-import Mascotas from "../pages/public/Mascotas/Mascotas";
-import Donaciones from "../pages/public/Donaciones/Donaciones";
-import Tienda from "../pages/public/Tienda/Tienda";
-import SolicitarAdopcion from "../pages/public/SolicitarAdopcion/SolicitarAdopcion";
-import SolicitudExitosa from "../pages/public/SolicitarAdopcion/SolicitudExitosa";
-import Veterinarias from "../pages/public/Veterinarias/Veterinarias";
-import VeterinariaDetalle from "../pages/public/Veterinarias/VeterinariaDetalle";
-import ReportarRescate from "../pages/public/ReportarRescate/ReportarRescate";
-import FundacionesIndex from "../pages/public/Fundaciones/FundacionesIndex";
-import FundacionDetalle from "../pages/public/Fundaciones/FundacionDetalle";
-import PublicEventosIndex from "../pages/public/Eventos/EventosPublicIndex";
-import PublicEventosShow from "../pages/public/Eventos/EventosPublicShow";
-import SuscripcionesPublicIndex from "../pages/public/Suscripciones/SuscripcionesPublicIndex";
+const Home = lazy(() => import("../pages/public/Home/Home"));
+const Login = lazy(() => import("../pages/public/Login/Login"));
+const MascotaDetalle = lazy(() => import("../pages/public/Mascotas/MascotaDetalle"));
+const Register = lazy(() => import("../pages/public/Register/Register"));
+const Mascotas = lazy(() => import("../pages/public/Mascotas/Mascotas"));
+const Donaciones = lazy(() => import("../pages/public/Donaciones/Donaciones"));
+const Tienda = lazy(() => import("../pages/public/Tienda/Tienda"));
+const SolicitarAdopcion = lazy(() => import("../pages/public/SolicitarAdopcion/SolicitarAdopcion"));
+const SolicitudExitosa = lazy(() => import("../pages/public/SolicitarAdopcion/SolicitudExitosa"));
+const Veterinarias = lazy(() => import("../pages/public/Veterinarias/Veterinarias"));
+const VeterinariaDetalle = lazy(() => import("../pages/public/Veterinarias/VeterinariaDetalle"));
+const ReportarRescate = lazy(() => import("../pages/public/ReportarRescate/ReportarRescate"));
+const FundacionesIndex = lazy(() => import("../pages/public/Fundaciones/FundacionesIndex"));
+const FundacionDetalle = lazy(() => import("../pages/public/Fundaciones/FundacionDetalle"));
+const PublicEventosIndex = lazy(() => import("../pages/public/Eventos/EventosPublicIndex"));
+const PublicEventosShow = lazy(() => import("../pages/public/Eventos/EventosPublicShow"));
+const SuscripcionesPublicIndex = lazy(() => import("../pages/public/Suscripciones/SuscripcionesPublicIndex"));
 
 // =============================================================
 // PÁGINAS DE USUARIO
 // =============================================================
-import Solicitudes from "../pages/user/Solicitudes/Solicitudes";
-import UserProfile from "../pages/user/perfil/UserProfile";
-import UserSuscripciones from "../pages/user/MisSuscripciones"; // NUEVO
+const Solicitudes = lazy(() => import("../pages/user/Solicitudes/Solicitudes"));
+const UserProfile = lazy(() => import("../pages/user/perfil/UserProfile"));
+const UserSuscripciones = lazy(() => import("../pages/user/MisSuscripciones"));
 
 // =============================================================
 // PÁGINAS ADMIN
 // =============================================================
-import Dashboard from "../pages/admin/Dashboard/Dashboard";
-import UsuariosPendientes from "../pages/admin/Usuarios/UsuariosPendientes";
-import AdminEventosIndex from "../pages/admin/eventos/EventosIndex";
-import AdminEventosCreate from "../pages/admin/eventos/EventosCreate";
-import AdminEventosEdit from "../pages/admin/eventos/EventosEdit";
-import AdminEventosShow from "../pages/admin/eventos/EventosShow";
-import AdminSuscripcionesIndex from "../pages/admin/suscripciones/SuscripcionesIndex";
-import AdminSuscripcionesCreate from "../pages/admin/suscripciones/SuscripcionesCreate";
-import AdminSuscripcionesEdit from "../pages/admin/suscripciones/SuscripcionesEdit";
-import AdminSuscripcionesShow from "../pages/admin/suscripciones/SuscripcionesShow";
-import AdminRescatesIndex from "../pages/admin/rescates/RescatesIndex";
-import AdminRescatesPendientes from "../pages/admin/rescates/RescatesPendientes";
-import AdminRescatesMapa from "../pages/admin/rescates/RescatesMapa";
-import AdminRescatesShow from "../pages/admin/rescates/RescatesShow";
-import AdminProfile from "../pages/admin/perfil/AdminProfile";
+const Dashboard = lazy(() => import("../pages/admin/Dashboard/Dashboard"));
+const UsuariosPendientes = lazy(() => import("../pages/admin/Usuarios/UsuariosPendientes"));
+const AdminEventosIndex = lazy(() => import("../pages/admin/eventos/EventosIndex"));
+const AdminEventosCreate = lazy(() => import("../pages/admin/eventos/EventosCreate"));
+const AdminEventosEdit = lazy(() => import("../pages/admin/eventos/EventosEdit"));
+const AdminEventosShow = lazy(() => import("../pages/admin/eventos/EventosShow"));
+const AdminSuscripcionesIndex = lazy(() => import("../pages/admin/suscripciones/SuscripcionesIndex"));
+const AdminSuscripcionesCreate = lazy(() => import("../pages/admin/suscripciones/SuscripcionesCreate"));
+const AdminSuscripcionesEdit = lazy(() => import("../pages/admin/suscripciones/SuscripcionesEdit"));
+const AdminSuscripcionesShow = lazy(() => import("../pages/admin/suscripciones/SuscripcionesShow"));
+const AdminRescatesIndex = lazy(() => import("../pages/admin/rescates/RescatesIndex"));
+const AdminRescatesPendientes = lazy(() => import("../pages/admin/rescates/RescatesPendientes"));
+const AdminRescatesMapa = lazy(() => import("../pages/admin/rescates/RescatesMapa"));
+const AdminRescatesShow = lazy(() => import("../pages/admin/rescates/RescatesShow"));
+const AdminProfile = lazy(() => import("../pages/admin/perfil/AdminProfile"));
 
 // =============================================================
 // PÁGINAS DE FUNDACIÓN
 // =============================================================
-import FundDashboard from "../pages/fundacion/dashboard/FundacionDashboard";
-import FundMascotas from "../pages/fundacion/mascotas/Mascotas";
-import CrearMascota from "../pages/fundacion/mascotas/CrearMascota";
-import EditarMascota from "../pages/fundacion/mascotas/EditarMascota";   
-import MascotaDetalleFundacion from "../pages/fundacion/mascotas/MascotaDetalle";
-import EventosIndex from "../pages/fundacion/eventos/EventosIndex";
-import EventosCreate from "../pages/fundacion/eventos/EventosCreate";
-import EventosShow from "../pages/fundacion/eventos/EventosShowFundacion";
-import EventosEdit from "../pages/fundacion/eventos/EventosEdit";
-import SuscripcionesIndex from "../pages/fundacion/suscripciones/SuscripcionesIndex";
-import SuscripcionesCreate from "../pages/fundacion/suscripciones/SuscripcionesCreate";
-import SuscripcionesEdit from "../pages/fundacion/suscripciones/SuscripcionesEdit";
-import SuscripcionesShow from "../pages/fundacion/suscripciones/SuscripcionesShow";
-import RescatesDisponiblesFundacion from "../pages/fundacion/rescates/RescatesDisponibles";
-import MisRescatesFundacion from "../pages/fundacion/rescates/MisRescates";
-import RescateDetalleFundacion from "../pages/fundacion/rescates/RescateDetalle";
-import FundacionProfile from "../pages/fundacion/perfil/FundacionProfile";
+const FundDashboard = lazy(() => import("../pages/fundacion/dashboard/FundacionDashboard"));
+const FundMascotas = lazy(() => import("../pages/fundacion/mascotas/Mascotas"));
+const CrearMascota = lazy(() => import("../pages/fundacion/mascotas/CrearMascota"));
+const EditarMascota = lazy(() => import("../pages/fundacion/mascotas/EditarMascota"));
+const MascotaDetalleFundacion = lazy(() => import("../pages/fundacion/mascotas/MascotaDetalle"));
+const EventosIndex = lazy(() => import("../pages/fundacion/eventos/EventosIndex"));
+const EventosCreate = lazy(() => import("../pages/fundacion/eventos/EventosCreate"));
+const EventosShow = lazy(() => import("../pages/fundacion/eventos/EventosShowFundacion"));
+const EventosEdit = lazy(() => import("../pages/fundacion/eventos/EventosEdit"));
+const SuscripcionesIndex = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesIndex"));
+const SuscripcionesCreate = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesCreate"));
+const SuscripcionesEdit = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesEdit"));
+const SuscripcionesShow = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesShow"));
+const RescatesDisponiblesFundacion = lazy(() => import("../pages/fundacion/rescates/RescatesDisponibles"));
+const MisRescatesFundacion = lazy(() => import("../pages/fundacion/rescates/MisRescates"));
+const RescateDetalleFundacion = lazy(() => import("../pages/fundacion/rescates/RescateDetalle"));
+const FundacionProfile = lazy(() => import("../pages/fundacion/perfil/FundacionProfile"));
 
 // =============================================================
 // PÁGINAS DE VETERINARIA
 // =============================================================
-import DashboardVeterinaria from "../pages/veterinaria/dashboard/DashboardVeterinaria";
-import Citas from "../pages/veterinaria/citas/Citas";
-import CitaForm from "../pages/veterinaria/citas/CitaForm";
-import Pacientes from "../pages/veterinaria/pacientes/Pacientes";
-import PacienteForm from "../pages/veterinaria/pacientes/PacienteForm";
-import HistorialMedico from "../pages/veterinaria/historial/HistorialMedico";
-import VeterinariaSuscripcionesIndex from "../pages/veterinaria/suscripciones/SuscripcionesIndex";
-import VeterinariaSuscripcionesShow from "../pages/veterinaria/suscripciones/SuscripcionesShow";
-import RescatesDisponiblesVet from "../pages/veterinaria/rescates/RescatesDisponibles";
-import MisRescatesVet from "../pages/veterinaria/rescates/MisRescates";
-import RescateDetalleVet from "../pages/veterinaria/rescates/RescateDetalle";
-import VeterinariaProfile from "../pages/veterinaria/perfil/VeterinariaProfile";
+const DashboardVeterinaria = lazy(() => import("../pages/veterinaria/dashboard/DashboardVeterinaria"));
+const Citas = lazy(() => import("../pages/veterinaria/citas/Citas"));
+const CitaForm = lazy(() => import("../pages/veterinaria/citas/CitaForm"));
+const Pacientes = lazy(() => import("../pages/veterinaria/pacientes/Pacientes"));
+const PacienteForm = lazy(() => import("../pages/veterinaria/pacientes/PacienteForm"));
+const HistorialMedico = lazy(() => import("../pages/veterinaria/historial/HistorialMedico"));
+const VeterinariaSuscripcionesIndex = lazy(() => import("../pages/veterinaria/suscripciones/SuscripcionesIndex"));
+const VeterinariaSuscripcionesShow = lazy(() => import("../pages/veterinaria/suscripciones/SuscripcionesShow"));
+const RescatesDisponiblesVet = lazy(() => import("../pages/veterinaria/rescates/RescatesDisponibles"));
+const MisRescatesVet = lazy(() => import("../pages/veterinaria/rescates/MisRescates"));
+const RescateDetalleVet = lazy(() => import("../pages/veterinaria/rescates/RescateDetalle"));
+const VeterinariaProfile = lazy(() => import("../pages/veterinaria/perfil/VeterinariaProfile"));
 
 // =============================================================
 // PLACEHOLDERS PARA PÁGINAS QUE NO TIENEN AÚN
