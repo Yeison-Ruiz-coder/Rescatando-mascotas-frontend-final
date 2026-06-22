@@ -295,11 +295,7 @@ const AliadosSection = () => {
         </div>
 
         <div className="al-footer-message reveal-up delay-300">
-          <span>
-            <i className="fas fa-heartbeat"></i>
-            {t('aliados.mensaje_footer') || 'Cada aliado es un paso más hacia un futuro mejor para los animales'}
-            <i className="fas fa-heart" style={{ color: 'var(--color-heart)' }}></i>
-          </span>
+
         </div>
       </div>
     </section>

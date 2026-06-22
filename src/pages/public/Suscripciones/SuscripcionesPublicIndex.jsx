@@ -194,7 +194,7 @@ const SuscripcionesPublicIndex = () => {
     <div className="suscripciones-public-page">
       {/* Hero Section */}
       <div className="suscripciones-hero">
-        <h1>🐾 {t("titulo")}</h1>
+        <h1> {t("titulo")}</h1>
         <p>{t("subtitulo")}</p>
         <div className="hero-stats">
           <div className="stat">
