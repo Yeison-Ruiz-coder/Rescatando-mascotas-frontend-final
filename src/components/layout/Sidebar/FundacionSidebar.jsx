@@ -7,7 +7,7 @@ import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import './Sidebar.css';
 
-// ✅ Submenu component optimizado
+// Submenu component optimizado
 const SubmenuItem = memo(({ to, icon, label, badge, isActive, onClick, badgeType }) => (
   <Link 
     to={to} 
@@ -82,12 +82,55 @@ const FundacionSidebar = () => {
     }
   }, [isMobile, closePublicSidebar]);
 
+  // 🔹 Función para obtener la foto de perfil de la fundación
+  const getUserAvatar = useCallback(() => {
+    if (!user) return null;
+    
+    // Si la fundación tiene foto de perfil (URL o base64)
+    if (user.foto_perfil) {
+      return user.foto_perfil;
+    }
+    
+    // Si tiene logo de fundación
+    if (user.logo) {
+      return user.logo;
+    }
+    
+    // Si tiene foto
+    if (user.foto) {
+      return user.foto;
+    }
+    
+    // Si tiene avatar generado
+    if (user.avatar) {
+      return user.avatar;
+    }
+    
+    return null;
+  }, [user]);
+
+  const userAvatar = getUserAvatar();
+
   return (
     <aside ref={sidebarRef} className={`sidebar fundacion-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
       <div className="sidebar-header fundacion-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar fundacion-avatar">
-            <i className="fas fa-building"></i>
+            {/* 🔹 Mostrar foto de perfil si existe, sino el ícono genérico de fundación */}
+            {userAvatar ? (
+              <img 
+                src={userAvatar} 
+                alt={user?.nombre || t("fundacion")} 
+                className="sidebar-avatar-img"
+                onError={(e) => {
+                  // Si la imagen falla, mostrar el ícono
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<i class="fas fa-building"></i>';
+                }}
+              />
+            ) : (
+              <i className="fas fa-building"></i>
+            )}
           </div>
           <div className="sidebar-user-info">
             <h5>{user?.nombre || t("fundacion")}</h5>

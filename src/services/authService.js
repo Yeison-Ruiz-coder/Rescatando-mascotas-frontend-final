@@ -153,6 +153,35 @@ const authService = {
     return userStr ? JSON.parse(userStr) : null;
   },
 
+  // Guardar/actualizar usuario en localStorage
+  setCurrentUser: (user) => {
+    try {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('user');
+      }
+    } catch (err) {
+      console.error('Error setting current user:', err);
+    }
+  },
+
+  // Refrescar usuario desde el servidor y almacenarlo
+  refreshCurrentUser: async () => {
+    try {
+      const response = await api.get('/user/profile');
+      if (response.data && response.data.data) {
+        const user = response.data.data;
+        localStorage.setItem('user', JSON.stringify(user));
+        return user;
+      }
+      return null;
+    } catch (err) {
+      console.error('Error refreshing current user:', err);
+      return null;
+    }
+  },
+
   // Verificar si está autenticado
   isAuthenticated: () => {
     return !!localStorage.getItem('auth_token');
