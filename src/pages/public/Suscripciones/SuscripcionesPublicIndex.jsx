@@ -1,4 +1,3 @@
-// src/pages/public/suscripciones/SuscripcionesPublicIndex.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +6,7 @@ import api from "../../../services/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import MascotaApadrinarCard from "../../../components/common/MascotaApadrinarCard/MascotaApadrinarCard";
+import MascotaApadrinarCardModal from "../../../components/common/MascotaApadrinarCardModal/MascotaApadrinarCardModal";
 import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
@@ -46,7 +46,6 @@ const SuscripcionesPublicIndex = () => {
     return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
-  // Aplicar filtros a mascotas
   const applyFilters = useCallback((filters, data, sortOrder) => {
     if (!data.length) {
       return [];
@@ -194,7 +193,7 @@ const SuscripcionesPublicIndex = () => {
     <div className="suscripciones-public-page">
       {/* Hero Section */}
       <div className="suscripciones-hero">
-        <h1> {t("titulo")}</h1>
+        <h1>🌟 {t("titulo")}</h1>
         <p>{t("subtitulo")}</p>
         <div className="hero-stats">
           <div className="stat">
@@ -223,10 +222,10 @@ const SuscripcionesPublicIndex = () => {
         </div>
       </div>
 
-      {/* Planes de Membresía */}
+      {/* Planes de Membresía - SOLO INFORMATIVOS */}
       <div className="suscripciones-container">
         <div className="section-header">
-          <h2>{t("planes_titulo")}</h2>
+          <h2>✨ {t("planes_titulo")}</h2>
           <p>{t("planes_subtitulo")}</p>
         </div>
 
@@ -259,9 +258,11 @@ const SuscripcionesPublicIndex = () => {
                   </li>
                 ))}
               </ul>
+              {/* Botón deshabilitado - solo informativo */}
               <button
                 className={`btn-plan ${plan.destacado ? "btn-primary" : "btn-outline"}`}
-                onClick={() => handleMembresiaClick(plan)}
+                disabled={true}
+                style={{ opacity: 0.6, cursor: 'default' }}
               >
                 {t("seleccionar_plan")}
               </button>
@@ -270,10 +271,10 @@ const SuscripcionesPublicIndex = () => {
         </div>
       </div>
 
-      {/* Mascotas para Apadrinar - ANCHO COMPLETO */}
+      {/* Mascotas para Apadrinar */}
       <div className="mascotas-section-full">
         <div className="section-header">
-          <h2>{t("mascotas_titulo")}</h2>
+          <h2>🐾 {t("mascotas_titulo")}</h2>
           <p>{t("mascotas_subtitulo")}</p>
           <div className="badge-count">
             🐾 {t("mascotas_disponibles", { count: mascotasFiltradas.length })}
@@ -361,16 +362,46 @@ const SuscripcionesPublicIndex = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {showModal && (
+      {/* Modal con tarjetas para apadrinar mascotas */}
+      {showModal && selectedMascota && (
+        <MascotaApadrinarCardModal
+          mascota={selectedMascota}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedMascota(null);
+          }}
+          onSuccess={async () => {
+            setShowModal(false);
+            setSelectedMascota(null);
+            
+            // ✅ Mostrar mensaje de éxito
+            toast.success('🎉 ¡Suscripción creada exitosamente!');
+            
+            // ✅ Recargar los datos antes de navegar
+            await cargarDatos();
+            
+            // ✅ Navegar a mis suscripciones con un parámetro para forzar recarga
+            navigate('/user/mis-suscripciones?recargar=true');
+          }}
+        />
+      )}
+
+      {/* Modal para membresías */}
+      {showModal && selectedMembresia && (
         <SuscripcionModal
           membresia={selectedMembresia}
-          mascota={selectedMascota}
-          onClose={() => setShowModal(false)}
-          onSuccess={() => {
+          onClose={() => {
             setShowModal(false);
-            toast.success(t("suscripcion_exitosa"));
-            navigate("/user/mis-suscripciones");
+            setSelectedMembresia(null);
+          }}
+          onSuccess={async () => {
+            setShowModal(false);
+            setSelectedMembresia(null);
+            toast.success(t('suscripcion_exitosa'));
+            
+            // ✅ Recargar datos
+            await cargarDatos();
+            navigate('/user/mis-suscripciones?recargar=true');
           }}
         />
       )}
@@ -378,12 +409,12 @@ const SuscripcionesPublicIndex = () => {
   );
 };
 
-// Componente Modal
-const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
+// Componente Modal para Membresías
+const SuscripcionModal = ({ membresia, onClose, onSuccess }) => {
   const { t } = useTranslation("suscripciones");
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    monto: membresia?.monto || mascota?.monto_sugerido || 10000,
+    monto: membresia?.monto || 10000,
     frecuencia: "mensual",
     mensaje_apoyo: "",
     metodo_pago: "tarjeta",
@@ -402,7 +433,7 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
     try {
       const suscripcionData = {
         user_id: user?.id,
-        mascota_id: mascota?.id || null,
+        mascota_id: null,
         monto_mensual: formData.monto,
         frecuencia: formData.frecuencia,
         fecha_inicio: new Date().toISOString().split("T")[0],
@@ -424,11 +455,7 @@ const SuscripcionModal = ({ membresia, mascota, onClose, onSuccess }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>
-            {mascota
-              ? t("apadrinar_titulo", { nombre: mascota.nombre_mascota })
-              : t("plan_titulo", { nombre: membresia?.nombre })}
-          </h2>
+          <h2>{t("plan_titulo", { nombre: membresia?.nombre })}</h2>
           <button className="modal-close" onClick={onClose}>
             ×
           </button>
