@@ -164,6 +164,19 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
+  // Refresca el usuario desde el servicio de auth (útil después de actualizar perfil/avatar)
+  const refreshUser = async () => {
+    try {
+      const currentUser = await authService.refreshCurrentUser();
+      setUser(currentUser);
+      setIsAuthenticated(!!currentUser);
+      return currentUser;
+    } catch (err) {
+      console.error('Error refrescando usuario:', err);
+      return null;
+    }
+  };
+
   const getDashboardPath = () => {
     if (!user) return '/login';
     
@@ -205,6 +218,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    refreshUser,
     getDashboardPath,
     getDashboardTitle,
     hasRole

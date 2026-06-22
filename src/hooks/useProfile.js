@@ -1,6 +1,7 @@
 // src/hooks/useProfile.js
 import { useState, useEffect, useCallback } from 'react';
 import { profileService } from '../services/profileService';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -30,11 +31,15 @@ export const useProfile = () => {
     }
   }, []);
 
+  const { refreshUser } = useAuth();
+
   const updateProfile = async (data) => {
     setLoading(true);
     try {
       const updated = await profileService.updateProfile(data);
       setProfile(updated);
+      // Actualiza también el usuario en el contexto de autenticación
+      try { await refreshUser(); } catch (e) { /* noop */ }
       await fetchCompletionStatus();
       return updated;
     } catch (err) {
@@ -50,6 +55,8 @@ export const useProfile = () => {
     try {
       const result = await profileService.updateAvatar(file);
       setProfile(prev => ({ ...prev, avatar: result.avatar }));
+      // Refrescar el usuario global para que sidebars y demás reflejen el cambio
+      try { await refreshUser(); } catch (e) { /* noop */ }
       return result;
     } catch (err) {
       setError(err.message);

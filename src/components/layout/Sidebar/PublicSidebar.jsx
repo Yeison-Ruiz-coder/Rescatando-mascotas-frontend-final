@@ -15,7 +15,8 @@ const PublicSidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-  // ✅ Sin delay para apertura inmediata
+
+  // Sin delay para apertura inmediata
   useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
 
   useEffect(() => {
@@ -39,6 +40,30 @@ const PublicSidebar = () => {
     }
   }, [isMobile, closePublicSidebar]);
 
+  // 🔹 Función para obtener la foto de perfil del usuario
+  const getUserAvatar = useCallback(() => {
+    if (!user) return null;
+    
+    // Si el usuario tiene foto de perfil (URL o base64)
+    if (user.foto_perfil) {
+      return user.foto_perfil;
+    }
+    
+    // Si tiene foto de Google
+    if (user.foto) {
+      return user.foto;
+    }
+    
+    // Si tiene avatar generado
+    if (user.avatar) {
+      return user.avatar;
+    }
+    
+    return null;
+  }, [user]);
+
+  const userAvatar = getUserAvatar();
+
   return (
     <aside
       ref={sidebarRef}
@@ -47,7 +72,21 @@ const PublicSidebar = () => {
       <div className="sidebar-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar">
-            <i className="fas fa-user"></i>
+            {/* 🔹 Mostrar foto de perfil si existe, sino el ícono genérico */}
+            {isAuthenticated && userAvatar ? (
+              <img 
+                src={userAvatar} 
+                alt={user?.nombre || "Usuario"} 
+                className="sidebar-avatar-img"
+                onError={(e) => {
+                  // Si la imagen falla, mostrar el ícono
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<i class="fas fa-user"></i>';
+                }}
+              />
+            ) : (
+              <i className="fas fa-user"></i>
+            )}
           </div>
           <div className="sidebar-user-info">
             <h5>{isAuthenticated ? user?.nombre : t("invitado")}</h5>

@@ -45,6 +45,8 @@ const SuscripcionesPublicIndex = lazy(() => import("../pages/public/Suscripcione
 const Solicitudes = lazy(() => import("../pages/user/Solicitudes/Solicitudes"));
 const UserProfile = lazy(() => import("../pages/user/perfil/UserProfile"));
 const UserSuscripciones = lazy(() => import("../pages/user/MisSuscripciones"));
+// ✅ IMPORT DEL DASHBOARD REAL
+const UserDashboard = lazy(() => import("../pages/user/Dashboard/UserDashboard"));
 
 // =============================================================
 // PÁGINAS ADMIN
@@ -214,8 +216,7 @@ const AdminRazas = () => <PagePlaceholder title="Catálogo de Razas" />;
 const AdminVacunas = () => <PagePlaceholder title="Tipos de Vacunas" />;
 const AdminCategorias = () => <PagePlaceholder title="Categorías" />;
 
-// Usuario placeholders
-const UserDashboard = () => <PagePlaceholder title="Dashboard Usuario" />;
+// ✅ Usuario placeholders (NOMBRES DIFERENTES para evitar conflicto)
 const UserCarrito = () => <PagePlaceholder title="Mi Carrito" />;
 const UserPedidos = () => <PagePlaceholder title="Mis Pedidos" />;
 const UserDonaciones = () => <PagePlaceholder title="Mis Donaciones" />;
@@ -340,7 +341,6 @@ const router = createBrowserRouter([
       { path: "eventos/:id", element: <PublicEventosShow /> },
       { path: "donaciones", element: <Donaciones /> },
       { path: "rescates/reportar", element: <ReportarRescate /> },
-      // ✅ SUSCRIPCIONES PÚBLICAS
       { path: "suscripciones", element: <SuscripcionesPublicIndex /> },
       { path: "apadrinar", element: <SuscripcionesPublicIndex /> },
     ],
@@ -355,7 +355,7 @@ const router = createBrowserRouter([
         element: <PublicLayout />,
         children: [
           { index: true, element: <Navigate to="/user/dashboard" replace /> },
-          { path: "dashboard", element: <UserDashboard /> },
+          { path: "dashboard", element: <UserDashboard /> }, // ✅ Dashboard REAL
           { path: "perfil", element: <UserProfile /> },
           { path: "mis-solicitudes", element: <Solicitudes /> },
           { path: "tienda", element: <Tienda /> },
@@ -376,11 +376,11 @@ const router = createBrowserRouter([
       {
         element: <VeterinariaLayout />,
         children: [
-          {index: true,element: <Navigate to="/veterinaria/dashboard" replace />,},
+          { index: true, element: <Navigate to="/veterinaria/dashboard" replace /> },
           { path: "dashboard", element: <DashboardVeterinaria /> },
-          {path: "rescates",element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,},
-          {path: "rescates/disponibles",element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,},
-          {path: "rescates/mis-rescates",element: <MisRescatesVet tipoUsuario="veterinaria" />,},
+          { path: "rescates", element: <RescatesDisponiblesVet tipoUsuario="veterinaria" /> },
+          { path: "rescates/disponibles", element: <RescatesDisponiblesVet tipoUsuario="veterinaria" /> },
+          { path: "rescates/mis-rescates", element: <MisRescatesVet tipoUsuario="veterinaria" /> },
           { path: "rescates/:id", element: <RescateDetalleVet /> },
           { path: "atenciones", element: <VetAtenciones /> },
           { path: "historiales", element: <VetHistoriales /> },
@@ -396,10 +396,8 @@ const router = createBrowserRouter([
           { path: "pedidos", element: <VetPedidos /> },
           { path: "reportes", element: <VetReportes /> },
           { path: "perfil", element: <VeterinariaProfile /> },
-
-           // Suscripciones Veterinaria
           { path: "suscripciones", element: <VeterinariaSuscripcionesIndex /> },
-          {path: "suscripciones/:id",element: <VeterinariaSuscripcionesShow />,},
+          { path: "suscripciones/:id", element: <VeterinariaSuscripcionesShow /> },
         ],
       },
     ],
@@ -413,28 +411,24 @@ const router = createBrowserRouter([
       {
         element: <FundacionLayout />,
         children: [
-          {index: true,element: <Navigate to="/fundacion/dashboard" replace />,},
+          { index: true, element: <Navigate to="/fundacion/dashboard" replace /> },
           { path: "dashboard", element: <FundDashboard /> },
           { path: "mascotas", element: <FundMascotas /> },
-          { path: "mascotas/nueva", element: <CrearMascota /> }, 
+          { path: "mascotas/nueva", element: <CrearMascota /> },
           { path: "mascotas/:id", element: <MascotaDetalleFundacion /> },
-          { path: "mascotas/editar/:id", element: <EditarMascota /> }, 
-          {path: "rescates",element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,},
-          {path: "rescates/disponibles",element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,},
-          {path: "rescates/mis-rescates",element: <MisRescatesFundacion tipoUsuario="fundacion" />,},
+          { path: "mascotas/editar/:id", element: <EditarMascota /> },
+          { path: "rescates", element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" /> },
+          { path: "rescates/disponibles", element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" /> },
+          { path: "rescates/mis-rescates", element: <MisRescatesFundacion tipoUsuario="fundacion" /> },
           { path: "rescates/:id", element: <RescateDetalleFundacion /> },
           { path: "eventos", element: <EventosIndex /> },
           { path: "eventos/crear", element: <EventosCreate /> },
           { path: "eventos/:id", element: <EventosShow /> },
           { path: "eventos/:id/editar", element: <EventosEdit /> },
-
-          // Suscripciones Fundación
           { path: "suscripciones", element: <SuscripcionesIndex /> },
           { path: "suscripciones/crear", element: <SuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
-
-          // Otros
           { path: "adopciones", element: <FundAdopciones /> },
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
@@ -455,8 +449,6 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
-
-          // Usuarios
           {
             path: "usuarios",
             children: [
@@ -467,30 +459,20 @@ const router = createBrowserRouter([
               { path: ":id/edit", element: <UsuarioForm /> },
             ],
           },
-
-          // Mascotas
           { path: "mascotas", element: <AdminMascotas /> },
           { path: "mascotas/nueva", element: <AdminMascotasNueva /> },
-
-          // Rescates
           { path: "rescates", element: <AdminRescatesIndex /> },
           { path: "rescates/pendientes", element: <AdminRescatesPendientes /> },
           { path: "rescates/mapa", element: <AdminRescatesMapa /> },
           { path: "rescates/:id", element: <AdminRescatesShow /> },
-
-          // Eventos
           { path: "eventos", element: <AdminEventosIndex /> },
           { path: "eventos/crear", element: <AdminEventosCreate /> },
           { path: "eventos/:id", element: <AdminEventosShow /> },
           { path: "eventos/:id/editar", element: <AdminEventosEdit /> },
-
-          // ✅ SUSCRIPCIONES ADMIN
           { path: "suscripciones", element: <AdminSuscripcionesIndex /> },
-          {path: "suscripciones/crear",element: <AdminSuscripcionesCreate />,},
+          { path: "suscripciones/crear", element: <AdminSuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <AdminSuscripcionesShow /> },
-          {path: "suscripciones/:id/editar",element: <AdminSuscripcionesEdit />,},
-
-          // Catálogos y configuraciones
+          { path: "suscripciones/:id/editar", element: <AdminSuscripcionesEdit /> },
           { path: "adopciones", element: <AdminAdopciones /> },
           { path: "donaciones", element: <AdminDonaciones /> },
           { path: "fundaciones", element: <AdminFundaciones /> },
