@@ -25,7 +25,9 @@ const FundacionesIndex = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ciudades, setCiudades] = useState([]);
 
+  // ✅ Estados para el panel
   const [selectedFundacion, setSelectedFundacion] = useState(null);
+  const [currentFundacionId, setCurrentFundacionId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const loadFundaciones = useCallback(async (filters = {}, page = 1) => {
@@ -104,15 +106,31 @@ const FundacionesIndex = () => {
     [currentPage, currentFilters, loadFundaciones],
   );
 
-  const handleOpenPanel = (fundacion) => {
+  // ✅ Abre el panel con una fundación
+  const handleOpenPanel = useCallback((fundacion) => {
     setSelectedFundacion(fundacion);
+    setCurrentFundacionId(fundacion.id);
     setIsPanelOpen(true);
-  };
+  }, []);
 
-  const handleClosePanel = () => {
+  // ✅ Navega a otra fundación DENTRO del mismo panel
+  const handleNavigateToFundacion = useCallback((nuevoId) => {
+    console.log(`🔄 [Panel Fundaciones] Navegando a fundación ${nuevoId}`);
+    setCurrentFundacionId(nuevoId);
+    const fundacionEncontrada = fundaciones.find(f => f.id === nuevoId);
+    if (fundacionEncontrada) {
+      setSelectedFundacion(fundacionEncontrada);
+    }
+  }, [fundaciones]);
+
+  // ✅ Cierra el panel
+  const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
-    setSelectedFundacion(null);
-  };
+    setTimeout(() => {
+      setSelectedFundacion(null);
+      setCurrentFundacionId(null);
+    }, 300);
+  }, []);
 
   const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
@@ -245,12 +263,19 @@ const FundacionesIndex = () => {
         </div>
       </div>
 
+      {/* ✅ SlideUpPanel actualizado */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}
         title={selectedFundacion?.Nombre_1 || t("detalle_fundacion")}
       >
-        <FundacionDetalle fundacionId={selectedFundacion?.id} embed={true} />
+        {currentFundacionId && (
+          <FundacionDetalle
+            fundacionId={currentFundacionId}
+            embed={true}
+            onNavigateToFundacion={handleNavigateToFundacion}
+          />
+        )}
       </SlideUpPanel>
     </div>
   );

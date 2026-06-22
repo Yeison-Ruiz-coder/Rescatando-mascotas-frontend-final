@@ -25,6 +25,7 @@ const Mascotas = () => {
   const [cargandoEspecies, setCargandoEspecies] = useState(true);
   
   const [selectedMascota, setSelectedMascota] = useState(null);
+  const [currentMascotaId, setCurrentMascotaId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const opcionesOrden = [
@@ -34,7 +35,6 @@ const Mascotas = () => {
     { value: "edad_desc", label: t('edad_mayor', 'Edad (mayor a menor)') },
   ];
 
-  // Función para cargar especies desde la API
   const loadEspecies = useCallback(async () => {
     try {
       const response = await api.get('/mascotas/especies', {
@@ -65,7 +65,6 @@ const Mascotas = () => {
     }
   }, [t]);
 
-  // Función para cargar mascotas - OPTIMIZADA
   const loadMascotas = useCallback(async (filters = {}, page = 1, sortOrder = "reciente") => {
     setLoading(true);
     setError(null);
@@ -146,14 +145,32 @@ const Mascotas = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage, currentFilters, orden, loadMascotas]);
 
+  // ✅ Abre el panel con una mascota
   const handleOpenPanel = useCallback((mascota) => {
     setSelectedMascota(mascota);
+    setCurrentMascotaId(mascota.id);
     setIsPanelOpen(true);
   }, []);
 
+  // ✅ Navega a otra mascota DENTRO del mismo panel
+  const handleNavigateToMascota = useCallback((nuevoId) => {
+    console.log(`🔄 [Panel] Navegando a mascota ${nuevoId}`);
+    setCurrentMascotaId(nuevoId);
+    // Actualiza el título con el nombre de la nueva mascota (se actualizará al cargar)
+    // Opcional: podrías buscar el nombre en la lista de mascotas
+    const mascotaEncontrada = mascotas.find(m => m.id === nuevoId);
+    if (mascotaEncontrada) {
+      setSelectedMascota(mascotaEncontrada);
+    }
+  }, [mascotas]);
+
+  // ✅ Cierra el panel
   const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
-    setSelectedMascota(null);
+    setTimeout(() => {
+      setSelectedMascota(null);
+      setCurrentMascotaId(null);
+    }, 300);
   }, []);
 
   if ((loading || cargandoEspecies) && mascotas.length === 0) {
@@ -185,7 +202,6 @@ const Mascotas = () => {
 
   return (
     <div className="mascotas-page">
-      {/* Header con animación */}
       <div className="mascotas-header reveal-up">
         <div className="mascotas-hero">
           <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} loading="eager" />
@@ -200,7 +216,6 @@ const Mascotas = () => {
         </div>
       </div>
 
-      {/* Filtros - sticky sin animación */}
       <div className="filtros-section">
         <div className="bento-container">
           <FiltrosMascotas 
@@ -212,7 +227,6 @@ const Mascotas = () => {
         </div>
       </div>
 
-      {/* Resultados */}
       <div className="resultados-section">
         <div className="bento-container">
           <div className="resultados-header reveal-up delay-100">
@@ -276,7 +290,6 @@ const Mascotas = () => {
         </div>
       </div>
 
-      {/* Mensaje motivacional */}
       <div className="motivational-message reveal-up delay-300">
         <div className="bento-container">
           <div className="motivational-content">
@@ -287,14 +300,17 @@ const Mascotas = () => {
         </div>
       </div>
 
-      {/* Panel deslizable */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}
         title={selectedMascota?.nombre_mascota || t('detalle', 'Detalle')}
       >
-        {selectedMascota && (
-          <MascotaDetalle mascotaId={selectedMascota.id} embed={true} />
+        {currentMascotaId && (
+          <MascotaDetalle 
+            mascotaId={currentMascotaId} 
+            embed={true}
+            onNavigateToMascota={handleNavigateToMascota}
+          />
         )}
       </SlideUpPanel>
     </div>

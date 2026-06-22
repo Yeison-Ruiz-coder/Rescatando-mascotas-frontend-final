@@ -3,10 +3,15 @@
 .custom-footer {
   background: var(--gradient-primary);
   color: white;
-  margin-top: 60px;
   padding: 60px 0 20px;
+  margin-top: 60px;
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  transition: transform 0.25s ease-out;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .footer-content-wrapper {
@@ -15,7 +20,26 @@
   padding: 0 20px;
 }
 
-/* Columnas */
+/* El footer se mueve junto al contenido cuando el sidebar está abierto */
+.main-content.shifted ~ .custom-footer {
+  transform: translate3d(240px, 0, 0);
+}
+
+.admin-main-content.shifted ~ .custom-footer {
+  transform: translate3d(280px, 0, 0);
+}
+
+/* ===== RESPONSIVE - En móvil NO se mueve ===== */
+@media (max-width: 1024px) {
+  .main-content.shifted ~ .custom-footer,
+  .admin-main-content.shifted ~ .custom-footer {
+    transform: translate3d(0, 0, 0) !important;
+    transition: none !important;
+  }
+}
+
+/* ===== RESTO DEL CSS (sin cambios) ===== */
+
 .footer-col {
   margin-bottom: 30px;
 }
@@ -102,6 +126,7 @@
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 .footer-links a:hover {
@@ -182,11 +207,16 @@
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: color 0.3s;
+  cursor: pointer;
 }
 
 .legal-links li a:hover {
   color: white;
 }
+
+/* ============================================
+   ✅ RESPONSIVE
+   ============================================ */
 
 @media (max-width: 992px) {
   .footer-col:not(.footer-social) {
@@ -203,11 +233,18 @@
   .social-icons-wrapper {
     justify-content: center;
   }
+
+  .main-content.shifted ~ .custom-footer,
+  .admin-main-content.shifted ~ .custom-footer {
+    transform: translate3d(0, 0, 0) !important;
+    transition: none !important;
+  }
 }
 
 @media (max-width: 768px) {
   .custom-footer {
     padding: 40px 0 20px;
+    margin-top: 40px;
   }
   
   .footer-col:not(.footer-social) {
@@ -252,9 +289,19 @@
     height: 44px;
     font-size: 1.3rem;
   }
+
+  .main-content.shifted ~ .custom-footer,
+  .admin-main-content.shifted ~ .custom-footer {
+    transform: translate3d(0, 0, 0) !important;
+    transition: none !important;
+  }
 }
 
 @media (max-width: 480px) {
+  .custom-footer {
+    margin-top: 30px;
+  }
+  
   .footer-col:not(.footer-social) {
     flex: 0 0 100%;
     max-width: 100%;
@@ -268,5 +315,11 @@
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+  }
+
+  .main-content.shifted ~ .custom-footer,
+  .admin-main-content.shifted ~ .custom-footer {
+    transform: translate3d(0, 0, 0) !important;
+    transition: none !important;
   }
 }

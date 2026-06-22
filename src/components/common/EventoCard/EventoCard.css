@@ -10,10 +10,14 @@
   background: transparent;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  /* ✅ Optimización de rendimiento */
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .ec-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--shadow-hard-md);
 }
 
@@ -30,11 +34,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .ec-card:hover .ec-image img {
-  transform: scale(1.03);
+  transform: scale(1.06);
 }
 
 /* Placeholder */
@@ -210,11 +214,13 @@ background: linear-gradient(
   justify-content: center;
   z-index: 10;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  pointer-events: none;
 }
 
 .ec-card:hover .ec-overlay {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .ec-card .ec-overlay-btn {
@@ -264,6 +270,36 @@ background: linear-gradient(
 /* ===== VARIANTE DESTACADA ===== */
 .ec-card.ec-featured {
   box-shadow: 0 0 0 2px var(--color-accent), var(--shadow-hard-sm);
+  border: 2px solid var(--color-heart);
+  transition: all 0.3s ease;
+}
+
+.ec-card.ec-featured .ec-titulo {
+  color: var(--color-heart);
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+}
+
+.ec-card.ec-featured .ec-fecha-badge {
+  background: linear-gradient(135deg, rgba(255, 71, 87, 0.9), rgba(255, 107, 107, 0.9));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.ec-card.ec-featured:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-hard-xl);
+}
+
+.ec-card.ec-featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 71, 87, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -335,42 +371,4 @@ background: linear-gradient(
 [data-theme="dark"] .ec-card .ec-overlay-btn:hover {
   background: var(--gradient-primary);
   color: white;
-}
-
-/* Añade al final de EventoCard.css */
-
-/* Variante para cards importantes (featured) */
-.ec-card.ec-featured {
-  border: 2px solid var(--color-heart);
-  box-shadow: var(--shadow-hard-lg);
-  transition: all 0.3s ease;
-}
-
-.ec-card.ec-featured .ec-titulo {
-  color: var(--color-heart);
-  text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
-}
-
-.ec-card.ec-featured .ec-fecha-badge {
-  background: linear-gradient(135deg, rgba(255, 71, 87, 0.9), rgba(255, 107, 107, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.ec-card.ec-featured:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: var(--shadow-hard-xl);
-}
-
-/* Badge de importancia integrado */
-.ec-card.ec-featured::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 71, 87, 0.15), transparent 70%);
-  pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
 }

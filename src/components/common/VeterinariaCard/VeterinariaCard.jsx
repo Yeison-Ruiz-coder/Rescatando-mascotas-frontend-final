@@ -14,7 +14,6 @@ const VeterinariaCard = memo(({
   const [imgError, setImgError] = useState(false);
 
   const {
-    id,
     Nombre_vet,
     Direccion,
     Telefono,
@@ -42,7 +41,6 @@ const VeterinariaCard = memo(({
       return [];
     }
     
-    // ✅ CORRECCIÓN: Si es array de objetos, extraer el nombre
     if (parsedServicios.length > 0 && typeof parsedServicios[0] === 'object') {
       return parsedServicios.map(s => s.nombre || s.name || s.servicio || String(s));
     }
@@ -86,7 +84,12 @@ const VeterinariaCard = memo(({
     >
       <div className="vc-image">
         {imageUrl ? (
-          <img src={imageUrl} alt={Nombre_vet} loading="lazy" onError={() => setImgError(true)} />
+          <img 
+            src={imageUrl} 
+            alt={Nombre_vet} 
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
         ) : (
           <div className="vc-placeholder">
             <Building />

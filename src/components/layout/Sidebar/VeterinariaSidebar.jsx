@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/VeterinariaSidebar.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -7,14 +7,41 @@ import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import './Sidebar.css';
 
+// ✅ Submenu component optimizado
+const SubmenuItem = memo(({ to, icon, label, badge, isActive, onClick, badgeType }) => (
+  <Link 
+    to={to} 
+    className={`submenu-item ${isActive ? 'active' : ''}`} 
+    onClick={onClick}
+  >
+    <i className={icon}></i> 
+    {label}
+    {badge && (
+      <span className={`sidebar-badge ${badgeType || ''}`}>{badge}</span>
+    )}
+  </Link>
+));
+
+SubmenuItem.displayName = 'SubmenuItem';
+
 const VeterinariaSidebar = () => {
   const { t } = useTranslation('layout');
   const location = useLocation();
   const { user, logout } = useAuth();
   const { isPublicSidebarOpen, closePublicSidebar } = useSidebar();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-  useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar);
+  // ✅ Sin delay para apertura inmediata
+  useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [openSections, setOpenSections] = useState({
     rescates: true,
@@ -22,19 +49,36 @@ const VeterinariaSidebar = () => {
     mascotas: false
   });
 
-  const toggleSection = (section) => {
+  const [showBadges, setShowBadges] = useState(false);
+
+  useEffect(() => {
+    if (isPublicSidebarOpen) {
+      const timer = setTimeout(() => setShowBadges(true), 200);
+      return () => clearTimeout(timer);
+    } else {
+      setShowBadges(false);
+    }
+  }, [isPublicSidebarOpen]);
+
+  const toggleSection = useCallback((section) => {
     setOpenSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
-  };
+  }, []);
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  const isActive = useCallback((path) => location.pathname.startsWith(path), [location.pathname]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     closePublicSidebar();
-  };
+  }, [logout, closePublicSidebar]);
+
+  const handleLinkClick = useCallback(() => {
+    if (isMobile) {
+      closePublicSidebar();
+    }
+  }, [isMobile, closePublicSidebar]);
 
   return (
     <aside ref={sidebarRef} className={`sidebar vet-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
@@ -55,7 +99,11 @@ const VeterinariaSidebar = () => {
 
       <nav className="sidebar-nav">
         <div className="sidebar-section">
-          <Link to="/veterinaria/dashboard" className={`sidebar-item ${isActive('/veterinaria/dashboard') ? 'active' : ''}`}>
+          <Link 
+            to="/veterinaria/dashboard" 
+            className={`sidebar-item ${isActive('/veterinaria/dashboard') ? 'active' : ''}`} 
+            onClick={handleLinkClick}
+          >
             <i className="fas fa-tachometer-alt"></i>
             <span>{t("dashboard")}</span>
           </Link>
@@ -68,16 +116,24 @@ const VeterinariaSidebar = () => {
           >
             <i className="fas fa-ambulance"></i>
             <span>{t("rescates")}</span>
-            <span className="sidebar-badge urgent">{t("urgentes")}</span>
+            {showBadges && <span className="sidebar-badge urgent">{t("urgentes")}</span>}
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
-            <Link to="/veterinaria/rescates/disponibles" className={`submenu-item ${isActive('/veterinaria/rescates/disponibles') ? 'active' : ''}`}>
-              <i className="fas fa-map-marker-alt"></i> {t("rescates_cerca")}
-            </Link>
-            <Link to="/veterinaria/rescates/mis-rescates" className={`submenu-item ${isActive('/veterinaria/rescates/mis-rescates') ? 'active' : ''}`}>
-              <i className="fas fa-clipboard-list"></i> {t("mis_rescates")}
-            </Link>
+            <SubmenuItem
+              to="/veterinaria/rescates/disponibles"
+              icon="fas fa-map-marker-alt"
+              label={t("rescates_cerca")}
+              isActive={isActive('/veterinaria/rescates/disponibles')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/veterinaria/rescates/mis-rescates"
+              icon="fas fa-clipboard-list"
+              label={t("mis_rescates")}
+              isActive={isActive('/veterinaria/rescates/mis-rescates')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
 
@@ -91,12 +147,20 @@ const VeterinariaSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.atenciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.atenciones ? 'open' : ''}`}>
-            <Link to="/veterinaria/atenciones" className={`submenu-item ${isActive('/veterinaria/atenciones') && !isActive('/veterinaria/atenciones/nueva') ? 'active' : ''}`}>
-              <i className="fas fa-list"></i> {t("historial_atenciones")}
-            </Link>
-            <Link to="/veterinaria/atenciones/nueva" className={`submenu-item ${isActive('/veterinaria/atenciones/nueva') ? 'active' : ''}`}>
-              <i className="fas fa-plus-circle"></i> {t("nueva_atencion")}
-            </Link>
+            <SubmenuItem
+              to="/veterinaria/atenciones"
+              icon="fas fa-list"
+              label={t("historial_atenciones")}
+              isActive={isActive('/veterinaria/atenciones') && !isActive('/veterinaria/atenciones/nueva')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/veterinaria/atenciones/nueva"
+              icon="fas fa-plus-circle"
+              label={t("nueva_atencion")}
+              isActive={isActive('/veterinaria/atenciones/nueva')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
 
@@ -110,12 +174,20 @@ const VeterinariaSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
-            <Link to="/veterinaria/mascotas" className={`submenu-item ${isActive('/veterinaria/mascotas') ? 'active' : ''}`}>
-              <i className="fas fa-list"></i> {t("mascotas_atendidas")}
-            </Link>
-            <Link to="/veterinaria/vacunas" className={`submenu-item ${isActive('/veterinaria/vacunas') ? 'active' : ''}`}>
-              <i className="fas fa-syringe"></i> {t("control_vacunas")}
-            </Link>
+            <SubmenuItem
+              to="/veterinaria/mascotas"
+              icon="fas fa-list"
+              label={t("mascotas_atendidas")}
+              isActive={isActive('/veterinaria/mascotas')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/veterinaria/vacunas"
+              icon="fas fa-syringe"
+              label={t("control_vacunas")}
+              isActive={isActive('/veterinaria/vacunas')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
       </nav>
@@ -123,4 +195,4 @@ const VeterinariaSidebar = () => {
   );
 };
 
-export default VeterinariaSidebar;
+export default memo(VeterinariaSidebar);

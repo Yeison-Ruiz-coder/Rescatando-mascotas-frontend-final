@@ -25,7 +25,7 @@
 }
 
 .main-content.shifted {
-  margin-left: 320px;
+  margin-left: 240px;
 }
 
 /* Contenedor para páginas normales */
@@ -41,5 +41,35 @@
 @media (max-width: 768px) {
   .main-content {
     padding-top: 60px; /* Altura del navbar en móvil */
+  }
+}
+
+/* src/layouts/Layouts.css */
+
+/* Solo agregar estas líneas al final del archivo */
+
+/* TABLET Y MOVIL - El contenido NO se corre */
+@media (max-width: 1024px) {
+  .main-content,
+  .admin-main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content,
+  .admin-main-content {
+    padding-top: 60px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content,
+  .admin-main-content {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 }

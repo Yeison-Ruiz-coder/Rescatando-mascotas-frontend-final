@@ -70,7 +70,11 @@ const MapaSimple = ({ direccion, nombre, lat, lng }) => {
   );
 };
 
-const FundacionDetalle = ({ fundacionId, embed = false }) => {
+const FundacionDetalle = ({ 
+  fundacionId, 
+  embed = false,
+  onNavigateToFundacion // ✅ Nuevo prop
+}) => {
   const { id: urlId } = useParams();
   const id = fundacionId || urlId;
   const { t } = useTranslation("fundaciones");
@@ -81,6 +85,17 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
+
+  // ✅ Función para navegar a otra fundación (desde fundaciones relacionadas)
+  const handleNavigateToFundacion = useCallback((nuevoId) => {
+    if (onNavigateToFundacion) {
+      onNavigateToFundacion(nuevoId);
+    } else if (embed) {
+      window.location.href = `/fundaciones/${nuevoId}`;
+    } else {
+      window.location.href = `/fundaciones/${nuevoId}`;
+    }
+  }, [embed, onNavigateToFundacion]);
 
   const resolveImageUrl = useCallback((url) => {
     if (!url) return null;
@@ -373,6 +388,15 @@ const FundacionDetalle = ({ fundacionId, embed = false }) => {
                     key={mascota.id}
                     to={`/mascota/${mascota.id}`}
                     className="detalle-mascota-card"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // ✅ Si estamos en embed, navegar dentro del panel
+                      if (embed && onNavigateToFundacion) {
+                        // Redirigir a la mascota en el panel de mascotas
+                        // Esto requiere que el padre maneje la navegación
+                        window.location.href = `/mascotas/${mascota.id}`;
+                      }
+                    }}
                   >
                     <div className="detalle-mascota-img">
                       {mascota.foto_principal ? (

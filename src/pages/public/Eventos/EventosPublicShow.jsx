@@ -9,7 +9,11 @@ import { getImageUrl } from '../../../utils/imageUtils';
 import { SimpleLoadingBar } from '../../../components/common/ProgressBar/ProgressBar';
 import './EventosPublicShow.css';
 
-const EventosPublicShow = ({ eventoId, embed = false }) => {
+const EventosPublicShow = ({ 
+  eventoId, 
+  embed = false,
+  onNavigateToEvento // ✅ Nuevo prop
+}) => {
   const { id: urlId } = useParams();
   const id = eventoId || urlId;
   const { t } = useTranslation('eventos');
@@ -25,6 +29,17 @@ const EventosPublicShow = ({ eventoId, embed = false }) => {
     if (!url) return null;
     return getImageUrl(url);
   }, []);
+
+  // ✅ Función para navegar a otro evento (desde eventos relacionados)
+  const handleNavigateToEvento = useCallback((nuevoId) => {
+    if (onNavigateToEvento) {
+      onNavigateToEvento(nuevoId);
+    } else if (embed) {
+      window.location.href = `/eventos/${nuevoId}`;
+    } else {
+      window.location.href = `/eventos/${nuevoId}`;
+    }
+  }, [embed, onNavigateToEvento]);
 
   useEffect(() => {
     const loadEvento = async () => {

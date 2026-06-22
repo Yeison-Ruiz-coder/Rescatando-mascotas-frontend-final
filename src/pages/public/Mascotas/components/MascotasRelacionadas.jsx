@@ -1,29 +1,54 @@
 // src/pages/public/Mascotas/components/MascotasRelacionadas.jsx
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import api from "../../../../services/api";
 import MascotaCard from "../../../../components/common/MascotaCard/MascotaCard";
-import SlideUpPanel from "../../../../components/common/SlideUpPanel/SlideUpPanel";
 import { getImageUrl as buildImageUrl } from "../../../../utils/imageUtils";
-import MascotaDetalle from "../MascotaDetalle";
 
-const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = false }) => {
+const MascotasRelacionadas = ({ 
+  mascotaId, 
+  especie, 
+  t, 
+  isEmbed = false,
+  onNavigateToMascota
+}) => {
   const [mascotasRelacionadas, setMascotasRelacionadas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedMascota, setSelectedMascota] = useState(null);
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  
+  const isMounted = useRef(true);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (mascotaId && especie) {
-      fetchMascotasRelacionadas();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        fetchMascotasRelacionadas();
+      }, 300);
     }
   }, [mascotaId, especie]);
 
   const fetchMascotasRelacionadas = async () => {
+    if (!isMounted.current) return;
+    
     setLoading(true);
     setError(null);
     
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const response = await api.get('/mascotas', {
         params: {
           especie: especie,
@@ -33,9 +58,14 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = 
           sort: '-created_at',
           fields: 'id,nombre_mascota,especie,genero,edad_aprox,foto_principal,descripcion,lugar_rescate,fundacion_id',
           include: 'fundacion'
-        }
+        },
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
       
+      if (!isMounted.current) return;
+
       let mascotasData = [];
       if (response.data?.data?.data) {
         mascotasData = response.data.data.data;
@@ -45,34 +75,45 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = 
         mascotasData = response.data;
       }
       
+      mascotasData = mascotasData.filter(m => m.id !== mascotaId);
+      
       setMascotasRelacionadas(mascotasData);
     } catch (err) {
+      if (!isMounted.current) return;
+      
+      if (err.name === 'CanceledError' || err.name === 'AbortError') {
+        console.log('⏹️ Petición de relacionadas cancelada');
+        return;
+      }
+      
       console.error("Error cargando mascotas relacionadas:", err);
       setError(err.message);
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   };
 
   const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
-  const handleOpenMascota = (mascota) => {
-    if (isEmbed) {
-      // ✅ Cuando estamos en embed (dentro de un panel), cerramos el panel actual
-      // y abrimos el nuevo en el mismo panel (recargando el contenido)
-      // Para evitar redirección, forzamos la apertura del nuevo panel
-      setSelectedMascota(mascota);
-      setIsPanelOpen(true);
+  // ✅ Maneja el clic en una mascota relacionada
+  const handleMascotaClick = useCallback((mascota) => {
+    console.log(`🔄 [Relacionadas] Clic en mascota ${mascota.id}, isEmbed: ${isEmbed}`);
+    
+    if (isEmbed && onNavigateToMascota) {
+      // ✅ SIEMPRE usa el callback cuando está en modo embed
+      console.log(`✅ [Relacionadas] Navegando a mascota ${mascota.id} dentro del panel`);
+      onNavigateToMascota(mascota.id);
+    } else if (isEmbed) {
+      // ✅ Si está en embed pero no hay callback, mostramos error
+      console.error('❌ [Relacionadas] Error: isEmbed=true pero no hay onNavigateToMascota');
     } else {
-      setSelectedMascota(mascota);
-      setIsPanelOpen(true);
+      // ✅ Solo cuando NO está en embed, redirige a la página
+      console.log(`🔗 [Relacionadas] Redirigiendo a /mascotas/${mascota.id}`);
+      window.location.href = `/mascotas/${mascota.id}`;
     }
-  };
-
-  const handleClosePanel = () => {
-    setIsPanelOpen(false);
-    setSelectedMascota(null);
-  };
+  }, [isEmbed, onNavigateToMascota]);
 
   if (loading) {
     return (
@@ -90,7 +131,16 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = 
   }
 
   if (error) {
-    return null;
+    return (
+      <section className="mrr-relacionadas">
+        <div className="mrr-container">
+          <h2 className="mrr-titulo">{t("mascotas_relacionadas")}</h2>
+          <p className="mrr-placeholder" style={{ color: 'var(--color-danger)' }}>
+            ⚠️ {t("error_cargar_relacionadas", "Error al cargar mascotas relacionadas")}
+          </p>
+        </div>
+      </section>
+    );
   }
 
   if (mascotasRelacionadas.length === 0) {
@@ -105,35 +155,22 @@ const MascotasRelacionadas = ({ mascotaId, especie, mascotaActual, t, isEmbed = 
   }
 
   return (
-    <>
-      <section className="mrr-relacionadas">
-        <div className="mrr-container">
-          <h2 className="mrr-titulo">{t("mascotas_relacionadas")}</h2>
-          <div className="mascotas-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.8rem' }}>
-            {mascotasRelacionadas.map((mascota) => (
-              <MascotaCard
-                key={mascota.id}
-                mascota={mascota}
-                getImageUrl={getImageUrl}
-                variant="default"
-                onView={handleOpenMascota}
-              />
-            ))}
-          </div>
+    <section className="mrr-relacionadas">
+      <div className="mrr-container">
+        <h2 className="mrr-titulo">{t("mascotas_relacionadas")}</h2>
+        <div className="mascotas-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.8rem' }}>
+          {mascotasRelacionadas.map((mascota) => (
+            <MascotaCard
+              key={mascota.id}
+              mascota={mascota}
+              getImageUrl={getImageUrl}
+              variant="default"
+              onView={() => handleMascotaClick(mascota)}
+            />
+          ))}
         </div>
-      </section>
-
-      {/* Panel deslizable - siempre se muestra sin restricciones */}
-      <SlideUpPanel
-        isOpen={isPanelOpen}
-        onClose={handleClosePanel}
-        title={selectedMascota?.nombre_mascota || t('detalle', 'Detalle de mascota')}
-      >
-        {selectedMascota && (
-          <MascotaDetalle mascotaId={selectedMascota.id} embed={true} />
-        )}
-      </SlideUpPanel>
-    </>
+      </div>
+    </section>
   );
 };
 
