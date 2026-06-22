@@ -39,6 +39,8 @@ const EventosSection = memo(({ isAuthenticated = false }) => {
     setError(null);
     
     try {
+      console.log('📡 [EventosSection] Cargando eventos...');
+      
       const response = await api.get('/eventos', {
         params: {
           per_page: 6,
@@ -46,6 +48,8 @@ const EventosSection = memo(({ isAuthenticated = false }) => {
           proximos: true
         }
       });
+      
+      console.log('📅 [EventosSection] Respuesta recibida:', response.data);
       
       let eventosData = [];
       
@@ -57,9 +61,11 @@ const EventosSection = memo(({ isAuthenticated = false }) => {
         eventosData = response.data;
       }
       
+      console.log(`📅 [EventosSection] ${eventosData.length} eventos cargados`);
       setEventos(eventosData.slice(0, 6));
+      
     } catch (err) {
-      console.error('Error fetching eventos:', err);
+      console.error('❌ [EventosSection] Error:', err);
       setError(err.message);
     } finally {
       setLoading(false);

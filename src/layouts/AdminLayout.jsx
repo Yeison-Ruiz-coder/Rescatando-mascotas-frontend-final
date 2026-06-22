@@ -4,14 +4,16 @@ import { Outlet } from 'react-router-dom';
 import AdminNavbar from '../components/layout/Navbar/AdminNavbar';
 import AdminSidebar from '../components/layout/Sidebar/AdminSidebar';
 import { useSidebar } from '../contexts/SidebarContext';
+import ScrollToTop from '../components/common/ScrollToTop/ScrollToTop'; // 👈 Importar
 import './Layouts.css';
-import './AdminLayout.css'; // 🔥 IMPORTANTE: Agregar esta línea
+import './AdminLayout.css';
 
 const AdminLayout = () => {
   const { isAdminSidebarOpen } = useSidebar();
 
   return (
     <div className="app-layout admin-layout">
+      <ScrollToTop /> {/* 👈 Agregar AQUÍ */}
       <AdminNavbar />
       <AdminSidebar />
       {isAdminSidebarOpen && <div className="sidebar-overlay" />}

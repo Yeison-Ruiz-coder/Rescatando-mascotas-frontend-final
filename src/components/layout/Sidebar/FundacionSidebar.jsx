@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/FundacionSidebar.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -7,14 +7,41 @@ import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import './Sidebar.css';
 
+// ✅ Submenu component optimizado
+const SubmenuItem = memo(({ to, icon, label, badge, isActive, onClick, badgeType }) => (
+  <Link 
+    to={to} 
+    className={`submenu-item ${isActive ? 'active' : ''}`} 
+    onClick={onClick}
+  >
+    <i className={icon}></i> 
+    {label}
+    {badge && (
+      <span className={`sidebar-badge ${badgeType || ''}`}>{badge}</span>
+    )}
+  </Link>
+));
+
+SubmenuItem.displayName = 'SubmenuItem';
+
 const FundacionSidebar = () => {
   const { t } = useTranslation('layout');
   const location = useLocation();
   const { user, logout } = useAuth();
   const { isPublicSidebarOpen, closePublicSidebar } = useSidebar();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-  useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar);
+  // ✅ Usa el hook SIN delay para apertura inmediata
+  useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [openSections, setOpenSections] = useState({
     rescates: true,
@@ -23,19 +50,37 @@ const FundacionSidebar = () => {
     eventos: false
   });
 
-  const toggleSection = (section) => {
+  const [showBadges, setShowBadges] = useState(false);
+
+  // ✅ Activa badges después de la apertura
+  useEffect(() => {
+    if (isPublicSidebarOpen) {
+      const timer = setTimeout(() => setShowBadges(true), 200);
+      return () => clearTimeout(timer);
+    } else {
+      setShowBadges(false);
+    }
+  }, [isPublicSidebarOpen]);
+
+  const toggleSection = useCallback((section) => {
     setOpenSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
-  };
+  }, []);
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  const isActive = useCallback((path) => location.pathname.startsWith(path), [location.pathname]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     closePublicSidebar();
-  };
+  }, [logout, closePublicSidebar]);
+
+  const handleLinkClick = useCallback(() => {
+    if (isMobile) {
+      closePublicSidebar();
+    }
+  }, [isMobile, closePublicSidebar]);
 
   return (
     <aside ref={sidebarRef} className={`sidebar fundacion-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
@@ -56,7 +101,11 @@ const FundacionSidebar = () => {
 
       <nav className="sidebar-nav">
         <div className="sidebar-section">
-          <Link to="/fundacion/dashboard" className={`sidebar-item ${isActive('/fundacion/dashboard') ? 'active' : ''}`}>
+          <Link 
+            to="/fundacion/dashboard" 
+            className={`sidebar-item ${isActive('/fundacion/dashboard') ? 'active' : ''}`} 
+            onClick={handleLinkClick}
+          >
             <i className="fas fa-tachometer-alt"></i>
             <span>{t("dashboard")}</span>
           </Link>
@@ -69,16 +118,24 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-ambulance"></i>
             <span>{t("rescates")}</span>
-            <span className="sidebar-badge urgent">{t("nuevos")}</span>
+            {showBadges && <span className="sidebar-badge urgent">{t("nuevos")}</span>}
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
-            <Link to="/fundacion/rescates/disponibles" className={`submenu-item ${isActive('/fundacion/rescates/disponibles') ? 'active' : ''}`}>
-              <i className="fas fa-map-marker-alt"></i> {t("rescates_cerca")}
-            </Link>
-            <Link to="/fundacion/rescates/mis-rescates" className={`submenu-item ${isActive('/fundacion/rescates/mis-rescates') ? 'active' : ''}`}>
-              <i className="fas fa-clipboard-list"></i> {t("mis_rescates")}
-            </Link>
+            <SubmenuItem
+              to="/fundacion/rescates/disponibles"
+              icon="fas fa-map-marker-alt"
+              label={t("rescates_cerca")}
+              isActive={isActive('/fundacion/rescates/disponibles')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/fundacion/rescates/mis-rescates"
+              icon="fas fa-clipboard-list"
+              label={t("mis_rescates")}
+              isActive={isActive('/fundacion/rescates/mis-rescates')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
 
@@ -89,16 +146,25 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-paw"></i>
             <span>{t("mascotas")}</span>
+            {showBadges && <span className="sidebar-badge">12</span>}
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
-            <Link to="/fundacion/mascotas" className={`submenu-item ${isActive('/fundacion/mascotas') && !isActive('/fundacion/mascotas/nueva') ? 'active' : ''}`}>
-              <i className="fas fa-list"></i> {t("mis_mascotas")}
-              <span className="sidebar-badge">12</span>
-            </Link>
-            <Link to="/fundacion/mascotas/nueva" className={`submenu-item ${isActive('/fundacion/mascotas/nueva') ? 'active' : ''}`}>
-              <i className="fas fa-plus-circle"></i> {t("registrar_mascota")}
-            </Link>
+            <SubmenuItem
+              to="/fundacion/mascotas"
+              icon="fas fa-list"
+              label={t("mis_mascotas")}
+              isActive={isActive('/fundacion/mascotas') && !isActive('/fundacion/mascotas/nueva')}
+              onClick={handleLinkClick}
+              badge="12"
+            />
+            <SubmenuItem
+              to="/fundacion/mascotas/nueva"
+              icon="fas fa-plus-circle"
+              label={t("registrar_mascota")}
+              isActive={isActive('/fundacion/mascotas/nueva')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
 
@@ -109,19 +175,33 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-heart"></i>
             <span>{t("adopciones")}</span>
+            {showBadges && <span className="sidebar-badge urgent">5</span>}
             <i className={`fas fa-chevron-right arrow ${openSections.adopciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.adopciones ? 'open' : ''}`}>
-            <Link to="/fundacion/solicitudes" className={`submenu-item ${isActive('/fundacion/solicitudes') ? 'active' : ''}`}>
-              <i className="fas fa-clipboard-list"></i> {t("solicitudes_recibidas")}
-              <span className="sidebar-badge urgent">5</span>
-            </Link>
-            <Link to="/fundacion/adopciones/aprobadas" className={`submenu-item ${isActive('/fundacion/adopciones/aprobadas') ? 'active' : ''}`}>
-              <i className="fas fa-check-circle"></i> {t("adopciones_aprobadas")}
-            </Link>
-            <Link to="/fundacion/seguimientos" className={`submenu-item ${isActive('/fundacion/seguimientos') ? 'active' : ''}`}>
-              <i className="fas fa-chart-line"></i> {t("seguimiento_post")}
-            </Link>
+            <SubmenuItem
+              to="/fundacion/solicitudes"
+              icon="fas fa-clipboard-list"
+              label={t("solicitudes_recibidas")}
+              isActive={isActive('/fundacion/solicitudes')}
+              onClick={handleLinkClick}
+              badge="5"
+              badgeType="urgent"
+            />
+            <SubmenuItem
+              to="/fundacion/adopciones/aprobadas"
+              icon="fas fa-check-circle"
+              label={t("adopciones_aprobadas")}
+              isActive={isActive('/fundacion/adopciones/aprobadas')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/fundacion/seguimientos"
+              icon="fas fa-chart-line"
+              label={t("seguimiento_post")}
+              isActive={isActive('/fundacion/seguimientos')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
 
@@ -135,12 +215,20 @@ const FundacionSidebar = () => {
             <i className={`fas fa-chevron-right arrow ${openSections.eventos ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.eventos ? 'open' : ''}`}>
-            <Link to="/fundacion/eventos" className={`submenu-item ${isActive('/fundacion/eventos') && !isActive('/fundacion/eventos/crear') ? 'active' : ''}`}>
-              <i className="fas fa-list"></i> {t("mis_eventos")}
-            </Link>
-            <Link to="/fundacion/eventos/crear" className={`submenu-item ${isActive('/fundacion/eventos/crear') ? 'active' : ''}`}>
-              <i className="fas fa-plus-circle"></i> {t("crear_evento")}
-            </Link>
+            <SubmenuItem
+              to="/fundacion/eventos"
+              icon="fas fa-list"
+              label={t("mis_eventos")}
+              isActive={isActive('/fundacion/eventos') && !isActive('/fundacion/eventos/crear')}
+              onClick={handleLinkClick}
+            />
+            <SubmenuItem
+              to="/fundacion/eventos/crear"
+              icon="fas fa-plus-circle"
+              label={t("crear_evento")}
+              isActive={isActive('/fundacion/eventos/crear')}
+              onClick={handleLinkClick}
+            />
           </div>
         </div>
       </nav>
@@ -148,4 +236,4 @@ const FundacionSidebar = () => {
   );
 };
 
-export default FundacionSidebar;
+export default memo(FundacionSidebar);

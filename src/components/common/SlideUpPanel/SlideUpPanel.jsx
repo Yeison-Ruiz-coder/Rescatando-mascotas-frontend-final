@@ -1,23 +1,25 @@
 // src/components/common/SlideUpPanel/SlideUpPanel.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { X } from 'lucide-react';
+import { requestManager } from '../../../services/api';
 import './SlideUpPanel.css';
 
 const SlideUpPanel = ({ isOpen, onClose, children, title }) => {
   const panelRef = useRef(null);
   const [isClosing, setIsClosing] = useState(false);
-  const [hasOpened, setHasOpened] = useState(false);
+  const scrollYRef = useRef(0);
 
-  // Función para cerrar con animación (1 segundo como en CSS)
   const handleClose = () => {
+    console.log('🔄 [SlideUpPanel] Cerrando panel...');
+    requestManager.cancelAllRequests();
     setIsClosing(true);
+    
     setTimeout(() => {
       onClose();
       setIsClosing(false);
-    }, 1000); // 1000ms = 1 segundo, igual que la transición CSS
+    }, 400);
   };
 
-  // Cerrar con ESC
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape' && isOpen && !isClosing) {
@@ -28,32 +30,41 @@ const SlideUpPanel = ({ isOpen, onClose, children, title }) => {
     return () => window.removeEventListener('keydown', handleEsc);
   }, [isOpen, isClosing]);
 
-  // Bloquear scroll cuando está abierto
   useEffect(() => {
     if (isOpen && !isClosing) {
+      scrollYRef.current = window.scrollY;
       document.body.style.overflow = 'hidden';
-      setHasOpened(true);
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.width = '100%';
     } else if (!isOpen && !isClosing) {
-      document.body.style.overflow = 'unset';
+      const scrollY = scrollYRef.current;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY > 0) {
+        window.scrollTo(0, scrollY);
+      }
     }
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
     };
   }, [isOpen, isClosing]);
 
-  // Resetear estado cuando se cierra completamente
-  useEffect(() => {
-    if (!isOpen && !isClosing) {
-      setHasOpened(false);
-    }
-  }, [isOpen, isClosing]);
-
-  if (!isOpen && !isClosing && !hasOpened) return null;
+  if (!isOpen && !isClosing) return null;
 
   return (
-    <div className={`slideup-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
+    <div 
+      className={`slideup-overlay ${isClosing ? 'closing' : ''}`} 
+      onClick={handleClose}
+    >
       <div 
-        className={`slideup-panel ${!hasOpened && isOpen ? 'entering' : ''} ${isClosing ? 'exiting' : ''}`}
+        className={`slideup-panel ${isClosing ? 'exiting' : ''}`}
         ref={panelRef}
         onClick={(e) => e.stopPropagation()}
       >
@@ -62,7 +73,7 @@ const SlideUpPanel = ({ isOpen, onClose, children, title }) => {
         </div>
         
         <div className="slideup-header">
-          <h2 className="slideup-title">{title}</h2>
+          <h2 className="slideup-title">{title || 'Detalle'}</h2>
           <button className="slideup-close" onClick={handleClose}>
             <X size={24} />
           </button>

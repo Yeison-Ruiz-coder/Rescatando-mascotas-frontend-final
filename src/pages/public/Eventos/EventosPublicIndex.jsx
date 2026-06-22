@@ -29,7 +29,9 @@ const EventosPublicIndex = () => {
   const [likedEvents, setLikedEvents] = useState({});
   const [asistenciaEvents, setAsistenciaEvents] = useState({});
 
+  // ✅ Estados para el panel
   const [selectedEvento, setSelectedEvento] = useState(null);
+  const [currentEventoId, setCurrentEventoId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   // Función para calcular nivel de importancia del evento
@@ -105,96 +107,85 @@ const EventosPublicIndex = () => {
   }, [calcularNivelImportancia]);
 
   const loadEventos = useCallback(async (filters = {}, page = 1) => {
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  try {
-    const params = {
-      page: page,
-      per_page: 12,
-    };
+    try {
+      const params = {
+        page: page,
+        per_page: 12,
+      };
 
-    if (filters.buscar) params.buscar = filters.buscar;
-    if (filters.tipo) params.tipo = filters.tipo;
-    if (filters.proximos) params.proximos = filters.proximos;
+      if (filters.buscar) params.buscar = filters.buscar;
+      if (filters.tipo) params.tipo = filters.tipo;
+      if (filters.proximos) params.proximos = filters.proximos;
 
-    params.sort = "-fecha_evento";
+      params.sort = "-fecha_evento";
 
-    console.log("📡 API Request Eventos:", params);
+      console.log("📡 API Request Eventos:", params);
 
-    const response = await api.get("/eventos", { params });
+      const response = await api.get("/eventos", { params });
 
-    // 🔍 LOG PARA VER LA ESTRUCTURA REAL
-    console.log("📦 Respuesta completa:", JSON.stringify(response.data, null, 2));
+      let eventosData = [];
+      let paginationData = { current_page: 1, last_page: 1, total: 0 };
 
-    let eventosData = [];
-    let paginationData = { current_page: 1, last_page: 1, total: 0 };
-
-    // ✅ La respuesta correcta debería ser response.data.data (el paginador)
-    if (response.data?.data && typeof response.data.data === 'object') {
-      // Caso: { success: true, data: { data: [...], current_page, last_page, total } }
-      if (Array.isArray(response.data.data.data)) {
-        eventosData = response.data.data.data;
-        paginationData = {
-          current_page: response.data.data.current_page || page,
-          last_page: response.data.data.last_page || 1,
-          total: response.data.data.total || 0,
-        };
-      } 
-      // Caso: response.data.data es directamente el array
-      else if (Array.isArray(response.data.data)) {
+      if (response.data?.data && typeof response.data.data === 'object') {
+        if (Array.isArray(response.data.data.data)) {
+          eventosData = response.data.data.data;
+          paginationData = {
+            current_page: response.data.data.current_page || page,
+            last_page: response.data.data.last_page || 1,
+            total: response.data.data.total || 0,
+          };
+        } else if (Array.isArray(response.data.data)) {
+          eventosData = response.data.data;
+          paginationData = {
+            current_page: page,
+            last_page: 1,
+            total: eventosData.length,
+          };
+        }
+      } else if (response.data && typeof response.data === 'object' && Array.isArray(response.data.data)) {
         eventosData = response.data.data;
+        paginationData = {
+          current_page: response.data.current_page || page,
+          last_page: response.data.last_page || 1,
+          total: response.data.total || 0,
+        };
+      } else if (Array.isArray(response.data)) {
+        eventosData = response.data;
         paginationData = {
           current_page: page,
           last_page: 1,
           total: eventosData.length,
         };
       }
-    } 
-    // Caso: response.data es el paginador directamente
-    else if (response.data && typeof response.data === 'object' && Array.isArray(response.data.data)) {
-      eventosData = response.data.data;
-      paginationData = {
-        current_page: response.data.current_page || page,
-        last_page: response.data.last_page || 1,
-        total: response.data.total || 0,
-      };
+
+      console.log("📊 Eventos cargados:", eventosData.length);
+      console.log("📄 Paginación:", paginationData);
+
+      setEventos(eventosData);
+      setPagination(paginationData);
+
+      const organizados = organizarEventosPorImportancia(eventosData);
+      setEventosOrganizados(organizados);
+
+      const asistenciaMap = {};
+      eventosData.forEach((evento) => {
+        if (evento.usuario_confirmado) {
+          asistenciaMap[evento.id] = true;
+        }
+      });
+      setAsistenciaEvents(asistenciaMap);
+    } catch (err) {
+      console.error("❌ Error:", err);
+      setError(
+        err.response?.data?.message || err.message || t("error_carga"),
+      );
+    } finally {
+      setLoading(false);
     }
-    // Caso: response.data es un array directo
-    else if (Array.isArray(response.data)) {
-      eventosData = response.data;
-      paginationData = {
-        current_page: page,
-        last_page: 1,
-        total: eventosData.length,
-      };
-    }
-
-    console.log("📊 Eventos cargados:", eventosData.length);
-    console.log("📄 Paginación:", paginationData);
-
-    setEventos(eventosData);
-    setPagination(paginationData);
-
-    const organizados = organizarEventosPorImportancia(eventosData);
-    setEventosOrganizados(organizados);
-
-    const asistenciaMap = {};
-    eventosData.forEach((evento) => {
-      if (evento.usuario_confirmado) {
-        asistenciaMap[evento.id] = true;
-      }
-    });
-    setAsistenciaEvents(asistenciaMap);
-  } catch (err) {
-    console.error("❌ Error:", err);
-    setError(
-      err.response?.data?.message || err.message || t("error_carga"),
-    );
-  } finally {
-    setLoading(false);
-  }
-}, [t, organizarEventosPorImportancia]);
+  }, [t, organizarEventosPorImportancia]);
 
   useEffect(() => {
     loadEventos({}, 1);
@@ -299,15 +290,31 @@ const EventosPublicIndex = () => {
     [isAuthenticated, asistenciaEvents, t, organizarEventosPorImportancia],
   );
 
-  const handleOpenPanel = (evento) => {
+  // ✅ Abre el panel con un evento
+  const handleOpenPanel = useCallback((evento) => {
     setSelectedEvento(evento);
+    setCurrentEventoId(evento.id);
     setIsPanelOpen(true);
-  };
+  }, []);
 
-  const handleClosePanel = () => {
+  // ✅ Navega a otro evento DENTRO del mismo panel
+  const handleNavigateToEvento = useCallback((nuevoId) => {
+    console.log(`🔄 [Panel Eventos] Navegando a evento ${nuevoId}`);
+    setCurrentEventoId(nuevoId);
+    const eventoEncontrado = eventos.find(e => e.id === nuevoId);
+    if (eventoEncontrado) {
+      setSelectedEvento(eventoEncontrado);
+    }
+  }, [eventos]);
+
+  // ✅ Cierra el panel
+  const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
-    setSelectedEvento(null);
-  };
+    setTimeout(() => {
+      setSelectedEvento(null);
+      setCurrentEventoId(null);
+    }, 300);
+  }, []);
 
   const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
@@ -431,7 +438,6 @@ const EventosPublicIndex = () => {
                 })}
               </div>
 
-              {/* ✅ PAGINACIÓN - IGUAL QUE FUNDACIONES */}
               {pagination.last_page > 1 && (
                 <div className="eventos-pagination-container reveal-up delay-300">
                   <button
@@ -472,12 +478,19 @@ const EventosPublicIndex = () => {
         </div>
       </div>
 
+      {/* ✅ SlideUpPanel actualizado */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}
         title={selectedEvento?.nombre_evento || t("detalle_evento")}
       >
-        <EventosPublicShow eventoId={selectedEvento?.id} embed={true} />
+        {currentEventoId && (
+          <EventosPublicShow 
+            eventoId={currentEventoId} 
+            embed={true}
+            onNavigateToEvento={handleNavigateToEvento}
+          />
+        )}
       </SlideUpPanel>
     </div>
   );

@@ -1,5 +1,5 @@
 // src/pages/public/Mascotas/MascotaDetalle.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "lucide-react";
@@ -17,7 +17,11 @@ import MascotaFundacion from "./components/MascotaFundacion";
 import MascotasRelacionadas from "./components/MascotasRelacionadas";
 import "./MascotaDetalle.css";
 
-const MascotaDetalle = ({ mascotaId, embed = false }) => {
+const MascotaDetalle = ({ 
+  mascotaId, 
+  embed = false,
+  onNavigateToMascota  // ✅ Recibir la prop
+}) => {
   const { id: urlId } = useParams();
   const id = mascotaId || urlId;
   const navigate = useNavigate();
@@ -32,8 +36,24 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
   const [razas, setRazas] = useState([]);
   const [imagenActual, setImagenActual] = useState(0);
 
+  // ✅ Función para navegar a otra mascota dentro del panel
+  const handleNavigateToMascota = useCallback((nuevoId) => {
+    if (onNavigateToMascota) {
+      // ✅ Usa la función del padre para cambiar el ID
+      onNavigateToMascota(nuevoId);
+    } else if (embed) {
+      // ✅ Fallback: recarga la página con el nuevo ID
+      window.location.href = `/mascotas/${nuevoId}`;
+    } else {
+      // ✅ Navegación normal
+      navigate(`/mascotas/${nuevoId}`);
+    }
+  }, [embed, navigate, onNavigateToMascota]);
+
   useEffect(() => {
-    fetchMascotaDetalle();
+    if (id) {
+      fetchMascotaDetalle();
+    }
   }, [id]);
 
   const fetchMascotaDetalle = async () => {
@@ -212,7 +232,6 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
 
   return (
     <div className={`md-page ${embed ? 'md-embed' : ''}`}>
-      {/* Botón volver - oculto en embed */}
       {!embed && (
         <div className="md-back-outer reveal-up delay-100">
           <button
@@ -269,12 +288,11 @@ const MascotaDetalle = ({ mascotaId, embed = false }) => {
       <MascotasRelacionadas
         mascotaId={id}
         especie={mascota?.especie}
-        mascotaActual={mascota}
         t={t}
         isEmbed={embed}
+        onNavigateToMascota={handleNavigateToMascota}  // ✅ PASAR LA FUNCIÓN
       />
 
-      {/* Footer - oculto en embed */}
       {!embed && (
         <div className="md-footer reveal-up delay-300">
           <i className="far fa-clock"></i>

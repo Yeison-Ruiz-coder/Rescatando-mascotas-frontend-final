@@ -1,5 +1,4 @@
 /* src/components/common/SlideUpPanel/SlideUpPanel.css */
-/* ESTILO COLLAGE + BENTO PARA PANEL DESLIZABLE */
 
 .slideup-overlay {
   position: fixed;
@@ -13,12 +12,12 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  transition: opacity 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
-/* Cuando el overlay está cerrando, se desvanece */
 .slideup-overlay.closing {
-  background: rgba(0, 0, 0, 0);
+  opacity: 0;
   backdrop-filter: blur(0px);
 }
 
@@ -26,30 +25,24 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  height: 95vh;
+  height: 97vh;
+  max-height: 97vh;
+  min-height: 400px;
   background: var(--color-background-section);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  box-shadow: var(--shadow-hard-lg);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
   border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transform: translateY(0);
-  transition: transform 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-/* Animación de entrada - el panel viene desde abajo */
-.slideup-panel.entering {
-  transform: translateY(100%);
-}
-
-/* Animación de salida - el panel baja hasta desaparecer completamente */
 .slideup-panel.exiting {
   transform: translateY(100%);
-  transition: transform 1s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-/* Barra de arrastre */
 .slideup-handle {
   display: flex;
   justify-content: center;
@@ -57,6 +50,8 @@
   cursor: grab;
   background: var(--bg-card);
   border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  min-height: 36px;
 }
 
 .slideup-handle:active {
@@ -67,11 +62,10 @@
   width: 40px;
   height: 4px;
   background: var(--color-text-muted);
-  border-radius: var(--radius-round);
+  border-radius: 999px;
   opacity: 0.5;
 }
 
-/* Header */
 .slideup-header {
   display: flex;
   justify-content: space-between;
@@ -80,6 +74,8 @@
   border-bottom: 1px solid var(--color-border);
   background: var(--bg-card);
   flex-shrink: 0;
+  min-height: 60px;
+  z-index: 1;
 }
 
 .slideup-title {
@@ -91,6 +87,10 @@
   background-clip: text;
   color: transparent;
   font-family: 'Space Grotesk', sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80%;
 }
 
 .slideup-close {
@@ -104,6 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .slideup-close:hover {
@@ -112,11 +113,19 @@
   transform: rotate(90deg);
 }
 
-/* Contenido scrollable */
 .slideup-content {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.slideup-content > * {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 /* Scrollbar */
@@ -134,22 +143,74 @@
   border-radius: 3px;
 }
 
+.slideup-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .slideup-panel {
     height: 90vh;
+    max-height: 90vh;
     border-radius: var(--radius-md) var(--radius-md) 0 0;
+    min-height: 300px;
   }
   
   .slideup-header {
     padding: 12px 16px;
+    min-height: 52px;
   }
   
   .slideup-title {
     font-size: 1.2rem;
+    max-width: 70%;
   }
   
   .slideup-content {
     padding: 16px;
   }
+  
+  .slideup-handle {
+    min-height: 30px;
+    padding: 8px 0 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slideup-panel {
+    height: 95vh;
+    max-height: 95vh;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    min-height: 250px;
+  }
+  
+  .slideup-content {
+    padding: 12px;
+  }
+  
+  .slideup-title {
+    font-size: 1rem;
+    max-width: 65%;
+  }
+}
+
+[data-theme="dark"] .slideup-panel {
+  background: var(--color-background-section);
+}
+
+[data-theme="dark"] .slideup-handle {
+  background: var(--bg-card);
+}
+
+[data-theme="dark"] .slideup-header {
+  background: var(--bg-card);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .slideup-content::-webkit-scrollbar-track {
+  background: var(--border-color);
+}
+
+[data-theme="dark"] .slideup-content::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
 }

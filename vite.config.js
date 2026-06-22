@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 3000,
     cssCodeSplit: true,
     esbuild: {
       drop: ["console", "debugger"],
@@ -53,11 +53,26 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target:
-          "https://rescatando-mascotas-backend-final-production.up.railway.app",
+        target: process.env.VITE_API_URL || "https://rescatando-mascotas-backend-final-production.up.railway.app",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, "/api"),
+        // ✅ Agrega estas opciones para evitar ECONNRESET
+        timeout: 60000, // 60 segundos
+        proxyTimeout: 60000,
+        onProxyReq: (proxyReq) => {
+          proxyReq.setHeader('Connection', 'keep-alive');
+        },
+        // ✅ Maneja errores del proxy
+        onError: (err, req, res) => {
+          console.error('⚠️ Proxy error:', err.message);
+          if (!res.headersSent) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ 
+              success: false, 
+              message: 'Error de conexión con el servidor' 
+            }));
+          }
+        }
       },
     },
   },

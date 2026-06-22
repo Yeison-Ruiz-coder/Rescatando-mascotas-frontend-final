@@ -15,18 +15,36 @@ const FeaturedMascotas = memo(() => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMascota, setSelectedMascota] = useState(null);
+  const [currentMascotaId, setCurrentMascotaId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const getOptimizedImageUrl = useCallback((path) => buildImageUrl(path), []);
 
+  // ✅ Abre el panel con una mascota
   const handleOpenPanel = useCallback((mascota) => {
     setSelectedMascota(mascota);
+    setCurrentMascotaId(mascota.id);
     setIsPanelOpen(true);
   }, []);
 
+  // ✅ Navega a otra mascota DENTRO del mismo panel
+  const handleNavigateToMascota = useCallback((nuevoId) => {
+    console.log(`🔄 [Home Panel] Navegando a mascota ${nuevoId}`);
+    setCurrentMascotaId(nuevoId);
+    // Opcional: actualiza el título si tienes el nombre
+    const mascotaEncontrada = mascotas.find(m => m.id === nuevoId);
+    if (mascotaEncontrada) {
+      setSelectedMascota(mascotaEncontrada);
+    }
+  }, [mascotas]);
+
+  // ✅ Cierra el panel
   const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
-    setSelectedMascota(null);
+    setTimeout(() => {
+      setSelectedMascota(null);
+      setCurrentMascotaId(null);
+    }, 300);
   }, []);
 
   useEffect(() => {
@@ -34,13 +52,20 @@ const FeaturedMascotas = memo(() => {
     
     const fetchMascotas = async () => {
       setLoading(true);
+      setError(null);
+      
       try {
+        console.log('📡 [FeaturedMascotas] Cargando mascotas...');
+        
         const response = await api.get('/mascotas', {
           params: { 
-            per_page: 12,
+            per_page: 7,
+            sort: '-created_at'
           },
           signal: abortController.signal
         });
+        
+        console.log('🐾 [FeaturedMascotas] Respuesta recibida:', response.data);
         
         let mascotasData = [];
         if (response.data?.data?.data) {
@@ -50,6 +75,8 @@ const FeaturedMascotas = memo(() => {
         } else if (Array.isArray(response.data)) {
           mascotasData = response.data;
         }
+        
+        console.log(`🐾 [FeaturedMascotas] ${mascotasData.length} mascotas cargadas`);
         
         const mappedMascotas = mascotasData.slice(0, 7).map(m => ({
           id: m.id,
@@ -66,9 +93,10 @@ const FeaturedMascotas = memo(() => {
         
         setMascotas(mappedMascotas);
         setError(null);
+        
       } catch (err) {
         if (err.name !== 'AbortError') {
-          console.error('Error fetching mascotas:', err);
+          console.error('❌ [FeaturedMascotas] Error:', err);
           setError(err.message);
         }
       } finally {
@@ -207,12 +235,19 @@ const FeaturedMascotas = memo(() => {
         </div>
       </div>
 
+      {/* ✅ Panel deslizable con navegación interna */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}
-        title={selectedMascota?.nombre_mascota || 'Detalle'}
+        title={selectedMascota?.nombre_mascota || 'Detalle de mascota'}
       >
-        {selectedMascota && <MascotaDetalle mascotaId={selectedMascota.id} embed />}
+        {currentMascotaId && (
+          <MascotaDetalle 
+            mascotaId={currentMascotaId} 
+            embed={true}
+            onNavigateToMascota={handleNavigateToMascota}
+          />
+        )}
       </SlideUpPanel>
     </section>
   );

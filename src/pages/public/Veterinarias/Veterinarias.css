@@ -96,6 +96,11 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.main-content.shifted .veterinarias-page .veterinarias-filtros-section {
+  position: static !important;
+  top: auto !important;
+}
+
 /* ===== RESULTADOS SECTION ===== */
 .veterinarias-page .veterinarias-resultados-section {
   padding: 40px 0 60px;

@@ -1,5 +1,5 @@
 // src/pages/public/Veterinarias/VeterinariaDetalle.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,7 +20,11 @@ import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import { SimpleLoadingBar } from "../../../components/common/ProgressBar/ProgressBar";
 import "./VeterinariaDetalle.css";
 
-const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
+const VeterinariaDetalle = ({ 
+  veterinariaId, 
+  embed = false,
+  onNavigateToVeterinaria // ✅ Nuevo prop
+}) => {
   const { id: urlId } = useParams();
   const id = veterinariaId || urlId;
   const { t } = useTranslation("veterinarias");
@@ -28,6 +32,17 @@ const VeterinariaDetalle = ({ veterinariaId, embed = false }) => {
   const [loading, setLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
   const [error, setError] = useState(null);
+
+  // ✅ Función para navegar a otra veterinaria (desde veterinarias relacionadas)
+  const handleNavigateToVeterinaria = useCallback((nuevoId) => {
+    if (onNavigateToVeterinaria) {
+      onNavigateToVeterinaria(nuevoId);
+    } else if (embed) {
+      window.location.href = `/veterinarias/${nuevoId}`;
+    } else {
+      window.location.href = `/veterinarias/${nuevoId}`;
+    }
+  }, [embed, onNavigateToVeterinaria]);
 
   const getImageUrl = (path) => buildImageUrl(path);
 

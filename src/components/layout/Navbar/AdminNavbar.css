@@ -19,7 +19,7 @@
 
 /* Cuando el sidebar está abierto, la navbar se encoge */
 .admin-navbar.sidebar-open {
-  left: 320px;
+  left: 240px;
   right: 0;
   width: auto;
 }
@@ -356,7 +356,6 @@
     transform: translateY(0);
   }
 }
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .admin-navbar-container {
@@ -364,8 +363,11 @@
     padding: 0 20px;
   }
   
+  /* ✅ En móvil/tablet, el navbar NO se corre */
   .admin-navbar.sidebar-open {
-    left: 280px;
+    left: 0 !important;
+    width: 100% !important;
+    transform: none !important;
   }
   
   .admin-navbar.sidebar-open .admin-navbar-container {
@@ -391,8 +393,11 @@
     padding: 6px 10px;
   }
   
+  /* ✅ En móvil, el navbar NO se corre */
   .admin-navbar.sidebar-open {
-    left: 280px;
+    left: 0 !important;
+    width: 100% !important;
+    transform: none !important;
   }
 }
 
@@ -406,7 +411,10 @@
     font-size: 0.9rem;
   }
   
+  /* ✅ En móvil pequeño, el navbar NO se corre */
   .admin-navbar.sidebar-open {
-    left: 280px;
+    left: 0 !important;
+    width: 100% !important;
+    transform: none !important;
   }
 }
