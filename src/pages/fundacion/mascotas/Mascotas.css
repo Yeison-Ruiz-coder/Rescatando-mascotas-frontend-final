@@ -1,174 +1,271 @@
 /* src/pages/fundacion/mascotas/Mascotas.css */
 
-/* ===== HEADER SECTION ===== */
-.mascotas-list-page .mascotas-header {
-  padding: 60px 0 40px 0;
-  text-align: center;
+/* ============================================
+   PANEL FUNDACIÓN - MASCOTAS
+   ESTILO COMPACTO, SIN HERO
+   ============================================ */
+
+/* ===== HEADER ===== */
+.fundacion-mascotas-header {
+  padding: 24px 0 16px 0;
+  text-align: left;
   background: transparent;
-  backdrop-filter: blur(2px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  position: relative;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.mascotas-list-page .mascotas-header h1 {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
+.fundacion-mascotas-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-.mascotas-list-page .mascotas-header .subtitle {
-  font-size: 1.2rem;
+.fundacion-mascotas-header .subtitle {
+  font-size: 0.85rem;
   color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
-.mascotas-list-page .mascotas-header .info {
+.fundacion-mascotas-header .info {
   color: var(--color-text-muted);
-  font-size: 0.9rem;
-  margin-top: 1rem;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
 }
 
-/* ===== FILTROS SECTION - IGUAL QUE PÚBLICA ===== */
-.mascotas-list-page .filtros-section {
-  padding: 10px 0;
+/* ===== FILTROS ===== */
+.fundacion-mascotas-filtros {
+  padding: 8px 0;
   position: sticky;
   top: var(--navbar-height, 70px);
   z-index: 99;
+  background: rgba(216, 217, 252, 0.7);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* ===== RESULTADOS SECTION ===== */
-.mascotas-list-page .resultados-section {
-  padding: 40px 0;
+[data-theme="dark"] .fundacion-mascotas-filtros {
+  background: rgba(30, 41, 59, 0.85);
 }
 
-.mascotas-list-page .resultados-header {
+/* ===== RESULTADOS ===== */
+.fundacion-mascotas-resultados {
+  padding: 16px 0 32px 0;
+}
+
+.resultados-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
-.mascotas-list-page .resultados-count {
+.resultados-count {
   color: var(--color-text-muted);
-  font-size: 0.95rem;
-}
-
-.mascotas-list-page .resultados-count strong {
-  color: var(--color-accent);
-  font-size: 1.1rem;
-}
-
-/* ===== GRID DE MASCOTAS ===== */
-.mascotas-list-page .mascotas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
-}
-
-/* ===== LOADING ===== */
-.mascotas-list-page .loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-/* ===== SIN RESULTADOS ===== */
-.mascotas-list-page .empty-container {
-  text-align: center;
-  padding: 4rem 2rem;
+  font-size: 0.8rem;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
-  margin: 2rem 0;
-  box-shadow: var(--shadow-sm);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
 }
 
-.mascotas-list-page .empty-container i {
-  font-size: 4rem;
-  color: var(--color-primary);
-  margin-bottom: 1rem;
-  opacity: 0.9;
+.resultados-count strong {
+  color: var(--color-accent);
+  font-size: 0.85rem;
 }
 
-.mascotas-list-page .empty-container h3 {
-  color: var(--form-text);
-  margin-bottom: 0.5rem;
+/* ============================================
+   🎯 GRID DE MASCOTAS - COMPACTO
+   ============================================ */
+.fundacion-mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  width: 100%;
 }
 
-.mascotas-list-page .empty-container p {
-  color: var(--color-text-muted);
-}
-
-/* ===== BOTONES ===== */
-.mascotas-list-page .btn-primary {
+/* ===== BOTÓN AGREGAR ===== */
+.btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 12px 24px;
+  padding: 6px 14px;
   background: var(--gradient-primary);
   color: white;
-  border-radius: 50px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   text-decoration: none;
   transition: var(--transition);
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-.mascotas-list-page .btn-primary:hover {
+.btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  filter: brightness(1.05);
+  box-shadow: var(--shadow-hard-md);
+  color: white;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .mascotas-list-page .mascotas-header {
-    padding: 40px 0 30px 0;
+/* ===== LOADING ===== */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* ===== EMPTY ===== */
+.empty-container {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-sm);
+  margin: 1rem 0;
+  border: 1px solid var(--color-border);
+}
+
+.empty-container i {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+.empty-container h3 {
+  color: var(--color-text);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.empty-container p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* ===== PAGINACIÓN ===== */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+}
+
+.pagination-btn {
+  padding: 4px 12px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+/* ============================================
+   📱 RESPONSIVE
+   ============================================ */
+
+/* Desktop grande - 5 columnas */
+@media (min-width: 1400px) {
+  .fundacion-mascotas-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Desktop - 4 columnas */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .fundacion-mascotas-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Tablet - 3 columnas */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .fundacion-mascotas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.875rem;
+  }
+}
+
+/* Móvil grande - 2 columnas */
+@media (min-width: 480px) and (max-width: 767px) {
+  .fundacion-mascotas-header h1 {
+    font-size: 1.3rem;
   }
   
-  .mascotas-list-page .mascotas-header h1 {
-    font-size: 1.8rem;
+  .resultados-count {
+    font-size: 0.7rem;
+    padding: 3px 8px;
   }
   
-  .mascotas-list-page .mascotas-header .subtitle {
-    font-size: 1rem;
+  .btn-primary {
+    padding: 5px 12px;
+    font-size: 0.75rem;
   }
   
-  .mascotas-list-page .filtros-section {
-    top: 60px;
+  .fundacion-mascotas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* Móvil - 2 columnas más pequeñas */
+@media (max-width: 479px) {
+  .fundacion-mascotas-header h1 {
+    font-size: 1.1rem;
   }
   
-  .mascotas-list-page .resultados-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .fundacion-mascotas-header .subtitle {
+    font-size: 0.75rem;
   }
   
-  .mascotas-list-page .mascotas-grid {
+  .resultados-count {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+  
+  .btn-primary {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+  
+  .fundacion-mascotas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+/* Móvil extra pequeño - 1 columna */
+@media (max-width: 360px) {
+  .fundacion-mascotas-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .mascotas-list-page .mascotas-header h1 {
-    font-size: 1.5rem;
-  }
-  
-  .mascotas-list-page .resultados-count {
-    font-size: 0.8rem;
-  }
-  
-  .mascotas-list-page .btn-primary {
-    padding: 10px 20px;
-    font-size: 0.85rem;
+    gap: 0.75rem;
   }
 }
