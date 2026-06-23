@@ -6,6 +6,36 @@ import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpi
 import { toast } from "react-toastify";
 import "./UsuariosPendientes.css";
 
+const samplePendientes = [
+  {
+    id: 201,
+    tipo: "fundacion",
+    nombre_entidad: "Hogar Peludo",
+    nombre: "María López",
+    email: "hola@hogarpeludo.org",
+    telefono: "+57 300 123 4567",
+    direccion: "Cra 10 #45-12, Bogotá",
+    tipo_documento: "NIT",
+    numero_documento: "900123456-7",
+    registro_sanitario: "NIT-4532",
+    capacidad_maxima: 45,
+    servicios: "Adopción y cuidados temporales",
+  },
+  {
+    id: 202,
+    tipo: "veterinaria",
+    nombre_entidad: "Clínica Salud Animal",
+    nombre: "Andrés Gómez",
+    email: "contacto@saludanimal.com",
+    telefono: "+57 312 987 6543",
+    direccion: "Av. 12 #24-56, Medellín",
+    tipo_documento: "Registro sanitario",
+    numero_documento: "RS-7789",
+    registro_sanitario: "RS-7789",
+    servicios: "Urgencias y vacunas",
+  },
+];
+
 const UsuariosPendientes = () => {
   const { t } = useTranslation("admin");
   const [usuarios, setUsuarios] = useState([]);
@@ -148,6 +178,8 @@ const UsuariosPendientes = () => {
     return pages;
   };
 
+  const mostrarPendientes = !loading && usuarios.length === 0 ? samplePendientes : usuarios;
+
   if (loading) {
     return (
       <div className="pendientes-loading">
@@ -157,7 +189,7 @@ const UsuariosPendientes = () => {
     );
   }
 
-  if (!usuarios || usuarios.length === 0) {
+  if (!mostrarPendientes || mostrarPendientes.length === 0) {
     return (
       <div className="pendientes-empty">
         <div className="empty-icon">
@@ -186,7 +218,7 @@ const UsuariosPendientes = () => {
       </div>
 
       <div className="pendientes-grid">
-        {usuarios.map((usuario) => (
+        {mostrarPendientes.map((usuario) => (
           <div key={usuario.id} className="pendiente-card">
             <div className="pendiente-header">
               <div className="pendiente-avatar">

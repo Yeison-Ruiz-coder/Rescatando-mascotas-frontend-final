@@ -119,5 +119,11 @@
   "error_aprobar": "Error approving user",
   "error_rechazar": "Error rejecting user",
   "capacidad": "Maximum capacity",
-  "servicios_ofrecidos": "Services offered"
+  "servicios_ofrecidos": "Services offered",
+  "gestion_usuarios": "User Management",
+  "gestion_usuarios_desc": "Manage accounts, states and verifications.",
+  "fundaciones_titulo": "Foundations",
+  "fundaciones_descripcion": "Manage and review registered foundations.",
+  "veterinarias_titulo": "Veterinarians",
+  "veterinarias_descripcion": "Manage and review clinics and veterinary centers."
 }

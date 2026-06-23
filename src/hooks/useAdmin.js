@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import adminService from '../services/adminService';
 import { toast } from 'react-toastify';
 
-export const useAdminUsuarios = () => {
+export const useAdminUsuarios = (initialFilters = {}) => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -15,20 +15,24 @@ export const useAdminUsuarios = () => {
     search: '',
     tipo: '',
     estado: '',
-    page: 1
+    page: 1,
+    ...initialFilters,
   });
 
   const fetchUsuarios = useCallback(async () => {
     setLoading(true);
     try {
       const response = await adminService.getUsuarios(filters);
-      setUsuarios(response.data || []);
-      setPagination(response.meta || {
+      const usuariosData = Array.isArray(response.data) ? response.data : [];
+      const paginationData = response.meta || {
         current_page: 1,
         last_page: 1,
         per_page: 15,
-        total: 0
-      });
+        total: usuariosData.length,
+      };
+
+      setUsuarios(usuariosData);
+      setPagination(paginationData);
     } catch (error) {
       console.error('Error fetching usuarios:', error);
       toast.error(error.response?.data?.message || 'Error al cargar los usuarios');
