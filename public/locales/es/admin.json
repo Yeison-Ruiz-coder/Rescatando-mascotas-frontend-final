@@ -121,5 +121,11 @@
   "error_aprobar": "Error al aprobar usuario",
   "error_rechazar": "Error al rechazar usuario",
   "capacidad": "Capacidad máxima",
-  "servicios_ofrecidos": "Servicios ofrecidos"
+  "servicios_ofrecidos": "Servicios ofrecidos",
+  "gestion_usuarios": "Gestión de Usuarios",
+  "gestion_usuarios_desc": "Administra cuentas, estados y verificaciones.",
+  "fundaciones_titulo": "Fundaciones",
+  "fundaciones_descripcion": "Gestión y revisión de fundaciones registradas.",
+  "veterinarias_titulo": "Veterinarias",
+  "veterinarias_descripcion": "Gestión y revisión de clínicas y centros veterinarios."
 }
