@@ -1,9 +1,10 @@
 /* src/pages/fundacion/mascotas/MascotaDetalle.css */
 
-.mascota-detalle-page-fundacion {
+/* ===== PÁGINA ===== */
+.mascota-detalle-fundacion {
   min-height: 100vh;
-  background: transparent;
   padding: 2rem;
+  background: transparent;
 }
 
 .detalle-container-fundacion {
@@ -11,6 +12,7 @@
   margin: 0 auto;
 }
 
+/* ===== HEADER ===== */
 .detalle-header-fundacion {
   margin-bottom: 1.5rem;
 }
@@ -22,30 +24,32 @@
   padding: 10px 20px;
   background: var(--gradient-primary);
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   color: white;
   cursor: pointer;
   transition: var(--transition);
   font-weight: 500;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-back-fundacion:hover {
   transform: translateX(-4px);
-  filter: brightness(1.05);
+  box-shadow: var(--shadow-hard-md);
 }
 
-/* Layout principal - IMAGENES ARRIBA, INFO DEBAJO */
+/* ===== CONTENIDO PRINCIPAL ===== */
 .detalle-content-fundacion {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   background: var(--color-card-bg);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* ===== SECCIÓN DE IMÁGENES - ARRIBA ===== */
+/* ===== IMÁGENES ===== */
 .imagenes-section-fundacion {
   padding: 1.5rem;
   background: var(--form-input-bg);
@@ -58,11 +62,12 @@
   position: relative;
   aspect-ratio: 16/9;
   max-height: 500px;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
   background: var(--color-card-bg);
   width: 100%;
+  border: 1px solid var(--color-border);
 }
 
 .imagen-principal-fundacion img {
@@ -89,22 +94,26 @@
   opacity: 0.5;
 }
 
+/* ===== BADGE ESTADO ===== */
 .estado-badge-fundacion {
   position: absolute;
   top: 16px;
   right: 16px;
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
   font-weight: 600;
   color: white;
   z-index: 2;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .estado-adopcion { background: var(--gradient-primary); }
 .estado-adoptado { background: var(--color-success); }
 .estado-rescatada { background: var(--color-accent); }
+.estado-acogida { background: var(--color-warning); }
 
+/* ===== MINIATURAS ===== */
 .miniaturas-container {
   display: flex;
   gap: 0.75rem;
@@ -120,8 +129,8 @@
   cursor: pointer;
   border: 2px solid transparent;
   transition: var(--transition-fast);
-  position: relative;
   flex-shrink: 0;
+  background: var(--form-input-bg);
 }
 
 .miniatura-item img {
@@ -132,10 +141,19 @@
 
 .miniatura-item.activa {
   border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* ===== SECCIÓN DE INFORMACIÓN - DEBAJO DE LAS FOTOS ===== */
+.miniatura-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+/* ===== INFO ===== */
 .detalle-info-fundacion {
   padding: 1.5rem 2rem 2rem 2rem;
 }
@@ -154,7 +172,7 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-/* Grid de información - 3 columnas para mejor organización */
+/* ===== GRID DE INFO ===== */
 .info-grid-fundacion {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -165,14 +183,14 @@
 .info-item-fundacion {
   padding: 0.75rem;
   background: var(--form-input-bg);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;
 }
 
 .info-item-fundacion:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .info-item-fundacion i {
@@ -197,7 +215,7 @@
   word-break: break-word;
 }
 
-/* Secciones de información - Ocupan todo el ancho */
+/* ===== SECCIONES ===== */
 .info-section-fundacion {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
@@ -226,7 +244,7 @@
   line-height: 1.6;
 }
 
-/* Badges de salud */
+/* ===== BADGES SALUD ===== */
 .salud-badges {
   display: flex;
   flex-wrap: wrap;
@@ -235,18 +253,19 @@
 
 .salud-badge {
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  color: white;
 }
 
-.salud-badge.esterilizado { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-.salud-badge.desparasitado { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-.salud-badge.vacunado { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; }
+.salud-badge.esterilizado { background: var(--gradient-primary); }
+.salud-badge.desparasitado { background: var(--color-success); }
+.salud-badge.vacunado { background: var(--color-secondary); }
 
-/* Enfermedades, medicamentos */
+/* ===== TAGS ===== */
 .enfermedad-tag,
 .medicamento-tag,
 .vacuna-tag-fundacion {
@@ -254,7 +273,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   margin: 0.25rem;
 }
@@ -274,7 +293,7 @@
   color: #8b5cf6;
 }
 
-/* Requisitos */
+/* ===== REQUISITOS ===== */
 .requisitos-lista {
   list-style: none;
   padding: 0;
@@ -292,7 +311,7 @@
   color: var(--color-success);
 }
 
-/* Aptitudes */
+/* ===== APTITUDES ===== */
 .aptitudes-grid {
   display: flex;
   flex-wrap: wrap;
@@ -301,27 +320,28 @@
 
 .aptitud-tag {
   padding: 6px 14px;
-  border-radius: 50px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  color: white;
 }
 
-.aptitud-tag.temporal { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
-.aptitud-tag.ninos { background: linear-gradient(135deg, #10b981, #059669); color: white; }
-.aptitud-tag.no-ninos { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
-.aptitud-tag.animales { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-.aptitud-tag.no-animales { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+.aptitud-tag.temporal { background: var(--color-warning); color: #1e293b; }
+.aptitud-tag.ninos { background: var(--color-success); }
+.aptitud-tag.no-ninos { background: var(--color-danger); }
+.aptitud-tag.animales { background: var(--color-primary); }
+.aptitud-tag.no-animales { background: var(--color-danger); }
 
-/* Selector de estado */
+/* ===== SELECTOR ESTADO ===== */
 .estado-select-fundacion {
   width: 100%;
   max-width: 300px;
   padding: 10px 16px;
   background: var(--form-input-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   color: var(--color-text);
   font-size: 0.9rem;
   cursor: pointer;
@@ -331,9 +351,40 @@
 .estado-select-fundacion:focus {
   outline: none;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
 }
 
-/* Botones de acción */
+.loading-fundacion {
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+/* ===== VIDEO ===== */
+.video-container {
+  margin-top: 0.5rem;
+}
+
+.video-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.video-link:hover {
+  background: var(--color-primary);
+  color: white;
+  text-decoration: none;
+}
+
+/* ===== BOTONES ACCIÓN ===== */
 .acciones-finales-fundacion {
   margin-top: 1.5rem;
   padding-top: 1rem;
@@ -351,13 +402,14 @@
   align-items: center;
   gap: 0.5rem;
   padding: 12px 28px;
-  border-radius: 50px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
   border: none;
   font-size: 0.9rem;
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .btn-edit-fundacion {
@@ -373,17 +425,12 @@
 .btn-edit-fundacion:hover,
 .btn-delete-fundacion:hover {
   transform: translateY(-2px);
-  filter: brightness(1.05);
+  box-shadow: var(--shadow-hard-md);
 }
 
-.loading-fundacion {
-  display: inline-block;
-  margin-left: 1rem;
-  font-size: 0.85rem;
-  color: var(--color-primary);
-}
+.btn-edit-fundacion:hover { color: white; }
 
-/* Modal de imagen */
+/* ===== MODAL IMAGEN ===== */
 .modal-imagen-fundacion {
   position: fixed;
   top: 0;
@@ -424,26 +471,27 @@
   transform: scale(1.1);
 }
 
-/* Video link */
-.video-container {
-  margin-top: 0.5rem;
+/* ===== ERROR ===== */
+.error-container {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  margin: 2rem auto;
+  max-width: 500px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-.video-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 8px 16px;
-  background: rgba(102, 126, 234, 0.1);
-  border-radius: 50px;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: var(--transition);
+.error-container i {
+  font-size: 3rem;
+  color: var(--color-danger);
+  margin-bottom: 1rem;
 }
 
-.video-link:hover {
-  background: var(--color-primary);
-  color: white;
+.error-container h2 {
+  color: var(--color-text);
+  margin-bottom: 0.8rem;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -454,7 +502,7 @@
 }
 
 @media (max-width: 768px) {
-  .mascota-detalle-page-fundacion {
+  .mascota-detalle-fundacion {
     padding: 1rem;
   }
   
@@ -486,6 +534,10 @@
   
   .imagen-principal-fundacion {
     aspect-ratio: 1;
+  }
+  
+  .detalle-info-fundacion {
+    padding: 1rem 1.2rem 1.5rem 1.2rem;
   }
 }
 

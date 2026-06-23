@@ -1,4 +1,4 @@
-// src/components/fundacion/MascotaCardFundacion/MascotaCardFundacion.jsx
+// src/components/common/MascotaCardFundacion/MascotaCardFundacion.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -8,26 +8,19 @@ import './MascotaCardFundacion.css';
 
 const MascotaCardFundacion = ({ 
   mascota, 
-  onEstadoChange, 
   onEliminar,
-  onVerDetalle,
-  onEditar,
   getImageUrl: propGetImageUrl
 }) => {
   const { t } = useTranslation(['mascotas', 'fundacion']);
-  const [cambiandoEstado, setCambiandoEstado] = useState(false);
   const [eliminando, setEliminando] = useState(false);
+  const [imgError, setImgError] = useState(false);
   
   const { 
     id, 
     nombre_mascota, 
     descripcion, 
-    especie, 
-    genero, 
-    edad_aprox, 
     estado,
-    foto_principal,
-    lugar_rescate
+    foto_principal
   } = mascota;
 
   const getImageUrlSafe = (path) => {
@@ -35,15 +28,6 @@ const MascotaCardFundacion = ({
       return propGetImageUrl(path);
     }
     return getImageUrl(path);
-  };
-
-  const formatEdad = (edad) => {
-    if (!edad && edad !== 0) return '?';
-    const edadNum = parseFloat(edad);
-    if (isNaN(edadNum)) return '?';
-    const edadRedondeada = Math.round(edadNum);
-    if (edadRedondeada === 0) return t('mascotas:menos_de_un_año');
-    return `${edadRedondeada} ${edadRedondeada === 1 ? t('mascotas:año') : t('mascotas:años')}`;
   };
 
   const getEstadoConfig = (estadoActual) => {
@@ -74,25 +58,9 @@ const MascotaCardFundacion = ({
 
   const estadoConfig = getEstadoConfig(estado);
 
-  const handleEstadoChange = async (nuevoEstado) => {
-    if (cambiandoEstado) return;
-    setCambiandoEstado(true);
-    try {
-      await onEstadoChange(id, nuevoEstado);
-      toast.success(t('fundacion:estado_actualizado_exito', { 
-        estado: getEstadoConfig(nuevoEstado).label
-      }));
-    } catch (error) {
-      toast.error(t('fundacion:error_actualizar_estado'));
-    } finally {
-      setCambiandoEstado(false);
-    }
-  };
-
   const handleEliminar = async (e) => {
     e.stopPropagation();
-    
-    if (eliminando) return;
+    if (eliminando || !onEliminar) return;
     
     const confirmacion = window.confirm(
       t('fundacion:confirmar_eliminar', { nombre: nombre_mascota })
@@ -115,75 +83,67 @@ const MascotaCardFundacion = ({
 
   return (
     <div className="mascota-card-fundacion">
+      {/* Imagen */}
+      {imageUrl && !imgError ? (
+        <img 
+          src={imageUrl}
+          alt={nombre_mascota}
+          className="card-image-fundacion"
+          loading="lazy"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <div className="card-image-placeholder-fundacion">
+          <span>🐾</span>
+        </div>
+      )}
+
+      {/* Badge de estado - SOLO ESTO QUEDA */}
       <div className={`estado-badge-fundacion ${estadoConfig.class}`}>
         <i className={`fas ${estadoConfig.icon}`}></i>
         <span>{estadoConfig.label}</span>
       </div>
 
-      <div className="card-image-fundacion">
-        {imageUrl ? (
-          <img 
-            src={imageUrl}
-            alt={nombre_mascota}
-            onError={(e) => {
-              console.error('Error cargando imagen:', imageUrl);
-              e.target.src = 'https://placehold.co/400x300?text=Sin+Imagen';
-            }}
-          />
-        ) : (
-          <div className="image-placeholder-fundacion">
-            <i className="fas fa-paw"></i>
-            <span>{t('mascotas:sin_imagen')}</span>
-          </div>
+      {/* Nombre */}
+      <h3 className="card-title-fundacion">{nombre_mascota}</h3>
+
+      {/* ID - Opcional, solo en hover */}
+      <span className="card-id-fundacion">#{id}</span>
+
+      {/* Overlay siempre visible con acciones */}
+      <div className="card-overlay-fundacion">
+        {descripcion && (
+          <p className="card-overlay-desc">
+            {descripcion.length > 80 ? descripcion.substring(0, 80) + '...' : descripcion}
+          </p>
         )}
-      </div>
-
-      <div className="card-content-fundacion">
-        <div className="card-header-fundacion">
-          <h3 className="card-title-fundacion">{nombre_mascota}</h3>
-        </div>
-
-        <div className="card-details-fundacion">
-          <div className="detail-item">
-            <i className="fas fa-tag"></i>
-            <span className="detail-label">{t('mascotas:especie')}:</span>
-            <span className="detail-value">{especie || t('mascotas:no_especificada')}</span>
-          </div>
-          <div className="detail-item">
-            <i className="fas fa-calendar"></i>
-            <span className="detail-label">{t('mascotas:edad')}:</span>
-            <span className="detail-value">{formatEdad(edad_aprox)}</span>
-          </div>
-          <div className="detail-item">
-            <i className="fas fa-venus-mars"></i>
-            <span className="detail-label">{t('mascotas:genero')}:</span>
-            <span className="detail-value">
-              {genero === 'Macho' ? t('mascotas:macho') : 
-               genero === 'Hembra' ? t('mascotas:hembra') : 
-               t('mascotas:no_especificado')}
-            </span>
-          </div>
-          {lugar_rescate && (
-            <div className="detail-item">
-              <i className="fas fa-map-marker-alt"></i>
-              <span className="detail-label">{t('mascotas:lugar_rescate')}:</span>
-              <span className="detail-value">{lugar_rescate}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="card-actions-fundacion">
-          <Link to={`/fundacion/mascotas/${id}`} className="action-btn-fundacion view">
+        
+        <div className="card-overlay-actions">
+          <Link 
+            to={`/fundacion/mascotas/${id}`} 
+            className="action-btn-fundacion view"
+            onClick={(e) => e.stopPropagation()}
+          >
             <i className="fas fa-eye"></i>
-            {t('fundacion:ver_detalles')}
+            <span className="btn-text">{t('fundacion:ver')}</span>
           </Link>
-          <Link to={`/fundacion/mascotas/editar/${id}`} className="action-btn-fundacion edit">
+          
+          <Link 
+            to={`/fundacion/mascotas/editar/${id}`} 
+            className="action-btn-fundacion edit"
+            onClick={(e) => e.stopPropagation()}
+          >
             <i className="fas fa-edit"></i>
-            {t('fundacion:editar')}
+            <span className="btn-text">{t('fundacion:editar')}</span>
           </Link>
-          <button onClick={handleEliminar} className="action-btn-fundacion delete" disabled={eliminando}>
+          
+          <button 
+            onClick={handleEliminar} 
+            className="action-btn-fundacion delete" 
+            disabled={eliminando}
+          >
             <i className={eliminando ? "fas fa-spinner fa-spin" : "fas fa-trash"}></i>
-            {eliminando ? t('fundacion:eliminando') : t('fundacion:eliminar')}
+            <span className="btn-text">{eliminando ? t('fundacion:eliminando') : t('fundacion:eliminar')}</span>
           </button>
         </div>
       </div>

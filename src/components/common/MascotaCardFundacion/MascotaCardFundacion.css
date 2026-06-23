@@ -1,262 +1,168 @@
-/* src/components/fundacion/MascotaCardFundacion/MascotaCardFundacion.css */
+/* src/components/common/MascotaCardFundacion/MascotaCardFundacion.css */
 
 /* ============================================
-   TARJETA SIMPLIFICADA PARA FUNDACIÓN
-   Adaptada a estilos globales y tema claro/oscuro
+   CARD - ESTILO FORMAL PARA CRUD
    ============================================ */
 
 .mascota-card-fundacion {
-  background: var(--color-card-bg);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--color-border);
   position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
 }
 
 .mascota-card-fundacion:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-hard-md);
   border-color: var(--color-primary);
 }
 
-/* Imagen */
+/* ===== IMAGEN ===== */
 .card-image-fundacion {
-  position: relative;
-  height: 200px;
-  overflow: hidden;
-  flex-shrink: 0;
-  background: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
-}
-
-.card-image-fundacion img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.mascota-card-fundacion:hover .card-image-fundacion img {
-  transform: scale(1.08);
+.mascota-card-fundacion:hover .card-image-fundacion {
+  transform: scale(1.04);
 }
 
-.image-placeholder-fundacion {
+.card-image-placeholder-fundacion {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  background: var(--gradient-primary);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  color: var(--color-text-muted);
-  background: linear-gradient(135deg, var(--color-light), var(--color-light-secondary));
+  font-size: 3rem;
+  color: white;
+  opacity: 0.6;
 }
 
-.image-placeholder-fundacion i {
-  font-size: 2.5rem;
-  opacity: 0.5;
-}
-
-.image-placeholder-fundacion span {
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-/* Badge de estado */
+/* ============================================
+   BADGE ESTADO - ESQUINA SUPERIOR DERECHA
+   ============================================ */
 .estado-badge-fundacion {
   position: absolute;
   top: 10px;
   right: 10px;
-  padding: 4px 12px;
-  border-radius: 50px;
-  font-size: 0.65rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.6rem;
   font-weight: 600;
   color: white;
   backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-hard-sm);
   display: flex;
   align-items: center;
   gap: 6px;
-  z-index: 2;
+  z-index: 5;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .estado-badge-fundacion i {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
 }
 
-/* Estados - colores fijos (no dependen del tema) */
 .estado-adopcion {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: var(--gradient-primary);
 }
 
 .estado-adoptado {
-  background: linear-gradient(135deg, #94a3b8, #64748b);
+  background: var(--color-success);
 }
 
 .estado-rescatada {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: var(--gradient-accent);
 }
 
 .estado-acogida {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: var(--color-info);
 }
 
-/* Contenido simplificado */
-.card-content-fundacion {
-  padding: 16px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header */
-.card-header-fundacion {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
+/* ============================================
+   NOMBRE - ESQUINA SUPERIOR IZQUIERDA
+   ============================================ */
 .card-title-fundacion {
-  font-size: 1rem;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 90px);
   margin: 0;
 }
 
-.card-id-fundacion {
-  font-size: 0.6rem;
-  color: var(--color-text-muted);
-  font-family: monospace;
-  background: var(--color-light);
-  padding: 2px 8px;
-  border-radius: 20px;
+/* ============================================
+   OVERLAY - SIEMPRE VISIBLE
+   ============================================ */
+.card-overlay-fundacion {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+  padding: 30px 12px 12px;
+  /* ✅ SIEMPRE VISIBLE, sin transform */
 }
 
-/* Grid de detalles - solo 2 líneas */
-.card-details-fundacion {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 8px;
-  background: var(--color-light);
-  border-radius: 12px;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-}
-
-.detail-item i {
-  width: 18px;
-  color: var(--color-primary);
-  font-size: 0.65rem;
-}
-
-.detail-label {
-  color: var(--color-text-muted);
-  font-weight: 500;
-}
-
-.detail-value {
-  color: var(--color-text);
-  font-weight: 600;
-}
-
-/* Descripción - solo 1 línea */
-.card-description-fundacion {
-  color: var(--color-text-muted);
+.card-overlay-desc {
+  color: rgba(255, 255, 255, 0.9) !important;
   font-size: 0.7rem;
   line-height: 1.4;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* Selector de estado - compacto */
-.estado-selector-fundacion {
-  margin-bottom: 12px;
-  padding: 8px;
-  background: var(--color-light);
-  border-radius: 10px;
+.card-overlay-fundacion-info {
+  display: none;
+  /* Oculto, no se usa en CRUD */
 }
 
-.estado-selector-fundacion label {
+/* ============================================
+   BOTONES DE ACCIÓN - SIEMPRE VISIBLES
+   ============================================ */
+.card-overlay-actions {
   display: flex;
-  align-items: center;
   gap: 6px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.estado-selector-fundacion label i {
-  color: var(--color-primary);
-  font-size: 0.55rem;
-}
-
-.estado-select-fundacion {
-  width: 100%;
-  padding: 6px 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  background: var(--color-card-bg);
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--color-text);
-}
-
-.estado-select-fundacion:hover {
-  border-color: var(--color-primary);
-}
-
-.estado-select-fundacion:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-}
-
-.estado-loading {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 0.65rem;
-  color: var(--color-primary);
-  animation: spinEstado 1s linear infinite;
-}
-
-@keyframes spinEstado {
-  to { transform: rotate(360deg); }
-}
-
-/* Botones de acción - más compactos */
-.card-actions-fundacion {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
+  margin-top: 6px;
+  flex-wrap: nowrap;
 }
 
 .action-btn-fundacion {
-  flex: 1;
-  padding: 8px 12px;
-  border-radius: 30px;
-  font-size: 0.7rem;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 6px 4px;
+  border-radius: 20px;
+  font-size: 0.65rem;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -266,102 +172,177 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
+  white-space: nowrap;
+  color: white;
 }
 
+.action-btn-fundacion .btn-text {
+  display: inline;
+}
+
+/* ✅ VER - Color primario */
 .action-btn-fundacion.view {
-  background: rgba(102, 126, 234, 0.1);
-  color: var(--color-primary);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: var(--gradient-primary);
 }
 
 .action-btn-fundacion.view:hover {
-  background: var(--color-primary);
-  color: white;
+  background: var(--gradient-primary);
   transform: translateY(-2px);
+  color: white;
+  box-shadow: var(--shadow-hard-sm);
 }
 
+/* ✅ EDITAR - Color warning */
 .action-btn-fundacion.edit {
-  background: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--color-accent);
+  color: #1e293b;
 }
 
 .action-btn-fundacion.edit:hover {
-  background: #f59e0b;
-  color: white;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
+/* ✅ ELIMINAR - Color danger */
 .action-btn-fundacion.delete {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(255, 71, 87, 0.9);
 }
 
 .action-btn-fundacion.delete:hover {
-  background: #ef4444;
-  color: white;
+  background: var(--color-danger);
   transform: translateY(-2px);
-}
-
-.action-btn-fundacion:active {
-  transform: translateY(0);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .action-btn-fundacion:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
-/* Modo oscuro - ajustes adicionales */
-[data-theme="dark"] .card-details-fundacion {
-  background: rgba(255, 255, 255, 0.05);
+/* ============================================
+   ID - SOLO VISIBLE EN HOVER (Opcional)
+   ============================================ */
+.card-id-fundacion {
+  position: absolute;
+  bottom: 80px;
+  right: 10px;
+  z-index: 5;
+  font-size: 0.5rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: none;
 }
 
-[data-theme="dark"] .card-id-fundacion {
-  background: rgba(255, 255, 255, 0.1);
-  color: #a0aec0;
+.mascota-card-fundacion:hover .card-id-fundacion {
+  display: block;
 }
 
-[data-theme="dark"] .estado-selector-fundacion {
-  background: rgba(255, 255, 255, 0.05);
-}
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 
-[data-theme="dark"] .card-description-fundacion {
-  color: #a0aec0;
-}
-
-/* Responsive */
+/* Tablet */
 @media (max-width: 768px) {
-  .card-image-fundacion {
-    height: 180px;
+  .card-overlay-fundacion {
+    padding: 24px 10px 8px;
   }
-  
-  .card-actions-fundacion {
-    flex-direction: column;
-    gap: 6px;
-  }
-  
-  .card-content-fundacion {
-    padding: 12px;
-  }
-}
 
-@media (max-width: 480px) {
   .card-title-fundacion {
-    font-size: 0.9rem;
+    top: 8px;
+    left: 8px;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    max-width: calc(100% - 70px);
   }
-  
+
   .estado-badge-fundacion {
     top: 8px;
     right: 8px;
+    font-size: 0.5rem;
     padding: 3px 10px;
+  }
+
+  .card-overlay-desc {
     font-size: 0.6rem;
+    -webkit-line-clamp: 1;
+    margin-bottom: 4px;
   }
-  
-  .card-details-fundacion {
-    grid-template-columns: 1fr;
+
+  .card-overlay-actions {
+    gap: 4px;
   }
+
+  .action-btn-fundacion {
+    font-size: 0.55rem;
+    padding: 5px 3px;
+    gap: 3px;
+  }
+
+  .action-btn-fundacion .btn-text {
+    display: none;
+  }
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+  .estado-badge-fundacion {
+    top: 6px;
+    right: 6px;
+    font-size: 0.45rem;
+    padding: 2px 8px;
+    gap: 4px;
+  }
+
+  .estado-badge-fundacion i {
+    font-size: 0.4rem;
+  }
+
+  .card-title-fundacion {
+    top: 6px;
+    left: 6px;
+    font-size: 0.6rem;
+    padding: 3px 8px;
+    max-width: calc(100% - 60px);
+  }
+
+  .card-overlay-fundacion {
+    padding: 16px 6px 6px;
+  }
+
+  .card-overlay-desc {
+    font-size: 0.5rem;
+    -webkit-line-clamp: 1;
+    margin-bottom: 2px;
+  }
+
+  .card-overlay-actions {
+    gap: 3px;
+    margin-top: 2px;
+  }
+
+  .action-btn-fundacion {
+    font-size: 0.45rem;
+    padding: 4px 2px;
+    min-width: 18px;
+    border-radius: 14px;
+  }
+
+  .action-btn-fundacion i {
+    font-size: 0.45rem;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .card-overlay-fundacion {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+}
+
+[data-theme="dark"] .card-title-fundacion {
+  background: rgba(0, 0, 0, 0.8);
 }
