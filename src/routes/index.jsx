@@ -94,6 +94,7 @@ const SuscripcionesIndex = lazy(() => import("../pages/fundacion/suscripciones/S
 const SuscripcionesCreate = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesCreate"));
 const SuscripcionesEdit = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesEdit"));
 const SuscripcionesShow = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesShow"));
+const FundacionSolicitudesRecibidas = lazy(() => import("../pages/fundacion/adopciones/FundacionSolicitudesRecibidas"));
 const RescatesDisponiblesFundacion = lazy(() => import("../pages/fundacion/rescates/RescatesDisponibles"));
 const MisRescatesFundacion = lazy(() => import("../pages/fundacion/rescates/MisRescates"));
 const RescateDetalleFundacion = lazy(() => import("../pages/fundacion/rescates/RescateDetalle"));
@@ -398,6 +399,7 @@ const router = createBrowserRouter([
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
           { path: "adopciones", element: <FundacionAdopciones /> },
+          { path: "solicitudes", element: <FundacionSolicitudesRecibidas /> },
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
           { path: "reportes", element: <FundReportes /> },
