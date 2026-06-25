@@ -9,12 +9,10 @@
   "fecha_label": "Fecha del rescate",
   "map_label": "Ubicacion exacta en el mapa",
   "map_hint": "Haz clic en el mapa para ajustar la ubicacion. Tambien puedes mover el marcador.",
-  
   "fotos_section": "Fotos del rescate",
   "foto_principal_label": "Foto principal (recomendada)",
   "galeria_label": "Galeria de fotos adicionales",
   "fotos_hint": "Las fotos ayudan a identificar mejor al animal y su estado. Puedes subir hasta 5 fotos adicionales (maximo 3MB cada una).",
-  
   "optional_data": "Datos opcionales (para contactarte y darte seguimiento)",
   "nombre_label": "Tu nombre",
   "nombre_placeholder": "Ejemplo: Juan Perez",
@@ -140,7 +138,6 @@
   "fotos_label": "Fotos del rescate (máximo 5)",
   "first_photo_main_hint": "La primera foto que subas será la foto principal del rescate",
   "location_section": "Ubicación del rescate",
-
   "rescate_enviado_title": "¡Rescate reportado exitosamente!",
   "rescate_enviado_message": "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
   "admin_waiting_time": "Tiempo para intervención de administradores:",
@@ -158,5 +155,15 @@
   "rescue_phone": "123-456-7890",
   "vet_phone": "098-765-4321",
   "animal_police": "112",
-  "footer_message": "Juntos podemos hacer la diferencia"
+  "footer_message": "Juntos podemos hacer la diferencia",
+  "stats": {
+      "total": "Total Rescates",
+      "pendientes": "Pendientes",
+      "en_proceso": "En Proceso",
+      "completados": "Completados",
+      "disponibles": "Disponibles",
+      "urgentes": "Urgentes",
+      "media": "Prioridad Media",
+      "baja": "Prioridad Baja"
+    }
 }

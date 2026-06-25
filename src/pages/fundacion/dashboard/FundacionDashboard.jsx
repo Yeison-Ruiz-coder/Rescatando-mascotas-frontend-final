@@ -6,7 +6,26 @@ import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import { rescateService } from "../../../services/rescateService";
 import { suscripcionService } from "../../../services/suscripcionService";
-import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import {
+  PawPrint,
+  Heart,
+  CheckCircle,
+  Calendar,
+  TrendingUp,
+  Users,
+  Activity,
+  Clock,
+  AlertCircle,
+  PlusCircle,
+  CalendarPlus,
+  HandHeart,
+  ArrowRight,
+  Home,
+  MapPin,
+  Calendar as CalendarIcon,
+  UserCheck,
+} from "lucide-react";
+import ProfileBanner from "../../../components/common/ProfileBanner/index.js";
 import { getImageUrl } from "../../../utils/imageUtils";
 import "./FundacionDashboard.css";
 
@@ -31,11 +50,10 @@ const FundacionDashboard = () => {
   const [actividadReciente, setActividadReciente] = useState([]);
   const [rescatesPendientes, setRescatesPendientes] = useState([]);
 
-  // Función para formatear fechas según el idioma
   const formatDateByLocale = (date, options = {}) => {
     if (!date) return "";
     const locale = i18n.language === "en" ? "en-US" : "es-ES";
-    const defaultOptions = { year: "numeric", month: "long", day: "numeric" };
+    const defaultOptions = { year: "numeric", month: "short", day: "numeric" };
     return new Date(date).toLocaleDateString(locale, { ...defaultOptions, ...options });
   };
 
@@ -45,7 +63,6 @@ const FundacionDashboard = () => {
     return new Date(date).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
   };
 
-  // Función para extraer datos de respuesta API
   const extractData = (response) => {
     if (response.data?.success && response.data.data) {
       return response.data.data;
@@ -67,11 +84,8 @@ const FundacionDashboard = () => {
     setError(null);
 
     try {
-      console.log("🚀 Cargando dashboard...");
+      console.log("🚀 Cargando dashboard fundación...");
 
-      // ============================================
-      // 1. Cargar mascotas
-      // ============================================
       let mascotas = [];
       try {
         const mascotasRes = await api.get("/entity/mascotas");
@@ -95,9 +109,6 @@ const FundacionDashboard = () => {
         )
         .slice(0, 5);
 
-      // ============================================
-      // 2. Cargar eventos
-      // ============================================
       let eventos = [];
       try {
         const eventosRes = await api.get("/entity/eventos");
@@ -127,9 +138,6 @@ const FundacionDashboard = () => {
         })
         .slice(0, 5);
 
-      // ============================================
-      // 3. Cargar rescates
-      // ============================================
       let rescates = [];
       let pendientes = [];
       try {
@@ -148,9 +156,6 @@ const FundacionDashboard = () => {
         console.error("❌ Error cargando rescates:", err);
       }
 
-      // ============================================
-      // 4. Cargar suscripciones
-      // ============================================
       let suscripciones = [];
       let montoTotal = 0;
       try {
@@ -167,9 +172,6 @@ const FundacionDashboard = () => {
         console.log("ℹ️ No hay suscripciones disponibles");
       }
 
-      // ============================================
-      // 5. Actividad reciente
-      // ============================================
       const actividades = [
         ...mascotas.slice(0, 3).map((m) => ({
           id: m.id,
@@ -249,30 +251,6 @@ const FundacionDashboard = () => {
     return "fd-status-rescatada";
   };
 
-  const getPrioridadText = (prioridad) => {
-    if (prioridad === "alta") return t("alta", "Alta");
-    if (prioridad === "media") return t("media", "Media");
-    return t("baja", "Baja");
-  };
-
-  const getPrioridadClass = (prioridad) => {
-    if (prioridad === "alta") return "prioridad-alta";
-    if (prioridad === "media") return "prioridad-media";
-    return "prioridad-baja";
-  };
-
-  const getPrioridadIcon = (prioridad) => {
-    if (prioridad === "alta") return "fa-exclamation-triangle";
-    if (prioridad === "media") return "fa-exclamation-circle";
-    return "fa-info-circle";
-  };
-
-  const getPrioridadLabel = (prioridad) => {
-    if (prioridad === "alta") return t("urgente", "Urgente");
-    if (prioridad === "media") return t("normal", "Normal");
-    return t("leve", "Leve");
-  };
-
   const getEstadoRescateText = (estado) => {
     if (estado === "pendiente") return t("estado_pendiente", "Pendiente");
     return t("estado_en_proceso", "En proceso");
@@ -282,10 +260,21 @@ const FundacionDashboard = () => {
     return estado === "pendiente" ? "pendiente" : "en_proceso";
   };
 
+  // ===== DATOS PARA EL BANNER =====
+  const fundacionName = user?.name || user?.nombre || t("fundacion", "Fundación");
+  const fundacionAvatar = user?.avatar || null;
+  const totalMascotas = stats.totalMascotas;
+  const tasaExito = stats.totalMascotas > 0 
+    ? Math.round((stats.adoptadas / stats.totalMascotas) * 100) 
+    : 0;
+
   if (loading) {
     return (
       <div className="fd-dashboard-container">
-        <LoadingSpinner text={t("cargando_dashboard", "Cargando dashboard...")} />
+        <div className="panel-loading-modern">
+          <div className="spinner-modern"></div>
+          <p>{t("cargando_dashboard", "Cargando dashboard...")}</p>
+        </div>
       </div>
     );
   }
@@ -293,13 +282,15 @@ const FundacionDashboard = () => {
   if (error) {
     return (
       <div className="fd-dashboard-container">
-        <div className="fd-error-state">
-          <i className="fas fa-exclamation-triangle"></i>
-          <h3>{t("error_titulo", "Error al cargar el dashboard")}</h3>
-          <p>{error}</p>
-          <button onClick={cargarDatosDashboard} className="fd-retry-btn">
-            <i className="fas fa-sync-alt"></i> {t("reintentar", "Reintentar")}
-          </button>
+        <div className="bento-container">
+          <div className="panel-error-modern">
+            <AlertCircle size={48} className="error-icon-modern" />
+            <h3>{t("error_titulo", "Error al cargar el dashboard")}</h3>
+            <p>{error}</p>
+            <button onClick={cargarDatosDashboard} className="btn-retry-modern">
+              {t("reintentar", "Reintentar")}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -307,334 +298,300 @@ const FundacionDashboard = () => {
 
   return (
     <div className="fd-dashboard-container">
-      <div className="fd-container">
-        {/* Header */}
-        <div className="fd-header">
-          <h1>
-            <i className="fas fa-chart-line"></i>
-            {t("dashboard_titulo", "Panel de Control")}
-          </h1>
-          <p>
-            {t("dashboard_bienvenida", "Bienvenido de vuelta")}, {user?.name || t("fundacion", "Fundación")}!
-            {" "}{t("dashboard_desc", "Aquí tienes un resumen de tu actividad")}
-          </p>
+      {/* ===== BANNER DE PERFIL ===== */}
+      <div className="fd-banner-wrapper">
+        <div className="bento-container">
+          <ProfileBanner
+            user={{
+              nombre: fundacionName,
+              avatar: fundacionAvatar,
+              titulo: t("banner.titulo", {
+                defaultValue: "{{count}} mascotas · {{percent}}% de adopciones exitosas",
+                count: totalMascotas,
+                percent: tasaExito,
+              }),
+              solicitudes: stats.totalMascotas,
+              adopciones: stats.adoptadas,
+              eventos: stats.eventosProximos,
+            }}
+          />
         </div>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="fd-stats-grid">
-          <div className="fd-stat-card">
-            <div className="fd-stat-icon">
-              <i className="fas fa-paw"></i>
-            </div>
-            <div className="fd-stat-value">{stats.totalMascotas}</div>
-            <div className="fd-stat-label">{t("total_mascotas", "Total Mascotas")}</div>
-          </div>
-
-          <div className="fd-stat-card">
-            <div className="fd-stat-icon">
-              <i className="fas fa-heart"></i>
-            </div>
-            <div className="fd-stat-value">{stats.enAdopcion}</div>
-            <div className="fd-stat-label">{t("en_adopcion", "En Adopción")}</div>
-          </div>
-
-          <div className="fd-stat-card">
-            <div className="fd-stat-icon">
-              <i className="fas fa-check-circle"></i>
-            </div>
-            <div className="fd-stat-value">{stats.adoptadas}</div>
-            <div className="fd-stat-label">{t("adoptadas", "Adoptadas")}</div>
-          </div>
-
-          <div className="fd-stat-card">
-            <div className="fd-stat-icon">
-              <i className="fas fa-calendar"></i>
-            </div>
-            <div className="fd-stat-value">{stats.eventosProximos}</div>
-            <div className="fd-stat-label">{t("eventos_proximos", "Eventos Próximos")}</div>
+      {/* ===== STATS CARDS ===== */}
+      <section className="fd-stats-section">
+        <div className="bento-container">
+          <div className="fd-stats-grid">
+            <StatCardModern
+              icon={<PawPrint size={24} />}
+              label={t("total_mascotas", "Total Mascotas")}
+              value={stats.totalMascotas}
+              color="primary"
+              progressLabel={t("total", "Total")}
+            />
+            <StatCardModern
+              icon={<Heart size={24} />}
+              label={t("en_adopcion", "En Adopción")}
+              value={stats.enAdopcion}
+              color="success"
+              progressLabel={t("disponibles", "Disponibles")}
+            />
+            <StatCardModern
+              icon={<CheckCircle size={24} />}
+              label={t("adoptadas", "Adoptadas")}
+              value={stats.adoptadas}
+              color="gradient"
+              progressLabel={t("exitos", "Éxitos")}
+            />
+            <StatCardModern
+              icon={<Calendar size={24} />}
+              label={t("eventos_proximos", "Eventos Próximos")}
+              value={stats.eventosProximos}
+              color="warning"
+              progressLabel={t("programados", "Programados")}
+            />
           </div>
         </div>
+      </section>
 
-        {/* Grid Principal - Mascotas Recientes y Eventos Próximos */}
-        <div className="fd-grid-2">
-          {/* Mascotas Recientes */}
-          <div className="fd-section">
-            <div className="fd-section-header">
-              <h2>
-                <i className="fas fa-paw"></i>
-                {t("mascotas_recientes", "Mascotas Recientes")}
-              </h2>
-              <Link to="/fundacion/mascotas" className="fd-section-link">
-                {t("ver_todas", "Ver todas")} <i className="fas fa-arrow-right"></i>
-              </Link>
-            </div>
-            <div className="fd-content-card">
-              <div className="fd-card-body">
-                {mascotasRecientes.length === 0 ? (
-                  <div className="fd-empty-state">
-                    <i className="fas fa-paw"></i>
-                    <p>{t("sin_mascotas", "No hay mascotas registradas")}</p>
-                    <Link to="/fundacion/mascotas/nueva" className="fd-empty-link">
-                      <i className="fas fa-plus-circle"></i>
-                      {t("registrar_primera", "Registrar primera mascota")}
-                    </Link>
-                  </div>
-                ) : (
-                  mascotasRecientes.map((mascota) => (
-                    <div key={mascota.id} className="fd-pet-card">
-                      <img
-                        src={getImageUrl(mascota.foto_principal)}
-                        alt={mascota.nombre_mascota}
-                        className="fd-pet-image"
-                        onError={(e) => {
-                          e.target.src = "https://placehold.co/60x60?text=🐾";
-                        }}
-                      />
-                      <div className="fd-pet-info">
-                        <div className="fd-pet-name">{mascota.nombre_mascota}</div>
-                        <div className="fd-pet-details">
-                          <span>
-                            <i className="fas fa-tag"></i> {mascota.especie || t("no_especificada", "?")}
-                          </span>
-                          <span>•</span>
-                          <span>
-                            <i className="fas fa-calendar"></i> {mascota.edad_aprox || "?"}{" "}
-                            {t("años", "años")}
+      {/* ===== GRID PRINCIPAL ===== */}
+      <section className="fd-main-grid-section">
+        <div className="bento-container">
+          <div className="fd-main-grid">
+            {/* Mascotas Recientes */}
+            <div className="card-modern fd-card-solicitudes">
+              <div className="card-header-modern">
+                <div className="card-header-left">
+                  <PawPrint size={20} className="card-icon" />
+                  <h3>{t("mascotas_recientes", "Mascotas Recientes")}</h3>
+                </div>
+                <Link to="/fundacion/mascotas" className="card-link-modern">
+                  {t("ver_todas", "Ver todas")} <ArrowRight size={14} />
+                </Link>
+              </div>
+              {mascotasRecientes.length === 0 ? (
+                <div className="empty-state-modern">
+                  <p>{t("sin_mascotas", "No hay mascotas registradas")}</p>
+                </div>
+              ) : (
+                <ul className="fd-mascotas-list">
+                  {mascotasRecientes.map((mascota) => (
+                    <li key={mascota.id} className="fd-mascota-item">
+                      <div className="fd-mascota-info">
+                        <img
+                          src={getImageUrl(mascota.foto_principal)}
+                          alt={mascota.nombre_mascota}
+                          className="fd-mascota-avatar"
+                          onError={(e) => {
+                            e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5z'/%3E%3Cpath d='M2 17l10 5 10-5'/%3E%3Cpath d='M2 12l10 5 10-5'/%3E%3C/svg%3E";
+                          }}
+                        />
+                        <div>
+                          <span className="fd-mascota-nombre">{mascota.nombre_mascota}</span>
+                          <span className="fd-mascota-detalles">
+                            {mascota.especie || "?"} · {mascota.edad_aprox || "?"} años
                           </span>
                         </div>
                       </div>
                       <span className={`fd-pet-status ${getEstadoClass(mascota.estado)}`}>
-                        <i className={`fas ${mascota.estado === "Adoptado" ? "fa-check-circle" : "fa-heart"}`}></i>
                         {getEstadoText(mascota.estado)}
                       </span>
-                    </div>
-                  ))
-                )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Eventos Próximos */}
+            <div className="card-modern fd-card-eventos">
+              <div className="card-header-modern">
+                <div className="card-header-left">
+                  <Calendar size={20} className="card-icon" />
+                  <h3>{t("eventos_proximos", "Eventos Próximos")}</h3>
+                </div>
+                <Link to="/fundacion/eventos" className="card-link-modern">
+                  {t("ver_todos", "Ver todos")} <ArrowRight size={14} />
+                </Link>
               </div>
-            </div>
-          </div>
-
-          {/* Eventos Próximos */}
-          <div className="fd-section">
-            <div className="fd-section-header">
-              <h2>
-                <i className="fas fa-calendar-alt"></i>
-                {t("eventos_proximos", "Eventos Próximos")}
-              </h2>
-              <Link to="/fundacion/eventos" className="fd-section-link">
-                {t("ver_todos", "Ver todos")} <i className="fas fa-arrow-right"></i>
-              </Link>
-            </div>
-            <div className="fd-content-card">
-              <div className="fd-card-body">
-                {eventosProximos.length === 0 ? (
-                  <div className="fd-empty-state">
-                    <i className="fas fa-calendar"></i>
-                    <p>{t("sin_eventos", "No hay eventos programados")}</p>
-                    <Link to="/fundacion/eventos/crear" className="fd-empty-link">
-                      <i className="fas fa-plus-circle"></i>
-                      {t("crear_primero", "Crear primer evento")}
-                    </Link>
-                  </div>
-                ) : (
-                  eventosProximos.map((evento) => {
-                    const imageUrl = evento.imagen_url ? getImageUrl(evento.imagen_url) : null;
-                    return (
-                      <div key={evento.id} className="fd-event-card">
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={evento.nombre_evento}
-                            className="fd-event-image"
-                            onError={(e) => {
-                              e.target.style.display = "none";
-                            }}
-                          />
-                        ) : (
-                          <div className="fd-event-date-badge">
-                            <div className="fd-event-day">{formatDateByLocale(evento.fecha_evento, { day: "numeric" })}</div>
-                            <div className="fd-event-month">
-                              {formatDateByLocale(evento.fecha_evento, { month: "short" })}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="fd-event-info">
-                          <div className="fd-event-title">
-                            {evento.nombre_evento}
-                            {evento.categoria && (
-                              <span className="fd-event-category">
-                                <i className="fas fa-tag"></i> {evento.categoria}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="fd-event-details">
-                            <span className="fd-event-location">
-                              <i className="fas fa-map-marker-alt"></i>
-                              {evento.lugar_evento}
-                            </span>
-                            <span className="fd-event-time">
-                              <i className="fas fa-clock"></i>
-                              {formatTimeByLocale(evento.fecha_evento)}
-                            </span>
-                            {evento.capacidad_maxima && (
-                              <span className="fd-event-capacity">
-                                <i className="fas fa-users"></i>
-                                {t("capacidad", "Cap")}: {evento.capacidad_maxima}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="fd-event-stats">
-                            <span className="fd-event-stat heart">
-                              <i className="fas fa-heart"></i>
-                              {evento.likes || 0}
-                            </span>
-                            <span className="fd-event-stat users">
-                              <i className="fas fa-user-check"></i>
-                              {evento.total_asistentes || 0} {t("asistentes", "asistentes")}
-                            </span>
-                          </div>
-                          
-                        </div>
+              {eventosProximos.length === 0 ? (
+                <div className="empty-state-modern">
+                  <p>{t("sin_eventos", "No hay eventos programados")}</p>
+                </div>
+              ) : (
+                <ul className="fd-eventos-list">
+                  {eventosProximos.slice(0, 5).map((evento) => (
+                    <li key={evento.id} className="fd-evento-item">
+                      <div className="fd-evento-fecha">
+                        <span className="fd-evento-dia">
+                          {formatDateByLocale(evento.fecha_evento, { day: "numeric" })}
+                        </span>
+                        <span className="fd-evento-mes">
+                          {formatDateByLocale(evento.fecha_evento, { month: "short" })}
+                        </span>
                       </div>
-                    );
-                  })
-                )}
-              </div>
+                      <div className="fd-evento-info">
+                        <span className="fd-evento-nombre">{evento.nombre_evento}</span>
+                        <span className="fd-evento-lugar">
+                          <MapPin size={12} /> {evento.lugar_evento}
+                        </span>
+                        <span className="fd-evento-hora">
+                          <Clock size={12} /> {formatTimeByLocale(evento.fecha_evento)}
+                        </span>
+                      </div>
+                      <div className="fd-evento-asistentes">
+                        <UserCheck size={14} />
+                        <span>{evento.total_asistentes || 0}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Segunda fila - Actividad Reciente y Rescates */}
-        <div className="fd-grid-2">
-          {/* Actividad Reciente */}
-          <div className="fd-section">
-            <div className="fd-section-header">
-              <h2>
-                <i className="fas fa-history"></i>
-                {t("actividad_reciente", "Actividad Reciente")}
-              </h2>
-            </div>
-            <div className="fd-content-card">
-              <div className="fd-card-body">
-                {actividadReciente.length === 0 ? (
-                  <div className="fd-empty-state">
-                    <i className="fas fa-history"></i>
-                    <p>{t("sin_actividad", "No hay actividad reciente")}</p>
-                  </div>
-                ) : (
-                  <ul className="fd-activity-list">
-                    {actividadReciente.map((actividad, idx) => (
-                      <li key={idx} className="fd-activity-item">
-                        <div className="fd-activity-icon" style={{ background: `${actividad.color}15` }}>
-                          <i className={`fas ${actividad.icono}`} style={{ color: actividad.color }}></i>
-                        </div>
-                        <div className="fd-activity-content">
-                          <div className="fd-activity-title">{actividad.titulo}</div>
-                          <div className="fd-activity-time">
-                            <i className="fas fa-clock"></i> {formatRelativeTime(actividad.fecha)}
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+      {/* ===== RESCATES Y ACTIVIDAD ===== */}
+      <section className="fd-bottom-section">
+        <div className="bento-container">
+          <div className="fd-bottom-grid">
+            {/* Rescates Pendientes */}
+            <div className="card-modern fd-card-rescates">
+              <div className="card-header-modern">
+                <div className="card-header-left">
+                  <Activity size={20} className="card-icon" />
+                  <h3>{t("rescates_pendientes", "Rescates Activos")}</h3>
+                </div>
+                <Link to="/fundacion/rescates/mis-rescates" className="card-link-modern">
+                  {t("ver_todos", "Ver todos")} <ArrowRight size={14} />
+                </Link>
               </div>
-            </div>
-          </div>
-
-          {/* Rescates Pendientes / En Proceso */}
-          <div className="fd-section">
-            <div className="fd-section-header">
-              <h2>
-                <i className="fas fa-ambulance"></i>
-                {t("rescates_pendientes", "Rescates Activos")}
-              </h2>
-              <Link to="/fundacion/rescates/mis-rescates" className="fd-section-link">
-                {t("ver_todos", "Ver todos")} <i className="fas fa-arrow-right"></i>
-              </Link>
-            </div>
-            <div className="fd-content-card">
-              <div className="fd-card-body">
-                {rescatesPendientes.length === 0 ? (
-                  <div className="fd-empty-state">
-                    <i className="fas fa-check-circle"></i>
-                    <p>{t("sin_rescates", "No hay rescates activos")}</p>
-                    <Link to="/fundacion/rescates/disponibles" className="fd-empty-link">
-                      <i className="fas fa-search"></i>
-                      {t("ver_disponibles", "Ver rescates disponibles")}
-                    </Link>
-                  </div>
-                ) : (
-                  rescatesPendientes.map((rescate) => (
-                    <div key={rescate.id} className="fd-rescue-card">
-                      <div className={`fd-rescue-icon ${getPrioridadClass(rescate.prioridad)}`}>
-                        <i className={`fas ${getPrioridadIcon(rescate.prioridad)}`}></i>
-                        <span>{getPrioridadLabel(rescate.prioridad)}</span>
-                      </div>
-
-                      <div className="fd-rescue-info">
-                        <div className="fd-rescue-title">
+              {rescatesPendientes.length === 0 ? (
+                <div className="empty-state-modern">
+                  <p>{t("sin_rescates", "No hay rescates activos")}</p>
+                </div>
+              ) : (
+                <ul className="fd-rescates-list">
+                  {rescatesPendientes.map((rescate) => (
+                    <li key={rescate.id} className="fd-rescate-item">
+                      <div className="fd-rescate-info">
+                        <span className="fd-rescate-lugar">
                           {rescate.lugar_rescate || t("lugar_no_especificado", "Lugar no especificado")}
-                          <span className={`fd-rescue-badge ${getEstadoRescateClass(rescate.estado)}`}>
-                            <i className="fas fa-circle"></i>
-                            {getEstadoRescateText(rescate.estado)}
-                          </span>
-                        </div>
-
-                        <div className="fd-rescue-details">
-                          {rescate.fecha_rescate && (
-                            <span className="fd-rescue-date">
-                              <i className="fas fa-calendar"></i>
-                              {formatDateByLocale(rescate.fecha_rescate)}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className={`fd-rescue-priority ${getPrioridadClass(rescate.prioridad)}`}>
-                          <i className={`fas ${getPrioridadIcon(rescate.prioridad)}`}></i>
-                          {t("prioridad", "Prioridad")}: {getPrioridadText(rescate.prioridad)}
-                        </div>
+                        </span>
+                        <span className="fd-rescate-fecha">
+                          <CalendarIcon size={12} /> {formatDateByLocale(rescate.fecha_rescate)}
+                        </span>
                       </div>
-                    </div>
-                  ))
-                )}
+                      <span className={`fd-rescate-estado ${getEstadoRescateClass(rescate.estado)}`}>
+                        {getEstadoRescateText(rescate.estado)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Actividad Reciente */}
+            <div className="card-modern fd-card-actividad">
+              <div className="card-header-modern">
+                <div className="card-header-left">
+                  <TrendingUp size={20} className="card-icon" />
+                  <h3>{t("actividad_reciente", "Actividad Reciente")}</h3>
+                </div>
               </div>
+              {actividadReciente.length === 0 ? (
+                <div className="empty-state-modern">
+                  <p>{t("sin_actividad", "No hay actividad reciente")}</p>
+                </div>
+              ) : (
+                <ul className="fd-actividad-list">
+                  {actividadReciente.map((actividad, idx) => (
+                    <li key={idx} className="fd-actividad-item">
+                      <div className="fd-actividad-icon" style={{ background: `${actividad.color}15`, color: actividad.color }}>
+                        <i className={`fas ${actividad.icono}`}></i>
+                      </div>
+                      <div className="fd-actividad-content">
+                        <span className="fd-actividad-titulo">{actividad.titulo}</span>
+                        <span className="fd-actividad-tiempo">
+                          <Clock size={12} /> {formatRelativeTime(actividad.fecha)}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Acciones Rápidas */}
-        <div className="fd-section">
-          <div className="fd-section-header">
-            <h2>
-              <i className="fas fa-bolt"></i>
-              {t("acciones_rapidas", "Acciones Rápidas")}
-            </h2>
-          </div>
-          <div className="fd-grid-3">
-            <Link to="/fundacion/mascotas/nueva" className="fd-quick-action-card">
-              <div className="fd-quick-action">
-                <i className="fas fa-plus-circle"></i>
-                <h3>{t("registrar_mascota", "Registrar Mascota")}</h3>
-              </div>
-            </Link>
-            <Link to="/fundacion/eventos/crear" className="fd-quick-action-card">
-              <div className="fd-quick-action">
-                <i className="fas fa-calendar-plus"></i>
-                <h3>{t("crear_evento", "Crear Evento")}</h3>
-              </div>
-            </Link>
-            <Link to="/fundacion/suscripciones/crear" className="fd-quick-action-card">
-              <div className="fd-quick-action">
-                <i className="fas fa-hand-holding-heart"></i>
-                <h3>{t("crear_suscripcion", "Crear Suscripción")}</h3>
-              </div>
-            </Link>
+      {/* ===== ACCIONES RÁPIDAS ===== */}
+      <section className="fd-quick-actions-section">
+        <div className="bento-container">
+          <div className="fd-quick-actions">
+            <h4>{t("acciones_rapidas", "Acciones Rápidas")}</h4>
+            <div className="fd-actions-grid">
+              <Link to="/fundacion/mascotas/nueva" className="fd-action-btn">
+                <div className="fd-action-icon" style={{ background: "rgba(102, 126, 234, 0.15)", color: "var(--color-primary)" }}>
+                  <PlusCircle size={22} />
+                </div>
+                <span>{t("registrar_mascota", "Registrar Mascota")}</span>
+              </Link>
+              <Link to="/fundacion/eventos/crear" className="fd-action-btn">
+                <div className="fd-action-icon" style={{ background: "rgba(255, 140, 66, 0.15)", color: "var(--color-accent)" }}>
+                  <CalendarPlus size={22} />
+                </div>
+                <span>{t("crear_evento", "Crear Evento")}</span>
+              </Link>
+              <Link to="/fundacion/suscripciones/crear" className="fd-action-btn">
+                <div className="fd-action-icon" style={{ background: "rgba(255, 107, 157, 0.15)", color: "var(--color-heart)" }}>
+                  <HandHeart size={22} />
+                </div>
+                <span>{t("crear_suscripcion", "Crear Suscripción")}</span>
+              </Link>
+              <Link to="/fundacion/rescates/disponibles" className="fd-action-btn">
+                <div className="fd-action-icon" style={{ background: "rgba(46, 204, 113, 0.15)", color: "var(--color-success)" }}>
+                  <Home size={22} />
+                </div>
+                <span>{t("ver_rescates", "Ver Rescates")}</span>
+              </Link>
+            </div>
           </div>
         </div>
+      </section>
+    </div>
+  );
+};
+
+// ===== STAT CARD =====
+const StatCardModern = ({ 
+  icon, 
+  label, 
+  value, 
+  color, 
+  percentage = 0,
+  progressLabel = "",
+}) => {
+  const progressPercentage = Math.min(percentage || 0, 100);
+
+  const getProgressGradient = () => {
+    if (color === "gradient") {
+      return "linear-gradient(90deg, var(--color-primary), var(--color-secondary))";
+    }
+    if (color === "success") return "linear-gradient(90deg, #2ecc71, #27ae60)";
+    if (color === "warning") return "linear-gradient(90deg, #f59e0b, #d97706)";
+    return "linear-gradient(90deg, var(--color-primary), var(--color-primary-light))";
+  };
+
+  return (
+    <div className={`stat-card-modern stat-${color}`}>
+      <div className="stat-header-modern">
+        <div className="stat-icon-modern">{icon}</div>
+        <span className="stat-badge-modern">{label}</span>
+      </div>
+      <div className="stat-body-modern">
+        <span className="stat-value-modern">{value}</span>
+        <span className="stat-label-modern">{progressLabel || label}</span>
       </div>
     </div>
   );

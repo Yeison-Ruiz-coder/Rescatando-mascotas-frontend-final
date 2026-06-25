@@ -4,7 +4,7 @@
     "iniciar_sesion": "Iniciar sesión",
     "registrarse": "Registrarse",
     "cerrar_sesion": "Cerrar sesión",
-    "mi_perfil": "Mi perfil",
+    "mi_perfil": "Mi erfil",
     "administrador": "Administrador",
     "usuario": "Usuario",
     "invitado": "Invitado",
@@ -184,5 +184,7 @@
       "select_language": "Seleccionar idioma",
       "user_menu": "Menú de usuario"
     }
-  }
+  },
+
+  "mi_dashboard": "Mi Dashboard"
 }

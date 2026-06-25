@@ -194,8 +194,8 @@ const PublicSidebar = () => {
           <>
             <div className="sidebar-section">
               <Link
-                to="/user/dashboard"
-                className={`sidebar-item ${isActive("/user/dashboard") ? "active" : ""}`}
+                to="/user/PanelUsuario"
+                className={`sidebar-item ${isActive("/user/PanelUsuario") ? "active" : ""}`}
                 onClick={handleLinkClick}
               >
                 <i className="fas fa-chart-line"></i>

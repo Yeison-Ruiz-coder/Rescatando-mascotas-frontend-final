@@ -7,7 +7,22 @@ const NeedsSection = ({ necesidades, onUpdate, saving }) => {
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    setSelected(necesidades || []);
+    // 🔥 CORRECCIÓN: Si necesidades es string, parsearlo
+    let necesidadesArray = necesidades || [];
+    
+    if (typeof necesidades === 'string') {
+      try {
+        necesidadesArray = JSON.parse(necesidades);
+      } catch (e) {
+        necesidadesArray = [];
+      }
+    }
+    
+    if (!Array.isArray(necesidadesArray)) {
+      necesidadesArray = [];
+    }
+    
+    setSelected(necesidadesArray);
   }, [necesidades]);
 
   const needsList = [

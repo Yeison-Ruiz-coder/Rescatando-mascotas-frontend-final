@@ -1,18 +1,18 @@
 // src/pages/fundacion/mascotas/Mascotas.jsx
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import ProfileBanner from "../../../components/common/ProfileBanner/ProfileBanner";
 import MascotaCardFundacion from "../../../components/common/MascotaCardFundacion/MascotaCardFundacion";
-import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
+import FiltrosMascotasFundacion from "../../../components/common/FiltrosMascotasFundacion/FiltrosMascotasFundacion";
 import "./Mascotas.css";
 
 const Mascotas = () => {
-  const { t } = useTranslation("fundacion");
+  const { t } = useTranslation(["fundacion", "mascotas"]);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -27,6 +27,16 @@ const Mascotas = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
 
+  // ===== DATOS PARA EL BANNER =====
+  const fundacionName = user?.name || user?.nombre || t("fundacion", "Fundación");
+  const fundacionAvatar = user?.avatar || null;
+  const totalMascotas = pagination.total || 0;
+  const enAdopcion = mascotas.filter(
+    (m) => m.estado === "En adopcion" || m.estado === "En adopción"
+  ).length;
+  const tasaExito = totalMascotas > 0 ? Math.round((enAdopcion / totalMascotas) * 100) : 0;
+
+  // ===== ESPECIES =====
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
 
   // ============================================
@@ -34,22 +44,24 @@ const Mascotas = () => {
   // ============================================
   const cargarMascotas = useCallback(
     async (filters = {}, page = 1) => {
-      try {
-        setLoading(true);
+      setLoading(true);
 
+      try {
         const params = {
           page: page,
           per_page: 15,
           fields:
             "id,nombre_mascota,especie,genero,edad_aprox,estado,foto_principal,created_at,descripcion,lugar_rescate",
-          include: "razas:nombre_raza",
+          include: "razas:nombre_raza,vacunas:id,nombre",
           sort: "-created_at",
         };
 
-        if (filters.buscar) params.buscar = filters.buscar;
+        // Filtros
+        if (filters.buscar) params.search = filters.buscar;
         if (filters.especie) params.especie = filters.especie;
         if (filters.genero) params.genero = filters.genero;
         if (filters.estado) params.estado = filters.estado;
+        if (filters.tamano) params.tamano = filters.tamano;
 
         const response = await api.get("/entity/mascotas", { params });
 
@@ -77,11 +89,11 @@ const Mascotas = () => {
         console.error("Error cargando mascotas:", error);
 
         if (error.response?.status === 403) {
-          toast.error(t("error_permisos"));
+          toast.error(t("fundacion:error_permisos"));
         } else if (error.response?.status === 401) {
-          toast.error(t("error_sesion"));
+          toast.error(t("fundacion:error_sesion"));
         } else {
-          toast.error(t("error_carga_mascotas"));
+          toast.error(t("fundacion:error_carga_mascotas"));
         }
 
         setMascotas([]);
@@ -126,21 +138,21 @@ const Mascotas = () => {
         const response = await api.delete(`/entity/mascotas/${id}`);
 
         if (response.data.success) {
-          toast.success(t("mascota_eliminada_exito", { nombre }));
+          toast.success(t("fundacion:mascota_eliminada_exito", { nombre }));
           cargarMascotas(currentFilters, currentPage);
         } else {
-          toast.error(response.data.message || t("error_eliminar"));
+          toast.error(response.data.message || t("fundacion:error_eliminar"));
         }
       } catch (error) {
         console.error("Error eliminando mascota:", error);
-        toast.error(t("error_eliminar_mascota"));
+        toast.error(t("fundacion:error_eliminar_mascota"));
       }
     },
     [cargarMascotas, currentFilters, currentPage, t],
   );
 
   // ============================================
-  // 🎯 CAMBIAR ESTADO - PATCH OPTIMIZADO
+  // 🎯 CAMBIAR ESTADO
   // ============================================
   const handleCambiarEstado = useCallback(
     async (id, nuevoEstado) => {
@@ -152,21 +164,21 @@ const Mascotas = () => {
         if (response.data.success) {
           const estadoTexto =
             nuevoEstado === "En adopcion"
-              ? t("estado_en_adopcion")
+              ? t("mascotas:en_adopcion")
               : nuevoEstado === "Adoptado"
-                ? t("estado_adoptado")
+                ? t("mascotas:adoptado")
                 : nuevoEstado === "Rescatada"
-                  ? t("estado_rescatada")
-                  : t("estado_en_acogida");
+                  ? t("mascotas:rescatada")
+                  : t("mascotas:en_acogida");
 
-          toast.success(t("estado_actualizado_exito", { estado: estadoTexto }));
+          toast.success(t("fundacion:estado_actualizado_exito", { estado: estadoTexto }));
           cargarMascotas(currentFilters, currentPage);
         } else {
-          toast.error(response.data.message || t("error_actualizar_estado"));
+          toast.error(response.data.message || t("fundacion:error_actualizar_estado"));
         }
       } catch (error) {
         console.error("Error actualizando estado:", error);
-        toast.error(t("error_actualizar_estado"));
+        toast.error(t("fundacion:error_actualizar_estado"));
       }
     },
     [cargarMascotas, currentFilters, currentPage, t],
@@ -179,11 +191,12 @@ const Mascotas = () => {
     cargarMascotas({}, 1);
   }, [cargarMascotas]);
 
-  if (loading) {
+  // ===== LOADING - SOLO PRIMERA CARGA =====
+  if (loading && mascotas.length === 0) {
     return (
       <div className="fundacion-mascotas-page">
         <div className="loading-container">
-          <LoadingSpinner text={t("cargando_mascotas")} />
+          <LoadingSpinner text={t("fundacion:cargando_mascotas")} />
         </div>
       </div>
     );
@@ -191,28 +204,28 @@ const Mascotas = () => {
 
   return (
     <div className="fundacion-mascotas-page">
-      <div className="fundacion-mascotas-header">
-        <div className="bento-container">
-          <h1>
-            <i className="fas fa-paw"></i>
-            {t("mis_mascotas")}
-          </h1>
-          <p className="subtitle">{t("gestion_mascotas")}</p>
-          {pagination.total > 0 && (
-            <p className="info">
-              <i
-                className="fas fa-heart"
-                style={{ color: "var(--color-heart)" }}
-              ></i>
-              {t("mensaje_bienvenida", { total: pagination.total })}
-            </p>
-          )}
-        </div>
+      {/* ===== PROFILE BANNER ===== */}
+      <div className="fundacion-mascotas-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: fundacionName,
+            avatar: fundacionAvatar,
+            titulo: t("fundacion:banner_mascotas_titulo", {
+              defaultValue: "{{count}} mascotas · {{percent}}% en adopción",
+              count: totalMascotas,
+              percent: tasaExito,
+            }),
+            solicitudes: totalMascotas,
+            adopciones: enAdopcion,
+            eventos: 0,
+          }}
+        />
       </div>
 
-      <div className="fundacion-mascotas-filtros glass-auto shadow-sticky">
+      {/* ===== FILTROS ===== */}
+      <div className="fundacion-mascotas-filtros">
         <div className="bento-container">
-          <FiltrosMascotas
+          <FiltrosMascotasFundacion
             onFilterChange={handleFilterChange}
             especies={especies}
             mascotas={mascotas}
@@ -221,35 +234,38 @@ const Mascotas = () => {
         </div>
       </div>
 
+      {/* ===== RESULTADOS ===== */}
       <div className="fundacion-mascotas-resultados">
         <div className="bento-container">
           <div className="resultados-header">
             <div className="resultados-count">
               <i className="fas fa-list"></i>
-              {t("mostrando")} <strong>{mascotasFiltradas.length}</strong>
-              {t("de")} <strong>{pagination.total}</strong> {t("mascotas")}
+              {t("mascotas:mostrando")} <strong>{mascotasFiltradas.length} </strong>
+              {t("mascotas:de")} <strong> {pagination.total}</strong> {t("mascotas:mascotas")}
             </div>
+
             <Link to="/fundacion/mascotas/nueva" className="btn-primary">
               <i className="fas fa-plus"></i>
-              {t("agregar_mascota")}
+              {t("fundacion:agregar_mascota")}
             </Link>
           </div>
 
           {mascotasFiltradas.length === 0 ? (
             <div className="empty-container">
               <i className="fas fa-search"></i>
-              <h3>{t("sin_mascotas")}</h3>
+              <h3>{t("fundacion:sin_mascotas")}</h3>
               <p>
                 {currentFilters.buscar ||
                 currentFilters.especie ||
-                currentFilters.genero
-                  ? t("sin_resultados_filtros")
-                  : t("primer_mascota")}
+                currentFilters.genero ||
+                currentFilters.estado
+                  ? t("fundacion:sin_resultados_filtros")
+                  : t("fundacion:primer_mascota")}
               </p>
             </div>
           ) : (
             <>
-              <div className="fundacion-mascotas-grid stagger-children">
+              <div className="fundacion-mascotas-grid">
                 {mascotasFiltradas.map((mascota) => (
                   <MascotaCardFundacion
                     key={mascota.id}
@@ -257,12 +273,11 @@ const Mascotas = () => {
                     onEstadoChange={handleCambiarEstado}
                     onEliminar={handleEliminar}
                     onVerDetalle={(id) => navigate(`/fundacion/mascotas/${id}`)}
-                    onEditar={(id) =>
-                      navigate(`/fundacion/mascotas/editar/${id}`)
-                    }
+                    onEditar={(id) => navigate(`/fundacion/mascotas/editar/${id}`)}
                   />
                 ))}
               </div>
+
               {pagination.last_page > 1 && (
                 <div className="pagination-container">
                   <button
@@ -270,17 +285,17 @@ const Mascotas = () => {
                     disabled={currentPage === 1}
                     className="pagination-btn"
                   >
-                    <i className="fas fa-chevron-left"></i> {t("anterior")}
+                    <i className="fas fa-chevron-left"></i> {t("mascotas:anterior")}
                   </button>
                   <span className="pagination-info">
-                    {t("pagina")} {currentPage} {t("de")} {pagination.last_page}
+                    {t("mascotas:pagina")} {currentPage} {t("mascotas:de")} {pagination.last_page}
                   </span>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === pagination.last_page}
                     className="pagination-btn"
                   >
-                    {t("siguiente")} <i className="fas fa-chevron-right"></i>
+                    {t("mascotas:siguiente")} <i className="fas fa-chevron-right"></i>
                   </button>
                 </div>
               )}

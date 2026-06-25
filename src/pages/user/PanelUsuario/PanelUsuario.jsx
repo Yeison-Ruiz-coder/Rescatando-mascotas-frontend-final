@@ -1,13 +1,13 @@
-// src/pages/user/Dashboard/UserDashboard.jsx
+// src/pages/user/PanelUsuario/PanelUsuario.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import {
   Heart,
   PawPrint,
   CalendarCheck,
-  Wallet,
   Mail,
   CheckCircle,
   ShieldCheck,
@@ -16,12 +16,16 @@ import {
   List,
   TrendingUp,
   Clock,
-  Sparkles,
   ArrowRight,
+  FileText,      // ← NUEVO: para solicitudes
+  Building2,     // ← NUEVO: para verificaciones
+  CalendarDays,  // ← NUEVO: para eventos
 } from "lucide-react";
-import "./UserDashboard.css";
+import ProfileBanner from "../../../components/common/ProfileBanner/index.js";
+import "./PanelUsuario.css";
 
-const UserDashboard = () => {
+const PanelUsuario = () => {
+  const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState(null);
   const [solicitudesRecientes, setSolicitudesRecientes] = useState([]);
@@ -35,7 +39,6 @@ const UserDashboard = () => {
       setLoading(true);
       setError(null);
 
-      // 🔹 1. Perfil del usuario
       try {
         const profileRes = await api.get("/user/profile");
         if (profileRes.data?.success) {
@@ -51,11 +54,12 @@ const UserDashboard = () => {
           email: user?.email || "",
           telefono: user?.telefono || "",
           email_verificado: !!user?.email_verified_at,
+          telefono_verificado: !!user?.telefono_verificado,
+          documento_verificado: !!user?.documento_verificado,
           avatar: user?.avatar || null,
         });
       }
 
-      // 🔹 2. Solicitudes recientes
       try {
         const solicitudesRes = await api.get("/user/solicitudes", {
           params: { perPage: 5, sort: "created_at", order: "desc" },
@@ -69,7 +73,6 @@ const UserDashboard = () => {
         setSolicitudesRecientes([]);
       }
 
-      // 🔹 3. Suscripciones activas
       try {
         const suscripcionesRes = await api.get(
           "/user/suscripciones/mis-suscripciones"
@@ -82,7 +85,6 @@ const UserDashboard = () => {
         setSuscripciones([]);
       }
 
-      // 🔹 4. Eventos próximos
       try {
         const eventosRes = await api.get("/eventos", {
           params: { per_page: 3, proximos: true },
@@ -111,19 +113,19 @@ const UserDashboard = () => {
 
   const getEstadoBadge = (estado) => {
     const estados = {
-      pendiente: { label: "Pendiente", className: "estado-pendiente", icon: "⏳" },
-      en_revision: { label: "En revisión", className: "estado-revision", icon: "🔍" },
-      aprobada: { label: "Aprobada", className: "estado-aprobada", icon: "✅" },
-      rechazada: { label: "Rechazada", className: "estado-rechazada", icon: "❌" },
-      completada: { label: "Completada", className: "estado-completada", icon: "🎉" },
+      pendiente: { label: t("estados.pendiente", "Pendiente"), className: "estado-pendiente" },
+      en_revision: { label: t("estados.en_revision", "En revisión"), className: "estado-revision" },
+      aprobada: { label: t("estados.aprobada", "Aprobada"), className: "estado-aprobada" },
+      rechazada: { label: t("estados.rechazada", "Rechazada"), className: "estado-rechazada" },
+      completada: { label: t("estados.completada", "Completada"), className: "estado-completada" },
     };
-    return estados[estado] || { label: estado || "Desconocido", className: "", icon: "📌" };
+    return estados[estado] || { label: estado || t("estados.desconocido", "Desconocido"), className: "" };
   };
 
   const formatDate = (fecha) => {
     if (!fecha) return "";
     try {
-      return new Date(fecha).toLocaleDateString("es-ES", {
+      return new Date(fecha).toLocaleDateString(t("locale", "es-ES"), {
         day: "numeric",
         month: "short",
         year: "numeric",
@@ -137,21 +139,22 @@ const UserDashboard = () => {
     return solicitudesRecientes.filter((s) => s.estado === estadoBuscado).length;
   };
 
-  // Calcular estadísticas
   const totalSolicitudes = solicitudesRecientes.length;
   const pendientes = contarPorEstado("pendiente");
   const aprobadas = contarPorEstado("aprobada");
-  const rechazadas = contarPorEstado("rechazada");
   const tasaAprobacion = totalSolicitudes > 0 
     ? Math.round((aprobadas / totalSolicitudes) * 100) 
     : 0;
 
+  const profile = userProfile || {};
+  const avatarInitial = profile.nombre?.charAt(0) || user?.nombre?.charAt(0) || "U";
+
   if (loading) {
     return (
-      <div className="user-dashboard-modern">
-        <div className="dashboard-loading-modern">
+      <div className="panel-usuario-modern">
+        <div className="panel-loading-modern">
           <div className="spinner-modern"></div>
-          <p>Cargando tu dashboard...</p>
+          <p>{t("panel.loading", "Cargando tu panel...")}</p>
         </div>
       </div>
     );
@@ -159,14 +162,14 @@ const UserDashboard = () => {
 
   if (error) {
     return (
-      <div className="user-dashboard-modern">
+      <div className="panel-usuario-modern">
         <div className="bento-container">
-          <div className="dashboard-error-modern">
+          <div className="panel-error-modern">
             <AlertCircle size={48} className="error-icon-modern" />
-            <h3>Error al cargar el dashboard</h3>
+            <h3>{t("panel.error.title", "Error al cargar el panel")}</h3>
             <p>{error}</p>
             <button onClick={cargarDashboard} className="btn-retry-modern">
-              <i className="fas fa-sync-alt"></i> Reintentar
+              {t("panel.error.retry", "Reintentar")}
             </button>
           </div>
         </div>
@@ -174,90 +177,65 @@ const UserDashboard = () => {
     );
   }
 
-  const profile = userProfile || {};
-  // Obtener la inicial del nombre para el avatar
-  const avatarInitial = profile.nombre?.charAt(0) || user?.nombre?.charAt(0) || "U";
-
   return (
-    <div className="user-dashboard-modern">
-      {/* ===== HEADER CON EFECTO DE DESVANECIMIENTO ===== */}
-      <header className="dashboard-header-modern">
-        {/* Fondo del header */}
-        <div className="header-bg-modern"></div>
-        
-        {/* Efecto de desvanecimiento - gradiente de desaparición */}
-        <div className="header-fade-modern"></div>
-        
-        <div className="bento-container header-content-modern">
-          <div className="header-left-modern">
-            {/* Avatar con efecto de brillo */}
-            <div className="header-avatar-modern">
-              {profile.avatar ? (
-                <img src={profile.avatar} alt="Avatar" className="avatar-image" />
-              ) : (
-                <span>{avatarInitial}</span>
-              )}
-              <div className="avatar-glow"></div>
-            </div>
-            <div className="header-text-modern">
-              <h1>
-                ¡Hola, <span className="highlight-name">{profile.nombre || user?.nombre || "Usuario"}</span>!
-              </h1>
-              <p>
-                <Sparkles size={16} /> Bienvenido a tu panel de control
-              </p>
-            </div>
-          </div>
-          <div className="header-stats-mini">
-            <div className="mini-stat">
-              <span className="mini-stat-value">{totalSolicitudes}</span>
-              <span className="mini-stat-label">Solicitudes</span>
-            </div>
-            <div className="mini-stat">
-              <span className="mini-stat-value">{tasaAprobacion}%</span>
-              <span className="mini-stat-label">Éxito</span>
-            </div>
-          </div>
+    <div className="panel-usuario-modern">
+      {/* ===== BANNER DE PERFIL ===== */}
+      <div className="banner-wrapper">
+        <div className="bento-container">
+          <ProfileBanner
+            user={{
+              nombre: profile.nombre || user?.nombre || t("panel.defaultUser", "Usuario"),
+              avatar: profile.avatar || user?.avatar || null,
+              titulo: t("panel.userTitle", {
+                defaultValue: "{{count}} solicitudes gestionadas · {{percent}}% de éxito",
+                count: totalSolicitudes,
+                percent: tasaAprobacion,
+              }),
+              solicitudes: totalSolicitudes,
+              adopciones: aprobadas,
+              eventos: eventosProximos.length,
+            }}
+          />
         </div>
-      </header>
+      </div>
 
-      {/* ===== STATS CARDS CON BARRAS DE PROGRESO ===== */}
+      {/* ===== STATS CARDS ===== */}
       <section className="stats-section-modern">
         <div className="bento-container">
-          <div className="stats-grid-modern stagger-children">
+          <div className="stats-grid-modern">
             <StatCardModern
               icon={<List size={24} />}
-              label="Total Solicitudes"
+              label={t("panel.stats.total", "Total Solicitudes")}
               value={totalSolicitudes}
               maxValue={Math.max(totalSolicitudes, 10)}
               color="primary"
-              progressLabel="Total"
+              progressLabel={t("panel.stats.totalLabel", "Total")}
             />
             <StatCardModern
               icon={<Heart size={24} />}
-              label="Aprobadas"
+              label={t("panel.stats.aprobadas", "Aprobadas")}
               value={aprobadas}
               maxValue={totalSolicitudes || 10}
               color="success"
-              progressLabel="Tasa de aprobación"
+              progressLabel={t("panel.stats.aprobadasLabel", "Tasa de aprobación")}
               percentage={tasaAprobacion}
             />
             <StatCardModern
               icon={<Clock size={24} />}
-              label="Pendientes"
+              label={t("panel.stats.pendientes", "Pendientes")}
               value={pendientes}
               maxValue={totalSolicitudes || 10}
               color="warning"
-              progressLabel="Por revisar"
+              progressLabel={t("panel.stats.pendientesLabel", "Por revisar")}
               percentage={totalSolicitudes > 0 ? Math.round((pendientes / totalSolicitudes) * 100) : 0}
             />
             <StatCardModern
               icon={<TrendingUp size={24} />}
-              label="Tasa de éxito"
+              label={t("panel.stats.exito", "Tasa de éxito")}
               value={`${tasaAprobacion}%`}
               maxValue={100}
               color="gradient"
-              progressLabel="Efectividad"
+              progressLabel={t("panel.stats.exitoLabel", "Efectividad")}
               percentage={tasaAprobacion}
               isPercentage
             />
@@ -273,16 +251,16 @@ const UserDashboard = () => {
             <div className="card-modern card-solicitudes">
               <div className="card-header-modern">
                 <div className="card-header-left">
-                  <span className="card-icon">📋</span>
-                  <h3>Solicitudes recientes</h3>
+                  <FileText size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                  <h3>{t("panel.solicitudes.title", "Solicitudes recientes")}</h3>
                 </div>
                 <Link to="/user/mis-solicitudes" className="card-link-modern">
-                  Ver todas <ArrowRight size={14} />
+                  {t("panel.solicitudes.verTodas", "Ver todas")} <ArrowRight size={14} />
                 </Link>
               </div>
               {solicitudesRecientes.length === 0 ? (
                 <div className="empty-state-modern">
-                  <p>No tienes solicitudes recientes</p>
+                  <p>{t("panel.solicitudes.empty", "No tienes solicitudes recientes")}</p>
                 </div>
               ) : (
                 <ul className="solicitudes-list-modern">
@@ -290,13 +268,13 @@ const UserDashboard = () => {
                     const estado = getEstadoBadge(sol.estado);
                     const mascotaNombre = sol.solicitable?.nombre_mascota || 
                                           sol.mascota?.nombre_mascota || 
-                                          "Mascota";
+                                          t("panel.mascota.default", "Mascota");
                     return (
                       <li key={sol.id} className="solicitud-item-modern">
                         <div className="solicitud-info-modern">
                           <span className="solicitud-mascota-modern">{mascotaNombre}</span>
                           <span className={`estado-badge-modern ${estado.className}`}>
-                            {estado.icon} {estado.label}
+                            {estado.label}
                           </span>
                         </div>
                         <span className="solicitud-fecha-modern">
@@ -309,20 +287,20 @@ const UserDashboard = () => {
               )}
             </div>
 
-            {/* Suscripciones */}
+            {/* Suscripciones - MANTIENE EL EMOJI 💝 */}
             <div className="card-modern card-suscripciones">
               <div className="card-header-modern">
                 <div className="card-header-left">
-                  <span className="card-icon">💝</span>
-                  <h3>Suscripciones activas</h3>
+                  <span className="card-icon">💝</span> {/* ← SE MANTIENE */}
+                  <h3>{t("panel.suscripciones.title", "Suscripciones activas")}</h3>
                 </div>
                 <Link to="/user/mis-suscripciones" className="card-link-modern">
-                  Gestionar <ArrowRight size={14} />
+                  {t("panel.suscripciones.gestionar", "Gestionar")} <ArrowRight size={14} />
                 </Link>
               </div>
               {suscripciones.length === 0 ? (
                 <div className="empty-state-modern">
-                  <p>No tienes suscripciones activas</p>
+                  <p>{t("panel.suscripciones.empty", "No tienes suscripciones activas")}</p>
                 </div>
               ) : (
                 <ul className="suscripciones-list-modern">
@@ -330,14 +308,16 @@ const UserDashboard = () => {
                     <li key={sub.id} className="suscripcion-item-modern">
                       <div className="suscripcion-info-modern">
                         <span className="suscripcion-plan-modern">
-                          {sub.plan?.nombre || sub.nombre || "Plan"}
+                          {sub.plan?.nombre || sub.nombre || t("panel.plan.default", "Plan")}
                         </span>
                         <span className="suscripcion-monto-modern">
                           ${sub.monto_mensual || sub.monto || 0}/mes
                         </span>
                       </div>
                       <span className={`suscripcion-estado-modern ${sub.estado === "activo" ? "activo" : "inactivo"}`}>
-                        {sub.estado === "activo" ? "✅ Activo" : "⏸️ Pausado"}
+                        {sub.estado === "activo" 
+                          ? t("panel.suscripciones.activo", "Activo") 
+                          : t("panel.suscripciones.pausado", "Pausado")}
                       </span>
                     </li>
                   ))}
@@ -348,20 +328,47 @@ const UserDashboard = () => {
         </div>
       </section>
 
-      {/* ===== EVENTOS + VERIFICACIONES ===== */}
+      {/* ===== VERIFICACIONES ===== */}
       <section className="bottom-section-modern">
         <div className="bento-container">
           <div className="bottom-grid-modern">
+            {/* Verificaciones */}
+            <div className="card-modern card-verificaciones">
+              <div className="card-header-modern">
+                <div className="card-header-left">
+                  <ShieldCheck size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                  <h3>{t("panel.verificaciones.title", "Verificaciones")}</h3>
+                </div>
+              </div>
+              <div className="verificaciones-grid-modern">
+                <VerificationItemModern
+                  icon={<Mail size={18} />}
+                  label={t("panel.verificaciones.email", "Email verificado")}
+                  verified={profile.email_verificado}
+                />
+                <VerificationItemModern
+                  icon={<ShieldCheck size={18} />}
+                  label={t("panel.verificaciones.telefono", "Teléfono verificado")}
+                  verified={!!profile.telefono_verificado}
+                />
+                <VerificationItemModern
+                  icon={<CheckCircle size={18} />}
+                  label={t("panel.verificaciones.documento", "Documento verificado")}
+                  verified={!!profile.documento_verificado}
+                />
+              </div>
+            </div>
+
             {/* Eventos próximos */}
             {eventosProximos.length > 0 && (
               <div className="card-modern card-eventos">
                 <div className="card-header-modern">
                   <div className="card-header-left">
-                    <span className="card-icon">📅</span>
-                    <h3>Eventos próximos</h3>
+                    <CalendarDays size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                    <h3>{t("panel.eventos.title", "Eventos próximos")}</h3>
                   </div>
                   <Link to="/eventos" className="card-link-modern">
-                    Ver todos <ArrowRight size={14} />
+                    {t("panel.eventos.verTodos", "Ver todos")} <ArrowRight size={14} />
                   </Link>
                 </div>
                 <div className="eventos-grid-modern">
@@ -370,39 +377,12 @@ const UserDashboard = () => {
                       <h4>{evento.nombre_evento}</h4>
                       <p className="evento-fecha-modern">📍 {evento.lugar_evento}</p>
                       <p className="evento-fecha-modern">📅 {formatDate(evento.fecha_evento)}</p>
-                      <span className="evento-asistencia-modern">✅ Confirmado</span>
+                      <span className="evento-asistencia-modern">{t("panel.eventos.confirmado", "Confirmado")}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-
-            {/* Verificaciones */}
-            <div className="card-modern card-verificaciones">
-              <div className="card-header-modern">
-                <div className="card-header-left">
-                  <span className="card-icon">🔐</span>
-                  <h3>Verificaciones</h3>
-                </div>
-              </div>
-              <div className="verificaciones-grid-modern">
-                <VerificationItemModern
-                  icon={<Mail size={18} />}
-                  label="Email verificado"
-                  verified={profile.email_verificado}
-                />
-                <VerificationItemModern
-                  icon={<ShieldCheck size={18} />}
-                  label="Teléfono verificado"
-                  verified={!!profile.telefono_verificado}
-                />
-                <VerificationItemModern
-                  icon={<CheckCircle size={18} />}
-                  label="Documento verificado"
-                  verified={!!profile.documento_verificado}
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -411,47 +391,33 @@ const UserDashboard = () => {
       <section className="quick-actions-section-modern">
         <div className="bento-container">
           <div className="quick-actions-modern">
-            <h4>Acciones rápidas</h4>
+            <h4>{t("panel.acciones.titulo", "Acciones rápidas")}</h4>
             <div className="actions-grid-modern">
               <Link to="/mascotas" className="action-btn-modern">
                 <div className="action-icon-modern" style={{ background: "rgba(102, 126, 234, 0.15)", color: "var(--color-primary)" }}>
                   <PawPrint size={22} />
                 </div>
-                <span>Ver mascotas</span>
+                <span>{t("panel.acciones.mascotas", "Ver mascotas")}</span>
               </Link>
               <Link to="/eventos" className="action-btn-modern">
                 <div className="action-icon-modern" style={{ background: "rgba(255, 140, 66, 0.15)", color: "var(--color-accent)" }}>
                   <CalendarCheck size={22} />
                 </div>
-                <span>Ver eventos</span>
+                <span>{t("panel.acciones.eventos", "Ver eventos")}</span>
               </Link>
               <Link to="/user/mis-solicitudes" className="action-btn-modern">
                 <div className="action-icon-modern" style={{ background: "rgba(255, 107, 157, 0.15)", color: "var(--color-heart)" }}>
                   <Heart size={22} />
                 </div>
-                <span>Mis solicitudes</span>
+                <span>{t("panel.acciones.solicitudes", "Mis solicitudes")}</span>
               </Link>
               <Link to="/user/perfil" className="action-btn-modern">
                 <div className="action-icon-modern" style={{ background: "rgba(46, 204, 113, 0.15)", color: "var(--color-success)" }}>
                   <User size={22} />
                 </div>
-                <span>Mi perfil</span>
+                <span>{t("panel.acciones.perfil", "Mi perfil")}</span>
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== MOTIVACIONAL ===== */}
-      <section className="motivational-section-modern">
-        <div className="bento-container">
-          <div className="motivational-content-modern">
-            <div className="motivational-icon-modern">🐾</div>
-            <h3>¡Cada acción cuenta!</h3>
-            <p>
-              Tu participación en adopciones, apadrinamientos y eventos 
-              hace la diferencia en la vida de estos animales. <strong>¡Sigue así!</strong>
-            </p>
           </div>
         </div>
       </section>
@@ -459,8 +425,7 @@ const UserDashboard = () => {
   );
 };
 
-// ===== COMPONENTES MODERNOS CON BARRA DE PROGRESO =====
-
+// ===== STAT CARD =====
 const StatCardModern = ({ 
   icon, 
   label, 
@@ -471,7 +436,6 @@ const StatCardModern = ({
   progressLabel = "",
   isPercentage = false
 }) => {
-  // Calcular el porcentaje para la barra
   const progressPercentage = isPercentage 
     ? Math.min(parseInt(value) || 0, 100)
     : Math.min(Math.round((Number(value) / maxValue) * 100), 100);
@@ -511,14 +475,21 @@ const StatCardModern = ({
   );
 };
 
-const VerificationItemModern = ({ icon, label, verified }) => (
-  <div className={`verification-item-modern ${verified ? "verified" : "unverified"}`}>
-    <div className="verification-icon-modern">{icon}</div>
-    <span className="verification-label-modern">{label}</span>
-    <span className="verification-status-modern">
-      {verified ? "✅ Verificado" : "⏳ Pendiente"}
-    </span>
-  </div>
-);
+// ===== VERIFICATION ITEM =====
+const VerificationItemModern = ({ icon, label, verified }) => {
+  const { t } = useTranslation('dashboard');
+  
+  return (
+    <div className={`verification-item-modern ${verified ? "verified" : "unverified"}`}>
+      <div className="verification-icon-modern">{icon}</div>
+      <span className="verification-label-modern">{label}</span>
+      <span className="verification-status-modern">
+        {verified 
+          ? t("panel.verificaciones.verificado", "Verificado") 
+          : t("panel.verificaciones.pendiente", "Pendiente")}
+      </span>
+    </div>
+  );
+};
 
-export default UserDashboard;
+export default PanelUsuario;
