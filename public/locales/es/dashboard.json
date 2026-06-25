@@ -1,0 +1,96 @@
+{
+  "locale": "es-ES",
+  
+  "banner": {
+    "badge": "Miembro de la comunidad",
+    "defaultUser": "Usuario",
+    "defaultTitle": "Amante de los animales y defensor del bienestar animal",
+    "greeting": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches",
+      "night": "Descansa"
+    },
+    "stats": {
+      "solicitudes": "Solicitudes",
+      "adopciones": "Adopciones",
+      "eventos": "Eventos"
+    }
+  },
+  
+  "panel": {
+    "loading": "Cargando tu panel...",
+    "defaultUser": "Usuario",
+    "userTitle": "{{count}} solicitudes gestionadas · {{percent}}% de éxito",
+    
+    "stats": {
+      "total": "Total Solicitudes",
+      "totalLabel": "Total",
+      "aprobadas": "Aprobadas",
+      "aprobadasLabel": "Tasa de aprobación",
+      "pendientes": "Pendientes",
+      "pendientesLabel": "Por revisar",
+      "exito": "Tasa de éxito",
+      "exitoLabel": "Efectividad"
+    },
+    
+    "solicitudes": {
+      "title": "Solicitudes recientes",
+      "verTodas": "Ver todas",
+      "empty": "No tienes solicitudes recientes"
+    },
+    
+    "suscripciones": {
+      "title": "Suscripciones activas",
+      "gestionar": "Gestionar",
+      "empty": "No tienes suscripciones activas",
+      "activo": "Activo",
+      "pausado": "Pausado"
+    },
+    
+    "verificaciones": {
+      "title": "Verificaciones",
+      "email": "Email verificado",
+      "telefono": "Teléfono verificado",
+      "documento": "Documento verificado",
+      "verificado": "Verificado",
+      "pendiente": "Pendiente"
+    },
+    
+    "eventos": {
+      "title": "Eventos próximos",
+      "verTodos": "Ver todos",
+      "confirmado": "Confirmado"
+    },
+    
+    "acciones": {
+      "titulo": "Acciones rápidas",
+      "mascotas": "Ver mascotas",
+      "eventos": "Ver eventos",
+      "solicitudes": "Mis solicitudes",
+      "perfil": "Mi perfil"
+    },
+    
+    "error": {
+      "title": "Error al cargar el panel",
+      "retry": "Reintentar"
+    },
+    
+    "mascota": {
+      "default": "Mascota"
+    },
+    
+    "plan": {
+      "default": "Plan"
+    }
+  },
+  
+  "estados": {
+    "pendiente": "Pendiente",
+    "en_revision": "En revisión",
+    "aprobada": "Aprobada",
+    "rechazada": "Rechazada",
+    "completada": "Completada",
+    "desconocido": "Desconocido"
+  }
+}

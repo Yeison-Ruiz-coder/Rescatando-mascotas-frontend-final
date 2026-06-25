@@ -45,8 +45,7 @@ const SuscripcionesPublicIndex = lazy(() => import("../pages/public/Suscripcione
 const Solicitudes = lazy(() => import("../pages/user/Solicitudes/Solicitudes"));
 const UserProfile = lazy(() => import("../pages/user/perfil/UserProfile"));
 const UserSuscripciones = lazy(() => import("../pages/user/MisSuscripciones"));
-// ✅ IMPORT DEL DASHBOARD REAL
-const UserDashboard = lazy(() => import("../pages/user/Dashboard/UserDashboard"));
+const UserDashboard = lazy(() => import("../pages/user/PanelUsuario/PanelUsuario"));
 
 // =============================================================
 // PÁGINAS ADMIN
@@ -323,8 +322,8 @@ const router = createBrowserRouter([
       {
         element: <PublicLayout />,
         children: [
-          { index: true, element: <Navigate to="/user/dashboard" replace /> },
-          { path: "dashboard", element: <UserDashboard /> }, // ✅ Dashboard REAL
+          { index: true, element: <Navigate to="/user/PanelUsuario" replace /> },
+          { path: "PanelUsuario", element: <UserDashboard /> },
           { path: "perfil", element: <UserProfile /> },
           { path: "mis-solicitudes", element: <Solicitudes /> },
           { path: "tienda", element: <Tienda /> },

@@ -66,7 +66,7 @@ const PublicNavbar = () => {
       case 'admin': return '/admin/dashboard';
       case 'veterinaria': return '/veterinaria/dashboard';
       case 'fundacion': return '/fundacion/dashboard';
-      default: return '/';
+      default: return '/user/PanelUsuario';
     }
   };
 

@@ -140,27 +140,32 @@
   "fotos_label": "Rescue photos (up to 5)",
   "first_photo_main_hint": "The first photo you upload will be the main photo of the rescue",
   "location_section": "Rescue location",
-
   "rescate_enviado_title": "Rescue reported successfully!",
   "rescate_enviado_message": "Your report has been sent. Nearby foundations and veterinarians can now see it and respond.",
   "admin_waiting_time": "Time until administrator intervention:",
   "admin_info": "If no foundation or veterinary responds within 30 minutes, administrators will be able to view and manage this rescue.",
   "galeria_fotos":"Photos Galery",
-  
   "motivational_title": "Your help is important!",
   "motivational_message": "Every report can save a life. Your information is valuable so we can act quickly.",
-  
   "tips_title": "Important tips:",
   "tip1": "Take clear photos of the animal and the location",
   "tip2": "Describe the location precisely",
   "tip3": "Don't approach if it's aggressive or injured",
   "tip4": "Share the report on social media",
   "tip5": "Stay by your phone",
-  
   "emergency_contacts": "Emergency line:",
   "rescue_phone": "123-456-7890",
   "vet_phone": "098-765-4321",
   "animal_police": "911",
-  
-  "footer_message": "Together we can make a difference"
+  "footer_message": "Together we can make a difference",
+  "stats": {
+      "total": "Total Rescues",
+      "pendientes": "Pending",
+      "en_proceso": "In Progress",
+      "completados": "Completed",
+      "disponibles": "Available",
+      "urgentes": "Urgent",
+      "media": "Medium Priority",
+      "baja": "Low Priority"
+    }
 }

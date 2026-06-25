@@ -7,7 +7,7 @@
 
 .rescate-card {
   background: var(--color-card-bg);
-  border-radius: var(--radius-xl);
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
@@ -81,7 +81,6 @@
   gap: 6px;
 }
 
-/* Iconos dentro del badge de prioridad - BLANCOS */
 .rescate-card .rescate-prioridad-badge i,
 .rescate-card .rescate-prioridad-badge .fas,
 .rescate-card .rescate-prioridad-badge .far {
@@ -206,7 +205,10 @@
   text-decoration: underline;
 }
 
-/* Acciones */
+/* ============================================
+   BOTONES UNIFICADOS
+   ============================================ */
+
 .rescate-card .rescate-card-actions {
   display: flex;
   gap: 0.75rem;
@@ -217,28 +219,21 @@
   flex-wrap: wrap;
 }
 
-/* Botones */
-.rescate-card .btn-aceptar,
-.rescate-card .btn-rechazar,
-.rescate-card .btn-detalle,
-.rescate-card .btn-registrar {
+/* === BOTÓN ACEPTAR (VERDE) === */
+.rescate-card .btn-aceptar {
   padding: 8px 20px;
-  border-radius: 50px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 0.8rem;
   cursor: pointer;
-  transition: var(--transition-fast);
   border: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: inherit;
-}
-
-/* Botón Aceptar - fondo verde, texto e icono BLANCOS */
-.rescate-card .btn-aceptar {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
+  transition: all 0.3s ease;
 }
 
 .rescate-card .btn-aceptar i,
@@ -249,33 +244,52 @@
 
 .rescate-card .btn-aceptar:hover:not(:disabled) {
   transform: translateY(-2px);
-  filter: brightness(1.05);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
 }
 
-/* Botón Rechazar */
+/* === BOTÓN RECHAZAR (ROJO) === */
 .rescate-card .btn-rechazar {
-  background: var(--color-card-bg);
-  color: var(--color-danger);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  transition: all 0.3s ease;
 }
 
 .rescate-card .btn-rechazar i,
 .rescate-card .btn-rechazar .fas,
 .rescate-card .btn-rechazar .far {
-  color: var(--color-danger);
+  color: white !important;
 }
 
 .rescate-card .btn-rechazar:hover:not(:disabled) {
-  background: var(--color-danger);
-  color: white;
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);
 }
 
-/* Botón Detalle - con gradiente y texto BLANCO, icono BLANCO */
+/* === BOTÓN DETALLE (PRIMARIO - GRADIENTE) === */
 .rescate-card .btn-detalle {
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
   background: var(--gradient-primary);
   color: white !important;
-  border: none;
+  transition: all 0.3s ease;
 }
 
 .rescate-card .btn-detalle i,
@@ -286,14 +300,24 @@
 
 .rescate-card .btn-detalle:hover {
   transform: translateY(-2px);
-  filter: brightness(1.05);
-  box-shadow: var(--shadow-accent);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
 }
 
-/* Botón Registrar - fondo morado, texto e icono BLANCOS */
+/* === BOTÓN REGISTRAR (MORADO) === */
 .rescate-card .btn-registrar {
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
+  transition: all 0.3s ease;
 }
 
 .rescate-card .btn-registrar i,
@@ -304,15 +328,17 @@
 
 .rescate-card .btn-registrar:hover:not(:disabled) {
   transform: translateY(-2px);
-  filter: brightness(1.05);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35);
 }
 
+/* === ESTADO DESHABILITADO === */
 .rescate-card .btn-aceptar:disabled,
 .rescate-card .btn-rechazar:disabled,
 .rescate-card .btn-registrar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 /* Estado badge */
@@ -328,7 +354,6 @@
   border-top: 1px solid var(--color-border);
 }
 
-/* Iconos dentro de estado badge - color coherente */
 .rescate-card .rescate-card-status i,
 .rescate-card .rescate-card-status .fas,
 .rescate-card .rescate-card-status .far {
@@ -336,7 +361,7 @@
 }
 
 .rescate-card .rescate-card-status.en-proceso {
-  background: rgba(245, 158, 11, 0.1) ;
+  background: rgba(245, 158, 11, 0.1);
   color: #d97706;
 }
 
@@ -345,12 +370,12 @@
 }
 
 .rescate-card .rescate-card-status.completado {
-  background: rgba(16, 185, 129, 0.219);
-  color: #03b128;
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
 }
 
 .rescate-card .rescate-card-status.completado i {
-  color: #03b128;
+  color: #059669;
 }
 
 .rescate-card .rescate-card-status.rechazado {

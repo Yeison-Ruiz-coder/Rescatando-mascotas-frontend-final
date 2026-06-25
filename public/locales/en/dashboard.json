@@ -1,0 +1,96 @@
+{
+  "locale": "en-US",
+  
+  "banner": {
+    "badge": "Community Member",
+    "defaultUser": "User",
+    "defaultTitle": "Animal lover and animal welfare advocate",
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening",
+      "night": "Rest well"
+    },
+    "stats": {
+      "solicitudes": "Requests",
+      "adopciones": "Adoptions",
+      "eventos": "Events"
+    }
+  },
+  
+  "panel": {
+    "loading": "Loading your panel...",
+    "defaultUser": "User",
+    "userTitle": "{{count}} requests managed · {{percent}}% success rate",
+    
+    "stats": {
+      "total": "Total Requests",
+      "totalLabel": "Total",
+      "aprobadas": "Approved",
+      "aprobadasLabel": "Approval rate",
+      "pendientes": "Pending",
+      "pendientesLabel": "To review",
+      "exito": "Success rate",
+      "exitoLabel": "Effectiveness"
+    },
+    
+    "solicitudes": {
+      "title": "Recent requests",
+      "verTodas": "View all",
+      "empty": "You have no recent requests"
+    },
+    
+    "suscripciones": {
+      "title": "Active subscriptions",
+      "gestionar": "Manage",
+      "empty": "You have no active subscriptions",
+      "activo": "Active",
+      "pausado": "Paused"
+    },
+    
+    "verificaciones": {
+      "title": "Verifications",
+      "email": "Email verified",
+      "telefono": "Phone verified",
+      "documento": "Document verified",
+      "verificado": "Verified",
+      "pendiente": "Pending"
+    },
+    
+    "eventos": {
+      "title": "Upcoming events",
+      "verTodos": "View all",
+      "confirmado": "Confirmed"
+    },
+    
+    "acciones": {
+      "titulo": "Quick actions",
+      "mascotas": "View pets",
+      "eventos": "View events",
+      "solicitudes": "My requests",
+      "perfil": "My profile"
+    },
+    
+    "error": {
+      "title": "Error loading panel",
+      "retry": "Retry"
+    },
+    
+    "mascota": {
+      "default": "Pet"
+    },
+    
+    "plan": {
+      "default": "Plan"
+    }
+  },
+  
+  "estados": {
+    "pendiente": "Pending",
+    "en_revision": "Under review",
+    "aprobada": "Approved",
+    "rechazada": "Rejected",
+    "completada": "Completed",
+    "desconocido": "Unknown"
+  }
+}
