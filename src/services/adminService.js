@@ -43,10 +43,64 @@ const adminService = {
       if (params.estado) queryParams.append('estado', params.estado);
 
       const response = await api.get(`/admin/usuarios?${queryParams.toString()}`);
-      return response.data;
+      const payload = response.data;
 
+      let data = [];
+      let meta = {
+        current_page: params.page || 1,
+        last_page: 1,
+        per_page: params.per_page || 15,
+        total: 0,
+      };
+
+      if (payload) {
+        if (Array.isArray(payload)) {
+          data = payload;
+        } else if (Array.isArray(payload.data)) {
+          data = payload.data;
+          meta = payload.meta || meta;
+        } else if (payload.data && Array.isArray(payload.data.data)) {
+          data = payload.data.data;
+          meta = payload.data.meta || payload.meta || meta;
+        } else if (Array.isArray(payload.data?.data)) {
+          data = payload.data.data;
+          meta = payload.data.meta || meta;
+        }
+      }
+
+      return { data, meta, raw: payload };
     } catch (error) {
       console.error('Error en getUsuarios:', error);
+      throw error;
+    }
+  },
+
+  getUsuario: async (id) => {
+    try {
+      const response = await api.get(`/admin/usuarios/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error en getUsuario:', error);
+      throw error;
+    }
+  },
+
+  createUsuario: async (payload) => {
+    try {
+      const response = await api.post('/admin/usuarios', payload);
+      return response.data;
+    } catch (error) {
+      console.error('Error en createUsuario:', error);
+      throw error;
+    }
+  },
+
+  updateUsuario: async (id, payload) => {
+    try {
+      const response = await api.put(`/admin/usuarios/${id}`, payload);
+      return response.data;
+    } catch (error) {
+      console.error('Error en updateUsuario:', error);
       throw error;
     }
   },

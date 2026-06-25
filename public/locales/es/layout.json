@@ -143,7 +143,26 @@
   "apadrinar": "Apadrinar",
   "apadrinar_mascota": "Apadrinar una mascota",
   "mis_suscripciones": "Mis Suscripciones",
+  "gestion_estados": "Gestión de estados",
+  "reportes_suscripciones": "Reportes de suscripciones",
 
+  "contacto": {
+    "titulo": "Contacto",
+    "descripcion": "¿Tienes preguntas o necesitas ayuda? Escríbenos y te responderemos pronto.",
+    "informacion_titulo": "Información de contacto",
+    "informacion_texto": "Estamos aquí para ayudarte con adopciones, rescates, eventos y soporte general.",
+    "telefono_label": "Teléfono",
+    "email_label": "Correo",
+    "direccion_label": "Dirección",
+    "ciudad_label": "Ciudad",
+    "form_titulo": "Envíanos un mensaje",
+    "nombre_label": "Nombre",
+    "nombre_placeholder": "Tu nombre",
+    "email_placeholder": "Correo electrónico",
+    "mensaje_label": "Mensaje",
+    "mensaje_placeholder": "Escribe tu mensaje aquí...",
+    "enviar": "Enviar mensaje"
+  },
   "admin_navbar": {
     "brand_title": "Rescatando",
     "brand_subtitle": "Panel Admin",

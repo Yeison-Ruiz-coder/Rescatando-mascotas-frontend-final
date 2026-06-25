@@ -143,7 +143,26 @@
   "apadrinar": "Sponsor",
   "apadrinar_mascota": "Sponsor a pet",
   "mis_suscripciones": "My Subscriptions",
+  "gestion_estados": "Status management",
+  "reportes_suscripciones": "Subscription reports",
 
+  "contacto": {
+    "titulo": "Contact",
+    "descripcion": "Have questions or need help? Write to us and we will reply soon.",
+    "informacion_titulo": "Contact information",
+    "informacion_texto": "We are here to support you with adoptions, rescues, events and general assistance.",
+    "telefono_label": "Phone",
+    "email_label": "Email",
+    "direccion_label": "Address",
+    "ciudad_label": "City",
+    "form_titulo": "Send us a message",
+    "nombre_label": "Name",
+    "nombre_placeholder": "Your name",
+    "email_placeholder": "Email address",
+    "mensaje_label": "Message",
+    "mensaje_placeholder": "Write your message here...",
+    "enviar": "Send message"
+  },
   "admin_navbar": {
     "brand_title": "Rescatando",
     "brand_subtitle": "Admin Panel",

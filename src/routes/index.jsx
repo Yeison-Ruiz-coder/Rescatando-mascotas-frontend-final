@@ -53,6 +53,12 @@ const UserDashboard = lazy(() => import("../pages/user/Dashboard/UserDashboard")
 // =============================================================
 const Dashboard = lazy(() => import("../pages/admin/Dashboard/Dashboard"));
 const UsuariosPendientes = lazy(() => import("../pages/admin/Usuarios/UsuariosPendientes"));
+const UsuariosList = lazy(() => import("../pages/admin/Usuarios/UsuariosList"));
+const UsuariosFundaciones = lazy(() => import("../pages/admin/Usuarios/UsuariosFundaciones"));
+const UsuariosVeterinarias = lazy(() => import("../pages/admin/Usuarios/UsuariosVeterinarias"));
+const UsuarioForm = lazy(() => import("../pages/admin/Usuarios/UsuarioForm"));
+const UsuarioDetail = lazy(() => import("../pages/admin/Usuarios/UsuarioDetail"));
+const Contacto = lazy(() => import("../pages/public/Contacto/Contacto"));
 const AdminEventosIndex = lazy(() => import("../pages/admin/eventos/EventosIndex"));
 const AdminEventosCreate = lazy(() => import("../pages/admin/eventos/EventosCreate"));
 const AdminEventosEdit = lazy(() => import("../pages/admin/eventos/EventosEdit"));
@@ -61,6 +67,12 @@ const AdminSuscripcionesIndex = lazy(() => import("../pages/admin/suscripciones/
 const AdminSuscripcionesCreate = lazy(() => import("../pages/admin/suscripciones/SuscripcionesCreate"));
 const AdminSuscripcionesEdit = lazy(() => import("../pages/admin/suscripciones/SuscripcionesEdit"));
 const AdminSuscripcionesShow = lazy(() => import("../pages/admin/suscripciones/SuscripcionesShow"));
+const AdminSuscripcionesEstado = lazy(() => import("../pages/admin/suscripciones/SuscripcionesEstado"));
+const AdminSuscripcionesReportes = lazy(() => import("../pages/admin/suscripciones/SuscripcionesReportes"));
+const AdminAdopciones = lazy(() => import("../pages/admin/adopciones/AdopcionesIndex"));
+const AdminAdopcionesSolicitudes = lazy(() => import("../pages/admin/adopciones/AdopcionesSolicitudes"));
+const AdminAdopcionesSeguimientos = lazy(() => import("../pages/admin/adopciones/AdopcionesSeguimientos"));
+const AdminDonaciones = lazy(() => import("../pages/admin/donaciones/AdminDonaciones"));
 const AdminRescatesIndex = lazy(() => import("../pages/admin/rescates/RescatesIndex"));
 const AdminRescatesPendientes = lazy(() => import("../pages/admin/rescates/RescatesPendientes"));
 const AdminRescatesMapa = lazy(() => import("../pages/admin/rescates/RescatesMapa"));
@@ -137,48 +149,6 @@ const AdminMascotasNueva = () => (
   </div>
 );
 
-const UsuariosList = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Gestión de Usuarios</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const UsuarioForm = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Formulario de Usuario</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const UsuarioDetail = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Detalle de Usuario</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
 const PagePlaceholder = ({
   title,
   description = "Próximamente - Página en construcción",
@@ -203,8 +173,6 @@ const PagePlaceholder = ({
   </div>
 );
 
-const AdminAdopciones = () => <PagePlaceholder title="Adopciones" />;
-const AdminDonaciones = () => <PagePlaceholder title="Donaciones" />;
 const AdminFundaciones = () => <PagePlaceholder title="Fundaciones" />;
 const AdminVeterinarias = () => <PagePlaceholder title="Veterinarias" />;
 const AdminProductos = () => <PagePlaceholder title="Productos" />;
@@ -230,7 +198,7 @@ const VetPedidos = () => <PagePlaceholder title="Pedidos" />;
 const VetReportes = () => <PagePlaceholder title="Reportes" />;
 
 // Fundación placeholders
-const FundAdopciones = () => <PagePlaceholder title="Adopciones" />;
+const FundacionAdopciones = () => <PagePlaceholder title="Adopciones" />;
 const FundDonaciones = () => <PagePlaceholder title="Donaciones" />;
 const FundVoluntarios = () => <PagePlaceholder title="Voluntarios" />;
 const FundReportes = () => <PagePlaceholder title="Reportes" />;
@@ -343,6 +311,7 @@ const router = createBrowserRouter([
       { path: "rescates/reportar", element: <ReportarRescate /> },
       { path: "suscripciones", element: <SuscripcionesPublicIndex /> },
       { path: "apadrinar", element: <SuscripcionesPublicIndex /> },
+      { path: "contacto", element: <Contacto /> },
     ],
   },
 
@@ -429,7 +398,7 @@ const router = createBrowserRouter([
           { path: "suscripciones/crear", element: <SuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
-          { path: "adopciones", element: <FundAdopciones /> },
+          { path: "adopciones", element: <FundacionAdopciones /> },
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
           { path: "reportes", element: <FundReportes /> },
@@ -454,6 +423,8 @@ const router = createBrowserRouter([
             children: [
               { index: true, element: <UsuariosList /> },
               { path: "pendientes", element: <UsuariosPendientes /> },
+              { path: "fundaciones", element: <UsuariosFundaciones /> },
+              { path: "veterinarias", element: <UsuariosVeterinarias /> },
               { path: "create", element: <UsuarioForm /> },
               { path: ":id", element: <UsuarioDetail /> },
               { path: ":id/edit", element: <UsuarioForm /> },
@@ -467,13 +438,23 @@ const router = createBrowserRouter([
           { path: "rescates/:id", element: <AdminRescatesShow /> },
           { path: "eventos", element: <AdminEventosIndex /> },
           { path: "eventos/crear", element: <AdminEventosCreate /> },
+          { path: "eventos/calendario", element: <PagePlaceholder title="Calendario" /> },
           { path: "eventos/:id", element: <AdminEventosShow /> },
           { path: "eventos/:id/editar", element: <AdminEventosEdit /> },
           { path: "suscripciones", element: <AdminSuscripcionesIndex /> },
           { path: "suscripciones/crear", element: <AdminSuscripcionesCreate /> },
+          { path: "suscripciones/estado", element: <AdminSuscripcionesEstado /> },
+          { path: "suscripciones/reportes", element: <AdminSuscripcionesReportes /> },
           { path: "suscripciones/:id", element: <AdminSuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <AdminSuscripcionesEdit /> },
-          { path: "adopciones", element: <AdminAdopciones /> },
+          {
+            path: "adopciones",
+            children: [
+              { index: true, element: <AdminAdopciones /> },
+              { path: "solicitudes", element: <AdminAdopcionesSolicitudes /> },
+              { path: "seguimientos", element: <AdminAdopcionesSeguimientos /> },
+            ],
+          },
           { path: "donaciones", element: <AdminDonaciones /> },
           { path: "fundaciones", element: <AdminFundaciones /> },
           { path: "veterinarias", element: <AdminVeterinarias /> },
