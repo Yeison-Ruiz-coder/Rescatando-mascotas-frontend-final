@@ -8,6 +8,40 @@ import api from '../services/api';
 import { rescateService } from '../services/rescateService';
 import { getImageUrl } from '../utils/imageUtils';
 
+// ============================================
+// 🎯 FUNCIÓN HELPER CON LA MISMA LÓGICA DEL BACKEND
+// ============================================
+const determinarEstadoMascota = ({
+  estadoSeleccionado = null,
+  desdeRescate = false,
+  necesitaHogarTemporal = false,
+  estadoPorDefecto = 'En adopcion'
+}) => {
+  // 🥇 MÁXIMA PRIORIDAD: Si necesita hogar temporal, forzar "En acogida"
+  if (necesitaHogarTemporal) {
+    return 'En acogida';
+  }
+
+  // 🥈 SEGUNDA PRIORIDAD: Si el usuario seleccionó un estado, usarlo
+  if (estadoSeleccionado && estadoSeleccionado.trim() !== '') {
+    return estadoSeleccionado;
+  }
+
+  // 🥉 TERCERA PRIORIDAD: Estado por defecto según contexto
+  if (desdeRescate) {
+    return 'Rescatada';
+  }
+
+  return estadoPorDefecto;
+};
+
+const getEstadoPorDefecto = (desdeRescate = false) => {
+  return desdeRescate ? 'Rescatada' : 'En adopcion';
+};
+
+// ============================================
+// HOOK PRINCIPAL
+// ============================================
 const useCrearMascota = () => {
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
@@ -33,7 +67,6 @@ const useCrearMascota = () => {
   // Datos estáticos
   const especies = ['Perro', 'Gato', 'Conejo', 'Ave', 'Otro'];
   const generos = ['Macho', 'Hembra', 'Desconocido'];
-  const estados = ['En adopcion', 'Adoptado', 'Rescatada', 'En acogida'];
   const totalSteps = 6;
 
   const steps = [
@@ -45,6 +78,9 @@ const useCrearMascota = () => {
     { number: 6, title: t('steps.galeria_fotos'), icon: 'fas fa-images' },
   ];
 
+  // Estado por defecto según contexto (misma lógica que backend)
+  const estadoPorDefecto = getEstadoPorDefecto(isFromRescate);
+
   // Formulario
   const [form, setForm] = useState({
     nombre_mascota: '',
@@ -52,7 +88,7 @@ const useCrearMascota = () => {
     razas: [],
     edad_aprox: '',
     genero: '',
-    estado: 'En adopcion',
+    estado: estadoPorDefecto,
     peso_aprox: '',
     tamano: '',
     color: '',
@@ -206,6 +242,26 @@ const useCrearMascota = () => {
   }, [rescateId, isFromRescate]);
 
   // ============================================
+  // 🎯 EFECTO: Sincronizar estado cuando cambia necesita_hogar_temporal
+  // (Misma lógica que el backend)
+  // ============================================
+  useEffect(() => {
+    const nuevoEstado = determinarEstadoMascota({
+      estadoSeleccionado: form.estado,
+      desdeRescate: isFromRescate,
+      necesitaHogarTemporal: form.necesita_hogar_temporal,
+      estadoPorDefecto: 'En adopcion'
+    });
+
+    if (nuevoEstado !== form.estado) {
+      setForm(prev => ({
+        ...prev,
+        estado: nuevoEstado
+      }));
+    }
+  }, [form.necesita_hogar_temporal, isFromRescate]);
+
+  // ============================================
   // ENVÍO DEL FORMULARIO (CREACIÓN)
   // ============================================
   const handleSubmit = useCallback(async (e) => {
@@ -226,40 +282,65 @@ const useCrearMascota = () => {
     
     const formDataToSend = new FormData();
     
-    // Datos básicos
+    // ============================================
+    // 🎯 DETERMINAR ESTADO FINAL (misma lógica que backend)
+    // ============================================
+    const estadoFinal = determinarEstadoMascota({
+      estadoSeleccionado: form.estado,
+      desdeRescate: isFromRescate,
+      necesitaHogarTemporal: form.necesita_hogar_temporal,
+      estadoPorDefecto: 'En adopcion'
+    });
+    
+    // ============================================
+    // DATOS BÁSICOS
+    // ============================================
     formDataToSend.append('fundacion_id', fundacionId);
     formDataToSend.append('nombre_mascota', form.nombre_mascota || '');
     formDataToSend.append('especie', form.especie || '');
     formDataToSend.append('edad_aprox', form.edad_aprox ? parseInt(form.edad_aprox, 10) : 0);
     formDataToSend.append('genero', form.genero || '');
-    formDataToSend.append('estado', form.estado || 'En adopcion');
+    formDataToSend.append('estado', estadoFinal); // ← Usar estado FINAL
     
-    // Razas
-    if (form.razas?.length > 0) {
+    // ============================================
+    // RAZAS
+    // ============================================
+    if (form.razas && form.razas.length > 0) {
       form.razas.forEach(id => formDataToSend.append('razas[]', id));
     }
     
-    // Características físicas
+    // ============================================
+    // CARACTERÍSTICAS FÍSICAS
+    // ============================================
     if (form.peso_aprox) formDataToSend.append('peso_aprox', form.peso_aprox);
     if (form.tamano) formDataToSend.append('tamano', form.tamano);
     if (form.color) formDataToSend.append('color', form.color);
     
-    // Ubicación y descripción
+    // ============================================
+    // UBICACIÓN Y DESCRIPCIÓN
+    // ============================================
     formDataToSend.append('lugar_rescate', form.lugar_rescate || '');
     formDataToSend.append('descripcion', form.descripcion || '');
     if (form.condiciones_especiales) formDataToSend.append('condiciones_especiales', form.condiciones_especiales);
 
-    // Salud
+    // ============================================
+    // SALUD
+    // ============================================
     if (form.salud_general) formDataToSend.append('salud_general', form.salud_general);
     formDataToSend.append('esterilizado', form.esterilizado ? 1 : 0);
     formDataToSend.append('desparasitado', form.desparasitado ? 1 : 0);
     formDataToSend.append('vacunado', form.vacunado ? 1 : 0);
 
+    // ============================================
+    // VACUNAS
+    // ============================================
     if (form.vacunas && form.vacunas.length > 0) {
       form.vacunas.forEach(id => formDataToSend.append('vacunas[]', id));
     }
 
-    // Enfermedades y medicamentos
+    // ============================================
+    // ENFERMEDADES CRÓNICAS
+    // ============================================
     const enfermedadesArray = Array.isArray(form.enfermedades_cronicas)
       ? form.enfermedades_cronicas.filter(item => item && item.trim())
       : [];
@@ -267,6 +348,9 @@ const useCrearMascota = () => {
       enfermedadesArray.forEach(item => formDataToSend.append('enfermedades_cronicas[]', item));
     }
 
+    // ============================================
+    // MEDICAMENTOS
+    // ============================================
     const medicamentosArray = Array.isArray(form.medicamentos)
       ? form.medicamentos.filter(item => item && item.trim())
       : [];
@@ -274,7 +358,9 @@ const useCrearMascota = () => {
       medicamentosArray.forEach(item => formDataToSend.append('medicamentos[]', item));
     }
 
-    // Requisitos
+    // ============================================
+    // REQUISITOS
+    // ============================================
     formDataToSend.append('necesita_hogar_temporal', form.necesita_hogar_temporal ? 1 : 0);
     formDataToSend.append('apto_con_ninos', form.apto_con_ninos ? 1 : 0);
     formDataToSend.append('apto_con_otros_animales', form.apto_con_otros_animales ? 1 : 0);
@@ -286,14 +372,19 @@ const useCrearMascota = () => {
       requisitosArray.forEach(item => formDataToSend.append('requisitos_adopcion[]', item));
     }
 
+    // ============================================
+    // HOGAR RECOMENDADO
+    // ============================================
     if (form.hogar_recomendado) formDataToSend.append('hogar_recomendado', form.hogar_recomendado);
 
-    // Fotos
+    // ============================================
+    // FOTOS
+    // ============================================
     if (form.foto_principal && form.foto_principal instanceof File) {
       formDataToSend.append('foto_principal', form.foto_principal);
     }
 
-    if (form.galeria_fotos?.length > 0) {
+    if (form.galeria_fotos && form.galeria_fotos.length > 0) {
       form.galeria_fotos.forEach(item => {
         const file = item?.file || item;
         if (file instanceof File) {
@@ -302,11 +393,19 @@ const useCrearMascota = () => {
       });
     }
 
+    // ============================================
+    // VIDEO Y FECHA
+    // ============================================
     if (form.video_url) formDataToSend.append('video_url', form.video_url);
     formDataToSend.append('fecha_ingreso', form.fecha_ingreso);
 
-    // Debug
+    // ============================================
+    // DEBUG
+    // ============================================
     console.log('=== ENVIANDO CREACIÓN DE MASCOTA ===');
+    console.log('Estado final:', estadoFinal);
+    console.log('Desde rescate:', isFromRescate);
+    console.log('Necesita hogar temporal:', form.necesita_hogar_temporal);
     for (let [key, value] of formDataToSend.entries()) {
       if (value instanceof File) {
         console.log(`${key}: ${value.name} (${value.type})`);
@@ -342,7 +441,7 @@ const useCrearMascota = () => {
     } finally {
       setLoading(false);
     }
-  }, [form, esFundacion, fundacionId, rescateId, navigate, t, validateStep]);
+  }, [form, esFundacion, fundacionId, rescateId, navigate, t, validateStep, isFromRescate]);
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -363,7 +462,7 @@ const useCrearMascota = () => {
     isFromRescate: !!rescateId,
     especies,
     generos,
-    estados,
+    estados: isFromRescate ? ['Rescatada', 'En acogida'] : ['En adopcion', 'Adoptado', 'Rescatada', 'En acogida'],
     steps,
     totalSteps,
     razasList,
