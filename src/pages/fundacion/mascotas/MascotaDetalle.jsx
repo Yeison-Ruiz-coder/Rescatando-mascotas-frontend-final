@@ -1,5 +1,5 @@
 // src/pages/fundacion/mascotas/MascotaDetalle.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -9,8 +9,7 @@ import { getImageUrl } from "../../../utils/imageUtils";
 import "./MascotaDetalle.css";
 
 const MascotaDetalleFundacion = () => {
-  const params = useParams();
-  const mascotaId = params.id;
+  const { id: mascotaId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation(["nuevaMascota", "mascotas"]);
 
@@ -22,6 +21,88 @@ const MascotaDetalleFundacion = () => {
   const [modalImage, setModalImage] = useState(null);
   const [imagenActual, setImagenActual] = useState(0);
 
+  // ============================================
+  // 🎯 CARGAR MASCOTA - OPTIMIZADO
+  // ============================================
+  const cargarMascota = useCallback(async () => {
+    try {
+      setLoading(true);
+      
+      const response = await api.get(`/entity/mascotas/${mascotaId}`, {
+        params: {
+          fields: 'id,nombre_mascota,especie,genero,edad_aprox,tamano,estado,esterilizado,desparasitado,vacunado,apto_con_ninos,apto_con_otros_animales,lugar_rescate,necesita_hogar_temporal,foto_principal,galeria_fotos,descripcion,condiciones_especiales,salud_general,peso_aprox,color,fecha_ingreso,video_url,hogar_recomendado,enfermedades_cronicas,medicamentos,requisitos_adopcion,created_at,updated_at,fundacion_id',
+          include: 'fundacion,razas,vacunas'
+        }
+      });
+
+      if (response.data.success) {
+        const data = response.data.data;
+        setMascota(data);
+        setVacunas(data.vacunas || []);
+        setRazas(data.razas || []);
+      } else {
+        toast.error(t("nuevaMascota:error_cargar"));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(t("nuevaMascota:error_carga"));
+    } finally {
+      setLoading(false);
+    }
+  }, [mascotaId, t]);
+
+  // ============================================
+  // 🎯 CAMBIAR ESTADO - PATCH OPTIMIZADO
+  // ============================================
+  const handleEstadoChange = async (nuevoEstado) => {
+    if (!mascotaId) return;
+
+    setCambiandoEstado(true);
+    try {
+      const response = await api.patch(`/entity/mascotas/${mascotaId}/estado`, {
+        estado: nuevoEstado,
+      });
+      
+      if (response.data.success) {
+        setMascota((prev) => ({ ...prev, estado: nuevoEstado }));
+        toast.success(t("nuevaMascota:estado_actualizado", { estado: nuevoEstado }));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(t("nuevaMascota:error_actualizar"));
+    } finally {
+      setCambiandoEstado(false);
+    }
+  };
+
+  // ============================================
+  // ELIMINAR
+  // ============================================
+  const handleEliminar = async () => {
+    if (!mascotaId) return;
+
+    const confirmacion = window.confirm(
+      t("nuevaMascota:confirmar_eliminar", { nombre: mascota?.nombre_mascota })
+    );
+
+    if (confirmacion) {
+      try {
+        const response = await api.delete(`/entity/mascotas/${mascotaId}`);
+        if (response.data.success) {
+          toast.success(t("nuevaMascota:mascota_eliminada"));
+          navigate("/fundacion/mascotas");
+        } else {
+          toast.error(response.data.message || t("nuevaMascota:error_eliminar"));
+        }
+      } catch (error) {
+        toast.error(error.response?.data?.message || t("nuevaMascota:error_eliminar"));
+      }
+    }
+  };
+
+  // ============================================
+  // UTILIDADES
+  // ============================================
   const formatEdad = (edad) => {
     if (!edad && edad !== 0) return t("mascotas:edad_no_especificada");
     const edadNum = parseFloat(edad);
@@ -82,87 +163,39 @@ const MascotaDetalleFundacion = () => {
     return getImageUrl(url);
   };
 
-  const openImageModal = (imageUrl) => {
-    if (imageUrl && typeof imageUrl === "string") {
-      setModalImage(imageUrl);
+  const getEstadoClass = () => {
+    switch (mascota?.estado) {
+      case "En adopcion": return "estado-adopcion";
+      case "Adoptado": return "estado-adoptado";
+      case "Rescatada": return "estado-rescatada";
+      default: return "estado-acogida";
     }
   };
 
-  const cambiarImagen = (index) => {
-    setImagenActual(index);
+  const getEstadoTexto = () => {
+    switch (mascota?.estado) {
+      case "En adopcion": return t("mascotas:en_adopcion");
+      case "Adoptado": return t("mascotas:adoptado");
+      case "Rescatada": return t("mascotas:rescatada");
+      default: return t("mascotas:en_acogida");
+    }
   };
 
+  // ============================================
+  // CARGA INICIAL
+  // ============================================
   useEffect(() => {
     if (mascotaId) {
       cargarMascota();
     }
-  }, [mascotaId]);
+  }, [mascotaId, cargarMascota]);
 
-  const cargarMascota = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get(`/entity/mascotas/${mascotaId}`);
-
-      if (response.data.success) {
-        const data = response.data.data;
-        setMascota(data);
-        setVacunas(data.vacunas || []);
-        setRazas(data.razas || []);
-      } else {
-        toast.error(t("nuevaMascota:error_cargar"));
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error(t("nuevaMascota:error_carga"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEstadoChange = async (nuevoEstado) => {
-    if (!mascotaId) return;
-
-    setCambiandoEstado(true);
-    try {
-      const response = await api.put(`/entity/mascotas/${mascotaId}`, {
-        estado: nuevoEstado,
-      });
-      if (response.data.success) {
-        setMascota((prev) => ({ ...prev, estado: nuevoEstado }));
-        toast.success(t("nuevaMascota:estado_actualizado", { estado: nuevoEstado }));
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error(t("nuevaMascota:error_actualizar"));
-    } finally {
-      setCambiandoEstado(false);
-    }
-  };
-
-  const handleEliminar = async () => {
-    if (!mascotaId) return;
-
-    const confirmacion = window.confirm(
-      t("nuevaMascota:confirmar_eliminar", { nombre: mascota?.nombre_mascota })
-    );
-
-    if (confirmacion) {
-      try {
-        const response = await api.delete(`/entity/mascotas/${mascotaId}`);
-        if (response.data.success) {
-          navigate("/fundacion/mascotas");
-        } else {
-          toast.error(response.data.message || t("nuevaMascota:error_eliminar"));
-        }
-      } catch (error) {
-        toast.error(error.response?.data?.message || t("nuevaMascota:error_eliminar"));
-      }
-    }
-  };
-
+  // ============================================
+  // RENDER - Igual que antes pero con variables CSS
+  // ============================================
   if (loading) {
     return (
-      <div className="mascota-detalle-page-fundacion">
+      <div className="mascota-detalle-fundacion">
         <LoadingSpinner text={t("mascotas:cargando_detalle")} />
       </div>
     );
@@ -170,7 +203,7 @@ const MascotaDetalleFundacion = () => {
 
   if (!mascota) {
     return (
-      <div className="mascota-detalle-page-fundacion">
+      <div className="mascota-detalle-fundacion">
         <div className="error-container">
           <i className="fas fa-paw"></i>
           <h2>{t("mascotas:no_encontrada")}</h2>
@@ -182,39 +215,12 @@ const MascotaDetalleFundacion = () => {
     );
   }
 
-  const getEstadoClass = () => {
-    switch (mascota.estado) {
-      case "En adopcion":
-        return "estado-adopcion";
-      case "Adoptado":
-        return "estado-adoptado";
-      case "Rescatada":
-        return "estado-rescatada";
-      default:
-        return "estado-acogida";
-    }
-  };
-
-  const getEstadoTexto = () => {
-    switch (mascota.estado) {
-      case "En adopcion":
-        return t("mascotas:en_adopcion");
-      case "Adoptado":
-        return t("mascotas:adoptado");
-      case "Rescatada":
-        return t("mascotas:rescatada");
-      default:
-        return t("mascotas:en_acogida");
-    }
-  };
-
   const galeriaArray = getGaleriaArray(mascota.galeria_fotos);
   const enfermedadesArray = getArrayFromJson(mascota.enfermedades_cronicas);
   const medicamentosArray = getArrayFromJson(mascota.medicamentos);
   const requisitosArray = getArrayFromJson(mascota.requisitos_adopcion);
 
   const todasLasImagenes = [];
-
   if (mascota.foto_principal && typeof mascota.foto_principal === "string") {
     todasLasImagenes.push({
       url: mascota.foto_principal,
@@ -222,7 +228,6 @@ const MascotaDetalleFundacion = () => {
       alt: `${mascota.nombre_mascota} - Foto principal`,
     });
   }
-
   galeriaArray.forEach((foto, idx) => {
     if (foto && typeof foto === "string") {
       todasLasImagenes.push({
@@ -236,31 +241,23 @@ const MascotaDetalleFundacion = () => {
   const imagenActualData = todasLasImagenes[imagenActual] || todasLasImagenes[0] || null;
   const imagenActualUrl = imagenActualData?.url ? safeGetImageUrl(imagenActualData.url) : null;
 
-  // Función para obtener el texto del hogar recomendado
-  const getHogarRecomendadoTexto = (hogar) => {
-    const hogares = {
-      casa_con_jardin: t("nuevaMascota:casa_con_jardin"),
-      departamento: t("nuevaMascota:departamento"),
-      casa_sin_jardin: t("nuevaMascota:casa_sin_jardin"),
-      espacio_amplio: t("nuevaMascota:espacio_amplio"),
-    };
-    return hogares[hogar] || hogar;
-  };
-
   return (
-    <div className="mascota-detalle-page-fundacion">
+    <div className="mascota-detalle-fundacion">
       <div className="detalle-container-fundacion">
+        {/* HEADER */}
         <div className="detalle-header-fundacion">
           <button onClick={() => navigate(-1)} className="btn-back-fundacion">
             <i className="fas fa-arrow-left"></i> {t("mascotas:volver")}
           </button>
         </div>
 
+        {/* CONTENT - El resto del código igual que antes */}
         <div className="detalle-content-fundacion">
+          {/* Imágenes */}
           <div className="imagenes-section-fundacion">
             <div
               className="imagen-principal-fundacion"
-              onClick={() => openImageModal(imagenActualUrl)}
+              onClick={() => imagenActualUrl && setModalImage(imagenActualUrl)}
             >
               {imagenActualUrl ? (
                 <img
@@ -288,24 +285,17 @@ const MascotaDetalleFundacion = () => {
                   return (
                     <div
                       key={idx}
-                      className={`miniatura-item ${imagenActual === idx ? "activa" : ""} ${img.esPrincipal ? "principal" : ""}`}
-                      onClick={() => cambiarImagen(idx)}
+                      className={`miniatura-item ${imagenActual === idx ? "activa" : ""}`}
+                      onClick={() => setImagenActual(idx)}
                     >
                       {imgUrl ? (
-                        <>
-                          <img
-                            src={imgUrl}
-                            alt={`Miniatura ${idx + 1}`}
-                            onError={(e) => {
-                              e.target.src = "https://placehold.co/80x80?text=Error";
-                            }}
-                          />
-                          {img.esPrincipal && (
-                            <span className="principal-badge-miniatura">
-                              <i className="fas fa-star"></i>
-                            </span>
-                          )}
-                        </>
+                        <img
+                          src={imgUrl}
+                          alt={`Miniatura ${idx + 1}`}
+                          onError={(e) => {
+                            e.target.src = "https://placehold.co/80x80?text=Error";
+                          }}
+                        />
                       ) : (
                         <div className="miniatura-placeholder">
                           <i className="fas fa-paw"></i>
@@ -318,10 +308,12 @@ const MascotaDetalleFundacion = () => {
             )}
           </div>
 
+          {/* Info - El resto del JSX igual que antes, ya usa variables CSS */}
           <div className="detalle-info-fundacion">
             <h1 className="mascota-titulo">{mascota.nombre_mascota}</h1>
             <p className="id-mascota-fundacion">ID: #{mascota.id}</p>
 
+            {/* Grid de info - 3 columnas */}
             <div className="info-grid-fundacion">
               <div className="info-item-fundacion">
                 <i className="fas fa-tag"></i>
@@ -348,34 +340,27 @@ const MascotaDetalleFundacion = () => {
                 <span>{mascota.genero || t("mascotas:no_especificado")}</span>
               </div>
 
-              {(mascota.peso_aprox || mascota.tamano || mascota.color) && (
-                <>
-                  <div className="info-item-fundacion">
-                    <i className="fas fa-weight-hanging"></i>
-                    <strong>{t("nuevaMascota:peso_aprox")}</strong>
-                    <span>
-                      {mascota.peso_aprox
-                        ? `${mascota.peso_aprox} kg`
-                        : t("mascotas:no_especificado")}
-                    </span>
-                  </div>
-                  <div className="info-item-fundacion">
-                    <i className="fas fa-ruler-combined"></i>
-                    <strong>{t("nuevaMascota:tamano")}</strong>
-                    <span>
-                      {mascota.tamano
-                        ? getTamanoTexto(mascota.tamano)
-                        : t("mascotas:no_especificado")}
-                    </span>
-                  </div>
-                  <div className="info-item-fundacion">
-                    <i className="fas fa-palette"></i>
-                    <strong>{t("nuevaMascota:color")}</strong>
-                    <span>{mascota.color || t("mascotas:no_especificado")}</span>
-                  </div>
-                </>
+              {mascota.peso_aprox && (
+                <div className="info-item-fundacion">
+                  <i className="fas fa-weight-hanging"></i>
+                  <strong>{t("nuevaMascota:peso_aprox")}</strong>
+                  <span>{`${mascota.peso_aprox} kg`}</span>
+                </div>
               )}
-
+              {mascota.tamano && (
+                <div className="info-item-fundacion">
+                  <i className="fas fa-ruler-combined"></i>
+                  <strong>{t("nuevaMascota:tamano")}</strong>
+                  <span>{getTamanoTexto(mascota.tamano)}</span>
+                </div>
+              )}
+              {mascota.color && (
+                <div className="info-item-fundacion">
+                  <i className="fas fa-palette"></i>
+                  <strong>{t("nuevaMascota:color")}</strong>
+                  <span>{mascota.color}</span>
+                </div>
+              )}
               <div className="info-item-fundacion">
                 <i className="fas fa-map-marker-alt"></i>
                 <strong>{t("nuevaMascota:lugar_rescate")}</strong>
@@ -392,36 +377,32 @@ const MascotaDetalleFundacion = () => {
               </div>
             </div>
 
+            {/* DESCRIPCIÓN */}
             <div className="info-section-fundacion">
-              <h3>
-                <i className="fas fa-file-alt"></i> {t("nuevaMascota:descripcion")}
-              </h3>
+              <h3><i className="fas fa-file-alt"></i> {t("nuevaMascota:descripcion")}</h3>
               <p>{mascota.descripcion || t("mascotas:sin_descripcion")}</p>
             </div>
 
+            {/* CONDICIONES ESPECIALES */}
             {mascota.condiciones_especiales && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-heartbeat"></i> {t("nuevaMascota:condiciones_especiales")}
-                </h3>
+                <h3><i className="fas fa-heartbeat"></i> {t("nuevaMascota:condiciones_especiales")}</h3>
                 <p>{mascota.condiciones_especiales}</p>
               </div>
             )}
 
+            {/* SALUD */}
             {mascota.salud_general && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-stethoscope"></i> {t("nuevaMascota:salud_general")}
-                </h3>
+                <h3><i className="fas fa-stethoscope"></i> {t("nuevaMascota:salud_general")}</h3>
                 <p>{mascota.salud_general}</p>
               </div>
             )}
 
+            {/* BADGES SALUD */}
             {(mascota.esterilizado || mascota.desparasitado || mascota.vacunado) && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-check-circle"></i> {t("nuevaMascota:estado_salud")}
-                </h3>
+                <h3><i className="fas fa-check-circle"></i> {t("nuevaMascota:estado_salud")}</h3>
                 <div className="salud-badges">
                   {mascota.esterilizado && (
                     <span className="salud-badge esterilizado">
@@ -442,11 +423,10 @@ const MascotaDetalleFundacion = () => {
               </div>
             )}
 
+            {/* ENFERMEDADES */}
             {enfermedadesArray.length > 0 && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-notes-medical"></i> {t("nuevaMascota:enfermedades_cronicas")}
-                </h3>
+                <h3><i className="fas fa-notes-medical"></i> {t("nuevaMascota:enfermedades_cronicas")}</h3>
                 <div className="enfermedades-lista">
                   {enfermedadesArray.map((enf, idx) => (
                     <span key={idx} className="enfermedad-tag">
@@ -457,11 +437,10 @@ const MascotaDetalleFundacion = () => {
               </div>
             )}
 
+            {/* MEDICAMENTOS */}
             {medicamentosArray.length > 0 && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-tablets"></i> {t("nuevaMascota:medicamentos")}
-                </h3>
+                <h3><i className="fas fa-tablets"></i> {t("nuevaMascota:medicamentos")}</h3>
                 <div className="medicamentos-lista">
                   {medicamentosArray.map((med, idx) => (
                     <span key={idx} className="medicamento-tag">
@@ -472,11 +451,10 @@ const MascotaDetalleFundacion = () => {
               </div>
             )}
 
+            {/* VACUNAS */}
             {vacunas.length > 0 && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-syringe"></i> {t("nuevaMascota:vacunas_aplicadas")}
-                </h3>
+                <h3><i className="fas fa-syringe"></i> {t("nuevaMascota:vacunas_aplicadas")}</h3>
                 <div className="vacunas-lista-fundacion">
                   {vacunas.map((vacuna, idx) => (
                     <span key={idx} className="vacuna-tag-fundacion">
@@ -487,11 +465,10 @@ const MascotaDetalleFundacion = () => {
               </div>
             )}
 
+            {/* REQUISITOS */}
             {requisitosArray.length > 0 && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-clipboard-list"></i> {t("nuevaMascota:requisitos_adopcion")}
-                </h3>
+                <h3><i className="fas fa-clipboard-list"></i> {t("nuevaMascota:requisitos_adopcion")}</h3>
                 <ul className="requisitos-lista">
                   {requisitosArray.map((req, idx) => (
                     <li key={idx}>
@@ -502,83 +479,72 @@ const MascotaDetalleFundacion = () => {
               </div>
             )}
 
+            {/* HOGAR RECOMENDADO */}
             {mascota.hogar_recomendado && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-home"></i> {t("nuevaMascota:hogar_recomendado")}
-                </h3>
+                <h3><i className="fas fa-home"></i> {t("nuevaMascota:hogar_recomendado")}</h3>
                 <p className="hogar-recomendado">
-                  <i className="fas fa-info-circle"></i> {getHogarRecomendadoTexto(mascota.hogar_recomendado)}
+                  <i className="fas fa-info-circle"></i> 
+                  {t(`nuevaMascota:${mascota.hogar_recomendado}`) || mascota.hogar_recomendado}
                 </p>
               </div>
             )}
 
-            {(mascota.necesita_hogar_temporal !== undefined ||
-              mascota.apto_con_ninos !== undefined ||
-              mascota.apto_con_otros_animales !== undefined) && (
-              <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-heart"></i> {t("nuevaMascota:aptitudes")}
-                </h3>
-                <div className="aptitudes-grid">
-                  {mascota.necesita_hogar_temporal && (
-                    <span className="aptitud-tag temporal">
-                      <i className="fas fa-clock"></i> {t("nuevaMascota:necesita_hogar_temporal")}
-                    </span>
-                  )}
-                  {mascota.apto_con_ninos && (
-                    <span className="aptitud-tag ninos">
-                      <i className="fas fa-child"></i> {t("nuevaMascota:apto_con_ninos")}
-                    </span>
-                  )}
-                  {!mascota.apto_con_ninos && mascota.apto_con_ninos !== undefined && (
-                    <span className="aptitud-tag no-ninos">
-                      <i className="fas fa-child"></i> {t("mascotas:no_apto_ninos")}
-                    </span>
-                  )}
-                  {mascota.apto_con_otros_animales && (
-                    <span className="aptitud-tag animales">
-                      <i className="fas fa-dog"></i> {t("nuevaMascota:apto_con_otros_animales")}
-                    </span>
-                  )}
-                  {!mascota.apto_con_otros_animales && mascota.apto_con_otros_animales !== undefined && (
-                    <span className="aptitud-tag no-animales">
-                      <i className="fas fa-dog"></i> {t("mascotas:no_apto_animales")}
-                    </span>
-                  )}
-                </div>
+            {/* APTITUDES */}
+            <div className="info-section-fundacion">
+              <h3><i className="fas fa-heart"></i> {t("nuevaMascota:aptitudes")}</h3>
+              <div className="aptitudes-grid">
+                {mascota.necesita_hogar_temporal && (
+                  <span className="aptitud-tag temporal">
+                    <i className="fas fa-clock"></i> {t("nuevaMascota:necesita_hogar_temporal")}
+                  </span>
+                )}
+                {mascota.apto_con_ninos && (
+                  <span className="aptitud-tag ninos">
+                    <i className="fas fa-child"></i> {t("nuevaMascota:apto_con_ninos")}
+                  </span>
+                )}
+                {!mascota.apto_con_ninos && mascota.apto_con_ninos !== undefined && (
+                  <span className="aptitud-tag no-ninos">
+                    <i className="fas fa-child"></i> {t("mascotas:no_apto_ninos")}
+                  </span>
+                )}
+                {mascota.apto_con_otros_animales && (
+                  <span className="aptitud-tag animales">
+                    <i className="fas fa-dog"></i> {t("nuevaMascota:apto_con_otros_animales")}
+                  </span>
+                )}
+                {!mascota.apto_con_otros_animales && mascota.apto_con_otros_animales !== undefined && (
+                  <span className="aptitud-tag no-animales">
+                    <i className="fas fa-dog"></i> {t("mascotas:no_apto_animales")}
+                  </span>
+                )}
               </div>
-            )}
+            </div>
 
+            {/* VIDEO */}
             {mascota.video_url && (
               <div className="info-section-fundacion">
-                <h3>
-                  <i className="fas fa-video"></i> {t("nuevaMascota:video")}
-                </h3>
+                <h3><i className="fas fa-video"></i> {t("nuevaMascota:video")}</h3>
                 <div className="video-container">
-                  <a
-                    href={mascota.video_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="video-link"
-                  >
-                    <i className="fas fa-play-circle"></i> {t("nuevaMascota:ver_video", { nombre: mascota.nombre_mascota })}
+                  <a href={mascota.video_url} target="_blank" rel="noopener noreferrer" className="video-link">
+                    <i className="fas fa-play-circle"></i> 
+                    {t("nuevaMascota:ver_video", { nombre: mascota.nombre_mascota })}
                   </a>
                 </div>
               </div>
             )}
 
+            {/* ESTADO - SELECTOR */}
             <div className="info-section-fundacion">
-              <h3>
-                <i className="fas fa-chart-line"></i> {t("nuevaMascota:estado_actual")}
-              </h3>
+              <h3><i className="fas fa-chart-line"></i> {t("nuevaMascota:estado_actual")}</h3>
               <select
                 value={mascota.estado}
                 onChange={(e) => handleEstadoChange(e.target.value)}
                 className="estado-select-fundacion"
                 disabled={cambiandoEstado}
               >
-                <option value="En adopción">{t("mascotas:en_adopcion")}</option>
+                <option value="En adopcion">{t("mascotas:en_adopcion")}</option>
                 <option value="Rescatada">{t("mascotas:rescatada")}</option>
                 <option value="En acogida">{t("mascotas:en_acogida")}</option>
                 <option value="Adoptado">{t("mascotas:adoptado")}</option>
@@ -588,12 +554,10 @@ const MascotaDetalleFundacion = () => {
               )}
             </div>
 
+            {/* ACCIONES */}
             <div className="acciones-finales-fundacion">
               <div className="botones-container">
-                <Link
-                  to={`/fundacion/mascotas/editar/${mascotaId}`}
-                  className="btn-edit-fundacion"
-                >
+                <Link to={`/fundacion/mascotas/editar/${mascotaId}`} className="btn-edit-fundacion">
                   <i className="fas fa-edit"></i> {t("nuevaMascota:editar")}
                 </Link>
                 <button onClick={handleEliminar} className="btn-delete-fundacion">
@@ -605,6 +569,7 @@ const MascotaDetalleFundacion = () => {
         </div>
       </div>
 
+      {/* MODAL IMAGEN */}
       {modalImage && (
         <div className="modal-imagen-fundacion" onClick={() => setModalImage(null)}>
           <button className="modal-close-fundacion" onClick={() => setModalImage(null)}>
