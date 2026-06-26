@@ -136,7 +136,7 @@ export const suscripcionService = {
   },
 
   /**
-   * ✅ CANCELAR UNA SUSCRIPCIÓN
+   * ✅ CANCELAR UNA SUSCRIPCIÓN (Usuario)
    * PATCH /api/suscripciones/user/{id}/cancelar
    */
   cancelUserSuscripcion: async (id) => {
@@ -170,7 +170,7 @@ export const suscripcionService = {
   },
 
   /**
-   * ✅ REACTIVAR UNA SUSCRIPCIÓN
+   * ✅ REACTIVAR UNA SUSCRIPCIÓN (Usuario)
    * PATCH /api/suscripciones/user/{id}/reactivar
    */
   reactivarSuscripcion: async (id) => {
@@ -213,7 +213,9 @@ export const suscripcionService = {
     }
   },
 
+  // ============================================
   // ============ ADMIN ============
+  // ============================================
   
   /**
    * ✅ OBTENER TODAS LAS SUSCRIPCIONES (ADMIN)
@@ -232,26 +234,20 @@ export const suscripcionService = {
       const response = await api.get('/admin/suscripciones');
       console.log('📊 Respuesta completa:', response);
       
-      // ✅ La estructura es: { success, message, data: { current_page, data: [], ... } }
       const responseData = response.data;
-      
-      // ✅ Extraer las suscripciones del array 'data' dentro de 'data.data'
       let suscripcionesArray = [];
       
-      // Si la respuesta tiene la estructura de Laravel con paginación
+      // Estructura de Laravel con paginación
       if (responseData?.data?.data && Array.isArray(responseData.data.data)) {
         suscripcionesArray = responseData.data.data;
         console.log('✅ Suscripciones encontradas en data.data.data');
       } 
-      // Si responseData.data es un array directamente
       else if (Array.isArray(responseData?.data)) {
         suscripcionesArray = responseData.data;
       }
-      // Si la respuesta directa es un array
       else if (Array.isArray(responseData)) {
         suscripcionesArray = responseData;
       }
-      // Buscar en otras propiedades
       else if (responseData?.data && typeof responseData.data === 'object') {
         for (const key in responseData.data) {
           if (Array.isArray(responseData.data[key]) && key !== 'links') {
@@ -341,6 +337,56 @@ export const suscripcionService = {
       throw error;
     }
   },
+
+  /**
+   * ✅ CANCELAR SUSCRIPCIÓN POR ADMIN
+   * PATCH /api/admin/suscripciones/{id}/cancelar
+   */
+  cancelarSuscripcionAdmin: async (id) => {
+    try {
+      console.log(`🗑️ Admin cancelando suscripción ${id} desde /api/admin/suscripciones/${id}/cancelar`);
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('No hay token de autenticación');
+      }
+      
+      const response = await api.patch(`/admin/suscripciones/${id}/cancelar`);
+      
+      console.log('✅ Suscripción cancelada por admin:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('❌ Error cancelarSuscripcionAdmin:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw new Error(error.response?.data?.message || 'Error al cancelar la suscripción');
+    }
+  },
+
+  /**
+   * ✅ ACTUALIZAR ESTADO DE SUSCRIPCIÓN POR ADMIN
+   * PATCH /api/admin/suscripciones/{id}
+   */
+  actualizarSuscripcionAdmin: async (id, data) => {
+    try {
+      console.log(`🔄 Admin actualizando suscripción ${id}`);
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('No hay token de autenticación');
+      }
+      
+      const response = await api.patch(`/admin/suscripciones/${id}`, data);
+      
+      console.log('✅ Suscripción actualizada por admin:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('❌ Error actualizarSuscripcionAdmin:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw new Error(error.response?.data?.message || 'Error al actualizar la suscripción');
+    }
+  },
 };
 
 // Datos de prueba (solo para desarrollo)
@@ -376,5 +422,4 @@ function getPlanesPrueba() {
   ];
 }
 
-// ✅ Exportación correcta
 export default api;

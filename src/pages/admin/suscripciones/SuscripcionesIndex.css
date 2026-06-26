@@ -196,3 +196,94 @@
   background: #e3f2fd;
   color: #0d47a1;
 }
+/* src/pages/admin/suscripciones/SuscripcionesIndex.css */
+
+/* ... estilos existentes ... */
+
+.btn-cancelar {
+  padding: 4px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+  margin-right: 4px;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.btn-reactivar {
+  padding: 4px 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+  margin-right: 4px;
+}
+
+.btn-reactivar:hover:not(:disabled) {
+  background: #218838;
+}
+
+.btn-pausar {
+  padding: 4px 12px;
+  background: #ffc107;
+  color: #212529;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+  margin-right: 4px;
+}
+
+.btn-pausar:hover:not(:disabled) {
+  background: #e0a800;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner-small {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.estado-inactivo {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.stat-inactivas {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.admin-table-container td {
+  vertical-align: middle;
+}
+
+.admin-table-container .btn-cancelar,
+.admin-table-container .btn-reactivar,
+.admin-table-container .btn-pausar {
+  white-space: nowrap;
+}
