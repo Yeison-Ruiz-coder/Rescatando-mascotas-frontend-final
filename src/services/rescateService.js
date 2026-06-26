@@ -2,6 +2,28 @@
 import api, { publicApi } from "./api";
 
 export const rescateService = {
+  // ========== LADO ADMINISTRADOR (NUEVOS ENLACES DE CONSOLA) ==========
+  
+  // Invocado por RescatesIndex.jsx
+  getAllRescatesAdmin: async (filters = {}) => {
+    return await api.get('/admin/rescates', { params: filters });
+  },
+
+  // Invocado por RescatesPendientes.jsx
+  getPendientesAdmin: async () => {
+    return await api.get('/admin/rescates', { params: { estado: 'pendiente' } });
+  },
+
+  // Invocado por RescatesMapa.jsx
+  getCoordenadasRescates: async () => {
+    return await api.get('/admin/rescates'); 
+  },
+
+  // Invocado por RescatesShow.jsx
+  getRescateDetalleAdmin: async (id) => {
+    return await api.get(`/admin/rescates/${id}`);
+  },
+
   // ========== LADO PÚBLICO ==========
   
   /**
@@ -62,7 +84,7 @@ export const rescateService = {
     return api.post(`/entity/rescates/${id}/registrar-mascota`, formData);
   },
 
-  // ========== LADO ADMINISTRADOR ==========
+  // ========== LADO ADMINISTRADOR ANTERIORES ==========
 
   /**
    * Marcar un rescate como disponible para administradores

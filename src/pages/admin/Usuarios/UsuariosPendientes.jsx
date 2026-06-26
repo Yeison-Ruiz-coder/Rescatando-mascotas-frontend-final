@@ -35,7 +35,7 @@ const samplePendientes = [
     servicios: "Urgencias y vacunas",
   },
 ];
-
+       
 const UsuariosPendientes = () => {
   const { t } = useTranslation("admin");
   const [usuarios, setUsuarios] = useState([]);
