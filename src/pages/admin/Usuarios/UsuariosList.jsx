@@ -70,16 +70,13 @@ const UsuariosList = () => {
 
   const hasActiveFilters = filters.search || filters.tipo || filters.estado;
 
-  // Obtener el nombre y avatar del admin
   const adminName = user?.name || user?.nombre || "Administrador";
   const adminAvatar = user?.avatar || null;
 
-  // Estadísticas para el banner
   const totalUsuarios = pagination.total || usuarios.length;
   const activos = usuarios.filter(u => u.estado === 'activo').length;
   const pendientes = usuarios.filter(u => u.estado === 'pendiente').length;
 
-  // Mapear filtros para FilterBar
   const filterBarFilters = {
     search: filters.search || '',
     tipo: filters.tipo || '',
@@ -89,7 +86,6 @@ const UsuariosList = () => {
   };
 
   const handleFilterBarChange = (newFilters) => {
-    // FilterBar puede enviar search, tipo, estado, sort
     handleFilterChange(newFilters);
   };
 
@@ -101,7 +97,7 @@ const UsuariosList = () => {
           user={{
             nombre: adminName,
             avatar: adminAvatar,
-            titulo: "Administra todas las cuentas de usuarios del sistema",
+            titulo: t("admin_usuarios_titulo", "Administra todas las cuentas de usuarios del sistema"),
             solicitudes: totalUsuarios,
             adopciones: activos,
             eventos: pendientes,
@@ -115,28 +111,28 @@ const UsuariosList = () => {
           <FilterBar
             filters={filterBarFilters}
             onFilterChange={handleFilterBarChange}
-            placeholder="Buscar por nombre, correo o tipo..."
+            placeholder={t("buscar_placeholder", "Buscar por nombre, correo o tipo...")}
             showTypeFilter={true}
             showStatusFilter={true}
             showSort={true}
             isLoading={loading}
             typeOptions={[
-              { value: '', label: 'Todos los tipos' },
-              { value: 'usuario', label: 'Usuarios' },
-              { value: 'fundacion', label: 'Fundaciones' },
-              { value: 'veterinaria', label: 'Veterinarias' },
+              { value: '', label: t('todos_tipos', 'Todos los tipos') },
+              { value: 'usuario', label: t('usuario', 'Usuarios') },
+              { value: 'fundacion', label: t('fundacion', 'Fundaciones') },
+              { value: 'veterinaria', label: t('veterinaria', 'Veterinarias') },
             ]}
             statusOptions={[
-              { value: '', label: 'Todos los estados' },
-              { value: 'activo', label: 'Activo' },
-              { value: 'inactivo', label: 'Inactivo' },
-              { value: 'pendiente', label: 'Pendiente' },
+              { value: '', label: t('todos_estados', 'Todos los estados') },
+              { value: 'activo', label: t('activo', 'Activo') },
+              { value: 'inactivo', label: t('inactivo', 'Inactivo') },
+              { value: 'pendiente', label: t('pendiente', 'Pendiente') },
             ]}
             sortOptions={[
-              { value: 'created_at_desc', label: 'Más recientes' },
-              { value: 'created_at_asc', label: 'Más antiguos' },
-              { value: 'nombre_asc', label: 'Nombre A-Z' },
-              { value: 'nombre_desc', label: 'Nombre Z-A' },
+              { value: 'created_at_desc', label: t('mas_recientes', 'Más recientes') },
+              { value: 'created_at_asc', label: t('mas_antiguos', 'Más antiguos') },
+              { value: 'nombre_asc', label: t('nombre_az', 'Nombre A-Z') },
+              { value: 'nombre_desc', label: t('nombre_za', 'Nombre Z-A') },
             ]}
           />
         </div>
