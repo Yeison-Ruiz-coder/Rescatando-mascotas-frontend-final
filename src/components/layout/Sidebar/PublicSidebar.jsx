@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/PublicSidebar.jsx
-import React, { useRef, useState, useEffect, useCallback, memo } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -15,16 +15,22 @@ const PublicSidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-
-  // Sin delay para apertura inmediata
   useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
 
+  // ✅ Resize handler optimizado con throttle
   useEffect(() => {
+    let timeoutId;
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 992);
+      }, 100);
     };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const isActive = useCallback((path) => location.pathname.startsWith(path), [location.pathname]);
@@ -40,53 +46,47 @@ const PublicSidebar = () => {
     }
   }, [isMobile, closePublicSidebar]);
 
-  // 🔹 Función para obtener la foto de perfil del usuario
-  const getUserAvatar = useCallback(() => {
+  // ✅ Memoizar avatar
+  const userAvatar = useMemo(() => {
     if (!user) return null;
-    
-    // Si el usuario tiene foto de perfil (URL o base64)
-    if (user.foto_perfil) {
-      return user.foto_perfil;
-    }
-    
-    // Si tiene foto de Google
-    if (user.foto) {
-      return user.foto;
-    }
-    
-    // Si tiene avatar generado
-    if (user.avatar) {
-      return user.avatar;
-    }
-    
+    if (user.foto_perfil) return user.foto_perfil;
+    if (user.foto) return user.foto;
+    if (user.avatar) return user.avatar;
     return null;
   }, [user]);
 
-  const userAvatar = getUserAvatar();
+  const avatarContent = useMemo(() => {
+    if (isAuthenticated && userAvatar) {
+      return (
+        <img 
+          src={userAvatar} 
+          alt={user?.nombre || "Usuario"} 
+          className="sidebar-avatar-img"
+          loading="lazy"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.parentElement.innerHTML = '<i class="fas fa-user"></i>';
+          }}
+        />
+      );
+    }
+    return <i className="fas fa-user"></i>;
+  }, [isAuthenticated, userAvatar, user]);
 
   return (
     <aside
       ref={sidebarRef}
       className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}
+      style={{
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        contain: 'layout style'
+      }}
     >
       <div className="sidebar-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar">
-            {/* 🔹 Mostrar foto de perfil si existe, sino el ícono genérico */}
-            {isAuthenticated && userAvatar ? (
-              <img 
-                src={userAvatar} 
-                alt={user?.nombre || "Usuario"} 
-                className="sidebar-avatar-img"
-                onError={(e) => {
-                  // Si la imagen falla, mostrar el ícono
-                  e.target.style.display = 'none';
-                  e.target.parentElement.innerHTML = '<i class="fas fa-user"></i>';
-                }}
-              />
-            ) : (
-              <i className="fas fa-user"></i>
-            )}
+            {avatarContent}
           </div>
           <div className="sidebar-user-info">
             <h5>{isAuthenticated ? user?.nombre : t("invitado")}</h5>

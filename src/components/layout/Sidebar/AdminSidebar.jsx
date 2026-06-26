@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/AdminSidebar.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -19,12 +19,20 @@ const AdminSidebar = () => {
   const sidebarRef = useRef(null);
   useSidebarCloser(sidebarRef, isAdminSidebarOpen, closeAdminSidebar);
 
+  // ✅ Resize handler optimizado
   useEffect(() => {
+    let timeoutId;
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 992);
+      }, 100);
     };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const [openSections, setOpenSections] = useState({
@@ -38,6 +46,7 @@ const AdminSidebar = () => {
 
   const [pendingCount, setPendingCount] = useState(0);
 
+  // ✅ Fetch pendientes optimizado
   useEffect(() => {
     if (!user || user.tipo !== 'admin') return;
 
@@ -74,41 +83,52 @@ const AdminSidebar = () => {
     };
   }, [user]);
 
-  const toggleSection = (section) => {
+  const toggleSection = useCallback((section) => {
     setOpenSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
-  };
+  }, []);
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/');
+  const isActive = useCallback((path) => location.pathname === path || location.pathname.startsWith(path + '/'), [location.pathname]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     closeAdminSidebar();
     navigate('/');
-  };
+  }, [logout, closeAdminSidebar, navigate]);
 
-  const getAvatarUrl = () => {
-    if (!user?.avatar) {
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.nombre || 'Admin')}&background=667eea&color=fff&bold=true&size=50`;
-    }
-    return getImageUrl(user.avatar);
-  };
-
-  // Función para cerrar el sidebar al hacer clic en un enlace (solo móvil)
-  const handleLinkClick = () => {
+  const handleLinkClick = useCallback(() => {
     if (isMobile) {
       closeAdminSidebar();
     }
-  };
+  }, [isMobile, closeAdminSidebar]);
+
+  // ✅ Memoizar avatar
+  const getAvatarUrl = useCallback(() => {
+    if (!user?.avatar) {
+      const defaultName = user?.nombre || 'Admin';
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=667eea&color=fff&bold=true&size=50`;
+    }
+    return getImageUrl(user.avatar);
+  }, [user]);
+
+  const avatarUrl = useMemo(() => getAvatarUrl(), [getAvatarUrl]);
 
   return (
-    <aside ref={sidebarRef} className={`sidebar admin-sidebar ${isAdminSidebarOpen ? 'open' : ''}`}>
+    <aside 
+      ref={sidebarRef} 
+      className={`sidebar admin-sidebar ${isAdminSidebarOpen ? 'open' : ''}`}
+      style={{
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        contain: 'layout style'
+      }}
+    >
       <div className="sidebar-header admin-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar admin-avatar">
-            <img src={getAvatarUrl()} alt={user?.nombre} />
+            <img src={avatarUrl} alt={user?.nombre} loading="lazy" />
           </div>
           <div className="sidebar-user-info">
             <h5>{user?.nombre || t('admin')}</h5>
@@ -291,4 +311,4 @@ const AdminSidebar = () => {
   );
 };
 
-export default AdminSidebar;
+export default memo(AdminSidebar);
