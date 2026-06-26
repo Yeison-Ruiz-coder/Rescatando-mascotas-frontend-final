@@ -34,7 +34,7 @@ export const suscripcionService = {
   },
 
   /**
-   * ✅ CREAR SUSCRIPCIÓN (Usuario autenticado) - VERSIÓN MEJORADA
+   * ✅ CREAR SUSCRIPCIÓN (Usuario autenticado)
    * POST /api/suscripciones/user/crear
    */
   createPublicSuscripcion: async (data) => {
@@ -42,7 +42,6 @@ export const suscripcionService = {
       console.log('📝 Creando suscripción...');
       console.log('📝 Datos:', data);
       
-      // ✅ Verificar autenticación
       const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
       if (!token) {
         throw new Error('Debes iniciar sesión para crear una suscripción');
@@ -59,7 +58,6 @@ export const suscripcionService = {
       const response = await api.post('/suscripciones/user/crear', payload);
       console.log('✅ Suscripción creada:', response.data);
       
-      // ✅ Devolver respuesta estructurada
       return {
         success: true,
         data: response.data.data || response.data,
@@ -70,7 +68,6 @@ export const suscripcionService = {
       console.error('❌ Error createPublicSuscripcion:', error);
       console.error('❌ Detalles:', error.response?.data);
       
-      // ✅ Manejar error 401 (No autorizado)
       if (error.response?.status === 401) {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("token");
@@ -78,7 +75,6 @@ export const suscripcionService = {
         throw new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
       }
       
-      // ✅ Mejorar mensaje de error
       const errorMessage = error.response?.data?.message || 
                           error.response?.data?.error || 
                           error.message || 
@@ -111,7 +107,6 @@ export const suscripcionService = {
       const response = await api.get('/suscripciones/user/mis-suscripciones');
       console.log('📊 Respuesta:', response.data);
       
-      // Normalizar respuesta
       if (response.data?.data) {
         return { data: response.data.data };
       }
@@ -220,29 +215,131 @@ export const suscripcionService = {
 
   // ============ ADMIN ============
   
+  /**
+   * ✅ OBTENER TODAS LAS SUSCRIPCIONES (ADMIN)
+   * GET /api/admin/suscripciones
+   */
   getAll: async () => {
-    const response = await api.get('/admin/suscripciones');
-    return response.data;
+    try {
+      console.log('🔄 Obteniendo todas las suscripciones (admin)');
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        console.warn('⚠️ No hay token de autenticación');
+        return { data: [], error: 'No autenticado' };
+      }
+      
+      const response = await api.get('/admin/suscripciones');
+      console.log('📊 Respuesta completa:', response);
+      
+      // ✅ La estructura es: { success, message, data: { current_page, data: [], ... } }
+      const responseData = response.data;
+      
+      // ✅ Extraer las suscripciones del array 'data' dentro de 'data.data'
+      let suscripcionesArray = [];
+      
+      // Si la respuesta tiene la estructura de Laravel con paginación
+      if (responseData?.data?.data && Array.isArray(responseData.data.data)) {
+        suscripcionesArray = responseData.data.data;
+        console.log('✅ Suscripciones encontradas en data.data.data');
+      } 
+      // Si responseData.data es un array directamente
+      else if (Array.isArray(responseData?.data)) {
+        suscripcionesArray = responseData.data;
+      }
+      // Si la respuesta directa es un array
+      else if (Array.isArray(responseData)) {
+        suscripcionesArray = responseData;
+      }
+      // Buscar en otras propiedades
+      else if (responseData?.data && typeof responseData.data === 'object') {
+        for (const key in responseData.data) {
+          if (Array.isArray(responseData.data[key]) && key !== 'links') {
+            suscripcionesArray = responseData.data[key];
+            console.log(`✅ Encontrado array en "data.${key}"`);
+            break;
+          }
+        }
+      }
+      
+      console.log('📊 Suscripciones extraídas:', suscripcionesArray.length);
+      if (suscripcionesArray.length > 0) {
+        console.log('📊 Primera suscripción:', suscripcionesArray[0]);
+      }
+      
+      return { 
+        data: suscripcionesArray,
+        pagination: {
+          current_page: responseData?.data?.current_page,
+          total: responseData?.data?.total,
+          per_page: responseData?.data?.per_page,
+          last_page: responseData?.data?.last_page
+        },
+        success: responseData?.success || true,
+        message: responseData?.message || 'Suscripciones obtenidas'
+      };
+      
+    } catch (error) {
+      console.error('❌ Error getAll:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ OBTENER SUSCRIPCIÓN POR ID (ADMIN)
+   * GET /api/admin/suscripciones/{id}
+   */
   getById: async (id) => {
-    const response = await api.get(`/admin/suscripciones/${id}`);
-    return response.data;
+    try {
+      const response = await api.get(`/admin/suscripciones/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getById:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ CREAR SUSCRIPCIÓN (ADMIN)
+   * POST /api/admin/suscripciones
+   */
   create: async (data) => {
-    const response = await api.post('/admin/suscripciones', data);
-    return response.data;
+    try {
+      const response = await api.post('/admin/suscripciones', data);
+      return response.data;
+    } catch (error) {
+      console.error('Error create:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ ACTUALIZAR SUSCRIPCIÓN (ADMIN)
+   * PUT /api/admin/suscripciones/{id}
+   */
   update: async (id, data) => {
-    const response = await api.put(`/admin/suscripciones/${id}`, data);
-    return response.data;
+    try {
+      const response = await api.put(`/admin/suscripciones/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error update:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ ELIMINAR SUSCRIPCIÓN (ADMIN)
+   * DELETE /api/admin/suscripciones/{id}
+   */
   delete: async (id) => {
-    const response = await api.delete(`/admin/suscripciones/${id}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/admin/suscripciones/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error delete:', error);
+      throw error;
+    }
   },
 };
 
@@ -279,5 +376,5 @@ function getPlanesPrueba() {
   ];
 }
 
-// ✅ SOLO UNA EXPORTACIÓN DEFAULT
+// ✅ Exportación correcta
 export default api;
