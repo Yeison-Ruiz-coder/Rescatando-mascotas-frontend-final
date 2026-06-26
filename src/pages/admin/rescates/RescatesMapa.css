@@ -1,0 +1,207 @@
+/* src/pages/admin/rescates/RescatesMapa.css */
+
+.ram-container {
+  width: 100%;
+  height: calc(100vh - 80px); /* Ajustado al viewport descontando barras superiores globales */
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 0 24px 24px 24px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .ram-container { padding: 0 16px 16px 16px; height: calc(100vh - 60px); }
+}
+
+/* ===== CONTROL CABECERA MAPA ===== */
+.ram-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ram-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ram-btn-back:hover { color: var(--color-primary); }
+
+.ram-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  padding: 6px 14px;
+  border-radius: 10px;
+}
+
+.ram-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.ram-select-filter {
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ===== CONTENEDOR DE MAPA Y HOVER CARDS ===== */
+.ram-map-wrapper {
+  flex: 1;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.ram-leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* ===== TARJETA DE LEYENDA FLOTANTE ===== */
+.ram-legend-card {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  padding: 14px 18px;
+  border-radius: 10px;
+  z-index: 1000; /* Por encima de las capas del mapa */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+}
+
+.ram-legend-card h4 {
+  margin: 0 0 10px 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.legend-item:last-child { margin-bottom: 0; }
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot.red { background: #ef4444; }
+.dot.orange { background: #f59e0b; }
+.dot.green { background: #10b981; }
+
+/* ===== POPUPS PERSONALIZADOS DENTRO DE LEAFLET ===== */
+.ram-popup-custom .leaflet-popup-content-wrapper {
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.ram-popup-custom .leaflet-popup-tip {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.ram-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 200px;
+}
+
+.ram-popup-img {
+  width: 100%;
+  height: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.ram-popup-content h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.ram-popup-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ram-popup-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.ram-popup-btn {
+  background: var(--gradient-primary, #667eea);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: opacity 0.2s;
+}
+
+.ram-popup-btn:hover { opacity: 0.9; }
+
+/* ===== ADAPTACIÓN NATIVA MODO OSCURO PARA MAPAS EN LEAFLET ===== */
+[data-theme="dark"] .ram-leaflet-container .leaflet-tile-layer {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
