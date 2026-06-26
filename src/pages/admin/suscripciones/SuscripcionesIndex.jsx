@@ -1,170 +1,328 @@
 // src/pages/admin/suscripciones/SuscripcionesIndex.jsx
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { toast } from 'react-toastify';
+import './SuscripcionesIndex.css';
 
 const AdminSuscripcionesIndex = () => {
   const [suscripciones, setSuscripciones] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    estado: '',
-    frecuencia: ''
+  const [error, setError] = useState(null);
+  const [cancelando, setCancelando] = useState(null);
+  const [actualizando, setActualizando] = useState(null);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    total: 0,
+    per_page: 15,
+    last_page: 1
   });
-
-  useEffect(() => {
-    cargarSuscripciones();
-  }, []);
 
   const cargarSuscripciones = async () => {
     try {
       setLoading(true);
-      const data = await suscripcionService.getAll();
-      setSuscripciones(data);
+      setError(null);
+      
+      console.log('🔄 Cargando suscripciones para admin...');
+      
+      const response = await suscripcionService.getAll();
+      console.log('📊 Respuesta completa:', response);
+      
+      let suscripcionesData = [];
+      
+      if (response?.data && Array.isArray(response.data)) {
+        suscripcionesData = response.data;
+        console.log(`✅ ${suscripcionesData.length} suscripciones cargadas`);
+      } else {
+        console.warn('⚠️ No se encontró un array en la respuesta');
+        suscripcionesData = [];
+      }
+      
+      if (response?.pagination) {
+        setPagination(response.pagination);
+      }
+      
+      setSuscripciones(suscripcionesData);
+      
     } catch (error) {
-      toast.error('Error al cargar suscripciones');
-      console.error(error);
+      console.error('❌ Error al cargar suscripciones:', error);
+      setError(error.message || 'Error al cargar las suscripciones');
+      toast.error('Error al cargar las suscripciones');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('¿Eliminar esta suscripción?')) {
-      try {
-        await suscripcionService.delete(id);
-        toast.success('Suscripción eliminada');
-        cargarSuscripciones();
-      } catch (error) {
-        toast.error('Error al eliminar');
-      }
+  useEffect(() => {
+    cargarSuscripciones();
+  }, []);
+
+  // ✅ Función para CANCELAR suscripción (ADMIN)
+  const handleCancelar = async (id) => {
+    if (!window.confirm('¿Estás seguro de cancelar esta suscripción?')) {
+      return;
+    }
+    
+    setCancelando(id);
+    
+    try {
+      console.log(`🗑️ Admin cancelando suscripción ${id}`);
+      
+      // ✅ USAR EL MÉTODO DE ADMIN, NO EL DE USUARIO
+      await suscripcionService.cancelarSuscripcionAdmin(id);
+      
+      toast.success('✅ Suscripción cancelada exitosamente');
+      
+      // ✅ Recargar la lista
+      await cargarSuscripciones();
+      
+    } catch (error) {
+      console.error('❌ Error al cancelar:', error);
+      toast.error(error.message || 'Error al cancelar la suscripción');
+    } finally {
+      setCancelando(null);
     }
   };
 
-  const handleFilterChange = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.name]: e.target.value
-    });
+  // ✅ Función para REACTIVAR suscripción (ADMIN)
+  const handleReactivar = async (id) => {
+    if (!window.confirm('¿Estás seguro de reactivar esta suscripción?')) {
+      return;
+    }
+    
+    setActualizando(id);
+    
+    try {
+      console.log(`🔄 Admin reactivando suscripción ${id}`);
+      
+      // ✅ USAR EL MÉTODO DE ADMIN
+      await suscripcionService.actualizarSuscripcionAdmin(id, { estado: 'activo' });
+      
+      toast.success('✅ Suscripción reactivada exitosamente');
+      
+      // ✅ Recargar la lista
+      await cargarSuscripciones();
+      
+    } catch (error) {
+      console.error('❌ Error al reactivar:', error);
+      toast.error(error.message || 'Error al reactivar la suscripción');
+    } finally {
+      setActualizando(null);
+    }
   };
 
-  const suscripcionesFiltradas = suscripciones.filter(suscripcion => {
-    if (filters.estado && suscripcion.estado !== filters.estado) return false;
-    if (filters.frecuencia && suscripcion.frecuencia !== filters.frecuencia) return false;
-    return true;
-  });
+  // ✅ Función para PAUSAR suscripción (ADMIN)
+  const handlePausar = async (id) => {
+    if (!window.confirm('¿Estás seguro de pausar esta suscripción?')) {
+      return;
+    }
+    
+    setActualizando(id);
+    
+    try {
+      console.log(`⏸️ Admin pausando suscripción ${id}`);
+      
+      // ✅ USAR EL MÉTODO DE ADMIN
+      await suscripcionService.actualizarSuscripcionAdmin(id, { estado: 'inactivo' });
+      
+      toast.success('✅ Suscripción pausada exitosamente');
+      
+      // ✅ Recargar la lista
+      await cargarSuscripciones();
+      
+    } catch (error) {
+      console.error('❌ Error al pausar:', error);
+      toast.error(error.message || 'Error al pausar la suscripción');
+    } finally {
+      setActualizando(null);
+    }
+  };
 
-  if (loading) return <div className="text-center p-5">Cargando...</div>;
+  if (loading) {
+    return (
+      <div className="admin-suscripciones-loading">
+        <div className="spinner"></div>
+        <p>Cargando suscripciones...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="admin-suscripciones-error">
+        <h3>❌ Error al cargar</h3>
+        <p>{error}</p>
+        <button onClick={cargarSuscripciones} className="btn-primary">
+          Intentar de nuevo
+        </button>
+      </div>
+    );
+  }
+
+  // ✅ Calcular estadísticas
+  const suscripcionesActivas = Array.isArray(suscripciones) 
+    ? suscripciones.filter(s => s.estado?.toLowerCase() === 'activo')
+    : [];
+
+  const suscripcionesPendientes = Array.isArray(suscripciones)
+    ? suscripciones.filter(s => s.estado?.toLowerCase() === 'pendiente')
+    : [];
+
+  const suscripcionesCanceladas = Array.isArray(suscripciones)
+    ? suscripciones.filter(s => s.estado?.toLowerCase() === 'cancelado')
+    : [];
+
+  const suscripcionesInactivas = Array.isArray(suscripciones)
+    ? suscripciones.filter(s => s.estado?.toLowerCase() === 'inactivo')
+    : [];
 
   return (
-    <div className="container-fluid p-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Gestión de Suscripciones</h1>
-        <Link to="/admin/suscripciones/crear" className="btn btn-primary">
-          + Nueva Suscripción
-        </Link>
-      </div>
-
-      {/* Filtros */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <div className="row">
-            <div className="col-md-4">
-              <label>Estado</label>
-              <select 
-                name="estado" 
-                className="form-control"
-                value={filters.estado}
-                onChange={handleFilterChange}
-              >
-                <option value="">Todos</option>
-                <option value="activo">Activo</option>
-                <option value="pausado">Pausado</option>
-                <option value="cancelado">Cancelado</option>
-                <option value="finalizado">Finalizado</option>
-              </select>
-            </div>
-            <div className="col-md-4">
-              <label>Frecuencia</label>
-              <select 
-                name="frecuencia" 
-                className="form-control"
-                value={filters.frecuencia}
-                onChange={handleFilterChange}
-              >
-                <option value="">Todas</option>
-                <option value="unica">Única</option>
-                <option value="mensual">Mensual</option>
-                <option value="trimestral">Trimestral</option>
-                <option value="anual">Anual</option>
-              </select>
-            </div>
-          </div>
+    <div className="admin-suscripciones-container">
+      <div className="admin-header">
+        <h1>📋 Gestión de Suscripciones</h1>
+        <div className="admin-stats">
+          <span className="stat-activas">🟢 Activas: {suscripcionesActivas.length}</span>
+          <span className="stat-pendientes">🟡 Pendientes: {suscripcionesPendientes.length}</span>
+          <span className="stat-inactivas">⏸️ Inactivas: {suscripcionesInactivas.length}</span>
+          <span className="stat-canceladas">🔴 Canceladas: {suscripcionesCanceladas.length}</span>
+          <span className="stat-total">📊 Total: {Array.isArray(suscripciones) ? suscripciones.length : 0}</span>
+          <span className="stat-paginacion">📄 Página {pagination.current_page} de {pagination.last_page}</span>
         </div>
       </div>
 
-      {/* Tabla */}
-      <div className="table-responsive">
-        <table className="table table-striped table-hover">
-          <thead className="table-dark">
+      <div className="admin-table-container">
+        <table className="admin-suscripciones-table">
+          <thead>
             <tr>
               <th>ID</th>
               <th>Usuario</th>
+              <th>Email</th>
               <th>Mascota</th>
               <th>Monto</th>
-              <th>Frecuencia</th>
               <th>Estado</th>
-              <th>Inicio</th>
+              <th>Fecha Inicio</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {suscripcionesFiltradas.map(suscripcion => (
-              <tr key={suscripcion.id}>
-                <td>{suscripcion.id}</td>
-                <td>{suscripcion.user?.name || `ID: ${suscripcion.user_id}`}</td>
-                <td>{suscripcion.mascota?.nombre || `ID: ${suscripcion.mascota_id}`}</td>
-                <td>${suscripcion.monto_mensual}</td>
-                <td>
-                  <span className="badge bg-info">
-                    {suscripcion.frecuencia}
-                  </span>
-                </td>
-                <td>
-                  <span className={`badge bg-${
-                    suscripcion.estado === 'activo' ? 'success' :
-                    suscripcion.estado === 'pausado' ? 'warning' :
-                    suscripcion.estado === 'cancelado' ? 'danger' : 'secondary'
-                  }`}>
-                    {suscripcion.estado}
-                  </span>
-                </td>
-                <td>{new Date(suscripcion.fecha_inicio).toLocaleDateString()}</td>
-                <td>
-                  <Link 
-                    to={`/admin/suscripciones/${suscripcion.id}`} 
-                    className="btn btn-sm btn-info me-2"
-                  >
-                    Ver
-                  </Link>
-                  <Link 
-                    to={`/admin/suscripciones/${suscripcion.id}/editar`} 
-                    className="btn btn-sm btn-warning me-2"
-                  >
-                    Editar
-                  </Link>
-                  <button 
-                    onClick={() => handleDelete(suscripcion.id)} 
-                    className="btn btn-sm btn-danger"
-                  >
-                    Eliminar
-                  </button>
+            {!Array.isArray(suscripciones) || suscripciones.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="empty-message">
+                  No hay suscripciones registradas
                 </td>
               </tr>
-            ))}
+            ) : (
+              suscripciones.map((suscripcion) => {
+                const estado = suscripcion.estado?.toLowerCase();
+                const estaCancelando = cancelando === suscripcion.id;
+                const estaActualizando = actualizando === suscripcion.id;
+                
+                return (
+                  <tr key={suscripcion.id}>
+                    <td>#{suscripcion.id}</td>
+                    <td>
+                      {suscripcion.usuario?.name || 
+                       suscripcion.usuario?.nombre || 
+                       suscripcion.user?.name ||
+                       'Usuario'}
+                    </td>
+                    <td>
+                      {suscripcion.usuario?.email || 
+                       suscripcion.user?.email ||
+                       'N/A'}
+                    </td>
+                    <td>
+                      {suscripcion.mascota?.nombre_mascota || 
+                       suscripcion.mascota?.nombre || 
+                       'Mascota'}
+                    </td>
+                    <td>${suscripcion.monto_mensual || suscripcion.monto || 0}</td>
+                    <td>
+                      <span className={`estado-badge estado-${estado || 'desconocido'}`}>
+                        {suscripcion.estado || 'Desconocido'}
+                      </span>
+                    </td>
+                    <td>
+                      {suscripcion.fecha_inicio 
+                        ? new Date(suscripcion.fecha_inicio).toLocaleDateString()
+                        : 'N/A'}
+                    </td>
+                    <td>
+                      {/* Botón Cancelar - Solo para activas y pendientes */}
+                      {(estado === 'activo' || estado === 'pendiente') && (
+                        <button
+                          className="btn-cancelar"
+                          onClick={() => handleCancelar(suscripcion.id)}
+                          disabled={estaCancelando || estaActualizando}
+                        >
+                          {estaCancelando ? (
+                            <span className="spinner-small"></span>
+                          ) : (
+                            '🗑️ Cancelar'
+                          )}
+                        </button>
+                      )}
+                      
+                      {/* Botón Reactivar - Solo para canceladas */}
+                      {estado === 'cancelado' && (
+                        <button
+                          className="btn-reactivar"
+                          onClick={() => handleReactivar(suscripcion.id)}
+                          disabled={estaActualizando}
+                        >
+                          {estaActualizando ? (
+                            <span className="spinner-small"></span>
+                          ) : (
+                            '🔄 Reactivar'
+                          )}
+                        </button>
+                      )}
+                      
+                      {/* Botón Pausar - Solo para activas */}
+                      {estado === 'activo' && (
+                        <button
+                          className="btn-pausar"
+                          onClick={() => handlePausar(suscripcion.id)}
+                          disabled={estaActualizando}
+                          style={{ marginLeft: '5px' }}
+                        >
+                          {estaActualizando ? (
+                            <span className="spinner-small"></span>
+                          ) : (
+                            '⏸️ Pausar'
+                          )}
+                        </button>
+                      )}
+                      
+                      {/* Botón Reanudar - Solo para inactivas */}
+                      {estado === 'inactivo' && (
+                        <button
+                          className="btn-reactivar"
+                          onClick={() => handleReactivar(suscripcion.id)}
+                          disabled={estaActualizando}
+                          style={{ marginLeft: '5px' }}
+                        >
+                          {estaActualizando ? (
+                            <span className="spinner-small"></span>
+                          ) : (
+                            '▶️ Reanudar'
+                          )}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
+      
+      {pagination.total > 0 && (
+        <div className="admin-pagination-info">
+          Mostrando {suscripciones.length} de {pagination.total} suscripciones
+        </div>
+      )}
     </div>
   );
 };

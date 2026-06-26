@@ -36,30 +36,51 @@ export const suscripcionService = {
   /**
    * ✅ CREAR SUSCRIPCIÓN (Usuario autenticado)
    * POST /api/suscripciones/user/crear
-   * 
-   * ¡IMPORTANTE! Esta ruta es para usuarios autenticados
    */
   createPublicSuscripcion: async (data) => {
     try {
       console.log('📝 Creando suscripción...');
       console.log('📝 Datos:', data);
       
-      // Datos para el método store() del controlador
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('Debes iniciar sesión para crear una suscripción');
+      }
+      
       const payload = {
         mascota_id: data.mascota_id || null,
         monto_mensual: data.monto_mensual || 10000,
         frecuencia: data.frecuencia || 'mensual',
-        mensaje_apoyo: data.mensaje_apoyo || ''
+        mensaje_apoyo: data.mensaje_apoyo || '',
+        plan_id: data.plan_id || null
       };
       
-      // ✅ RUTA CORRECTA
       const response = await api.post('/suscripciones/user/crear', payload);
       console.log('✅ Suscripción creada:', response.data);
-      return response.data;
+      
+      return {
+        success: true,
+        data: response.data.data || response.data,
+        message: response.data.message || 'Suscripción creada exitosamente'
+      };
+      
     } catch (error) {
       console.error('❌ Error createPublicSuscripcion:', error);
       console.error('❌ Detalles:', error.response?.data);
-      throw error;
+      
+      if (error.response?.status === 401) {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        throw new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+      }
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          error.message || 
+                          'Error al crear la suscripción';
+      
+      throw new Error(errorMessage);
     }
   },
 
@@ -71,46 +92,57 @@ export const suscripcionService = {
     try {
       console.log('🔄 Obteniendo suscripciones desde /api/suscripciones/user/mis-suscripciones');
       
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      console.log('🔑 Token presente:', !!token);
+      
       if (!token) {
         console.warn('⚠️ No hay token de autenticación');
-        return [];
+        return { 
+          data: [],
+          error: 'No autenticado',
+          needsAuth: true 
+        };
       }
       
-      // ✅ RUTA CORRECTA
       const response = await api.get('/suscripciones/user/mis-suscripciones');
       console.log('📊 Respuesta:', response.data);
       
       if (response.data?.data) {
-        return response.data.data;
+        return { data: response.data.data };
       }
       if (Array.isArray(response.data)) {
-        return response.data;
+        return { data: response.data };
       }
-      return response.data || [];
+      return { data: response.data || [] };
       
     } catch (error) {
       console.error('❌ Error getUserSuscripciones:', error);
       console.error('❌ Detalles:', error.response?.data);
       
       if (error.response?.status === 401) {
-        console.log('🔒 Usuario no autenticado');
-        return [];
+        console.log('🔒 Token inválido o expirado');
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        return { 
+          data: [],
+          error: 'Sesión expirada',
+          needsAuth: true 
+        };
       }
       
-      return [];
+      return { data: [] };
     }
   },
 
   /**
-   * ✅ CANCELAR UNA SUSCRIPCIÓN
+   * ✅ CANCELAR UNA SUSCRIPCIÓN (Usuario)
    * PATCH /api/suscripciones/user/{id}/cancelar
    */
   cancelUserSuscripcion: async (id) => {
     try {
       console.log(`🗑️ Cancelando suscripción ${id} desde /api/suscripciones/user/${id}/cancelar`);
       
-      // ✅ RUTA CORRECTA
       const response = await api.patch(`/suscripciones/user/${id}/cancelar`);
       
       console.log('✅ Suscripción cancelada:', response.data);
@@ -118,7 +150,7 @@ export const suscripcionService = {
     } catch (error) {
       console.error('❌ Error cancelUserSuscripcion:', error);
       console.error('❌ Detalles:', error.response?.data);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al cancelar la suscripción');
     }
   },
 
@@ -133,22 +165,23 @@ export const suscripcionService = {
       return response.data;
     } catch (error) {
       console.error('Error pausarSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al pausar la suscripción');
     }
   },
 
   /**
-   * ✅ REACTIVAR UNA SUSCRIPCIÓN
+   * ✅ REACTIVAR UNA SUSCRIPCIÓN (Usuario)
    * PATCH /api/suscripciones/user/{id}/reactivar
    */
   reactivarSuscripcion: async (id) => {
     try {
       console.log(`🔄 Reactivando suscripción ${id} desde /api/suscripciones/user/${id}/reactivar`);
       const response = await api.patch(`/suscripciones/user/${id}/reactivar`);
+      console.log('✅ Suscripción reactivada:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error reactivarSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al reactivar la suscripción');
     }
   },
 
@@ -163,7 +196,7 @@ export const suscripcionService = {
       return response.data.data || response.data;
     } catch (error) {
       console.error('Error getSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al obtener la suscripción');
     }
   },
 
@@ -180,35 +213,183 @@ export const suscripcionService = {
     }
   },
 
+  // ============================================
   // ============ ADMIN ============
+  // ============================================
   
+  /**
+   * ✅ OBTENER TODAS LAS SUSCRIPCIONES (ADMIN)
+   * GET /api/admin/suscripciones
+   */
   getAll: async () => {
-    const response = await api.get('/admin/suscripciones');
-    return response.data;
+    try {
+      console.log('🔄 Obteniendo todas las suscripciones (admin)');
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        console.warn('⚠️ No hay token de autenticación');
+        return { data: [], error: 'No autenticado' };
+      }
+      
+      const response = await api.get('/admin/suscripciones');
+      console.log('📊 Respuesta completa:', response);
+      
+      const responseData = response.data;
+      let suscripcionesArray = [];
+      
+      // Estructura de Laravel con paginación
+      if (responseData?.data?.data && Array.isArray(responseData.data.data)) {
+        suscripcionesArray = responseData.data.data;
+        console.log('✅ Suscripciones encontradas en data.data.data');
+      } 
+      else if (Array.isArray(responseData?.data)) {
+        suscripcionesArray = responseData.data;
+      }
+      else if (Array.isArray(responseData)) {
+        suscripcionesArray = responseData;
+      }
+      else if (responseData?.data && typeof responseData.data === 'object') {
+        for (const key in responseData.data) {
+          if (Array.isArray(responseData.data[key]) && key !== 'links') {
+            suscripcionesArray = responseData.data[key];
+            console.log(`✅ Encontrado array en "data.${key}"`);
+            break;
+          }
+        }
+      }
+      
+      console.log('📊 Suscripciones extraídas:', suscripcionesArray.length);
+      if (suscripcionesArray.length > 0) {
+        console.log('📊 Primera suscripción:', suscripcionesArray[0]);
+      }
+      
+      return { 
+        data: suscripcionesArray,
+        pagination: {
+          current_page: responseData?.data?.current_page,
+          total: responseData?.data?.total,
+          per_page: responseData?.data?.per_page,
+          last_page: responseData?.data?.last_page
+        },
+        success: responseData?.success || true,
+        message: responseData?.message || 'Suscripciones obtenidas'
+      };
+      
+    } catch (error) {
+      console.error('❌ Error getAll:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ OBTENER SUSCRIPCIÓN POR ID (ADMIN)
+   * GET /api/admin/suscripciones/{id}
+   */
   getById: async (id) => {
-    const response = await api.get(`/admin/suscripciones/${id}`);
-    return response.data;
+    try {
+      const response = await api.get(`/admin/suscripciones/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getById:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ CREAR SUSCRIPCIÓN (ADMIN)
+   * POST /api/admin/suscripciones
+   */
   create: async (data) => {
-    const response = await api.post('/admin/suscripciones', data);
-    return response.data;
+    try {
+      const response = await api.post('/admin/suscripciones', data);
+      return response.data;
+    } catch (error) {
+      console.error('Error create:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ ACTUALIZAR SUSCRIPCIÓN (ADMIN)
+   * PUT /api/admin/suscripciones/{id}
+   */
   update: async (id, data) => {
-    const response = await api.put(`/admin/suscripciones/${id}`, data);
-    return response.data;
+    try {
+      const response = await api.put(`/admin/suscripciones/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error update:', error);
+      throw error;
+    }
   },
   
+  /**
+   * ✅ ELIMINAR SUSCRIPCIÓN (ADMIN)
+   * DELETE /api/admin/suscripciones/{id}
+   */
   delete: async (id) => {
-    const response = await api.delete(`/admin/suscripciones/${id}`);
-    return response.data;
+    try {
+      const response = await api.delete(`/admin/suscripciones/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error delete:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * ✅ CANCELAR SUSCRIPCIÓN POR ADMIN
+   * PATCH /api/admin/suscripciones/{id}/cancelar
+   */
+  cancelarSuscripcionAdmin: async (id) => {
+    try {
+      console.log(`🗑️ Admin cancelando suscripción ${id} desde /api/admin/suscripciones/${id}/cancelar`);
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('No hay token de autenticación');
+      }
+      
+      const response = await api.patch(`/admin/suscripciones/${id}/cancelar`);
+      
+      console.log('✅ Suscripción cancelada por admin:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('❌ Error cancelarSuscripcionAdmin:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw new Error(error.response?.data?.message || 'Error al cancelar la suscripción');
+    }
+  },
+
+  /**
+   * ✅ ACTUALIZAR ESTADO DE SUSCRIPCIÓN POR ADMIN
+   * PATCH /api/admin/suscripciones/{id}
+   */
+  actualizarSuscripcionAdmin: async (id, data) => {
+    try {
+      console.log(`🔄 Admin actualizando suscripción ${id}`);
+      
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('No hay token de autenticación');
+      }
+      
+      const response = await api.patch(`/admin/suscripciones/${id}`, data);
+      
+      console.log('✅ Suscripción actualizada por admin:', response.data);
+      return response.data;
+      
+    } catch (error) {
+      console.error('❌ Error actualizarSuscripcionAdmin:', error);
+      console.error('❌ Detalles:', error.response?.data);
+      throw new Error(error.response?.data?.message || 'Error al actualizar la suscripción');
+    }
   },
 };
 
-// Datos de prueba
+// Datos de prueba (solo para desarrollo)
 function getPlanesPrueba() {
   return [
     {
