@@ -1,0 +1,226 @@
+/* src/pages/admin/rescates/RescatesIndex.css */
+
+.rai-container {
+  width: 100%;
+  min-height: 100vh;
+  background: transparent;
+}
+
+[data-theme="dark"] .rai-container {
+  background: transparent;
+}
+
+/* ===== BANNER PANELS ===== */
+.rai-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.rai-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+/* ===== CONTENEDOR ANCHO BENTO ===== */
+.rai-container .bento-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .rai-banner-wrapper .bento-container,
+  .rai-container .bento-container {
+    padding: 0 16px;
+  }
+}
+
+/* ===== SECCIÓN DE TARJETAS MODULARES ===== */
+.rai-stats-section {
+  margin-bottom: 30px;
+}
+
+.rai-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card-modern {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card-clickable {
+  cursor: pointer;
+  border-style: dashed; /* Identifica visualmente que es un botón de acción */
+}
+
+.stat-card-clickable:hover {
+  border-color: var(--color-primary);
+}
+
+.stat-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stat-icon-modern {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon-modern svg {
+  width: 22px;
+  height: 22px;
+}
+
+.stat-badge-modern {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(102, 126, 234, 0.08);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.stat-body-modern {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value-modern {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.stat-label-modern {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* Paletas cromáticas del sistema */
+.stat-primary .stat-icon-modern { background: rgba(102, 126, 234, 0.12); color: var(--color-primary); }
+.stat-success .stat-icon-modern { background: rgba(46, 204, 113, 0.12); color: var(--color-success); }
+.stat-info .stat-icon-modern { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+.stat-danger .stat-icon-modern { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+
+/* ===== CABECERA DE LA LISTA DE CONTROL ===== */
+.rai-list-section {
+  margin-bottom: 30px;
+}
+
+.rai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rai-header-icon {
+  color: var(--color-text-muted);
+}
+
+.rai-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.rai-badge-count {
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 20px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.rai-btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rai-btn-refresh:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+/* ===== GRILLA PARA RESCATE-CARDS ===== */
+.rai-grid {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 992px) { .rai-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) and (max-width: 991px) { .rai-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 767px) { .rai-grid { grid-template-columns: 1fr; } }
+
+/* ===== MEDIA QUERIES RESPONSIVAS ===== */
+@media (max-width: 1024px) {
+  .rai-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .rai-header { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .rai-stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card-modern { padding: 14px; }
+  .stat-value-modern { font-size: 1.3rem; }
+}
+
+/* SOPORTE DE TEMA OSCURO */
+[data-theme="dark"] .stat-card-modern {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+[data-theme="dark"] .rai-btn-refresh {
+  background: var(--form-input-bg);
+}
