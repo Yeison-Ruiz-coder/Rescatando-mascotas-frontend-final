@@ -1,0 +1,218 @@
+.admin-veterinarias-page {
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100%;
+}
+
+.admin-veterinarias-header,
+.admin-veterinarias-controls,
+.veterinaria-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-veterinarias-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: #64748b;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-action {
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  padding: 0.8rem 1rem;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #0f172a;
+  padding: 0.7rem 0.9rem;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-action:hover {
+  transform: translateY(-1px);
+}
+
+.veterinaria-form-card,
+.veterinaria-detail-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.veterinaria-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.veterinaria-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.veterinaria-form-grid input,
+.veterinaria-form-grid select,
+.veterinaria-form-grid textarea,
+.admin-veterinarias-controls input,
+.admin-veterinarias-controls select {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 0.7rem;
+  border: 1px solid #cbd5e1;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.admin-veterinarias-controls {
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.admin-veterinarias-controls input {
+  max-width: 420px;
+}
+
+.veterinarias-table-wrap {
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.veterinarias-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.veterinarias-table th,
+.veterinarias-table td {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.veterinarias-table th {
+  background: #0f172a;
+  color: #fff;
+}
+
+.table-subtext {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.btn-view {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.btn-toggle {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.btn-delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.estado-badge {
+  text-transform: capitalize;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.estado-badge.activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.estado-badge.inactivo {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.estado-badge.pendiente {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.empty-state {
+  background: #fff;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 1rem;
+  color: #64748b;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+@media (max-width: 768px) {
+  .admin-veterinarias-page {
+    padding: 1rem;
+  }
+
+  .admin-veterinarias-header,
+  .admin-veterinarias-controls,
+  .veterinaria-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .veterinaria-form-grid,
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,45 +1,101 @@
-.usuario-form-page {
-  padding: 2rem 1.5rem;
-  max-width: 960px;
-  margin: 0 auto;
+/* src/pages/admin/Usuarios/UsuarioForm.css */
+/* ============================================
+   USUARIO FORM - ESTILO BENTO
+   ============================================ */
+
+.usuario-form-container {
+  width: 100%;
   min-height: 100vh;
-  color: #1f2937;
+  background: transparent;
 }
 
+/* ===== BANNER WRAPPER ===== */
+.usuario-form-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.usuario-form-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .usuario-form-banner-wrapper .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuario-form-banner-wrapper .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ===== CONTENIDO ===== */
+.usuario-form-content {
+  width: 100%;
+}
+
+.usuario-form-content .bento-container {
+  padding: 0 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .usuario-form-content .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuario-form-content .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ===== CARD ===== */
 .usuario-form-card {
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+  background: var(--color-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   overflow: hidden;
 }
 
 .usuario-form-header {
-  padding: 2rem 2rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .usuario-form-header h1 {
   margin: 0;
-  font-size: clamp(1.8rem, 2vw, 2.4rem);
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  color: var(--color-text);
 }
 
 .usuario-form-header p {
-  margin: 0.5rem 0 0;
-  color: #4b5563;
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
   max-width: 720px;
+  font-size: 0.9rem;
 }
 
+/* ===== FORM ===== */
 .usuario-form {
   padding: 2rem;
 }
 
 .usuario-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
 
@@ -49,67 +105,156 @@
 }
 
 .usuario-form-field label {
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #374151;
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.usuario-form-field label .required {
+  color: var(--color-danger);
+  margin-left: 2px;
 }
 
 .usuario-form-field input,
 .usuario-form-field select {
-  border: 1px solid #d1d5db;
-  border-radius: 16px;
-  padding: 0.95rem 1rem;
-  background: #f9fafb;
-  color: #111827;
+  padding: 0.7rem 1rem;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 8px;
+  color: var(--form-text);
+  font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .usuario-form-field input:focus,
 .usuario-form-field select:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
+  transform: translateX(2px);
+}
+
+.usuario-form-field input::placeholder {
+  color: var(--form-placeholder);
 }
 
 .usuario-form-full {
   grid-column: span 2;
 }
 
+/* ===== ACTIONS ===== */
 .usuario-form-actions {
   margin-top: 1.75rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   flex-wrap: wrap;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .usuario-form-actions .btn-primary,
 .usuario-form-actions .btn-secondary {
-  padding: 0.95rem 1.5rem;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
 }
 
 .usuario-form-actions .btn-primary {
-  background: #4f46e5;
+  background: var(--gradient-primary);
   color: white;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-.usuario-form-actions .btn-secondary {
-  background: #f8fafc;
-  color: #1f2937;
-  border: 1px solid #d1d5db;
+.usuario-form-actions .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
 }
 
 .usuario-form-actions .btn-primary:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+  transform: none !important;
 }
 
+.usuario-form-actions .btn-secondary {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.usuario-form-actions .btn-secondary:hover {
+  background: var(--color-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+  .usuario-form-header {
+    padding: 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .usuario-form {
+    padding: 1.25rem;
+  }
+
   .usuario-form-grid {
     grid-template-columns: 1fr;
   }
+
+  .usuario-form-full {
+    grid-column: span 1;
+  }
+
+  .usuario-form-actions {
+    flex-direction: column;
+  }
+
+  .usuario-form-actions .btn-primary,
+  .usuario-form-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuario-form-header {
+    padding: 1rem;
+  }
+
+  .usuario-form {
+    padding: 1rem;
+  }
+
+  .usuario-form-field input,
+  .usuario-form-field select {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .usuario-form-field input,
+[data-theme="dark"] .usuario-form-field select {
+  background: var(--form-input-bg);
+  border-color: var(--form-border);
+  color: var(--form-text);
+}
+
+[data-theme="dark"] .usuario-form-field input:focus,
+[data-theme="dark"] .usuario-form-field select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring-dark);
 }

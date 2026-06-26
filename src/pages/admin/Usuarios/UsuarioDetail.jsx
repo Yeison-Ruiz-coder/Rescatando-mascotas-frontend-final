@@ -1,8 +1,11 @@
+// src/pages/admin/Usuarios/UsuarioDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { useAuth } from "../../../contexts/AuthContext";
 import adminService from "../../../services/adminService";
+import ProfileBanner from "../../../components/common/ProfileBanner/ProfileBanner";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import "./UsuarioDetail.css";
 
@@ -10,6 +13,7 @@ const UsuarioDetail = () => {
   const { t } = useTranslation("admin");
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,17 +35,28 @@ const UsuarioDetail = () => {
     }
   }, [id, t]);
 
+  const adminName = user?.name || user?.nombre || "Administrador";
+  const adminAvatar = user?.avatar || null;
+
   if (loading) {
-    return <LoadingSpinner text={t("cargando_usuario", "Cargando usuario...")} />;
+    return (
+      <div className="usuario-detail-container">
+        <LoadingSpinner text={t("cargando_usuario", "Cargando usuario...")} />
+      </div>
+    );
   }
 
   if (!usuario) {
     return (
-      <div className="usuario-detail-empty">
-        <h2>{t("usuario_no_encontrado", "Usuario no encontrado")}</h2>
-        <button onClick={() => navigate("/admin/usuarios")} className="btn-primary">
-          {t("volver", "Volver")}
-        </button>
+      <div className="usuario-detail-container">
+        <div className="usuario-detail-empty">
+          <i className="fas fa-user-slash"></i>
+          <h2>{t("usuario_no_encontrado", "Usuario no encontrado")}</h2>
+          <p>{t("usuario_no_encontrado_desc", "El usuario que buscas no existe o fue eliminado.")}</p>
+          <button onClick={() => navigate("/admin/usuarios")} className="btn-primary">
+            <i className="fas fa-arrow-left"></i> {t("volver", "Volver")}
+          </button>
+        </div>
       </div>
     );
   }
@@ -50,74 +65,116 @@ const UsuarioDetail = () => {
   const createdAt = usuario.created_at || usuario.createdAt || usuario.fecha_creacion;
 
   return (
-    <div className="usuario-detail-page">
-      <div className="usuario-detail-card">
-        <div className="usuario-detail-header">
-          <div>
-            <h1>{t("detalle_usuario", "Detalle de usuario")}</h1>
-            <p>{t("detalle_usuario_desc", "Revisa la información principal y el estado de la cuenta.")}</p>
-          </div>
-          <div className="usuario-detail-actions">
-            <button className="btn-secondary" onClick={() => navigate(-1)}>
-              {t("volver", "Volver")}
-            </button>
-            <button className="btn-primary" onClick={() => navigate(`/admin/usuarios/${id}/editar`)}>
-              {t("editar", "Editar")}
-            </button>
-          </div>
-        </div>
+    <div className="usuario-detail-container">
+      {/* ===== BANNER ===== */}
+      <div className="usuario-detail-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: `Detalles del usuario: ${usuario.nombre || usuario.nombre_entidad || usuario.email}`,
+            solicitudes: 0,
+            adopciones: 0,
+            eventos: 0,
+          }}
+        />
+      </div>
 
-        <div className="usuario-detail-grid">
-          <div className="usuario-detail-section">
-            <h2>{t("datos_usuario", "Datos de usuario")}</h2>
-            <div className="usuario-detail-row">
-              <span>{t("nombre", "Nombre")}</span>
-              <strong>{usuario.nombre || usuario.nombre_entidad || "-"}</strong>
+      {/* ===== CONTENIDO ===== */}
+      <div className="usuario-detail-content">
+        <div className="bento-container">
+          <div className="usuario-detail-header">
+            <div>
+              <h1>
+                <i className="fas fa-user-circle" style={{ color: "var(--color-primary)", marginRight: "0.75rem" }}></i>
+                {usuario.nombre || usuario.nombre_entidad || "Usuario"}
+              </h1>
+              <p>{t("detalle_usuario_desc", "Revisa la información principal y el estado de la cuenta.")}</p>
             </div>
-            <div className="usuario-detail-row">
-              <span>{t("email", "Correo electrónico")}</span>
-              <strong>{usuario.email || "-"}</strong>
-            </div>
-            <div className="usuario-detail-row">
-              <span>{t("tipo_usuario", "Tipo")}</span>
-              <strong>{usuario.tipo || "-"}</strong>
-            </div>
-            <div className="usuario-detail-row">
-              <span>{t("estado_usuario", "Estado")}</span>
-              <strong>{usuario.estado || "-"}</strong>
-            </div>
-            <div className="usuario-detail-row">
-              <span>{t("email_verificado", "Email verificado")}</span>
-              <strong>{emailVerified ? t("si", "Sí") : t("no", "No")}</strong>
-            </div>
-            <div className="usuario-detail-row">
-              <span>{t("registro", "Registro")}</span>
-              <strong>{createdAt ? new Date(createdAt).toLocaleString() : "-"}</strong>
+            <div className="usuario-detail-actions">
+              <button className="btn-secondary" onClick={() => navigate(-1)}>
+                <i className="fas fa-arrow-left"></i> {t("volver", "Volver")}
+              </button>
+              <button className="btn-primary" onClick={() => navigate(`/admin/usuarios/editar/${id}`)}>
+                <i className="fas fa-edit"></i> {t("editar", "Editar")}
+              </button>
             </div>
           </div>
 
-          <div className="usuario-detail-section">
-            <h2>{t("datos_contacto", "Contacto")}</h2>
-            <div className="usuario-detail-row">
-              <span>{t("telefono", "Teléfono")}</span>
-              <strong>{usuario.telefono || "-"}</strong>
-            </div>
-            <div className="usuario-detail-row">
-              <span>{t("direccion", "Dirección")}</span>
-              <strong>{usuario.direccion || "-"}</strong>
-            </div>
-            {usuario.nombre_entidad && (
+          <div className="usuario-detail-grid">
+            {/* Datos del usuario */}
+            <div className="usuario-detail-section">
+              <h2><i className="fas fa-user" style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}></i> {t("datos_usuario", "Datos de usuario")}</h2>
               <div className="usuario-detail-row">
-                <span>{t("nombre_entidad", "Nombre de la entidad")}</span>
-                <strong>{usuario.nombre_entidad}</strong>
+                <span>{t("nombre", "Nombre")}</span>
+                <strong>{usuario.nombre || usuario.nombre_entidad || "-"}</strong>
               </div>
-            )}
-            {usuario.registro_sanitario && (
               <div className="usuario-detail-row">
-                <span>{t("registro_sanitario", "Registro sanitario")}</span>
-                <strong>{usuario.registro_sanitario}</strong>
+                <span>{t("email", "Correo electrónico")}</span>
+                <strong>{usuario.email || "-"}</strong>
               </div>
-            )}
+              <div className="usuario-detail-row">
+                <span>{t("tipo_usuario", "Tipo")}</span>
+                <strong>
+                  <span className={`badge tipo ${usuario.tipo || "usuario"}`}>
+                    {usuario.tipo || "usuario"}
+                  </span>
+                </strong>
+              </div>
+              <div className="usuario-detail-row">
+                <span>{t("estado_usuario", "Estado")}</span>
+                <strong>
+                  <span className={`badge estado ${usuario.estado || "desconocido"}`}>
+                    <i className={`fas fa-${usuario.estado === "activo" ? "check-circle" : usuario.estado === "pendiente" ? "clock" : "times-circle"}`}></i>
+                    {usuario.estado || "desconocido"}
+                  </span>
+                </strong>
+              </div>
+              <div className="usuario-detail-row">
+                <span>{t("email_verificado", "Email verificado")}</span>
+                <strong>
+                  <span className={`badge ${emailVerified ? "verified" : "unverified"}`}>
+                    <i className={`fas fa-${emailVerified ? "check" : "exclamation-triangle"}`}></i>
+                    {emailVerified ? t("si", "Sí") : t("no", "No")}
+                  </span>
+                </strong>
+              </div>
+              <div className="usuario-detail-row">
+                <span>{t("registro", "Registro")}</span>
+                <strong>{createdAt ? new Date(createdAt).toLocaleString() : "-"}</strong>
+              </div>
+            </div>
+
+            {/* Contacto */}
+            <div className="usuario-detail-section">
+              <h2><i className="fas fa-address-card" style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}></i> {t("datos_contacto", "Contacto")}</h2>
+              <div className="usuario-detail-row">
+                <span>{t("telefono", "Teléfono")}</span>
+                <strong>{usuario.telefono || "-"}</strong>
+              </div>
+              <div className="usuario-detail-row">
+                <span>{t("direccion", "Dirección")}</span>
+                <strong>{usuario.direccion || "-"}</strong>
+              </div>
+              {usuario.nombre_entidad && (
+                <div className="usuario-detail-row">
+                  <span>{t("nombre_entidad", "Nombre de la entidad")}</span>
+                  <strong>{usuario.nombre_entidad}</strong>
+                </div>
+              )}
+              {usuario.registro_sanitario && (
+                <div className="usuario-detail-row">
+                  <span>{t("registro_sanitario", "Registro sanitario")}</span>
+                  <strong>{usuario.registro_sanitario}</strong>
+                </div>
+              )}
+              {usuario.tipo && (
+                <div className="usuario-detail-row">
+                  <span>{t("tipo_usuario", "Tipo de usuario")}</span>
+                  <strong>{usuario.tipo}</strong>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
