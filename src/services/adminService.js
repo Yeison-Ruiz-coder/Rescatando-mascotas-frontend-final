@@ -2,35 +2,6 @@ import api from './api';
 
 const adminService = {
 
-  // ========== MASCOTAS ==========
-  getMascotas: async (params = {}) => {
-    try {
-      const cleanParams = {};
-      Object.keys(params).forEach(key => {
-        if (params[key] !== '' && params[key] !== null && params[key] !== undefined) {
-          cleanParams[key] = params[key];
-        }
-      });
-
-      const response = await api.get('/admin/mascotas', { params: cleanParams });
-      return response.data;
-
-    } catch (error) {
-      console.error('Error en getMascotas:', error);
-      throw error;
-    }
-  },
-
-  getMascota: async (id) => {
-    try {
-      const response = await api.get(`/admin/mascotas/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error('Error en getMascota:', error);
-      throw error;
-    }
-  },
-
   // ========== USUARIOS ==========
   getUsuarios: async (params = {}) => {
     try {
@@ -115,10 +86,11 @@ const adminService = {
     }
   },
 
+  // ✅ CORREGIDO: Ruta correcta con /estado
   cambiarEstadoUsuario: async (id, payload) => {
     try {
       const body = typeof payload === 'string' ? { estado: payload } : payload;
-      const response = await api.patch(`/admin/usuarios/${id}`, body);
+      const response = await api.patch(`/admin/usuarios/${id}/estado`, body);
       return response.data;
     } catch (error) {
       console.error('Error en cambiarEstadoUsuario:', error);
@@ -167,7 +139,7 @@ const adminService = {
     }
   },
 
-  // ========== SUSCRIPCIONES (TU MÓDULO) ==========
+  // ========== SUSCRIPCIONES ==========
   getSuscripciones: async (params = {}) => {
     try {
       const cleanParams = {};
@@ -205,4 +177,5 @@ const adminService = {
   }
 
 };
+
 export default adminService;

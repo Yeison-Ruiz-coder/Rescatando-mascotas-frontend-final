@@ -1,13 +1,17 @@
+// src/pages/admin/Usuarios/UsuariosList.jsx
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../contexts/AuthContext";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import ProfileBanner from "../../../components/common/ProfileBanner/ProfileBanner";
+import FilterBar from "../../../components/common/FilterBar/FilterBar";
 import { useAdminUsuarios } from "../../../hooks/useAdmin";
 import "./UsuariosList.css";
 
-
 const UsuariosList = () => {
   const { t } = useTranslation("admin");
+  const { user } = useAuth();
   const {
     usuarios,
     loading,
@@ -55,168 +59,257 @@ const UsuariosList = () => {
 
   const filteredMessage = useMemo(() => {
     if (loading) return "";
-    if (!displayUsuarios || displayUsuarios.length === 0) return t("sin_usuarios", "No se encontraron usuarios.");
+    if (!displayUsuarios || displayUsuarios.length === 0) {
+      return t("sin_usuarios", "No se encontraron usuarios.");
+    }
     return t("mostrando_usuarios", {
       count: displayUsuarios.length,
       total: pagination.total || displayUsuarios.length,
     });
   }, [loading, displayUsuarios, pagination.total, t]);
 
+  const hasActiveFilters = filters.search || filters.tipo || filters.estado;
+
+  // Obtener el nombre y avatar del admin
+  const adminName = user?.name || user?.nombre || "Administrador";
+  const adminAvatar = user?.avatar || null;
+
+  // Estadísticas para el banner
+  const totalUsuarios = pagination.total || usuarios.length;
+  const activos = usuarios.filter(u => u.estado === 'activo').length;
+  const pendientes = usuarios.filter(u => u.estado === 'pendiente').length;
+
+  // Mapear filtros para FilterBar
+  const filterBarFilters = {
+    search: filters.search || '',
+    tipo: filters.tipo || '',
+    estado: filters.estado || '',
+    sort: filters.sort || 'created_at_desc',
+    total: totalUsuarios,
+  };
+
+  const handleFilterBarChange = (newFilters) => {
+    // FilterBar puede enviar search, tipo, estado, sort
+    handleFilterChange(newFilters);
+  };
+
   return (
     <div className="admin-usuarios-page">
-      <div className="admin-usuarios-header">
-        <div>
-          <h1>{t("gestion_usuarios", "Gestión de Usuarios")}</h1>
-          <p>{t("gestion_usuarios_desc", "Administra cuentas, estados y verificaciones.")}</p>
-        </div>
-        <div className="admin-usuarios-actions">
-          <Link to="/admin/usuarios/pendientes" className="admin-usuarios-button secondary">
-            {t("usuarios_pendientes", "Usuarios pendientes")}
-          </Link>
-          <Link to="/admin/usuarios/create" className="admin-usuarios-button primary">
-            {t("crear_usuario", "Nuevo usuario")}
-          </Link>
-        </div>
+      {/* ===== BANNER ===== */}
+      <div className="admin-usuarios-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: "Administra todas las cuentas de usuarios del sistema",
+            solicitudes: totalUsuarios,
+            adopciones: activos,
+            eventos: pendientes,
+          }}
+        />
       </div>
 
-      <div className="admin-usuarios-filters">
-        <div className="filter-item">
-          <label>{t("buscar", "Buscar")}</label>
-          <input
-            type="search"
-            value={filters.search}
-            placeholder={t("buscar_placeholder", "Buscar por nombre, correo o tipo...")}
-            onChange={(e) => handleFilterChange({ search: e.target.value })}
+      {/* ===== FILTER BAR ===== */}
+      <div className="admin-usuarios-filter-wrapper">
+        <div className="bento-container">
+          <FilterBar
+            filters={filterBarFilters}
+            onFilterChange={handleFilterBarChange}
+            placeholder="Buscar por nombre, correo o tipo..."
+            showTypeFilter={true}
+            showStatusFilter={true}
+            showSort={true}
+            isLoading={loading}
+            typeOptions={[
+              { value: '', label: 'Todos los tipos' },
+              { value: 'usuario', label: 'Usuarios' },
+              { value: 'fundacion', label: 'Fundaciones' },
+              { value: 'veterinaria', label: 'Veterinarias' },
+            ]}
+            statusOptions={[
+              { value: '', label: 'Todos los estados' },
+              { value: 'activo', label: 'Activo' },
+              { value: 'inactivo', label: 'Inactivo' },
+              { value: 'pendiente', label: 'Pendiente' },
+            ]}
+            sortOptions={[
+              { value: 'created_at_desc', label: 'Más recientes' },
+              { value: 'created_at_asc', label: 'Más antiguos' },
+              { value: 'nombre_asc', label: 'Nombre A-Z' },
+              { value: 'nombre_desc', label: 'Nombre Z-A' },
+            ]}
           />
         </div>
-        <div className="filter-item">
-          <label>{t("tipo", "Tipo")}</label>
-          <select value={filters.tipo} onChange={(e) => handleFilterChange({ tipo: e.target.value })}>
-            <option value="">{t("todos", "Todos")}</option>
-            <option value="usuario">{t("usuario", "Usuario")}</option>
-            <option value="fundacion">{t("fundacion", "Fundación")}</option>
-            <option value="veterinaria">{t("veterinaria", "Veterinaria")}</option>
-          </select>
-        </div>
-        <div className="filter-item">
-          <label>{t("estado", "Estado")}</label>
-          <select value={filters.estado} onChange={(e) => handleFilterChange({ estado: e.target.value })}>
-            <option value="">{t("todos", "Todos")}</option>
-            <option value="activo">{t("activo", "Activo")}</option>
-            <option value="inactivo">{t("inactivo", "Inactivo")}</option>
-            <option value="pendiente">{t("pendiente", "Pendiente")}</option>
-          </select>
+      </div>
+
+      {/* ===== ACCIONES ===== */}
+      <div className="admin-usuarios-actions-wrapper">
+        <div className="bento-container">
+          <div className="admin-usuarios-actions">
+            <Link to="/admin/usuarios/pendientes" className="admin-usuarios-button secondary">
+              <i className="fas fa-clock"></i>
+              {t("usuarios_pendientes", "Usuarios pendientes")}
+            </Link>
+            <Link to="/admin/usuarios/create" className="admin-usuarios-button primary">
+              <i className="fas fa-plus"></i>
+              {t("crear_usuario", "Nuevo usuario")}
+            </Link>
+          </div>
         </div>
       </div>
 
-      <div className="admin-usuarios-summary">
-        <span>{filteredMessage}</span>
+      {/* ===== TABLA ===== */}
+      <div className="admin-usuarios-table-wrapper">
+        <div className="bento-container">
+          <div className="admin-usuarios-summary">
+            <i className="fas fa-list"></i>
+            <span>{filteredMessage}</span>
+            {hasActiveFilters && (
+              <button
+                onClick={() => handleFilterChange({ search: '', tipo: '', estado: '', sort: 'created_at_desc' })}
+                className="admin-usuarios-clear-filters"
+              >
+                <i className="fas fa-times"></i> {t("limpiar_filtros", "Limpiar filtros")}
+              </button>
+            )}
+          </div>
+
+          {loading ? (
+            <div className="admin-usuarios-loading">
+              <LoadingSpinner text={t("cargando", "Cargando usuarios...")} />
+            </div>
+          ) : displayUsuarios && displayUsuarios.length > 0 ? (
+            <>
+              <div className="admin-usuarios-table-scroll">
+                <table className="admin-usuarios-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>{t("nombre", "Nombre")}</th>
+                      <th>{t("correo", "Correo")}</th>
+                      <th>{t("tipo", "Tipo")}</th>
+                      <th>{t("estado", "Estado")}</th>
+                      <th>{t("registro", "Registro")}</th>
+                      <th>{t("acciones", "Acciones")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayUsuarios.map((usuario) => {
+                      const emailVerified = usuario.email_verified_at || usuario.email_verificado || usuario.email_verified;
+                      return (
+                        <tr key={usuario.id}>
+                          <td>{usuario.id}</td>
+                          <td>{usuario.nombre || usuario.nombre_entidad || "-"}</td>
+                          <td>{usuario.email || "-"}</td>
+                          <td>
+                            <span className={`badge tipo ${usuario.tipo || "usuario"}`}>
+                              {usuario.tipo || "usuario"}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`badge estado ${usuario.estado || "desconocido"}`}>
+                              <i className={`fas fa-${usuario.estado === "activo" ? "check-circle" : usuario.estado === "pendiente" ? "clock" : "times-circle"}`}></i>
+                              {usuario.estado || "desconocido"}
+                            </span>
+                            <span className={`badge ${emailVerified ? "verified" : "unverified"}`}>
+                              <i className={`fas fa-${emailVerified ? "check" : "exclamation-triangle"}`}></i>
+                              {emailVerified ? t("verificado", "Verificado") : t("no_verificado", "No verificado")}
+                            </span>
+                          </td>
+                          <td>{getCreatedAt(usuario)}</td>
+                          <td className="acciones-column">
+                            <div className="acciones-group">
+                              <Link to={`/admin/usuarios/${usuario.id}`} className="action-button info">
+                                <i className="fas fa-eye"></i> {t("ver", "Ver")}
+                              </Link>
+                              <Link to={`/admin/usuarios/editar/${usuario.id}`} className="action-button warning">
+                                <i className="fas fa-edit"></i> {t("editar", "Editar")}
+                              </Link>
+                              <button
+                                className="action-button danger"
+                                disabled={isProcessing(usuario.id)}
+                                onClick={() => handleRemove(usuario)}
+                              >
+                                <i className="fas fa-trash"></i>
+                                {isProcessing(usuario.id) ? t("procesando", "Procesando...") : t("eliminar", "Eliminar")}
+                              </button>
+                            </div>
+                            <div className="acciones-group">
+                              <button
+                                className="action-button ghost"
+                                disabled={isProcessing(usuario.id)}
+                                onClick={() => handleToggleEstado(usuario)}
+                              >
+                                <i className={`fas fa-${usuario.estado === "activo" ? "pause" : "play"}`}></i>
+                                {usuario.estado === "activo" ? t("desactivar", "Desactivar") : t("activar", "Activar")}
+                              </button>
+                              {!emailVerified && (
+                                <button
+                                  className="action-button ghost"
+                                  disabled={isProcessing(usuario.id)}
+                                  onClick={() => handleVerify(usuario)}
+                                >
+                                  <i className="fas fa-envelope"></i>
+                                  {t("verificar_email", "Verificar email")}
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Paginación */}
+              {pagination.last_page > 1 && (
+                <div className="admin-usuarios-pagination">
+                  <button
+                    disabled={pagination.current_page === 1}
+                    onClick={() => handlePageChange(pagination.current_page - 1)}
+                  >
+                    <i className="fas fa-chevron-left"></i> {t("anterior", "Anterior")}
+                  </button>
+                  <span>
+                    {t("pagina", "Página")} {pagination.current_page} / {pagination.last_page}
+                  </span>
+                  <button
+                    disabled={pagination.current_page === pagination.last_page}
+                    onClick={() => handlePageChange(pagination.current_page + 1)}
+                  >
+                    {t("siguiente", "Siguiente")} <i className="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="admin-usuarios-empty">
+              <i className={`fas fa-${hasActiveFilters ? "search" : "users"}`}></i>
+              <h3>
+                {hasActiveFilters 
+                  ? t("sin_resultados", "No se encontraron resultados")
+                  : t("sin_usuarios", "No hay usuarios registrados")
+                }
+              </h3>
+              <p>
+                {hasActiveFilters
+                  ? t("sin_resultados_desc", "Prueba con otros criterios de búsqueda.")
+                  : t("sin_usuarios_desc", "Comienza creando el primer usuario.")
+                }
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={() => handleFilterChange({ search: '', tipo: '', estado: '', sort: 'created_at_desc' })}
+                  className="admin-usuarios-clear-filters-btn"
+                >
+                  <i className="fas fa-undo"></i> {t("limpiar_filtros", "Limpiar filtros")}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      {loading ? (
-        <div className="admin-usuarios-loading">
-          <LoadingSpinner text={t("cargando", "Cargando usuarios...")} />
-        </div>
-      ) : displayUsuarios && displayUsuarios.length > 0 ? (
-        <div className="admin-usuarios-table-wrapper">
-          <table className="admin-usuarios-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>{t("nombre", "Nombre")}</th>
-                <th>{t("correo", "Correo")}</th>
-                <th>{t("tipo", "Tipo")}</th>
-                <th>{t("estado", "Estado")}</th>
-                <th>{t("registro", "Registro")}</th>
-                <th>{t("acciones", "Acciones")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayUsuarios.map((usuario) => {
-                const emailVerified = usuario.email_verified_at || usuario.email_verificado || usuario.email_verified;
-                return (
-                  <tr key={usuario.id}>
-                    <td>{usuario.id}</td>
-                    <td>{usuario.nombre || usuario.nombre_entidad || "-"}</td>
-                    <td>{usuario.email || "-"}</td>
-                    <td>{usuario.tipo || "-"}</td>
-                    <td>
-                      <span className={`badge estado ${usuario.estado || "desconocido"}`}>
-                        {usuario.estado || "desconocido"}
-                      </span>
-                      {emailVerified ? (
-                        <span className="badge verified">{t("email_verificado", "Email verificado")}</span>
-                      ) : (
-                        <span className="badge unverified">{t("email_no_verificado", "Email no verificado")}</span>
-                      )}
-                    </td>
-                    <td>{getCreatedAt(usuario)}</td>
-                    <td className="acciones-column">
-                      <div className="acciones-group">
-                        <Link to={`/admin/usuarios/${usuario.id}`} className="action-button info">
-                          {t("ver", "Ver")}
-                        </Link>
-                        <Link to={`/admin/usuarios/${usuario.id}/editar`} className="action-button warning">
-                          {t("editar", "Editar")}
-                        </Link>
-                        <button
-                          className="action-button danger"
-                          disabled={isProcessing(usuario.id)}
-                          onClick={() => handleRemove(usuario)}
-                        >
-                          {isProcessing(usuario.id) ? t("procesando", "Procesando...") : t("eliminar", "Eliminar")}
-                        </button>
-                      </div>
-                      <div className="acciones-group actions-secondary">
-                        <button
-                          className="action-button ghost"
-                          disabled={isProcessing(usuario.id)}
-                          onClick={() => handleToggleEstado(usuario)}
-                        >
-                          {usuario.estado === "activo" ? t("desactivar", "Desactivar") : t("activar", "Activar")}
-                        </button>
-                        {!emailVerified && (
-                          <button
-                            className="action-button ghost"
-                            disabled={isProcessing(usuario.id)}
-                            onClick={() => handleVerify(usuario)}
-                          >
-                            {t("verificar_email", "Verificar email")}
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="admin-usuarios-empty">
-          <p>{filteredMessage}</p>
-        </div>
-      )}
-
-      {pagination.last_page > 1 && (
-        <div className="admin-usuarios-pagination">
-          <button
-            disabled={pagination.current_page === 1}
-            onClick={() => handlePageChange(pagination.current_page - 1)}
-          >
-            {t("anterior", "Anterior")}
-          </button>
-          <span>
-            {t("pagina", "Página")} {pagination.current_page} / {pagination.last_page}
-          </span>
-          <button
-            disabled={pagination.current_page === pagination.last_page}
-            onClick={() => handlePageChange(pagination.current_page + 1)}
-          >
-            {t("siguiente", "Siguiente")}
-          </button>
-        </div>
-      )}
     </div>
   );
 };

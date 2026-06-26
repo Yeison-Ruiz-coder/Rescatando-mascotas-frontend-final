@@ -1,0 +1,269 @@
+/* src/components/common/StatusBadge/StatusBadge.css */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.status-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ===== TAMAÑOS ===== */
+.badge-size-sm {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.6rem;
+}
+.badge-size-sm .status-badge-dot {
+  width: 4px;
+  height: 4px;
+}
+
+.badge-size-md {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+}
+.badge-size-md .status-badge-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.badge-size-lg {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+}
+.badge-size-lg .status-badge-dot {
+  width: 8px;
+  height: 8px;
+}
+
+/* ===== ESTADOS ===== */
+.status-success {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+.status-success .status-badge-dot {
+  background: #16a34a;
+}
+
+.status-danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+.status-danger .status-badge-dot {
+  background: #dc2626;
+}
+
+.status-warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+.status-warning .status-badge-dot {
+  background: #d97706;
+}
+
+.status-dark {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.status-dark .status-badge-dot {
+  background: #64748b;
+}
+
+/* ===== PRIORIDADES ===== */
+.priority-high {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #f87171;
+}
+.priority-high .status-badge-dot {
+  background: #dc2626;
+}
+
+.priority-medium {
+  background: #ffedd5;
+  color: #ea580c;
+  border-color: #fdba74;
+}
+.priority-medium .status-badge-dot {
+  background: #ea580c;
+}
+
+.priority-low {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #86efac;
+}
+.priority-low .status-badge-dot {
+  background: #16a34a;
+}
+
+/* ===== TIPOS ===== */
+.type-user {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+.type-user .status-badge-dot {
+  background: #3b82f6;
+}
+
+.type-fundacion {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #f87171;
+}
+.type-fundacion .status-badge-dot {
+  background: #dc2626;
+}
+
+.type-veterinaria {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #86efac;
+}
+.type-veterinaria .status-badge-dot {
+  background: #16a34a;
+}
+
+.type-admin {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border-color: #c4b5fd;
+}
+.type-admin .status-badge-dot {
+  background: #7c3aed;
+}
+
+/* ===== VERIFICACIÓN ===== */
+.verif-success {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+.verif-success .status-badge-dot {
+  background: #16a34a;
+}
+
+.verif-warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+.verif-warning .status-badge-dot {
+  background: #d97706;
+}
+
+/* ===== DEFAULT ===== */
+.status-default {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+.status-default .status-badge-dot {
+  background: #94a3b8;
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .status-success {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+[data-theme="dark"] .status-success .status-badge-dot {
+  background: #34d399;
+}
+
+[data-theme="dark"] .status-danger {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+[data-theme="dark"] .status-danger .status-badge-dot {
+  background: #f87171;
+}
+
+[data-theme="dark"] .status-warning {
+  background: #78350f;
+  color: #fde68a;
+  border-color: #92400e;
+}
+[data-theme="dark"] .status-warning .status-badge-dot {
+  background: #fbbf24;
+}
+
+[data-theme="dark"] .priority-high {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-color: #991b1b;
+}
+
+[data-theme="dark"] .priority-medium {
+  background: #78350f;
+  color: #fdba74;
+  border-color: #92400e;
+}
+
+[data-theme="dark"] .priority-low {
+  background: #064e3b;
+  color: #6ee7b7;
+  border-color: #065f46;
+}
+
+[data-theme="dark"] .type-user {
+  background: #1e3a8a;
+  color: #93c5fd;
+  border-color: #1d4ed8;
+}
+
+[data-theme="dark"] .type-fundacion {
+  background: #7f1d1d;
+  color: #f87171;
+  border-color: #991b1b;
+}
+
+[data-theme="dark"] .type-veterinaria {
+  background: #064e3b;
+  color: #4ade80;
+  border-color: #065f46;
+}
+
+[data-theme="dark"] .type-admin {
+  background: #4c1d95;
+  color: #c4b5fd;
+  border-color: #7c3aed;
+}
+
+[data-theme="dark"] .verif-success {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+
+[data-theme="dark"] .verif-warning {
+  background: #78350f;
+  color: #fde68a;
+  border-color: #92400e;
+}
+
+[data-theme="dark"] .status-default {
+  background: #1e293b;
+  color: #94a3b8;
+  border-color: #334155;
+}
