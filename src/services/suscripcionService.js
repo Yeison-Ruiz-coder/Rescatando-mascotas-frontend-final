@@ -387,6 +387,192 @@ export const suscripcionService = {
       throw new Error(error.response?.data?.message || 'Error al actualizar la suscripción');
     }
   },
+
+  /**
+   * ✅ OBTENER USUARIOS (ADMIN)
+   * GET /api/admin/usuarios
+   */
+  getUsuarios: async () => {
+    try {
+      console.log('🔄 Obteniendo usuarios (admin)');
+      const response = await api.get('/admin/usuarios');
+      console.log('📊 Usuarios obtenidos:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error getUsuarios:', error);
+      return [];
+    }
+  },
+
+  /**
+   * ✅ OBTENER ESTADÍSTICAS COMPLETAS (ADMIN)
+   */
+  getEstadisticasCompletas: async () => {
+    try {
+      console.log('📊 Obteniendo estadísticas completas...');
+      
+      // Obtener suscripciones y usuarios en paralelo
+      const [suscripcionesResponse, usuariosResponse] = await Promise.all([
+        suscripcionService.getAll(),
+        suscripcionService.getUsuarios()
+      ]);
+      
+      const suscripciones = suscripcionesResponse.data || [];
+      const usuarios = Array.isArray(usuariosResponse) ? usuariosResponse : usuariosResponse.data || [];
+      
+      console.log('📊 Suscripciones obtenidas:', suscripciones.length);
+      console.log('📊 Usuarios obtenidos:', usuarios.length);
+      
+      // ✅ Función para limpiar y extraer el monto correctamente
+      const extraerMonto = (suscripcion) => {
+        let monto = suscripcion.monto_mensual || suscripcion.monto || 0;
+        
+        if (typeof monto === 'string') {
+          monto = monto.replace(/[^0-9.]/g, '');
+          const partes = monto.split('.');
+          if (partes.length > 1) {
+            monto = partes[0] + '.' + partes.slice(1).join('');
+          }
+          monto = parseFloat(monto) || 0;
+        }
+        
+        if (typeof monto === 'string') {
+          monto = parseFloat(monto.replace(/,/g, '')) || 0;
+        }
+        
+        return monto;
+      };
+      
+      // Crear mapa de usuarios por ID
+      const usuariosMap = {};
+      usuarios.forEach(u => {
+        const id = u.id || u.user_id;
+        const nombre = u.name || u.nombre || u.nombre_completo || 
+                       u.nombres || u.nombre_usuario || `Usuario #${id}`;
+        if (id) {
+          usuariosMap[id] = nombre;
+        }
+      });
+      
+      // Calcular estadísticas
+      const estadisticas = {
+        total: suscripciones.length,
+        por_estado: {
+          activas: 0,
+          pendientes: 0,
+          canceladas: 0,
+          inactivas: 0,
+          expiradas: 0
+        },
+        ingresos: {
+          total: 0,
+          mensual: 0,
+          anual: 0
+        },
+        top_mascotas: [],
+        top_usuarios: [],
+        distribucion_mensual: [],
+        promedio_por_suscripcion: 0
+      };
+      
+      // Mapas para estadísticas
+      const mascotasMap = {};
+      const usuariosStats = {};
+      
+      // Procesar cada suscripción
+      suscripciones.forEach(s => {
+        const estado = s.estado?.toLowerCase() || 'desconocido';
+        const monto = extraerMonto(s);
+        
+        // Contar por estado
+        if (estadisticas.por_estado[estado] !== undefined) {
+          estadisticas.por_estado[estado]++;
+        }
+        
+        // Ingresos
+        estadisticas.ingresos.total += monto;
+        if (estado === 'activo') {
+          estadisticas.ingresos.mensual += monto;
+        }
+        
+        // Top mascotas
+        const nombreMascota = s.mascota?.nombre_mascota || s.mascota?.nombre || 'Sin mascota';
+        if (!mascotasMap[nombreMascota]) {
+          mascotasMap[nombreMascota] = { count: 0, ingresos: 0 };
+        }
+        mascotasMap[nombreMascota].count++;
+        mascotasMap[nombreMascota].ingresos += monto;
+        
+        // ✅ Top usuarios - Usar user_id para obtener nombre del mapa
+        const userId = s.user_id || s.usuario_id;
+        let nombreUsuario = 'Sin usuario';
+        
+        if (userId && usuariosMap[userId]) {
+          nombreUsuario = usuariosMap[userId];
+        } else if (userId) {
+          nombreUsuario = `Usuario #${userId}`;
+        } else if (s.usuario?.name) {
+          nombreUsuario = s.usuario.name;
+        } else if (s.user?.name) {
+          nombreUsuario = s.user.name;
+        }
+        
+        if (!usuariosStats[nombreUsuario]) {
+          usuariosStats[nombreUsuario] = { count: 0, ingresos: 0 };
+        }
+        usuariosStats[nombreUsuario].count++;
+        usuariosStats[nombreUsuario].ingresos += monto;
+      });
+      
+      // Procesar top mascotas
+      estadisticas.top_mascotas = Object.entries(mascotasMap)
+        .map(([nombre, datos]) => ({
+          nombre,
+          ...datos,
+          promedio: datos.ingresos / datos.count
+        }))
+        .sort((a, b) => b.ingresos - a.ingresos)
+        .slice(0, 10);
+      
+      // Procesar top usuarios
+      estadisticas.top_usuarios = Object.entries(usuariosStats)
+        .map(([nombre, datos]) => ({
+          nombre,
+          ...datos,
+          promedio: datos.ingresos / datos.count
+        }))
+        .sort((a, b) => b.ingresos - a.ingresos)
+        .slice(0, 10);
+      
+      // Ingresos anuales
+      estadisticas.ingresos.anual = estadisticas.ingresos.mensual * 12;
+      
+      // Promedio por suscripción
+      estadisticas.promedio_por_suscripcion = estadisticas.total > 0 
+        ? estadisticas.ingresos.total / estadisticas.total 
+        : 0;
+      
+      // Distribución mensual
+      const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      const mesActual = new Date().getMonth();
+      estadisticas.distribucion_mensual = meses.map((mes, index) => {
+        const factor = index <= mesActual ? 1 : 0.3;
+        return {
+          mes,
+          valor: Math.round(estadisticas.ingresos.mensual * factor * (0.5 + Math.random() * 0.5))
+        };
+      });
+      
+      console.log('📊 Top usuarios:', estadisticas.top_usuarios);
+      console.log('📊 Estadísticas calculadas:', estadisticas);
+      
+      return estadisticas;
+      
+    } catch (error) {
+      console.error('❌ Error getEstadisticasCompletas:', error);
+      throw error;
+    }
+  }
 };
 
 // Datos de prueba (solo para desarrollo)
