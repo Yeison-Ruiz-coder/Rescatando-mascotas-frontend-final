@@ -72,7 +72,10 @@ const UsuarioDetail = () => {
           user={{
             nombre: adminName,
             avatar: adminAvatar,
-            titulo: `Detalles del usuario: ${usuario.nombre || usuario.nombre_entidad || usuario.email}`,
+            titulo: t("detalle_usuario_titulo", { 
+              defaultValue: "Detalles del usuario: {{nombre}}",
+              nombre: usuario.nombre || usuario.nombre_entidad || usuario.email 
+            }),
             solicitudes: 0,
             adopciones: 0,
             eventos: 0,
@@ -166,12 +169,6 @@ const UsuarioDetail = () => {
                 <div className="usuario-detail-row">
                   <span>{t("registro_sanitario", "Registro sanitario")}</span>
                   <strong>{usuario.registro_sanitario}</strong>
-                </div>
-              )}
-              {usuario.tipo && (
-                <div className="usuario-detail-row">
-                  <span>{t("tipo_usuario", "Tipo de usuario")}</span>
-                  <strong>{usuario.tipo}</strong>
                 </div>
               )}
             </div>

@@ -116,7 +116,7 @@ const UsuarioForm = () => {
           user={{
             nombre: adminName,
             avatar: adminAvatar,
-            titulo: isEditing ? "Editando usuario" : "Creando nuevo usuario",
+            titulo: isEditing ? t("editando_usuario", "Editando usuario") : t("creando_usuario", "Creando nuevo usuario"),
             solicitudes: 0,
             adopciones: 0,
             eventos: 0,
