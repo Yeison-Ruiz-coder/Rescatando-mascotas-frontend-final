@@ -1,0 +1,198 @@
+/* src/pages/admin/suscripciones/SuscripcionesIndex.css */
+
+.admin-suscripciones-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.admin-stats {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.admin-stats span {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stat-activas {
+  background: #d4edda;
+  color: #155724;
+}
+
+.stat-pendientes {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.stat-canceladas {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.stat-total {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.admin-table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-suscripciones-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-suscripciones-table thead {
+  background: #f8f9fa;
+}
+
+.admin-suscripciones-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.admin-suscripciones-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.admin-suscripciones-table tr:hover {
+  background: #f8f9fa;
+}
+
+.estado-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.estado-activo {
+  background: #d4edda;
+  color: #155724;
+}
+
+.estado-pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.estado-cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.estado-inactivo {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.estado-expirado {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.btn-cancelar {
+  padding: 4px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.btn-cancelar:hover {
+  background: #c82333;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 40px !important;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.admin-suscripciones-loading,
+.admin-suscripciones-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.admin-suscripciones-error button {
+  margin-top: 16px;
+  padding: 8px 24px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.admin-suscripciones-error button:hover {
+  background: #0056b3;
+}
+/* src/pages/admin/suscripciones/SuscripcionesIndex.css */
+
+/* ... estilos existentes ... */
+
+.admin-pagination-info {
+  margin-top: 16px;
+  padding: 12px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 14px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stat-paginacion {
+  background: #e3f2fd;
+  color: #0d47a1;
+}
