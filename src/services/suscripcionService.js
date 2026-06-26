@@ -389,28 +389,46 @@ export const suscripcionService = {
   },
 
   /**
-   * ✅ OBTENER ESTADÍSTICAS COMPLETAS (ADMIN) - VERSIÓN MEJORADA
+   * ✅ OBTENER USUARIOS (ADMIN)
+   * GET /api/admin/usuarios
+   */
+  getUsuarios: async () => {
+    try {
+      console.log('🔄 Obteniendo usuarios (admin)');
+      const response = await api.get('/admin/usuarios');
+      console.log('📊 Usuarios obtenidos:', response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error('❌ Error getUsuarios:', error);
+      return [];
+    }
+  },
+
+  /**
+   * ✅ OBTENER ESTADÍSTICAS COMPLETAS (ADMIN)
    */
   getEstadisticasCompletas: async () => {
     try {
       console.log('📊 Obteniendo estadísticas completas...');
       
-      // Primero obtener todas las suscripciones
-      const response = await suscripcionService.getAll();
-      const suscripciones = response.data || [];
+      // Obtener suscripciones y usuarios en paralelo
+      const [suscripcionesResponse, usuariosResponse] = await Promise.all([
+        suscripcionService.getAll(),
+        suscripcionService.getUsuarios()
+      ]);
+      
+      const suscripciones = suscripcionesResponse.data || [];
+      const usuarios = Array.isArray(usuariosResponse) ? usuariosResponse : usuariosResponse.data || [];
       
       console.log('📊 Suscripciones obtenidas:', suscripciones.length);
+      console.log('📊 Usuarios obtenidos:', usuarios.length);
       
       // ✅ Función para limpiar y extraer el monto correctamente
       const extraerMonto = (suscripcion) => {
-        // Intentar obtener el monto de diferentes campos
         let monto = suscripcion.monto_mensual || suscripcion.monto || 0;
         
-        // Si es string, limpiar caracteres no numéricos
         if (typeof monto === 'string') {
-          // Eliminar $, espacios, y otros caracteres
           monto = monto.replace(/[^0-9.]/g, '');
-          // Si hay múltiples puntos, tomar solo el primero
           const partes = monto.split('.');
           if (partes.length > 1) {
             monto = partes[0] + '.' + partes.slice(1).join('');
@@ -418,7 +436,6 @@ export const suscripcionService = {
           monto = parseFloat(monto) || 0;
         }
         
-        // Si es número pero está en formato string con comas
         if (typeof monto === 'string') {
           monto = parseFloat(monto.replace(/,/g, '')) || 0;
         }
@@ -426,7 +443,18 @@ export const suscripcionService = {
         return monto;
       };
       
-      // Calcular estadísticas detalladas
+      // Crear mapa de usuarios por ID
+      const usuariosMap = {};
+      usuarios.forEach(u => {
+        const id = u.id || u.user_id;
+        const nombre = u.name || u.nombre || u.nombre_completo || 
+                       u.nombres || u.nombre_usuario || `Usuario #${id}`;
+        if (id) {
+          usuariosMap[id] = nombre;
+        }
+      });
+      
+      // Calcular estadísticas
       const estadisticas = {
         total: suscripciones.length,
         por_estado: {
@@ -447,48 +475,56 @@ export const suscripcionService = {
         promedio_por_suscripcion: 0
       };
       
+      // Mapas para estadísticas
+      const mascotasMap = {};
+      const usuariosStats = {};
+      
       // Procesar cada suscripción
       suscripciones.forEach(s => {
         const estado = s.estado?.toLowerCase() || 'desconocido';
         const monto = extraerMonto(s);
-        
-        console.log(`📊 Suscripción ${s.id}: estado=${estado}, monto=${monto}`);
         
         // Contar por estado
         if (estadisticas.por_estado[estado] !== undefined) {
           estadisticas.por_estado[estado]++;
         }
         
-        // Ingresos totales
+        // Ingresos
         estadisticas.ingresos.total += monto;
-        
-        // Ingresos mensuales (solo activas)
         if (estado === 'activo') {
           estadisticas.ingresos.mensual += monto;
         }
-      });
-      
-      // Ingresos anuales (12 meses)
-      estadisticas.ingresos.anual = estadisticas.ingresos.mensual * 12;
-      
-      // Promedio por suscripción
-      estadisticas.promedio_por_suscripcion = estadisticas.total > 0 
-        ? estadisticas.ingresos.total / estadisticas.total 
-        : 0;
-      
-      // Top mascotas
-      const mascotasMap = {};
-      suscripciones.forEach(s => {
-        const nombre = s.mascota?.nombre_mascota || s.mascota?.nombre || 'Sin mascota';
-        const monto = extraerMonto(s);
         
-        if (!mascotasMap[nombre]) {
-          mascotasMap[nombre] = { count: 0, ingresos: 0 };
+        // Top mascotas
+        const nombreMascota = s.mascota?.nombre_mascota || s.mascota?.nombre || 'Sin mascota';
+        if (!mascotasMap[nombreMascota]) {
+          mascotasMap[nombreMascota] = { count: 0, ingresos: 0 };
         }
-        mascotasMap[nombre].count++;
-        mascotasMap[nombre].ingresos += monto;
+        mascotasMap[nombreMascota].count++;
+        mascotasMap[nombreMascota].ingresos += monto;
+        
+        // ✅ Top usuarios - Usar user_id para obtener nombre del mapa
+        const userId = s.user_id || s.usuario_id;
+        let nombreUsuario = 'Sin usuario';
+        
+        if (userId && usuariosMap[userId]) {
+          nombreUsuario = usuariosMap[userId];
+        } else if (userId) {
+          nombreUsuario = `Usuario #${userId}`;
+        } else if (s.usuario?.name) {
+          nombreUsuario = s.usuario.name;
+        } else if (s.user?.name) {
+          nombreUsuario = s.user.name;
+        }
+        
+        if (!usuariosStats[nombreUsuario]) {
+          usuariosStats[nombreUsuario] = { count: 0, ingresos: 0 };
+        }
+        usuariosStats[nombreUsuario].count++;
+        usuariosStats[nombreUsuario].ingresos += monto;
       });
       
+      // Procesar top mascotas
       estadisticas.top_mascotas = Object.entries(mascotasMap)
         .map(([nombre, datos]) => ({
           nombre,
@@ -498,20 +534,8 @@ export const suscripcionService = {
         .sort((a, b) => b.ingresos - a.ingresos)
         .slice(0, 10);
       
-      // Top usuarios
-      const usuariosMap = {};
-      suscripciones.forEach(s => {
-        const nombre = s.usuario?.name || s.usuario?.nombre || s.user?.name || 'Sin usuario';
-        const monto = extraerMonto(s);
-        
-        if (!usuariosMap[nombre]) {
-          usuariosMap[nombre] = { count: 0, ingresos: 0 };
-        }
-        usuariosMap[nombre].count++;
-        usuariosMap[nombre].ingresos += monto;
-      });
-      
-      estadisticas.top_usuarios = Object.entries(usuariosMap)
+      // Procesar top usuarios
+      estadisticas.top_usuarios = Object.entries(usuariosStats)
         .map(([nombre, datos]) => ({
           nombre,
           ...datos,
@@ -519,6 +543,14 @@ export const suscripcionService = {
         }))
         .sort((a, b) => b.ingresos - a.ingresos)
         .slice(0, 10);
+      
+      // Ingresos anuales
+      estadisticas.ingresos.anual = estadisticas.ingresos.mensual * 12;
+      
+      // Promedio por suscripción
+      estadisticas.promedio_por_suscripcion = estadisticas.total > 0 
+        ? estadisticas.ingresos.total / estadisticas.total 
+        : 0;
       
       // Distribución mensual
       const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -531,6 +563,7 @@ export const suscripcionService = {
         };
       });
       
+      console.log('📊 Top usuarios:', estadisticas.top_usuarios);
       console.log('📊 Estadísticas calculadas:', estadisticas);
       
       return estadisticas;
