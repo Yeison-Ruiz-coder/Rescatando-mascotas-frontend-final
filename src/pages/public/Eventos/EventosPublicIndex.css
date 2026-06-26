@@ -1,5 +1,4 @@
 /* src/pages/public/Eventos/EventosPublicIndex.css */
-/* ===== HEADER - ESTILO IDÉNTICO A MASCOTAS ===== */
 
 .eventos-page {
   min-height: 100vh;
@@ -127,31 +126,28 @@
   font-size: 1rem;
 }
 
-/* ===== GRID DE EVENTOS ===== */
+/* ===== GRID DE EVENTOS - 4 COLUMNAS ===== */
 .eventos-page .eventos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.8rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
   width: 100%;
 }
 
-/* ===== CARDS CON DIFERENTES TAMAÑOS SEGÚN IMPORTANCIA ===== */
-
-/* Card tamaño normal */
+/* ===== CARDS CON DIFERENTES TAMAÑOS ===== */
 .evento-card-normal {
   grid-column: span 1;
+  grid-row: span 1;
 }
 
-/* Card tamaño importante (más grande) */
 .evento-card-importante {
   grid-column: span 2;
   grid-row: span 1;
 }
 
-/* Card tamaño muy importante (todavía más grande) */
 .evento-card-muy-importante {
   grid-column: span 2;
-  grid-row: span 2;
+  grid-row: span 1;
 }
 
 /* Estilo especial para cards importantes */
@@ -170,7 +166,6 @@
   border-color: var(--color-accent);
 }
 
-/* Ajustes para cards importantes en el contenido */
 .evento-card-importante .ec-card .ec-titulo,
 .evento-card-muy-importante .ec-card .ec-titulo {
   font-size: 1.3rem !important;
@@ -387,18 +382,29 @@
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .eventos-page .eventos-header h1 {
-    font-size: 5.1rem;
+@media (max-width: 1200px) {
+  .eventos-page .eventos-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
   
-  .evento-card-importante {
-    grid-column: span 2;
-  }
-  
+  .evento-card-importante,
   .evento-card-muy-importante {
     grid-column: span 2;
-    grid-row: span 1;
+  }
+}
+
+@media (max-width: 992px) {
+  .eventos-page .eventos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .evento-card-importante,
+  .evento-card-muy-importante {
+    grid-column: span 2;
+  }
+  
+  .eventos-page .eventos-header h1 {
+    font-size: 5.1rem;
   }
   
   .eventos-page .eventos-header .eventos-info {
@@ -408,6 +414,16 @@
 }
 
 @media (max-width: 768px) {
+  .eventos-page .eventos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  
+  .evento-card-importante,
+  .evento-card-muy-importante {
+    grid-column: span 1;
+  }
+  
   .eventos-page .eventos-header {
     padding: 60px 0 80px 0;
     min-height: auto;
@@ -434,16 +450,6 @@
   .eventos-page .eventos-resultados-header {
     flex-direction: column;
     align-items: flex-start;
-  }
-  
-  .eventos-page .eventos-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
-  }
-  
-  .evento-card-importante,
-  .evento-card-muy-importante {
-    grid-column: span 1;
   }
   
   .importancia-badge {

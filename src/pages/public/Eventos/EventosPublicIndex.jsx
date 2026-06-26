@@ -29,12 +29,13 @@ const EventosPublicIndex = () => {
   const [likedEvents, setLikedEvents] = useState({});
   const [asistenciaEvents, setAsistenciaEvents] = useState({});
 
-  // ✅ Estados para el panel
   const [selectedEvento, setSelectedEvento] = useState(null);
   const [currentEventoId, setCurrentEventoId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  // Función para calcular nivel de importancia del evento
+  // ============================================
+  // FUNCIÓN DE PUNTUACIÓN
+  // ============================================
   const calcularNivelImportancia = useCallback((evento, todosEventos) => {
     let puntos = 0;
     
@@ -44,66 +45,95 @@ const EventosPublicIndex = () => {
     fechaEvento.setHours(0, 0, 0, 0);
     const diffDays = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
     
-    if (diffDays >= 0 && diffDays <= 1) puntos += 50;
-    else if (diffDays >= 2 && diffDays <= 3) puntos += 30;
-    else if (diffDays >= 4 && diffDays <= 7) puntos += 15;
+    // Si el evento ya pasó, NO puede ser importante
+    if (diffDays < 0) {
+      return 'normal';
+    }
     
-    const maxAsistentes = Math.max(...todosEventos.map(e => e.total_asistentes || 0), 1);
-    const porcentajeAsistentes = (evento.total_asistentes || 0) / maxAsistentes;
-    if (porcentajeAsistentes >= 0.8) puntos += 40;
-    else if (porcentajeAsistentes >= 0.5) puntos += 20;
-    else if (porcentajeAsistentes >= 0.3) puntos += 10;
+    // Puntos por cercanía
+    if (diffDays === 0) puntos += 70;
+    else if (diffDays <= 2) puntos += 60;
+    else if (diffDays <= 5) puntos += 45;
+    else if (diffDays <= 10) puntos += 30;
+    else if (diffDays <= 20) puntos += 15;
+    else puntos += 5;
     
-    const maxLikes = Math.max(...todosEventos.map(e => e.likes || 0), 1);
-    const porcentajeLikes = (evento.likes || 0) / maxLikes;
-    if (porcentajeLikes >= 0.8) puntos += 30;
-    else if (porcentajeLikes >= 0.5) puntos += 15;
-    else if (porcentajeLikes >= 0.3) puntos += 8;
+    // Puntos por asistentes
+    if (evento.total_asistentes) {
+      const maxAsistentes = Math.max(...todosEventos.map(e => e.total_asistentes || 0), 1);
+      const porcentajeAsistentes = (evento.total_asistentes || 0) / maxAsistentes;
+      if (porcentajeAsistentes >= 0.8) puntos += 40;
+      else if (porcentajeAsistentes >= 0.5) puntos += 25;
+      else if (porcentajeAsistentes >= 0.3) puntos += 15;
+    }
     
+    // Puntos por likes
+    if (evento.likes) {
+      const maxLikes = Math.max(...todosEventos.map(e => e.likes || 0), 1);
+      const porcentajeLikes = (evento.likes || 0) / maxLikes;
+      if (porcentajeLikes >= 0.8) puntos += 35;
+      else if (porcentajeLikes >= 0.5) puntos += 20;
+      else if (porcentajeLikes >= 0.3) puntos += 10;
+    }
+    
+    // Bonus
     if (evento.imagen) puntos += 10;
     if (evento.es_gratuito) puntos += 15;
     if (evento.capacidad_total && evento.capacidad_total > 100) puntos += 10;
     else if (evento.capacidad_total && evento.capacidad_total > 50) puntos += 5;
     
-    if (puntos >= 80) return 'muy-importante';
-    if (puntos >= 50) return 'importante';
+    if (puntos >= 85) return 'muy-importante';
+    if (puntos >= 55) return 'importante';
     return 'normal';
   }, []);
 
+  // ============================================
+  // FUNCIÓN DE ORGANIZACIÓN - Finalizados al final
+  // ============================================
   const organizarEventosPorImportancia = useCallback((eventosList) => {
     if (!eventosList || eventosList.length === 0) return [];
     
-    const eventosConImportancia = eventosList.map(evento => ({
-      ...evento,
-      nivelImportancia: calcularNivelImportancia(evento, eventosList),
-      puntuacion: (() => {
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-        const fechaEvento = new Date(evento.fecha_evento);
-        fechaEvento.setHours(0, 0, 0, 0);
-        const diffDays = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
-        
-        let puntos = 0;
-        if (diffDays >= 0 && diffDays <= 1) puntos = 1000;
-        else if (diffDays >= 2 && diffDays <= 3) puntos = 900;
-        else if (diffDays >= 4 && diffDays <= 7) puntos = 800;
-        else if (diffDays < 0) puntos = 100;
-        else puntos = 700;
-        
-        const maxAsistentes = Math.max(...eventosList.map(e => e.total_asistentes || 0), 1);
-        puntos += ((evento.total_asistentes || 0) / maxAsistentes) * 100;
-        
-        return puntos;
-      })()
-    }));
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
     
-    const nivelOrden = { 'muy-importante': 3, 'importante': 2, 'normal': 1 };
-    return eventosConImportancia.sort((a, b) => {
-      if (nivelOrden[b.nivelImportancia] !== nivelOrden[a.nivelImportancia]) {
-        return nivelOrden[b.nivelImportancia] - nivelOrden[a.nivelImportancia];
+    const eventosFuturos = [];
+    const eventosFinalizados = [];
+    
+    eventosList.forEach(evento => {
+      const fechaEvento = new Date(evento.fecha_evento);
+      fechaEvento.setHours(0, 0, 0, 0);
+      const diffDays = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
+      
+      const eventoConData = {
+        ...evento,
+        diffDays: diffDays,
+        esFuturo: diffDays >= 0,
+        nivelImportancia: calcularNivelImportancia(evento, eventosList)
+      };
+      
+      if (diffDays >= 0) {
+        eventosFuturos.push(eventoConData);
+      } else {
+        eventoConData.nivelImportancia = 'normal';
+        eventosFinalizados.push(eventoConData);
       }
-      return b.puntuacion - a.puntuacion;
     });
+    
+    // Ordenar eventos futuros
+    eventosFuturos.sort((a, b) => {
+      const niveles = { 'muy-importante': 3, 'importante': 2, 'normal': 1 };
+      const diffNivel = niveles[b.nivelImportancia] - niveles[a.nivelImportancia];
+      if (diffNivel !== 0) return diffNivel;
+      if (a.diffDays !== b.diffDays) return a.diffDays - b.diffDays;
+      return (b.likes || 0) - (a.likes || 0);
+    });
+    
+    // Ordenar eventos finalizados por fecha (más reciente primero)
+    eventosFinalizados.sort((a, b) => {
+      return new Date(b.fecha_evento) - new Date(a.fecha_evento);
+    });
+    
+    return [...eventosFuturos, ...eventosFinalizados];
   }, [calcularNivelImportancia]);
 
   const loadEventos = useCallback(async (filters = {}, page = 1) => {
@@ -121,8 +151,6 @@ const EventosPublicIndex = () => {
       if (filters.proximos) params.proximos = filters.proximos;
 
       params.sort = "-fecha_evento";
-
-      console.log("📡 API Request Eventos:", params);
 
       const response = await api.get("/eventos", { params });
 
@@ -160,9 +188,6 @@ const EventosPublicIndex = () => {
           total: eventosData.length,
         };
       }
-
-      console.log("📊 Eventos cargados:", eventosData.length);
-      console.log("📄 Paginación:", paginationData);
 
       setEventos(eventosData);
       setPagination(paginationData);
@@ -290,16 +315,13 @@ const EventosPublicIndex = () => {
     [isAuthenticated, asistenciaEvents, t, organizarEventosPorImportancia],
   );
 
-  // ✅ Abre el panel con un evento
   const handleOpenPanel = useCallback((evento) => {
     setSelectedEvento(evento);
     setCurrentEventoId(evento.id);
     setIsPanelOpen(true);
   }, []);
 
-  // ✅ Navega a otro evento DENTRO del mismo panel
   const handleNavigateToEvento = useCallback((nuevoId) => {
-    console.log(`🔄 [Panel Eventos] Navegando a evento ${nuevoId}`);
     setCurrentEventoId(nuevoId);
     const eventoEncontrado = eventos.find(e => e.id === nuevoId);
     if (eventoEncontrado) {
@@ -307,7 +329,6 @@ const EventosPublicIndex = () => {
     }
   }, [eventos]);
 
-  // ✅ Cierra el panel
   const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
     setTimeout(() => {
@@ -397,10 +418,19 @@ const EventosPublicIndex = () => {
             <>
               <div className="eventos-grid stagger-children">
                 {eventosAMostrar.map((evento) => {
+                  const hoy = new Date();
+                  hoy.setHours(0, 0, 0, 0);
+                  const fechaEvento = new Date(evento.fecha_evento);
+                  fechaEvento.setHours(0, 0, 0, 0);
+                  const diffDays = Math.ceil((fechaEvento - hoy) / (1000 * 60 * 60 * 24));
+                  
+                  const esEventoFuturo = diffDays >= 0;
+                  const nivelReal = esEventoFuturo ? evento.nivelImportancia : 'normal';
+                  
                   let tamañoCard = 'evento-card-normal';
                   let badgeImportancia = null;
                   
-                  if (evento.nivelImportancia === 'muy-importante') {
+                  if (nivelReal === 'muy-importante' && esEventoFuturo) {
                     tamañoCard = 'evento-card-muy-importante';
                     badgeImportancia = (
                       <div className="importancia-badge muy-importante">
@@ -408,12 +438,21 @@ const EventosPublicIndex = () => {
                         <span>¡Evento Estelar!</span>
                       </div>
                     );
-                  } else if (evento.nivelImportancia === 'importante') {
+                  } else if (nivelReal === 'importante' && esEventoFuturo) {
                     tamañoCard = 'evento-card-importante';
                     badgeImportancia = (
                       <div className="importancia-badge">
                         <i className="fas fa-star"></i>
                         <span>Evento Destacado</span>
+                      </div>
+                    );
+                  }
+                  
+                  if (!esEventoFuturo) {
+                    badgeImportancia = (
+                      <div className="importancia-badge" style={{ background: 'linear-gradient(135deg, #6b7280, #9ca3af)', animation: 'none' }}>
+                        <i className="fas fa-check-circle"></i>
+                        <span>Finalizado</span>
                       </div>
                     );
                   }
@@ -424,7 +463,7 @@ const EventosPublicIndex = () => {
                       <EventoCard
                         evento={evento}
                         getImageUrl={getImageUrl}
-                        variant={evento.nivelImportancia !== 'normal' ? 'featured' : 'default'}
+                        variant={nivelReal !== 'normal' && esEventoFuturo ? 'featured' : 'default'}
                         isAuthenticated={isAuthenticated}
                         liked={likedEvents[evento.id]}
                         asistencia={asistenciaEvents[evento.id]}
@@ -478,7 +517,6 @@ const EventosPublicIndex = () => {
         </div>
       </div>
 
-      {/* ✅ SlideUpPanel actualizado */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

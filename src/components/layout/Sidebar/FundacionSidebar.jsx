@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/FundacionSidebar.jsx
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -7,7 +7,7 @@ import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import './Sidebar.css';
 
-// Submenu component optimizado
+// ✅ Submenu component optimizado
 const SubmenuItem = memo(({ to, icon, label, badge, isActive, onClick, badgeType }) => (
   <Link 
     to={to} 
@@ -32,16 +32,7 @@ const FundacionSidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-  // ✅ Usa el hook SIN delay para apertura inmediata
   useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const [openSections, setOpenSections] = useState({
     rescates: true,
@@ -51,16 +42,118 @@ const FundacionSidebar = () => {
   });
 
   const [showBadges, setShowBadges] = useState(false);
+  
+  // ✅ Estado para datos reales
+  const [badgeCounts, setBadgeCounts] = useState({
+    solicitudesPendientes: 0,
+    mascotasActivas: 0,
+    rescatesNuevos: 0,
+    seguimientosPendientes: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Activa badges después de la apertura
+  // ✅ Resize handler optimizado con throttle
+  useEffect(() => {
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 992);
+      }, 100);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // ✅ Badges con requestAnimationFrame
   useEffect(() => {
     if (isPublicSidebarOpen) {
-      const timer = setTimeout(() => setShowBadges(true), 200);
-      return () => clearTimeout(timer);
+      const rafId = requestAnimationFrame(() => {
+        const timer = setTimeout(() => setShowBadges(true), 200);
+        return () => clearTimeout(timer);
+      });
+      return () => cancelAnimationFrame(rafId);
     } else {
       setShowBadges(false);
     }
   }, [isPublicSidebarOpen]);
+
+  // ✅ Cargar datos reales para badges
+  useEffect(() => {
+    const fetchBadgeCounts = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        // Obtener contador de solicitudes pendientes
+        const solicitudesRes = await fetch('/api/fundacion/adopciones/solicitudes/pendientes/count', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (solicitudesRes.ok) {
+          const data = await solicitudesRes.json();
+          setBadgeCounts(prev => ({
+            ...prev,
+            solicitudesPendientes: data.count || 0
+          }));
+        }
+
+        // Obtener contador de mascotas activas
+        const mascotasRes = await fetch('/api/fundacion/mascotas/count', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (mascotasRes.ok) {
+          const data = await mascotasRes.json();
+          setBadgeCounts(prev => ({
+            ...prev,
+            mascotasActivas: data.count || 0
+          }));
+        }
+
+        // Obtener contador de rescates nuevos disponibles
+        const rescatesRes = await fetch('/api/fundacion/rescates/disponibles/count', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (rescatesRes.ok) {
+          const data = await rescatesRes.json();
+          setBadgeCounts(prev => ({
+            ...prev,
+            rescatesNuevos: data.count || 0
+          }));
+        }
+
+        // Obtener contador de seguimientos pendientes
+        const seguimientosRes = await fetch('/api/fundacion/adopciones/seguimientos/pendientes/count', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (seguimientosRes.ok) {
+          const data = await seguimientosRes.json();
+          setBadgeCounts(prev => ({
+            ...prev,
+            seguimientosPendientes: data.count || 0
+          }));
+        }
+
+      } catch (error) {
+        console.error('Error fetching badge counts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBadgeCounts();
+  }, []);
 
   const toggleSection = useCallback((section) => {
     setOpenSections(prev => ({
@@ -69,7 +162,14 @@ const FundacionSidebar = () => {
     }));
   }, []);
 
-  const isActive = useCallback((path) => location.pathname.startsWith(path), [location.pathname]);
+  const isActive = useCallback((path) => {
+    if (path === '/fundacion/adopciones') {
+      return location.pathname.startsWith('/fundacion/adopciones') || 
+             location.pathname.startsWith('/fundacion/solicitudes') ||
+             location.pathname.startsWith('/fundacion/seguimientos');
+    }
+    return location.pathname.startsWith(path);
+  }, [location.pathname]);
 
   const handleLogout = useCallback(() => {
     logout();
@@ -82,55 +182,49 @@ const FundacionSidebar = () => {
     }
   }, [isMobile, closePublicSidebar]);
 
-  // 🔹 Función para obtener la foto de perfil de la fundación
-  const getUserAvatar = useCallback(() => {
+  // ✅ Función optimizada para obtener la foto de perfil
+  const userAvatar = useMemo(() => {
     if (!user) return null;
-    
-    // Si la fundación tiene foto de perfil (URL o base64)
-    if (user.foto_perfil) {
-      return user.foto_perfil;
-    }
-    
-    // Si tiene logo de fundación
-    if (user.logo) {
-      return user.logo;
-    }
-    
-    // Si tiene foto
-    if (user.foto) {
-      return user.foto;
-    }
-    
-    // Si tiene avatar generado
-    if (user.avatar) {
-      return user.avatar;
-    }
-    
+    if (user.foto_perfil) return user.foto_perfil;
+    if (user.logo) return user.logo;
+    if (user.foto) return user.foto;
+    if (user.avatar) return user.avatar;
     return null;
   }, [user]);
 
-  const userAvatar = getUserAvatar();
+  // ✅ Memoizar contenido del avatar
+  const avatarContent = useMemo(() => {
+    if (userAvatar) {
+      return (
+        <img 
+          src={userAvatar} 
+          alt={user?.nombre || t("fundacion")} 
+          className="sidebar-avatar-img"
+          loading="lazy"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.parentElement.innerHTML = '<i class="fas fa-building"></i>';
+          }}
+        />
+      );
+    }
+    return <i className="fas fa-building"></i>;
+  }, [userAvatar, user, t]);
 
   return (
-    <aside ref={sidebarRef} className={`sidebar fundacion-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
+    <aside 
+      ref={sidebarRef} 
+      className={`sidebar fundacion-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}
+      style={{
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        contain: 'layout style'
+      }}
+    >
       <div className="sidebar-header fundacion-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar fundacion-avatar">
-            {/* 🔹 Mostrar foto de perfil si existe, sino el ícono genérico de fundación */}
-            {userAvatar ? (
-              <img 
-                src={userAvatar} 
-                alt={user?.nombre || t("fundacion")} 
-                className="sidebar-avatar-img"
-                onError={(e) => {
-                  // Si la imagen falla, mostrar el ícono
-                  e.target.style.display = 'none';
-                  e.target.parentElement.innerHTML = '<i class="fas fa-building"></i>';
-                }}
-              />
-            ) : (
-              <i className="fas fa-building"></i>
-            )}
+            {avatarContent}
           </div>
           <div className="sidebar-user-info">
             <h5>{user?.nombre || t("fundacion")}</h5>
@@ -161,7 +255,9 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-ambulance"></i>
             <span>{t("rescates")}</span>
-            {showBadges && <span className="sidebar-badge urgent">{t("nuevos")}</span>}
+            {showBadges && badgeCounts.rescatesNuevos > 0 && (
+              <span className="sidebar-badge urgent">{badgeCounts.rescatesNuevos}</span>
+            )}
             <i className={`fas fa-chevron-right arrow ${openSections.rescates ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.rescates ? 'open' : ''}`}>
@@ -171,6 +267,8 @@ const FundacionSidebar = () => {
               label={t("rescates_cerca")}
               isActive={isActive('/fundacion/rescates/disponibles')}
               onClick={handleLinkClick}
+              badge={badgeCounts.rescatesNuevos > 0 ? badgeCounts.rescatesNuevos : null}
+              badgeType="urgent"
             />
             <SubmenuItem
               to="/fundacion/rescates/mis-rescates"
@@ -189,7 +287,9 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-paw"></i>
             <span>{t("mascotas")}</span>
-            {showBadges && <span className="sidebar-badge">12</span>}
+            {showBadges && badgeCounts.mascotasActivas > 0 && (
+              <span className="sidebar-badge">{badgeCounts.mascotasActivas}</span>
+            )}
             <i className={`fas fa-chevron-right arrow ${openSections.mascotas ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.mascotas ? 'open' : ''}`}>
@@ -199,7 +299,7 @@ const FundacionSidebar = () => {
               label={t("mis_mascotas")}
               isActive={isActive('/fundacion/mascotas') && !isActive('/fundacion/mascotas/nueva')}
               onClick={handleLinkClick}
-              badge="12"
+              badge={badgeCounts.mascotasActivas > 0 ? badgeCounts.mascotasActivas : null}
             />
             <SubmenuItem
               to="/fundacion/mascotas/nueva"
@@ -218,32 +318,38 @@ const FundacionSidebar = () => {
           >
             <i className="fas fa-heart"></i>
             <span>{t("adopciones")}</span>
-            {showBadges && <span className="sidebar-badge urgent">5</span>}
+            {showBadges && (badgeCounts.solicitudesPendientes > 0 || badgeCounts.seguimientosPendientes > 0) && (
+              <span className="sidebar-badge urgent">
+                {badgeCounts.solicitudesPendientes + badgeCounts.seguimientosPendientes}
+              </span>
+            )}
             <i className={`fas fa-chevron-right arrow ${openSections.adopciones ? 'open' : ''}`}></i>
           </div>
           <div className={`submenu ${openSections.adopciones ? 'open' : ''}`}>
             <SubmenuItem
-              to="/fundacion/solicitudes"
+              to="/fundacion/adopciones/solicitudes"
               icon="fas fa-clipboard-list"
               label={t("solicitudes_recibidas")}
-              isActive={isActive('/fundacion/solicitudes')}
+              isActive={isActive('/fundacion/adopciones/solicitudes')}
               onClick={handleLinkClick}
-              badge="5"
+              badge={badgeCounts.solicitudesPendientes > 0 ? badgeCounts.solicitudesPendientes : null}
               badgeType="urgent"
             />
             <SubmenuItem
-              to="/fundacion/adopciones/aprobadas"
+              to="/fundacion/adopciones"
               icon="fas fa-check-circle"
               label={t("adopciones_aprobadas")}
-              isActive={isActive('/fundacion/adopciones/aprobadas')}
+              isActive={isActive('/fundacion/adopciones') && !isActive('/fundacion/adopciones/solicitudes') && !isActive('/fundacion/adopciones/seguimientos')}
               onClick={handleLinkClick}
             />
             <SubmenuItem
-              to="/fundacion/seguimientos"
+              to="/fundacion/adopciones/seguimientos"
               icon="fas fa-chart-line"
               label={t("seguimiento_post")}
-              isActive={isActive('/fundacion/seguimientos')}
+              isActive={isActive('/fundacion/adopciones/seguimientos')}
               onClick={handleLinkClick}
+              badge={badgeCounts.seguimientosPendientes > 0 ? badgeCounts.seguimientosPendientes : null}
+              badgeType="urgent"
             />
           </div>
         </div>

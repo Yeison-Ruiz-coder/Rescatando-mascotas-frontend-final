@@ -25,7 +25,6 @@ const FundacionesIndex = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ciudades, setCiudades] = useState([]);
 
-  // ✅ Estados para el panel
   const [selectedFundacion, setSelectedFundacion] = useState(null);
   const [currentFundacionId, setCurrentFundacionId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -42,8 +41,6 @@ const FundacionesIndex = () => {
 
       if (filters.buscar) params.buscar = filters.buscar;
       if (filters.ciudad) params.ciudad = filters.ciudad;
-
-      console.log("📡 API Request Fundaciones:", params);
 
       const response = await api.get("/fundaciones", { params });
 
@@ -88,7 +85,6 @@ const FundacionesIndex = () => {
 
   const handleFilterChange = useCallback(
     (newFilters) => {
-      console.log("📝 Filtros aplicados:", newFilters);
       setCurrentFilters(newFilters);
       setCurrentPage(1);
       loadFundaciones(newFilters, 1);
@@ -106,16 +102,13 @@ const FundacionesIndex = () => {
     [currentPage, currentFilters, loadFundaciones],
   );
 
-  // ✅ Abre el panel con una fundación
   const handleOpenPanel = useCallback((fundacion) => {
     setSelectedFundacion(fundacion);
     setCurrentFundacionId(fundacion.id);
     setIsPanelOpen(true);
   }, []);
 
-  // ✅ Navega a otra fundación DENTRO del mismo panel
   const handleNavigateToFundacion = useCallback((nuevoId) => {
-    console.log(`🔄 [Panel Fundaciones] Navegando a fundación ${nuevoId}`);
     setCurrentFundacionId(nuevoId);
     const fundacionEncontrada = fundaciones.find(f => f.id === nuevoId);
     if (fundacionEncontrada) {
@@ -123,7 +116,6 @@ const FundacionesIndex = () => {
     }
   }, [fundaciones]);
 
-  // ✅ Cierra el panel
   const handleClosePanel = useCallback(() => {
     setIsPanelOpen(false);
     setTimeout(() => {
@@ -263,7 +255,6 @@ const FundacionesIndex = () => {
         </div>
       </div>
 
-      {/* ✅ SlideUpPanel actualizado */}
       <SlideUpPanel
         isOpen={isPanelOpen}
         onClose={handleClosePanel}

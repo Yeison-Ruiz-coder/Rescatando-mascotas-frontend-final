@@ -94,11 +94,19 @@ const SuscripcionesIndex = lazy(() => import("../pages/fundacion/suscripciones/S
 const SuscripcionesCreate = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesCreate"));
 const SuscripcionesEdit = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesEdit"));
 const SuscripcionesShow = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesShow"));
-const FundacionSolicitudesRecibidas = lazy(() => import("../pages/fundacion/adopciones/FundacionSolicitudesRecibidas"));
 const RescatesDisponiblesFundacion = lazy(() => import("../pages/fundacion/rescates/RescatesDisponibles"));
 const MisRescatesFundacion = lazy(() => import("../pages/fundacion/rescates/MisRescates"));
 const RescateDetalleFundacion = lazy(() => import("../pages/fundacion/rescates/RescateDetalle"));
 const FundacionProfile = lazy(() => import("../pages/fundacion/perfil/FundacionProfile"));
+
+const FundAdopciones = lazy(() => import("../pages/fundacion/adopciones/Adopciones"));
+const FundSolicitudesRecibidas = lazy(() => import("../pages/fundacion/adopciones/Solicitudes"));
+const FundSeguimientos = lazy(() => import("../pages/fundacion/adopciones/Seguimientos"));
+const FundDetalleAdopcion = lazy(() => import("../pages/fundacion/adopciones/DetalleAdopcion"));
+const FundDetalleSeguimiento = lazy(() => import("../pages/fundacion/adopciones/DetalleSeguimiento"));
+const FundCrearSeguimiento = lazy(() => import("../pages/fundacion/adopciones/CrearSeguimiento"));
+const FundEditarSeguimiento = lazy(() => import("../pages/fundacion/adopciones/EditarSeguimiento"));
+const FundSeleccionarAdopcion = lazy(() => import("../pages/fundacion/adopciones/SeleccionarAdopcionParaSeguimiento"));
 
 // =============================================================
 // PÁGINAS DE VETERINARIA
@@ -398,12 +406,23 @@ const router = createBrowserRouter([
           { path: "suscripciones/crear", element: <SuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
-          { path: "adopciones", element: <FundacionAdopciones /> },
-          { path: "solicitudes", element: <FundacionSolicitudesRecibidas /> },
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
           { path: "reportes", element: <FundReportes /> },
           { path: "perfil", element: <FundacionProfile /> },
+          { 
+          path: "adopciones",
+          children: [
+            { index: true, element: <FundAdopciones /> },
+            { path: "solicitudes", element: <FundSolicitudesRecibidas /> },
+            { path: "seguimientos", element: <FundSeguimientos /> },
+            { path: ":id", element: <FundDetalleAdopcion /> },
+            { path: "seguimientos/nuevo", element: <FundSeleccionarAdopcion /> }, 
+            { path: "seguimientos/:id", element: <FundDetalleSeguimiento /> },
+            { path: "seguimientos/crear/:adopcionId", element: <FundCrearSeguimiento /> },
+            { path: "seguimientos/:id/editar", element: <FundEditarSeguimiento /> },
+          ],
+        },
         ],
       },
     ],

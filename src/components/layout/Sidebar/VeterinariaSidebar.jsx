@@ -1,5 +1,5 @@
 // src/components/layout/Sidebar/VeterinariaSidebar.jsx
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -32,16 +32,7 @@ const VeterinariaSidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const sidebarRef = useRef(null);
-  // ✅ Sin delay para apertura inmediata
   useSidebarCloser(sidebarRef, isPublicSidebarOpen, closePublicSidebar, 0);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const [openSections, setOpenSections] = useState({
     rescates: true,
@@ -51,10 +42,30 @@ const VeterinariaSidebar = () => {
 
   const [showBadges, setShowBadges] = useState(false);
 
+  // ✅ Resize handler optimizado con throttle
+  useEffect(() => {
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth < 992);
+      }, 100);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // ✅ Badges con requestAnimationFrame
   useEffect(() => {
     if (isPublicSidebarOpen) {
-      const timer = setTimeout(() => setShowBadges(true), 200);
-      return () => clearTimeout(timer);
+      const rafId = requestAnimationFrame(() => {
+        const timer = setTimeout(() => setShowBadges(true), 200);
+        return () => clearTimeout(timer);
+      });
+      return () => cancelAnimationFrame(rafId);
     } else {
       setShowBadges(false);
     }
@@ -80,12 +91,25 @@ const VeterinariaSidebar = () => {
     }
   }, [isMobile, closePublicSidebar]);
 
+  // ✅ Memoizar avatar
+  const avatarContent = useMemo(() => {
+    return <i className="fas fa-clinic-medical"></i>;
+  }, []);
+
   return (
-    <aside ref={sidebarRef} className={`sidebar vet-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}>
+    <aside 
+      ref={sidebarRef} 
+      className={`sidebar vet-sidebar ${isPublicSidebarOpen ? 'open' : ''}`}
+      style={{
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        contain: 'layout style'
+      }}
+    >
       <div className="sidebar-header vet-header">
         <div className="sidebar-user">
           <div className="sidebar-avatar vet-avatar">
-            <i className="fas fa-clinic-medical"></i>
+            {avatarContent}
           </div>
           <div className="sidebar-user-info">
             <h5>{user?.nombre || t("veterinaria")}</h5>
