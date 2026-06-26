@@ -34,32 +34,57 @@ export const suscripcionService = {
   },
 
   /**
-   * ✅ CREAR SUSCRIPCIÓN (Usuario autenticado)
+   * ✅ CREAR SUSCRIPCIÓN (Usuario autenticado) - VERSIÓN MEJORADA
    * POST /api/suscripciones/user/crear
-   * 
-   * ¡IMPORTANTE! Esta ruta es para usuarios autenticados
    */
   createPublicSuscripcion: async (data) => {
     try {
       console.log('📝 Creando suscripción...');
       console.log('📝 Datos:', data);
       
-      // Datos para el método store() del controlador
+      // ✅ Verificar autenticación
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      if (!token) {
+        throw new Error('Debes iniciar sesión para crear una suscripción');
+      }
+      
       const payload = {
         mascota_id: data.mascota_id || null,
         monto_mensual: data.monto_mensual || 10000,
         frecuencia: data.frecuencia || 'mensual',
-        mensaje_apoyo: data.mensaje_apoyo || ''
+        mensaje_apoyo: data.mensaje_apoyo || '',
+        plan_id: data.plan_id || null
       };
       
-      // ✅ RUTA CORRECTA
       const response = await api.post('/suscripciones/user/crear', payload);
       console.log('✅ Suscripción creada:', response.data);
-      return response.data;
+      
+      // ✅ Devolver respuesta estructurada
+      return {
+        success: true,
+        data: response.data.data || response.data,
+        message: response.data.message || 'Suscripción creada exitosamente'
+      };
+      
     } catch (error) {
       console.error('❌ Error createPublicSuscripcion:', error);
       console.error('❌ Detalles:', error.response?.data);
-      throw error;
+      
+      // ✅ Manejar error 401 (No autorizado)
+      if (error.response?.status === 401) {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        throw new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+      }
+      
+      // ✅ Mejorar mensaje de error
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          error.message || 
+                          'Error al crear la suscripción';
+      
+      throw new Error(errorMessage);
     }
   },
 
@@ -71,34 +96,47 @@ export const suscripcionService = {
     try {
       console.log('🔄 Obteniendo suscripciones desde /api/suscripciones/user/mis-suscripciones');
       
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("auth_token") || localStorage.getItem("token");
+      console.log('🔑 Token presente:', !!token);
+      
       if (!token) {
         console.warn('⚠️ No hay token de autenticación');
-        return [];
+        return { 
+          data: [],
+          error: 'No autenticado',
+          needsAuth: true 
+        };
       }
       
-      // ✅ RUTA CORRECTA
       const response = await api.get('/suscripciones/user/mis-suscripciones');
       console.log('📊 Respuesta:', response.data);
       
+      // Normalizar respuesta
       if (response.data?.data) {
-        return response.data.data;
+        return { data: response.data.data };
       }
       if (Array.isArray(response.data)) {
-        return response.data;
+        return { data: response.data };
       }
-      return response.data || [];
+      return { data: response.data || [] };
       
     } catch (error) {
       console.error('❌ Error getUserSuscripciones:', error);
       console.error('❌ Detalles:', error.response?.data);
       
       if (error.response?.status === 401) {
-        console.log('🔒 Usuario no autenticado');
-        return [];
+        console.log('🔒 Token inválido o expirado');
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        return { 
+          data: [],
+          error: 'Sesión expirada',
+          needsAuth: true 
+        };
       }
       
-      return [];
+      return { data: [] };
     }
   },
 
@@ -110,7 +148,6 @@ export const suscripcionService = {
     try {
       console.log(`🗑️ Cancelando suscripción ${id} desde /api/suscripciones/user/${id}/cancelar`);
       
-      // ✅ RUTA CORRECTA
       const response = await api.patch(`/suscripciones/user/${id}/cancelar`);
       
       console.log('✅ Suscripción cancelada:', response.data);
@@ -118,7 +155,7 @@ export const suscripcionService = {
     } catch (error) {
       console.error('❌ Error cancelUserSuscripcion:', error);
       console.error('❌ Detalles:', error.response?.data);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al cancelar la suscripción');
     }
   },
 
@@ -133,7 +170,7 @@ export const suscripcionService = {
       return response.data;
     } catch (error) {
       console.error('Error pausarSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al pausar la suscripción');
     }
   },
 
@@ -145,10 +182,11 @@ export const suscripcionService = {
     try {
       console.log(`🔄 Reactivando suscripción ${id} desde /api/suscripciones/user/${id}/reactivar`);
       const response = await api.patch(`/suscripciones/user/${id}/reactivar`);
+      console.log('✅ Suscripción reactivada:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error reactivarSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al reactivar la suscripción');
     }
   },
 
@@ -163,7 +201,7 @@ export const suscripcionService = {
       return response.data.data || response.data;
     } catch (error) {
       console.error('Error getSuscripcion:', error);
-      throw error;
+      throw new Error(error.response?.data?.message || 'Error al obtener la suscripción');
     }
   },
 
@@ -208,7 +246,7 @@ export const suscripcionService = {
   },
 };
 
-// Datos de prueba
+// Datos de prueba (solo para desarrollo)
 function getPlanesPrueba() {
   return [
     {
@@ -241,4 +279,5 @@ function getPlanesPrueba() {
   ];
 }
 
+// ✅ SOLO UNA EXPORTACIÓN DEFAULT
 export default api;
