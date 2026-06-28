@@ -1,0 +1,467 @@
+/* src/components/common/ModalApadrinar/ModalApadrinar.css */
+/* ============================================
+   MODAL APADRINAR - ESTILOS AISLADOS
+   Prefijo: ma- (Modal Apadrinar)
+   ============================================ */
+
+/* ===== OVERLAY ===== */
+.ma-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  padding: 20px;
+  animation: ma-fadeIn 0.3s ease;
+}
+
+@keyframes ma-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== CONTENEDOR ===== */
+.ma-container {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-xl);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  animation: ma-slideUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+@keyframes ma-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== HEADER ===== */
+.ma-header {
+  background: var(--gradient-primary);
+  padding: 24px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.ma-header-content {
+  flex: 1;
+}
+
+.ma-header-content .ma-paw-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.ma-header-content h2 {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.ma-header-content p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.ma-header-content p strong {
+  color: white;
+  font-weight: 700;
+}
+
+/* ===== BOTÓN CERRAR ===== */
+.ma-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ma-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* ===== BODY ===== */
+.ma-body {
+  padding: 24px 30px 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* ===== PREVIEW MASCOTA ===== */
+.ma-mascota-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--color-light-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .ma-mascota-preview {
+  background: var(--color-background-section);
+  border-color: var(--color-border);
+}
+
+.ma-mascota-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ma-mascota-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ma-avatar-placeholder {
+  font-size: 2rem;
+}
+
+.ma-mascota-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.ma-mascota-especie {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== PLANES ===== */
+.ma-planes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+/* ===== PLAN CARD ===== */
+.ma-plan-card {
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  text-align: center;
+}
+
+.ma-plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.ma-plan-card.ma-selected {
+  border-color: var(--plan-color, var(--color-primary));
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.ma-plan-card.ma-featured {
+  border-color: var(--color-accent);
+  background: linear-gradient(to bottom, var(--color-card-bg), rgba(255, 107, 157, 0.05));
+}
+
+[data-theme="dark"] .ma-plan-card.ma-featured {
+  background: linear-gradient(to bottom, var(--color-card-bg), rgba(255, 107, 157, 0.1));
+}
+
+/* ===== BADGE DESTACADO ===== */
+.ma-plan-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--gradient-accent);
+  color: white;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-heart);
+}
+
+/* ===== ICONO PLAN ===== */
+.ma-plan-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.ma-plan-card h4 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ===== PRECIO ===== */
+.ma-plan-price {
+  margin-bottom: 12px;
+}
+
+.ma-plan-price .ma-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--plan-color, var(--color-primary));
+}
+
+.ma-plan-price .ma-period {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== BENEFICIOS ===== */
+.ma-plan-beneficios {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 16px;
+  text-align: left;
+}
+
+.ma-plan-beneficios li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.ma-plan-beneficios .ma-check-icon {
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* ===== INDICADOR SELECCIÓN ===== */
+.ma-plan-select-indicator {
+  margin-top: 8px;
+}
+
+.ma-selected-badge {
+  display: inline-block;
+  background: var(--color-success);
+  color: white;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.ma-select-hint {
+  display: inline-block;
+  color: var(--color-text-disabled);
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.ma-plan-card:hover .ma-select-hint {
+  opacity: 1;
+}
+
+/* ===== FOOTER ===== */
+.ma-footer {
+  padding: 16px 30px 24px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-light-secondary);
+}
+
+[data-theme="dark"] .ma-footer {
+  background: var(--color-background-section);
+}
+
+/* ===== BOTONES ===== */
+.ma-btn-cancel {
+  flex: 1;
+  padding: 12px 24px;
+  background: var(--color-danger);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ma-btn-cancel:hover {
+  background: var(--color-hover);
+}
+
+.ma-btn-confirm {
+  flex: 2;
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ma-btn-confirm:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+.ma-btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== SPINNER ===== */
+.ma-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: ma-spin 0.8s linear infinite;
+}
+
+@keyframes ma-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== MENSAJES ===== */
+.ma-mensaje {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: ma-slideDown 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.ma-mensaje.ma-error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.ma-mensaje.ma-success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.ma-mensaje.ma-info {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+[data-theme="dark"] .ma-mensaje.ma-error {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+
+[data-theme="dark"] .ma-mensaje.ma-success {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+
+[data-theme="dark"] .ma-mensaje.ma-info {
+  background: #1e3a8a;
+  color: #bfdbfe;
+  border-color: #1e40af;
+}
+
+@keyframes ma-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .ma-container {
+    max-width: 100%;
+    border-radius: var(--radius-lg);
+    margin: 10px;
+  }
+
+  .ma-header {
+    padding: 20px;
+  }
+
+  .ma-header-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .ma-body {
+    padding: 16px 20px;
+    max-height: 55vh;
+  }
+
+  .ma-planes-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ma-footer {
+    padding: 16px 20px;
+    flex-direction: column;
+  }
+
+  .ma-mascota-preview {
+    padding: 12px 16px;
+  }
+}

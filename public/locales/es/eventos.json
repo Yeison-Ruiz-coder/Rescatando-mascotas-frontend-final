@@ -1,11 +1,13 @@
 {
   "botones": {
+    "ver": "Ver",
+    "editar": "Editar",
+    "eliminar": "Eliminar",
+    "ver_detalle": "Ver detalle",
     "crear_evento": "Crear Evento Global",
     "crear_primero": "Crear Primer Evento",
     "crear_evento_global": "Crear Evento Global",
     "ver_detalles": "Ver Detalles",
-    "editar": "Editar",
-    "eliminar": "Eliminar",
     "cancelar": "Cancelar",
     "creando": "Creando...",
     "guardando": "Guardando...",
@@ -211,7 +213,6 @@
   "like": {
     "login_requerido": "Debes iniciar sesión para dar like"
   },
-
   "cargando_evento": "Cargando evento...",
   "evento_no_encontrado": "Evento no encontrado",
   "btn_volver": "Volver a mis eventos",
@@ -228,8 +229,8 @@
   "evento_global_badge": "🌍 Evento Global",
   "evento_fundacion_badge": " Evento de Fundación",
   "eliminando": "Eliminando...",
-  "mensaje_motivacional_titulo":"Participa y ayuda a cambiar vidas",
-  "mensaje_motivacional_texto":"Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!",
+  "mensaje_motivacional_titulo": "Participa y ayuda a cambiar vidas",
+  "mensaje_motivacional_texto": "Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!",
   "buscar_placeholder": "Buscar eventos...",
   "cargando": "Cargando eventos...",
   "tipo_fundacion": "Evento de fundación",
@@ -241,5 +242,14 @@
   "eventos_proximos": "Eventos próximos",
   "eventos_pasados": "Eventos pasados",
   "eventos_hoy": "Eventos hoy",
-  "evento_popular": "Evento popular"
+  "evento_popular": "Evento popular",
+  "crear_nuevo_evento": "Crear nuevo evento",
+  "editando_evento": "Editando evento",
+  "solo_numeros": "Solo números (ej: 15000)",
+  "banner": {
+    "titulo": "{{count}} eventos gestionados"
+  },
+  "ver_detalle": "Ver detalle",
+  "evento_eliminado": "Evento eliminado correctamente",
+  "error_delete": "Error al eliminar el evento"
 }

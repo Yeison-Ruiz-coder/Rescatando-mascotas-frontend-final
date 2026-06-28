@@ -1,6 +1,7 @@
 // src/pages/fundacion/mascotas/components/FormStep1.jsx
 import React from "react";
 import { useTranslation } from "react-i18next";
+import CustomSelect from "../../../../components/common/CustomSelect/CustomSelect";
 import MultiSelect from "./MultiSelect";
 import "./FormStep1.css";
 
@@ -23,6 +24,10 @@ const FormStep1 = ({
     }));
   };
 
+  const handleCustomChange = (name, value) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const razasArray = Array.isArray(razasList) ? razasList : [];
   const razasFiltradas = razasArray.filter((r) => r.especie === form.especie);
 
@@ -30,6 +35,18 @@ const FormStep1 = ({
     value: r.id,
     label: r.nombre_raza,
   }));
+
+  const especiesOptions = especies.map((esp) => ({
+    value: esp,
+    label: esp,
+  }));
+
+  const estadosOptions = [
+    { value: "En adopcion", label: t("estado_en_adopcion") },
+    { value: "Adoptado", label: t("estado_adoptado") },
+    { value: "Rescatada", label: t("estado_rescatada") },
+    { value: "En acogida", label: t("estado_en_acogida") },
+  ];
 
   return (
     <div className="form-step">
@@ -59,14 +76,13 @@ const FormStep1 = ({
           <label>
             {t("especie")} <span className="required">*</span>
           </label>
-          <select name="especie" value={form.especie} onChange={handleChange}>
-            <option value="">{t("seleccionar_especie")}</option>
-            {especies.map((esp) => (
-              <option key={esp} value={esp}>
-                {esp}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            options={especiesOptions}
+            value={form.especie}
+            onChange={(e) => handleCustomChange("especie", e.target.value)}
+            placeholder={t("seleccionar_especie")}
+            error={errors.especie}
+          />
           {errors.especie && (
             <span className="error-msg">{errors.especie}</span>
           )}
@@ -166,22 +182,15 @@ const FormStep1 = ({
           <label>
             {t("estado_actual")} <span className="required">*</span>
           </label>
-          <select
-            name="estado"
+          <CustomSelect
+            options={estadosOptions}
             value={form.estado || ""}
-            onChange={handleChange}
-            className={errors.estado ? "error" : ""}
-          >
-            <option value="">
-              {t("seleccionar_estado", {
-                defaultValue: "Selecciona un estado",
-              })}
-            </option>
-            <option value="En adopcion"> {t("estado_en_adopcion")}</option>
-            <option value="Adoptado"> {t("estado_adoptado")}</option>
-            <option value="Rescatada"> {t("estado_rescatada")}</option>
-            <option value="En acogida"> {t("estado_en_acogida")}</option>
-          </select>
+            onChange={(e) => handleCustomChange("estado", e.target.value)}
+            placeholder={t("seleccionar_estado", {
+              defaultValue: "Selecciona un estado",
+            })}
+            error={errors.estado}
+          />
           {errors.estado && <span className="error-msg">{errors.estado}</span>}
         </div>
       </div>

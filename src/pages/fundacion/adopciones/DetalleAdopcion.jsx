@@ -2,18 +2,24 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import './DetalleAdopcion.css';
 
 const DetalleAdopcion = () => {
   const { t } = useTranslation('fundacion');
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuth();
   const [adopcion, setAdopcion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [seguimientos, setSeguimientos] = useState([]);
+
+  const fundacionName = user?.nombre || user?.name || t('fundacion');
+  const fundacionAvatar = user?.avatar || user?.foto_perfil || null;
 
   useEffect(() => {
     fetchAdopcion();
@@ -22,12 +28,19 @@ const DetalleAdopcion = () => {
   const fetchAdopcion = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/entity/adopciones/${id}`);
+      const response = await api.get(`/entity/adopciones/${id}`, {
+        params: {
+          fields: 'id,estado,created_at,fecha_adopcion,observaciones,mascota_id,adoptante_id',
+          include: 'mascota,adoptante',
+        }
+      });
       setAdopcion(response.data.data);
       
-      // Cargar seguimientos
       const segResponse = await api.get(`/entity/adopciones/${id}/seguimientos`, {
-        params: { per_page: 10 }
+        params: {
+          per_page: 10,
+          fields: 'id,adopcion_id,tipo_seguimiento,fecha_seguimiento,estado_mascota,resultado,observaciones,proximo_seguimiento',
+        }
       });
       setSeguimientos(segResponse.data.data?.data || []);
     } catch (err) {
@@ -87,8 +100,21 @@ const DetalleAdopcion = () => {
 
   return (
     <div className="da-container">
+      <ProfileBanner
+        user={{
+          nombre: fundacionName,
+          avatar: fundacionAvatar,
+          titulo: t('banner.titulo_detalle', {
+            defaultValue: 'Detalle de adopción - {{nombre}}',
+            nombre: adopcion.mascota?.nombre_mascota || t('mascota'),
+          }),
+          solicitudes: 1,
+          adopciones: adopcion.estado === 'completada' ? 1 : 0,
+          eventos: 0,
+        }}
+      />
+
       <div className="da-wrapper">
-        {/* Header */}
         <div className="da-header">
           <button onClick={() => navigate('/fundacion/adopciones')} className="da-btn-back">
             <i className="fas fa-arrow-left"></i> {t('volver')}
@@ -97,7 +123,6 @@ const DetalleAdopcion = () => {
           <span className={`da-estado ${estado.class}`}>{estado.label}</span>
         </div>
 
-        {/* Información principal */}
         <div className="da-grid">
           <div className="da-card">
             <h3><i className="fas fa-paw"></i> {t('mascota')}</h3>
@@ -144,7 +169,6 @@ const DetalleAdopcion = () => {
           </div>
         </div>
 
-        {/* Seguimientos */}
         <div className="da-seguimientos">
           <div className="da-seguimientos-header">
             <h3><i className="fas fa-clipboard-check"></i> {t('seguimientos')}</h3>

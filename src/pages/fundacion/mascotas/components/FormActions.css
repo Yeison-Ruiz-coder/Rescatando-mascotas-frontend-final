@@ -30,7 +30,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 12px 28px;
-  border-radius: 50px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -38,42 +38,52 @@
   border: none;
 }
 
-/* Botón Anterior */
+/* ===== BOTÓN ANTERIOR ===== */
 .form-actions .btn-prev {
-  background: rgba(250, 192, 3, 0.1);
-  color: var(--color-text);
-  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: white;
+
 }
 
 .form-actions .btn-prev:hover {
-  background: var(--color-accent);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Botón Cancelar */
+/* ===== BOTÓN CANCELAR ===== */
 .form-actions .btn-cancel {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--color-danger);
+  color: white;
+
 }
 
 .form-actions .btn-cancel:hover {
-  background: #ef4444;
-  color: white;
   transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Botón Siguiente y Guardar */
-.form-actions .btn-next,
+/* ===== BOTÓN SIGUIENTE ===== */
+.form-actions .btn-next {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.form-actions .btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* ===== BOTÓN GUARDAR / REGISTRAR ===== */
 .form-actions .btn-submit {
   background: var(--gradient-primary);
   color: white;
+  box-shadow: var(--shadow-hard-sm);
 }
 
-.form-actions .btn-next:hover,
-.form-actions .btn-submit:hover {
+.form-actions .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-accent);
+  box-shadow: var(--shadow-hard-md);
   filter: brightness(1.05);
 }
 
@@ -81,28 +91,37 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
-/* Modo oscuro - ajustes */
+/* ===== MODO OSCURO ===== */
 [data-theme="dark"] .form-actions .btn-prev {
-  background: rgba(250, 192, 3, 0.2);
-  color: var(--color-text);
-  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: white;
 }
 
 [data-theme="dark"] .form-actions .btn-prev:hover {
-  background: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 [data-theme="dark"] .form-actions .btn-cancel {
-  background: rgba(239, 68, 68, 0.2);
+  background: var(--color-danger);
+  color: white;
 }
 
 [data-theme="dark"] .form-actions .btn-cancel:hover {
-  background: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-/* Responsive */
+[data-theme="dark"] .form-actions .btn-next,
+[data-theme="dark"] .form-actions .btn-submit {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .form-actions {
     flex-direction: column;

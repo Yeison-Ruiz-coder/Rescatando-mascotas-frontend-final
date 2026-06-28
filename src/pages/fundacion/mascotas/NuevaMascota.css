@@ -1,34 +1,77 @@
 /* src/pages/fundacion/mascotas/NuevaMascota.css */
 
 /* ============================================
-   PÁGINA NUEVA MASCOTA - FUNDACIÓN
-   SOLO estilos de layout y contenedores
-   Los estilos de componentes están en sus propios CSS
+   NUEVA MASCOTA - ESTILO BENTO
    ============================================ */
 
-/* Contenedor principal */
 .nueva-mascota-page {
-  min-height: calc(100vh - var(--navbar-height, 70px));
-  padding: 2rem 1.5rem;
+  width: 100%;
+  min-height: 100vh;
   background: transparent;
-  position: relative;
 }
 
-/* Botón de retroceso */
-.nueva-mascota-page .page-header-buttons {
+/* ===== BANNER WRAPPER ===== */
+.nueva-mascota-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.nueva-mascota-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .nueva-mascota-banner-wrapper .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nueva-mascota-banner-wrapper .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ===== CONTENIDO ===== */
+.nueva-mascota-content {
+  width: 100%;
+}
+
+.nueva-mascota-content .bento-container {
+  padding: 0 24px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .nueva-mascota-content .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nueva-mascota-content .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ===== HEADER BUTTONS ===== */
+.nueva-mascota-content .page-header-buttons {
   max-width: 900px;
   margin: 0 auto 1rem auto;
   display: flex;
   justify-content: flex-start;
 }
 
-.nueva-mascota-page .btn-back-page {
+.nueva-mascota-content .btn-back-page {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgb(255, 255, 255);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-border);
   color: var(--color-primary);
   font-size: 0.95rem;
   font-weight: 600;
@@ -39,48 +82,48 @@
   box-shadow: var(--shadow-sm);
 }
 
-[data-theme="dark"] .nueva-mascota-page .btn-back-page {
+[data-theme="dark"] .nueva-mascota-content .btn-back-page {
   background: var(--gradient-primary);
   border-color: rgba(139, 156, 255, 0.2);
   color: white;
 }
 
-.nueva-mascota-page .btn-back-page:hover {
+.nueva-mascota-content .btn-back-page:hover {
   background: var(--gradient-primary);
   color: white;
   transform: translateX(-4px);
   box-shadow: var(--shadow-md);
 }
 
-.nueva-mascota-page .btn-back-page i {
+.nueva-mascota-content .btn-back-page i {
   font-size: 0.9rem;
   transition: var(--transition);
 }
 
-.nueva-mascota-page .mascota-form-container {
+/* ===== FORM CONTAINER ===== */
+.nueva-mascota-content .mascota-form-container {
   max-width: 900px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.95); /* ✅ Más opaco en modo claro */
-  backdrop-filter: blur(10px);
-  border-radius: 32px;
+  background: var(--color-card-bg);
+  border-radius: 12px;
   padding: 1.5rem 2rem;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-border);
 }
 
-/* Modo oscuro - fondo más oscuro para contraste */
-[data-theme="dark"] .nueva-mascota-page .mascota-form-container {
-  background: rgba(30, 41, 59, 0.95); /* ✅ Más opaco en modo oscuro */
-  border-color: rgba(139, 156, 255, 0.2);
+[data-theme="dark"] .nueva-mascota-content .mascota-form-container {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
 }
-/* Header del formulario */
-.nueva-mascota-page .form-header {
+
+/* ===== FORM HEADER ===== */
+.nueva-mascota-content .form-header {
   text-align: center;
   background: transparent;
   margin-bottom: 2rem;
 }
 
-.nueva-mascota-page .form-header h1 {
+.nueva-mascota-content .form-header h1 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
   display: flex;
@@ -93,12 +136,12 @@
   background-clip: text;
 }
 
-.nueva-mascota-page .form-subtitle {
+.nueva-mascota-content .form-subtitle {
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
-.nueva-mascota-page .rescate-info-badge {
+.nueva-mascota-content .rescate-info-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -111,44 +154,39 @@
   border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
-/* Contenido del formulario */
-.nueva-mascota-page .form-content {
+/* ===== FORM CONTENT ===== */
+.nueva-mascota-content .form-content {
   margin-top: 1.5rem;
 }
 
-/* Error container */
-.nueva-mascota-page .error-container {
+/* ===== ERROR CONTAINER ===== */
+.nueva-mascota-content .error-container {
   text-align: center;
   padding: 3rem;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border-radius: 32px;
+  background: var(--color-card-bg);
+  border-radius: 12px;
   max-width: 500px;
   margin: 2rem auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-border);
 }
 
-[data-theme="dark"] .nueva-mascota-page .error-container {
-  background: rgba(30, 41, 59, 0.8);
-}
-
-.nueva-mascota-page .error-container i {
+.nueva-mascota-content .error-container i {
   font-size: 3rem;
   color: var(--color-danger);
   margin-bottom: 1rem;
 }
 
-.nueva-mascota-page .error-container h2 {
+.nueva-mascota-content .error-container h2 {
   margin-bottom: 0.5rem;
   color: var(--color-text);
 }
 
-.nueva-mascota-page .error-container p {
+.nueva-mascota-content .error-container p {
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
-.nueva-mascota-page .btn-back-error {
+.nueva-mascota-content .btn-back-error {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -162,54 +200,41 @@
   transition: var(--transition);
 }
 
-.nueva-mascota-page .btn-back-error:hover {
+.nueva-mascota-content .btn-back-error:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-/* Responsive solo para el layout */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .nueva-mascota-page {
-    padding: 1rem;
-  }
-  
-  .nueva-mascota-page .page-header-buttons {
-    margin-bottom: 0.75rem;
-  }
-  
-  .nueva-mascota-page .btn-back-page {
-    padding: 0.6rem 1rem;
-    font-size: 0.85rem;
-  }
-  
-  .nueva-mascota-page .mascota-form-container {
+  .nueva-mascota-content .mascota-form-container {
     padding: 1rem 1.2rem;
   }
   
-  .nueva-mascota-page .form-header h1 {
+  .nueva-mascota-content .form-header h1 {
     font-size: 1.4rem;
   }
 }
 
 @media (max-width: 480px) {
-  .nueva-mascota-page .mascota-form-container {
+  .nueva-mascota-content .mascota-form-container {
     padding: 0.8rem 1rem;
   }
   
-  .nueva-mascota-page .form-header h1 {
+  .nueva-mascota-content .form-header h1 {
     font-size: 1.2rem;
   }
   
-  .nueva-mascota-page .form-subtitle {
+  .nueva-mascota-content .form-subtitle {
     font-size: 0.85rem;
   }
   
-  .nueva-mascota-page .rescate-info-badge {
+  .nueva-mascota-content .rescate-info-badge {
     font-size: 0.75rem;
     padding: 0.4rem 1rem;
   }
   
-  .nueva-mascota-page .btn-back-page {
+  .nueva-mascota-content .btn-back-page {
     padding: 0.5rem 0.9rem;
     font-size: 0.8rem;
   }

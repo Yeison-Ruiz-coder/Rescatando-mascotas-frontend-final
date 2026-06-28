@@ -1,6 +1,7 @@
 // src/pages/fundacion/mascotas/components/FormStep2.jsx
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import CustomSelect from '../../../../components/common/CustomSelect/CustomSelect';
 import './FormStep1.css';
 
 const FormStep2 = ({ form, setForm, errors }) => {
@@ -14,7 +15,16 @@ const FormStep2 = ({ form, setForm, errors }) => {
     }));
   };
 
-  const tamanoOptions = ['pequeño', 'mediano', 'grande', 'muy_grande'];
+  const handleCustomChange = (name, value) => {
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const tamanoOptions = [
+    { value: 'pequeño', label: t('tamano_pequeño') },
+    { value: 'mediano', label: t('tamano_mediano') },
+    { value: 'grande', label: t('tamano_grande') },
+    { value: 'muy_grande', label: t('tamano_muy_grande') },
+  ];
 
   return (
     <div className="form-step">
@@ -38,14 +48,13 @@ const FormStep2 = ({ form, setForm, errors }) => {
 
         <div className="form-group">
           <label>{t('tamano')}</label>
-          <select name="tamano" value={form.tamano || ''} onChange={handleChange}>
-            <option value="">{t('seleccionar_tamano')}</option>
-            {tamanoOptions.map(tam => (
-              <option key={tam} value={tam}>
-                {t(`tamano_${tam}`)}
-              </option>
-            ))}
-          </select>
+          <CustomSelect
+            options={tamanoOptions}
+            value={form.tamano || ''}
+            onChange={(e) => handleCustomChange('tamano', e.target.value)}
+            placeholder={t('seleccionar_tamano')}
+            error={errors.tamano}
+          />
           {errors.tamano && <span className="error-msg">{errors.tamano}</span>}
         </div>
 

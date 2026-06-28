@@ -2,6 +2,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import useCrearMascota from '../../../hooks/useCrearMascota';
 import MascotaFormSteps from './components/MascotaFormSteps';
@@ -17,6 +19,7 @@ import './NuevaMascota.css';
 const CrearMascota = () => {
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   const {
     form,
@@ -44,6 +47,9 @@ const CrearMascota = () => {
     getImageUrl,
     fundacionNombre,
   } = useCrearMascota();
+
+  const adminName = user?.name || user?.nombre || t('fundacion', 'Fundación');
+  const adminAvatar = user?.avatar || null;
 
   const handleGoBack = () => {
     if (currentStep > 1) {
@@ -78,103 +84,123 @@ const CrearMascota = () => {
     );
   }
 
+  const titulo = isFromRescate 
+    ? t('titulo_registrar_rescate', { defaultValue: 'Registrar Mascota Rescatada' })
+    : t('titulo_nueva', { defaultValue: 'Registrar Nueva Mascota' });
+
   return (
     <div className="nueva-mascota-page">
-      <div className="page-header-buttons">
-        <button className="btn-back-page" onClick={handleGoBack}>
-          <i className="fas fa-arrow-left"></i>
-          <span>{t('botones.volver', { defaultValue: 'Volver' })}</span>
-        </button>
+      {/* ===== BANNER ===== */}
+      <div className="nueva-mascota-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: titulo,
+            solicitudes: 0,
+            adopciones: 0,
+            eventos: 0,
+          }}
+        />
       </div>
 
-      <div className="mascota-form-container">
-        <div className="form-header">
-          <h1>
-            <i className="fas fa-paw"></i>
-            {isFromRescate 
-              ? t('titulo_registrar_rescate', { defaultValue: 'Registrar Mascota Rescatada' })
-              : t('titulo_nueva', { defaultValue: 'Registrar Nueva Mascota' })
-            }
-          </h1>
-          <p className="form-subtitle">
-            {fundacionNombre 
-              ? `${t('fundacion_label', { defaultValue: 'Fundación' })}: ${fundacionNombre}` 
-              : t('subtitulo', { defaultValue: 'Completa los datos de la mascota' })
-            }
-          </p>
-          {rescateInfo && (
-            <div className="rescate-info-badge">
-              <i className="fas fa-ambulance"></i>
-              {t('registrando_desde_rescate', { defaultValue: 'Registrando desde rescate' })}: {rescateInfo.lugar_rescate}
+      {/* ===== CONTENIDO ===== */}
+      <div className="nueva-mascota-content">
+        <div className="bento-container">
+          <div className="page-header-buttons">
+            <button className="btn-back-page" onClick={handleGoBack}>
+              <i className="fas fa-arrow-left"></i>
+              <span>{t('botones.volver', { defaultValue: 'Volver' })}</span>
+            </button>
+          </div>
+
+          <div className="mascota-form-container">
+            <div className="form-header">
+              <h1>
+                <i className="fas fa-paw"></i>
+                {titulo}
+              </h1>
+              <p className="form-subtitle">
+                {fundacionNombre 
+                  ? `${t('fundacion_label', { defaultValue: 'Fundación' })}: ${fundacionNombre}` 
+                  : t('subtitulo', { defaultValue: 'Completa los datos de la mascota' })
+                }
+              </p>
+              {rescateInfo && (
+                <div className="rescate-info-badge">
+                  <i className="fas fa-ambulance"></i>
+                  {t('registrando_desde_rescate', { defaultValue: 'Registrando desde rescate' })}: {rescateInfo.lugar_rescate}
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <MascotaFormSteps steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
+            <MascotaFormSteps steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
 
-        <div className="form-content">
-          <form onSubmit={handleSubmit}>
-            {currentStep === 1 && (
-              <FormStep1 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-                especies={especies} 
-                generos={generos} 
-                estados={estados} 
-                razasList={razasList} 
-              />
-            )}
-            {currentStep === 2 && (
-              <FormStep2 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 3 && (
-              <FormStep3 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 4 && (
-              <FormStep4 
-                form={form} 
-                setForm={setForm} 
-                vacunasList={vacunasList} 
-              />
-            )}
-            {currentStep === 5 && (
-              <FormStep5 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 6 && (
-              <FormStep6 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-                getImageUrl={getImageUrl}
-                galeriaExistente={[]}
-                onRemoveExistingFoto={() => {}}
-              />
-            )}
-            
-            <FormActions 
-              currentStep={currentStep} 
-              totalSteps={totalSteps}
-              onPrev={prevStep} 
-              onNext={nextStep} 
-              onSubmit={handleSubmit} 
-              loading={loading}
-              isEditMode={false}
-              cancelUrl="/fundacion/mascotas"
-            />
-          </form>
+            <div className="form-content">
+              <form onSubmit={handleSubmit}>
+                {currentStep === 1 && (
+                  <FormStep1 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                    especies={especies} 
+                    generos={generos} 
+                    estados={estados} 
+                    razasList={razasList} 
+                  />
+                )}
+                {currentStep === 2 && (
+                  <FormStep2 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 3 && (
+                  <FormStep3 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 4 && (
+                  <FormStep4 
+                    form={form} 
+                    setForm={setForm} 
+                    vacunasList={vacunasList} 
+                  />
+                )}
+                {currentStep === 5 && (
+                  <FormStep5 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 6 && (
+                  <FormStep6 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                    getImageUrl={getImageUrl}
+                    galeriaExistente={[]}
+                    onRemoveExistingFoto={() => {}}
+                  />
+                )}
+                
+                <FormActions 
+                  currentStep={currentStep} 
+                  totalSteps={totalSteps}
+                  onPrev={prevStep} 
+                  onNext={nextStep} 
+                  onSubmit={handleSubmit} 
+                  loading={loading}
+                  isEditMode={false}
+                  cancelUrl="/fundacion/mascotas"
+                />
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,16 @@
 // src/pages/admin/rescates/RescatesMapa.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../contexts/AuthContext';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { ArrowLeft, Filter, MapPin, Eye, Info } from 'lucide-react';
 import L from 'leaflet';
 import { rescateService } from '../../../services/rescateService';
 import { getImageUrl } from '../../../utils/imageUtils';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import './RescatesMapa.css';
 
-// Reparar problemas de íconos por defecto de Leaflet en entornos de empaquetado (Vite/Webpack)
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -21,65 +23,58 @@ L.Icon.Default.mergeOptions({
 });
 
 const RescatesMapa = () => {
+  const { t } = useTranslation('rescate');
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const [casos, setCasos] = useState([]); // Garantizamos un array inicial seguro
+  const [casos, setCasos] = useState([]);
   const [filtroPrioridad, setFiltroPrioridad] = useState('todos');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Centro inicial del mapa por defecto (Ajusta estas coordenadas a tu ciudad/región base)
-  const centroPorDefecto = [2.4419, -76.6063]; 
+  const centroPorDefecto = [2.4419, -76.6063];
 
   useEffect(() => {
     const fetchCoordenadas = async () => {
       try {
         setLoading(true);
         setError(null);
-        
         const response = await rescateService.getCoordenadasRescates();
-        
         if (response && response.data) {
           const respuestaApi = response.data;
-          
           if (respuestaApi.success) {
-            // Desenvolvemos la paginación de Laravel si existe (.data.data) o tomamos la respuesta limpia (.data)
             const dataExtraida = respuestaApi.data?.data || respuestaApi.data;
-            
             if (Array.isArray(dataExtraida)) {
               setCasos(dataExtraida);
             } else {
-              console.warn("Los datos recibidos no poseen estructura de Array:", dataExtraida);
               setCasos([]);
             }
           } else {
-            setError(respuestaApi.message || "El servidor falló al procesar la colección.");
+            setError(respuestaApi.message || t('errors.load_geovisor'));
           }
         }
       } catch (err) {
-        console.error("Error cargando el geovisor:", err);
-        setError("No se pudieron cargar los puntos georreferenciados.");
+        console.error("Error:", err);
+        setError(t('errors.load_geovisor'));
         setCasos([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchCoordenadas();
-  }, []);
+  }, [t]);
 
-  // Filtrado reactivo de casos según la prioridad seleccionada
+  const adminName = user?.name || user?.nombre || t('admin', 'Administrador');
+  const adminAvatar = user?.avatar || null;
+
   const casosFiltrados = Array.isArray(casos)
     ? casos.filter(caso => {
-        // Validamos que el caso tenga propiedades latitud y longitud válidas
         const tieneCoordenadas = caso.latitud && caso.longitud;
         if (!tieneCoordenadas) return false;
-
         if (filtroPrioridad === 'todos') return true;
         return String(caso.prioridad).toLowerCase() === filtroPrioridad.toLowerCase();
       })
     : [];
 
-  // Retorna una clase CSS para los puntos de la leyenda según prioridad
   const obtenerColorPrioridad = (prioridad) => {
     switch (String(prioridad).toLowerCase()) {
       case 'alta': return 'red';
@@ -91,112 +86,123 @@ const RescatesMapa = () => {
 
   return (
     <div className="ram-container">
-      {/* ===== CONTROL CABECERA MAPA ===== */}
-      <header className="ram-map-header">
-        <button className="ram-btn-back" onClick={() => navigate('/admin/rescates')}>
-          <ArrowLeft size={16} />
-          Volver a Consola
-        </button>
+      <div className="ram-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: t('banner.titulo_mapa', 'Geovisor de Rescates - Popayán'),
+            solicitudes: casos.length,
+            adopciones: 0,
+            eventos: 0,
+          }}
+        />
+      </div>
 
-        <div className="ram-filter-bar">
-          <span className="ram-filter-label">
-            <Filter size={14} />
-            Prioridad:
-          </span>
-          <select 
-            className="ram-select-filter"
-            value={filtroPrioridad}
-            onChange={(e) => setFiltroPrioridad(e.target.value)}
-          >
-            <option value="todos">Todos los Casos</option>
-            <option value="alta">Alta Urgencia</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
-          </select>
-        </div>
-      </header>
+      <div className="bento-container ram-content">
+        <div className="ram-map-header">
+          <button className="ram-btn-back" onClick={() => navigate('/admin/rescates')}>
+            <ArrowLeft size={16} />
+            {t('volver_consola', 'Volver a Consola')}
+          </button>
 
-      {/* ===== CONTENEDOR DE MAPA Y HOVER CARDS ===== */}
-      <main className="ram-map-wrapper">
-        {loading ? (
-          <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', background: 'var(--color-card-bg)', gap: '10px' }}>
-            <span>Cargando Geovisor...</span>
-          </div>
-        ) : error ? (
-          <div style={{ display: 'flex', height: '100%', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--color-card-bg)', padding: '20px', color: '#ef4444' }}>
-            <p>{error}</p>
-          </div>
-        ) : (
-          <>
-            <MapContainer 
-              center={centroPorDefecto} 
-              zoom={13} 
-              className="ram-leaflet-container"
+          <div className="ram-filter-bar">
+            <span className="ram-filter-label">
+              <Filter size={14} />
+              {t('prioridad', 'Prioridad')}:
+            </span>
+            <select 
+              className="ram-select-filter"
+              value={filtroPrioridad}
+              onChange={(e) => setFiltroPrioridad(e.target.value)}
             >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                className="leaflet-tile-layer" // Aplica tu filtro CSS de modo oscuro automáticamente
-              />
+              <option value="todos">{t('todos_casos', 'Todos los Casos')}</option>
+              <option value="alta">{t('prioridad_alta', 'Alta Urgencia')}</option>
+              <option value="media">{t('prioridad_media', 'Media')}</option>
+              <option value="baja">{t('prioridad_baja', 'Baja')}</option>
+            </select>
+          </div>
+        </div>
 
-              {casosFiltrados.map((caso) => {
-                const lat = parseFloat(caso.latitud);
-                const lng = parseFloat(caso.longitud);
-
-                if (isNaN(lat) || isNaN(lng)) return null;
-
-                return (
-                  <Marker key={caso.id} position={[lat, lng]}>
-                    <Popup className="ram-popup-custom">
-                      <div className="ram-popup-content">
-                        {caso.foto_principal && (
-                          <img 
-                            src={getImageUrl(caso.foto_principal)} 
-                            alt={caso.titulo || "Mascota"} 
-                            className="ram-popup-img"
-                          />
-                        )}
-                        <h3>{caso.titulo || 'Caso sin Título'}</h3>
-                        <p className="ram-popup-desc">{caso.descripcion || 'Sin descripción provista.'}</p>
-                        
-                        <div className="ram-popup-meta">
-                          <MapPin size={12} />
-                          <span>Prioridad: <strong>{caso.prioridad || 'Media'}</strong></span>
-                        </div>
-
-                        <button 
-                          className="ram-popup-btn"
-                          onClick={() => navigate(`/admin/rescates/show/${caso.id}`)}
-                        >
-                          <Eye size={12} />
-                          Ver Detalles
-                        </button>
-                      </div>
-                    </Popup>
-                  </Marker>
-                );
-              })}
-            </MapContainer>
-
-            {/* ===== TARJETA DE LEYENDA FLOTANTE ===== */}
-            <div className="ram-legend-card">
-              <h4>
-                <Info size={12} />
-                Leyenda de Alertas
-              </h4>
-              <div className="legend-item">
-                <span className="dot red"></span> Urgencia Alta
-              </div>
-              <div className="legend-item">
-                <span className="dot orange"></span> Emergencia Media
-              </div>
-              <div className="legend-item">
-                <span className="dot green"></span> Estado Estable / Baja
-              </div>
+        <main className="ram-map-wrapper">
+          {loading ? (
+            <div className="ram-loading">
+              <div className="spinner-modern"></div>
+              <p>{t('cargando_mapa', 'Cargando Geovisor...')}</p>
             </div>
-          </>
-        )}
-      </main>
+          ) : error ? (
+            <div className="ram-error">
+              <AlertCircle size={48} className="error-icon-modern" />
+              <p>{error}</p>
+            </div>
+          ) : (
+            <>
+              <MapContainer 
+                center={centroPorDefecto} 
+                zoom={13} 
+                className="ram-leaflet-container"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  className="leaflet-tile-layer"
+                />
+
+                {casosFiltrados.map((caso) => {
+                  const lat = parseFloat(caso.latitud);
+                  const lng = parseFloat(caso.longitud);
+                  if (isNaN(lat) || isNaN(lng)) return null;
+
+                  return (
+                    <Marker key={caso.id} position={[lat, lng]}>
+                      <Popup className="ram-popup-custom">
+                        <div className="ram-popup-content">
+                          {caso.foto_principal && (
+                            <img 
+                              src={getImageUrl(caso.foto_principal)} 
+                              alt={caso.titulo || "Mascota"} 
+                              className="ram-popup-img"
+                            />
+                          )}
+                          <h3>{caso.titulo || t('sin_titulo', 'Caso sin título')}</h3>
+                          <p className="ram-popup-desc">{caso.descripcion || t('sin_descripcion', 'Sin descripción.')}</p>
+                          <div className="ram-popup-meta">
+                            <MapPin size={12} />
+                            <span>{t('prioridad', 'Prioridad')}: <strong>{caso.prioridad || t('media', 'Media')}</strong></span>
+                          </div>
+                          <button 
+                            className="ram-popup-btn"
+                            onClick={() => navigate(`/admin/rescates/show/${caso.id}`)}
+                          >
+                            <Eye size={12} />
+                            {t('ver_detalles', 'Ver Detalles')}
+                          </button>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })}
+              </MapContainer>
+
+              <div className="ram-legend-card">
+                <h4>
+                  <Info size={12} />
+                  {t('leyenda', 'Leyenda de Alertas')}
+                </h4>
+                <div className="legend-item">
+                  <span className="dot red"></span> {t('urgencia_alta', 'Urgencia Alta')}
+                </div>
+                <div className="legend-item">
+                  <span className="dot orange"></span> {t('emergencia_media', 'Emergencia Media')}
+                </div>
+                <div className="legend-item">
+                  <span className="dot green"></span> {t('estado_estable', 'Estado Estable / Baja')}
+                </div>
+              </div>
+            </>
+          )}
+        </main>
+      </div>
     </div>
   );
 };

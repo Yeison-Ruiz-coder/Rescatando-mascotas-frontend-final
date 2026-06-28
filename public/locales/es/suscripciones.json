@@ -131,5 +131,17 @@
   "procesando": "Procesando...",
   "confirmar": "Confirmar Suscripción",
   "error_suscripcion": "Error al procesar la suscripción",
-  "error_carga_datos": "Error al cargar los datos"
+  "error_carga_datos": "Error al cargar los datos",
+  "urgente": "Urgente",
+  "ellos_te_necesitan": "Ellos te necesitan",
+  "ellos_te_necesitan_desc": "...",
+  "padrinos_activos": "Padrinos activos",
+  "ver_mascotas": "Ver mascotas",
+  "destacado": "Destacado",
+  "disponible": "Disponible",
+  "perro": "Perro",
+  "años": "años",
+  "card_ejemplo_desc": "...",
+  "ejemplo_apadrinamiento": "...",
+  "cargar_mas": "Cargar más"
 }

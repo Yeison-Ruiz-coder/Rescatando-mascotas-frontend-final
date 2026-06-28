@@ -1,14 +1,27 @@
 /* src/pages/fundacion/adopciones/SeleccionarAdopcion.css */
+
 .seleccionar-adopcion-container {
   width: 100%;
   min-height: 100vh;
-  padding: 24px;
   background: transparent;
 }
 
 .seleccionar-adopcion-wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .seleccionar-adopcion-wrapper {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seleccionar-adopcion-wrapper {
+    padding: 0 12px;
+  }
 }
 
 .seleccionar-adopcion-header {
@@ -20,18 +33,18 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: var(--form-input-bg);
+  background: var(--gradient-primary);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
   transition: all 0.3s ease;
-  color: var(--color-text);
+  color: white;
   margin-bottom: 16px;
 }
 
 .seleccionar-btn-back:hover {
-  background: var(--color-hover);
+  transform: translateY(-2px);
 }
 
 .seleccionar-adopcion-header h1 {
@@ -268,9 +281,40 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+/* ===== PAGINACIÓN ===== */
+.seleccionar-paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-bottom: 24px;
+}
+
+.seleccionar-paginacion-btn {
+  padding: 8px 16px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.seleccionar-paginacion-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.seleccionar-paginacion-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .seleccionar-adopcion-container {
-    padding: 16px;
+    padding: 0;
   }
 
   .seleccionar-adopcion-grid {
@@ -284,4 +328,42 @@
   .seleccionar-card-actions {
     flex-direction: column;
   }
+
+  .seleccionar-paginacion {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seleccionar-adopcion-wrapper {
+    padding: 0 12px;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .seleccionar-adopcion-card,
+[data-theme="dark"] .seleccionar-adopcion-empty {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .seleccionar-search-input {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .seleccionar-btn-detalle {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .seleccionar-btn-detalle:hover {
+  background: var(--color-hover);
+}
+
+[data-theme="dark"] .seleccionar-paginacion-btn {
+  background: var(--gradient-primary);
 }

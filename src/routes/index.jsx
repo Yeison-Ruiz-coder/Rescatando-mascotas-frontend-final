@@ -91,7 +91,6 @@ const EventosCreate = lazy(() => import("../pages/fundacion/eventos/EventosCreat
 const EventosShow = lazy(() => import("../pages/fundacion/eventos/EventosShowFundacion"));
 const EventosEdit = lazy(() => import("../pages/fundacion/eventos/EventosEdit"));
 const SuscripcionesIndex = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesIndex"));
-const SuscripcionesCreate = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesCreate"));
 const SuscripcionesEdit = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesEdit"));
 const SuscripcionesShow = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesShow"));
 const RescatesDisponiblesFundacion = lazy(() => import("../pages/fundacion/rescates/RescatesDisponibles"));
@@ -403,7 +402,6 @@ const router = createBrowserRouter([
           { path: "eventos/:id", element: <EventosShow /> },
           { path: "eventos/:id/editar", element: <EventosEdit /> },
           { path: "suscripciones", element: <SuscripcionesIndex /> },
-          { path: "suscripciones/crear", element: <SuscripcionesCreate /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
           { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
           { path: "donaciones", element: <FundDonaciones /> },
@@ -455,7 +453,7 @@ const router = createBrowserRouter([
           { path: "rescates", element: <AdminRescatesIndex /> },
           { path: "rescates/pendientes", element: <AdminRescatesPendientes /> },
           { path: "rescates/mapa", element: <AdminRescatesMapa /> },
-          { path: "rescates/:id", element: <AdminRescatesShow /> },
+          { path: "rescates/show/:id", element: <AdminRescatesShow /> },
           { path: "eventos", element: <AdminEventosIndex /> },
           { path: "eventos/crear", element: <AdminEventosCreate /> },
           { path: "eventos/calendario", element: <PagePlaceholder title="Calendario" /> },

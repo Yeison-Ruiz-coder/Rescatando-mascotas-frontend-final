@@ -2,19 +2,57 @@
 
 .ram-container {
   width: 100%;
-  height: calc(100vh - 80px); /* Ajustado al viewport descontando barras superiores globales */
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
   background: transparent;
-  padding: 0 24px 24px 24px;
-  box-sizing: border-box;
+}
+
+/* ===== BANNER WRAPPER ===== */
+.ram-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.ram-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
-  .ram-container { padding: 0 16px 16px 16px; height: calc(100vh - 60px); }
+  .ram-banner-wrapper .bento-container {
+    padding: 0 16px;
+  }
 }
 
-/* ===== CONTROL CABECERA MAPA ===== */
+@media (max-width: 480px) {
+  .ram-banner-wrapper .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ===== CONTENIDO ===== */
+.ram-content {
+  width: 100%;
+}
+
+.ram-content .bento-container {
+  padding: 0 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .ram-content .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ram-content .bento-container {
+    padding: 0 12px;
+  }
+}
+
 .ram-map-header {
   display: flex;
   justify-content: space-between;
@@ -37,7 +75,9 @@
   transition: color 0.2s ease;
 }
 
-.ram-btn-back:hover { color: var(--color-primary); }
+.ram-btn-back:hover {
+  color: var(--color-primary);
+}
 
 .ram-filter-bar {
   display: flex;
@@ -69,9 +109,10 @@
   cursor: pointer;
 }
 
-/* ===== CONTENEDOR DE MAPA Y HOVER CARDS ===== */
+/* ===== MAPA ===== */
 .ram-map-wrapper {
   flex: 1;
+  min-height: 500px;
   position: relative;
   border-radius: 14px;
   overflow: hidden;
@@ -81,11 +122,26 @@
 
 .ram-leaflet-container {
   width: 100%;
-  height: 100%;
+  height: 500px;
   z-index: 1;
 }
 
-/* ===== TARJETA DE LEYENDA FLOTANTE ===== */
+.ram-loading,
+.ram-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  background: var(--color-card-bg);
+  gap: 20px;
+}
+
+.ram-error {
+  color: var(--color-danger);
+}
+
+/* ===== LEYENDA ===== */
 .ram-legend-card {
   position: absolute;
   bottom: 20px;
@@ -94,7 +150,7 @@
   border: 1px solid var(--color-border);
   padding: 14px 18px;
   border-radius: 10px;
-  z-index: 1000; /* Por encima de las capas del mapa */
+  z-index: 1000;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   pointer-events: auto;
 }
@@ -118,7 +174,9 @@
   margin-bottom: 6px;
 }
 
-.legend-item:last-child { margin-bottom: 0; }
+.legend-item:last-child {
+  margin-bottom: 0;
+}
 
 .dot {
   width: 10px;
@@ -126,11 +184,12 @@
   border-radius: 50%;
   display: inline-block;
 }
+
 .dot.red { background: #ef4444; }
 .dot.orange { background: #f59e0b; }
 .dot.green { background: #10b981; }
 
-/* ===== POPUPS PERSONALIZADOS DENTRO DE LEAFLET ===== */
+/* ===== POPUPS ===== */
 .ram-popup-custom .leaflet-popup-content-wrapper {
   background: var(--color-card-bg);
   color: var(--color-text);
@@ -184,7 +243,7 @@
 }
 
 .ram-popup-btn {
-  background: var(--gradient-primary, #667eea);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -199,9 +258,33 @@
   transition: opacity 0.2s;
 }
 
-.ram-popup-btn:hover { opacity: 0.9; }
+.ram-popup-btn:hover {
+  opacity: 0.9;
+}
 
-/* ===== ADAPTACIÓN NATIVA MODO OSCURO PARA MAPAS EN LEAFLET ===== */
+/* ===== MODO OSCURO ===== */
 [data-theme="dark"] .ram-leaflet-container .leaflet-tile-layer {
   filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .ram-map-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .ram-map-wrapper {
+    min-height: 400px;
+  }
+  
+  .ram-leaflet-container {
+    height: 400px;
+  }
+  
+  .ram-legend-card {
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 14px;
+  }
 }

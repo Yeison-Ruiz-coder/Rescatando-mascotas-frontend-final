@@ -4,12 +4,24 @@
   width: 100%;
   min-height: 100vh;
   background: transparent;
-  padding: 24px;
 }
 
 .da-wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .da-wrapper {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .da-wrapper {
+    padding: 0 12px;
+  }
 }
 
 .da-header {
@@ -280,7 +292,7 @@
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .da-container {
-    padding: 16px;
+    padding: 0;
   }
 
   .da-grid {
@@ -314,4 +326,33 @@
     align-items: flex-start;
     gap: 6px;
   }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .da-card,
+[data-theme="dark"] .da-seguimientos,
+[data-theme="dark"] .da-error {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .da-seguimiento-item {
+  background: var(--form-input-bg);
+}
+
+[data-theme="dark"] .da-seguimiento-estado.excelente {
+  background: rgba(5, 150, 105, 0.2);
+  color: #6ee7b7;
+}
+[data-theme="dark"] .da-seguimiento-estado.bueno {
+  background: rgba(37, 99, 235, 0.2);
+  color: #93c5fd;
+}
+[data-theme="dark"] .da-seguimiento-estado.regular {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fcd34d;
+}
+[data-theme="dark"] .da-seguimiento-estado.preocupante {
+  background: rgba(220, 38, 38, 0.2);
+  color: #fca5a5;
 }

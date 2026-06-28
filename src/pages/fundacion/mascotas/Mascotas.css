@@ -171,17 +171,6 @@
    CARDS - MISMO TAMAÑO QUE LA PÚBLICA
    ============================================ */
 
-.fundacion-mascotas-grid .mascota-card-fundacion {
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.fundacion-mascotas-grid .mascota-card-fundacion .card-image-fundacion {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .fundacion-mascotas-grid
   .mascota-card-fundacion
