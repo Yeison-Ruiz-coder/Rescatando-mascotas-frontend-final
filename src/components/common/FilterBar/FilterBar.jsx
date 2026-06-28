@@ -14,24 +14,9 @@ const FilterBar = ({
   showStatusFilter = true,
   showSort = true,
   isLoading = false,
-  typeOptions = [
-    { value: '', label: 'Todos los tipos' },
-    { value: 'usuario', label: 'Usuarios' },
-    { value: 'fundacion', label: 'Fundaciones' },
-    { value: 'veterinaria', label: 'Veterinarias' },
-  ],
-  statusOptions = [
-    { value: '', label: 'Todos los estados' },
-    { value: 'activo', label: 'Activo' },
-    { value: 'inactivo', label: 'Inactivo' },
-    { value: 'pendiente', label: 'Pendiente' },
-  ],
-  sortOptions = [
-    { value: 'created_at_desc', label: 'Más recientes' },
-    { value: 'created_at_asc', label: 'Más antiguos' },
-    { value: 'nombre_asc', label: 'Nombre A-Z' },
-    { value: 'nombre_desc', label: 'Nombre Z-A' },
-  ],
+  typeOptions = [],
+  statusOptions = [],
+  sortOptions = [],
   className = '',
 }) => {
   const { t } = useTranslation('admin');
@@ -40,7 +25,7 @@ const FilterBar = ({
   const [buscar, setBuscar] = useState(filters.search || '');
   const [tipo, setTipo] = useState(filters.tipo || '');
   const [estado, setEstado] = useState(filters.estado || '');
-  const [sort, setSort] = useState(filters.sort || sortOptions[0]?.value || '');
+  const [sort, setSort] = useState(filters.sort || '');
   const [progress, setProgress] = useState(0);
   
   const [sugerencias, setSugerencias] = useState([]);
@@ -52,6 +37,32 @@ const FilterBar = ({
   const timeoutRef = useRef(null);
   const progressIntervalRef = useRef(null);
   const isInternalUpdate = useRef(false);
+
+  // Default options con i18n
+  const defaultTypeOptions = [
+    { value: '', label: t('todos_tipos', 'Todos los tipos') },
+    { value: 'usuario', label: t('usuario', 'Usuarios') },
+    { value: 'fundacion', label: t('fundacion', 'Fundaciones') },
+    { value: 'veterinaria', label: t('veterinaria', 'Veterinarias') },
+  ];
+
+  const defaultStatusOptions = [
+    { value: '', label: t('todos_estados', 'Todos los estados') },
+    { value: 'activo', label: t('activo', 'Activo') },
+    { value: 'inactivo', label: t('inactivo', 'Inactivo') },
+    { value: 'pendiente', label: t('pendiente', 'Pendiente') },
+  ];
+
+  const defaultSortOptions = [
+    { value: 'created_at_desc', label: t('mas_recientes', 'Más recientes') },
+    { value: 'created_at_asc', label: t('mas_antiguos', 'Más antiguos') },
+    { value: 'nombre_asc', label: t('nombre_az', 'Nombre A-Z') },
+    { value: 'nombre_desc', label: t('nombre_za', 'Nombre Z-A') },
+  ];
+
+  const finalTypeOptions = typeOptions.length > 0 ? typeOptions : defaultTypeOptions;
+  const finalStatusOptions = statusOptions.length > 0 ? statusOptions : defaultStatusOptions;
+  const finalSortOptions = sortOptions.length > 0 ? sortOptions : defaultSortOptions;
 
   // Efecto para animar la barra de progreso
   useEffect(() => {
@@ -95,7 +106,7 @@ const FilterBar = ({
         setEstado(filters.estado || '');
       }
       if (filters.sort !== undefined && filters.sort !== sort) {
-        setSort(filters.sort || sortOptions[0]?.value || '');
+        setSort(filters.sort || '');
       }
     }
     isInternalUpdate.current = false;
@@ -123,7 +134,6 @@ const FilterBar = ({
   const handleBuscarChange = (e) => {
     const value = e.target.value;
     setBuscar(value);
-    // No notificamos al padre hasta que haga clic en buscar
   };
 
   const handleBuscarClick = () => {
@@ -156,7 +166,6 @@ const FilterBar = ({
           const sugerencia = sugerencias[sugerenciaSeleccionada];
           setBuscar(sugerencia);
           setMostrarSugerencias(false);
-          // Aplicar filtros con la sugerencia seleccionada
           const filtros = {};
           if (sugerencia.trim()) filtros.search = sugerencia.trim();
           if (tipo) filtros.tipo = tipo;
@@ -177,7 +186,6 @@ const FilterBar = ({
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
-    // Aplicar filtros con la sugerencia seleccionada
     const filtros = {};
     if (sugerencia.trim()) filtros.search = sugerencia.trim();
     if (tipo) filtros.tipo = tipo;
@@ -190,24 +198,22 @@ const FilterBar = ({
     setBuscar('');
     setTipo('');
     setEstado('');
-    setSort(sortOptions[0]?.value || '');
+    setSort('');
     setSugerencias([]);
     setMostrarSugerencias(false);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     
-    // Notificar al padre que limpiamos todo
     notifyFilterChange({
       search: '',
       tipo: '',
       estado: '',
-      sort: sortOptions[0]?.value || '',
+      sort: '',
     });
   };
 
   const handleSelectChange = (tipoSelect, valor) => {
     if (tipoSelect === 'tipo') {
       setTipo(valor);
-      // Aplicar filtros inmediatamente con el nuevo valor
       const nuevosFiltros = {};
       if (buscar.trim()) nuevosFiltros.search = buscar.trim();
       if (valor) nuevosFiltros.tipo = valor;
@@ -216,7 +222,6 @@ const FilterBar = ({
       notifyFilterChange(nuevosFiltros);
     } else if (tipoSelect === 'estado') {
       setEstado(valor);
-      // Aplicar filtros inmediatamente con el nuevo valor
       const nuevosFiltros = {};
       if (buscar.trim()) nuevosFiltros.search = buscar.trim();
       if (tipo) nuevosFiltros.tipo = tipo;
@@ -225,7 +230,6 @@ const FilterBar = ({
       notifyFilterChange(nuevosFiltros);
     } else if (tipoSelect === 'sort') {
       setSort(valor);
-      // Aplicar filtros inmediatamente con el nuevo valor
       const nuevosFiltros = {};
       if (buscar.trim()) nuevosFiltros.search = buscar.trim();
       if (tipo) nuevosFiltros.tipo = tipo;
@@ -347,7 +351,7 @@ const FilterBar = ({
                 <i className="fas fa-users"></i> {t("tipo", "Tipo")}
               </label>
               <CustomSelect
-                options={typeOptions}
+                options={finalTypeOptions}
                 value={tipo}
                 onChange={(e) => handleSelectChange('tipo', e.target.value)}
                 placeholder={t('seleccionar_tipo', 'Seleccionar tipo')}
@@ -361,7 +365,7 @@ const FilterBar = ({
                 <i className="fas fa-circle"></i> {t("estado", "Estado")}
               </label>
               <CustomSelect
-                options={statusOptions}
+                options={finalStatusOptions}
                 value={estado}
                 onChange={(e) => handleSelectChange('estado', e.target.value)}
                 placeholder={t('seleccionar_estado', 'Seleccionar estado')}
@@ -375,7 +379,7 @@ const FilterBar = ({
                 <i className="fas fa-sort"></i> {t("ordenar", "Ordenar")}
               </label>
               <CustomSelect
-                options={sortOptions}
+                options={finalSortOptions}
                 value={sort}
                 onChange={(e) => handleSelectChange('sort', e.target.value)}
                 placeholder={t('seleccionar_orden', 'Seleccionar orden')}

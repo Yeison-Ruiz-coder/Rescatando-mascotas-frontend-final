@@ -1,6 +1,7 @@
 // src/pages/fundacion/mascotas/components/FormStep5.jsx
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import CustomSelect from '../../../../components/common/CustomSelect/CustomSelect';
 import './FormStep4.css';
 
 const FormStep5 = ({ form, setForm, errors }) => {
@@ -14,6 +15,10 @@ const FormStep5 = ({ form, setForm, errors }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCustomChange = (name, value) => {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
@@ -33,6 +38,13 @@ const FormStep5 = ({ form, setForm, errors }) => {
       requisitos_adopcion: (prev.requisitos_adopcion || []).filter((_, i) => i !== index)
     }));
   };
+
+  const hogarOptions = [
+    { value: 'casa_jardin', label: t('casa_con_jardin') },
+    { value: 'departamento', label: t('departamento') },
+    { value: 'casa_sin_jardin', label: t('casa_sin_jardin') },
+    { value: 'espacio_amplio', label: t('espacio_amplio') },
+  ];
 
   return (
     <div className="form-step">
@@ -77,13 +89,12 @@ const FormStep5 = ({ form, setForm, errors }) => {
 
         <div className="form-group full-width">
           <label>{t('hogar_recomendado')}</label>
-          <select name="hogar_recomendado" value={form.hogar_recomendado || ''} onChange={handleChange}>
-            <option value="">{t('seleccionar_hogar')}</option>
-            <option value="casa_jardin">{t('casa_con_jardin')}</option>
-            <option value="departamento">{t('departamento')}</option>
-            <option value="casa_sin_jardin">{t('casa_sin_jardin')}</option>
-            <option value="espacio_amplio">{t('espacio_amplio')}</option>
-          </select>
+          <CustomSelect
+            options={hogarOptions}
+            value={form.hogar_recomendado || ''}
+            onChange={(e) => handleCustomChange('hogar_recomendado', e.target.value)}
+            placeholder={t('seleccionar_hogar')}
+          />
         </div>
 
         <div className="form-group full-width">

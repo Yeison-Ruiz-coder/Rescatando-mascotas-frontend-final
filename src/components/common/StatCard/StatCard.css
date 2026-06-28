@@ -1,0 +1,115 @@
+.stat-card-modern {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.stat-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.stat-icon-modern {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon-modern svg {
+  width: 22px;
+  height: 22px;
+}
+
+.stat-badge-modern {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(102, 126, 234, 0.08);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.stat-body-modern {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value-modern {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.stat-label-modern {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.stat-primary .stat-icon-modern {
+  background: rgba(102, 126, 234, 0.12);
+  color: var(--color-primary);
+}
+.stat-success .stat-icon-modern {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--color-success);
+}
+.stat-warning .stat-icon-modern {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.stat-danger .stat-icon-modern {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .stat-card-modern {
+    padding: 16px;
+  }
+  .stat-value-modern {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-card-modern {
+    padding: 12px 14px;
+  }
+  .stat-value-modern {
+    font-size: 1.2rem;
+  }
+  .stat-icon-modern {
+    width: 36px;
+    height: 36px;
+  }
+  .stat-icon-modern svg {
+    width: 18px;
+    height: 18px;
+  }
+  .stat-badge-modern {
+    font-size: 0.55rem;
+    padding: 3px 8px;
+  }
+}
+
+[data-theme="dark"] .stat-card-modern {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}

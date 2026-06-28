@@ -38,7 +38,12 @@
     "fecha_ingreso_required": "La fecha de ingreso es obligatoria",
     "photo_max_size": "La foto no debe superar los {size}MB",
     "gallery_max_size": "Las fotos de la galeria no deben superar los {size}MB cada una",
-    "max_photos": "Maximo {max} fotos permitidas"
+    "max_photos": "Maximo {max} fotos permitidas",
+    "load_geovisor": "Error al cargar el geovisor",
+    "load_pendientes": "Error al cargar las alertas pendientes",
+    "load_show_failed": "Error al cargar los detalles del caso",
+    "approve_failed": "Error al aprobar el reporte",
+    "reject_failed": "Error al rechazar el reporte"
   },
   "success_title": "Rescate reportado exitosamente",
   "success_message": "Gracias por tu ayuda. Hemos notificado a las entidades mas cercanas. En breve alguien se pondra en contacto contigo para coordinar la ayuda.",
@@ -142,7 +147,7 @@
   "rescate_enviado_message": "Tu reporte ha sido enviado. Fundaciones y veterinarias cercanas ya pueden verlo y responder.",
   "admin_waiting_time": "Tiempo para intervención de administradores:",
   "admin_info": "Si ninguna fundación o veterinaria responde en 30 minutos, los administradores podrán ver y gestionar este rescate.",
-  "galeria_fotos":"Galeria de fotos",
+  "galeria_fotos": "Galeria de fotos",
   "motivational_title": "¡Tu reporte puede salvar una vida!",
   "motivational_message": "Cada minuto cuenta. Tu reporte nos ayuda a llegar a tiempo y brindar la atención que estos animales necesitan. ¡No te quedes callado, actúa ahora!",
   "tips_title": "Tips importantes:",
@@ -157,13 +162,86 @@
   "animal_police": "112",
   "footer_message": "Juntos podemos hacer la diferencia",
   "stats": {
-      "total": "Total Rescates",
-      "pendientes": "Pendientes",
-      "en_proceso": "En Proceso",
-      "completados": "Completados",
-      "disponibles": "Disponibles",
-      "urgentes": "Urgentes",
-      "media": "Prioridad Media",
-      "baja": "Prioridad Baja"
-    }
+    "total": "Total Rescates",
+    "pendientes": "Pendientes",
+    "en_proceso": "En Proceso",
+    "completados": "Completados",
+    "disponibles": "Disponibles",
+    "urgentes": "Urgentes",
+    "media": "Prioridad Media",
+    "baja": "Prioridad Baja",
+    "total_casos": "Casos Totales",
+    "tasa_cierre": "Tasa de Cierre",
+    "geovisor": "Ver Geovisor"
+  },
+  "admin": "Administrador",
+  "admin_rescates": "Rescates - Administración",
+
+  "banner": {
+    "titulo_admin": "Panel de Administración · {{count}} Casos Reportados",
+    "titulo_mapa": "Geovisor de Rescates - Popayán",
+    "titulo_pendientes": "{{count}} alertas pendientes de revisión",
+    "titulo_show": "Caso #{{id}} - {{titulo}}"
+  },
+
+  "monitoreo_global": "Monitoreo Global de Rescates",
+  "sincronizar": "Sincronizar",
+  "no_reportes": "No hay reportes en el sistema",
+  "no_reportes_desc": "Las solicitudes de la ciudadanía aparecerán listadas aquí.",
+
+  "acceso_modulo": "Acceso Módulo",
+  "metrica_central": "Métrica Central",
+
+  "mapa": "Mapa",
+  "todos_casos": "Todos los Casos",
+
+  "volver_consola": "Volver a la Consola Principal",
+  "cargando_mapa": "Cargando Geovisor...",
+  "sin_titulo": "Caso sin título",
+  "sin_descripcion": "Sin descripción.",
+  "ver_detalles": "Ver Detalles",
+  "leyenda": "Leyenda de Alertas",
+  "urgencia_alta": "Urgencia Alta",
+  "emergencia_media": "Emergencia Media",
+  "estado_estable": "Estado Estable / Baja",
+
+  "alertas_evaluar": "Alertas por Evaluar",
+  "alertas_evaluar_desc": "Revisa, aprueba o descarta los reportes de animales en situación de riesgo.",
+  "casos": "Casos",
+  "bandeja_limpia": "¡Bandeja limpia!",
+  "bandeja_limpia_desc": "No tienes reportes ciudadanos pendientes de validación por el momento.",
+  "animal_reporte": "Animal / Reporte",
+  "ubicacion": "Ubicación",
+  "detalles_caso": "Detalles del Caso",
+  "por": "Por",
+  "sin_foto": "Sin foto",
+  "inspeccionar": "Inspeccionar",
+  "validar_publicar": "Validar y Publicar",
+  "descartar": "Descartar reporte",
+  "confirm_aprobar": "¿Confirmas que este reporte es válido?",
+  "motivo_rechazo": "Por favor, ingresa el motivo del rechazo:",
+
+  "volver_historial": "Volver al Historial",
+  "caso_id": "ID CASO",
+  "sin_evidencia": "Sin Evidencia Fotográfica",
+  "registrado": "Registrado",
+  "actores_involucrados": "Actores Involucrados",
+  "ciudadano_informante": "Ciudadano Informante",
+  "sin_contacto": "Sin contacto directo",
+  "fundacion_asignada": "Fundación Asignada",
+  "sin_asignar": "Ninguna (Sin Asignar)",
+  "datos_auditoria": "Datos de Auditoría",
+  "direccion_descrita": "Dirección exacta descrita",
+  "no_especificada": "No especificada",
+  "geolocalizacion": "Geolocalización (Lat, Long)",
+  "sin_coordenadas": "Sin coordenadas GPS",
+  "historial_cambios": "Historial de Cambios",
+  "creado_actualizado": "Caso creado el {{created}}. Última actualización el {{updated}}.",
+
+  "estado_progreso": "En Progreso",
+  "estado_rechazado": "Rechazado",
+
+
+  "cargando_pendientes": "Cargando cola de revisión...",
+  "caso_no_existe": "El caso solicitado no existe."
 }

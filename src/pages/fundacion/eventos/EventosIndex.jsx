@@ -1,16 +1,22 @@
 // src/pages/fundacion/eventos/EventosIndex.jsx
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Calendar, List, Heart, Loader, X } from "lucide-react";
+import { Calendar, List, Heart, Loader, X, Plus } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
-import EventoCard from "../../../components/common/EventoCard/EventoCard";
+import ProfileBanner from "../../../components/common/ProfileBanner/ProfileBanner";
+import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
+import EventoCardFundacion from "../../../components/common/EventoCardFundacion/EventoCardFundacion";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
 import "./EventosIndex.css";
 
 const EventosIndex = () => {
   const { t, i18n } = useTranslation("eventos");
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [eventos, setEventos] = useState([]);
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +24,9 @@ const EventosIndex = () => {
   const [orden, setOrden] = useState("reciente");
   const [currentFilters, setCurrentFilters] = useState({});
   const [isMobile, setIsMobile] = useState(false);
+
+  const fundacionName = user?.nombre || user?.name || t("fundacion");
+  const fundacionAvatar = user?.avatar || user?.foto_perfil || null;
 
   const opcionesOrden = useMemo(() => [
     { value: "reciente", label: t("mas_recientes") },
@@ -87,7 +96,13 @@ const EventosIndex = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get(`/entity/eventos`);
+      const response = await api.get(`/entity/eventos`, {
+        params: {
+          fields: 'id,nombre_evento,lugar_evento,descripcion,fecha_evento,fecha_fin,capacidad_maxima,costo,organizador,telefono_contacto,email_contacto,categoria,tags,imagen_url,likes,total_asistentes,created_at',
+          sort: 'created_at',
+          order: 'desc',
+        }
+      });
 
       let eventosData = [];
       if (response.data && response.data.success !== undefined) {
@@ -131,13 +146,22 @@ const EventosIndex = () => {
     setOrden(newOrden);
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm(t("confirm_delete"))) return;
+    try {
+      await api.delete(`/entity/eventos/${id}`);
+      toast.success(t("evento_eliminado"));
+      loadEventos();
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.response?.data?.message || t("error_delete"));
+    }
+  };
+
   if (loading) {
     return (
       <div className="fundacion-eventos-page">
-        <div className="fundacion-eventos-loading">
-          <Loader size={40} className="spinner" />
-          <p>{t("cargando_eventos")}</p>
-        </div>
+        <LoadingSpinner text={t("cargando_eventos")} />
       </div>
     );
   }
@@ -160,41 +184,57 @@ const EventosIndex = () => {
     );
   }
 
+  const totalEventos = eventos.length;
+  const totalFiltrados = eventosFiltrados.length;
+
   return (
     <div className="fundacion-eventos-page">
-      <div className="fundacion-eventos-header">
-        <div className="container">
-          <h1>
-            <Calendar size={28} />
-            {t("mis_eventos")}
-          </h1>
-          <p className="subtitle">{t("mis_eventos_desc")}</p>
-          {eventos.length > 0 && (
-            <p className="info">
-              <Heart size={14} style={{ color: "var(--color-heart)" }} />{" "}
-              {t("total_eventos", { total: eventos.length })}
-            </p>
-          )}
-        </div>
-      </div>
+      <ProfileBanner
+        user={{
+          nombre: fundacionName,
+          avatar: fundacionAvatar,
+          titulo: t("banner.titulo", {
+            defaultValue: "{{count}} eventos gestionados",
+            count: totalEventos,
+          }),
+          solicitudes: 0,
+          adopciones: 0,
+          eventos: totalEventos,
+        }}
+        showEventStats={true}
+      />
 
-      <div className="fundacion-eventos-filtros-section sticky-glass glass-auto shadow-sticky">
-        <div className="container">
+      <div className="fundacion-eventos-wrapper">
+        <div className="fundacion-eventos-header">
+          <div className="fundacion-eventos-header-left">
+            <h1>
+              <Calendar size={28} />
+              {t("mis_eventos")}
+            </h1>
+            <p className="subtitle">{t("mis_eventos_desc")}</p>
+          </div>
+          <div className="fundacion-eventos-header-right">
+            <Link to="/fundacion/eventos/crear" className="fundacion-btn-crear">
+              <Plus size={18} />
+              {t("crear_evento")}
+            </Link>
+          </div>
+        </div>
+
+        <div className="fundacion-eventos-filtros-section">
           <FiltrosEventos 
             onFilterChange={handleFilterChange}
             eventos={eventos}
             isLoading={loading}
           />
         </div>
-      </div>
 
-      <div className="fundacion-eventos-resultados-section">
-        <div className="container">
+        <div className="fundacion-eventos-resultados-section">
           <div className="fundacion-eventos-resultados-header">
             <div className="fundacion-eventos-resultados-count">
               <List size={16} />
-              {t("mostrando")} <strong>{eventosFiltrados.length}</strong>{" "}
-              {t("de")} <strong>{eventos.length}</strong> {t("eventos")}
+              {t("mostrando")} <strong>{totalFiltrados}</strong>{" "}
+              {t("de")} <strong>{totalEventos}</strong> {t("eventos")}
             </div>
             <div className="fundacion-eventos-resultados-orden">
               <label>{t("ordenar_por")}:</label>
@@ -207,7 +247,7 @@ const EventosIndex = () => {
             </div>
           </div>
 
-          {eventosFiltrados.length === 0 ? (
+          {totalFiltrados === 0 ? (
             <div className="fundacion-eventos-empty">
               <Calendar size={64} />
               <h3>{t("sin_resultados")}</h3>
@@ -220,20 +260,14 @@ const EventosIndex = () => {
               )}
             </div>
           ) : (
-            <div className="fundacion-eventos-grid">
+            <div className="fundacion-eventos-grid bento-grid">
               {eventosFiltrados.map((evento) => (
-                <EventoCard
+                <EventoCardFundacion
                   key={evento.id}
                   evento={evento}
                   getImageUrl={getImageUrl}
-                  variant="default"
-                  rol="fundacion"
-                  onDelete={async (id) => {
-                    if (window.confirm(t("confirm_delete"))) {
-                      await api.delete(`/entity/eventos/${id}`);
-                      loadEventos();
-                    }
-                  }}
+                  onDelete={handleDelete}
+                  onEdit={(id) => navigate(`/fundacion/eventos/${id}/editar`)}
                   showActions={true}
                 />
               ))}

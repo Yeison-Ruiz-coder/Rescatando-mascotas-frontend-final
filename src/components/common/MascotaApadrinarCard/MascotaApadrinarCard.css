@@ -1,48 +1,46 @@
 /* src/components/common/MascotaApadrinarCard/MascotaApadrinarCard.css */
+/* ============================================
+   MASCOTA APADRINAR CARD - ESTILOS AISLADOS
+   Prefijo: mac- (Mascota Apadrinar Card)
+   ============================================ */
 
-.mascota-apadrinar-card {
-  background: #ffffff;
-  border-radius: 24px;
+.mac-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  border: 1px solid #e5e7eb;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid var(--color-border);
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-[data-theme="dark"] .mascota-apadrinar-card {
-  background: #1e293b;
-  border-color: #334155;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-}
-
-.mascota-apadrinar-card:hover {
+.mac-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 /* ===== IMAGEN ===== */
-.card-imagen {
+.mac-imagen {
   position: relative;
   height: 220px;
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
 }
 
-.card-imagen img {
+.mac-imagen img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
+  transition: transform var(--transition);
 }
 
-.mascota-apadrinar-card:hover .card-imagen img {
+.mac-card:hover .mac-imagen img {
   transform: scale(1.05);
 }
 
-.image-placeholder {
+.mac-image-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
@@ -53,117 +51,109 @@
   gap: 0.5rem;
 }
 
-.image-placeholder i {
+.mac-image-placeholder i {
   font-size: 3rem;
   opacity: 0.7;
 }
 
-.image-placeholder span {
+.mac-image-placeholder span {
   font-size: 0.8rem;
   opacity: 0.8;
 }
 
 /* ===== ESTADO BADGE ===== */
-.estado-badge {
+.mac-estado-badge {
   position: absolute;
   top: 12px;
   right: 12px;
   padding: 4px 12px;
-  border-radius: 30px;
+  border-radius: var(--radius-full);
   font-size: 0.7rem;
   font-weight: 600;
   color: white;
   z-index: 2;
 }
 
-.estado-badge.estado-adopcion {
-  background: linear-gradient(135deg, #10b981, #059669);
+.mac-estado-badge.mac-adopcion {
+  background: var(--color-success);
 }
 
-.estado-badge.estado-adoptado {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
+.mac-estado-badge.mac-adoptado {
+  background: var(--color-text-muted);
 }
 
-.estado-badge.estado-rescatada {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+.mac-estado-badge.mac-rescatada {
+  background: var(--color-warning);
 }
 
-.estado-badge.estado-necesita {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+.mac-estado-badge.mac-necesita {
+  background: var(--color-danger);
 }
 
 /* ===== INFORMACIÓN ===== */
-.card-info {
+.mac-info {
   padding: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.mascota-nombre {
+.mac-nombre {
   font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
-  color: #1f2937;
-}
-
-[data-theme="dark"] .mascota-nombre {
-  color: #f1f5f9;
+  color: var(--color-text);
 }
 
 /* ===== DETALLES ===== */
-.mascota-detalles {
+.mac-detalles {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.detalle-item {
+.mac-detalle-item {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
   background: rgba(102, 126, 234, 0.1);
   padding: 4px 10px;
-  border-radius: 30px;
+  border-radius: var(--radius-full);
   font-size: 0.7rem;
-  color: #667eea;
+  color: var(--color-primary);
   font-weight: 500;
 }
 
-[data-theme="dark"] .detalle-item {
+[data-theme="dark"] .mac-detalle-item {
   background: rgba(139, 156, 255, 0.15);
-  color: #8b9cff;
+  color: var(--color-primary-light);
 }
 
-.detalle-item i {
+.mac-detalle-item i {
   font-size: 0.65rem;
 }
 
 /* ===== HISTORIA ===== */
-.mascota-historia {
+.mac-historia {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
   line-height: 1.5;
   margin-bottom: 1.5rem;
   flex: 1;
 }
 
-[data-theme="dark"] .mascota-historia {
-  color: #94a3b8;
-}
-
 /* ===== BOTÓN ===== */
-.btn-apadrinar {
+.mac-btn-apadrinar {
   width: 100%;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--gradient-primary);
   color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: var(--radius-2xl);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
   font-size: 0.9rem;
   display: flex;
   align-items: center;
@@ -171,16 +161,16 @@
   gap: 0.5rem;
 }
 
-.btn-apadrinar:hover:not(:disabled) {
+.mac-btn-apadrinar:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--shadow-accent);
 }
 
-.btn-apadrinar:disabled {
+.mac-btn-apadrinar:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.btn-apadrinar i {
+.mac-btn-apadrinar i {
   font-size: 0.9rem;
 }

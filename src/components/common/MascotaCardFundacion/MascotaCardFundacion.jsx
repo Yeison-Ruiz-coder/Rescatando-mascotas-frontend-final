@@ -1,154 +1,199 @@
 // src/components/common/MascotaCardFundacion/MascotaCardFundacion.jsx
-import React, { useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import { getImageUrl } from '../../../utils/imageUtils';
+import { Edit, Trash2, Eye } from 'lucide-react';
+import { getImageUrl as getImageUrlUtil } from '../../../utils/imageUtils';
 import './MascotaCardFundacion.css';
 
-const MascotaCardFundacion = ({ 
+const MascotaCardFundacion = memo(({ 
   mascota, 
-  onEliminar,
-  getImageUrl: propGetImageUrl
+  getImageUrl: propGetImageUrl,
+  onDelete,
+  onEdit,
+  showActions = true
 }) => {
-  const { t } = useTranslation(['mascotas', 'fundacion']);
-  const [eliminando, setEliminando] = useState(false);
+  const { t } = useTranslation('fundacion');
   const [imgError, setImgError] = useState(false);
-  
-  const { 
-    id, 
-    nombre_mascota, 
-    descripcion, 
+
+  const {
+    id,
+    nombre_mascota,
+    descripcion,
     estado,
-    foto_principal
-  } = mascota;
+    foto_principal,
+    especie,
+    edad,
+    sexo
+  } = mascota || {};
 
   const getImageUrlSafe = (path) => {
     if (propGetImageUrl && typeof propGetImageUrl === 'function') {
       return propGetImageUrl(path);
     }
-    return getImageUrl(path);
+    return getImageUrlUtil(path);
   };
 
-  const getEstadoConfig = (estadoActual) => {
+  const imageUrl = useMemo(() => {
+    if (!foto_principal || imgError) return null;
+    try {
+      return getImageUrlSafe(foto_principal);
+    } catch (error) {
+      return null;
+    }
+  }, [foto_principal, getImageUrlSafe, imgError]);
+
+  const getEstadoConfig = () => {
     const estados = {
       'En adopcion': { 
-        class: 'estado-adopcion', 
+        class: 'mcf-estado-adopcion', 
         icon: 'fa-heart', 
-        label: t('mascotas:en_adopcion')
+        label: t('estado_adopcion', 'En adopción')
       },
       'Adoptado': { 
-        class: 'estado-adoptado', 
+        class: 'mcf-estado-adoptado', 
         icon: 'fa-check-circle', 
-        label: t('mascotas:adoptado')
+        label: t('estado_adoptado', 'Adoptado')
       },
       'Rescatada': { 
-        class: 'estado-rescatada', 
+        class: 'mcf-estado-rescatada', 
         icon: 'fa-hand-holding-heart', 
-        label: t('mascotas:rescatada')
+        label: t('estado_rescatada', 'Rescatada')
       },
       'En acogida': { 
-        class: 'estado-acogida', 
+        class: 'mcf-estado-acogida', 
         icon: 'fa-home', 
-        label: t('mascotas:en_acogida')
+        label: t('estado_acogida', 'En acogida')
       }
     };
-    return estados[estadoActual] || estados['En adopcion'];
+    return estados[estado] || estados['En adopcion'];
   };
 
-  const estadoConfig = getEstadoConfig(estado);
+  const estadoConfig = getEstadoConfig();
 
-  const handleEliminar = async (e) => {
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    if (eliminando || !onEliminar) return;
-    
-    const confirmacion = window.confirm(
-      t('fundacion:confirmar_eliminar', { nombre: nombre_mascota })
-    );
-    
-    if (!confirmacion) return;
-    
-    setEliminando(true);
-    try {
-      await onEliminar(id, nombre_mascota);
-    } catch (error) {
-      console.error('Error al eliminar:', error);
-      toast.error(t('fundacion:error_eliminar'));
-    } finally {
-      setEliminando(false);
-    }
+    if (onDelete) onDelete(id);
   };
 
-  const imageUrl = getImageUrlSafe(foto_principal);
+  const handleEditClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onEdit) onEdit(id);
+  };
+
+  const getEspecieIcon = () => {
+    if (!especie) return 'fa-paw';
+    const especieLower = especie.toLowerCase();
+    if (especieLower.includes('perro') || especieLower.includes('canino')) return 'fa-dog';
+    if (especieLower.includes('gato') || especieLower.includes('felino')) return 'fa-cat';
+    return 'fa-paw';
+  };
+
+  const getSexoIcon = () => {
+    if (!sexo) return 'fa-genderless';
+    const sexoLower = sexo.toLowerCase();
+    if (sexoLower.includes('macho') || sexoLower === 'm') return 'fa-mars';
+    if (sexoLower.includes('hembra') || sexoLower === 'f') return 'fa-venus';
+    return 'fa-genderless';
+  };
 
   return (
     <div className="mascota-card-fundacion">
-      {/* Imagen */}
-      {imageUrl && !imgError ? (
-        <img 
-          src={imageUrl}
-          alt={nombre_mascota}
-          className="card-image-fundacion"
-          loading="lazy"
-          onError={() => setImgError(true)}
-        />
-      ) : (
-        <div className="card-image-placeholder-fundacion">
-          <span>🐾</span>
-        </div>
-      )}
-
-      {/* Badge de estado - SOLO ESTO QUEDA */}
-      <div className={`estado-badge-fundacion ${estadoConfig.class}`}>
-        <i className={`fas ${estadoConfig.icon}`}></i>
-        <span>{estadoConfig.label}</span>
-      </div>
-
-      {/* Nombre */}
-      <h3 className="card-title-fundacion">{nombre_mascota}</h3>
-
-      {/* ID - Opcional, solo en hover */}
-      <span className="card-id-fundacion">#{id}</span>
-
-      {/* Overlay siempre visible con acciones */}
-      <div className="card-overlay-fundacion">
-        {descripcion && (
-          <p className="card-overlay-desc">
-            {descripcion.length > 80 ? descripcion.substring(0, 80) + '...' : descripcion}
-          </p>
+      <div className="mcf-image">
+        {imageUrl ? (
+          <img 
+            src={imageUrl} 
+            alt={nombre_mascota || 'Mascota'} 
+            loading="lazy" 
+            onError={() => setImgError(true)} 
+          />
+        ) : (
+          <div className="mcf-placeholder">
+            <i className="fas fa-paw"></i>
+          </div>
         )}
         
-        <div className="card-overlay-actions">
-          <Link 
-            to={`/fundacion/mascotas/${id}`} 
-            className="action-btn-fundacion view"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <i className="fas fa-eye"></i>
-            <span className="btn-text">{t('fundacion:ver')}</span>
-          </Link>
-          
-          <Link 
-            to={`/fundacion/mascotas/editar/${id}`} 
-            className="action-btn-fundacion edit"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <i className="fas fa-edit"></i>
-            <span className="btn-text">{t('fundacion:editar')}</span>
-          </Link>
-          
-          <button 
-            onClick={handleEliminar} 
-            className="action-btn-fundacion delete" 
-            disabled={eliminando}
-          >
-            <i className={eliminando ? "fas fa-spinner fa-spin" : "fas fa-trash"}></i>
-            <span className="btn-text">{eliminando ? t('fundacion:eliminando') : t('fundacion:eliminar')}</span>
-          </button>
+        {/* Badge de estado */}
+        <div className={`mcf-estado-badge ${estadoConfig.class}`}>
+          <i className={`fas ${estadoConfig.icon}`}></i>
+          <span>{estadoConfig.label}</span>
         </div>
+
+        {/* Nombre */}
+        <h3 className="mcf-titulo">{nombre_mascota || 'Sin nombre'}</h3>
+      </div>
+
+      {/* Contenido */}
+      <div className="mcf-content">
+        {descripcion && (
+          <p className="mcf-descripcion">
+            {descripcion.length > 100 ? descripcion.substring(0, 100) + '...' : descripcion}
+          </p>
+        )}
+
+        <div className="mcf-info-grid">
+          {especie && (
+            <div className="mcf-info-item">
+              <i className={`fas ${getEspecieIcon()}`}></i>
+              <span>{especie}</span>
+            </div>
+          )}
+          {sexo && (
+            <div className="mcf-info-item">
+              <i className={`fas ${getSexoIcon()}`}></i>
+              <span>{sexo}</span>
+            </div>
+          )}
+          {edad && (
+            <div className="mcf-info-item">
+              <i className="fas fa-calendar-alt"></i>
+              <span>{edad} {parseInt(edad) > 1 ? 'años' : 'año'}</span>
+            </div>
+          )}
+        </div>
+
+        {/* ✅ Acciones - siempre visibles */}
+        {showActions && (
+          <div className="mcf-actions">
+            <Link 
+              to={`/fundacion/mascotas/${id}`} 
+              className="mcf-btn mcf-btn-ver"
+              title={t('ver_detalle', 'Ver detalle')}
+            >
+              <Eye size={16} />
+              <span>{t('ver', 'Ver')}</span>
+            </Link>
+            <Link 
+              to={`/fundacion/mascotas/editar/${id}`} 
+              className="mcf-btn mcf-btn-editar"
+              title={t('editar', 'Editar')}
+              onClick={(e) => {
+                if (onEdit) {
+                  e.preventDefault();
+                  handleEditClick(e);
+                }
+              }}
+            >
+              <Edit size={16} />
+              <span>{t('editar', 'Editar')}</span>
+            </Link>
+            <button 
+              className="mcf-btn mcf-btn-eliminar"
+              onClick={handleDeleteClick}
+              title={t('eliminar', 'Eliminar')}
+            >
+              <Trash2 size={16} />
+              <span>{t('eliminar', 'Eliminar')}</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
-};
+});
+
+MascotaCardFundacion.displayName = 'MascotaCardFundacion';
 
 export default MascotaCardFundacion;

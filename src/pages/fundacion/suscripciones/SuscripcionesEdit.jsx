@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { toast } from 'react-toastify';
+import './Suscripciones.css';
 
 const FundacionSuscripcionesEdit = () => {
   const { id } = useParams();
@@ -25,11 +26,11 @@ const FundacionSuscripcionesEdit = () => {
   const cargarSuscripcion = async () => {
     try {
       setLoading(true);
-      const data = await suscripcionService.getFundacionSuscripcionById(id);
+      const data = await suscripcionService.getEntitySuscripcionById(id);
       setFormData({
         monto_mensual: data.monto_mensual,
         frecuencia: data.frecuencia,
-        fecha_inicio: data.fecha_inicio.split('T')[0],
+        fecha_inicio: data.fecha_inicio ? data.fecha_inicio.split('T')[0] : '',
         fecha_fin: data.fecha_fin ? data.fecha_fin.split('T')[0] : '',
         mensaje_apoyo: data.mensaje_apoyo || '',
         estado: data.estado
@@ -55,8 +56,8 @@ const FundacionSuscripcionesEdit = () => {
     setSaving(true);
     
     try {
-      await suscripcionService.updateFundacionSuscripcion(id, formData);
-      toast.success('Suscripción actualizada exitosamente');
+      await suscripcionService.updateEntitySuscripcion(id, formData);
+      toast.success('✅ Suscripción actualizada exitosamente');
       navigate('/fundacion/suscripciones');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error al actualizar');
@@ -69,11 +70,11 @@ const FundacionSuscripcionesEdit = () => {
   const handlePausar = async () => {
     if (window.confirm('¿Pausar esta suscripción?')) {
       try {
-        await suscripcionService.pausarSuscripcion(id);
-        toast.success('Suscripción pausada');
+        await suscripcionService.pausarSuscripcionEntity(id);
+        toast.success('⏸️ Suscripción pausada');
         cargarSuscripcion();
       } catch (error) {
-        toast.error('Error al pausar');
+        toast.error(error.message || 'Error al pausar');
       }
     }
   };
@@ -81,11 +82,23 @@ const FundacionSuscripcionesEdit = () => {
   const handleReactivar = async () => {
     if (window.confirm('¿Reactivar esta suscripción?')) {
       try {
-        await suscripcionService.reactivarSuscripcion(id);
-        toast.success('Suscripción reactivada');
+        await suscripcionService.reactivarSuscripcionEntity(id);
+        toast.success('▶️ Suscripción reactivada');
         cargarSuscripcion();
       } catch (error) {
-        toast.error('Error al reactivar');
+        toast.error(error.message || 'Error al reactivar');
+      }
+    }
+  };
+
+  const handleCancelar = async () => {
+    if (window.confirm('¿Cancelar esta suscripción? Esta acción no se puede deshacer.')) {
+      try {
+        await suscripcionService.cancelarSuscripcionEntity(id);
+        toast.success('🗑️ Suscripción cancelada');
+        navigate('/fundacion/suscripciones');
+      } catch (error) {
+        toast.error(error.message || 'Error al cancelar');
       }
     }
   };
@@ -95,9 +108,9 @@ const FundacionSuscripcionesEdit = () => {
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Editar Suscripción #{id}</h1>
+        <h1>✏️ Editar Suscripción #{id}</h1>
         <Link to="/fundacion/suscripciones" className="btn btn-secondary">
-          Volver
+          ⬅️ Volver
         </Link>
       </div>
 
@@ -105,12 +118,12 @@ const FundacionSuscripcionesEdit = () => {
         <div className="col-md-8">
           <div className="card">
             <div className="card-header">
-              <h5 className="mb-0">Datos de la Suscripción</h5>
+              <h5 className="mb-0">📌 Datos de la Suscripción</h5>
             </div>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label className="form-label">Monto Mensual *</label>
+                  <label className="form-label">💰 Monto Mensual *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -123,7 +136,7 @@ const FundacionSuscripcionesEdit = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Frecuencia *</label>
+                  <label className="form-label">🔄 Frecuencia *</label>
                   <select
                     name="frecuencia"
                     className="form-control"
@@ -139,7 +152,7 @@ const FundacionSuscripcionesEdit = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Fecha Inicio *</label>
+                  <label className="form-label">📅 Fecha Inicio *</label>
                   <input
                     type="date"
                     name="fecha_inicio"
@@ -151,7 +164,7 @@ const FundacionSuscripcionesEdit = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Fecha Fin</label>
+                  <label className="form-label">📅 Fecha Fin</label>
                   <input
                     type="date"
                     name="fecha_fin"
@@ -159,10 +172,11 @@ const FundacionSuscripcionesEdit = () => {
                     value={formData.fecha_fin}
                     onChange={handleChange}
                   />
+                  <small className="text-muted">Dejar en blanco para suscripción indefinida</small>
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Mensaje de Apoyo</label>
+                  <label className="form-label">💬 Mensaje de Apoyo</label>
                   <textarea
                     name="mensaje_apoyo"
                     className="form-control"
@@ -173,7 +187,7 @@ const FundacionSuscripcionesEdit = () => {
                 </div>
 
                 <div className="mb-3">
-                  <label className="form-label">Estado *</label>
+                  <label className="form-label">📌 Estado *</label>
                   <select
                     name="estado"
                     className="form-control"
@@ -181,10 +195,11 @@ const FundacionSuscripcionesEdit = () => {
                     onChange={handleChange}
                     required
                   >
-                    <option value="activo">Activo</option>
-                    <option value="pausado">Pausado</option>
-                    <option value="cancelado">Cancelado</option>
-                    <option value="finalizado">Finalizado</option>
+                    <option value="activo">✅ Activo</option>
+                    <option value="pendiente">⏳ Pendiente</option>
+                    <option value="pausado">⏸️ Pausado</option>
+                    <option value="cancelado">❌ Cancelado</option>
+                    <option value="finalizado">🏁 Finalizado</option>
                   </select>
                 </div>
 
@@ -194,7 +209,7 @@ const FundacionSuscripcionesEdit = () => {
                     className="btn btn-primary"
                     disabled={saving}
                   >
-                    {saving ? 'Guardando...' : 'Guardar Cambios'}
+                    {saving ? '💾 Guardando...' : '💾 Guardar Cambios'}
                   </button>
                   <Link 
                     to="/fundacion/suscripciones" 
@@ -211,17 +226,18 @@ const FundacionSuscripcionesEdit = () => {
         <div className="col-md-4">
           <div className="card">
             <div className="card-header">
-              <h5 className="mb-0">Acciones Rápidas</h5>
+              <h5 className="mb-0">⚡ Acciones Rápidas</h5>
             </div>
             <div className="card-body">
-              {formData.estado === 'activo' ? (
+              {formData.estado === 'activo' && (
                 <button 
                   onClick={handlePausar}
                   className="btn btn-warning w-100 mb-2"
                 >
                   ⏸️ Pausar Suscripción
                 </button>
-              ) : formData.estado === 'pausado' && (
+              )}
+              {formData.estado === 'pausado' && (
                 <button 
                   onClick={handleReactivar}
                   className="btn btn-success w-100 mb-2"
@@ -229,7 +245,14 @@ const FundacionSuscripcionesEdit = () => {
                   ▶️ Reactivar Suscripción
                 </button>
               )}
-              
+              {(formData.estado === 'activo' || formData.estado === 'pausado' || formData.estado === 'pendiente') && (
+                <button 
+                  onClick={handleCancelar}
+                  className="btn btn-danger w-100 mb-2"
+                >
+                  🗑️ Cancelar Suscripción
+                </button>
+              )}
               <button 
                 className="btn btn-info w-100"
                 onClick={() => window.print()}

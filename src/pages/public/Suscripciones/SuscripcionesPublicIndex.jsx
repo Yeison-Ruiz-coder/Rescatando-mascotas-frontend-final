@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { suscripcionService } from "../../../services/suscripcionService";
@@ -6,27 +6,31 @@ import api from "../../../services/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import MascotaApadrinarCard from "../../../components/common/MascotaApadrinarCard/MascotaApadrinarCard";
-import MascotaApadrinarCardModal from "../../../components/common/MascotaApadrinarCardModal/MascotaApadrinarCardModal";
 import FiltrosMascotas from "../../../components/common/FiltrosMascotas/FiltrosMascotas";
 import CustomSelect from "../../../components/common/CustomSelect/CustomSelect";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
 import "./SuscripcionesPublicIndex.css";
 
+// ✅ Lazy load del modal
+const ModalApadrinar = lazy(() => import("../../../components/common/ModalApadrinar/ModalApadrinar"));
+
 const SuscripcionesPublicIndex = () => {
   const { t } = useTranslation("suscripciones");
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const [membresias, setMembresias] = useState([]);
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [apadrinando, setApadrinando] = useState(false);
-  const [selectedMembresia, setSelectedMembresia] = useState(null);
-  const [selectedMascota, setSelectedMascota] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [orden, setOrden] = useState("reciente");
   const [currentFilters, setCurrentFilters] = useState({});
-  const [isMobile, setIsMobile] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [mascotaSeleccionada, setMascotaSeleccionada] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [apadrinando, setApadrinando] = useState(false);
+  const [mensajeModal, setMensajeModal] = useState({ tipo: '', texto: '' });
+  
+  const [visibleCount, setVisibleCount] = useState(6);
+  const ITEMS_PER_PAGE = 6;
 
   const especies = ["Perro", "Gato", "Conejo", "Ave", "Otro"];
 
@@ -37,19 +41,55 @@ const SuscripcionesPublicIndex = () => {
     { value: "edad_desc", label: t("edad_desc") },
   ];
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
+  const planesApadrinamiento = [
+    {
+      id: "basico",
+      nombre: "Amigo Fiel",
+      monto: 10000,
+      frecuencia: "mensual",
+      icon: "🐶",
+      destacado: false,
+      beneficios: [
+        "Certificado digital de apadrinamiento",
+        "Actualización mensual de tu ahijado",
+        "Calcomanía virtual exclusiva",
+      ],
+      color: "var(--color-primary, #667eea)",
+    },
+    {
+      id: "premium",
+      nombre: "Guardian Especial",
+      monto: 25000,
+      frecuencia: "mensual",
+      icon: "💝",
+      destacado: true,
+      beneficios: [
+        "Certificado premium con foto",
+        "Actualizaciones semanales",
+        "Fotos exclusivas de tu mascota",
+        "Descuento 15% en tienda",
+      ],
+      color: "var(--color-secondary, #764ba2)",
+    },
+    {
+      id: "vitalicio",
+      nombre: "Super Patrocinador",
+      monto: 50000,
+      frecuencia: "mensual",
+      icon: "🌟",
+      destacado: false,
+      beneficios: [
+        "Certificado especial con tu nombre",
+        "Visitas mensuales a tu ahijado",
+        "Nombre en placa de agradecimiento",
+        "Descuento 20% en tienda",
+      ],
+      color: "var(--color-accent, #ff6b9d)",
+    },
+  ];
 
   const applyFilters = useCallback((filters, data, sortOrder) => {
-    if (!data.length) {
-      return [];
-    }
+    if (!data.length) return [];
 
     let resultado = [...data];
 
@@ -101,14 +141,10 @@ const SuscripcionesPublicIndex = () => {
     try {
       setLoading(true);
 
-      const planesResponse = await suscripcionService.getPlanesMembresia();
-      if (planesResponse && Array.isArray(planesResponse)) {
-        setMembresias(planesResponse);
-      }
-
       const mascotasResponse = await api.get(
-        "/mascotas?estado=activo&limit=100",
+        "/mascotas?estado=En adopcion&fields=id,nombre_mascota,especie,raza,edad_aprox,genero,descripcion,estado,foto_principal&limit=20"
       );
+
       let mascotasData = [];
       if (mascotasResponse.data?.success) {
         mascotasData = mascotasResponse.data.data.data || [];
@@ -119,11 +155,12 @@ const SuscripcionesPublicIndex = () => {
       }
 
       const mascotasDisponibles = mascotasData.filter(
-        (m) => m.estado !== "Adoptado",
+        (m) => m.estado !== "Adoptado"
       );
+
       setMascotas(mascotasDisponibles);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error cargando datos:", error);
       toast.error(t("error_carga_datos"));
     } finally {
       setLoading(false);
@@ -139,6 +176,11 @@ const SuscripcionesPublicIndex = () => {
   }, []);
 
   const mascotasFiltradas = applyFilters(currentFilters, mascotas, orden);
+  const mascotasVisibles = mascotasFiltradas.slice(0, visibleCount);
+
+  const handleCargarMas = () => {
+    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
+  };
 
   const handleApadrinar = (mascota) => {
     if (!isAuthenticated) {
@@ -153,58 +195,130 @@ const SuscripcionesPublicIndex = () => {
       navigate("/login", { state: { from: "/suscripciones" } });
       return;
     }
-    setSelectedMascota(mascota);
-    setSelectedMembresia(null);
+
+    setMascotaSeleccionada(mascota);
+    setSelectedPlan(null);
+    setMensajeModal({ tipo: '', texto: '' });
     setShowModal(true);
   };
 
-  const handleMembresiaClick = (membresia) => {
-    if (!isAuthenticated) {
-      localStorage.setItem(
-        "intencion_membresia",
-        JSON.stringify({
-          plan_id: membresia.id,
-          timestamp: new Date().getTime(),
-        }),
-      );
-      toast.info(t("login_requerido"));
-      navigate("/login", { state: { from: "/suscripciones" } });
+  const closeModal = () => {
+    setShowModal(false);
+    setMascotaSeleccionada(null);
+    setSelectedPlan(null);
+    setApadrinando(false);
+    setMensajeModal({ tipo: '', texto: '' });
+  };
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+    setMensajeModal({ tipo: '', texto: '' });
+  };
+
+  const handleConfirmarApadrinar = async () => {
+    if (!selectedPlan) {
+      setMensajeModal({
+        tipo: 'error',
+        texto: '⚠️ ' + t("seleccionar_plan_error")
+      });
       return;
     }
-    setSelectedMembresia(membresia);
-    setSelectedMascota(null);
-    setShowModal(true);
+
+    if (!isAuthenticated) {
+      setMensajeModal({
+        tipo: 'error',
+        texto: '🔑 ' + t("login_requerido")
+      });
+      setTimeout(() => {
+        closeModal();
+        navigate('/login');
+      }, 1500);
+      return;
+    }
+
+    setApadrinando(true);
+    setMensajeModal({ tipo: 'info', texto: '⏳ ' + t("procesando") });
+
+    try {
+      const suscripcionData = {
+        mascota_id: mascotaSeleccionada?.id,
+        monto_mensual: selectedPlan.monto,
+        frecuencia: selectedPlan.frecuencia || "mensual",
+        mensaje_apoyo: t("mensaje_apoyo_apadrinar", {
+          nombre: mascotaSeleccionada?.nombre_mascota,
+          plan: selectedPlan.nombre
+        }),
+      };
+
+      await suscripcionService.crearSuscripcion(suscripcionData);
+
+      setMensajeModal({
+        tipo: 'success',
+        texto: `🎉 ${t("apadrinamiento_exitoso", { nombre: mascotaSeleccionada?.nombre_mascota })}`
+      });
+
+      toast.success(t("apadrinamiento_exitoso_toast", { nombre: mascotaSeleccionada?.nombre_mascota }));
+
+      setTimeout(() => {
+        closeModal();
+        cargarDatos();
+      }, 2500);
+
+    } catch (error) {
+      let errorMsg = t("error_general");
+      if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.response?.data?.errors) {
+        const errors = Object.values(error.response.data.errors);
+        if (errors.length > 0 && Array.isArray(errors[0])) {
+          errorMsg = errors[0][0];
+        } else if (errors.length > 0) {
+          errorMsg = errors[0];
+        }
+      }
+
+      setMensajeModal({
+        tipo: 'error',
+        texto: `❌ ${errorMsg}`
+      });
+
+      toast.error(errorMsg);
+    } finally {
+      setApadrinando(false);
+    }
   };
 
   const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   if (loading) {
     return (
-      <div className="suscripciones-public-page">
-        <div className="loading-container">
-          <div className="spinner"></div>
+      <div className="sp-suscripciones-page">
+        <div className="sp-loading-container">
+          <div className="sp-spinner"></div>
           <p>{t("cargando")}</p>
         </div>
       </div>
     );
   }
 
+  const hasMore = visibleCount < mascotasFiltradas.length;
+
   return (
-    <div className="suscripciones-public-page">
+    <div className="sp-suscripciones-page">
       {/* Hero Section */}
-      <div className="suscripciones-hero">
-        <h1>🌟 {t("titulo")}</h1>
-        <p>{t("subtitulo")}</p>
-        <div className="hero-stats">
-          <div className="stat">
+      <div className="sp-hero">
+        <h1 className="sp-hero-title">🌟 {t("titulo")}</h1>
+        <p className="sp-hero-subtitle">{t("subtitulo")}</p>
+        <div className="sp-hero-stats">
+          <div className="sp-hero-stat">
             <strong>500+</strong>
             <span>{t("animales_rescatados")}</span>
           </div>
-          <div className="stat">
+          <div className="sp-hero-stat">
             <strong>200+</strong>
             <span>{t("adopciones_exitosas")}</span>
           </div>
-          <div className="stat">
+          <div className="sp-hero-stat">
             <strong>1000+</strong>
             <span>{t("patrocinadores")}</span>
           </div>
@@ -212,95 +326,42 @@ const SuscripcionesPublicIndex = () => {
       </div>
 
       {/* Banner simple */}
-      <div className="planes-banner-simple">
-        <div className="simple-banner-content">
-          <span className="puppy-emoji">🐶🐱🐾</span>
-          <div className="banner-text">
+      <div className="sp-banner">
+        <div className="sp-banner-content">
+          <span className="sp-banner-emoji">🐶🐱🐾</span>
+          <div className="sp-banner-text">
             <h3>{t("banner_titulo")}</h3>
             <p>{t("banner_subtitulo")}</p>
           </div>
         </div>
       </div>
 
-      {/* Planes de Membresía - SOLO INFORMATIVOS */}
-      <div className="suscripciones-container">
-        <div className="section-header">
-          <h2>✨ {t("planes_titulo")}</h2>
-          <p>{t("planes_subtitulo")}</p>
-        </div>
-
-        <div className="planes-grid">
-          {membresias.map((plan, index) => (
-            <div
-              key={plan.id}
-              className={`plan-card ${plan.destacado ? "featured" : ""}`}
-            >
-              {plan.destacado && (
-                <div className="plan-badge">⭐ {t("mas_popular")}</div>
-              )}
-              <div className="plan-icon">
-                {index === 0 && "🐾"}
-                {index === 1 && "💝"}
-                {index === 2 && "🌟"}
-              </div>
-              <h3>{plan.nombre}</h3>
-              <div className="plan-price">
-                <span className="amount">${plan.monto?.toLocaleString()}</span>
-                <span className="period">
-                  /{plan.frecuencia || t("mensual")}
-                </span>
-              </div>
-              <p className="plan-description">{plan.descripcion}</p>
-              <ul className="plan-features">
-                {plan.beneficios?.map((beneficio, i) => (
-                  <li key={i}>
-                    <span className="check">✓</span> {beneficio}
-                  </li>
-                ))}
-              </ul>
-              {/* Botón deshabilitado - solo informativo */}
-              <button
-                className={`btn-plan ${plan.destacado ? "btn-primary" : "btn-outline"}`}
-                disabled={true}
-                style={{ opacity: 0.6, cursor: 'default' }}
-              >
-                {t("seleccionar_plan")}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Mascotas para Apadrinar */}
-      <div className="mascotas-section-full">
-        <div className="section-header">
+      <div className="sp-mascotas-section">
+        <div className="sp-section-header">
           <h2>🐾 {t("mascotas_titulo")}</h2>
           <p>{t("mascotas_subtitulo")}</p>
-          <div className="badge-count">
+          <div className="sp-badge-count">
             🐾 {t("mascotas_disponibles", { count: mascotasFiltradas.length })}
           </div>
         </div>
 
-        {/* Filtros */}
-        <div className="filtros-section sticky-glass glass-auto shadow-sticky">
-          <div className="container">
-            <FiltrosMascotas
-              onFilterChange={handleFilterChange}
-              especies={especies}
-              mascotas={mascotas}
-              isLoading={loading}
-            />
-          </div>
+        <div className="sp-filtros-wrapper">
+          <FiltrosMascotas
+            onFilterChange={handleFilterChange}
+            especies={especies}
+            mascotas={mascotas}
+            isLoading={loading}
+          />
         </div>
 
-        {/* Resultados header */}
-        <div className="results-header">
-          <div className="results-count">
+        <div className="sp-results-header">
+          <div className="sp-results-count">
             <i className="fas fa-list"></i> {t("mostrando")}{" "}
-            <strong>{mascotasFiltradas.length}</strong> {t("de")}{" "}
-            <strong>{mascotas.length}</strong> {t("mascotas")}
+            <strong>{mascotasVisibles.length}</strong> {t("de")}{" "}
+            <strong>{mascotasFiltradas.length}</strong> {t("mascotas")}
           </div>
-          <div className="results-orden">
+          <div className="sp-results-orden">
             <label>
               <i className="fas fa-sort"></i> {t("ordenar_por")}:
             </label>
@@ -314,230 +375,76 @@ const SuscripcionesPublicIndex = () => {
           </div>
         </div>
 
-        {/* Grid de mascotas */}
-        <div className="mascotas-grid-full">
-          {mascotasFiltradas.map((mascota) => (
+        <div className="sp-mascotas-grid">
+          {mascotasVisibles.map((mascota) => (
             <MascotaApadrinarCard
               key={mascota.id}
               mascota={mascota}
               getImageUrl={getImageUrl}
               onApadrinar={handleApadrinar}
-              loading={apadrinando && selectedMascota?.id === mascota.id}
+              loading={false}
             />
           ))}
         </div>
 
         {mascotasFiltradas.length === 0 && (
-          <div className="empty-container">
+          <div className="sp-empty">
             <i className="fas fa-search"></i>
             <h3>{t("sin_resultados")}</h3>
             <p>{t("sin_resultados_desc")}</p>
           </div>
         )}
+
+        {hasMore && (
+          <div className="sp-load-more-wrapper">
+            <button className="sp-btn-load-more" onClick={handleCargarMas}>
+              {t("cargar_mas")} ({mascotasFiltradas.length - visibleCount} {t("restantes")})
+            </button>
+          </div>
+        )}
       </div>
 
       {/* FAQ Section */}
-      <div className="faq-section">
-        <div className="section-header">
+      <div className="sp-faq-section">
+        <div className="sp-section-header">
           <h2>{t("faq_titulo")}</h2>
           <p>{t("faq_subtitulo")}</p>
         </div>
-        <div className="faq-grid">
-          <div className="faq-item">
+        <div className="sp-faq-grid">
+          <div className="sp-faq-item">
             <h4>🐶 {t("faq1_pregunta")}</h4>
             <p>{t("faq1_respuesta")}</p>
           </div>
-          <div className="faq-item">
+          <div className="sp-faq-item">
             <h4>📅 {t("faq2_pregunta")}</h4>
             <p>{t("faq2_respuesta")}</p>
           </div>
-          <div className="faq-item">
+          <div className="sp-faq-item">
             <h4>🎁 {t("faq3_pregunta")}</h4>
             <p>{t("faq3_respuesta")}</p>
           </div>
-          <div className="faq-item">
+          <div className="sp-faq-item">
             <h4>❌ {t("faq4_pregunta")}</h4>
             <p>{t("faq4_respuesta")}</p>
           </div>
         </div>
       </div>
 
-      {/* Modal con tarjetas para apadrinar mascotas */}
-      {showModal && selectedMascota && (
-        <MascotaApadrinarCardModal
-          mascota={selectedMascota}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedMascota(null);
-          }}
-          onSuccess={async () => {
-            setShowModal(false);
-            setSelectedMascota(null);
-            
-            // ✅ Mostrar mensaje de éxito
-            toast.success('🎉 ¡Suscripción creada exitosamente!');
-            
-            // ✅ Recargar los datos antes de navegar
-            await cargarDatos();
-            
-            // ✅ Navegar a mis suscripciones con un parámetro para forzar recarga
-            navigate('/user/mis-suscripciones?recargar=true');
-          }}
+      {/* Modal */}
+      <Suspense fallback={<div className="sp-modal-loading"><div className="sp-spinner-small"></div></div>}>
+        <ModalApadrinar
+          isOpen={showModal}
+          mascota={mascotaSeleccionada}
+          planes={planesApadrinamiento}
+          selectedPlan={selectedPlan}
+          mensaje={mensajeModal}
+          apadrinando={apadrinando}
+          onClose={closeModal}
+          onSelectPlan={handleSelectPlan}
+          onConfirmar={handleConfirmarApadrinar}
+          getImageUrl={getImageUrl}
         />
-      )}
-
-      {/* Modal para membresías */}
-      {showModal && selectedMembresia && (
-        <SuscripcionModal
-          membresia={selectedMembresia}
-          onClose={() => {
-            setShowModal(false);
-            setSelectedMembresia(null);
-          }}
-          onSuccess={async () => {
-            setShowModal(false);
-            setSelectedMembresia(null);
-            toast.success(t('suscripcion_exitosa'));
-            
-            // ✅ Recargar datos
-            await cargarDatos();
-            navigate('/user/mis-suscripciones?recargar=true');
-          }}
-        />
-      )}
-    </div>
-  );
-};
-
-// Componente Modal para Membresías
-const SuscripcionModal = ({ membresia, onClose, onSuccess }) => {
-  const { t } = useTranslation("suscripciones");
-  const { user } = useAuth();
-  const [formData, setFormData] = useState({
-    monto: membresia?.monto || 10000,
-    frecuencia: "mensual",
-    mensaje_apoyo: "",
-    metodo_pago: "tarjeta",
-  });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const suscripcionData = {
-        user_id: user?.id,
-        mascota_id: null,
-        monto_mensual: formData.monto,
-        frecuencia: formData.frecuencia,
-        fecha_inicio: new Date().toISOString().split("T")[0],
-        mensaje_apoyo: formData.mensaje_apoyo,
-        estado: "activo",
-        plan_id: membresia?.id || null,
-      };
-
-      await suscripcionService.createPublicSuscripcion(suscripcionData);
-      onSuccess();
-    } catch (error) {
-      toast.error(error.response?.data?.message || t("error_suscripcion"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>{t("plan_titulo", { nombre: membresia?.nombre })}</h2>
-          <button className="modal-close" onClick={onClose}>
-            ×
-          </button>
-        </div>
-
-        <div className="modal-body">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>{t("monto")}</label>
-              <div className="monto-input">
-                <span className="currency">$</span>
-                <input
-                  type="number"
-                  name="monto"
-                  value={formData.monto}
-                  onChange={handleChange}
-                  min="1000"
-                  step="1000"
-                  required
-                />
-              </div>
-              <small>{t("monto_minimo")}</small>
-            </div>
-
-            <div className="form-group">
-              <label>{t("frecuencia")}</label>
-              <div className="frecuencia-opciones">
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="mensual"
-                    checked={formData.frecuencia === "mensual"}
-                    onChange={handleChange}
-                  />
-                  <span>{t("mensual")}</span>
-                </label>
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="trimestral"
-                    checked={formData.frecuencia === "trimestral"}
-                    onChange={handleChange}
-                  />
-                  <span>{t("trimestral")}</span>
-                </label>
-                <label className="radio-label">
-                  <input
-                    type="radio"
-                    name="frecuencia"
-                    value="anual"
-                    checked={formData.frecuencia === "anual"}
-                    onChange={handleChange}
-                  />
-                  <span>{t("anual")}</span>
-                </label>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>{t("mensaje_apoyo")}</label>
-              <textarea
-                name="mensaje_apoyo"
-                rows="3"
-                placeholder={t("mensaje_placeholder")}
-                value={formData.mensaje_apoyo}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="modal-footer">
-              <button type="button" onClick={onClose} className="btn-cancel">
-                {t("cancelar")}
-              </button>
-              <button type="submit" className="btn-confirm" disabled={loading}>
-                {loading ? t("procesando") : t("confirmar")}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+      </Suspense>
     </div>
   );
 };

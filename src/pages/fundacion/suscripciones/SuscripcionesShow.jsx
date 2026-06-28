@@ -3,22 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { toast } from 'react-toastify';
+import './Suscripciones.css';
 
 const FundacionSuscripcionesShow = () => {
   const { id } = useParams();
   const [suscripcion, setSuscripcion] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [historialPagos, setHistorialPagos] = useState([]);
 
   useEffect(() => {
     cargarSuscripcion();
-    cargarHistorialPagos();
   }, [id]);
 
   const cargarSuscripcion = async () => {
     try {
       setLoading(true);
-      const data = await suscripcionService.getFundacionSuscripcionById(id);
+      const data = await suscripcionService.getEntitySuscripcionById(id);
       setSuscripcion(data);
     } catch (error) {
       toast.error('Error al cargar la suscripción');
@@ -28,24 +27,26 @@ const FundacionSuscripcionesShow = () => {
     }
   };
 
-  const cargarHistorialPagos = async () => {
-    try {
-      const data = await suscripcionService.getHistorialPagos(id);
-      setHistorialPagos(data);
-    } catch (error) {
-      console.error('Error al cargar historial:', error);
-    }
-  };
-
   const getEstadoBadge = (estado) => {
     const config = {
-      activo: { class: 'success', text: 'Activo' },
-      pausado: { class: 'warning', text: 'Pausado' },
-      cancelado: { class: 'danger', text: 'Cancelado' },
-      finalizado: { class: 'secondary', text: 'Finalizado' }
+      activo: { class: 'success', text: 'Activa' },
+      pendiente: { class: 'warning', text: 'Pendiente' },
+      pausado: { class: 'warning', text: 'Pausada' },
+      cancelado: { class: 'danger', text: 'Cancelada' },
+      finalizado: { class: 'secondary', text: 'Finalizada' }
     };
     const cfg = config[estado] || config.cancelado;
     return <span className={`badge bg-${cfg.class}`}>{cfg.text}</span>;
+  };
+
+  const getFrecuenciaTexto = (frecuencia) => {
+    const textos = {
+      unica: 'Pago único',
+      mensual: 'Mensual',
+      trimestral: 'Trimestral',
+      anual: 'Anual'
+    };
+    return textos[frecuencia] || frecuencia;
   };
 
   if (loading) return <div className="text-center p-5">Cargando detalle...</div>;
@@ -54,16 +55,16 @@ const FundacionSuscripcionesShow = () => {
   return (
     <div className="container-fluid p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1>Detalle de Suscripción #{suscripcion.id}</h1>
+        <h1>📋 Detalle de Suscripción #{suscripcion.id}</h1>
         <div>
           <Link 
             to={`/fundacion/suscripciones/${id}/editar`} 
             className="btn btn-warning me-2"
           >
-            Editar Suscripción
+            ✏️ Editar
           </Link>
           <Link to="/fundacion/suscripciones" className="btn btn-secondary">
-            Volver
+            ⬅️ Volver
           </Link>
         </div>
       </div>
@@ -73,14 +74,14 @@ const FundacionSuscripcionesShow = () => {
         <div className="col-md-6">
           <div className="card mb-4">
             <div className="card-header">
-              <h5 className="mb-0">Información de la Suscripción</h5>
+              <h5 className="mb-0">📌 Información de la Suscripción</h5>
             </div>
             <div className="card-body">
               <table className="table table-borderless">
                 <tbody>
                   <tr>
                     <th width="40%">ID Suscripción:</th>
-                    <td>#{suscripcion.id}</td>
+                    <td><strong>#{suscripcion.id}</strong></td>
                   </tr>
                   <tr>
                     <th>Estado:</th>
@@ -88,19 +89,15 @@ const FundacionSuscripcionesShow = () => {
                   </tr>
                   <tr>
                     <th>Monto Mensual:</th>
-                    <td><strong>${parseFloat(suscripcion.monto_mensual).toLocaleString()}</strong></td>
+                    <td><strong>${parseFloat(suscripcion.monto_mensual || 0).toLocaleString()}</strong></td>
                   </tr>
                   <tr>
                     <th>Frecuencia:</th>
-                    <td>
-                      {suscripcion.frecuencia === 'unica' ? 'Pago único' :
-                       suscripcion.frecuencia === 'mensual' ? 'Mensual' :
-                       suscripcion.frecuencia === 'trimestral' ? 'Trimestral' : 'Anual'}
-                    </td>
+                    <td>{getFrecuenciaTexto(suscripcion.frecuencia)}</td>
                   </tr>
                   <tr>
                     <th>Fecha Inicio:</th>
-                    <td>{new Date(suscripcion.fecha_inicio).toLocaleDateString()}</td>
+                    <td>{suscripcion.fecha_inicio ? new Date(suscripcion.fecha_inicio).toLocaleDateString() : '-'}</td>
                   </tr>
                   {suscripcion.fecha_fin && (
                     <tr>
@@ -110,7 +107,11 @@ const FundacionSuscripcionesShow = () => {
                   )}
                   <tr>
                     <th>Fecha Creación:</th>
-                    <td>{new Date(suscripcion.created_at).toLocaleString()}</td>
+                    <td>{suscripcion.created_at ? new Date(suscripcion.created_at).toLocaleString() : '-'}</td>
+                  </tr>
+                  <tr>
+                    <th>Es Demo:</th>
+                    <td>{suscripcion.es_demo ? '✅ Sí' : '❌ No'}</td>
                   </tr>
                 </tbody>
               </table>
@@ -122,7 +123,7 @@ const FundacionSuscripcionesShow = () => {
         <div className="col-md-6">
           <div className="card mb-4">
             <div className="card-header">
-              <h5 className="mb-0">Información del Donante</h5>
+              <h5 className="mb-0">👤 Información del Donante</h5>
             </div>
             <div className="card-body">
               {suscripcion.user ? (
@@ -130,18 +131,22 @@ const FundacionSuscripcionesShow = () => {
                   <tbody>
                     <tr>
                       <th width="40%">Nombre:</th>
-                      <td>{suscripcion.user.name}</td>
+                      <td><strong>{suscripcion.user.name || suscripcion.user.nombre || 'N/A'}</strong></td>
                     </tr>
                     <tr>
                       <th>Email:</th>
-                      <td>{suscripcion.user.email}</td>
+                      <td><a href={`mailto:${suscripcion.user.email}`}>{suscripcion.user.email || 'N/A'}</a></td>
                     </tr>
                     {suscripcion.user.telefono && (
                       <tr>
                         <th>Teléfono:</th>
-                        <td>{suscripcion.user.telefono}</td>
+                        <td><a href={`tel:${suscripcion.user.telefono}`}>{suscripcion.user.telefono}</a></td>
                       </tr>
                     )}
+                    <tr>
+                      <th>ID Usuario:</th>
+                      <td>#{suscripcion.user_id}</td>
+                    </tr>
                   </tbody>
                 </table>
               ) : (
@@ -155,7 +160,7 @@ const FundacionSuscripcionesShow = () => {
         <div className="col-md-6">
           <div className="card mb-4">
             <div className="card-header">
-              <h5 className="mb-0">Información de la Mascota</h5>
+              <h5 className="mb-0">🐾 Información de la Mascota</h5>
             </div>
             <div className="card-body">
               {suscripcion.mascota ? (
@@ -163,19 +168,27 @@ const FundacionSuscripcionesShow = () => {
                   <tbody>
                     <tr>
                       <th width="40%">Nombre:</th>
-                      <td><strong>{suscripcion.mascota.nombre}</strong></td>
+                      <td><strong>{suscripcion.mascota.nombre || 'N/A'}</strong></td>
                     </tr>
                     <tr>
                       <th>Especie:</th>
-                      <td>{suscripcion.mascota.especie}</td>
+                      <td>{suscripcion.mascota.especie || 'N/A'}</td>
                     </tr>
+                    {suscripcion.mascota.raza && (
+                      <tr>
+                        <th>Raza:</th>
+                        <td>{suscripcion.mascota.raza}</td>
+                      </tr>
+                    )}
+                    {suscripcion.mascota.edad && (
+                      <tr>
+                        <th>Edad:</th>
+                        <td>{suscripcion.mascota.edad} años</td>
+                      </tr>
+                    )}
                     <tr>
-                      <th>Raza:</th>
-                      <td>{suscripcion.mascota.raza}</td>
-                    </tr>
-                    <tr>
-                      <th>Edad:</th>
-                      <td>{suscripcion.mascota.edad} años</td>
+                      <th>ID Mascota:</th>
+                      <td>#{suscripcion.mascota_id}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -191,57 +204,10 @@ const FundacionSuscripcionesShow = () => {
           <div className="col-md-6">
             <div className="card mb-4">
               <div className="card-header">
-                <h5 className="mb-0">Mensaje de Agradecimiento</h5>
+                <h5 className="mb-0">💬 Mensaje de Apoyo</h5>
               </div>
               <div className="card-body">
                 <p className="mb-0">"{suscripcion.mensaje_apoyo}"</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Historial de pagos */}
-        {historialPagos.length > 0 && (
-          <div className="col-12">
-            <div className="card">
-              <div className="card-header">
-                <h5 className="mb-0">Historial de Pagos</h5>
-              </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-sm">
-                    <thead>
-                      <tr>
-                        <th>Fecha</th>
-                        <th>Monto</th>
-                        <th>Método</th>
-                        <th>Estado</th>
-                        <th>Comprobante</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {historialPagos.map(pago => (
-                        <tr key={pago.id}>
-                          <td>{new Date(pago.fecha).toLocaleDateString()}</td>
-                          <td>${pago.monto}</td>
-                          <td>{pago.metodo}</td>
-                          <td>
-                            <span className={`badge bg-${pago.estado === 'completado' ? 'success' : 'warning'}`}>
-                              {pago.estado}
-                            </span>
-                          </td>
-                          <td>
-                            {pago.comprobante && (
-                              <a href={pago.comprobante} target="_blank" rel="noopener noreferrer">
-                                Ver comprobante
-                              </a>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
           </div>

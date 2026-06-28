@@ -4,34 +4,29 @@
   width: 100%;
   min-height: 100vh;
   background: transparent;
-  padding: 24px;
 }
 
 .adopciones-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-}
-
-/* ===== BANNER WRAPPER ===== */
-.adopciones-banner-wrapper {
-  padding-top: 0;
-  margin-bottom: 40px;
-  width: 100%;
-}
-
-.adopciones-banner-wrapper .bento-container {
-  padding: 0;
-  max-width: 100%;
+  padding: 0 24px;
 }
 
 @media (max-width: 768px) {
-  .adopciones-banner-wrapper .bento-container {
+  .adopciones-wrapper {
     padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .adopciones-wrapper {
+    padding: 0 12px;
   }
 }
 
 /* ===== STATS CARDS ===== */
 .adopciones-stats-section {
+  margin-top: 24px;
   margin-bottom: 30px;
 }
 
@@ -41,7 +36,6 @@
   gap: 20px;
 }
 
-/* ===== STAT CARD ===== */
 .stat-card-modern {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
@@ -106,7 +100,6 @@
   margin-top: 2px;
 }
 
-/* Colores de estadísticas */
 .stat-primary .stat-icon-modern {
   background: rgba(102, 126, 234, 0.12);
   color: var(--color-primary);
@@ -247,7 +240,7 @@
   margin-right: 6px;
 }
 
-/* ===== ESTADO ===== */
+/* ===== ESTADO BADGE ===== */
 .adopciones-estado {
   display: inline-flex;
   align-items: center;
@@ -277,25 +270,9 @@
   background: #e0e7ff;
   color: #4f46e5;
 }
-
-/* ===== BOTONES ===== */
-.adopciones-btn-detalle {
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  font-size: 0.75rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.adopciones-btn-detalle:hover {
-  background: var(--color-hover);
-  color: var(--color-primary);
+.estado-en_proceso {
+  background: #fef3c7;
+  color: #d97706;
 }
 
 /* ===== DETALLE ===== */
@@ -327,10 +304,6 @@
   margin: 0;
   color: var(--color-text);
   font-size: 0.85rem;
-}
-
-.adopciones-rechazo {
-  color: var(--color-danger);
 }
 
 /* ===== PAGINACIÓN ===== */
@@ -435,6 +408,198 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+/* ===== ESTILOS UNIFICADOS DE ACCIONES ===== */
+.acciones-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 14px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-accion:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.btn-accion:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-accion svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.btn-accion i {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.btn-accion .fa-spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ===== VARIANTES DE BOTONES ===== */
+
+/* Ver detalle - Primario */
+.btn-ver-detalle {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-ver-detalle:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+/* Ver - Primario */
+.btn-ver {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-ver:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+/* PDF - Gradiente */
+.btn-pdf {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+}
+
+.btn-pdf:hover:not(:disabled) {
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Aprobar - Verde */
+.btn-aprobar {
+  background: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.btn-aprobar:hover:not(:disabled) {
+  background: #27ae60;
+  border-color: #27ae60;
+  color: white;
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.35);
+}
+
+/* Rechazar - Rojo */
+.btn-rechazar {
+  background: var(--color-danger);
+  color: white;
+  border-color: var(--color-danger);
+}
+
+.btn-rechazar:hover:not(:disabled) {
+  background: #e0313f;
+  border-color: #e0313f;
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.35);
+}
+
+/* Expandir - Secundario */
+.btn-expandir {
+  background: var(--form-input-bg);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  min-width: 32px;
+  padding: 0 12px;
+}
+
+.btn-expandir:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.btn-expandir.abierto {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-expandir.abierto:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+}
+
+/* Editar - Secundario */
+.btn-editar {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-editar:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* Badge pendiente */
+.badge-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #d97706;
+}
+
+/* PDF Error */
+.btn-pdf-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  height: 32px;
+  background: rgba(255, 71, 87, 0.1);
+  color: var(--color-danger);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .adopciones-stats-grid {
@@ -444,7 +609,7 @@
 
 @media (max-width: 768px) {
   .adopciones-container {
-    padding: 16px;
+    padding: 0;
   }
 
   .adopciones-header {
@@ -487,11 +652,26 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+
+  .btn-accion {
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 0.7rem;
+  }
+
+  .btn-accion svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .btn-accion i {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .adopciones-container {
-    padding: 12px;
+  .adopciones-wrapper {
+    padding: 0 12px;
   }
 
   .adopciones-stats-grid {
@@ -536,9 +716,42 @@
     padding: 3px 10px;
   }
 
-  .adopciones-btn-detalle {
-    font-size: 0.65rem;
-    padding: 4px 8px;
+  .btn-accion {
+    min-height: 24px;
+    padding: 0 8px;
+    font-size: 0.6rem;
+  }
+
+  .btn-accion svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .btn-accion i {
+    font-size: 0.6rem;
+  }
+
+  .btn-accion span {
+    display: none;
+  }
+
+  .btn-accion {
+    min-width: 28px;
+  }
+
+  .badge-pendiente {
+    font-size: 0.55rem;
+    padding: 2px 6px;
+  }
+
+  .btn-pdf-error {
+    height: 24px;
+    padding: 0 8px;
+    font-size: 0.6rem;
+  }
+
+  .btn-pdf-error span {
+    display: none;
   }
 }
 
@@ -561,4 +774,104 @@
 
 [data-theme="dark"] .adopciones-detalle {
   background: var(--form-input-bg) !important;
+}
+
+[data-theme="dark"] .btn-accion {
+  background: var(--form-input-bg);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-accion:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-ver-detalle {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .btn-ver-detalle:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-theme="dark"] .btn-ver {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .btn-ver:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-theme="dark"] .btn-pdf {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+}
+
+[data-theme="dark"] .btn-aprobar {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+[data-theme="dark"] .btn-aprobar:hover:not(:disabled) {
+  background: #27ae60;
+  border-color: #27ae60;
+}
+
+[data-theme="dark"] .btn-rechazar {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: white;
+}
+
+[data-theme="dark"] .btn-rechazar:hover:not(:disabled) {
+  background: #e0313f;
+  border-color: #e0313f;
+}
+
+[data-theme="dark"] .btn-expandir {
+  background: var(--form-input-bg);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .btn-expandir:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .btn-expandir.abierto {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .btn-editar {
+  background: var(--form-input-bg);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-editar:hover:not(:disabled) {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .badge-pendiente {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .btn-pdf-error {
+  background: rgba(255, 71, 87, 0.15);
+  color: #f87171;
 }

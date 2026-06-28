@@ -2,43 +2,71 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import './SeleccionarAdopcion.css';
 
 const SeleccionarAdopcionParaSeguimiento = () => {
   const { t } = useTranslation('fundacion');
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [adopciones, setAdopciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    total: 0,
+  });
+
+  const fundacionName = user?.nombre || user?.name || t('fundacion');
+  const fundacionAvatar = user?.avatar || user?.foto_perfil || null;
 
   useEffect(() => {
-    fetchAdopciones();
+    fetchAdopciones(1);
   }, []);
 
-  const fetchAdopciones = async () => {
+  const fetchAdopciones = async (page = 1) => {
     try {
       setLoading(true);
       const response = await api.get('/entity/adopciones', {
         params: { 
           estado: 'en_proceso',
-          per_page: 50
+          page,
+          per_page: 10,
+          fields: 'id,estado,fecha_adopcion,mascota_id,adoptante_id',
+          include: 'mascota,adoptante',
+          sort: 'created_at',
+          order: 'desc',
         }
       });
       
-      // La respuesta puede estar en response.data.data o response.data
       const data = response.data?.data || response.data;
       const list = data?.data || data || [];
       
       setAdopciones(Array.isArray(list) ? list : []);
+      setPagination({
+        current_page: data?.current_page || page,
+        last_page: data?.last_page || 1,
+        total: data?.total || list.length,
+      });
+      setCurrentPage(page);
     } catch (error) {
       console.error('Error cargando adopciones:', error);
       toast.error(t('error_cargar_adopciones'));
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page) => {
+    if (page === currentPage || page < 1 || page > pagination.last_page) return;
+    fetchAdopciones(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSeleccionar = (adopcionId) => {
@@ -79,6 +107,17 @@ const SeleccionarAdopcionParaSeguimiento = () => {
 
   return (
     <div className="seleccionar-adopcion-container">
+      <ProfileBanner
+        user={{
+          nombre: fundacionName,
+          avatar: fundacionAvatar,
+          titulo: t('seleccionar_adopcion'),
+          solicitudes: adopciones.length,
+          adopciones: 0,
+          eventos: 0,
+        }}
+      />
+
       <div className="seleccionar-adopcion-wrapper">
         <div className="seleccionar-adopcion-header">
           <button 
@@ -113,69 +152,93 @@ const SeleccionarAdopcionParaSeguimiento = () => {
             {!searchTerm && (
               <button 
                 className="seleccionar-btn-refresh"
-                onClick={fetchAdopciones}
+                onClick={() => fetchAdopciones(currentPage)}
               >
                 <i className="fas fa-sync-alt"></i> {t('refrescar')}
               </button>
             )}
           </div>
         ) : (
-          <div className="seleccionar-adopcion-grid">
-            {filteredAdopciones.map((adopcion) => (
-              <div key={adopcion.id} className="seleccionar-adopcion-card">
-                <div className="seleccionar-card-header">
-                  <div className="seleccionar-mascota-info">
-                    <div className="seleccionar-mascota-avatar">
-                      {adopcion.mascota?.foto_url ? (
-                        <img src={adopcion.mascota.foto_url} alt={adopcion.mascota.nombre_mascota} />
-                      ) : (
-                        <i className="fas fa-paw"></i>
-                      )}
+          <>
+            <div className="seleccionar-adopcion-grid">
+              {filteredAdopciones.map((adopcion) => (
+                <div key={adopcion.id} className="seleccionar-adopcion-card">
+                  <div className="seleccionar-card-header">
+                    <div className="seleccionar-mascota-info">
+                      <div className="seleccionar-mascota-avatar">
+                        {adopcion.mascota?.foto_url ? (
+                          <img src={adopcion.mascota.foto_url} alt={adopcion.mascota.nombre_mascota} />
+                        ) : (
+                          <i className="fas fa-paw"></i>
+                        )}
+                      </div>
+                      <div>
+                        <h3>{adopcion.mascota?.nombre_mascota || t('sin_nombre')}</h3>
+                        <span className="seleccionar-mascota-especie">
+                          {adopcion.mascota?.especie || t('no_especificado')}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h3>{adopcion.mascota?.nombre_mascota || t('sin_nombre')}</h3>
-                      <span className="seleccionar-mascota-especie">
-                        {adopcion.mascota?.especie || t('no_especificado')}
-                      </span>
+                    <span className="seleccionar-estado-badge">
+                      {t('en_proceso')}
+                    </span>
+                  </div>
+
+                  <div className="seleccionar-card-body">
+                    <div className="seleccionar-info-item">
+                      <i className="fas fa-user"></i>
+                      <span><strong>{t('adoptante')}:</strong> {adopcion.adoptante?.nombre || t('no_especificado')}</span>
+                    </div>
+                    <div className="seleccionar-info-item">
+                      <i className="fas fa-calendar"></i>
+                      <span><strong>{t('fecha_adopcion')}:</strong> {formatDate(adopcion.fecha_adopcion)}</span>
+                    </div>
+                    <div className="seleccionar-info-item">
+                      <i className="fas fa-id"></i>
+                      <span><strong>{t('id')}:</strong> #{adopcion.id}</span>
                     </div>
                   </div>
-                  <span className="seleccionar-estado-badge">
-                    {t('en_proceso')}
-                  </span>
-                </div>
 
-                <div className="seleccionar-card-body">
-                  <div className="seleccionar-info-item">
-                    <i className="fas fa-user"></i>
-                    <span><strong>{t('adoptante')}:</strong> {adopcion.adoptante?.nombre || t('no_especificado')}</span>
-                  </div>
-                  <div className="seleccionar-info-item">
-                    <i className="fas fa-calendar"></i>
-                    <span><strong>{t('fecha_adopcion')}:</strong> {formatDate(adopcion.fecha_adopcion)}</span>
-                  </div>
-                  <div className="seleccionar-info-item">
-                    <i className="fas fa-id"></i>
-                    <span><strong>{t('id')}:</strong> #{adopcion.id}</span>
+                  <div className="seleccionar-card-actions">
+                    <button
+                      className="seleccionar-btn-detalle"
+                      onClick={() => handleVerDetalle(adopcion.id)}
+                    >
+                      <i className="fas fa-eye"></i> {t('ver_detalle')}
+                    </button>
+                    <button
+                      className="seleccionar-btn-crear"
+                      onClick={() => handleSeleccionar(adopcion.id)}
+                    >
+                      <i className="fas fa-plus"></i> {t('crear_seguimiento')}
+                    </button>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                <div className="seleccionar-card-actions">
-                  <button
-                    className="seleccionar-btn-detalle"
-                    onClick={() => handleVerDetalle(adopcion.id)}
-                  >
-                    <i className="fas fa-eye"></i> {t('ver_detalle')}
-                  </button>
-                  <button
-                    className="seleccionar-btn-crear"
-                    onClick={() => handleSeleccionar(adopcion.id)}
-                  >
-                    <i className="fas fa-plus"></i> {t('crear_seguimiento')}
-                  </button>
-                </div>
+            {pagination.last_page > 1 && (
+              <div className="seleccionar-paginacion">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="seleccionar-paginacion-btn"
+                >
+                  <i className="fas fa-chevron-left"></i>
+                </button>
+                <span>
+                  {t('pagina')} {currentPage} {t('de')} {pagination.last_page}
+                </span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === pagination.last_page}
+                  className="seleccionar-paginacion-btn"
+                >
+                  <i className="fas fa-chevron-right"></i>
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

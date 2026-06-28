@@ -4,7 +4,7 @@ import { suscripcionService } from '../../services/suscripcionService';
 import { toast } from 'react-toastify';
 import './MisSuscripciones.css';
 
-const UserSuscripciones = () => {
+const MisSuscripciones = () => {
   const [suscripciones, setSuscripciones] = useState([]);
   const [suscripcionesEliminadas, setSuscripcionesEliminadas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,12 +21,14 @@ const UserSuscripciones = () => {
       setLoading(true);
       console.log('🔄 Cargando suscripciones desde el backend...');
       
-      const response = await suscripcionService.getUserSuscripciones();
+      // ✅ CORREGIDO: Usar getMisSuscripciones
+      const response = await suscripcionService.getMisSuscripciones();
       
       console.log('📊 Respuesta del backend:', response);
       
       let suscripcionesData = [];
       
+      // ✅ Extraer los datos correctamente
       if (response?.data?.data) {
         suscripcionesData = response.data.data;
       } else if (response?.data) {
@@ -37,17 +39,30 @@ const UserSuscripciones = () => {
       
       console.log('📊 Total de suscripciones del backend:', suscripcionesData.length);
       
+      // ✅ Si no hay datos, mostrar mensaje y salir
+      if (suscripcionesData.length === 0) {
+        setSuscripciones([]);
+        setSuscripcionesEliminadas([]);
+        setUltimaEliminada(null);
+        setLoading(false);
+        return;
+      }
+      
+      // ✅ Verificar que cada suscripción tenga la estructura esperada
+      const suscripcionesValidas = suscripcionesData.filter(s => s && typeof s === 'object');
+      
       // Filtrar solo las activas
-      const activas = suscripcionesData.filter(s => 
+      const activas = suscripcionesValidas.filter(s => 
         s.estado?.toLowerCase() === 'activo' || 
         s.estado?.toLowerCase() === 'pendiente'
       );
       
       // Filtrar las canceladas/inactivas
-      const eliminadas = suscripcionesData.filter(s => 
+      const eliminadas = suscripcionesValidas.filter(s => 
         s.estado?.toLowerCase() === 'cancelado' || 
         s.estado?.toLowerCase() === 'inactivo' ||
-        s.estado?.toLowerCase() === 'expirado'
+        s.estado?.toLowerCase() === 'expirado' ||
+        s.estado?.toLowerCase() === 'finalizado'
       );
       
       console.log('🐾 Suscripciones activas:', activas.length);
@@ -67,7 +82,15 @@ const UserSuscripciones = () => {
       
     } catch (error) {
       console.error('❌ Error al cargar suscripciones:', error);
-      toast.error('Error al cargar tus suscripciones');
+      
+      // ✅ Mensaje de error más amigable
+      if (error.response?.status === 500) {
+        toast.error('Error en el servidor. Por favor, intenta más tarde.');
+      } else if (error.response?.status === 401) {
+        toast.error('Tu sesión ha expirado. Inicia sesión nuevamente.');
+      } else {
+        toast.error('Error al cargar tus suscripciones');
+      }
     } finally {
       setLoading(false);
       setRecargando(false);
@@ -80,7 +103,8 @@ const UserSuscripciones = () => {
       'pendiente': 1,
       'inactivo': 2,
       'cancelado': 3,
-      'expirado': 4
+      'expirado': 4,
+      'finalizado': 5
     };
 
     return [...lista].sort((a, b) => {
@@ -100,15 +124,14 @@ const UserSuscripciones = () => {
     });
   };
 
-  // ✅ UNICA DEFINICIÓN DE handleCancelar
   const handleCancelar = async (id) => {
     if (window.confirm('¿Estás seguro de que deseas cancelar esta suscripción? Esta acción no se puede deshacer.')) {
       setCancelando(id);
       try {
         console.log('🗑️ Cancelando suscripción:', id);
         
-        // Intentar cancelar en el backend
-        await suscripcionService.cancelUserSuscripcion(id);
+        // ✅ Usar el método correcto para cancelar
+        await suscripcionService.cancelarSuscripcion(id);
         
         toast.success('✅ Suscripción cancelada exitosamente');
         
@@ -117,48 +140,10 @@ const UserSuscripciones = () => {
         
       } catch (error) {
         console.error('❌ Error al cancelar:', error);
-        toast.error('Error al cancelar la suscripción. Intenta nuevamente.');
+        toast.error(error.response?.data?.message || 'Error al cancelar la suscripción');
       } finally {
         setCancelando(null);
       }
-    }
-  };
-
-  const handleRestaurar = async (id) => {
-    try {
-      console.log('🔄 Restaurando suscripción:', id);
-      
-      const eliminada = suscripcionesEliminadas.find(s => s.id === id);
-      
-      if (eliminada) {
-        // Intentar restaurar en el backend
-        try {
-          // Si tienes un endpoint para restaurar
-          // await suscripcionService.reactivarSuscripcion(id);
-          
-          // Por ahora, solo actualizar localmente
-          const restaurada = {
-            ...eliminada,
-            estado: 'activo',
-            updated_at: new Date().toISOString()
-          };
-          
-          const nuevasActivas = [...suscripciones, restaurada];
-          const nuevasEliminadas = suscripcionesEliminadas.filter(s => s.id !== id);
-          
-          setSuscripciones(ordenarSuscripciones(nuevasActivas));
-          setSuscripcionesEliminadas(nuevasEliminadas);
-          setUltimaEliminada(nuevasEliminadas.length > 0 ? nuevasEliminadas[nuevasEliminadas.length - 1] : null);
-          
-          toast.success(`✅ Suscripción restaurada exitosamente`);
-        } catch (error) {
-          console.error('❌ Error al restaurar:', error);
-          toast.error('Error al restaurar la suscripción');
-        }
-      }
-    } catch (error) {
-      console.error('❌ Error al restaurar:', error);
-      toast.error('Error al restaurar la suscripción');
     }
   };
 
@@ -169,6 +154,8 @@ const UserSuscripciones = () => {
   };
 
   const getNombreMascota = (suscripcion) => {
+    if (!suscripcion) return 'Mascota';
+    
     if (suscripcion.mascota?.nombre_mascota) {
       return suscripcion.mascota.nombre_mascota;
     }
@@ -185,11 +172,16 @@ const UserSuscripciones = () => {
   };
 
   const getImagenMascota = (suscripcion) => {
+    if (!suscripcion) return null;
+    
     if (suscripcion.mascota?.imagen_url) {
       return suscripcion.mascota.imagen_url;
     }
     if (suscripcion.mascota?.foto_url) {
       return suscripcion.mascota.foto_url;
+    }
+    if (suscripcion.mascota?.foto_principal) {
+      return suscripcion.mascota.foto_principal;
     }
     return null;
   };
@@ -198,9 +190,11 @@ const UserSuscripciones = () => {
     const estados = {
       'activo': { class: 'success', icon: '✅', label: 'Activa' },
       'pendiente': { class: 'warning', icon: '⏳', label: 'Pendiente' },
+      'pausado': { class: 'warning', icon: '⏸️', label: 'Pausada' },
       'cancelado': { class: 'danger', icon: '❌', label: 'Cancelada' },
       'expirado': { class: 'secondary', icon: '⏰', label: 'Expirada' },
-      'inactivo': { class: 'secondary', icon: '⏸️', label: 'Inactiva' }
+      'inactivo': { class: 'secondary', icon: '⏸️', label: 'Inactiva' },
+      'finalizado': { class: 'secondary', icon: '🏁', label: 'Finalizada' }
     };
     return estados[estado?.toLowerCase()] || { class: 'secondary', icon: '❓', label: estado || 'Desconocido' };
   };
@@ -261,6 +255,7 @@ const UserSuscripciones = () => {
                     handleCancelar={handleCancelar}
                     cancelando={cancelando}
                     mostrarBotonEliminar={true}
+                    esActiva={true}
                   />
                 ))}
               </div>
@@ -281,8 +276,6 @@ const UserSuscripciones = () => {
                   getNombreMascota={getNombreMascota}
                   getImagenMascota={getImagenMascota}
                   getEstadoInfo={getEstadoInfo}
-                  handleRestaurar={handleRestaurar}
-                  mostrarBotonRestaurar={true}
                   esEliminada={true}
                 />
               </div>
@@ -319,30 +312,45 @@ const UserSuscripciones = () => {
   );
 };
 
-// Componente de Tarjeta de Suscripción
+// ============================================
+// COMPONENTE: SuscripcionCard
+// ============================================
 const SuscripcionCard = ({ 
   suscripcion, 
   getNombreMascota, 
   getImagenMascota, 
   getEstadoInfo, 
   handleCancelar, 
-  handleRestaurar,
   cancelando,
   mostrarBotonEliminar = false,
-  mostrarBotonRestaurar = false,
   esEliminada = false,
-  esHistorial = false
+  esHistorial = false,
+  esActiva = false
 }) => {
   const nombreMascota = getNombreMascota(suscripcion);
   const imagenMascota = getImagenMascota(suscripcion);
   const estadoInfo = getEstadoInfo(suscripcion.estado);
-  const esActiva = suscripcion.estado?.toLowerCase() === 'activo';
+  const esActivaEstado = suscripcion.estado?.toLowerCase() === 'activo';
   const fechaInicio = suscripcion.fecha_inicio ? new Date(suscripcion.fecha_inicio) : null;
-  const fechaFin = suscripcion.fecha_eliminacion || suscripcion.updated_at ? 
-    new Date(suscripcion.fecha_eliminacion || suscripcion.updated_at) : null;
+  const fechaFin = suscripcion.fecha_eliminacion || suscripcion.updated_at || suscripcion.fecha_fin ? 
+    new Date(suscripcion.fecha_eliminacion || suscripcion.updated_at || suscripcion.fecha_fin) : null;
+
+  // ✅ Formatear fecha
+  const formatearFecha = (fecha) => {
+    if (!fecha) return '-';
+    try {
+      return fecha.toLocaleDateString('es-ES', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+    } catch {
+      return '-';
+    }
+  };
 
   return (
-    <div className={`suscripcion-card ${esActiva ? 'card-activa' : 'card-eliminada'} ${esHistorial ? 'card-historial' : ''}`}>
+    <div className={`suscripcion-card ${esActivaEstado ? 'card-activa' : 'card-inactiva'} ${esHistorial ? 'card-historial' : ''}`}>
       <div className="suscripcion-card-header">
         <div className="suscripcion-mascota">
           {imagenMascota ? (
@@ -350,14 +358,19 @@ const SuscripcionCard = ({
               src={imagenMascota} 
               alt={nombreMascota}
               className="suscripcion-avatar"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentElement.querySelector('.suscripcion-avatar-placeholder')?.classList.remove('hidden');
+              }}
             />
-          ) : (
-            <div className="suscripcion-avatar-placeholder">🐾</div>
-          )}
+          ) : null}
+          <div className="suscripcion-avatar-placeholder">
+            {esActivaEstado ? '🐾' : '🗑️'}
+          </div>
           <div className="suscripcion-mascota-info">
             <h3>{nombreMascota}</h3>
             <span className="suscripcion-tipo">
-              {suscripcion.plan_id ? '📋 Plan: ' + suscripcion.plan_id : '🤝 Apadrinamiento'}
+              {suscripcion.plan_id ? '📋 Plan' : '🤝 Apadrinamiento'}
             </span>
             {esEliminada && (
               <span className="suscripcion-eliminada-tag">🗑️ Eliminada</span>
@@ -374,7 +387,7 @@ const SuscripcionCard = ({
           <div className="detalle-item">
             <span className="detalle-label">💰 Monto mensual</span>
             <span className="detalle-valor">
-              ${suscripcion.monto_mensual?.toLocaleString() || suscripcion.monto?.toLocaleString() || '0'}
+              ${parseFloat(suscripcion.monto_mensual || suscripcion.monto || 0).toLocaleString()}
             </span>
           </div>
           <div className="detalle-item">
@@ -387,11 +400,7 @@ const SuscripcionCard = ({
             <div className="detalle-item">
               <span className="detalle-label">📅 Inicio</span>
               <span className="detalle-valor">
-                {fechaInicio.toLocaleDateString('es-ES', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
+                {formatearFecha(fechaInicio)}
               </span>
             </div>
           )}
@@ -399,11 +408,7 @@ const SuscripcionCard = ({
             <div className="detalle-item">
               <span className="detalle-label">🗑️ Eliminada</span>
               <span className="detalle-valor">
-                {fechaFin.toLocaleDateString('es-ES', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
+                {formatearFecha(fechaFin)}
               </span>
             </div>
           )}
@@ -417,7 +422,7 @@ const SuscripcionCard = ({
       </div>
 
       <div className="suscripcion-card-footer">
-        {mostrarBotonEliminar && esActiva && (
+        {mostrarBotonEliminar && esActivaEstado && (
           <button
             className="btn-cancelar"
             onClick={() => handleCancelar(suscripcion.id)}
@@ -430,17 +435,14 @@ const SuscripcionCard = ({
             )}
           </button>
         )}
-        {mostrarBotonRestaurar && (
-          <button
-            className="btn-restaurar"
-            onClick={() => handleRestaurar(suscripcion.id)}
-          >
-            🔄 Restaurar Suscripción
-          </button>
-        )}
-        {esEliminada && !mostrarBotonRestaurar && !mostrarBotonEliminar && (
+        {esEliminada && !mostrarBotonEliminar && (
           <span className="suscripcion-inactiva-msg">
-            Esta suscripción fue eliminada
+            {esHistorial ? 'Suscripción eliminada' : 'Esta suscripción fue cancelada'}
+          </span>
+        )}
+        {suscripcion.estado?.toLowerCase() === 'pendiente' && (
+          <span className="suscripcion-inactiva-msg">
+            ⏳ Pendiente de pago
           </span>
         )}
       </div>
@@ -448,4 +450,4 @@ const SuscripcionCard = ({
   );
 };
 
-export default UserSuscripciones;
+export default MisSuscripciones;

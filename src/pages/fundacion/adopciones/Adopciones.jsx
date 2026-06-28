@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
-import { PawPrint, CheckCircle, Clock, Heart, RefreshCw } from 'lucide-react';
+import StatCard from '../../../components/common/StatCard/StatCard';
+import { PawPrint, CheckCircle, Clock, Heart, RefreshCw, Eye } from 'lucide-react';
 import './Adopciones.css';
 
 const FundacionAdopciones = () => {
@@ -24,7 +25,6 @@ const FundacionAdopciones = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filaAbierta, setFilaAbierta] = useState(null);
 
-  // Estadísticas
   const totalAdopciones = pagination.total || adopciones.length;
   const enProceso = adopciones.filter(a => a.estado === 'en_proceso' || a.estado === 'aprobada').length;
   const completadas = adopciones.filter(a => a.estado === 'completada').length;
@@ -34,13 +34,14 @@ const FundacionAdopciones = () => {
       setLoading(true);
       setError(null);
 
-      const response = await api.get('/entity/solicitudes', {
+      const response = await api.get('/entity/adopciones', {
         params: {
           page,
           per_page: 10,
-          estado: 'aprobada',
           sort: 'created_at',
           order: 'desc',
+          fields: 'id,estado,created_at,fecha_adopcion,observaciones,mascota_id,adoptante_id',
+          include: 'mascota,adoptante',
         },
       });
 
@@ -83,6 +84,10 @@ const FundacionAdopciones = () => {
     setFilaAbierta(filaAbierta === id ? null : id);
   };
 
+  const navigateToDetalle = (id) => {
+    window.location.href = `/fundacion/adopciones/${id}`;
+  };
+
   const formatDate = (date) => {
     if (!date) return '';
     try {
@@ -103,6 +108,7 @@ const FundacionAdopciones = () => {
       aprobada: { label: t('estado_aprobada'), class: 'estado-aprobada' },
       rechazada: { label: t('estado_rechazada'), class: 'estado-rechazada' },
       completada: { label: t('estado_completada'), class: 'estado-completada' },
+      en_proceso: { label: t('estado_en_proceso'), class: 'estado-pendiente' },
     };
     return estados[estado] || estados.pendiente;
   };
@@ -137,25 +143,21 @@ const FundacionAdopciones = () => {
 
   return (
     <div className="adopciones-container">
-      {/* ===== BANNER DE PERFIL ===== */}
-      <div className="adopciones-banner-wrapper">
-        <ProfileBanner
-          user={{
-            nombre: fundacionName,
-            avatar: fundacionAvatar,
-            titulo: t('banner.titulo', {
-              defaultValue: '{{count}} adopciones realizadas',
-              count: totalAdopciones,
-            }),
-            solicitudes: totalAdopciones,
-            adopciones: enProceso,
-            eventos: completadas,
-          }}
-        />
-      </div>
+      <ProfileBanner
+        user={{
+          nombre: fundacionName,
+          avatar: fundacionAvatar,
+          titulo: t('banner.titulo', {
+            defaultValue: '{{count}} adopciones gestionadas',
+            count: totalAdopciones,
+          }),
+          solicitudes: totalAdopciones,
+          adopciones: enProceso,
+          eventos: completadas,
+        }}
+      />
 
       <div className="adopciones-wrapper">
-        {/* ===== STATS CARDS ===== */}
         <section className="adopciones-stats-section">
           <div className="adopciones-stats-grid">
             <StatCard
@@ -179,7 +181,6 @@ const FundacionAdopciones = () => {
           </div>
         </section>
 
-        {/* ===== HEADER ===== */}
         <div className="adopciones-header">
           <div className="adopciones-header-left">
             <h1>
@@ -210,7 +211,7 @@ const FundacionAdopciones = () => {
                   <tr>
                     <th>{t('id')}</th>
                     <th>{t('mascota')}</th>
-                    <th>{t('solicitante')}</th>
+                    <th>{t('adoptante')}</th>
                     <th>{t('fecha')}</th>
                     <th>{t('estado')}</th>
                     <th>{t('acciones')}</th>
@@ -219,8 +220,8 @@ const FundacionAdopciones = () => {
                 <tbody>
                   {adopciones.map((item) => {
                     const estado = getEstadoBadge(item.estado);
-                    const mascotaNombre = item.solicitable?.nombre_mascota || t('mascota_no_disponible');
-                    const solicitanteNombre = item.usuario?.nombre || item.nombre_solicitante || t('no_especificado');
+                    const mascotaNombre = item.mascota?.nombre_mascota || t('mascota_no_disponible');
+                    const adoptanteNombre = item.adoptante?.nombre || t('no_especificado');
                     const isOpen = filaAbierta === item.id;
 
                     return (
@@ -230,21 +231,32 @@ const FundacionAdopciones = () => {
                           <td>
                             <i className="fas fa-paw"></i> {mascotaNombre}
                           </td>
-                          <td>{solicitanteNombre}</td>
-                          <td>{formatDate(item.created_at)}</td>
+                          <td>{adoptanteNombre}</td>
+                          <td>{formatDate(item.fecha_adopcion || item.created_at)}</td>
                           <td>
                             <span className={`adopciones-estado ${estado.class}`}>
                               {estado.label}
                             </span>
                           </td>
                           <td>
-                            <button
-                              className="adopciones-btn-detalle"
-                              onClick={() => toggleDetalle(item.id)}
-                            >
-                              <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
-                              {isOpen ? t('ocultar') : t('ver')}
-                            </button>
+                            <div className="acciones-container">
+                              <button
+                                className="btn-accion btn-ver"
+                                onClick={() => navigateToDetalle(item.id)}
+                                title={t('ver_detalle_completo')}
+                              >
+                                <Eye size={14} />
+                                <span>{t('ver')}</span>
+                              </button>
+                              <button
+                                className={`btn-accion btn-expandir ${isOpen ? 'abierto' : ''}`}
+                                onClick={() => toggleDetalle(item.id)}
+                                title={isOpen ? t('ocultar') : t('ver_mas')}
+                              >
+                                <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+                                <span>{isOpen ? t('ocultar') : t('ver_mas')}</span>
+                              </button>
+                            </div>
                           </td>
                         </tr>
 
@@ -254,22 +266,16 @@ const FundacionAdopciones = () => {
                               <div className="adopciones-detalle-grid">
                                 <div>
                                   <strong>{t('email')}</strong>
-                                  <p>{item.usuario?.email || item.email_solicitante || t('no_especificado')}</p>
+                                  <p>{item.adoptante?.email || t('no_especificado')}</p>
                                 </div>
                                 <div>
                                   <strong>{t('telefono')}</strong>
-                                  <p>{item.usuario?.telefono || item.telefono_solicitante || t('no_especificado')}</p>
+                                  <p>{item.adoptante?.telefono || t('no_especificado')}</p>
                                 </div>
                                 <div className="full">
-                                  <strong>{t('mensaje')}</strong>
-                                  <p>{item.contenido || t('no_especificado')}</p>
+                                  <strong>{t('observaciones')}</strong>
+                                  <p>{item.observaciones || t('sin_observaciones')}</p>
                                 </div>
-                                {item.razon_rechazo && (
-                                  <div className="full">
-                                    <strong>{t('razon_rechazo')}</strong>
-                                    <p className="adopciones-rechazo">{item.razon_rechazo}</p>
-                                  </div>
-                                )}
                               </div>
                             </td>
                           </tr>
@@ -304,31 +310,6 @@ const FundacionAdopciones = () => {
             )}
           </>
         )}
-      </div>
-    </div>
-  );
-};
-
-// ===== STAT CARD =====
-const StatCard = ({ icon, label, value, color }) => {
-  const getColorClass = () => {
-    switch (color) {
-      case 'danger': return 'stat-danger';
-      case 'warning': return 'stat-warning';
-      case 'success': return 'stat-success';
-      default: return 'stat-primary';
-    }
-  };
-
-  return (
-    <div className={`stat-card-modern ${getColorClass()}`}>
-      <div className="stat-header-modern">
-        <div className="stat-icon-modern">{icon}</div>
-        <span className="stat-badge-modern">{label}</span>
-      </div>
-      <div className="stat-body-modern">
-        <span className="stat-value-modern">{value}</span>
-        <span className="stat-label-modern">{label}</span>
       </div>
     </div>
   );

@@ -2,6 +2,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../contexts/AuthContext';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import useEditarMascota from '../../../hooks/useEditarMascota';
 import MascotaFormSteps from './components/MascotaFormSteps';
@@ -18,6 +20,7 @@ const EditarMascota = () => {
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuth();
   
   const {
     form,
@@ -43,6 +46,9 @@ const EditarMascota = () => {
     handleRemoveExistingFoto,
     fundacionNombre,
   } = useEditarMascota(id);
+
+  const adminName = user?.name || user?.nombre || t('fundacion', 'Fundación');
+  const adminAvatar = user?.avatar || null;
 
   const handleGoBack = () => {
     if (currentStep > 1) {
@@ -79,92 +85,111 @@ const EditarMascota = () => {
 
   return (
     <div className="nueva-mascota-page">
-      <div className="page-header-buttons">
-        <button className="btn-back-page" onClick={handleGoBack}>
-          <i className="fas fa-arrow-left"></i>
-          <span>{t('botones.volver', { defaultValue: 'Volver' })}</span>
-        </button>
+      {/* ===== BANNER ===== */}
+      <div className="nueva-mascota-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: t('titulo_editar', { defaultValue: 'Editar Mascota' }),
+            solicitudes: 0,
+            adopciones: 0,
+            eventos: 0,
+          }}
+        />
       </div>
 
-      <div className="mascota-form-container">
-        <div className="form-header">
-          <h1>
-            <i className="fas fa-edit"></i>
-            {t('titulo_editar', { defaultValue: 'Editar Mascota' })}
-          </h1>
-          <p className="form-subtitle">
-            {fundacionNombre 
-              ? `${t('fundacion_label', { defaultValue: 'Fundación' })}: ${fundacionNombre}` 
-              : t('subtitulo_editar', { defaultValue: 'Actualiza los datos de la mascota' })
-            }
-          </p>
-        </div>
+      {/* ===== CONTENIDO ===== */}
+      <div className="nueva-mascota-content">
+        <div className="bento-container">
+          <div className="page-header-buttons">
+            <button className="btn-back-page" onClick={handleGoBack}>
+              <i className="fas fa-arrow-left"></i>
+              <span>{t('botones.volver', { defaultValue: 'Volver' })}</span>
+            </button>
+          </div>
 
-        <MascotaFormSteps steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
+          <div className="mascota-form-container">
+            <div className="form-header">
+              <h1>
+                <i className="fas fa-edit"></i>
+                {t('titulo_editar', { defaultValue: 'Editar Mascota' })}
+              </h1>
+              <p className="form-subtitle">
+                {fundacionNombre 
+                  ? `${t('fundacion_label', { defaultValue: 'Fundación' })}: ${fundacionNombre}` 
+                  : t('subtitulo_editar', { defaultValue: 'Actualiza los datos de la mascota' })
+                }
+              </p>
+            </div>
 
-        <div className="form-content">
-          <form onSubmit={handleSubmit}>
-            {currentStep === 1 && (
-              <FormStep1 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-                especies={especies} 
-                generos={generos} 
-                estados={estados} 
-                razasList={razasList} 
-              />
-            )}
-            {currentStep === 2 && (
-              <FormStep2 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 3 && (
-              <FormStep3 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 4 && (
-              <FormStep4 
-                form={form} 
-                setForm={setForm} 
-                vacunasList={vacunasList} 
-              />
-            )}
-            {currentStep === 5 && (
-              <FormStep5 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-              />
-            )}
-            {currentStep === 6 && (
-              <FormStep6 
-                form={form} 
-                setForm={setForm} 
-                errors={errors} 
-                getImageUrl={getImageUrl}
-                galeriaExistente={galeriaExistente}
-                onRemoveExistingFoto={handleRemoveExistingFoto}
-              />
-            )}
-            
-            <FormActions 
-              currentStep={currentStep} 
-              totalSteps={totalSteps}
-              onPrev={prevStep} 
-              onNext={nextStep} 
-              onSubmit={handleSubmit} 
-              loading={loading}
-              isEditMode={true}
-              cancelUrl="/fundacion/mascotas"
-            />
-          </form>
+            <MascotaFormSteps steps={steps} currentStep={currentStep} setCurrentStep={setCurrentStep} />
+
+            <div className="form-content">
+              <form onSubmit={handleSubmit}>
+                {currentStep === 1 && (
+                  <FormStep1 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                    especies={especies} 
+                    generos={generos} 
+                    estados={estados} 
+                    razasList={razasList} 
+                  />
+                )}
+                {currentStep === 2 && (
+                  <FormStep2 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 3 && (
+                  <FormStep3 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 4 && (
+                  <FormStep4 
+                    form={form} 
+                    setForm={setForm} 
+                    vacunasList={vacunasList} 
+                  />
+                )}
+                {currentStep === 5 && (
+                  <FormStep5 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                  />
+                )}
+                {currentStep === 6 && (
+                  <FormStep6 
+                    form={form} 
+                    setForm={setForm} 
+                    errors={errors} 
+                    getImageUrl={getImageUrl}
+                    galeriaExistente={galeriaExistente}
+                    onRemoveExistingFoto={handleRemoveExistingFoto}
+                  />
+                )}
+                
+                <FormActions 
+                  currentStep={currentStep} 
+                  totalSteps={totalSteps}
+                  onPrev={prevStep} 
+                  onNext={nextStep} 
+                  onSubmit={handleSubmit} 
+                  loading={loading}
+                  isEditMode={true}
+                  cancelUrl="/fundacion/mascotas"
+                />
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -38,7 +38,8 @@ const FundacionSidebar = () => {
     rescates: true,
     mascotas: false,
     adopciones: false,
-    eventos: false
+    eventos: false,
+    suscripciones: false // ✅ Nueva sección
   });
 
   const [showBadges, setShowBadges] = useState(false);
@@ -48,7 +49,8 @@ const FundacionSidebar = () => {
     solicitudesPendientes: 0,
     mascotasActivas: 0,
     rescatesNuevos: 0,
-    seguimientosPendientes: 0
+    seguimientosPendientes: 0,
+    suscripcionesActivas: 0 // ✅ Nuevo contador
   });
   const [loading, setLoading] = useState(true);
 
@@ -145,6 +147,20 @@ const FundacionSidebar = () => {
           }));
         }
 
+        // ✅ Obtener contador de suscripciones activas
+        const suscripcionesRes = await fetch('/api/fundacion/suscripciones/activas/count', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (suscripcionesRes.ok) {
+          const data = await suscripcionesRes.json();
+          setBadgeCounts(prev => ({
+            ...prev,
+            suscripcionesActivas: data.count || 0
+          }));
+        }
+
       } catch (error) {
         console.error('Error fetching badge counts:', error);
       } finally {
@@ -167,6 +183,10 @@ const FundacionSidebar = () => {
       return location.pathname.startsWith('/fundacion/adopciones') || 
              location.pathname.startsWith('/fundacion/solicitudes') ||
              location.pathname.startsWith('/fundacion/seguimientos');
+    }
+    // ✅ Verificar suscripciones
+    if (path === '/fundacion/suscripciones') {
+      return location.pathname.startsWith('/fundacion/suscripciones');
     }
     return location.pathname.startsWith(path);
   }, [location.pathname]);
@@ -210,6 +230,11 @@ const FundacionSidebar = () => {
     }
     return <i className="fas fa-building"></i>;
   }, [userAvatar, user, t]);
+
+  // ✅ Calcular total de badges para suscripciones
+  const totalSuscripcionesBadge = useMemo(() => {
+    return badgeCounts.suscripcionesActivas > 0 ? badgeCounts.suscripcionesActivas : null;
+  }, [badgeCounts.suscripcionesActivas]);
 
   return (
     <aside 
@@ -376,6 +401,38 @@ const FundacionSidebar = () => {
               icon="fas fa-plus-circle"
               label={t("crear_evento")}
               isActive={isActive('/fundacion/eventos/crear')}
+              onClick={handleLinkClick}
+            />
+          </div>
+        </div>
+
+        {/* ✅ SECCIÓN DE SUSCRIPCIONES */}
+        <div className="sidebar-section sidebar-section-suscripciones">
+          <div
+            className={`sidebar-item has-submenu ${isActive('/fundacion/suscripciones') ? 'active' : ''}`}
+            onClick={() => toggleSection('suscripciones')}
+          >
+            <i className="fas fa-hand-holding-heart"></i>
+            <span>{t("suscripciones")}</span>
+            {showBadges && totalSuscripcionesBadge && (
+              <span className="sidebar-badge">{totalSuscripcionesBadge}</span>
+            )}
+            <i className={`fas fa-chevron-right arrow ${openSections.suscripciones ? 'open' : ''}`}></i>
+          </div>
+          <div className={`submenu ${openSections.suscripciones ? 'open' : ''}`}>
+            <SubmenuItem
+              to="/fundacion/suscripciones"
+              icon="fas fa-list"
+              label={t("mis_suscripciones")}
+              isActive={isActive('/fundacion/suscripciones') && !isActive('/fundacion/suscripciones/crear')}
+              onClick={handleLinkClick}
+              badge={totalSuscripcionesBadge}
+            />
+            <SubmenuItem
+              to="/fundacion/suscripciones/crear"
+              icon="fas fa-plus-circle"
+              label={t("crear_suscripcion")}
+              isActive={isActive('/fundacion/suscripciones/crear')}
               onClick={handleLinkClick}
             />
           </div>

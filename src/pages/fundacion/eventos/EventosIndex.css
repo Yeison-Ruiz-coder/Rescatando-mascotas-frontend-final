@@ -1,27 +1,45 @@
 /* src/pages/fundacion/eventos/EventosIndex.css */
 
 /* ============================================
-   FUNDACIÓN - LISTA DE EVENTOS (DISEÑO MASCOTAS)
+   FUNDACIÓN - LISTA DE EVENTOS
    ============================================ */
 
 .fundacion-eventos-page {
   min-height: calc(100vh - var(--navbar-height, 70px));
 }
 
-/* ===== HEADER SECTION ===== */
-.fundacion-eventos-header {
-  padding: 60px 0 40px 0;
-  text-align: center;
-  background: transparent;
-  backdrop-filter: blur(2px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  position: relative;
+.fundacion-eventos-wrapper {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
 }
 
-.fundacion-eventos-header h1 {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
+@media (max-width: 768px) {
+  .fundacion-eventos-wrapper {
+    padding: 0 16px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fundacion-eventos-wrapper {
+    padding: 0 12px 20px;
+  }
+}
+
+/* ===== HEADER ===== */
+.fundacion-eventos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.fundacion-eventos-header-left h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
@@ -31,40 +49,58 @@
   gap: 0.75rem;
 }
 
-.fundacion-eventos-header .subtitle {
-  font-size: 1.2rem;
+.fundacion-eventos-header-left .subtitle {
   color: var(--color-text-muted);
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin: 0;
 }
 
-.fundacion-eventos-header .info {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  margin-top: 1rem;
+.fundacion-eventos-header-right {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  gap: 12px;
 }
 
-/* ===== FILTROS SECTION ===== */
+.fundacion-btn-crear {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.fundacion-btn-crear:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+  color: white;
+}
+
+/* ===== FILTROS ===== */
 .fundacion-eventos-filtros-section {
-  padding: 10px 0;
-  position: sticky;
-  top: var(--navbar-height, 70px);
-  z-index: 99;
+  padding: 10px 0 20px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 20px;
 }
 
-/* ===== RESULTADOS SECTION ===== */
+/* ===== RESULTADOS ===== */
 .fundacion-eventos-resultados-section {
-  padding: 40px 0;
+  padding: 10px 0 40px;
 }
 
 .fundacion-eventos-resultados-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -79,7 +115,7 @@
 
 .fundacion-eventos-resultados-count strong {
   color: var(--color-accent);
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .fundacion-eventos-resultados-orden {
@@ -91,19 +127,22 @@
 .fundacion-eventos-resultados-orden label {
   font-size: 0.85rem;
   color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
 }
 
-/* ===== GRID DE EVENTOS ===== */
+/* ===== GRID ===== */
 .fundacion-eventos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
-/* ===== ESTADO VACÍO ===== */
+.fundacion-eventos-grid.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== EMPTY ===== */
 .fundacion-eventos-empty {
   text-align: center;
   padding: 4rem 2rem;
@@ -151,7 +190,7 @@
   transform: translateY(-2px);
 }
 
-/* ===== ESTADO DE ERROR ===== */
+/* ===== ERROR ===== */
 .fundacion-eventos-error {
   text-align: center;
   padding: 4rem 2rem;
@@ -197,93 +236,65 @@
   box-shadow: var(--shadow-md);
 }
 
-/* ===== LOADING ===== */
-.fundacion-eventos-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  gap: 1rem;
-}
-
-.fundacion-eventos-loading .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .fundacion-eventos-filtros-section {
-  background: rgba(30, 41, 59, 0.9);
-}
-
-[data-theme="dark"] .fundacion-eventos-header {
-  border-bottom-color: rgba(139, 156, 255, 0.15);
-}
-
-[data-theme="dark"] .fundacion-eventos-empty,
-[data-theme="dark"] .fundacion-eventos-error {
-  background: var(--color-card-bg);
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .fundacion-eventos-header h1 {
-    font-size: 2.2rem;
-  }
-  
-  .fundacion-eventos-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+  .fundacion-eventos-grid,
+  .fundacion-eventos-grid.bento-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
   }
 }
 
 @media (max-width: 768px) {
   .fundacion-eventos-header {
-    padding: 40px 0 30px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 0;
   }
-  
-  .fundacion-eventos-header h1 {
-    font-size: 1.8rem;
+
+  .fundacion-eventos-header-left h1 {
+    font-size: 1.5rem;
   }
-  
-  .fundacion-eventos-header .subtitle {
-    font-size: 1rem;
-  }
-  
-  .fundacion-eventos-filtros-section {
-    top: 60px;
-  }
-  
+
   .fundacion-eventos-resultados-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
-  .fundacion-eventos-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+
+  .fundacion-eventos-grid,
+  .fundacion-eventos-grid.bento-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .fundacion-eventos-header h1 {
-    font-size: 1.5rem;
+  .fundacion-eventos-grid,
+  .fundacion-eventos-grid.bento-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  
+
+  .fundacion-eventos-header-left h1 {
+    font-size: 1.3rem;
+  }
+
   .fundacion-eventos-resultados-count {
     font-size: 0.8rem;
   }
-  
+
   .fundacion-eventos-empty {
     padding: 2rem 1rem;
   }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .fundacion-eventos-filtros-section {
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .fundacion-eventos-empty,
+[data-theme="dark"] .fundacion-eventos-error {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
 }

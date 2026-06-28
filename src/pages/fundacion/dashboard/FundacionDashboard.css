@@ -807,3 +807,307 @@
 [data-theme="dark"] .fd-rescate-estado.en_proceso {
   background: rgba(59, 130, 246, 0.2);
 }
+
+/* ===== CHART SECTION - Agregar al final de FundacionDashboard.css ===== */
+.fd-charts-section {
+  margin-bottom: 30px;
+}
+
+/* Ajustes para integración con el dashboard */
+.fd-charts-section .chart-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.fd-charts-section .chart-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== RESPONSIVE PARA GRÁFICOS ===== */
+@media (max-width: 1024px) {
+  .fd-charts-section .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .fd-charts-section .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fd-charts-section .charts-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .fd-charts-section .filters-left {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .fd-charts-section .chart-wrapper {
+    padding: 10px 12px;
+  }
+  
+  .fd-charts-section .chart-header h4 {
+    font-size: 0.75rem;
+  }
+  
+  .fd-charts-section .charts-filters {
+    padding: 12px 14px;
+  }
+}
+
+/* ============================================
+   NUEVOS WIDGETS - SOLICITUDES Y SEGUIMIENTOS
+   ============================================ */
+
+/* ===== GRID DE 3 COLUMNAS ===== */
+.fd-main-grid-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.fd-bottom-grid-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ===== SOLICITUDES LIST ===== */
+.fd-solicitudes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fd-solicitud-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fd-solicitud-item:last-child {
+  border-bottom: none;
+}
+
+.fd-solicitud-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fd-solicitud-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(102, 126, 234, 0.12);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.fd-solicitud-nombre {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.fd-solicitud-detalles {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  display: block;
+}
+
+.fd-solicitud-badge-pendiente {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 20px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  white-space: nowrap;
+}
+
+/* ===== SEGUIMIENTOS LIST ===== */
+.fd-seguimientos-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fd-seguimiento-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fd-seguimiento-item:last-child {
+  border-bottom: none;
+}
+
+.fd-seguimiento-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fd-seguimiento-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(102, 126, 234, 0.08);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.fd-seguimiento-mascota {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.fd-seguimiento-detalles {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  display: block;
+}
+
+.fd-seguimiento-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.fd-seguimiento-estado.seg-estado-excelente {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--color-success);
+}
+
+.fd-seguimiento-estado.seg-estado-bueno {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+}
+
+.fd-seguimiento-estado.seg-estado-regular {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+.fd-seguimiento-estado.seg-estado-preocupante {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .fd-main-grid-three {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .fd-bottom-grid-three {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .fd-main-grid-three .fd-card-solicitudes-pendientes {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .fd-main-grid-three {
+    grid-template-columns: 1fr;
+  }
+  
+  .fd-bottom-grid-three {
+    grid-template-columns: 1fr;
+  }
+  
+  .fd-main-grid-three .fd-card-solicitudes-pendientes {
+    grid-column: span 1;
+  }
+  
+  .fd-solicitud-item,
+  .fd-seguimiento-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .fd-solicitud-badge-pendiente,
+  .fd-seguimiento-estado {
+    margin-left: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fd-solicitud-avatar,
+  .fd-seguimiento-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+  }
+  
+  .fd-solicitud-nombre,
+  .fd-seguimiento-mascota {
+    font-size: 0.8rem;
+  }
+  
+  .fd-solicitud-badge-pendiente,
+  .fd-seguimiento-estado {
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    margin-left: 42px;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .fd-solicitud-avatar {
+  background: rgba(139, 156, 255, 0.15);
+}
+
+[data-theme="dark"] .fd-seguimiento-icon {
+  background: rgba(139, 156, 255, 0.1);
+}
+
+[data-theme="dark"] .fd-solicitud-badge-pendiente {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .fd-seguimiento-estado.seg-estado-excelente {
+  background: rgba(52, 211, 153, 0.2);
+  color: #34d399;
+}
+
+[data-theme="dark"] .fd-seguimiento-estado.seg-estado-bueno {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .fd-seguimiento-estado.seg-estado-regular {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .fd-seguimiento-estado.seg-estado-preocupante {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}

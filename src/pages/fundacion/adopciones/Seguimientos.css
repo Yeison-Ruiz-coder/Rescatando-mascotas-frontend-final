@@ -4,12 +4,24 @@
   width: 100%;
   min-height: 100vh;
   background: transparent;
-  padding: 24px;
 }
 
 .seg-wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .seg-wrapper {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .seg-wrapper {
+    padding: 0 12px;
+  }
 }
 
 /* ===== HEADER ===== */
@@ -208,62 +220,7 @@
   color: #4f46e5;
 }
 
-/* ===== BOTONES ===== */
-.seg-acciones {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.seg-btn-detalle {
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  font-size: 0.75rem;
-  padding: 6px 10px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.seg-btn-detalle:hover {
-  background: var(--color-hover);
-  color: var(--color-primary);
-}
-
-.seg-btn-editar {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: var(--form-input-bg);
-  color: var(--color-text-muted);
-  border: 1px solid var(--color-border);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.seg-btn-editar:hover {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-}
-
-.seg-pendiente-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  background: #fef3c7;
-  color: #d97706;
-}
-
-/* ===== DETALLE ===== */
+/* ===== DETALLE EXPANDIDO ===== */
 .seg-detalle {
   background: var(--form-input-bg) !important;
   padding: 16px 20px !important;
@@ -410,10 +367,348 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+/* ===== ESTILOS UNIFICADOS DE ACCIONES ===== */
+.acciones-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 14px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-accion:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.btn-accion:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-accion svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.btn-accion i {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.btn-accion .fa-spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ===== VARIANTES DE BOTONES ===== */
+
+/* Ver detalle - Primario */
+.btn-ver-detalle {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-ver-detalle:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+/* Ver - Primario */
+.btn-ver {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-ver:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+/* Editar - Secundario */
+.btn-editar {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-editar:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* Badge pendiente */
+.badge-pendiente {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #d97706;
+}
+
+/* ============================================
+   ESTILOS PARA FORMULARIOS (Crear y Editar)
+   ============================================ */
+
+.seg-form {
+  margin-top: 1rem;
+}
+
+.seg-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.seg-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.seg-form-group.full {
+  grid-column: span 2;
+}
+
+.seg-form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.seg-form-group label .required {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+.seg-form-group input,
+.seg-form-group select,
+.seg-form-group textarea {
+  padding: 0.7rem 1rem;
+  background: var(--form-input-bg);
+  border: 1px solid var(--form-border);
+  border-radius: 8px;
+  color: var(--form-text);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.seg-form-group input:focus,
+.seg-form-group select:focus,
+.seg-form-group textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring);
+  transform: translateX(2px);
+}
+
+.seg-form-group input.error,
+.seg-form-group select.error,
+.seg-form-group textarea.error {
+  border-color: var(--color-danger);
+}
+
+.seg-form-group input::placeholder,
+.seg-form-group textarea::placeholder {
+  color: var(--form-placeholder);
+}
+
+.seg-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.seg-error-text {
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.seg-file-input {
+  padding: 0.5rem !important;
+}
+
+.seg-file-input::file-selector-button {
+  padding: 0.4rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.seg-file-input::file-selector-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.seg-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.seg-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.seg-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.seg-fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.75rem;
+}
+
+.seg-foto-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.seg-foto-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.seg-foto-eliminar {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.seg-foto-eliminar:hover {
+  background: var(--color-danger);
+  transform: scale(1.1);
+}
+
+.seg-foto-actual {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.seg-foto-actual a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.seg-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.seg-btn-cancelar,
+.seg-btn-guardar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.seg-btn-cancelar {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.seg-btn-cancelar:hover {
+  background: var(--color-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.seg-btn-guardar {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.seg-btn-guardar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+.seg-btn-guardar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .seg-container {
-    padding: 16px;
+    padding: 0;
   }
 
   .seg-header {
@@ -453,11 +748,49 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+
+  .seg-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .seg-form-group.full {
+    grid-column: span 1;
+  }
+
+  .seg-form-actions {
+    flex-direction: column;
+  }
+
+  .seg-btn-cancelar,
+  .seg-btn-guardar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .seg-checkboxes {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .btn-accion {
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 0.7rem;
+  }
+
+  .btn-accion svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .btn-accion i {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .seg-container {
-    padding: 12px;
+  .seg-wrapper {
+    padding: 0 12px;
   }
 
   .seg-table {
@@ -476,17 +809,41 @@
     padding: 2px 8px;
   }
 
-  .seg-btn-detalle,
-  .seg-btn-editar {
-    font-size: 0.6rem;
-    padding: 4px 6px;
-    width: 24px;
-    height: 24px;
-  }
-
   .seg-foto {
     max-width: 120px;
     max-height: 100px;
+  }
+
+  .seg-fotos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+
+  .btn-accion {
+    min-height: 24px;
+    padding: 0 8px;
+    font-size: 0.6rem;
+  }
+
+  .btn-accion svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .btn-accion i {
+    font-size: 0.6rem;
+  }
+
+  .btn-accion span {
+    display: none;
+  }
+
+  .btn-accion {
+    min-width: 28px;
+  }
+
+  .badge-pendiente {
+    font-size: 0.55rem;
+    padding: 2px 6px;
   }
 }
 
@@ -542,4 +899,79 @@
 [data-theme="dark"] .resultado-reingreso {
   background: rgba(79, 70, 229, 0.2);
   color: #a5b4fc;
+}
+
+[data-theme="dark"] .seg-form-group input,
+[data-theme="dark"] .seg-form-group select,
+[data-theme="dark"] .seg-form-group textarea {
+  background: var(--form-input-bg);
+  border-color: var(--form-border);
+  color: var(--form-text);
+}
+
+[data-theme="dark"] .seg-form-group input:focus,
+[data-theme="dark"] .seg-form-group select:focus,
+[data-theme="dark"] .seg-form-group textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--form-focus-ring-dark);
+}
+
+[data-theme="dark"] .seg-btn-cancelar {
+  background: var(--form-input-bg);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .seg-btn-cancelar:hover {
+  background: var(--color-hover);
+}
+
+[data-theme="dark"] .btn-accion {
+  background: var(--form-input-bg);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-accion:hover:not(:disabled) {
+  background: var(--color-hover);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-ver-detalle {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .btn-ver-detalle:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-theme="dark"] .btn-ver {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .btn-ver:hover:not(:disabled) {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+[data-theme="dark"] .btn-editar {
+  background: var(--form-input-bg);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .btn-editar:hover:not(:disabled) {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .badge-pendiente {
+  background: rgba(217, 119, 6, 0.2);
+  color: #fcd34d;
 }

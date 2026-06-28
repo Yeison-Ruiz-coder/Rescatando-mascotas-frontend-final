@@ -16,7 +16,7 @@ import {
   Clock,
   RefreshCw
 } from 'lucide-react';
-import './RescatesIndex.css'; // Usamos un CSS con el mismo nombre para mantener consistencia
+import './RescatesIndex.css';
 
 const RescatesIndex = () => {
   const { t } = useTranslation('rescate');
@@ -28,7 +28,6 @@ const RescatesIndex = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
 
-  // ===== MÉTRICAS DE CONTROL MAESTRO =====
   const totalCasos = rescates.length;
   const pendientes = rescates.filter(r => r.estado === 'pendiente' || r.estado === 'en_progreso').length;
   const completados = rescates.filter(r => r.estado === 'completado').length;
@@ -43,7 +42,7 @@ const RescatesIndex = () => {
       }
       setError(null);
     } catch (err) {
-      console.error('Error al cargar la consola de rescates:', err);
+      console.error('Error:', err);
       setError(err.response?.data?.message || t('errors.general'));
     } finally {
       setLoading(false);
@@ -60,12 +59,11 @@ const RescatesIndex = () => {
     fetchRescatesGlobal();
   };
 
-  // Redirecciones basadas en tu árbol de archivos de la imagen
-  const handleVerDetalle = (id) => navigate(`/admin/rescates/show/${id}`); // Va a RescatesShow.jsx
-  const irAPendientes = () => navigate('/admin/rescates/pendientes');    // Va a RescatesPendientes.jsx
-  const irAMapa = () => navigate('/admin/rescates/mapa');              // Va a RescatesMapa.jsx
+  const handleVerDetalle = (id) => navigate(`/admin/rescates/show/${id}`);
+  const irAPendientes = () => navigate('/admin/rescates/pendientes');
+  const irAMapa = () => navigate('/admin/rescates/mapa');
 
-  const adminName = user?.name || user?.nombre || 'Admin';
+  const adminName = user?.name || user?.nombre || t('admin', 'Administrador');
   const adminAvatar = user?.avatar || null;
 
   if (loading) {
@@ -73,7 +71,7 @@ const RescatesIndex = () => {
       <div className="rai-container">
         <div className="panel-loading-modern">
           <div className="spinner-modern"></div>
-          <p>Accediendo al Panel de Control de Rescates...</p>
+          <p>{t('cargando_rescates', 'Cargando panel de rescates...')}</p>
         </div>
       </div>
     );
@@ -85,9 +83,11 @@ const RescatesIndex = () => {
         <div className="bento-container">
           <div className="panel-error-modern">
             <AlertCircle size={48} className="error-icon-modern" />
-            <h3>Error de sincronización con el servidor</h3>
+            <h3>{t('error_carga', 'Error al cargar los rescates')}</h3>
             <p>{error}</p>
-            <button onClick={fetchRescatesGlobal} className="btn-retry-modern">Reintentar</button>
+            <button onClick={fetchRescatesGlobal} className="btn-retry-modern">
+              {t('reintentar', 'Reintentar')}
+            </button>
           </div>
         </div>
       </div>
@@ -96,13 +96,15 @@ const RescatesIndex = () => {
 
   return (
     <div className="rai-container">
-      {/* ===== BANNER PRINCIPAL ===== */}
       <div className="rai-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
             avatar: adminAvatar,
-            titulo: `Consola de Administración · ${totalCasos} Casos Reportados`,
+            titulo: t('banner.titulo_admin', {
+              defaultValue: 'Panel de Administración · {{count}} Casos Reportados',
+              count: totalCasos,
+            }),
             solicitudes: totalCasos,
             adopciones: completados,
             eventos: pendientes,
@@ -110,20 +112,18 @@ const RescatesIndex = () => {
         />
       </div>
 
-      {/* ===== BENTO GRID: ESTADÍSTICAS Y ACCESOS RÁPIDOS ===== */}
       <section className="rai-stats-section">
         <div className="bento-container">
           <div className="rai-stats-grid">
             <StatCard
               icon={<History size={24} />}
-              label="Casos Totales"
+              label={t('stats.total_casos', 'Casos Totales')}
               value={totalCasos}
               color="primary"
             />
-            {/* Tarjeta interactiva para ir a Pendientes */}
             <StatCard
               icon={<Clock size={24} />}
-              label="Por Evaluar / Activos"
+              label={t('stats.pendientes', 'Pendientes')}
               value={pendientes}
               color="danger"
               onClick={irAPendientes}
@@ -131,15 +131,14 @@ const RescatesIndex = () => {
             />
             <StatCard
               icon={<ShieldCheck size={24} />}
-              label="Tasa de Cierre"
+              label={t('stats.tasa_cierre', 'Tasa de Cierre')}
               value={`${tasaEfectividad}%`}
               color="info"
             />
-            {/* Tarjeta interactiva para ir al Mapa */}
             <StatCard
               icon={<MapPin size={24} />}
-              label="Ver Geovisor"
-              value="Mapa"
+              label={t('stats.geovisor', 'Ver Geovisor')}
+              value={t('mapa', 'Mapa')}
               color="success"
               onClick={irAMapa}
               isAction
@@ -148,26 +147,25 @@ const RescatesIndex = () => {
         </div>
       </section>
 
-      {/* ===== LISTADO DE AUDITORÍA GENERAL ===== */}
       <section className="rai-list-section">
         <div className="bento-container">
           <div className="rai-header">
             <div className="rai-header-left">
               <FolderHeart size={20} className="rai-header-icon" />
-              <h2>Monitoreo Global de Rescates</h2>
+              <h2>{t('monitoreo_global', 'Monitoreo Global de Rescates')}</h2>
               <span className="rai-badge-count">{totalCasos}</span>
             </div>
             <button onClick={handleRefresh} className="rai-btn-refresh" disabled={refreshing}>
               <RefreshCw size={16} className={refreshing ? 'spin' : ''} />
-              Sincronizar Panel
+              {t('sincronizar', 'Sincronizar')}
             </button>
           </div>
 
           {rescates.length === 0 ? (
             <div className="empty-state-modern">
               <FolderHeart size={48} className="empty-icon" />
-              <h3>No hay reportes en el sistema</h3>
-              <p>Las solicitudes de la ciudadanía aparecerán listadas aquí.</p>
+              <h3>{t('no_reportes', 'No hay reportes en el sistema')}</h3>
+              <p>{t('no_reportes_desc', 'Las solicitudes de la ciudadanía aparecerán listadas aquí.')}</p>
             </div>
           ) : (
             <div className="rai-grid">
@@ -187,8 +185,8 @@ const RescatesIndex = () => {
   );
 };
 
-// Componente de Tarjeta Estilo Bento adaptable
 const StatCard = ({ icon, label, value, color, onClick, isAction }) => {
+  const { t } = useTranslation('rescate');
   const getColorClass = () => {
     switch (color) {
       case 'success': return 'stat-success';
@@ -206,7 +204,7 @@ const StatCard = ({ icon, label, value, color, onClick, isAction }) => {
       <div className="stat-header-modern">
         <div className="stat-icon-modern">{icon}</div>
         <span className="stat-badge-modern">
-          {isAction ? 'Acceso Módulo' : 'Métrica Central'}
+          {isAction ? t('acceso_modulo', 'Acceso Módulo') : t('metrica_central', 'Métrica Central')}
         </span>
       </div>
       <div className="stat-body-modern">

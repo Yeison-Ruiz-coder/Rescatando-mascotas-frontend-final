@@ -52,19 +52,19 @@ const MascotaApadrinarCard = ({
   const getEstadoClass = () => {
     switch (estado) {
       case 'En adopcion':
-        return 'estado-adopcion';
+        return 'mac-adopcion';
       case 'Adoptado':
-        return 'estado-adoptado';
+        return 'mac-adoptado';
       case 'Rescatada':
-        return 'estado-rescatada';
+        return 'mac-rescatada';
       default:
-        return 'estado-necesita';
+        return 'mac-necesita';
     }
   };
 
   return (
-    <div className="mascota-apadrinar-card">
-      <div className="card-imagen">
+    <div className="mac-card">
+      <div className="mac-imagen">
         {getImageUrl(mascota.foto_principal || mascota.fotos?.[0]) ? (
           <img
             src={getImageUrl(mascota.foto_principal || mascota.fotos?.[0])}
@@ -74,45 +74,45 @@ const MascotaApadrinarCard = ({
             }}
           />
         ) : (
-          <div className="image-placeholder">
+          <div className="mac-image-placeholder">
             <i className="fas fa-paw fa-3x"></i>
             <span>{t('mascotas:sin_imagen', 'Sin imagen')}</span>
           </div>
         )}
         
-        <div className={`estado-badge ${getEstadoClass()}`}>
+        <div className={`mac-estado-badge ${getEstadoClass()}`}>
           {getEstadoTexto()}
         </div>
       </div>
 
-      <div className="card-info">
-        <h3 className="mascota-nombre">{nombre_mascota}</h3>
+      <div className="mac-info">
+        <h3 className="mac-nombre">{nombre_mascota}</h3>
         
-        <div className="mascota-detalles">
-          <span className="detalle-item">
+        <div className="mac-detalles">
+          <span className="mac-detalle-item">
             <i className="fas fa-paw"></i> {especie || '?'}
           </span>
           {raza && (
-            <span className="detalle-item">
+            <span className="mac-detalle-item">
               <i className="fas fa-tag"></i> {raza}
             </span>
           )}
-          <span className="detalle-item">
+          <span className="mac-detalle-item">
             <i className="fas fa-calendar"></i> {formatEdad(edad_aprox)}
           </span>
-          <span className="detalle-item">
+          <span className="mac-detalle-item">
             <i className="fas fa-venus-mars"></i> {genero === 'Macho' ? t('mascotas:macho', 'Macho') : genero === 'Hembra' ? t('mascotas:hembra', 'Hembra') : genero || '?'}
           </span>
         </div>
 
-        <p className="mascota-historia">
+        <p className="mac-historia">
           {descripcion 
             ? descripcion.substring(0, 100) + (descripcion.length > 100 ? '...' : '')
             : t('mascotas:sin_descripcion', 'Sin descripción disponible')}
         </p>
 
         <button 
-          className="btn-apadrinar"
+          className="mac-btn-apadrinar"
           onClick={() => onApadrinar(mascota)}
           disabled={loading}
         >

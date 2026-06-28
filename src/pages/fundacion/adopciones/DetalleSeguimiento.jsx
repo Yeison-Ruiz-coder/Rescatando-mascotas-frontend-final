@@ -2,18 +2,24 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
 import './DetalleSeguimiento.css';
 
 const DetalleSeguimiento = () => {
   const { t } = useTranslation('fundacion');
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useAuth();
   const [seguimiento, setSeguimiento] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fotos, setFotos] = useState([]);
+
+  const fundacionName = user?.nombre || user?.name || t('fundacion');
+  const fundacionAvatar = user?.avatar || user?.foto_perfil || null;
 
   useEffect(() => {
     fetchSeguimiento();
@@ -22,7 +28,12 @@ const DetalleSeguimiento = () => {
   const fetchSeguimiento = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/entity/adopciones/seguimientos/${id}`);
+      const response = await api.get(`/entity/adopciones/seguimientos/${id}`, {
+        params: {
+          fields: 'id,adopcion_id,tipo_seguimiento,fecha_seguimiento,estado_mascota,resultado,observaciones,proximo_seguimiento,recomendaciones,condiciones_hogar,observaciones_hogar,convive_con_otros_animales,comportamiento_observado,requiere_nuevo_seguimiento,firma_adoptante,foto_url,fotos_adicionales,documento_url,realizado_por_nombre',
+          include: 'adopcion'
+        }
+      });
       const data = response.data.data;
       setSeguimiento(data);
       
@@ -102,8 +113,21 @@ const DetalleSeguimiento = () => {
 
   return (
     <div className="ds-container">
+      <ProfileBanner
+        user={{
+          nombre: fundacionName,
+          avatar: fundacionAvatar,
+          titulo: t('banner.titulo_seguimiento', {
+            defaultValue: 'Seguimiento #{{id}}',
+            id: seguimiento.id,
+          }),
+          solicitudes: 1,
+          adopciones: 0,
+          eventos: 0,
+        }}
+      />
+
       <div className="ds-wrapper">
-        {/* Header */}
         <div className="ds-header">
           <button onClick={() => navigate('/fundacion/adopciones/seguimientos')} className="ds-btn-back">
             <i className="fas fa-arrow-left"></i> {t('volver')}
@@ -115,7 +139,6 @@ const DetalleSeguimiento = () => {
           </div>
         </div>
 
-        {/* Información principal */}
         <div className="ds-grid">
           <div className="ds-card">
             <h3><i className="fas fa-info-circle"></i> {t('informacion_general')}</h3>
@@ -186,7 +209,6 @@ const DetalleSeguimiento = () => {
             </div>
           )}
 
-          {/* Fotos */}
           {fotos.length > 0 && (
             <div className="ds-card ds-card-full">
               <h3><i className="fas fa-images"></i> {t('fotos_adicionales')}</h3>
@@ -217,7 +239,6 @@ const DetalleSeguimiento = () => {
           )}
         </div>
 
-        {/* Acciones */}
         <div className="ds-actions">
           <Link to={`/fundacion/adopciones/seguimientos/${id}/editar`} className="ds-btn-editar">
             <i className="fas fa-edit"></i> {t('editar')}
