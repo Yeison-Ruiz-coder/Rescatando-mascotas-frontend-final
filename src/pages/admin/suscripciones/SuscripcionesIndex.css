@@ -1,289 +1,457 @@
 /* src/pages/admin/suscripciones/SuscripcionesIndex.css */
+/* ============================================
+   SUSCRIPCIONES INDEX - ESTILO BENTO
+   PREFIJO: as- (Admin Suscripciones)
+   ============================================ */
 
-.admin-suscripciones-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+.as-container {
+  width: 100%;
+  min-height: 100vh;
+  background: transparent;
 }
 
-.admin-header {
+[data-theme="dark"] .as-container {
+  background: transparent;
+}
+
+/* ===== BANNER ===== */
+.as-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.as-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .as-banner-wrapper .bento-container,
+  .as-container .bento-container {
+    padding: 0 16px;
+  }
+}
+
+/* ===== BENTO CONTAINER ===== */
+.as-container .bento-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== HEADER ===== */
+.as-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 12px;
 }
 
-.admin-header h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.admin-stats {
+.as-header-left {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
 }
 
-.admin-stats span {
-  padding: 8px 16px;
+.as-header-icon {
+  color: var(--color-text-muted);
+}
+
+.as-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.as-badge-count {
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
   border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
+  min-width: 28px;
+  text-align: center;
 }
 
-.stat-activas {
-  background: #d4edda;
-  color: #155724;
+.as-header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
-.stat-pendientes {
-  background: #fff3cd;
-  color: #856404;
+.as-btn-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.stat-canceladas {
-  background: #f8d7da;
-  color: #721c24;
+.as-btn-refresh:hover:not(:disabled) {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
 }
 
-.stat-total {
-  background: #e2e3e5;
-  color: #383d41;
+.as-btn-refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.admin-table-container {
-  overflow-x: auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.as-spin {
+  animation: as-spin 0.8s linear infinite;
 }
 
-.admin-suscripciones-table {
+@keyframes as-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== STATS ===== */
+.as-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+/* ===== TABLA ===== */
+.as-table-wrapper {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.as-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 0.9rem;
+  min-width: 900px;
 }
 
-.admin-suscripciones-table thead {
-  background: #f8f9fa;
+.as-table thead {
+  background: var(--form-input-bg);
+  border-bottom: 2px solid var(--color-border);
 }
 
-.admin-suscripciones-table th {
+.as-table th {
   padding: 12px 16px;
   text-align: left;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
-.admin-suscripciones-table td {
+.as-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  vertical-align: middle;
+  font-size: 0.9rem;
 }
 
-.admin-suscripciones-table tr:hover {
-  background: #f8f9fa;
+.as-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.estado-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  display: inline-block;
+.as-table tbody tr:hover {
+  background: rgba(102, 126, 234, 0.02);
 }
 
-.estado-activo {
-  background: #d4edda;
-  color: #155724;
-}
-
-.estado-pendiente {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.estado-cancelado {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.estado-inactivo {
-  background: #e2e3e5;
-  color: #383d41;
-}
-
-.estado-expirado {
-  background: #e2e3e5;
-  color: #383d41;
-}
-
-.btn-cancelar {
-  padding: 4px 12px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
-}
-
-.btn-cancelar:hover {
-  background: #c82333;
-}
-
-.empty-message {
+.as-empty-row {
   text-align: center;
   padding: 40px !important;
-  color: #6c757d;
-  font-size: 16px;
+  color: var(--color-text-muted);
 }
 
-.admin-suscripciones-loading,
-.admin-suscripciones-error {
+/* ===== BADGES ===== */
+.as-estado-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.estado-activo { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+.estado-pendiente { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.estado-pausado { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.estado-inactivo { background: rgba(107, 114, 128, 0.12); color: #6b7280; }
+.estado-cancelado { background: rgba(239, 68, 68, 0.12); color: #ef4444; }
+.estado-finalizado { background: rgba(107, 114, 128, 0.12); color: #6b7280; }
+
+/* ===== ACCIONES ===== */
+.as-actions-cell {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+.as-action-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.as-action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.as-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.as-btn-view {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.as-btn-view:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.as-btn-cancelar {
+  background: #ef4444;
+  color: white;
+}
+
+.as-btn-cancelar:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.as-btn-reactivar {
+  background: #10b981;
+  color: white;
+}
+
+.as-btn-reactivar:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.as-btn-pausar {
+  background: #f59e0b;
+  color: white;
+}
+
+.as-btn-pausar:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.as-btn-reanudar {
+  background: #3b82f6;
+  color: white;
+}
+
+.as-btn-reanudar:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.as-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: as-spin 0.8s linear infinite;
+}
+
+/* ===== PAGINACIÓN ===== */
+.as-pagination-info {
+  margin-top: 16px;
+  padding: 12px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  background: var(--form-input-bg);
+  border-radius: 8px;
+}
+
+/* ===== LOADING ===== */
+.as-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 400px;
+  gap: 20px;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+.as-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: as-spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.admin-suscripciones-error button {
-  margin-top: 16px;
-  padding: 8px 24px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.admin-suscripciones-error button:hover {
-  background: #0056b3;
-}
-/* src/pages/admin/suscripciones/SuscripcionesIndex.css */
-
-/* ... estilos existentes ... */
-
-.admin-pagination-info {
-  margin-top: 16px;
-  padding: 12px;
+/* ===== ERROR ===== */
+.as-error {
   text-align: center;
-  color: #6c757d;
-  font-size: 14px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 60px 40px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
 }
 
-.stat-paginacion {
-  background: #e3f2fd;
-  color: #0d47a1;
+.as-error-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
 }
-/* src/pages/admin/suscripciones/SuscripcionesIndex.css */
 
-/* ... estilos existentes ... */
+.as-error h3 {
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
 
-.btn-cancelar {
-  padding: 4px 12px;
-  background: #dc3545;
+.as-error p {
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+.as-btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--gradient-primary);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
-  margin-right: 4px;
+  transition: all 0.3s ease;
 }
 
-.btn-cancelar:hover:not(:disabled) {
-  background: #c82333;
+.as-btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
-.btn-reactivar {
-  padding: 4px 12px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
-  margin-right: 4px;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .as-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.btn-reactivar:hover:not(:disabled) {
-  background: #218838;
+@media (max-width: 768px) {
+  .as-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .as-header-right {
+    width: 100%;
+  }
+
+  .as-btn-refresh {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .as-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .as-table th,
+  .as-table td {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+
+  .as-table th {
+    font-size: 0.65rem;
+  }
+
+  .as-actions-cell {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .as-action-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .as-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
 }
 
-.btn-pausar {
-  padding: 4px 12px;
-  background: #ffc107;
-  color: #212529;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
-  margin-right: 4px;
+@media (max-width: 480px) {
+  .as-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .as-table {
+    min-width: 600px;
+  }
+
+  .as-action-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .as-action-btn svg {
+    width: 12px;
+    height: 12px;
+  }
 }
 
-.btn-pausar:hover:not(:disabled) {
-  background: #e0a800;
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .as-table-wrapper,
+[data-theme="dark"] .as-error {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+[data-theme="dark"] .as-btn-refresh {
+  background: var(--form-input-bg);
 }
 
-.spinner-small {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #007bff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+[data-theme="dark"] .as-table thead {
+  background: var(--form-input-bg);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.estado-inactivo {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.stat-inactivas {
-  background: #fff3cd;
-  color: #856404;
-}
-
-.admin-table-container td {
-  vertical-align: middle;
-}
-
-.admin-table-container .btn-cancelar,
-.admin-table-container .btn-reactivar,
-.admin-table-container .btn-pausar {
-  white-space: nowrap;
+[data-theme="dark"] .as-pagination-info {
+  background: var(--form-input-bg);
 }

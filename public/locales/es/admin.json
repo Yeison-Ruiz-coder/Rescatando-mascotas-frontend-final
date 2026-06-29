@@ -323,6 +323,45 @@
     "total_seguimientos": "Total seguimientos",
     "en_progreso": "En progreso",
     "activos": "Activos",
-    "finalizados": "Finalizados"
-  }
+    "finalizados": "Finalizados",
+    "total_usuarios": "Total Usuarios",
+    "adopciones_completadas": "Adopciones Completadas",
+    "eventos_activos": "Eventos Activos",
+    "rescates_pendientes": "Rescates Pendientes",
+    "suscripciones_activas": "Suscripciones Activas"
+  },
+  "cargando_dashboard": "Cargando dashboard...",
+  "error_carga_dashboard": "Error al cargar el dashboard",
+  "dashboard": {
+    "titulo": "Panel de Administración",
+    "estadisticas": "Estadísticas del sistema",
+    "subtitulo": "Resumen general de toda la plataforma"
+  },
+  "charts": {
+    "mascotas_mensual": "Mascotas registradas por mes",
+    "adopciones_mensual": "Adopciones por mes",
+    "distribucion_adopciones": "Distribución de adopciones",
+    "tipos_usuarios": "Tipos de usuarios",
+    "eventos_mensual": "Eventos por mes",
+    "rescates_prioridad": "Rescates por prioridad",
+    "ingresos_suscripciones": "Ingresos por suscripciones"
+  },
+  "recent": {
+    "usuarios": "Últimos usuarios",
+    "mascotas": "Últimas mascotas",
+    "adopciones": "Últimas adopciones",
+    "rescates": "Últimos rescates",
+    "eventos": "Próximos eventos"
+  },
+  "alerts": {
+    "usuarios_pendientes": "Usuarios pendientes de aprobación",
+    "rescates_pendientes": "Rescates pendientes",
+    "solicitudes_pendientes": "Solicitudes de adopción pendientes"
+  },
+  "sin_alertas": "¡Todo en orden!",
+  "sin_alertas_desc": "No hay pendientes que requieran tu atención en este momento.",
+  "sin_registros": "No hay registros recientes",
+  "sin_datos": "Sin datos disponibles",
+  "ver_todos": "Ver todos",
+  "reintentar": "Reintentar"
 }
