@@ -428,13 +428,6 @@ const FundacionSidebar = () => {
               onClick={handleLinkClick}
               badge={totalSuscripcionesBadge}
             />
-            <SubmenuItem
-              to="/fundacion/suscripciones/crear"
-              icon="fas fa-plus-circle"
-              label={t("crear_suscripcion")}
-              isActive={isActive('/fundacion/suscripciones/crear')}
-              onClick={handleLinkClick}
-            />
           </div>
         </div>
       </nav>

@@ -1,0 +1,85 @@
+{
+  "razas": "Breeds",
+  "vacunas": "Vaccines",
+  
+  "nueva_raza": "New Breed",
+  "editar_raza": "Edit Breed",
+  "raza_creada": "Breed created successfully",
+  "raza_actualizada": "Breed updated successfully",
+  "raza_eliminada": "Breed '{{nombre}}' deleted successfully",
+  
+  "nueva_vacuna": "New Vaccine",
+  "editar_vacuna": "Edit Vaccine",
+  "vacuna_creada": "Vaccine created successfully",
+  "vacuna_actualizada": "Vaccine updated successfully",
+  "vacuna_eliminada": "Vaccine '{{nombre}}' deleted successfully",
+  
+  "nombre_raza": "Breed Name",
+  "nombre_raza_placeholder": "Ex: Labrador Retriever, Siamese, etc.",
+  "nombre_vacuna": "Vaccine Name",
+  "nombre_vacuna_placeholder": "Ex: Rabies, Parvovirus, Distemper, etc.",
+  
+  "especie": "Species",
+  "seleccionar_especie": "Select species",
+  "todas_especies": "All species",
+  "sin_especie": "No species",
+  "especie_hint": "Select the species this breed belongs to",
+  
+  "frecuencia": "Frequency",
+  "seleccionar_frecuencia": "Select frequency",
+  "mensual": "Monthly (30 days)",
+  "trimestral": "Quarterly (90 days)",
+  "semestral": "Semi-annual (180 days)",
+  "anual": "Annual (365 days)",
+  "frecuencia_hint": "How often this vaccine should be applied (in days)",
+  
+  "mascotas_asociadas": "Associated pets",
+  "fecha_creacion": "Creation date",
+  "fecha_actualizacion": "Update date",
+  
+  "buscar_raza": "Search breeds...",
+  "buscar_vacuna": "Search vaccines...",
+  "sin_razas": "No breeds registered",
+  "sin_vacunas": "No vaccines registered",
+  
+  "total": "Total",
+  "perros": "Dogs",
+  "gatos": "Cats",
+  "otros": "Others",
+  
+  "confirmar_eliminar": "Confirm deletion",
+  "confirmar_eliminar_mensaje": "Are you sure you want to delete the breed '{{nombre}}'?",
+  "confirmar_eliminar_mensaje_vacuna": "Are you sure you want to delete the vaccine '{{nombre}}'?",
+  "raza_tiene_mascotas": "⚠️ This breed has {{count}} associated pets. It cannot be deleted.",
+  "vacuna_tiene_mascotas": "⚠️ This vaccine has {{count}} associated pets. It cannot be deleted.",
+  
+  "ver_detalle": "View details",
+  "ver": "View",
+  "editar": "Edit",
+  "eliminar": "Delete",
+  "cancelar": "Cancel",
+  "guardar": "Save",
+  "guardando": "Saving...",
+  "actualizar": "Update",
+  "volver": "Back",
+  "cerrar": "Close",
+  "filtrar": "Filter",
+  "anterior": "Previous",
+  "siguiente": "Next",
+  "pagina": "Page",
+  "de": "of",
+  "cargando": "Loading...",
+  "cargando_razas": "Loading breeds...",
+  "cargando_vacunas": "Loading vaccines...",
+  
+  "confirmar_cancelar": "Are you sure you want to cancel? Changes will not be saved.",
+  
+  "banner_razas_titulo": "Breed Catalog · {{count}} registered",
+  "banner_vacunas_titulo": "Vaccine Catalog · {{count}} registered",
+  
+  "error_carga": "Error loading data",
+  "error_guardar": "Error saving data",
+  "error_eliminar": "Error deleting record",
+  "error_carga_razas": "Error loading breeds",
+  "error_carga_vacunas": "Error loading vaccines"
+}

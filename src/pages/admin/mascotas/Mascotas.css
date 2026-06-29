@@ -1,0 +1,347 @@
+/* src/pages/admin/mascotas/Mascotas.css */
+/* ============================================
+   PANEL ADMIN - MASCOTAS
+   REUTILIZA ESTILOS DE FUNDACIÓN CON PREFIJO ADMIN
+   ============================================ */
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.admin-mascotas-page {
+  width: 100%;
+  min-height: 100vh;
+  background: transparent;
+}
+
+[data-theme="dark"] .admin-mascotas-page {
+  background: transparent;
+}
+
+/* ============================================
+   BANNER WRAPPER - ANCHO COMPLETO
+   ============================================ */
+
+.admin-mascotas-banner-wrapper {
+  padding-top: 0;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.admin-mascotas-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .admin-mascotas-banner-wrapper .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-mascotas-banner-wrapper .bento-container {
+    padding: 0 12px;
+  }
+}
+
+.admin-mascotas-banner-wrapper .profile-banner {
+  border-radius: 0 0 24px 24px;
+}
+
+/* ============================================
+   BENTO CONTAINER - SIN MAX-WIDTH
+   ============================================ */
+
+.admin-mascotas-page .bento-container {
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .admin-mascotas-page .bento-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-mascotas-page .bento-container {
+    padding: 0 12px;
+  }
+}
+
+/* ============================================
+   FILTROS - STICKY
+   ============================================ */
+
+.admin-mascotas-filtros {
+  padding: 20px 0;
+  position: sticky;
+  top: var(--navbar-height, 70px);
+  z-index: 99;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .admin-mascotas-filtros {
+  background: rgba(30, 41, 59, 0.92);
+}
+
+/* ============================================
+   RESULTADOS
+   ============================================ */
+
+.admin-mascotas-resultados {
+  padding: 40px 0 60px 0;
+  background: transparent;
+}
+
+/* ===== HEADER DE RESULTADOS ===== */
+.resultados-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.resultados-count {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  background: var(--color-card-bg);
+  padding: 6px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.resultados-count strong {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   🎯 GRID DE MASCOTAS - ANCHO COMPLETO
+   ============================================ */
+
+.admin-mascotas-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.8rem;
+  width: 100%;
+}
+
+.admin-mascotas-grid > * {
+  width: 100%;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.empty-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  max-width: 720px;
+}
+
+.empty-container i {
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.empty-container h3 {
+  font-size: 1.2rem;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.empty-container p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   PAGINACIÓN
+   ============================================ */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   LOADING
+   ============================================ */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Desktop - 4 columnas */
+@media (max-width: 1399px) {
+  .admin-mascotas-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Desktop - 3 columnas */
+@media (max-width: 1024px) {
+  .admin-mascotas-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+}
+
+/* Tablet - 2 columnas */
+@media (max-width: 768px) {
+  .admin-mascotas-filtros {
+    padding: 16px 0;
+  }
+
+  .admin-mascotas-resultados {
+    padding: 24px 0 40px 0;
+  }
+
+  .resultados-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .resultados-count {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+  }
+
+  .admin-mascotas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Móvil - 2 columnas */
+@media (max-width: 480px) {
+  .resultados-count {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+
+  .pagination-btn {
+    padding: 4px 14px;
+    font-size: 0.75rem;
+  }
+
+  .pagination-info {
+    font-size: 0.75rem;
+  }
+
+  .empty-container {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .empty-container i {
+    font-size: 2.5rem;
+  }
+
+  .empty-container h3 {
+    font-size: 1rem;
+  }
+
+  .empty-container p {
+    font-size: 0.8rem;
+  }
+
+  .admin-mascotas-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+}
+
+/* Móvil extra pequeño - 1 columna */
+@media (max-width: 359px) {
+  .admin-mascotas-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ============================================
+   MODO OSCURO
+   ============================================ */
+
+[data-theme="dark"] .resultados-count {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .empty-container {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .pagination-btn {
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+[data-theme="dark"] .pagination-btn:hover {
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.25);
+}

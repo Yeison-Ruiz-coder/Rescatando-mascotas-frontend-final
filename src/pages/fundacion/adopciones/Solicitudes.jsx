@@ -348,19 +348,19 @@ const Solicitudes = () => {
                                     return (
                                       <span className="btn-pdf-error" title={t('error_pdf')}>
                                         <i className="fas fa-exclamation-triangle"></i>
-                                        <span>PDF</span>
+                                        <span>{t('pdf', 'PDF')}</span>
                                       </span>
                                     );
                                   }
                                   return pdfLoading ? (
                                     <>
                                       <i className="fas fa-spinner fa-spin"></i>
-                                      <span>PDF</span>
+                                      <span>{t('pdf', 'PDF')}</span>
                                     </>
                                   ) : (
                                     <>
                                       <FileText size={14} />
-                                      <span>PDF</span>
+                                      <span>{t('pdf', 'PDF')}</span>
                                     </>
                                   );
                                 }}

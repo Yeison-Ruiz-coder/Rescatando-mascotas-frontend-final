@@ -73,7 +73,6 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
   const adminAvatar = user?.avatar || null;
   const totalUsuarios = pagination.total || usuarios.length;
 
-  // Mapear filtros para FilterBar
   const filterBarFilters = {
     search: filters.search || '',
     estado: filters.estado || '',
@@ -81,7 +80,6 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
     total: totalUsuarios,
   };
 
-  // Ajustar las opciones de estado para incluir solo los relevantes
   const statusOptions = [
     { value: '', label: 'Todos los estados' },
     { value: 'activo', label: 'Activo' },
@@ -89,13 +87,12 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
     { value: 'pendiente', label: 'Pendiente' },
   ];
 
-  // Si es un listado por tipo, deshabilitamos el filtro de tipo
   const showTypeFilter = false;
 
   return (
-    <div className="usuarios-tipo-container">
+    <div className="utl-page">
       {/* ===== BANNER ===== */}
-      <div className="usuarios-tipo-banner-wrapper">
+      <div className="utl-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
@@ -109,7 +106,7 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
       </div>
 
       {/* ===== FILTER BAR ===== */}
-      <div className="usuarios-tipo-filter-wrapper">
+      <div className="utl-filter-wrapper">
         <div className="bento-container">
           <FilterBar
             filters={filterBarFilters}
@@ -131,14 +128,14 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
       </div>
 
       {/* ===== ACCIONES ===== */}
-      <div className="usuarios-tipo-actions-wrapper">
+      <div className="utl-actions-wrapper">
         <div className="bento-container">
-          <div className="usuarios-tipo-actions">
-            <Link to="/admin/usuarios/pendientes" className="usuarios-tipo-button secondary">
+          <div className="utl-actions">
+            <Link to="/admin/usuarios/pendientes" className="utl-button secondary">
               <i className="fas fa-clock"></i>
               {t("usuarios_pendientes", "Usuarios pendientes")}
             </Link>
-            <Link to="/admin/usuarios/create" className="usuarios-tipo-button primary">
+            <Link to="/admin/usuarios/create" className="utl-button primary">
               <i className="fas fa-plus"></i>
               {t("crear_usuario", "Nuevo usuario")}
             </Link>
@@ -147,15 +144,15 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
       </div>
 
       {/* ===== TABLA ===== */}
-      <div className="usuarios-tipo-table-wrapper">
+      <div className="utl-table-wrapper">
         <div className="bento-container">
-          <div className="usuarios-tipo-summary">
+          <div className="utl-summary">
             <i className="fas fa-list"></i>
             <span>{filteredMessage}</span>
             {(filters.search || filters.estado) && (
               <button
                 onClick={() => handleFilterChange({ search: '', estado: '', sort: 'created_at_desc' })}
-                className="usuarios-tipo-clear-filters"
+                className="utl-clear-filters"
               >
                 <i className="fas fa-times"></i> {t("limpiar_filtros", "Limpiar filtros")}
               </button>
@@ -163,13 +160,13 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
           </div>
 
           {loading ? (
-            <div className="usuarios-tipo-loading">
+            <div className="utl-loading">
               <LoadingSpinner text={t("cargando", "Cargando usuarios...")} />
             </div>
           ) : usuarios && usuarios.length > 0 ? (
             <>
-              <div className="usuarios-tipo-table-scroll">
-                <table className="usuarios-tipo-table">
+              <div className="utl-table-scroll">
+                <table className="utl-table">
                   <thead>
                     <tr>
                       <th>ID</th>
@@ -190,31 +187,31 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
                           <td>{usuario.nombre || usuario.nombre_entidad || "-"}</td>
                           <td>{usuario.email || "-"}</td>
                           <td>
-                            <span className={`badge tipo ${usuario.tipo || "usuario"}`}>
+                            <span className={`utl-badge tipo ${usuario.tipo || "usuario"}`}>
                               {usuario.tipo || "usuario"}
                             </span>
                           </td>
                           <td>
-                            <span className={`badge estado ${usuario.estado || "desconocido"}`}>
+                            <span className={`utl-badge estado ${usuario.estado || "desconocido"}`}>
                               <i className={`fas fa-${usuario.estado === "activo" ? "check-circle" : usuario.estado === "pendiente" ? "clock" : "times-circle"}`}></i>
                               {usuario.estado || "desconocido"}
                             </span>
-                            <span className={`badge ${emailVerified ? "verified" : "unverified"}`}>
+                            <span className={`utl-badge ${emailVerified ? "verified" : "unverified"}`}>
                               <i className={`fas fa-${emailVerified ? "check" : "exclamation-triangle"}`}></i>
                               {emailVerified ? t("verificado", "Verificado") : t("no_verificado", "No verificado")}
                             </span>
                           </td>
                           <td>{getCreatedAt(usuario)}</td>
-                          <td className="acciones-column">
-                            <div className="acciones-group">
-                              <Link to={`/admin/usuarios/${usuario.id}`} className="action-button info">
+                          <td className="utl-acciones-column">
+                            <div className="utl-acciones-group">
+                              <Link to={`/admin/usuarios/${usuario.id}`} className="utl-action-button info">
                                 <i className="fas fa-eye"></i> {t("ver", "Ver")}
                               </Link>
-                              <Link to={`/admin/usuarios/${usuario.id}/editar`} className="action-button warning">
+                              <Link to={`/admin/usuarios/${usuario.id}/editar`} className="utl-action-button warning">
                                 <i className="fas fa-edit"></i> {t("editar", "Editar")}
                               </Link>
                               <button
-                                className="action-button danger"
+                                className="utl-action-button danger"
                                 disabled={isProcessing(usuario.id)}
                                 onClick={() => handleRemove(usuario)}
                               >
@@ -222,9 +219,9 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
                                 {isProcessing(usuario.id) ? t("procesando", "Procesando...") : t("eliminar", "Eliminar")}
                               </button>
                             </div>
-                            <div className="acciones-group">
+                            <div className="utl-acciones-group">
                               <button
-                                className="action-button ghost"
+                                className="utl-action-button ghost"
                                 disabled={isProcessing(usuario.id)}
                                 onClick={() => handleToggleEstado(usuario)}
                               >
@@ -233,7 +230,7 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
                               </button>
                               {!emailVerified && (
                                 <button
-                                  className="action-button ghost"
+                                  className="utl-action-button ghost"
                                   disabled={isProcessing(usuario.id)}
                                   onClick={() => handleVerify(usuario)}
                                 >
@@ -252,7 +249,7 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
 
               {/* Paginación */}
               {pagination.last_page > 1 && (
-                <div className="usuarios-tipo-pagination">
+                <div className="utl-pagination">
                   <button
                     disabled={pagination.current_page === 1}
                     onClick={() => handlePageChange(pagination.current_page - 1)}
@@ -272,7 +269,7 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
               )}
             </>
           ) : (
-            <div className="usuarios-tipo-empty">
+            <div className="utl-empty">
               <i className={`fas fa-${(filters.search || filters.estado) ? "search" : "users"}`}></i>
               <h3>
                 {(filters.search || filters.estado) 
@@ -289,7 +286,7 @@ const UsuariosTipoList = ({ tipo, titulo, descripcion }) => {
               {(filters.search || filters.estado) && (
                 <button
                   onClick={() => handleFilterChange({ search: '', estado: '', sort: 'created_at_desc' })}
-                  className="usuarios-tipo-clear-filters-btn"
+                  className="utl-clear-filters-btn"
                 >
                   <i className="fas fa-undo"></i> {t("limpiar_filtros", "Limpiar filtros")}
                 </button>

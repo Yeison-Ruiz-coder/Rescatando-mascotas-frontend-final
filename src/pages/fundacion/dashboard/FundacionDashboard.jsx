@@ -1,5 +1,5 @@
 // src/pages/fundacion/dashboard/FundacionDashboard.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -26,13 +26,20 @@ import {
   ClipboardList,
   ClipboardCheck,
   Users,
-  Mail,
-  Phone,
 } from "lucide-react";
 import ProfileBanner from "../../../components/common/ProfileBanner/index.js";
 import { getImageUrl } from "../../../utils/imageUtils";
-import FundacionDashboardCharts from "../../../components/common/FundacionDashboardCharts/FundacionDashboardCharts";
 import "./FundacionDashboard.css";
+
+// ✅ Lazy load de componentes pesados
+const FundacionDashboardCharts = lazy(() => 
+  import("../../../components/common/FundacionDashboardCharts/FundacionDashboardCharts")
+);
+
+// ⏱️ Configuración de optimización
+const PER_PAGE = 20;
+const MIN_LOADING_TIME = 300;
+const CACHE_DURATION = 300000; // 5 minutos
 
 const FundacionDashboard = () => {
   const { t, i18n } = useTranslation("fundacion");
@@ -43,86 +50,212 @@ const FundacionDashboard = () => {
     totalMascotas: 0,
     enAdopcion: 0,
     adoptadas: 0,
-    rescatadas: 0,
     totalEventos: 0,
     eventosProximos: 0,
     totalSuscripciones: 0,
     montoMensual: 0,
     rescatesPendientes: 0,
-    solicitudesPendientes: 0, // 🆕
-    totalSeguimientos: 0, // 🆕
+    solicitudesPendientes: 0,
+    totalSeguimientos: 0,
   });
   const [mascotasRecientes, setMascotasRecientes] = useState([]);
   const [eventosProximos, setEventosProximos] = useState([]);
   const [actividadReciente, setActividadReciente] = useState([]);
   const [rescatesPendientes, setRescatesPendientes] = useState([]);
   const [adopciones, setAdopciones] = useState([]);
-  // 🆕 Estados para nuevos widgets
   const [solicitudesPendientes, setSolicitudesPendientes] = useState([]);
   const [seguimientosRecientes, setSeguimientosRecientes] = useState([]);
+  const [suscripciones, setSuscripciones] = useState([]);
 
-  const formatDateByLocale = (date, options = {}) => {
+  const formatDateByLocale = useCallback((date, options = {}) => {
     if (!date) return "";
     const locale = i18n.language === "en" ? "en-US" : "es-ES";
     const defaultOptions = { year: "numeric", month: "short", day: "numeric" };
     return new Date(date).toLocaleDateString(locale, { ...defaultOptions, ...options });
-  };
+  }, [i18n.language]);
 
-  const formatTimeByLocale = (date) => {
+  const formatTimeByLocale = useCallback((date) => {
     if (!date) return "";
     const locale = i18n.language === "en" ? "en-US" : "es-ES";
     return new Date(date).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
-  };
+  }, [i18n.language]);
 
+  const formatRelativeTime = useCallback((date) => {
+    if (!date) return t("recientemente", "Recientemente");
+    const now = new Date();
+    const diff = now - new Date(date);
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return t("justo_ahora", "Justo ahora");
+    if (minutes < 60) return t("hace_minutos", "Hace {{count}} minutos", { count: minutes });
+    if (hours < 24) return t("hace_horas", "Hace {{count}} horas", { count: hours });
+    if (days < 7) return t("hace_dias", "Hace {{count}} días", { count: days });
+    return formatDateByLocale(date);
+  }, [t, formatDateByLocale]);
+
+  const getEstadoText = useCallback((estado) => {
+    if (estado === "En adopcion" || estado === "En adopción") {
+      return t("estado_en_adopcion", "En adopción");
+    }
+    if (estado === "Adoptado") {
+      return t("estado_adoptado", "Adoptado");
+    }
+    return t("estado_rescatada", "Rescatada");
+  }, [t]);
+
+  const getEstadoClass = useCallback((estado) => {
+    if (estado === "En adopcion" || estado === "En adopción") return "fd-status-adopcion";
+    if (estado === "Adoptado") return "fd-status-adoptado";
+    return "fd-status-rescatada";
+  }, []);
+
+  const getEstadoRescateText = useCallback((estado) => {
+    if (estado === "pendiente") return t("estado_pendiente", "Pendiente");
+    return t("estado_en_proceso", "En proceso");
+  }, [t]);
+
+  const getEstadoRescateClass = useCallback((estado) => {
+    return estado === "pendiente" ? "pendiente" : "en_proceso";
+  }, []);
+
+  const getTipoSeguimientoLabel = useCallback((tipo) => {
+    const tipos = {
+      virtual: t("tipo_virtual", "Virtual"),
+      domiciliario: t("tipo_domiciliario", "Domiciliario"),
+      telefonico: t("tipo_telefonico", "Telefónico"),
+    };
+    return tipos[tipo] || tipo;
+  }, [t]);
+
+  const getEstadoSeguimientoClass = useCallback((estado) => {
+    const clases = {
+      excelente: "seg-estado-excelente",
+      bueno: "seg-estado-bueno",
+      regular: "seg-estado-regular",
+      preocupante: "seg-estado-preocupante",
+    };
+    return clases[estado] || "seg-estado-bueno";
+  }, []);
+
+  const getEstadoSeguimientoLabel = useCallback((estado) => {
+    const labels = {
+      excelente: t("estado_excelente", "Excelente"),
+      bueno: t("estado_bueno", "Bueno"),
+      regular: t("estado_regular", "Regular"),
+      preocupante: t("estado_preocupante", "Preocupante"),
+    };
+    return labels[estado] || estado;
+  }, [t]);
+
+  // ✅ Cache helpers
+  const guardarEnCache = useCallback((key, data) => {
+    try {
+      const cacheData = { data, timestamp: Date.now() };
+      sessionStorage.setItem(`dashboard_${key}`, JSON.stringify(cacheData));
+    } catch (e) {
+      // Ignorar errores de storage
+    }
+  }, []);
+
+  const obtenerDeCache = useCallback((key) => {
+    try {
+      const cached = sessionStorage.getItem(`dashboard_${key}`);
+      if (!cached) return null;
+      const { data, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp > CACHE_DURATION) {
+        sessionStorage.removeItem(`dashboard_${key}`);
+        return null;
+      }
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }, []);
+
+  // ✅ Cargar datos optimizado
   const cargarDatosDashboard = useCallback(async () => {
+    const startTime = Date.now();
     setLoading(true);
     setError(null);
 
     try {
-      console.log("🚀 Cargando dashboard fundación...");
+      console.log("🚀 Cargando dashboard fundación (optimizado)...");
 
-      let mascotas = [];
-      let adopcionesList = [];
-      let solicitudesList = [];
-      let seguimientosList = [];
+      // ✅ PRIMERO: Verificar caché
+      const cachedMascotas = obtenerDeCache('mascotas');
+      const cachedAdopciones = obtenerDeCache('adopciones');
 
-      // --- Cargar mascotas ---
-      try {
-        const mascotasRes = await api.get("/entity/mascotas", {
-          params: {
-            per_page: 100,
-            fields: 'id,nombre_mascota,especie,estado,created_at,foto_principal,edad_aprox',
-          },
-        });
-        if (mascotasRes.data?.success && Array.isArray(mascotasRes.data.data)) {
-          mascotas = mascotasRes.data.data;
-        }
-      } catch (err) {
-        console.error("❌ Error cargando mascotas:", err);
+      if (cachedMascotas && cachedAdopciones) {
+        console.log("📦 Usando datos en caché");
+        setMascotasRecientes(cachedMascotas.slice(0, 5));
+        setAdopciones(cachedAdopciones);
       }
 
-      // --- Cargar adopciones ---
-      try {
-        const adopcionesRes = await api.get("/entity/adopciones", {
+      // ✅ SEGUNDO: Cargar datos esenciales (mascotas y adopciones)
+      const [mascotasRes, adopcionesRes] = await Promise.all([
+        api.get("/entity/mascotas", {
           params: {
-            per_page: 100,
+            per_page: PER_PAGE,
+            fields: 'id,nombre_mascota,especie,estado,created_at,foto_principal,edad_aprox',
+          },
+        }).catch(() => ({ data: { data: [] } })),
+        
+        api.get("/entity/adopciones", {
+          params: {
+            per_page: PER_PAGE,
             fields: 'id,estado,created_at,fecha_adopcion,mascota_id,adoptante_id',
             include: 'mascota',
             sort: 'created_at',
             order: 'desc',
           },
-        });
-        if (adopcionesRes.data?.success && Array.isArray(adopcionesRes.data.data)) {
-          adopcionesList = adopcionesRes.data.data;
-        }
-      } catch (err) {
-        console.error("❌ Error cargando adopciones:", err);
+        }).catch(() => ({ data: { data: [] } })),
+      ]);
+
+      // ✅ Procesar mascotas
+      let mascotas = [];
+      if (mascotasRes?.data?.success && Array.isArray(mascotasRes.data.data)) {
+        mascotas = mascotasRes.data.data;
+        guardarEnCache('mascotas', mascotas);
+      }
+
+      // ✅ Procesar adopciones
+      let adopcionesList = [];
+      if (adopcionesRes?.data?.success && Array.isArray(adopcionesRes.data.data)) {
+        adopcionesList = adopcionesRes.data.data;
+        guardarEnCache('adopciones', adopcionesList);
       }
       setAdopciones(adopcionesList);
 
-      // 🆕 --- Cargar solicitudes pendientes ---
-      try {
-        const solicitudesRes = await api.get("/entity/solicitudes", {
+      // ✅ Calcular estadísticas básicas
+      const enAdopcion = mascotas.filter(
+        (m) => m.estado === "En adopcion" || m.estado === "En adopción"
+      ).length;
+      const adoptadas = mascotas.filter((m) => m.estado === "Adoptado").length;
+
+      const recientes = [...mascotas]
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+        .slice(0, 5);
+      setMascotasRecientes(recientes);
+
+      // ✅ Actualizar stats con datos disponibles
+      setStats(prev => ({
+        ...prev,
+        totalMascotas: mascotas.length,
+        enAdopcion,
+        adoptadas,
+      }));
+
+      // ✅ TERCERO: Cargar datos secundarios (no bloqueantes)
+      const [
+        solicitudesRes,
+        seguimientosRes,
+        eventosRes,
+        rescatesRes,
+        suscripcionesRes,
+      ] = await Promise.all([
+        api.get("/entity/solicitudes", {
           params: {
             per_page: 5,
             estado: 'pendiente',
@@ -131,18 +264,9 @@ const FundacionDashboard = () => {
             sort: 'created_at',
             order: 'desc',
           },
-        });
-        const data = solicitudesRes.data?.data || solicitudesRes.data;
-        const list = data?.data || data || [];
-        solicitudesList = Array.isArray(list) ? list : [];
-        setSolicitudesPendientes(solicitudesList.slice(0, 5));
-      } catch (err) {
-        console.error("❌ Error cargando solicitudes:", err);
-      }
-
-      // 🆕 --- Cargar seguimientos recientes ---
-      try {
-        const seguimientosRes = await api.get("/entity/adopciones/seguimientos/mis-seguimientos", {
+        }).catch(() => ({ data: { data: [] } })),
+        
+        api.get("/entity/adopciones/seguimientos/mis-seguimientos", {
           params: {
             per_page: 5,
             fields: 'id,adopcion_id,tipo_seguimiento,fecha_seguimiento,estado_mascota,resultado,observaciones',
@@ -150,102 +274,80 @@ const FundacionDashboard = () => {
             sort: 'created_at',
             order: 'desc',
           },
-        });
-        const data = seguimientosRes.data?.data || seguimientosRes.data;
-        const list = data?.data || data || [];
-        seguimientosList = Array.isArray(list) ? list : [];
-        setSeguimientosRecientes(seguimientosList.slice(0, 5));
-      } catch (err) {
-        console.error("❌ Error cargando seguimientos:", err);
+        }).catch(() => ({ data: { data: [] } })),
+        
+        api.get("/entity/eventos").catch(() => ({ data: { data: [] } })),
+        
+        rescateService.getMisRescates().catch(() => ({ data: { data: [] } })),
+        
+        suscripcionService.getSuscripcionesEntity().catch(() => []),
+      ]);
+
+      // ✅ Procesar solicitudes
+      let solicitudesList = [];
+      if (solicitudesRes?.data?.success) {
+        const data = solicitudesRes.data;
+        solicitudesList = data.data?.data || data.data || [];
       }
+      setSolicitudesPendientes(solicitudesList.slice(0, 5));
 
-      // --- Calcular estadísticas ---
-      const enAdopcion = mascotas.filter(
-        (m) => m.estado === "En adopcion" || m.estado === "En adopción"
-      ).length;
-      const adoptadas = mascotas.filter((m) => m.estado === "Adoptado").length;
+      // ✅ Procesar seguimientos
+      let seguimientosList = [];
+      if (seguimientosRes?.data?.success) {
+        const data = seguimientosRes.data;
+        seguimientosList = data.data?.data || data.data || [];
+      }
+      setSeguimientosRecientes(seguimientosList.slice(0, 5));
 
-      const recientes = [...mascotas]
-        .sort(
-          (a, b) =>
-            new Date(b.created_at || b.fecha_ingreso || 0) -
-            new Date(a.created_at || a.fecha_ingreso || 0)
-        )
-        .slice(0, 5);
-
-      // --- Cargar eventos ---
+      // ✅ Procesar eventos
       let eventos = [];
-      try {
-        const eventosRes = await api.get("/entity/eventos");
-        if (eventosRes.data?.success && Array.isArray(eventosRes.data.data)) {
-          eventos = eventosRes.data.data;
-        }
-      } catch (err) {
-        console.error("❌ Error cargando eventos:", err);
+      if (eventosRes?.data?.success && Array.isArray(eventosRes.data.data)) {
+        eventos = eventosRes.data.data;
       }
 
       const ahora = new Date();
       const proximos = eventos
-        .filter((e) => {
-          if (!e.fecha_evento) return false;
-          try {
-            return new Date(e.fecha_evento) > ahora;
-          } catch {
-            return false;
-          }
-        })
-        .sort((a, b) => {
-          try {
-            return new Date(a.fecha_evento) - new Date(b.fecha_evento);
-          } catch {
-            return 0;
-          }
-        })
+        .filter((e) => e.fecha_evento && new Date(e.fecha_evento) > ahora)
+        .sort((a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento))
         .slice(0, 5);
+      setEventosProximos(proximos);
 
-      // --- Cargar rescates ---
+      // ✅ Procesar rescates
       let rescates = [];
       let pendientes = [];
-      try {
-        const rescatesRes = await rescateService.getMisRescates();
-        if (rescatesRes?.data?.success) {
-          if (Array.isArray(rescatesRes.data.data?.data)) {
-            rescates = rescatesRes.data.data.data;
-          } else if (Array.isArray(rescatesRes.data.data)) {
-            rescates = rescatesRes.data.data;
-          }
+      if (rescatesRes?.data?.success) {
+        const data = rescatesRes.data;
+        if (Array.isArray(data.data?.data)) {
+          rescates = data.data.data;
+        } else if (Array.isArray(data.data)) {
+          rescates = data.data;
         }
         pendientes = rescates
           .filter((r) => r.estado === "pendiente" || r.estado === "en_proceso")
           .slice(0, 5);
-      } catch (err) {
-        console.error("❌ Error cargando rescates:", err);
       }
+      setRescatesPendientes(pendientes);
 
-      // --- Cargar suscripciones ---
-      let suscripciones = [];
+      // ✅ Procesar suscripciones
+      let suscripcionesData = [];
       let montoTotal = 0;
-      try {
-        const suscripcionesRes = await suscripcionService.getFundacionSuscripciones();
-        if (Array.isArray(suscripcionesRes)) {
-          suscripciones = suscripcionesRes;
-        } else if (suscripcionesRes?.data) {
-          suscripciones = Array.isArray(suscripcionesRes.data) ? suscripcionesRes.data : [];
-        }
-        montoTotal = suscripciones
-          .filter((s) => s.estado === "activo")
-          .reduce((sum, s) => sum + (parseFloat(s.monto_mensual) || 0), 0);
-      } catch (err) {
-        console.log("ℹ️ No hay suscripciones disponibles");
+      if (Array.isArray(suscripcionesRes)) {
+        suscripcionesData = suscripcionesRes;
+      } else if (suscripcionesRes?.data && Array.isArray(suscripcionesRes.data)) {
+        suscripcionesData = suscripcionesRes.data;
       }
+      setSuscripciones(suscripcionesData);
+      montoTotal = suscripcionesData
+        .filter((s) => s.estado === "activo")
+        .reduce((sum, s) => sum + (parseFloat(s.monto_mensual) || 0), 0);
 
-      // --- Actividad reciente ---
+      // ✅ Actividad reciente
       const actividades = [
         ...mascotas.slice(0, 3).map((m) => ({
           id: m.id,
           tipo: "mascota",
           titulo: `${t("actividad_mascota_titulo", "Nueva mascota registrada")}: ${m.nombre_mascota}`,
-          fecha: m.created_at || m.fecha_ingreso || new Date(),
+          fecha: m.created_at || new Date(),
           icono: "fa-paw",
           color: "var(--color-primary)",
         })),
@@ -260,116 +362,51 @@ const FundacionDashboard = () => {
       ]
         .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
         .slice(0, 5);
+      setActividadReciente(actividades);
 
-      // --- Actualizar stats con nuevos datos ---
+      // ✅ Actualizar stats completos
       setStats({
         totalMascotas: mascotas.length,
         enAdopcion,
         adoptadas,
         totalEventos: eventos.length,
         eventosProximos: proximos.length,
-        totalSuscripciones: suscripciones.length,
+        totalSuscripciones: suscripcionesData.length,
         montoMensual: montoTotal,
         rescatesPendientes: pendientes.length,
-        solicitudesPendientes: solicitudesList.length, // 🆕
-        totalSeguimientos: seguimientosList.length, // 🆕
+        solicitudesPendientes: solicitudesList.length,
+        totalSeguimientos: seguimientosList.length,
       });
 
-      setMascotasRecientes(recientes);
-      setEventosProximos(proximos);
-      setActividadReciente(actividades);
-      setRescatesPendientes(pendientes);
     } catch (error) {
       console.error("❌ Error general:", error);
       setError(error.message || t("error_carga", "Error al cargar los datos"));
     } finally {
-      setLoading(false);
+      // ✅ Tiempo mínimo de carga para evitar flashes
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MIN_LOADING_TIME - elapsed);
+      setTimeout(() => {
+        setLoading(false);
+      }, remaining);
     }
-  }, [t]);
+  }, [t, obtenerDeCache, guardarEnCache]);
 
   useEffect(() => {
     cargarDatosDashboard();
   }, [cargarDatosDashboard]);
 
-  // ===== FUNCIONES AUXILIARES =====
-  const formatRelativeTime = (date) => {
-    if (!date) return t("recientemente", "Recientemente");
-    const now = new Date();
-    const diff = now - new Date(date);
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(diff / 3600000);
-    const days = Math.floor(diff / 86400000);
+  // ✅ Memoizar datos del banner
+  const bannerData = useMemo(() => {
+    const fundacionName = user?.name || user?.nombre || t("fundacion", "Fundación");
+    const fundacionAvatar = user?.avatar || null;
+    const totalMascotas = stats.totalMascotas;
+    const tasaExito = stats.totalMascotas > 0 
+      ? Math.round((stats.adoptadas / stats.totalMascotas) * 100) 
+      : 0;
+    return { fundacionName, fundacionAvatar, totalMascotas, tasaExito };
+  }, [user, stats]);
 
-    if (minutes < 1) return t("justo_ahora", "Justo ahora");
-    if (minutes < 60) return t("hace_minutos", "Hace {{count}} minutos", { count: minutes });
-    if (hours < 24) return t("hace_horas", "Hace {{count}} horas", { count: hours });
-    if (days < 7) return t("hace_dias", "Hace {{count}} días", { count: days });
-    return formatDateByLocale(date);
-  };
-
-  const getEstadoText = (estado) => {
-    if (estado === "En adopcion" || estado === "En adopción") {
-      return t("estado_en_adopcion", "En adopción");
-    }
-    if (estado === "Adoptado") {
-      return t("estado_adoptado", "Adoptado");
-    }
-    return t("estado_rescatada", "Rescatada");
-  };
-
-  const getEstadoClass = (estado) => {
-    if (estado === "En adopcion" || estado === "En adopción") return "fd-status-adopcion";
-    if (estado === "Adoptado") return "fd-status-adoptado";
-    return "fd-status-rescatada";
-  };
-
-  const getEstadoRescateText = (estado) => {
-    if (estado === "pendiente") return t("estado_pendiente", "Pendiente");
-    return t("estado_en_proceso", "En proceso");
-  };
-
-  const getEstadoRescateClass = (estado) => {
-    return estado === "pendiente" ? "pendiente" : "en_proceso";
-  };
-
-  const getTipoSeguimientoLabel = (tipo) => {
-    const tipos = {
-      virtual: t("tipo_virtual", "Virtual"),
-      domiciliario: t("tipo_domiciliario", "Domiciliario"),
-      telefonico: t("tipo_telefonico", "Telefónico"),
-    };
-    return tipos[tipo] || tipo;
-  };
-
-  const getEstadoSeguimientoClass = (estado) => {
-    const clases = {
-      excelente: "seg-estado-excelente",
-      bueno: "seg-estado-bueno",
-      regular: "seg-estado-regular",
-      preocupante: "seg-estado-preocupante",
-    };
-    return clases[estado] || "seg-estado-bueno";
-  };
-
-  const getEstadoSeguimientoLabel = (estado) => {
-    const labels = {
-      excelente: t("estado_excelente", "Excelente"),
-      bueno: t("estado_bueno", "Bueno"),
-      regular: t("estado_regular", "Regular"),
-      preocupante: t("estado_preocupante", "Preocupante"),
-    };
-    return labels[estado] || estado;
-  };
-
-  // ===== DATOS PARA EL BANNER =====
-  const fundacionName = user?.name || user?.nombre || t("fundacion", "Fundación");
-  const fundacionAvatar = user?.avatar || null;
-  const totalMascotas = stats.totalMascotas;
-  const tasaExito = stats.totalMascotas > 0 
-    ? Math.round((stats.adoptadas / stats.totalMascotas) * 100) 
-    : 0;
-
-  // ===== RENDER =====
+  // ✅ LOADING SIMPLIFICADO - Sin porcentaje
   if (loading) {
     return (
       <div className="fd-dashboard-container">
@@ -405,12 +442,12 @@ const FundacionDashboard = () => {
         <div className="bento-container">
           <ProfileBanner
             user={{
-              nombre: fundacionName,
-              avatar: fundacionAvatar,
+              nombre: bannerData.fundacionName,
+              avatar: bannerData.fundacionAvatar,
               titulo: t("banner.titulo", {
                 defaultValue: "{{count}} mascotas · {{percent}}% de adopciones exitosas",
-                count: totalMascotas,
-                percent: tasaExito,
+                count: bannerData.totalMascotas,
+                percent: bannerData.tasaExito,
               }),
               solicitudes: stats.solicitudesPendientes,
               adopciones: stats.adoptadas,
@@ -429,39 +466,67 @@ const FundacionDashboard = () => {
               label={t("total_mascotas", "Total Mascotas")}
               value={stats.totalMascotas}
               color="primary"
-              progressLabel={t("total", "Total")}
             />
             <StatCardModern
               icon={<Heart size={24} />}
               label={t("en_adopcion", "En Adopción")}
               value={stats.enAdopcion}
               color="success"
-              progressLabel={t("disponibles", "Disponibles")}
             />
             <StatCardModern
               icon={<CheckCircle size={24} />}
               label={t("adoptadas", "Adoptadas")}
               value={stats.adoptadas}
               color="gradient"
-              progressLabel={t("exitos", "Éxitos")}
             />
             <StatCardModern
-              icon={<Calendar size={24} />}
-              label={t("eventos_proximos", "Eventos Próximos")}
-              value={stats.eventosProximos}
+              icon={<HandHeart size={24} />}
+              label={t("suscripciones", "Suscripciones")}
+              value={stats.totalSuscripciones}
               color="warning"
-              progressLabel={t("programados", "Programados")}
             />
           </div>
         </div>
       </section>
 
-      {/* ===== GRID PRINCIPAL - 3 COLUMNAS ===== */}
+      {/* ===== STATS SECUNDARIAS ===== */}
+      <section className="fd-stats-section">
+        <div className="bento-container">
+          <div className="fd-stats-grid">
+            <StatCardModern
+              icon={<Calendar size={24} />}
+              label={t("eventos_proximos", "Eventos Próximos")}
+              value={stats.eventosProximos}
+              color="info"
+            />
+            <StatCardModern
+              icon={<Activity size={24} />}
+              label={t("rescates_pendientes", "Rescates Activos")}
+              value={stats.rescatesPendientes}
+              color="danger"
+            />
+            <StatCardModern
+              icon={<ClipboardList size={24} />}
+              label={t("solicitudes_pendientes", "Solicitudes")}
+              value={stats.solicitudesPendientes}
+              color="warning"
+            />
+            <StatCardModern
+              icon={<ClipboardCheck size={24} />}
+              label={t("seguimientos", "Seguimientos")}
+              value={stats.totalSeguimientos}
+              color="success"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== GRID PRINCIPAL ===== */}
       <section className="fd-main-grid-section">
         <div className="bento-container">
           <div className="fd-main-grid-three">
             {/* Mascotas Recientes */}
-            <div className="card-modern fd-card-solicitudes">
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <PawPrint size={20} className="card-icon" />
@@ -505,7 +570,7 @@ const FundacionDashboard = () => {
             </div>
 
             {/* Eventos Próximos */}
-            <div className="card-modern fd-card-eventos">
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <Calendar size={20} className="card-icon" />
@@ -550,8 +615,8 @@ const FundacionDashboard = () => {
               )}
             </div>
 
-            {/* 🆕 SOLICITUDES PENDIENTES */}
-            <div className="card-modern fd-card-solicitudes-pendientes">
+            {/* Solicitudes Pendientes */}
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <ClipboardList size={20} className="card-icon" />
@@ -594,12 +659,12 @@ const FundacionDashboard = () => {
         </div>
       </section>
 
-      {/* ===== RESCATES, SEGUIMIENTOS Y ACTIVIDAD ===== */}
+      {/* ===== GRID INFERIOR ===== */}
       <section className="fd-bottom-section">
         <div className="bento-container">
           <div className="fd-bottom-grid-three">
             {/* Rescates Pendientes */}
-            <div className="card-modern fd-card-rescates">
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <Activity size={20} className="card-icon" />
@@ -634,8 +699,8 @@ const FundacionDashboard = () => {
               )}
             </div>
 
-            {/* 🆕 SEGUIMIENTOS RECIENTES */}
-            <div className="card-modern fd-card-seguimientos">
+            {/* Seguimientos Recientes */}
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <ClipboardCheck size={20} className="card-icon" />
@@ -677,7 +742,7 @@ const FundacionDashboard = () => {
             </div>
 
             {/* Actividad Reciente */}
-            <div className="card-modern fd-card-actividad">
+            <div className="card-modern">
               <div className="card-header-modern">
                 <div className="card-header-left">
                   <TrendingUp size={20} className="card-icon" />
@@ -710,14 +775,22 @@ const FundacionDashboard = () => {
         </div>
       </section>
 
-      {/* ===== GRÁFICOS INTERACTIVOS ===== */}
+      {/* ===== GRÁFICOS ===== */}
       <section className="fd-charts-section">
         <div className="bento-container">
-          <FundacionDashboardCharts
-            mascotas={mascotasRecientes}
-            adopciones={adopciones}
-            loading={loading}
-          />
+          <Suspense fallback={
+            <div className="charts-loading-placeholder">
+              <div className="spinner-small"></div>
+              <span>{t("cargando_graficos", "Cargando gráficos...")}</span>
+            </div>
+          }>
+            <FundacionDashboardCharts
+              mascotas={mascotasRecientes}
+              adopciones={adopciones}
+              suscripciones={suscripciones}
+              loading={loading}
+            />
+          </Suspense>
         </div>
       </section>
 
@@ -739,11 +812,11 @@ const FundacionDashboard = () => {
                 </div>
                 <span>{t("crear_evento", "Crear Evento")}</span>
               </Link>
-              <Link to="/fundacion/suscripciones/crear" className="fd-action-btn">
+              <Link to="/fundacion/suscripciones" className="fd-action-btn">
                 <div className="fd-action-icon" style={{ background: "rgba(255, 107, 157, 0.15)", color: "var(--color-heart)" }}>
                   <HandHeart size={22} />
                 </div>
-                <span>{t("crear_suscripcion", "Crear Suscripción")}</span>
+                <span>{t("ver_suscripciones", "Ver Suscripciones")}</span>
               </Link>
               <Link to="/fundacion/rescates/disponibles" className="fd-action-btn">
                 <div className="fd-action-icon" style={{ background: "rgba(46, 204, 113, 0.15)", color: "var(--color-success)" }}>
@@ -760,14 +833,7 @@ const FundacionDashboard = () => {
 };
 
 // ===== STAT CARD =====
-const StatCardModern = ({ 
-  icon, 
-  label, 
-  value, 
-  color, 
-  percentage = 0,
-  progressLabel = "",
-}) => {
+const StatCardModern = React.memo(({ icon, label, value, color }) => {
   return (
     <div className={`stat-card-modern stat-${color}`}>
       <div className="stat-header-modern">
@@ -776,10 +842,9 @@ const StatCardModern = ({
       </div>
       <div className="stat-body-modern">
         <span className="stat-value-modern">{value}</span>
-        <span className="stat-label-modern">{progressLabel || label}</span>
       </div>
     </div>
   );
-};
+});
 
 export default FundacionDashboard;

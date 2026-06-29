@@ -1,5 +1,5 @@
 // src/pages/user/PanelUsuario/PanelUsuario.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -17,15 +17,22 @@ import {
   TrendingUp,
   Clock,
   ArrowRight,
-  FileText,      // ← NUEVO: para solicitudes
-  Building2,     // ← NUEVO: para verificaciones
-  CalendarDays,  // ← NUEVO: para eventos
+  FileText,
+  CalendarDays,
 } from "lucide-react";
 import ProfileBanner from "../../../components/common/ProfileBanner/index.js";
 import "./PanelUsuario.css";
 
+// ✅ Lazy load de componentes pesados
+const UserDashboardCharts = lazy(() => 
+  import("../../../components/common/UserDashboardCharts/UserDashboardCharts")
+);
+
+// ⏱️ Tiempo mínimo de carga para evitar flashes
+const MIN_LOADING_TIME = 300;
+
 const PanelUsuario = () => {
-  const { t } = useTranslation('dashboard');
+  const { t, i18n } = useTranslation('dashboard');
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState(null);
   const [solicitudesRecientes, setSolicitudesRecientes] = useState([]);
@@ -33,23 +40,71 @@ const PanelUsuario = () => {
   const [eventosProximos, setEventosProximos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadingStartTime] = useState(Date.now());
+  
+  // ✅ Ref para evitar cargas duplicadas
+  const isMounted = useRef(true);
+  const loadingRef = useRef(false);
 
+  // ✅ Memoizar funciones de formato (sin dependencias que cambien)
+  const formatDate = useCallback((fecha) => {
+    if (!fecha) return "";
+    try {
+      const lang = i18n.language || 'es';
+      return new Date(fecha).toLocaleDateString(lang, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return fecha;
+    }
+  }, [i18n.language]);
+
+  // ✅ Memoizar funciones de estado
+  const getEstadoBadge = useCallback((estado) => {
+    const estados = {
+      pendiente: { label: t("estados.pendiente", "Pendiente"), className: "estado-pendiente" },
+      en_revision: { label: t("estados.en_revision", "En revisión"), className: "estado-revision" },
+      aprobada: { label: t("estados.aprobada", "Aprobada"), className: "estado-aprobada" },
+      rechazada: { label: t("estados.rechazada", "Rechazada"), className: "estado-rechazada" },
+      completada: { label: t("estados.completada", "Completada"), className: "estado-completada" },
+    };
+    return estados[estado] || { label: estado || t("estados.desconocido", "Desconocido"), className: "" };
+  }, [t]);
+
+  // ✅ Cargar datos - SIN DEPENDENCIAS QUE CAMBIEN
   const cargarDashboard = useCallback(async () => {
+    // ✅ Evitar cargas simultáneas
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+
     try {
       setLoading(true);
       setError(null);
 
-      try {
-        const profileRes = await api.get("/user/profile");
-        if (profileRes.data?.success) {
-          setUserProfile(profileRes.data.data || profileRes.data);
-        } else if (profileRes.data?.data) {
-          setUserProfile(profileRes.data.data);
+      // ✅ Promise.allSettled para que no falle todo si una petición falla
+      const resultados = await Promise.allSettled([
+        api.get("/user/profile").catch(() => ({ data: null })),
+        api.get("/user/solicitudes", { params: { perPage: 5, sort: "created_at", order: "desc" } }).catch(() => ({ data: null })),
+        api.get("/suscripciones/user/mis-suscripciones").catch(() => ({ data: null })),
+        api.get("/eventos", { params: { per_page: 3, proximos: true } }).catch(() => ({ data: null })),
+      ]);
+
+      // ✅ Si el componente se desmontó, no actualizar estado
+      if (!isMounted.current) return;
+
+      const [profileRes, solicitudesRes, suscripcionesRes, eventosRes] = resultados;
+
+      // 1. Perfil
+      if (profileRes.status === 'fulfilled' && profileRes.value?.data) {
+        const data = profileRes.value.data;
+        if (data.success) {
+          setUserProfile(data.data || data);
         }
-      } catch (e) {
-        console.log("👤 Usando datos del contexto para perfil");
+      } else if (!userProfile) {
         setUserProfile({
-          nombre: user?.nombre || "Usuario",
+          nombre: user?.nombre || t("panel.defaultUser", "Usuario"),
           apellidos: user?.apellidos || "",
           email: user?.email || "",
           telefono: user?.telefono || "",
@@ -60,94 +115,97 @@ const PanelUsuario = () => {
         });
       }
 
-      try {
-        const solicitudesRes = await api.get("/user/solicitudes", {
-          params: { perPage: 5, sort: "created_at", order: "desc" },
-        });
-        if (solicitudesRes.data?.success) {
-          const data = solicitudesRes.data.data;
-          setSolicitudesRecientes(Array.isArray(data) ? data : data.data || []);
+      // 2. Solicitudes
+      if (solicitudesRes.status === 'fulfilled' && solicitudesRes.value?.data) {
+        const data = solicitudesRes.value.data;
+        if (data.success) {
+          const solicitudes = data.data || [];
+          setSolicitudesRecientes(Array.isArray(solicitudes) ? solicitudes : (solicitudes.data || []));
         }
-      } catch (e) {
-        console.log("📋 No hay solicitudes");
-        setSolicitudesRecientes([]);
       }
 
-      try {
-        const suscripcionesRes = await api.get(
-          "/user/suscripciones/mis-suscripciones"
-        );
-        if (suscripcionesRes.data?.success) {
-          setSuscripciones(suscripcionesRes.data.data || []);
+      // 3. Suscripciones
+      if (suscripcionesRes.status === 'fulfilled' && suscripcionesRes.value?.data) {
+        const data = suscripcionesRes.value.data;
+        if (data.success) {
+          setSuscripciones(data.data || []);
+        } else if (Array.isArray(data)) {
+          setSuscripciones(data);
+        } else if (data?.data) {
+          setSuscripciones(data.data);
         }
-      } catch (e) {
-        console.log("💝 No hay suscripciones");
-        setSuscripciones([]);
       }
 
-      try {
-        const eventosRes = await api.get("/eventos", {
-          params: { per_page: 3, proximos: true },
-        });
-        if (eventosRes.data?.data?.data) {
-          const eventos = eventosRes.data.data.data;
-          setEventosProximos(eventos.filter((e) => e.usuario_confirmado));
-        } else if (Array.isArray(eventosRes.data)) {
-          setEventosProximos(eventosRes.data.filter((e) => e.usuario_confirmado));
+      // 4. Eventos
+      if (eventosRes.status === 'fulfilled' && eventosRes.value?.data) {
+        const data = eventosRes.value.data;
+        let eventos = [];
+        if (data?.data?.data) {
+          eventos = data.data.data;
+        } else if (Array.isArray(data)) {
+          eventos = data;
         }
-      } catch (e) {
-        console.log("📅 No hay eventos");
-        setEventosProximos([]);
+        setEventosProximos(eventos.filter((e) => e.usuario_confirmado));
       }
+
     } catch (error) {
       console.error("❌ Error:", error);
-      setError(error.response?.data?.message || "Error al cargar los datos");
+      if (isMounted.current) {
+        setError(error.response?.data?.message || t("panel.error.generic", "Error al cargar los datos"));
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        const elapsed = Date.now() - loadingStartTime;
+        const remaining = Math.max(0, MIN_LOADING_TIME - elapsed);
+        setTimeout(() => {
+          if (isMounted.current) {
+            setLoading(false);
+            loadingRef.current = false;
+          }
+        }, remaining);
+      } else {
+        loadingRef.current = false;
+      }
     }
-  }, [user]);
+  }, [user, t, loadingStartTime, userProfile]); // ✅ Dependencias estables
 
   useEffect(() => {
+    isMounted.current = true;
     cargarDashboard();
-  }, [cargarDashboard]);
-
-  const getEstadoBadge = (estado) => {
-    const estados = {
-      pendiente: { label: t("estados.pendiente", "Pendiente"), className: "estado-pendiente" },
-      en_revision: { label: t("estados.en_revision", "En revisión"), className: "estado-revision" },
-      aprobada: { label: t("estados.aprobada", "Aprobada"), className: "estado-aprobada" },
-      rechazada: { label: t("estados.rechazada", "Rechazada"), className: "estado-rechazada" },
-      completada: { label: t("estados.completada", "Completada"), className: "estado-completada" },
+    
+    // ✅ Cleanup
+    return () => {
+      isMounted.current = false;
+      loadingRef.current = false;
     };
-    return estados[estado] || { label: estado || t("estados.desconocido", "Desconocido"), className: "" };
-  };
+  }, []); // ✅ Array vacío = solo se ejecuta una vez
 
-  const formatDate = (fecha) => {
-    if (!fecha) return "";
-    try {
-      return new Date(fecha).toLocaleDateString(t("locale", "es-ES"), {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
-    } catch (e) {
-      return fecha;
-    }
-  };
-
-  const contarPorEstado = (estadoBuscado) => {
-    return solicitudesRecientes.filter((s) => s.estado === estadoBuscado).length;
-  };
-
-  const totalSolicitudes = solicitudesRecientes.length;
-  const pendientes = contarPorEstado("pendiente");
-  const aprobadas = contarPorEstado("aprobada");
-  const tasaAprobacion = totalSolicitudes > 0 
-    ? Math.round((aprobadas / totalSolicitudes) * 100) 
-    : 0;
+  // ✅ Memoizar cálculos
+  const totalSolicitudes = useMemo(() => solicitudesRecientes.length, [solicitudesRecientes]);
+  const pendientes = useMemo(() => solicitudesRecientes.filter((s) => s.estado === "pendiente").length, [solicitudesRecientes]);
+  const aprobadas = useMemo(() => solicitudesRecientes.filter((s) => s.estado === "aprobada").length, [solicitudesRecientes]);
+  const tasaAprobacion = useMemo(() => 
+    totalSolicitudes > 0 ? Math.round((aprobadas / totalSolicitudes) * 100) : 0,
+    [totalSolicitudes, aprobadas]
+  );
 
   const profile = userProfile || {};
   const avatarInitial = profile.nombre?.charAt(0) || user?.nombre?.charAt(0) || "U";
+
+  // ✅ Memoizar estadísticas de suscripciones
+  const suscripcionesActivas = useMemo(
+    () => suscripciones.filter(s => s.estado?.toLowerCase() === 'activo').length,
+    [suscripciones]
+  );
+  const suscripcionesPendientes = useMemo(
+    () => suscripciones.filter(s => s.estado?.toLowerCase() === 'pendiente').length,
+    [suscripciones]
+  );
+
+  // ✅ Función para recargar manualmente (cuando el usuario hace clic)
+  const handleRetry = useCallback(() => {
+    cargarDashboard();
+  }, [cargarDashboard]);
 
   if (loading) {
     return (
@@ -168,7 +226,7 @@ const PanelUsuario = () => {
             <AlertCircle size={48} className="error-icon-modern" />
             <h3>{t("panel.error.title", "Error al cargar el panel")}</h3>
             <p>{error}</p>
-            <button onClick={cargarDashboard} className="btn-retry-modern">
+            <button onClick={handleRetry} className="btn-retry-modern">
               {t("panel.error.retry", "Reintentar")}
             </button>
           </div>
@@ -243,6 +301,24 @@ const PanelUsuario = () => {
         </div>
       </section>
 
+      {/* ===== GRÁFICOS - CON SUSPENSE ===== */}
+      <section className="charts-section-modern">
+        <div className="bento-container">
+          <Suspense fallback={
+            <div className="charts-loading-placeholder">
+              <div className="spinner-small"></div>
+              <span>{t("panel.charts.loading", "Cargando gráficos...")}</span>
+            </div>
+          }>
+            <UserDashboardCharts 
+              suscripciones={suscripciones} 
+              solicitudes={solicitudesRecientes}
+              loading={loading}
+            />
+          </Suspense>
+        </div>
+      </section>
+
       {/* ===== GRID PRINCIPAL ===== */}
       <section className="main-grid-section-modern">
         <div className="bento-container">
@@ -251,7 +327,7 @@ const PanelUsuario = () => {
             <div className="card-modern card-solicitudes">
               <div className="card-header-modern">
                 <div className="card-header-left">
-                  <FileText size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                  <FileText size={20} className="card-icon" />
                   <h3>{t("panel.solicitudes.title", "Solicitudes recientes")}</h3>
                 </div>
                 <Link to="/user/mis-solicitudes" className="card-link-modern">
@@ -287,11 +363,11 @@ const PanelUsuario = () => {
               )}
             </div>
 
-            {/* Suscripciones - MANTIENE EL EMOJI 💝 */}
+            {/* Suscripciones */}
             <div className="card-modern card-suscripciones">
               <div className="card-header-modern">
                 <div className="card-header-left">
-                  <span className="card-icon">💝</span> {/* ← SE MANTIENE */}
+                  <span className="card-icon-emoji">💝</span>
                   <h3>{t("panel.suscripciones.title", "Suscripciones activas")}</h3>
                 </div>
                 <Link to="/user/mis-suscripciones" className="card-link-modern">
@@ -304,23 +380,37 @@ const PanelUsuario = () => {
                 </div>
               ) : (
                 <ul className="suscripciones-list-modern">
-                  {suscripciones.slice(0, 5).map((sub) => (
-                    <li key={sub.id} className="suscripcion-item-modern">
-                      <div className="suscripcion-info-modern">
-                        <span className="suscripcion-plan-modern">
-                          {sub.plan?.nombre || sub.nombre || t("panel.plan.default", "Plan")}
+                  {suscripciones.slice(0, 5).map((sub) => {
+                    const nombreMascota = sub.mascota?.nombre_mascota || 
+                                         sub.mascota_nombre || 
+                                         t("panel.plan.default", "Plan");
+                    return (
+                      <li key={sub.id} className="suscripcion-item-modern">
+                        <div className="suscripcion-info-modern">
+                          <span className="suscripcion-plan-modern">
+                            {nombreMascota}
+                          </span>
+                          <span className="suscripcion-monto-modern">
+                            ${sub.monto_mensual || sub.monto || 0}/mes
+                          </span>
+                        </div>
+                        <span className={`suscripcion-estado-modern ${sub.estado === "activo" ? "activo" : "inactivo"}`}>
+                          {sub.estado === "activo" 
+                            ? t("panel.suscripciones.activo", "Activo") 
+                            : sub.estado === "pendiente"
+                            ? t("panel.suscripciones.pendiente", "Pendiente")
+                            : t("panel.suscripciones.inactivo", "Inactivo")}
                         </span>
-                        <span className="suscripcion-monto-modern">
-                          ${sub.monto_mensual || sub.monto || 0}/mes
-                        </span>
-                      </div>
-                      <span className={`suscripcion-estado-modern ${sub.estado === "activo" ? "activo" : "inactivo"}`}>
-                        {sub.estado === "activo" 
-                          ? t("panel.suscripciones.activo", "Activo") 
-                          : t("panel.suscripciones.pausado", "Pausado")}
+                      </li>
+                    );
+                  })}
+                  {suscripciones.length > 5 && (
+                    <li className="suscripcion-item-modern" style={{ justifyContent: 'center' }}>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+                        +{suscripciones.length - 5} {t("panel.suscripciones.mas", "más")}
                       </span>
                     </li>
-                  ))}
+                  )}
                 </ul>
               )}
             </div>
@@ -336,7 +426,7 @@ const PanelUsuario = () => {
             <div className="card-modern card-verificaciones">
               <div className="card-header-modern">
                 <div className="card-header-left">
-                  <ShieldCheck size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                  <ShieldCheck size={20} className="card-icon" />
                   <h3>{t("panel.verificaciones.title", "Verificaciones")}</h3>
                 </div>
               </div>
@@ -364,7 +454,7 @@ const PanelUsuario = () => {
               <div className="card-modern card-eventos">
                 <div className="card-header-modern">
                   <div className="card-header-left">
-                    <CalendarDays size={20} className="card-icon" /> {/* ← ICONO EN VEZ DE EMOJI */}
+                    <CalendarDays size={20} className="card-icon" />
                     <h3>{t("panel.eventos.title", "Eventos próximos")}</h3>
                   </div>
                   <Link to="/eventos" className="card-link-modern">

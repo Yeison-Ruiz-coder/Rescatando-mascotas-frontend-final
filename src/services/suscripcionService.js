@@ -1,21 +1,21 @@
 // src/services/suscripcionService.js
-import api from './api';
+import api from "./api";
 
 export const suscripcionService = {
   // ============================================
   // PÚBLICOS (sin autenticación)
   // ============================================
-  
+
   /**
    * Obtener mascotas disponibles para apadrinar
    * GET /api/suscripciones/planes
    */
   getPlanes: async () => {
     try {
-      const response = await api.get('/suscripciones/planes');
+      const response = await api.get("/suscripciones/planes");
       return response.data.data || [];
     } catch (error) {
-      console.error('Error getPlanes:', error);
+      console.error("Error getPlanes:", error);
       return [];
     }
   },
@@ -29,7 +29,7 @@ export const suscripcionService = {
       const response = await api.get(`/suscripciones/planes/${id}`);
       return response.data.data;
     } catch (error) {
-      console.error('Error getPlanDetalle:', error);
+      console.error("Error getPlanDetalle:", error);
       throw error;
     }
   },
@@ -37,17 +37,17 @@ export const suscripcionService = {
   // ============================================
   // USUARIO (requiere autenticación)
   // ============================================
-  
+
   /**
    * Crear una suscripción (pendiente de pago)
    * POST /api/suscripciones/user/crear
    */
   crearSuscripcion: async (data) => {
     try {
-      const response = await api.post('/suscripciones/user/crear', data);
+      const response = await api.post("/suscripciones/user/crear", data);
       return response.data.data;
     } catch (error) {
-      console.error('Error crearSuscripcion:', error);
+      console.error("Error crearSuscripcion:", error);
       throw error;
     }
   },
@@ -58,10 +58,10 @@ export const suscripcionService = {
    */
   getMisSuscripciones: async () => {
     try {
-      const response = await api.get('/suscripciones/user/mis-suscripciones');
+      const response = await api.get("/suscripciones/user/mis-suscripciones");
       return response.data.data || [];
     } catch (error) {
-      console.error('Error getMisSuscripciones:', error);
+      console.error("Error getMisSuscripciones:", error);
       return [];
     }
   },
@@ -75,7 +75,7 @@ export const suscripcionService = {
       const response = await api.get(`/suscripciones/user/${id}`);
       return response.data.data;
     } catch (error) {
-      console.error('Error getSuscripcion:', error);
+      console.error("Error getSuscripcion:", error);
       throw error;
     }
   },
@@ -89,7 +89,7 @@ export const suscripcionService = {
       const response = await api.patch(`/suscripciones/user/${id}/cancelar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error cancelarSuscripcion:', error);
+      console.error("Error cancelarSuscripcion:", error);
       throw error;
     }
   },
@@ -103,7 +103,7 @@ export const suscripcionService = {
       const response = await api.patch(`/suscripciones/user/${id}/pausar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error pausarSuscripcion:', error);
+      console.error("Error pausarSuscripcion:", error);
       throw error;
     }
   },
@@ -117,7 +117,7 @@ export const suscripcionService = {
       const response = await api.patch(`/suscripciones/user/${id}/reactivar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error reactivarSuscripcion:', error);
+      console.error("Error reactivarSuscripcion:", error);
       throw error;
     }
   },
@@ -125,17 +125,17 @@ export const suscripcionService = {
   // ============================================
   // FUNDACIÓN/VETERINARIA (requiere autenticación)
   // ============================================
-  
+
   /**
    * Obtener suscripciones de la entidad
    * GET /api/entity/suscripciones
    */
   getSuscripcionesEntity: async () => {
     try {
-      const response = await api.get('/entity/suscripciones');
+      const response = await api.get("/entity/suscripciones");
       return response.data.data || [];
     } catch (error) {
-      console.error('Error getSuscripcionesEntity:', error);
+      console.error("Error getSuscripcionesEntity:", error);
       return [];
     }
   },
@@ -149,7 +149,7 @@ export const suscripcionService = {
       const response = await api.get(`/entity/suscripciones/${id}`);
       return response.data.data;
     } catch (error) {
-      console.error('Error getSuscripcionEntity:', error);
+      console.error("Error getSuscripcionEntity:", error);
       throw error;
     }
   },
@@ -163,7 +163,7 @@ export const suscripcionService = {
       const response = await api.put(`/entity/suscripciones/${id}`, data);
       return response.data.data;
     } catch (error) {
-      console.error('Error updateSuscripcionEntity:', error);
+      console.error("Error updateSuscripcionEntity:", error);
       throw error;
     }
   },
@@ -177,7 +177,7 @@ export const suscripcionService = {
       const response = await api.patch(`/entity/suscripciones/${id}/pausar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error pausarSuscripcionEntity:', error);
+      console.error("Error pausarSuscripcionEntity:", error);
       throw error;
     }
   },
@@ -191,7 +191,7 @@ export const suscripcionService = {
       const response = await api.patch(`/entity/suscripciones/${id}/reactivar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error reactivarSuscripcionEntity:', error);
+      console.error("Error reactivarSuscripcionEntity:", error);
       throw error;
     }
   },
@@ -205,7 +205,7 @@ export const suscripcionService = {
       const response = await api.patch(`/entity/suscripciones/${id}/cancelar`);
       return response.data.data;
     } catch (error) {
-      console.error('Error cancelarSuscripcionEntity:', error);
+      console.error("Error cancelarSuscripcionEntity:", error);
       throw error;
     }
   },
@@ -216,10 +216,10 @@ export const suscripcionService = {
    */
   getEstadisticasEntity: async () => {
     try {
-      const response = await api.get('/entity/suscripciones-estadisticas');
+      const response = await api.get("/entity/suscripciones-estadisticas");
       return response.data.data;
     } catch (error) {
-      console.error('Error getEstadisticasEntity:', error);
+      console.error("Error getEstadisticasEntity:", error);
       return null;
     }
   },
@@ -227,19 +227,19 @@ export const suscripcionService = {
   // ============================================
   // PAGOS (requiere autenticación)
   // ============================================
-  
+
   /**
    * Iniciar pago (demo)
    * POST /api/payment/iniciar
    */
   iniciarPago: async (suscripcionId) => {
     try {
-      const response = await api.post('/payment/iniciar', { 
-        suscripcion_id: suscripcionId 
+      const response = await api.post("/payment/iniciar", {
+        suscripcion_id: suscripcionId,
       });
       return response.data.data;
     } catch (error) {
-      console.error('Error iniciarPago:', error);
+      console.error("Error iniciarPago:", error);
       throw error;
     }
   },
@@ -250,13 +250,13 @@ export const suscripcionService = {
    */
   confirmarPago: async (suscripcionId, reference) => {
     try {
-      const response = await api.post('/payment/confirmar', { 
+      const response = await api.post("/payment/confirmar", {
         suscripcion_id: suscripcionId,
-        reference: reference 
+        reference: reference,
       });
       return response.data.data;
     } catch (error) {
-      console.error('Error confirmarPago:', error);
+      console.error("Error confirmarPago:", error);
       throw error;
     }
   },
@@ -267,11 +267,104 @@ export const suscripcionService = {
    */
   getPaymentMode: async () => {
     try {
-      const response = await api.get('/payment/mode');
+      const response = await api.get("/payment/mode");
       return response.data.data;
     } catch (error) {
-      console.error('Error getPaymentMode:', error);
-      return { mode: 'demo', is_demo: true };
+      console.error("Error getPaymentMode:", error);
+      return { mode: "demo", is_demo: true };
+    }
+  },
+
+  // src/services/suscripcionService.js
+
+  // ============================================
+  // ADMIN (requiere autenticación de admin)
+  // ============================================
+
+  /**
+   * Obtener todas las suscripciones (admin)
+   * GET /api/admin/suscripciones
+   */
+  getAll: async (params = {}) => {
+    try {
+      const response = await api.get("/admin/suscripciones", { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error getAll:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Cancelar suscripción desde admin
+   * PATCH /api/admin/suscripciones/{id}/cancelar
+   */
+  cancelarSuscripcionAdmin: async (id) => {
+    try {
+      const response = await api.patch(`/admin/suscripciones/${id}/cancelar`);
+      return response.data;
+    } catch (error) {
+      console.error("Error cancelarSuscripcionAdmin:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Actualizar suscripción desde admin (estado)
+   * PATCH /api/admin/suscripciones/{id}/actualizar
+   */
+  actualizarSuscripcionAdmin: async (id, data) => {
+    try {
+      const response = await api.patch(
+        `/admin/suscripciones/${id}/actualizar`,
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error actualizarSuscripcionAdmin:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Estadísticas completas para dashboard admin
+   * GET /api/admin/suscripciones/estadisticas
+   */
+  getEstadisticasCompletas: async () => {
+    try {
+      const response = await api.get("/admin/suscripciones/estadisticas");
+      return response.data;
+    } catch (error) {
+      console.error("Error getEstadisticasCompletas:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener detalle de una suscripción (admin)
+   * GET /api/admin/suscripciones/{id}
+   */
+  getById: async (id) => {
+    try {
+      const response = await api.get(`/admin/suscripciones/${id}`);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error("Error getById:", error);
+      throw error;
+    }
+  },
+
+  /* Simular pago en modo demo
+   * POST /api/suscripciones/user/{id}/simular-pago
+   */
+  
+  simularPago: async (id) => {
+    try {
+      const response = await api.post(`/suscripciones/user/${id}/simular-pago`);
+      return response.data.data;
+    } catch (error) {
+      console.error("Error simularPago:", error);
+      throw error;
     }
   },
 };

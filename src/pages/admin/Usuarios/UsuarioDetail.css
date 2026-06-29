@@ -1,63 +1,64 @@
 /* src/pages/admin/Usuarios/UsuarioDetail.css */
 /* ============================================
    USUARIO DETAIL - ESTILO BENTO
+   PREFIJO: ud- (UsuarioDetail)
    ============================================ */
 
-.usuario-detail-container {
+.ud-container {
   width: 100%;
   min-height: 100vh;
   background: transparent;
 }
 
 /* ===== BANNER WRAPPER ===== */
-.usuario-detail-banner-wrapper {
+.ud-banner-wrapper {
   padding-top: 0;
   margin-bottom: 30px;
   width: 100%;
 }
 
-.usuario-detail-banner-wrapper .bento-container {
+.ud-banner-wrapper .bento-container {
   padding: 0;
   max-width: 100%;
 }
 
 @media (max-width: 768px) {
-  .usuario-detail-banner-wrapper .bento-container {
+  .ud-banner-wrapper .bento-container {
     padding: 0 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-detail-banner-wrapper .bento-container {
+  .ud-banner-wrapper .bento-container {
     padding: 0 12px;
   }
 }
 
 /* ===== CONTENIDO ===== */
-.usuario-detail-content {
+.ud-content {
   width: 100%;
 }
 
-.usuario-detail-content .bento-container {
+.ud-content .bento-container {
   padding: 0 24px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-  .usuario-detail-content .bento-container {
+  .ud-content .bento-container {
     padding: 0 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-detail-content .bento-container {
+  .ud-content .bento-container {
     padding: 0 12px;
   }
 }
 
 /* ===== HEADER ===== */
-.usuario-detail-header {
+.ud-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,26 +67,26 @@
   flex-wrap: wrap;
 }
 
-.usuario-detail-header h1 {
+.ud-header h1 {
   margin: 0;
   font-size: clamp(1.4rem, 2vw, 2rem);
   color: var(--color-text);
 }
 
-.usuario-detail-header p {
+.ud-header p {
   margin: 0.25rem 0 0;
   color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
-.usuario-detail-actions {
+.ud-actions {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-.usuario-detail-actions .btn-primary,
-.usuario-detail-actions .btn-secondary {
+.ud-actions .btn-primary,
+.ud-actions .btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -98,38 +99,38 @@
   transition: all 0.3s ease;
 }
 
-.usuario-detail-actions .btn-primary {
+.ud-actions .btn-primary {
   background: var(--gradient-primary);
   color: white;
   box-shadow: var(--shadow-hard-sm);
 }
 
-.usuario-detail-actions .btn-primary:hover {
+.ud-actions .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-.usuario-detail-actions .btn-secondary {
+.ud-actions .btn-secondary {
   background: var(--form-input-bg);
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
 
-.usuario-detail-actions .btn-secondary:hover {
+.ud-actions .btn-secondary:hover {
   background: var(--color-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-sm);
 }
 
 /* ===== GRID ===== */
-.usuario-detail-grid {
+.ud-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 
 /* ===== SECCIONES ===== */
-.usuario-detail-section {
+.ud-section {
   background: var(--color-card-bg);
   border-radius: 12px;
   padding: 1.5rem 1.75rem;
@@ -137,7 +138,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.usuario-detail-section h2 {
+.ud-section h2 {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -148,7 +149,7 @@
 }
 
 /* ===== ROWS ===== */
-.usuario-detail-row {
+.ud-row {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.5rem 1rem;
@@ -157,23 +158,23 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.usuario-detail-row:last-child {
+.ud-row:last-child {
   border-bottom: none;
 }
 
-.usuario-detail-row span {
+.ud-row span {
   color: var(--color-text-muted);
   font-size: 0.85rem;
 }
 
-.usuario-detail-row strong {
+.ud-row strong {
   color: var(--color-text);
   font-weight: 600;
   font-size: 0.9rem;
 }
 
 /* ===== BADGES ===== */
-.badge {
+.ud-badge {
   display: inline-flex;
   align-items: center;
   padding: 0.2rem 0.6rem;
@@ -184,57 +185,44 @@
   gap: 4px;
 }
 
-.badge i {
+.ud-badge i {
   font-size: 0.6rem;
 }
 
-.badge.estado.activo {
+/* ESTADOS - Con colores */
+.ud-badge.estado.activo {
   background: #dcfce7;
   color: #166534;
 }
 
-.badge.estado.inactivo {
+.ud-badge.estado.inactivo {
   background: #fee2e2;
   color: #b91c1c;
 }
 
-.badge.estado.pendiente {
+.ud-badge.estado.pendiente {
   background: #fef3c7;
   color: #92400e;
 }
 
-.badge.estado.desconocido {
+.ud-badge.estado.desconocido {
   background: #f1f5f9;
   color: #475569;
 }
 
-.badge.tipo.usuario {
-  background: #eff6ff;
-  color: #1d4ed8;
-}
-
-.badge.tipo.fundacion {
-  background: #fee2e2;
-  color: #dc2626;
-}
-
-.badge.tipo.veterinaria {
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-.badge.verified {
+/* VERIFICACIÓN */
+.ud-badge.verified {
   background: #dbeafe;
   color: #1d4ed8;
 }
 
-.badge.unverified {
+.ud-badge.unverified {
   background: #fef3c7;
   color: #92400e;
 }
 
 /* ===== EMPTY STATE ===== */
-.usuario-detail-empty {
+.ud-empty {
   min-height: 70vh;
   display: flex;
   flex-direction: column;
@@ -248,23 +236,23 @@
   border: 1px solid var(--color-border);
 }
 
-.usuario-detail-empty i {
+.ud-empty i {
   font-size: 4rem;
   color: var(--color-text-muted);
   opacity: 0.3;
 }
 
-.usuario-detail-empty h2 {
+.ud-empty h2 {
   margin: 0;
   font-size: 1.8rem;
   color: var(--color-text);
 }
 
-.usuario-detail-empty p {
+.ud-empty p {
   color: var(--color-text-muted);
 }
 
-.usuario-detail-empty .btn-primary {
+.ud-empty .btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -278,96 +266,93 @@
   transition: all 0.3s ease;
 }
 
-.usuario-detail-empty .btn-primary:hover {
+.ud-empty .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 920px) {
-  .usuario-detail-grid {
+  .ud-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .usuario-detail-header {
+  .ud-header {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .usuario-detail-actions {
+  .ud-actions {
     width: 100%;
   }
 
-  .usuario-detail-actions .btn-primary,
-  .usuario-detail-actions .btn-secondary {
+  .ud-actions .btn-primary,
+  .ud-actions .btn-secondary {
     flex: 1;
     justify-content: center;
   }
 
-  .usuario-detail-section {
+  .ud-section {
     padding: 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-detail-actions {
+  .ud-actions {
     flex-direction: column;
   }
 
-  .usuario-detail-row {
+  .ud-row {
     grid-template-columns: 1fr;
     gap: 0.25rem;
   }
 
-  .usuario-detail-row strong {
+  .ud-row strong {
     margin-bottom: 0.25rem;
   }
 }
 
 /* ===== MODO OSCURO ===== */
-[data-theme="dark"] .badge.estado.activo {
+[data-theme="dark"] .ud-badge.estado.activo {
   background: #064e3b;
   color: #86efac;
 }
 
-[data-theme="dark"] .badge.estado.inactivo {
+[data-theme="dark"] .ud-badge.estado.inactivo {
   background: #7f1d1d;
   color: #fca5a5;
 }
 
-[data-theme="dark"] .badge.estado.pendiente {
+[data-theme="dark"] .ud-badge.estado.pendiente {
   background: #78350f;
   color: #fde68a;
 }
 
-[data-theme="dark"] .badge.estado.desconocido {
+[data-theme="dark"] .ud-badge.estado.desconocido {
   background: #1e293b;
   color: #94a3b8;
 }
 
-[data-theme="dark"] .badge.tipo.usuario {
+[data-theme="dark"] .ud-badge.tipo.usuario {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .ud-badge.tipo.fundacion {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .ud-badge.tipo.veterinaria {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .ud-badge.verified {
   background: #1e3a8a;
   color: #93c5fd;
 }
 
-[data-theme="dark"] .badge.tipo.fundacion {
-  background: #7f1d1d;
-  color: #fca5a5;
-}
-
-[data-theme="dark"] .badge.tipo.veterinaria {
-  background: #064e3b;
-  color: #86efac;
-}
-
-[data-theme="dark"] .badge.verified {
-  background: #1e3a8a;
-  color: #93c5fd;
-}
-
-[data-theme="dark"] .badge.unverified {
+[data-theme="dark"] .ud-badge.unverified {
   background: #78350f;
   color: #fde68a;
 }

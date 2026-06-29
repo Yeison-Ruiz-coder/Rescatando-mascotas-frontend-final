@@ -24,6 +24,23 @@ export const rescateService = {
     return await api.get(`/admin/rescates/${id}`);
   },
 
+ // src/services/rescateService.js
+
+// ✅ NUEVO: Aprobar rescate (admin)
+aprobarRescate: async (id) => {
+  return await api.patch(`/admin/rescates/${id}/estado`, { 
+    estado: 'completado'  // 🔥 Cambiar a 'completado' en lugar de 'en_progreso'
+  });
+},
+
+// ✅ NUEVO: Rechazar rescate (admin)
+rechazarRescate: async (id, data = {}) => {
+  return await api.patch(`/admin/rescates/${id}/estado`, { 
+    estado: 'rechazado',
+    motivo_rechazo: data?.motivo || 'Rechazado por el administrador'
+  });
+},
+
   // ========== LADO PÚBLICO ==========
   
   /**
@@ -64,9 +81,9 @@ export const rescateService = {
   aceptarRescate: (id) => api.put(`/entity/rescates/${id}/aceptar`),
   
   /**
-   * Rechazar un rescate
+   * Rechazar un rescate (entidad)
    */
-  rechazarRescate: (id) => api.put(`/entity/rescates/${id}/rechazar`),
+  rechazarRescateEntity: (id) => api.put(`/entity/rescates/${id}/rechazar`),
   
   /**
    * Completar un rescate (marcar como finalizado)

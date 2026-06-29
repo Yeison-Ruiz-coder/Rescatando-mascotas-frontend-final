@@ -3,13 +3,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../../contexts/AuthContext';
 import api from '../../../services/api';
 import SolicitudPDF from '../../public/SolicitarAdopcion/components/SolicitudPDF';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
+import ProfileBanner from '../../../components/common/ProfileBanner/index.js';
 import './Solicitudes.css';
 
 const Solicitudes = () => {
   const { t } = useTranslation('solicitudes');
+  const { user } = useAuth();
   const [solicitudes, setSolicitudes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,12 +24,20 @@ const Solicitudes = () => {
     lastPage: 1
   });
 
+  // ✅ Calcular estadísticas para el banner
+  const totalSolicitudes = solicitudes.length;
+  const aprobadas = solicitudes.filter(s => s.estado === 'aprobada').length;
+  const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
+  const rechazadas = solicitudes.filter(s => s.estado === 'rechazada').length;
+  const tasaAprobacion = totalSolicitudes > 0 
+    ? Math.round((aprobadas / totalSolicitudes) * 100) 
+    : 0;
+
   const fetchSolicitudes = useCallback(async (page = 1) => {
     try {
       setLoading(true);
       setError(null);
 
-      // OPTIMIZACIÓN: Paginación y campos específicos
       const response = await api.get('/user/solicitudes', {
         params: {
           page: page,
@@ -42,7 +53,6 @@ const Solicitudes = () => {
         const solicitudesList = data.data || data || [];
         setSolicitudes(Array.isArray(solicitudesList) ? solicitudesList : []);
         
-        // Actualizar paginación
         setPagination({
           currentPage: data.current_page || page,
           perPage: data.per_page || pagination.perPage,
@@ -279,6 +289,26 @@ const Solicitudes = () => {
 
   return (
     <div className="solicitudes-page">
+      {/* ===== BANNER DE PERFIL - ANCHO COMPLETO ===== */}
+      <div className="solicitudes-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: user?.nombre || t('usuario', 'Usuario'),
+            avatar: user?.avatar || null,
+            titulo: t('banner.titulo', {
+              defaultValue: "{{total}} solicitudes · {{aprobadas}} aprobadas · {{tasa}}% éxito",
+              total: totalSolicitudes,
+              aprobadas: aprobadas,
+              tasa: tasaAprobacion,
+            }),
+            solicitudes: totalSolicitudes,
+            adopciones: aprobadas,
+            eventos: 0,
+          }}
+        />
+      </div>
+
+      {/* ===== CONTENIDO CENTRADO ===== */}
       <div className="solicitudes-wrapper">
         <div className="solicitudes-header">
           <h1>

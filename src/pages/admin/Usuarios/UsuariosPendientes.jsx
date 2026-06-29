@@ -23,14 +23,12 @@ const UsuariosPendientes = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Estado para los filtros activos
   const [activeFilters, setActiveFilters] = useState({
     search: '',
     estado: '',
     sort: 'created_at_desc',
   });
 
-  // useEffect para cargar datos cuando cambian los filtros activos o la página
   useEffect(() => {
     fetchPendientes();
   }, [currentPage, activeFilters.estado, activeFilters.sort, activeFilters.search]);
@@ -154,23 +152,20 @@ const UsuariosPendientes = () => {
     return pages;
   };
 
-  // Verificar si hay filtros activos
   const hasActiveFilters = () => {
     return activeFilters.search || activeFilters.estado;
   };
 
-  // Estadísticas para el banner
   const totalPendientes = pagination.total || usuarios.length;
 
-  // Obtener el nombre y avatar del admin
   const adminName = user?.name || user?.nombre || "Administrador";
   const adminAvatar = user?.avatar || null;
 
   if (loading) {
     return (
-      <div className="pendientes-container">
-        <div className="pendientes-loading">
-          <div className="loading-spinner-custom"></div>
+      <div className="up-container">
+        <div className="up-loading">
+          <div className="up-loading-spinner"></div>
           <p>{t("cargando")}</p>
         </div>
       </div>
@@ -178,9 +173,9 @@ const UsuariosPendientes = () => {
   }
 
   return (
-    <div className="pendientes-container">
-      {/* ===== BANNER CON WRAPPER ===== */}
-      <div className="pendientes-banner-wrapper">
+    <div className="up-container">
+      {/* ===== BANNER ===== */}
+      <div className="up-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
@@ -194,7 +189,7 @@ const UsuariosPendientes = () => {
       </div>
 
       {/* ===== FILTER BAR ===== */}
-      <div className="pendientes-filter-wrapper">
+      <div className="up-filter-wrapper">
         <div className="bento-container">
           <FilterBar
             filters={activeFilters}
@@ -218,11 +213,11 @@ const UsuariosPendientes = () => {
       </div>
 
       {/* ===== GRID DE TARJETAS ===== */}
-      <div className="pendientes-grid-wrapper">
+      <div className="up-grid-wrapper">
         <div className="bento-container">
           {usuarios.length === 0 ? (
-            <div className="pendientes-empty">
-              <div className="empty-icon">
+            <div className="up-empty">
+              <div className="up-empty-icon">
                 {hasActiveFilters() ? (
                   <i className="fas fa-search"></i>
                 ) : (
@@ -251,7 +246,7 @@ const UsuariosPendientes = () => {
                     });
                     setCurrentPage(1);
                   }} 
-                  className="btn-volver"
+                  className="up-btn-volver"
                 >
                   <i className="fas fa-undo"></i> {t("limpiar_filtros", "Limpiar filtros")}
                 </button>
@@ -259,7 +254,7 @@ const UsuariosPendientes = () => {
             </div>
           ) : (
             <>
-              <div className="pendientes-grid">
+              <div className="up-grid">
                 {usuarios.map((usuario) => (
                   <UsuarioCard
                     key={usuario.id}
@@ -274,22 +269,22 @@ const UsuariosPendientes = () => {
 
               {/* Paginación */}
               {pagination.last_page > 1 && (
-                <div className="pagination-wrapper">
-                  <div className="pagination-info">
+                <div className="up-pagination-wrapper">
+                  <div className="up-pagination-info">
                     {t("mostrando")} {usuarios.length} {t("de")} {pagination.total} {t("solicitudes")}
                   </div>
-                  <div className="pagination-controls">
+                  <div className="up-pagination-controls">
                     <button
                       onClick={() => goToPage(1)}
                       disabled={pagination.current_page === 1}
-                      className="page-btn"
+                      className="up-page-btn"
                     >
                       <i className="fas fa-angle-double-left"></i>
                     </button>
                     <button
                       onClick={() => goToPage(pagination.current_page - 1)}
                       disabled={pagination.current_page === 1}
-                      className="page-btn"
+                      className="up-page-btn"
                     >
                       <i className="fas fa-angle-left"></i>
                     </button>
@@ -298,7 +293,7 @@ const UsuariosPendientes = () => {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`page-number ${pagination.current_page === page ? 'active' : ''}`}
+                        className={`up-page-number ${pagination.current_page === page ? 'active' : ''}`}
                       >
                         {page}
                       </button>
@@ -307,14 +302,14 @@ const UsuariosPendientes = () => {
                     <button
                       onClick={() => goToPage(pagination.current_page + 1)}
                       disabled={pagination.current_page === pagination.last_page}
-                      className="page-btn"
+                      className="up-page-btn"
                     >
                       <i className="fas fa-angle-right"></i>
                     </button>
                     <button
                       onClick={() => goToPage(pagination.last_page)}
                       disabled={pagination.current_page === pagination.last_page}
-                      className="page-btn"
+                      className="up-page-btn"
                     >
                       <i className="fas fa-angle-double-right"></i>
                     </button>

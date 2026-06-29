@@ -71,7 +71,7 @@ const ChartEmpty = ({ message }) => (
   </div>
 );
 
-// ===== COMPONENTE: MASCOTAS POR ESTADO (Gráfico de Anillos) =====
+// ===== COMPONENTE: MASCOTAS POR ESTADO =====
 const PetsByStatusChart = ({ data, loading }) => {
   const { t } = useTranslation('fundacion');
 
@@ -138,7 +138,7 @@ const PetsByStatusChart = ({ data, loading }) => {
   );
 };
 
-// ===== COMPONENTE: ADOPCIONES MENSUALES (Gráfico de Barras) =====
+// ===== COMPONENTE: ADOPCIONES MENSUALES =====
 const MonthlyAdoptionsChart = ({ data, loading }) => {
   const { t } = useTranslation('fundacion');
 
@@ -208,7 +208,7 @@ const MonthlyAdoptionsChart = ({ data, loading }) => {
   );
 };
 
-// ===== COMPONENTE: TASA DE ÉXITO (Gráfico de Área) =====
+// ===== COMPONENTE: TASA DE ÉXITO =====
 const SuccessRateChart = ({ data, loading }) => {
   const { t } = useTranslation('fundacion');
 
@@ -276,7 +276,7 @@ const SuccessRateChart = ({ data, loading }) => {
   );
 };
 
-// ===== COMPONENTE: MASCOTAS POR ESPECIE (con soporte para especie única) =====
+// ===== COMPONENTE: MASCOTAS POR ESPECIE =====
 const SpeciesChart = ({ data, loading }) => {
   const { t } = useTranslation('fundacion');
 
@@ -288,7 +288,6 @@ const SpeciesChart = ({ data, loading }) => {
     return <ChartEmpty message={t('sin_datos_especie', 'No hay datos por especie')} />;
   }
 
-  // Si solo hay una especie, mostrar mensaje informativo
   if (data.length === 1) {
     const total = data[0].value;
     const especie = data[0].name;
@@ -333,7 +332,6 @@ const SpeciesChart = ({ data, loading }) => {
     );
   }
 
-  // Renderizado normal con múltiples especies
   return (
     <div className="chart-wrapper">
       <div className="chart-header">
@@ -389,8 +387,92 @@ const SpeciesChart = ({ data, loading }) => {
   );
 };
 
-// ===== COMPONENTE PRINCIPAL =====
-const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = false }) => {
+// ============================================
+// ✅ COMPONENTE: GANANCIAS POR SUSCRIPCIONES (GRANDE)
+// ============================================
+const SubscriptionRevenueChart = ({ data, loading }) => {
+  const { t } = useTranslation('fundacion');
+
+  if (loading) {
+    return <ChartSkeleton height={320} />;
+  }
+
+  if (!data || data.length === 0) {
+    return <ChartEmpty message={t('sin_datos_suscripciones', 'No hay datos de suscripciones')} />;
+  }
+
+  const total = data.reduce((sum, d) => sum + d.monto, 0);
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
+  return (
+    <div className="chart-wrapper chart-wrapper-large">
+      <div className="chart-header">
+        <h4>
+          <BarChart2 size={16} />
+          {t('ganancias_suscripciones', 'Ganancias por Suscripciones')}
+        </h4>
+        <span className="chart-badge success">
+          {formatCurrency(total)} {t('total', 'total')}
+        </span>
+      </div>
+      <div className="chart-body" style={{ height: 300 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+            <XAxis
+              dataKey="mes"
+              tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+              tickLine={{ stroke: 'var(--color-border)' }}
+            />
+            <YAxis
+              tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+              tickLine={{ stroke: 'var(--color-border)' }}
+              tickFormatter={(value) => `$${value.toLocaleString()}`}
+            />
+            <Tooltip
+              contentStyle={{
+                background: 'var(--color-card-bg)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '8px',
+              }}
+              formatter={(value) => [formatCurrency(value), t('ingresos', 'Ingresos')]}
+            />
+            <Bar 
+              dataKey="monto" 
+              fill={COLORS.primary} 
+              radius={[4, 4, 0, 0]}
+              barSize={40}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="chart-footer">
+        <span className="chart-legend-item">
+          <span className="legend-dot" style={{ background: COLORS.primary }} />
+          {t('ingresos_mensuales', 'Ingresos mensuales por suscripciones')}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+// ============================================
+// COMPONENTE PRINCIPAL
+// ============================================
+const FundacionDashboardCharts = ({ 
+  mascotas = [], 
+  adopciones = [], 
+  suscripciones = [],
+  loading = false 
+}) => {
   const { t } = useTranslation('fundacion');
   const [filterPeriod, setFilterPeriod] = useState('6');
   const [chartData, setChartData] = useState({
@@ -398,15 +480,15 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
     mensual: [],
     tasaExito: [],
     especie: [],
+    ingresosSuscripciones: [],
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Procesar datos para gráficos
   useEffect(() => {
-    if (!mascotas || !adopciones) return;
+    if (!mascotas && !adopciones && !suscripciones) return;
 
     const procesarDatos = () => {
-      // 1. Distribución por estado (usando todas las mascotas)
+      // 1. Distribución por estado (mascotas)
       const estadoMap = {};
       mascotas.forEach((m) => {
         const estado = m.estado || 'Desconocido';
@@ -423,7 +505,6 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
       const ahora = new Date();
       const limite = parseInt(filterPeriod);
 
-      // Inicializar meses
       for (let i = 0; i < limite; i++) {
         const d = new Date(ahora);
         d.setMonth(d.getMonth() - i);
@@ -436,7 +517,6 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
         };
       }
 
-      // Llenar datos de adopciones
       adopciones.forEach((a) => {
         if (!a.created_at) return;
         const fecha = new Date(a.created_at);
@@ -461,7 +541,7 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
         total: m.total,
       }));
 
-      // 4. Mascotas por especie (usando TODAS las mascotas, no solo adoptadas)
+      // 4. Mascotas por especie
       const especieMap = {};
       mascotas.forEach((m) => {
         const especie = m.especie || 'Desconocida';
@@ -471,16 +551,46 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value);
 
+      // ============================================
+      // 5. GANANCIAS POR SUSCRIPCIONES
+      // ============================================
+      const ingresosMap = {};
+      for (let i = 0; i < limite; i++) {
+        const d = new Date(ahora);
+        d.setMonth(d.getMonth() - i);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        ingresosMap[key] = {
+          mes: `${mesesNombres[d.getMonth()]} ${d.getFullYear()}`,
+          monto: 0,
+          cantidad: 0,
+        };
+      }
+
+      suscripciones.forEach((s) => {
+        if (!s.created_at) return;
+        const fecha = new Date(s.created_at);
+        const key = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`;
+        if (ingresosMap[key] && s.estado === 'activo') {
+          ingresosMap[key].monto += parseFloat(s.monto_mensual || 0);
+          ingresosMap[key].cantidad += 1;
+        }
+      });
+
+      const ingresosData = Object.values(ingresosMap)
+        .filter(d => d.monto > 0)
+        .reverse();
+
       setChartData({
         estado: estadoData,
         mensual: mensualData,
         tasaExito: tasaData,
         especie: especieData,
+        ingresosSuscripciones: ingresosData,
       });
     };
 
     procesarDatos();
-  }, [mascotas, adopciones, filterPeriod]);
+  }, [mascotas, adopciones, suscripciones, filterPeriod, t]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -488,7 +598,6 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
   };
 
   const handleExport = () => {
-    // Exportar datos como CSV
     const headers = ['Mes', 'Adoptadas', 'En Proceso', 'Total', 'Tasa Éxito'];
     const rows = chartData.mensual.map((m) => [
       m.mes,
@@ -553,7 +662,7 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
         </div>
       </div>
 
-      {/* Grid de gráficos */}
+      {/* Grid de gráficos - 3 filas x 2 columnas */}
       <div className="charts-grid">
         <div className="chart-card">
           <PetsByStatusChart data={chartData.estado} loading={loading} />
@@ -566,6 +675,10 @@ const FundacionDashboardCharts = ({ mascotas = [], adopciones = [], loading = fa
         </div>
         <div className="chart-card">
           <SpeciesChart data={chartData.especie} loading={loading} />
+        </div>
+        {/* ✅ GRÁFICO GRANDE DE GANANCIAS POR SUSCRIPCIONES - OCUPA 2 COLUMNAS */}
+        <div className="chart-card chart-card-full-width">
+          <SubscriptionRevenueChart data={chartData.ingresosSuscripciones} loading={loading} />
         </div>
       </div>
     </div>

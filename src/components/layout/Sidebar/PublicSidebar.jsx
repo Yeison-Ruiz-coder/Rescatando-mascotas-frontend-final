@@ -1,5 +1,12 @@
 // src/components/layout/Sidebar/PublicSidebar.jsx
-import React, { useRef, useState, useEffect, useCallback, useMemo, memo } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  memo,
+} from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -26,14 +33,17 @@ const PublicSidebar = () => {
         setIsMobile(window.innerWidth < 992);
       }, 100);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       clearTimeout(timeoutId);
     };
   }, []);
 
-  const isActive = useCallback((path) => location.pathname.startsWith(path), [location.pathname]);
+  const isActive = useCallback(
+    (path) => location.pathname.startsWith(path),
+    [location.pathname],
+  );
 
   const handleLogout = useCallback(() => {
     logout();
@@ -58,13 +68,13 @@ const PublicSidebar = () => {
   const avatarContent = useMemo(() => {
     if (isAuthenticated && userAvatar) {
       return (
-        <img 
-          src={userAvatar} 
-          alt={user?.nombre || "Usuario"} 
+        <img
+          src={userAvatar}
+          alt={user?.nombre || "Usuario"}
           className="sidebar-avatar-img"
           loading="lazy"
           onError={(e) => {
-            e.target.style.display = 'none';
+            e.target.style.display = "none";
             e.target.parentElement.innerHTML = '<i class="fas fa-user"></i>';
           }}
         />
@@ -78,16 +88,14 @@ const PublicSidebar = () => {
       ref={sidebarRef}
       className={`sidebar public-sidebar ${isPublicSidebarOpen ? "open" : ""}`}
       style={{
-        willChange: 'transform',
-        backfaceVisibility: 'hidden',
-        contain: 'layout style'
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        contain: "layout style",
       }}
     >
       <div className="sidebar-header">
         <div className="sidebar-user">
-          <div className="sidebar-avatar">
-            {avatarContent}
-          </div>
+          <div className="sidebar-avatar">{avatarContent}</div>
           <div className="sidebar-user-info">
             <h5>{isAuthenticated ? user?.nombre : t("invitado")}</h5>
             <span className="sidebar-user-role">{t("bienvenido")}</span>
@@ -193,6 +201,9 @@ const PublicSidebar = () => {
         {isAuthenticated && (
           <>
             <div className="sidebar-section">
+              <div className="section-title">
+                <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
+              </div>
               <Link
                 to="/user/PanelUsuario"
                 className={`sidebar-item ${isActive("/user/PanelUsuario") ? "active" : ""}`}
@@ -201,9 +212,6 @@ const PublicSidebar = () => {
                 <i className="fas fa-chart-line"></i>
                 <span>{t("mi_dashboard") || "Mi Dashboard"}</span>
               </Link>
-              <div className="section-title">
-                <i className="fas fa-user me-1"></i> {t("mi_cuenta")}
-              </div>
               <Link
                 to="/user/mis-solicitudes"
                 className={`sidebar-item ${isActive("/user/mis-solicitudes") ? "active" : ""}`}
