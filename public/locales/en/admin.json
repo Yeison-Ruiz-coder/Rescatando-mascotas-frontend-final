@@ -23,10 +23,10 @@
       "total_sistema": "Total in System"
     },
     "estados": {
-      "en_adopcion": "For Adoption",
+      "en_adopcion": "For adoption",
       "adoptado": "Adopted",
       "rescatada": "Rescued",
-      "en_acogida": "In Foster"
+      "en_acogida": "In foster care"
     },
     "card": {
       "ver_detalles": "View Details",
@@ -66,8 +66,8 @@
       "vacunas": "Applied Vaccines",
       "foto_principal": "Main Photo",
       "galeria": "Photo Gallery",
-      "fecha_ingreso": "Admission Date",
-      "fecha_salida": "Departure Date (if applicable)",
+      "fecha_ingreso": "Entry Date",
+      "fecha_salida": "Exit Date (if applicable)",
       "fundacion": "Foundation"
     },
     "opciones": {
@@ -100,9 +100,11 @@
   "pendientes_titulo": "Pending Requests",
   "pendientes_descripcion": "Review and approve foundation and veterinary requests",
   "sin_solicitudes": "No pending requests",
-  "sin_solicitudes_desc": "All foundations and veterinary clinics have been reviewed",
-  "actualizar": "Refresh",
+  "sin_solicitudes_desc": "All foundations and veterinarians have been reviewed",
+  "actualizar": "Update",
   "cargando": "Loading pending requests...",
+  "mostrando": "Showing",
+  "de": "of",
   "solicitudes": "requests",
   "fundacion": "Foundation",
   "veterinaria": "Veterinary",
@@ -111,7 +113,7 @@
   "fecha_solicitud": "Request date",
   "aprobar": "Approve",
   "rechazar": "Reject",
-  "aprobado_exito": "User successfully approved",
+  "aprobado_exito": "User approved successfully",
   "rechazado_exito": "User rejected",
   "error_carga": "Error loading pending users",
   "error_aprobar": "Error approving user",
@@ -119,38 +121,33 @@
   "capacidad": "Maximum capacity",
   "servicios_ofrecidos": "Services offered",
   "gestion_usuarios": "User Management",
-  "gestion_usuarios_desc": "Manage accounts, states and verifications.",
+  "gestion_usuarios_desc": "Manage accounts, statuses and verifications.",
   "fundaciones_titulo": "Foundations",
-  "fundaciones_descripcion": "Manage and review registered foundations.",
+  "fundaciones_descripcion": "Management and review of registered foundations.",
   "veterinarias_titulo": "Veterinarians",
-  "veterinarias_descripcion": "Manage and review clinics and veterinary centers.",
+  "veterinarias_descripcion": "Management and review of clinics and veterinary centers.",
   "usuarios_pendientes": "Pending users",
   "crear_usuario": "New user",
   "usuario_form_desc": "Complete the data to manage the account.",
-
   "buscar": "Search",
   "buscar_placeholder": "Search by name, email or type...",
   "buscar_placeholder_usuarios": "Search by name, email or type...",
-
   "tipo": "Type",
   "tipo_usuario": "Type",
   "todos_tipos": "All types",
   "todos": "All",
   "todos_estados": "All statuses",
-
   "estado": "Status",
   "estado_usuario": "Status",
   "activo": "Active",
   "inactivo": "Inactive",
   "pendiente": "Pending",
   "en_revision": "Under review",
-
   "ordenar": "Sort",
   "mas_recientes": "Most recent",
   "mas_antiguos": "Oldest",
   "nombre_az": "Name A-Z",
   "nombre_za": "Name Z-A",
-
   "nombre": "Name",
   "correo": "Email",
   "email": "Email",
@@ -171,35 +168,25 @@
   "anterior": "Previous",
   "siguiente": "Next",
   "pagina": "Page",
-  "mostrando": "Showing",
-  "de": "of",
   "resultados": "results",
-
   "verificado": "Verified",
-  "no_verificado": "Unverified",
+  "no_verificado": "Not verified",
   "si": "Yes",
   "no": "No",
-
   "sin_usuarios": "No users found.",
   "sin_usuarios_desc": "Start by creating the first user.",
   "sin_resultados": "No results found",
-  "sin_resultados_desc": "Try with different search criteria.",
+  "sin_resultados_desc": "Try other search criteria.",
   "limpiar_filtros": "Clear filters",
-
   "sin_solicitudes_titulo": "No pending requests",
-  "sin_solicitudes_texto": "There are no pending registration requests to review.",
-
+  "sin_solicitudes_texto": "There are no pending registration requests for review.",
   "mostrando_usuarios": "Showing {{count}} of {{total}} users",
   "mostrando_solicitudes": "Showing {{count}} of {{total}} requests",
-
   "error_cargar_usuario": "Error loading user",
   "error_guardar_usuario": "Error saving user",
-
   "actualizar_exito": "User updated successfully",
   "crear_exito": "User created successfully",
   "confirm_delete_usuario": "Are you sure you want to delete this user?",
-
-
   "datos_usuario": "User data",
   "datos_contacto": "Contact",
   "nombre_usuario": "Username",
@@ -216,7 +203,7 @@
   "contraseña_placeholder": "Minimum 8 characters",
   "contraseña_placeholder_editar": "Leave blank to keep current",
   "confirmar_contraseña": "Confirm password",
-  "confirmar_contraseña_placeholder": "Repeat the password",
+  "confirmar_contraseña_placeholder": "Repeat password",
   "email_verificado": "Email verified",
   "email_no_verificado": "Email not verified",
   "usuario": "User",
@@ -224,7 +211,6 @@
   "seleccionar_tipo": "Select type",
   "seleccionar_estado": "Select status",
   "seleccionar_orden": "Select order",
-
   "usuario_no_encontrado": "User not found",
   "usuario_no_encontrado_desc": "The user you are looking for does not exist or was deleted.",
   "detalle_usuario": "User details",
@@ -232,16 +218,13 @@
   "detalle_usuario_titulo": "User details: {{nombre}}",
   "editando_usuario": "Editing user",
   "creando_usuario": "Creating new user",
-
   "cargando_usuario": "Loading user...",
   "cargando_usuarios": "Loading users...",
   "cargando_rescates": "Loading rescues...",
-
   "admin_usuarios_titulo": "Manage all user accounts in the system",
   "editar_usuario": "Edit user",
   "nuevo_usuario": "New user",
   "gestion_tipo": "{{titulo}} Management",
-
   "banner_titulo_pendientes": "{{count}} pending requests · {{percent}}% processed",
   "adopciones_titulo": "Pets for adoption",
   "adopciones_descripcion": "Manage all pets available for adoption",
@@ -340,6 +323,45 @@
     "total_seguimientos": "Total follow-ups",
     "en_progreso": "In progress",
     "activos": "Active",
-    "finalizados": "Finished"
-  }
+    "finalizados": "Finished",
+    "total_usuarios": "Total Users",
+    "adopciones_completadas": "Completed Adoptions",
+    "eventos_activos": "Active Events",
+    "rescates_pendientes": "Pending Rescues",
+    "suscripciones_activas": "Active Subscriptions"
+  },
+  "cargando_dashboard": "Loading dashboard...",
+  "error_carga_dashboard": "Error loading dashboard",
+  "dashboard": {
+    "titulo": "Admin Dashboard",
+    "estadisticas": "System Statistics",
+    "subtitulo": "Overall platform summary"
+  },
+  "charts": {
+    "mascotas_mensual": "Pets registered per month",
+    "adopciones_mensual": "Adoptions per month",
+    "distribucion_adopciones": "Adoption distribution",
+    "tipos_usuarios": "User types",
+    "eventos_mensual": "Events per month",
+    "rescates_prioridad": "Rescues by priority",
+    "ingresos_suscripciones": "Subscription revenue"
+  },
+  "recent": {
+    "usuarios": "Recent users",
+    "mascotas": "Recent pets",
+    "adopciones": "Recent adoptions",
+    "rescates": "Recent rescues",
+    "eventos": "Upcoming events"
+  },
+  "alerts": {
+    "usuarios_pendientes": "Users pending approval",
+    "rescates_pendientes": "Pending rescues",
+    "solicitudes_pendientes": "Pending adoption requests"
+  },
+  "sin_alertas": "All clear!",
+  "sin_alertas_desc": "There are no pending items requiring your attention at this time.",
+  "sin_registros": "No recent records",
+  "sin_datos": "No data available",
+  "ver_todos": "View all",
+  "reintentar": "Retry"
 }
