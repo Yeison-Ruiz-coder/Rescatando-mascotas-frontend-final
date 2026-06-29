@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import api from '../../../services/api';
 import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
 import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
-import CustomSelect from '../../../components/common/CustomSelect/CustomSelect';
 import DatePicker from 'react-datepicker';
 import { registerLocale } from 'react-datepicker';
 import es from 'date-fns/locale/es';
@@ -52,35 +51,6 @@ const EditarSeguimiento = () => {
 
   const fundacionName = user?.nombre || user?.name || t('fundacion');
   const fundacionAvatar = user?.avatar || user?.foto_perfil || null;
-
-  // Opciones para CustomSelect
-  const tipoSeguimientoOptions = [
-    { value: 'virtual', label: t('tipo_virtual') },
-    { value: 'domiciliario', label: t('tipo_domiciliario') },
-    { value: 'telefonico', label: t('tipo_telefonico') }
-  ];
-
-  const estadoMascotaOptions = [
-    { value: 'excelente', label: t('estado_excelente') },
-    { value: 'bueno', label: t('estado_bueno') },
-    { value: 'regular', label: t('estado_regular') },
-    { value: 'preocupante', label: t('estado_preocupante') }
-  ];
-
-  const resultadoOptions = [
-    { value: 'satisfactorio', label: t('resultado_satisfactorio') },
-    { value: 'observaciones', label: t('resultado_observaciones') },
-    { value: 'incumplimiento', label: t('resultado_incumplimiento') },
-    { value: 'reingreso', label: t('resultado_reingreso') }
-  ];
-
-  const condicionesHogarOptions = [
-    { value: '', label: t('seleccionar') },
-    { value: 'optimas', label: t('condicion_optimas') },
-    { value: 'aceptables', label: t('condicion_aceptables') },
-    { value: 'mejorables', label: t('condicion_mejorables') },
-    { value: 'precarias', label: t('condicion_precarias') }
-  ];
 
   useEffect(() => {
     if (id) {
@@ -141,14 +111,6 @@ const EditarSeguimiento = () => {
     if (errores[name]) {
       setErrores(prev => ({ ...prev, [name]: '' }));
     }
-  };
-
-  const handleSelectChange = (name, value) => {
-    setForm(prev => ({ ...prev, [name]: value }));
-    if (errores[name]) {
-      setErrores(prev => ({ ...prev, [name]: '' }));
-    }
-    setTouched(prev => ({ ...prev, [name]: true }));
   };
 
   const handleBlur = (fieldName) => {
@@ -295,23 +257,23 @@ const EditarSeguimiento = () => {
 
           <form onSubmit={handleSubmit} className="cs-form">
             <div className="cs-form-grid">
-              {/* Tipo de Seguimiento - CustomSelect */}
               <div className="cs-form-group">
                 <label>{t('tipo_seguimiento')} <span className="required">*</span></label>
-                <CustomSelect
+                <select
                   name="tipo_seguimiento"
                   value={form.tipo_seguimiento}
-                  onChange={handleSelectChange}
-                  options={tipoSeguimientoOptions}
-                  placeholder={t('selecciona_tipo')}
-                  error={errores.tipo_seguimiento}
-                  touched={touched.tipo_seguimiento}
+                  onChange={handleInputChange}
                   onBlur={() => handleBlur('tipo_seguimiento')}
-                />
+                  className={errores.tipo_seguimiento ? 'error' : ''}
+                >
+                  <option value="">{t('selecciona_tipo')}</option>
+                  <option value="virtual">{t('tipo_virtual')}</option>
+                  <option value="domiciliario">{t('tipo_domiciliario')}</option>
+                  <option value="telefonico">{t('tipo_telefonico')}</option>
+                </select>
                 {errores.tipo_seguimiento && <span className="cs-error-text">{errores.tipo_seguimiento}</span>}
               </div>
 
-              {/* Fecha de Seguimiento - DatePicker */}
               <div className="cs-form-group">
                 <label>{t('fecha_seguimiento')} <span className="required">*</span></label>
                 <div className="datepicker-wrapper">
@@ -335,35 +297,39 @@ const EditarSeguimiento = () => {
                 {errores.fecha_seguimiento && <span className="cs-error-text">{errores.fecha_seguimiento}</span>}
               </div>
 
-              {/* Estado de la Mascota - CustomSelect */}
               <div className="cs-form-group">
                 <label>{t('estado_mascota')} <span className="required">*</span></label>
-                <CustomSelect
+                <select
                   name="estado_mascota"
                   value={form.estado_mascota}
-                  onChange={handleSelectChange}
-                  options={estadoMascotaOptions}
-                  placeholder={t('selecciona_estado')}
-                  error={errores.estado_mascota}
-                  touched={touched.estado_mascota}
+                  onChange={handleInputChange}
                   onBlur={() => handleBlur('estado_mascota')}
-                />
+                  className={errores.estado_mascota ? 'error' : ''}
+                >
+                  <option value="">{t('selecciona_estado')}</option>
+                  <option value="excelente">{t('estado_excelente')}</option>
+                  <option value="bueno">{t('estado_bueno')}</option>
+                  <option value="regular">{t('estado_regular')}</option>
+                  <option value="preocupante">{t('estado_preocupante')}</option>
+                </select>
                 {errores.estado_mascota && <span className="cs-error-text">{errores.estado_mascota}</span>}
               </div>
 
-              {/* Resultado - CustomSelect */}
               <div className="cs-form-group">
                 <label>{t('resultado')}</label>
-                <CustomSelect
+                <select
                   name="resultado"
                   value={form.resultado}
-                  onChange={handleSelectChange}
-                  options={resultadoOptions}
-                  placeholder={t('selecciona_resultado')}
-                />
+                  onChange={handleInputChange}
+                >
+                  <option value="">{t('selecciona_resultado')}</option>
+                  <option value="satisfactorio">{t('resultado_satisfactorio')}</option>
+                  <option value="observaciones">{t('resultado_observaciones')}</option>
+                  <option value="incumplimiento">{t('resultado_incumplimiento')}</option>
+                  <option value="reingreso">{t('resultado_reingreso')}</option>
+                </select>
               </div>
 
-              {/* Observaciones */}
               <div className="cs-form-group full">
                 <label>{t('observaciones')} <span className="required">*</span></label>
                 <textarea
@@ -377,7 +343,6 @@ const EditarSeguimiento = () => {
                 {errores.observaciones && <span className="cs-error-text">{errores.observaciones}</span>}
               </div>
 
-              {/* Recomendaciones */}
               <div className="cs-form-group full">
                 <label>{t('recomendaciones')}</label>
                 <textarea
@@ -388,19 +353,21 @@ const EditarSeguimiento = () => {
                 />
               </div>
 
-              {/* Condiciones del Hogar - CustomSelect */}
               <div className="cs-form-group">
                 <label>{t('condiciones_hogar')}</label>
-                <CustomSelect
+                <select
                   name="condiciones_hogar"
                   value={form.condiciones_hogar}
-                  onChange={handleSelectChange}
-                  options={condicionesHogarOptions}
-                  placeholder={t('selecciona')}
-                />
+                  onChange={handleInputChange}
+                >
+                  <option value="">{t('seleccionar')}</option>
+                  <option value="optimas">{t('condicion_optimas')}</option>
+                  <option value="aceptables">{t('condicion_aceptables')}</option>
+                  <option value="mejorables">{t('condicion_mejorables')}</option>
+                  <option value="precarias">{t('condicion_precarias')}</option>
+                </select>
               </div>
 
-              {/* Próximo Seguimiento - DatePicker */}
               <div className="cs-form-group">
                 <label>{t('proximo_seguimiento')}</label>
                 <div className="datepicker-wrapper">
@@ -422,7 +389,6 @@ const EditarSeguimiento = () => {
                 </div>
               </div>
 
-              {/* Comportamiento Observado */}
               <div className="cs-form-group full">
                 <label>{t('comportamiento_observado')}</label>
                 <textarea
@@ -433,7 +399,16 @@ const EditarSeguimiento = () => {
                 />
               </div>
 
-              {/* Fotos existentes */}
+              <div className="cs-form-group full">
+                <label>{t('observaciones_hogar')}</label>
+                <textarea
+                  name="observaciones_hogar"
+                  value={form.observaciones_hogar}
+                  onChange={handleInputChange}
+                  rows="2"
+                />
+              </div>
+
               {fotosExistentes.length > 0 && (
                 <div className="cs-form-group full">
                   <label>{t('fotos_existentes')}</label>
@@ -454,7 +429,6 @@ const EditarSeguimiento = () => {
                 </div>
               )}
 
-              {/* Checkboxes */}
               <div className="cs-form-group full">
                 <div className="cs-checkboxes">
                   <label className="cs-checkbox">
@@ -487,7 +461,6 @@ const EditarSeguimiento = () => {
                 </div>
               </div>
 
-              {/* Archivos */}
               <div className="cs-form-group">
                 <label>{t('foto_principal')}</label>
                 <input
@@ -547,7 +520,7 @@ const EditarSeguimiento = () => {
                 className="cs-btn-cancelar"
                 onClick={() => navigate('/fundacion/adopciones/seguimientos')}
               >
-                {t('cancelar')}
+                <i className="fas fa-times"></i> {t('cancelar')}
               </button>
               <button
                 type="submit"

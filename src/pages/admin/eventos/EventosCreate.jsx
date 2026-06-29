@@ -14,6 +14,7 @@ const AdminEventosCreate = () => {
     const { t } = useTranslation('eventos');
     const navigate = useNavigate();
     const fechaInputRef = useRef(null);
+    const fechaFinInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [previewImage, setPreviewImage] = useState(null);
@@ -37,13 +38,13 @@ const AdminEventosCreate = () => {
     const [imagen, setImagen] = useState(null);
 
     // Función para abrir el calendario nativo
-    const openCalendar = () => {
-        if (fechaInputRef.current) {
-            if (fechaInputRef.current.showPicker) {
-                fechaInputRef.current.showPicker();
+    const openCalendar = (ref) => {
+        if (ref.current) {
+            if (ref.current.showPicker) {
+                ref.current.showPicker();
             } else {
-                fechaInputRef.current.focus();
-                fechaInputRef.current.click();
+                ref.current.focus();
+                ref.current.click();
             }
         }
     };
@@ -51,6 +52,16 @@ const AdminEventosCreate = () => {
     // Validación de solo números para capacidad
     const handleNumberChange = (e) => {
         const { name, value } = e.target;
+        if (value === '' || /^[0-9]+$/.test(value)) {
+            setFormData(prev => ({ ...prev, [name]: value }));
+            if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
+        }
+    };
+
+    // ✅ Validación de solo números para costo (integer)
+    const handleCostoChange = (e) => {
+        const { name, value } = e.target;
+        // Solo permite números enteros positivos
         if (value === '' || /^[0-9]+$/.test(value)) {
             setFormData(prev => ({ ...prev, [name]: value }));
             if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
@@ -141,20 +152,20 @@ const AdminEventosCreate = () => {
 
     return (
         <div className="admin-eventos-form-container">
-        {/* Botón volver externo - izquierda, con gradiente */}
-        <div className="back-button-wrapper">
-            <Link to="/admin/eventos" className="btn-back-gradient">
-                <ArrowLeft size={18} />
-                {t('back_to_events')}
-            </Link>
-        </div>
-
-        {/* Card del formulario */}
-        <div className="admin-eventos-form-card">
-            <div className="form-header">
-                <h1>✨ {t('create_event')}</h1>
-                <p>{t('create_event_desc')}</p>
+            {/* Botón volver externo - izquierda, con gradiente */}
+            <div className="back-button-wrapper">
+                <Link to="/admin/eventos" className="btn-back-gradient">
+                    <ArrowLeft size={18} />
+                    {t('back_to_events')}
+                </Link>
             </div>
+
+            {/* Card del formulario */}
+            <div className="admin-eventos-form-card">
+                <div className="form-header">
+                    <h1>✨ {t('create_event')}</h1>
+                    <p>{t('create_event_desc')}</p>
+                </div>
                 <form onSubmit={handleSubmit} className="eventos-form">
                     <div className="form-grid">
                         {/* COLUMNA IZQUIERDA */}
@@ -187,6 +198,7 @@ const AdminEventosCreate = () => {
                                 {errors.lugar_evento && <span className="error-message">{errors.lugar_evento[0]}</span>}
                             </div>
 
+                            {/* ✅ CAMPO FECHA EVENTO CON CALENDARIO */}
                             <div className="form-group required" style={{ position: 'relative' }}>
                                 <label><Calendar size={16} /> {t('start_date')} *</label>
                                 <input
@@ -198,20 +210,25 @@ const AdminEventosCreate = () => {
                                     className={errors.fecha_evento ? 'error' : ''}
                                     required
                                 />
-                                <div className="calendar-icon-custom" onClick={openCalendar}>
+                                <div className="calendar-icon-custom" onClick={() => openCalendar(fechaInputRef)}>
                                     <Calendar size={16} />
                                 </div>
                                 {errors.fecha_evento && <span className="error-message">{errors.fecha_evento[0]}</span>}
                             </div>
 
-                            <div className="form-group">
+                            {/* ✅ CAMPO FECHA FIN CON CALENDARIO */}
+                            <div className="form-group" style={{ position: 'relative' }}>
                                 <label><Calendar size={16} /> {t('end_date')}</label>
                                 <input
+                                    ref={fechaFinInputRef}
                                     type="datetime-local"
                                     name="fecha_fin"
                                     value={formData.fecha_fin}
                                     onChange={handleChange}
                                 />
+                                <div className="calendar-icon-custom" onClick={() => openCalendar(fechaFinInputRef)}>
+                                    <Calendar size={16} />
+                                </div>
                             </div>
 
                             <div className="form-group">
@@ -244,14 +261,17 @@ const AdminEventosCreate = () => {
                             </div>
 
                             <div className="form-row-2">
+                                {/* ✅ CAMPO COSTO - SOLO NÚMEROS */}
                                 <div className="form-group">
                                     <label><DollarSign size={16} /> {t('cost')}</label>
                                     <input 
                                         type="text" 
                                         name="costo" 
                                         value={formData.costo} 
-                                        onChange={handleChange} 
+                                        onChange={handleCostoChange}
                                         placeholder={t('cost_placeholder')}
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
                                     />
                                 </div>
                                 <div className="form-group">

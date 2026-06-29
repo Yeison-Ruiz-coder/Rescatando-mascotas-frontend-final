@@ -1,14 +1,16 @@
 // src/components/common/MultiSelect/MultiSelect.jsx
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import './MultiSelect.css';
 
+// ===== COMPONENTE PRINCIPAL =====
 const MultiSelect = ({ options = [], selected = [], onChange, placeholder, disabled }) => {
   const { t } = useTranslation('nuevaMascota');
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const wrapperRef = useRef(null);
 
+  // ===== EFECTOS =====
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -19,34 +21,54 @@ const MultiSelect = ({ options = [], selected = [], onChange, placeholder, disab
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Asegurar que options sea un array
-  const safeOptions = Array.isArray(options) ? options : [];
+  // ===== MEMOIZACIÓN =====
+  const safeOptions = useMemo(() => Array.isArray(options) ? options : [], [options]);
   
-  const filteredOptions = safeOptions.filter(opt =>
-    opt.label?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOptions = useMemo(() => 
+    safeOptions.filter(opt =>
+      opt.label?.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
+    [safeOptions, searchTerm]
   );
 
-  const toggleOption = (value) => {
+  const selectedLabels = useMemo(() => 
+    selected.map(id => {
+      const opt = safeOptions.find(o => o.value === id);
+      return opt ? opt.label : '';
+    }).filter(Boolean),
+    [selected, safeOptions]
+  );
+
+  // ===== CALLBACKS =====
+  const toggleOption = useCallback((value) => {
     if (selected.includes(value)) {
       onChange(selected.filter(v => v !== value));
     } else {
       onChange([...selected, value]);
     }
-  };
+  }, [selected, onChange]);
 
-  const removeOption = (value, e) => {
+  const removeOption = useCallback((value, e) => {
     e.stopPropagation();
     onChange(selected.filter(v => v !== value));
-  };
+  }, [selected, onChange]);
 
-  const selectedLabels = selected.map(id => {
-    const opt = safeOptions.find(o => o.value === id);
-    return opt ? opt.label : '';
-  }).filter(Boolean);
+  const toggleDropdown = useCallback(() => {
+    if (!disabled) setIsOpen(prev => !prev);
+  }, [disabled]);
+
+  const handleSearchChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const getLabelFromValue = useCallback((value) => {
+    const opt = safeOptions.find(o => o.value === value);
+    return opt?.label || '';
+  }, [safeOptions]);
 
   return (
     <div className="multi-select-container" ref={wrapperRef}>
-      <div className="multi-select-input" onClick={() => !disabled && setIsOpen(!isOpen)}>
+      <div className="multi-select-input" onClick={toggleDropdown}>
         {selectedLabels.length > 0 ? (
           <div className="multi-select-tags">
             {selectedLabels.map(label => (
@@ -55,7 +77,6 @@ const MultiSelect = ({ options = [], selected = [], onChange, placeholder, disab
                 <button 
                   type="button" 
                   onClick={(e) => {
-                    e.stopPropagation();
                     const opt = safeOptions.find(o => o.label === label);
                     if (opt) removeOption(opt.value, e);
                   }}
@@ -66,7 +87,9 @@ const MultiSelect = ({ options = [], selected = [], onChange, placeholder, disab
             ))}
           </div>
         ) : (
-          <span className="multi-select-placeholder">{placeholder || t('seleccionar_opciones')}</span>
+          <span className="multi-select-placeholder">
+            {placeholder || t('seleccionar_opciones')}
+          </span>
         )}
         <i className={`fas fa-chevron-down ${isOpen ? 'open' : ''}`}></i>
       </div>
@@ -78,7 +101,7 @@ const MultiSelect = ({ options = [], selected = [], onChange, placeholder, disab
             className="multi-select-search"
             placeholder={t('buscar')}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
             onClick={(e) => e.stopPropagation()}
           />
           <div className="multi-select-options">

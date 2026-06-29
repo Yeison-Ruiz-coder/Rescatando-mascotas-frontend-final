@@ -70,8 +70,8 @@ const Seguimientos = () => {
         setCurrentPage(page);
       } catch (err) {
         console.error("Error:", err);
-        setError(t("error_cargar_seguimientos"));
-        toast.error(t("error_cargar_seguimientos"));
+        setError(t("error_carga"));
+        toast.error(t("error_carga"));
       } finally {
         setLoading(false);
       }

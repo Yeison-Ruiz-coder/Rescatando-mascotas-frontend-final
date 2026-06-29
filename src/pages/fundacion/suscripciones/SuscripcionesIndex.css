@@ -1,0 +1,504 @@
+/* src/pages/fundacion/suscripciones/SuscripcionesIndex.css */
+/* ============================================
+   SUSCRIPCIONES INDEX - FUNDACIÓN
+   ============================================ */
+
+.fs-suscripciones-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+}
+
+.fs-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+/* ===== LOADING ===== */
+.fs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.fs-loading .spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== STATS ===== */
+.fs-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 24px 0 30px;
+}
+
+.fs-stat-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.fs-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.fs-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.fs-stat-total .fs-stat-icon {
+  background: rgba(102, 126, 234, 0.12);
+  color: var(--color-primary);
+}
+.fs-stat-activas .fs-stat-icon {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--color-success);
+}
+.fs-stat-pendientes .fs-stat-icon {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.fs-stat-monto .fs-stat-icon {
+  background: rgba(255, 140, 66, 0.12);
+  color: var(--color-accent);
+}
+
+.fs-stat-info {
+  flex: 1;
+}
+
+.fs-stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.fs-stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ===== FILTROS ===== */
+.fs-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.fs-filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fs-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--form-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fs-filter-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.fs-filter-btn.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+.fs-filter-btn i {
+  font-size: 0.7rem;
+}
+
+.fs-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.fs-share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* ===== TABLA ===== */
+.fs-table-container {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.fs-table-scroll {
+  overflow-x: auto;
+}
+
+.fs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.fs-table thead {
+  background: var(--form-input-bg);
+}
+
+.fs-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fs-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.fs-table tbody tr:hover {
+  background: var(--color-hover);
+}
+
+.fs-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.fs-mascota-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.fs-mascota-cell strong {
+  color: var(--color-text);
+}
+
+.fs-mascota-id {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.fs-donante-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.fs-donante-email {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.fs-monto {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.fs-frecuencia-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary);
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+/* ===== ESTADO BADGE ===== */
+.fs-estado-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.fs-estado-badge.estado-activo {
+  background: rgba(46, 204, 113, 0.15);
+  color: var(--color-success);
+}
+.fs-estado-badge.estado-pendiente {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+.fs-estado-badge.estado-pausado {
+  background: rgba(102, 126, 234, 0.15);
+  color: var(--color-primary);
+}
+.fs-estado-badge.estado-cancelado {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+.fs-estado-badge.estado-finalizado {
+  background: rgba(107, 114, 128, 0.15);
+  color: var(--color-text-muted);
+}
+
+/* ===== ACCIONES ===== */
+.fs-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.fs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.fs-btn-ver {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--color-primary);
+}
+.fs-btn-ver:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.fs-btn-pausar {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+.fs-btn-pausar:hover {
+  background: #f59e0b;
+  color: white;
+}
+
+.fs-btn-reactivar {
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--color-success);
+}
+.fs-btn-reactivar:hover {
+  background: var(--color-success);
+  color: white;
+}
+
+.fs-btn-cancelar {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+}
+.fs-btn-cancelar:hover {
+  background: var(--color-danger);
+  color: white;
+}
+
+/* ===== EMPTY ===== */
+.fs-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.fs-empty i {
+  font-size: 4rem;
+  color: var(--color-text-muted);
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.fs-empty h3 {
+  font-size: 1.3rem;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.fs-empty p {
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+/* ===== FOOTER ===== */
+.fs-footer {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 40px;
+}
+
+.fs-total-info {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .fs-wrapper {
+    padding: 0 16px;
+  }
+  
+  .fs-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .fs-wrapper {
+    padding: 0 12px;
+  }
+  
+  .fs-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .fs-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .fs-filter-group {
+    justify-content: center;
+  }
+  
+  .fs-filter-btn {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+  
+  .fs-table {
+    font-size: 0.8rem;
+  }
+  
+  .fs-table th,
+  .fs-table td {
+    padding: 8px 10px;
+  }
+  
+  .fs-actions {
+    gap: 2px;
+  }
+  
+  .fs-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fs-wrapper {
+    padding: 0 8px;
+  }
+  
+  .fs-stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .fs-stat-card {
+    padding: 12px 14px;
+  }
+  
+  .fs-stat-value {
+    font-size: 1.2rem;
+  }
+  
+  .fs-stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   MODO OSCURO
+   ============================================ */
+[data-theme="dark"] .fs-stat-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .fs-table-container {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .fs-table thead {
+  background: var(--form-input-bg);
+}
+
+[data-theme="dark"] .fs-table th {
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .fs-table td {
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .fs-table tbody tr:hover {
+  background: var(--color-hover);
+}

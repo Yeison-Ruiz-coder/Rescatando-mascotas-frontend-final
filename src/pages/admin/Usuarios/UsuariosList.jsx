@@ -90,9 +90,9 @@ const UsuariosList = () => {
   };
 
   return (
-    <div className="admin-usuarios-page">
+    <div className="ul-page">
       {/* ===== BANNER ===== */}
-      <div className="admin-usuarios-banner-wrapper">
+      <div className="ul-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
@@ -106,7 +106,7 @@ const UsuariosList = () => {
       </div>
 
       {/* ===== FILTER BAR ===== */}
-      <div className="admin-usuarios-filter-wrapper">
+      <div className="ul-filter-wrapper">
         <div className="bento-container">
           <FilterBar
             filters={filterBarFilters}
@@ -139,14 +139,14 @@ const UsuariosList = () => {
       </div>
 
       {/* ===== ACCIONES ===== */}
-      <div className="admin-usuarios-actions-wrapper">
+      <div className="ul-actions-wrapper">
         <div className="bento-container">
-          <div className="admin-usuarios-actions">
-            <Link to="/admin/usuarios/pendientes" className="admin-usuarios-button secondary">
+          <div className="ul-actions">
+            <Link to="/admin/usuarios/pendientes" className="ul-button secondary">
               <i className="fas fa-clock"></i>
               {t("usuarios_pendientes", "Usuarios pendientes")}
             </Link>
-            <Link to="/admin/usuarios/create" className="admin-usuarios-button primary">
+            <Link to="/admin/usuarios/create" className="ul-button primary">
               <i className="fas fa-plus"></i>
               {t("crear_usuario", "Nuevo usuario")}
             </Link>
@@ -155,15 +155,15 @@ const UsuariosList = () => {
       </div>
 
       {/* ===== TABLA ===== */}
-      <div className="admin-usuarios-table-wrapper">
+      <div className="ul-table-wrapper">
         <div className="bento-container">
-          <div className="admin-usuarios-summary">
+          <div className="ul-summary">
             <i className="fas fa-list"></i>
             <span>{filteredMessage}</span>
             {hasActiveFilters && (
               <button
                 onClick={() => handleFilterChange({ search: '', tipo: '', estado: '', sort: 'created_at_desc' })}
-                className="admin-usuarios-clear-filters"
+                className="ul-clear-filters"
               >
                 <i className="fas fa-times"></i> {t("limpiar_filtros", "Limpiar filtros")}
               </button>
@@ -171,13 +171,13 @@ const UsuariosList = () => {
           </div>
 
           {loading ? (
-            <div className="admin-usuarios-loading">
+            <div className="ul-loading">
               <LoadingSpinner text={t("cargando", "Cargando usuarios...")} />
             </div>
           ) : displayUsuarios && displayUsuarios.length > 0 ? (
             <>
-              <div className="admin-usuarios-table-scroll">
-                <table className="admin-usuarios-table">
+              <div className="ul-table-scroll">
+                <table className="ul-table">
                   <thead>
                     <tr>
                       <th>ID</th>
@@ -198,31 +198,31 @@ const UsuariosList = () => {
                           <td>{usuario.nombre || usuario.nombre_entidad || "-"}</td>
                           <td>{usuario.email || "-"}</td>
                           <td>
-                            <span className={`badge tipo ${usuario.tipo || "usuario"}`}>
+                            <span className={`ul-badge tipo ${usuario.tipo || "usuario"}`}>
                               {usuario.tipo || "usuario"}
                             </span>
                           </td>
                           <td>
-                            <span className={`badge estado ${usuario.estado || "desconocido"}`}>
+                            <span className={`ul-badge estado ${usuario.estado || "desconocido"}`}>
                               <i className={`fas fa-${usuario.estado === "activo" ? "check-circle" : usuario.estado === "pendiente" ? "clock" : "times-circle"}`}></i>
                               {usuario.estado || "desconocido"}
                             </span>
-                            <span className={`badge ${emailVerified ? "verified" : "unverified"}`}>
+                            <span className={`ul-badge ${emailVerified ? "verified" : "unverified"}`}>
                               <i className={`fas fa-${emailVerified ? "check" : "exclamation-triangle"}`}></i>
                               {emailVerified ? t("verificado", "Verificado") : t("no_verificado", "No verificado")}
                             </span>
                           </td>
                           <td>{getCreatedAt(usuario)}</td>
-                          <td className="acciones-column">
-                            <div className="acciones-group">
-                              <Link to={`/admin/usuarios/${usuario.id}`} className="action-button info">
+                          <td className="ul-acciones-column">
+                            <div className="ul-acciones-group">
+                              <Link to={`/admin/usuarios/${usuario.id}`} className="ul-action-button info">
                                 <i className="fas fa-eye"></i> {t("ver", "Ver")}
                               </Link>
-                              <Link to={`/admin/usuarios/editar/${usuario.id}`} className="action-button warning">
+                              <Link to={`/admin/usuarios/editar/${usuario.id}`} className="ul-action-button warning">
                                 <i className="fas fa-edit"></i> {t("editar", "Editar")}
                               </Link>
                               <button
-                                className="action-button danger"
+                                className="ul-action-button danger"
                                 disabled={isProcessing(usuario.id)}
                                 onClick={() => handleRemove(usuario)}
                               >
@@ -230,9 +230,9 @@ const UsuariosList = () => {
                                 {isProcessing(usuario.id) ? t("procesando", "Procesando...") : t("eliminar", "Eliminar")}
                               </button>
                             </div>
-                            <div className="acciones-group">
+                            <div className="ul-acciones-group">
                               <button
-                                className="action-button ghost"
+                                className="ul-action-button ghost"
                                 disabled={isProcessing(usuario.id)}
                                 onClick={() => handleToggleEstado(usuario)}
                               >
@@ -241,7 +241,7 @@ const UsuariosList = () => {
                               </button>
                               {!emailVerified && (
                                 <button
-                                  className="action-button ghost"
+                                  className="ul-action-button ghost"
                                   disabled={isProcessing(usuario.id)}
                                   onClick={() => handleVerify(usuario)}
                                 >
@@ -260,7 +260,7 @@ const UsuariosList = () => {
 
               {/* Paginación */}
               {pagination.last_page > 1 && (
-                <div className="admin-usuarios-pagination">
+                <div className="ul-pagination">
                   <button
                     disabled={pagination.current_page === 1}
                     onClick={() => handlePageChange(pagination.current_page - 1)}
@@ -280,7 +280,7 @@ const UsuariosList = () => {
               )}
             </>
           ) : (
-            <div className="admin-usuarios-empty">
+            <div className="ul-empty">
               <i className={`fas fa-${hasActiveFilters ? "search" : "users"}`}></i>
               <h3>
                 {hasActiveFilters 
@@ -297,7 +297,7 @@ const UsuariosList = () => {
               {hasActiveFilters && (
                 <button
                   onClick={() => handleFilterChange({ search: '', tipo: '', estado: '', sort: 'created_at_desc' })}
-                  className="admin-usuarios-clear-filters-btn"
+                  className="ul-clear-filters-btn"
                 >
                   <i className="fas fa-undo"></i> {t("limpiar_filtros", "Limpiar filtros")}
                 </button>

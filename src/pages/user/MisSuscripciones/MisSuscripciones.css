@@ -1,0 +1,335 @@
+/* src/pages/user/MisSuscripciones/MisSuscripciones.css */
+/* ============================================
+   MIS SUSCRIPCIONES - DISEÑO MODERNO
+   ============================================ */
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.mis-suscripciones-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+}
+
+/* ===== BANNER WRAPPER ===== */
+.mis-suscripciones-banner-wrapper {
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0;
+}
+
+/* ===== WRAPPER INTERNO ===== */
+.mis-suscripciones-wrapper {
+  max-width: 1800px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+/* ===== HEADER - CENTRADO Y MÁS GRANDE ===== */
+.mis-suscripciones-header {
+  padding: 40px 0 30px 0;
+  text-align: center;
+}
+
+.header-content-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-content-centered h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-content-centered h1 i {
+  color: var(--color-primary);
+  font-size: 2.5rem;
+}
+
+.header-content-centered p {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.header-content-centered p i {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+}
+
+/* ===== SECCIONES ===== */
+.suscripciones-seccion-modern {
+  margin-bottom: 2.5rem;
+}
+
+.suscripciones-seccion-modern:last-child {
+  margin-bottom: 0;
+}
+
+.suscripciones-seccion-modern.eliminadas {
+  opacity: 0.85;
+}
+
+.seccion-titulo-modern {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.seccion-titulo-modern.eliminadas {
+  color: var(--color-text-muted);
+}
+
+.seccion-icon {
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ===== GRID - 3 COLUMNAS ===== */
+.mis-suscripciones-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* ===== LOADING ===== */
+.mis-suscripciones-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.mis-suscripciones-loading .spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== ESTADO VACÍO ===== */
+.mis-suscripciones-empty-modern {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mis-suscripciones-empty-modern .empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.mis-suscripciones-empty-modern h3 {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.mis-suscripciones-empty-modern p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.btn-primary-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 2rem;
+  background: var(--gradient-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* ===== HISTORIAL ===== */
+.historial-eliminadas-modern {
+  margin-top: 1.5rem;
+}
+
+.historial-eliminadas-modern summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+  padding: 0.75rem 0;
+  list-style: none;
+}
+
+.historial-eliminadas-modern summary::-webkit-details-marker {
+  display: none;
+}
+
+.historial-eliminadas-modern summary:hover {
+  color: var(--color-primary);
+}
+
+.historial-eliminadas-modern summary .fa-chevron-down {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.historial-eliminadas-modern[open] summary .fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.historial-eliminadas-modern .mis-suscripciones-grid-modern {
+  margin-top: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablets - 2 columnas */
+@media (max-width: 1024px) {
+  .mis-suscripciones-wrapper {
+    padding: 0 16px;
+  }
+  
+  .mis-suscripciones-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .header-content-centered h1 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Móviles grandes - 2 columnas */
+@media (max-width: 768px) {
+  .mis-suscripciones-wrapper {
+    padding: 0 12px;
+  }
+  
+  .mis-suscripciones-banner-wrapper {
+    margin-bottom: 20px;
+  }
+  
+  .mis-suscripciones-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .header-content-centered h1 {
+    font-size: 1.8rem;
+  }
+  
+  .header-content-centered h1 i {
+    font-size: 1.6rem;
+  }
+  
+  .header-content-centered p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Móviles pequeños - 1 columna */
+@media (max-width: 580px) {
+  .mis-suscripciones-wrapper {
+    padding: 0 8px;
+  }
+  
+  .mis-suscripciones-grid-modern {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-content-centered h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header-content-centered h1 i {
+    font-size: 1.4rem;
+  }
+  
+  .seccion-titulo-modern {
+    font-size: 1.1rem;
+  }
+  
+  .header-content-centered p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ============================================
+   MODO OSCURO
+   ============================================ */
+[data-theme="dark"] .suscripcion-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .suscripcion-card-header {
+  background: var(--form-input-bg);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .suscripcion-card-footer {
+  background: var(--form-input-bg);
+  border-top-color: var(--color-border);
+}
+
+[data-theme="dark"] .mis-suscripciones-empty-modern {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .btn-simular-pago {
+  background: #b45309;
+  color: white;
+}
+
+[data-theme="dark"] .btn-simular-pago:hover:not(:disabled) {
+  background: #92400e;
+}
+
+[data-theme="dark"] .historial-eliminadas-modern summary {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .historial-eliminadas-modern summary:hover {
+  color: var(--color-primary);
+}

@@ -182,7 +182,7 @@ const DetalleSeguimiento = () => {
                 )}
                 <div className="ds-info-item">
                   <strong>{t('convive_con_otros_animales')}:</strong>
-                  <span>{seguimiento.convive_con_otros_animales ? '✅ Si' : '❌ No'}</span>
+                  <span>{seguimiento.convive_con_otros_animales ? '✅ Sí' : '❌ No'}</span>
                 </div>
               </>
             ) : (

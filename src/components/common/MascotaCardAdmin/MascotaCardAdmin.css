@@ -1,0 +1,346 @@
+/* src/components/common/MascotaCardAdmin/MascotaCardAdmin.css */
+/* ============================================
+   ADMIN - MASCOTA CARD
+   BASADO EN MascotaCardFundacion pero adaptado
+   ============================================ */
+
+.mascota-card-admin {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mascota-card-admin:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hard-md);
+}
+
+/* ===== IMAGEN ===== */
+.mascota-card-admin .mcf-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--form-input-bg);
+  flex-shrink: 0;
+}
+
+.mascota-card-admin .mcf-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.mascota-card-admin:hover .mcf-image img {
+  transform: scale(1.06);
+}
+
+.mascota-card-admin .mcf-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.mascota-card-admin .mcf-placeholder i {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+/* ===== ESTADO BADGE ===== */
+.mascota-card-admin .mcf-estado-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 40px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  color: white;
+  z-index: 3;
+}
+
+.mascota-card-admin .mcf-estado-badge i {
+  font-size: 0.65rem;
+}
+
+.mascota-card-admin .mcf-estado-badge.mcf-estado-adopcion {
+  background: rgba(52, 211, 153, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.mascota-card-admin .mcf-estado-badge.mcf-estado-adoptado {
+  background: rgba(107, 114, 128, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.mascota-card-admin .mcf-estado-badge.mcf-estado-rescatada {
+  background: rgba(251, 191, 36, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.mascota-card-admin .mcf-estado-badge.mcf-estado-acogida {
+  background: rgba(56, 189, 248, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+/* ===== NOMBRE (sobre la imagen) ===== */
+.mascota-card-admin .mcf-titulo {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  margin: 0;
+  z-index: 3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== FUNDACIÓN ===== */
+.mascota-card-admin .mcf-fundacion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+  padding: 4px 8px;
+  background: rgba(102, 126, 234, 0.08);
+  border-radius: 6px;
+}
+
+.mascota-card-admin .mcf-fundacion i {
+  font-size: 0.65rem;
+}
+
+/* ===== CONTENIDO ===== */
+.mascota-card-admin .mcf-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mascota-card-admin .mcf-descripcion {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 8px 0;
+}
+
+/* ===== INFO GRID ===== */
+.mascota-card-admin .mcf-info-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.mascota-card-admin .mcf-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  background: var(--form-input-bg);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+}
+
+.mascota-card-admin .mcf-info-item i {
+  font-size: 0.6rem;
+}
+
+/* ===== ACCIONES ===== */
+.mascota-card-admin .mcf-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.mascota-card-admin .mcf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border: none;
+  flex: 1;
+  min-height: 30px;
+}
+
+.mascota-card-admin .mcf-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.mascota-card-admin .mcf-btn-ver {
+  background: var(--color-primary);
+  color: white;
+}
+
+.mascota-card-admin .mcf-btn-ver:hover {
+  background: var(--color-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.mascota-card-admin .mcf-btn-eliminar {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.mascota-card-admin .mcf-btn-eliminar:hover {
+  background: var(--color-danger);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.mascota-card-admin .mcf-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mascota-card-admin .mcf-content {
+    padding: 12px;
+  }
+
+  .mascota-card-admin .mcf-titulo {
+    font-size: 0.95rem;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+  }
+
+  .mascota-card-admin .mcf-descripcion {
+    font-size: 0.7rem;
+  }
+
+  .mascota-card-admin .mcf-estado-badge {
+    top: 12px;
+    right: 12px;
+    font-size: 0.65rem;
+    padding: 3px 10px;
+  }
+
+  .mascota-card-admin .mcf-btn {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    min-height: 26px;
+  }
+
+  .mascota-card-admin .mcf-btn span {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mascota-card-admin .mcf-content {
+    padding: 10px;
+  }
+
+  .mascota-card-admin .mcf-titulo {
+    font-size: 0.85rem;
+  }
+
+  .mascota-card-admin .mcf-actions {
+    gap: 4px;
+  }
+
+  .mascota-card-admin .mcf-btn {
+    font-size: 0.6rem;
+    padding: 3px 6px;
+    min-height: 24px;
+  }
+
+  .mascota-card-admin .mcf-btn span {
+    display: none;
+  }
+
+  .mascota-card-admin .mcf-btn {
+    flex: 0 1 auto;
+    min-width: 28px;
+  }
+
+  .mascota-card-admin .mcf-estado-badge {
+    font-size: 0.6rem;
+    padding: 2px 8px;
+  }
+
+  .mascota-card-admin .mcf-info-item {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .mascota-card-admin {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .mascota-card-admin .mcf-btn-ver {
+  background: var(--color-primary);
+  color: white;
+}
+
+[data-theme="dark"] .mascota-card-admin .mcf-btn-ver:hover {
+  background: var(--color-secondary);
+}
+
+[data-theme="dark"] .mascota-card-admin .mcf-btn-eliminar {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="dark"] .mascota-card-admin .mcf-btn-eliminar:hover {
+  background: var(--color-danger);
+  color: white;
+}

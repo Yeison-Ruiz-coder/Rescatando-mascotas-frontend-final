@@ -40,7 +40,7 @@ const UsuarioDetail = () => {
 
   if (loading) {
     return (
-      <div className="usuario-detail-container">
+      <div className="ud-container">
         <LoadingSpinner text={t("cargando_usuario", "Cargando usuario...")} />
       </div>
     );
@@ -48,8 +48,8 @@ const UsuarioDetail = () => {
 
   if (!usuario) {
     return (
-      <div className="usuario-detail-container">
-        <div className="usuario-detail-empty">
+      <div className="ud-container">
+        <div className="ud-empty">
           <i className="fas fa-user-slash"></i>
           <h2>{t("usuario_no_encontrado", "Usuario no encontrado")}</h2>
           <p>{t("usuario_no_encontrado_desc", "El usuario que buscas no existe o fue eliminado.")}</p>
@@ -65,9 +65,9 @@ const UsuarioDetail = () => {
   const createdAt = usuario.created_at || usuario.createdAt || usuario.fecha_creacion;
 
   return (
-    <div className="usuario-detail-container">
+    <div className="ud-container">
       {/* ===== BANNER ===== */}
-      <div className="usuario-detail-banner-wrapper">
+      <div className="ud-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
@@ -84,9 +84,9 @@ const UsuarioDetail = () => {
       </div>
 
       {/* ===== CONTENIDO ===== */}
-      <div className="usuario-detail-content">
+      <div className="ud-content">
         <div className="bento-container">
-          <div className="usuario-detail-header">
+          <div className="ud-header">
             <div>
               <h1>
                 <i className="fas fa-user-circle" style={{ color: "var(--color-primary)", marginRight: "0.75rem" }}></i>
@@ -94,7 +94,7 @@ const UsuarioDetail = () => {
               </h1>
               <p>{t("detalle_usuario_desc", "Revisa la información principal y el estado de la cuenta.")}</p>
             </div>
-            <div className="usuario-detail-actions">
+            <div className="ud-actions">
               <button className="btn-secondary" onClick={() => navigate(-1)}>
                 <i className="fas fa-arrow-left"></i> {t("volver", "Volver")}
               </button>
@@ -104,69 +104,69 @@ const UsuarioDetail = () => {
             </div>
           </div>
 
-          <div className="usuario-detail-grid">
+          <div className="ud-grid">
             {/* Datos del usuario */}
-            <div className="usuario-detail-section">
+            <div className="ud-section">
               <h2><i className="fas fa-user" style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}></i> {t("datos_usuario", "Datos de usuario")}</h2>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("nombre", "Nombre")}</span>
                 <strong>{usuario.nombre || usuario.nombre_entidad || "-"}</strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("email", "Correo electrónico")}</span>
                 <strong>{usuario.email || "-"}</strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("tipo_usuario", "Tipo")}</span>
                 <strong>
-                  <span className={`badge tipo ${usuario.tipo || "usuario"}`}>
+                  <span className={`ud-badge tipo ${usuario.tipo || "usuario"}`}>
                     {usuario.tipo || "usuario"}
                   </span>
                 </strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("estado_usuario", "Estado")}</span>
                 <strong>
-                  <span className={`badge estado ${usuario.estado || "desconocido"}`}>
+                  <span className={`ud-badge estado ${usuario.estado || "desconocido"}`}>
                     <i className={`fas fa-${usuario.estado === "activo" ? "check-circle" : usuario.estado === "pendiente" ? "clock" : "times-circle"}`}></i>
                     {usuario.estado || "desconocido"}
                   </span>
                 </strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("email_verificado", "Email verificado")}</span>
                 <strong>
-                  <span className={`badge ${emailVerified ? "verified" : "unverified"}`}>
+                  <span className={`ud-badge ${emailVerified ? "verified" : "unverified"}`}>
                     <i className={`fas fa-${emailVerified ? "check" : "exclamation-triangle"}`}></i>
                     {emailVerified ? t("si", "Sí") : t("no", "No")}
                   </span>
                 </strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("registro", "Registro")}</span>
                 <strong>{createdAt ? new Date(createdAt).toLocaleString() : "-"}</strong>
               </div>
             </div>
 
             {/* Contacto */}
-            <div className="usuario-detail-section">
+            <div className="ud-section">
               <h2><i className="fas fa-address-card" style={{ color: "var(--color-primary)", marginRight: "0.5rem" }}></i> {t("datos_contacto", "Contacto")}</h2>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("telefono", "Teléfono")}</span>
                 <strong>{usuario.telefono || "-"}</strong>
               </div>
-              <div className="usuario-detail-row">
+              <div className="ud-row">
                 <span>{t("direccion", "Dirección")}</span>
                 <strong>{usuario.direccion || "-"}</strong>
               </div>
               {usuario.nombre_entidad && (
-                <div className="usuario-detail-row">
+                <div className="ud-row">
                   <span>{t("nombre_entidad", "Nombre de la entidad")}</span>
                   <strong>{usuario.nombre_entidad}</strong>
                 </div>
               )}
               {usuario.registro_sanitario && (
-                <div className="usuario-detail-row">
+                <div className="ud-row">
                   <span>{t("registro_sanitario", "Registro sanitario")}</span>
                   <strong>{usuario.registro_sanitario}</strong>
                 </div>

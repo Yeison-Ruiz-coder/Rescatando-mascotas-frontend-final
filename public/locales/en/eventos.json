@@ -1,27 +1,30 @@
 {
   "botones": {
+    "ver": "View",
+    "editar": "Edit",
+    "eliminar": "Delete",
+    "ver_detalle": "View details",
     "crear_evento": "Create Global Event",
     "crear_primero": "Create First Event",
     "crear_evento_global": "Create Global Event",
     "ver_detalles": "View Details",
-    "editar": "Edit",
-    "eliminar": "Delete",
     "cancelar": "Cancel",
     "creando": "Creating...",
     "guardando": "Saving...",
     "guardar_cambios": "Save Changes",
     "dar_like": "Like",
-    "me_gusta": "Liked",
+    "me_gusta": "Like",
     "asistire": "I'll attend",
-    "confirmado": "✅ Confirmed",
-    "compartir": "Share"
+    "confirmado": "Confirmed",
+    "compartir": "Share",
+    "volver_mis_eventos": "Back to my events"
   },
 
   "mensajes": {
     "error_carga": "Error loading events",
     "evento_eliminado": "Event deleted successfully",
     "error_eliminar": "Error deleting event",
-    "confirmar_eliminar": "Are you sure you want to delete this global event?",
+    "confirmar_eliminar": "Are you sure you want to delete this event? This action cannot be undone.",
     "error_crear": "Error creating global event",
     "error_actualizar": "Error updating global event"
   },
@@ -36,7 +39,7 @@
 
   "sin_eventos": {
     "titulo": "No events scheduled",
-    "mensaje": "Soon we will have events for pets. Stay tuned!"
+    "mensaje": "We'll have events for pets soon. Stay tuned!"
   },
 
   "crear": {
@@ -47,7 +50,7 @@
     "descripcion": "Description",
     "fecha_evento": "Date and Time",
     "imagen": "Event Image",
-    "nombre_placeholder": "Ex: National Fair",
+    "nombre_placeholder": "Ex: Great National Fair",
     "lugar_placeholder": "Ex: Convention Center",
     "descripcion_placeholder": "Describe the event in detail...",
     "seleccionar_imagen": "Select image",
@@ -93,14 +96,14 @@
   "asistencia": {
     "confirmar": "Confirm my attendance",
     "confirmada": "Attendance confirmed!",
-    "personas_asistiran": "people attending",
+    "personas_asistiran": "people will attend",
     "login_requerido": "You must log in to confirm attendance",
     "error": "Error processing request"
   },
 
   "back_to_events": "Back to events",
   "create_event": "Create New Event",
-  "create_event_desc": "Complete the data to create a global event",
+  "create_event_desc": "Fill in the data to create a global event",
   "event_name": "Event name",
   "event_name_placeholder": "Ex: Adoption Fair 2024",
   "location": "Location",
@@ -112,7 +115,7 @@
   "description": "Description",
   "description_placeholder": "Describe the event, activities, requirements...",
   "cost": "Cost",
-  "cost_placeholder": "Ex: Free or $10.00",
+  "cost_placeholder": "Ex: Free or $10.000",
   "category": "Category",
   "category_placeholder": "Ex: Adoption, Fair",
   "contact": "Contact (optional)",
@@ -124,14 +127,14 @@
   "event_image": "Event image",
   "click_to_upload": "Click to upload an image",
   "image_max_size_text": "JPG, PNG, GIF (max 2MB)",
-  "image_max_size": "The image cannot exceed 2MB",
+  "image_max_size": "Image cannot exceed 2MB",
   "image_only": "Only images are allowed",
   "cancel": "Cancel",
   "creating": "Creating...",
   "create_event_btn": "Create Event",
   "error_create": "Error creating event",
   "error_load": "Error loading event",
-  "error_update": "Error updating event",
+  "error_update": "Error updating",
   "loading_event": "Loading event...",
   "back": "Back",
   "edit_event": "Edit Event",
@@ -159,7 +162,7 @@
   "mis_eventos_desc": "Manage your foundation's events",
   "crear_evento": "Create Event",
   "crear_primer_evento": "Create first event",
-  "buscar_evento": "Search event...",
+  "buscar_evento": "Search events...",
   "filtros": "Filters",
   "limpiar_filtros": "Clear",
   "todos_eventos": "All events",
@@ -172,7 +175,7 @@
   "de": "of",
   "eventos": "events",
   "ordenar_por": "Sort by",
-  "sin_resultados": "No events found",
+  "sin_resultados": "No events",
   "sin_resultados_desc": "No events found with the selected filters.",
   "mas_recientes": "Most recent",
   "mas_antiguos": "Oldest",
@@ -182,8 +185,8 @@
   "categoria_adopcion": "Adoption",
   "categoria_kermes": "Fair",
   "categoria_charla": "Talk",
-  "categoria_jornada": "Workshop Day",
-  "categoria_taller": "Workshop",
+  "categoria_jornada": "Workshop",
+  "categoria_taller": "Seminar",
   "tipo": "Type",
   "categoria": "Category",
   "estado": "Status",
@@ -207,7 +210,6 @@
   "fecha": "Date",
   "costo": "Cost",
   "volver": "Back",
-  "evento_fundacion": "Foundation Event",
   "like": {
     "login_requerido": "You must log in to like"
   },
@@ -225,20 +227,49 @@
   "likes_contador": "{{count}} likes",
   "asistentes_contador": "{{count}} attendees",
   "evento_global_badge": "🌍 Global Event",
-  "evento_fundacion_badge": " Foundation Event",
+  "evento_fundacion_badge": "🏠 Foundation Event",
   "eliminando": "Deleting...",
-  "mensaje_motivacional_titulo": "Join and help change lives",
-  "mensaje_motivacional_texto": "Events are a great chance to learn, connect, and contribute to animal welfare. Don't miss them!",
+  "mensaje_motivacional_titulo": "Participate and help change lives",
+  "mensaje_motivacional_texto": "Events are a great opportunity to meet, learn, and contribute to animal welfare. Don't miss them!",
   "buscar_placeholder": "Search events...",
   "cargando": "Loading events...",
   "tipo_fundacion": "Foundation event",
   "tipo_admin": "Official event",
   "gratis": "Free",
-  "capacidad_pequeña": "Small capacity",
-  "capacidad_grande": "Large capacity",
+  "capacidad_pequeña": "Small venue",
+  "capacidad_grande": "Large venue",
   "hasta": "Until",
   "eventos_proximos": "Upcoming events",
   "eventos_pasados": "Past events",
-  "eventos_hoy": "Events today",
-  "evento_popular": "Popular event"
+  "eventos_hoy": "Today's events",
+  "evento_popular": "Popular event",
+  "crear_nuevo_evento": "Create new event",
+  "editando_evento": "Editing event",
+  "solo_numeros": "Numbers only (ex: 15000)",
+  "banner": {
+    "titulo": "{{count}} events managed",
+    "titulo_calendario": "Event Calendar · {{count}} events this month",
+    "titulo_show": "Event: {{nombre}}"
+  },
+  "ver_detalle": "View details",
+  "evento_eliminado": "Event deleted successfully",
+  "error_delete": "Error deleting event",
+
+  "stats": {
+    "total": "Total events",
+    "registrados": "Registered",
+    "proximos": "Upcoming",
+    "por_venir": "Coming up",
+    "pasados": "Past",
+    "finalizados": "Finished",
+    "este_mes": "Events this month",
+    "activos": "Active",
+    "dias_con_eventos": "Days with events",
+    "dias": "Days",
+    "total_asistentes": "Total attendees",
+    "personas": "People"
+  },
+
+  "loading": "Loading calendar...",
+  "error_title": "Error loading calendar"
 }

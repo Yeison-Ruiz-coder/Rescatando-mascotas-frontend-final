@@ -488,3 +488,43 @@
 [data-theme="dark"] .single-species-count {
   color: var(--color-text-muted);
 }
+/* src/components/common/FundacionDashboardCharts/FundacionDashboardCharts.css */
+/* Agregar al final del archivo */
+
+/* ===== GRÁFICO DE ANCHO COMPLETO ===== */
+.chart-card-full-width {
+  grid-column: span 2;
+}
+
+.chart-wrapper-large {
+  padding: 20px 24px;
+}
+
+.chart-wrapper-large .chart-body {
+  min-height: 320px;
+}
+
+/* Responsive - En móvil vuelve a 1 columna */
+@media (max-width: 768px) {
+  .chart-card-full-width {
+    grid-column: span 1;
+  }
+  
+  .chart-wrapper-large {
+    padding: 12px 16px;
+  }
+  
+  .chart-wrapper-large .chart-body {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-wrapper-large {
+    padding: 10px 12px;
+  }
+  
+  .chart-wrapper-large .chart-body {
+    min-height: 200px;
+  }
+}

@@ -102,16 +102,16 @@ const UsuarioForm = () => {
 
   if (loading) {
     return (
-      <div className="usuario-form-container">
+      <div className="uf-container">
         <LoadingSpinner text={t("cargando_usuario", "Cargando usuario...")} />
       </div>
     );
   }
 
   return (
-    <div className="usuario-form-container">
+    <div className="uf-container">
       {/* ===== BANNER ===== */}
-      <div className="usuario-form-banner-wrapper">
+      <div className="uf-banner-wrapper">
         <ProfileBanner
           user={{
             nombre: adminName,
@@ -125,10 +125,10 @@ const UsuarioForm = () => {
       </div>
 
       {/* ===== FORMULARIO ===== */}
-      <div className="usuario-form-content">
+      <div className="uf-content">
         <div className="bento-container">
-          <div className="usuario-form-card">
-            <div className="usuario-form-header">
+          <div className="uf-card">
+            <div className="uf-header">
               <div>
                 <h1>
                   <i className="fas fa-user-plus" style={{ color: "var(--color-primary)", marginRight: "0.75rem" }}></i>
@@ -138,9 +138,9 @@ const UsuarioForm = () => {
               </div>
             </div>
 
-            <form className="usuario-form" onSubmit={handleSubmit}>
-              <div className="usuario-form-grid">
-                <div className="usuario-form-field">
+            <form className="uf-form" onSubmit={handleSubmit}>
+              <div className="uf-grid">
+                <div className="uf-field">
                   <label>{t("nombre", "Nombre")} <span className="required">*</span></label>
                   <input
                     type="text"
@@ -152,7 +152,7 @@ const UsuarioForm = () => {
                   />
                 </div>
 
-                <div className="usuario-form-field">
+                <div className="uf-field">
                   <label>{t("email", "Correo electrónico")} <span className="required">*</span></label>
                   <input
                     type="email"
@@ -164,7 +164,7 @@ const UsuarioForm = () => {
                   />
                 </div>
 
-                <div className="usuario-form-field">
+                <div className="uf-field">
                   <label>{t("tipo_usuario", "Tipo")} <span className="required">*</span></label>
                   <select name="tipo" value={formData.tipo} onChange={handleChange} required>
                     <option value="usuario">{t("usuario", "Usuario")}</option>
@@ -173,7 +173,7 @@ const UsuarioForm = () => {
                   </select>
                 </div>
 
-                <div className="usuario-form-field">
+                <div className="uf-field">
                   <label>{t("estado_usuario", "Estado")} <span className="required">*</span></label>
                   <select name="estado" value={formData.estado} onChange={handleChange} required>
                     <option value="activo">{t("activo", "Activo")}</option>
@@ -184,7 +184,7 @@ const UsuarioForm = () => {
 
                 {showEntityFields && (
                   <>
-                    <div className="usuario-form-field usuario-form-full">
+                    <div className="uf-field uf-full">
                       <label>{t("nombre_entidad", "Nombre de la entidad")}</label>
                       <input
                         type="text"
@@ -194,7 +194,7 @@ const UsuarioForm = () => {
                         placeholder={t("nombre_entidad_placeholder", "Nombre de la fundación o clínica")}
                       />
                     </div>
-                    <div className="usuario-form-field">
+                    <div className="uf-field">
                       <label>{t("telefono", "Teléfono")}</label>
                       <input
                         type="text"
@@ -204,7 +204,7 @@ const UsuarioForm = () => {
                         placeholder={t("telefono_placeholder", "+57 300 000 0000")}
                       />
                     </div>
-                    <div className="usuario-form-field usuario-form-full">
+                    <div className="uf-field uf-full">
                       <label>{t("direccion", "Dirección")}</label>
                       <input
                         type="text"
@@ -217,7 +217,7 @@ const UsuarioForm = () => {
                   </>
                 )}
 
-                <div className="usuario-form-field">
+                <div className="uf-field">
                   <label>{t("contraseña", "Contraseña")}</label>
                   <input
                     type="password"
@@ -229,7 +229,7 @@ const UsuarioForm = () => {
                   />
                 </div>
 
-                <div className="usuario-form-field">
+                <div className="uf-field">
                   <label>{t("confirmar_contraseña", "Confirmar contraseña")}</label>
                   <input
                     type="password"
@@ -242,7 +242,7 @@ const UsuarioForm = () => {
                 </div>
               </div>
 
-              <div className="usuario-form-actions">
+              <div className="uf-actions">
                 <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>
                   <i className="fas fa-times"></i> {t("cancelar", "Cancelar")}
                 </button>

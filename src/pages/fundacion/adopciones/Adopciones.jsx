@@ -57,8 +57,8 @@ const FundacionAdopciones = () => {
       setCurrentPage(page);
     } catch (err) {
       console.error('Error:', err);
-      setError(t('error_cargar_adopciones'));
-      toast.error(t('error_cargar_adopciones'));
+      setError(t('error_carga'));
+      toast.error(t('error_carga'));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -147,7 +147,7 @@ const FundacionAdopciones = () => {
         user={{
           nombre: fundacionName,
           avatar: fundacionAvatar,
-          titulo: t('banner.titulo', {
+          titulo: t('banner.titulo_detalle', {
             defaultValue: '{{count}} adopciones gestionadas',
             count: totalAdopciones,
           }),

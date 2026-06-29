@@ -1,9 +1,19 @@
 // src/pages/fundacion/mascotas/components/FormActions.jsx
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import './FormActions.css';
 
+// ===== CONSTANTES =====
+const ICONS = {
+  prev: 'fa-arrow-left',
+  next: 'fa-arrow-right',
+  cancel: 'fa-times',
+  save: 'fa-save',
+  spinner: 'fa-spinner fa-spin',
+};
+
+// ===== COMPONENTE PRINCIPAL =====
 const FormActions = ({ 
   currentStep, 
   totalSteps, 
@@ -17,11 +27,13 @@ const FormActions = ({
   const { t } = useTranslation('nuevaMascota');
   const navigate = useNavigate();
 
-  const handleCancel = () => {
-    if (window.confirm(t('confirmaciones.cancelar', { defaultValue: '¿Estás seguro de que quieres cancelar? Los datos no guardados se perderán.' }))) {
+  const handleCancel = useCallback(() => {
+    if (window.confirm(t('confirmaciones.cancelar', { 
+      defaultValue: '¿Estás seguro de que quieres cancelar? Los datos no guardados se perderán.' 
+    }))) {
       navigate(cancelUrl);
     }
-  };
+  }, [navigate, cancelUrl, t]);
 
   const isLastStep = currentStep === totalSteps;
 
@@ -30,28 +42,35 @@ const FormActions = ({
       <div className="form-actions-left">
         {currentStep > 1 && (
           <button type="button" className="btn-prev" onClick={onPrev}>
-            <i className="fas fa-arrow-left"></i> {t('botones.anterior')}
+            <i className={`fas ${ICONS.prev}`}></i>
+            {t('botones.anterior')}
           </button>
         )}
       </div>
 
       <div className="form-actions-right">
         <button type="button" className="btn-cancel" onClick={handleCancel}>
-          <i className="fas fa-times"></i> {t('botones.cancelar', { defaultValue: 'Cancelar' })}
+          <i className={`fas ${ICONS.cancel}`}></i>
+          {t('botones.cancelar', { defaultValue: 'Cancelar' })}
         </button>
         
         {!isLastStep ? (
           <button type="button" className="btn-next" onClick={onNext}>
-            {t('botones.siguiente')} <i className="fas fa-arrow-right"></i>
+            {t('botones.siguiente')}
+            <i className={`fas ${ICONS.next}`}></i>
           </button>
         ) : (
           <button 
-            type="button"  // ✅ Cambiado de "submit" a "button"
+            type="button"
             className="btn-submit" 
-            onClick={onSubmit}  // ✅ Ejecuta onSubmit directamente
+            onClick={onSubmit}
             disabled={loading}
           >
-            {loading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-save"></i>}
+            {loading ? (
+              <i className={`fas ${ICONS.spinner}`}></i>
+            ) : (
+              <i className={`fas ${ICONS.save}`}></i>
+            )}
             {loading 
               ? ` ${t('botones.guardando')}` 
               : ` ${isEditMode ? t('botones.actualizar') : t('botones.registrar')}`}

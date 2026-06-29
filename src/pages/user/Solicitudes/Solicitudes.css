@@ -10,22 +10,38 @@
   display: flex;
   flex-direction: column;
   background: transparent;
-  padding: 0 24px;
-}
-
-.solicitudes-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
   width: 100%;
 }
 
+/* ===== BANNER WRAPPER - ANCHO COMPLETO ===== */
+.solicitudes-page .solicitudes-banner-wrapper {
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0;
+}
+
+.solicitudes-page .solicitudes-banner-wrapper .bento-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+
+/* ===== WRAPPER INTERNO ===== */
+.solicitudes-page .solicitudes-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
 /* ===== HEADER ===== */
-.solicitudes-header {
-  padding: 60px 0 30px 0;
+.solicitudes-page .solicitudes-header {
+  padding: 40px 0 30px 0;
   text-align: center;
 }
 
-.solicitudes-header h1 {
+.solicitudes-page .solicitudes-header h1 {
   font-size: 2.8rem;
   font-weight: 800;
   margin-bottom: 0.75rem;
@@ -35,7 +51,7 @@
   background-clip: text;
 }
 
-.solicitudes-header h1 i {
+.solicitudes-page .solicitudes-header h1 i {
   margin-right: 0.75rem;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -43,7 +59,7 @@
   color: transparent;
 }
 
-.solicitudes-header p {
+.solicitudes-page .solicitudes-header p {
   font-size: 1rem;
   color: var(--color-text-muted);
   max-width: 600px;
@@ -51,13 +67,13 @@
 }
 
 /* ===== TABLA ===== */
-.solicitudes-table-container {
+.solicitudes-page .solicitudes-table-container {
   overflow-x: auto;
   border-radius: var(--radius-none);
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-table {
+.solicitudes-page .solicitudes-table {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-none);
@@ -66,7 +82,7 @@
 }
 
 /* Header de la tabla */
-.solicitudes-table-header {
+.solicitudes-page .solicitudes-table-header {
   display: grid;
   grid-template-columns: 70px 1.5fr 1fr 140px 1fr;
   background: var(--form-input-bg);
@@ -80,7 +96,7 @@
 }
 
 /* Fila de solicitud */
-.solicitudes-row {
+.solicitudes-page .solicitudes-row {
   display: grid;
   grid-template-columns: 70px 1.5fr 1fr 140px 1fr;
   padding: 0.8rem 1rem;
@@ -89,22 +105,22 @@
   align-items: center;
 }
 
-.solicitudes-row:hover {
+.solicitudes-page .solicitudes-row:hover {
   background: var(--color-hover);
 }
 
-.solicitudes-row:last-child {
+.solicitudes-page .solicitudes-row:last-child {
   border-bottom: none;
 }
 
 /* ===== CELDAS ===== */
-.solicitudes-id {
+.solicitudes-page .solicitudes-id {
   font-weight: 600;
   color: var(--color-primary);
   font-size: 0.9rem;
 }
 
-.solicitudes-mascota {
+.solicitudes-page .solicitudes-mascota {
   font-weight: 500;
   color: var(--color-text);
   font-size: 0.9rem;
@@ -113,12 +129,12 @@
   gap: 0.5rem;
 }
 
-.solicitudes-mascota i {
+.solicitudes-page .solicitudes-mascota i {
   color: var(--color-primary);
   font-size: 0.85rem;
 }
 
-.solicitudes-fecha {
+.solicitudes-page .solicitudes-fecha {
   font-size: 0.85rem;
   color: var(--color-text-muted);
   display: flex;
@@ -126,19 +142,19 @@
   gap: 0.3rem;
 }
 
-.solicitudes-fecha i {
+.solicitudes-page .solicitudes-fecha i {
   font-size: 0.7rem;
 }
 
 /* ===== ACCIONES ===== */
-.solicitudes-acciones {
+.solicitudes-page .solicitudes-acciones {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-.solicitudes-detalle-btn {
+.solicitudes-page .solicitudes-detalle-btn {
   background: none;
   border: none;
   color: var(--color-text-muted);
@@ -153,12 +169,12 @@
   white-space: nowrap;
 }
 
-.solicitudes-detalle-btn:hover {
+.solicitudes-page .solicitudes-detalle-btn:hover {
   color: var(--color-primary);
   background: var(--color-hover);
 }
 
-.solicitudes-pdf-btn {
+.solicitudes-page .solicitudes-pdf-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -177,16 +193,16 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-pdf-btn:hover {
+.solicitudes-page .solicitudes-pdf-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-pdf-btn i {
+.solicitudes-page .solicitudes-pdf-btn i {
   font-size: 0.7rem;
 }
 
-.solicitudes-pdf-btn .fa-spinner {
+.solicitudes-page .solicitudes-pdf-btn .fa-spinner {
   animation: solicitudesSpin 1s linear infinite;
 }
 
@@ -194,7 +210,7 @@
   to { transform: rotate(360deg); }
 }
 
-.solicitudes-pdf-error {
+.solicitudes-page .solicitudes-pdf-error {
   background: rgba(239, 68, 68, 0.15);
   color: var(--color-danger);
   padding: 0.4rem 0.8rem;
@@ -208,7 +224,7 @@
 }
 
 /* ===== ESTADO BADGE ===== */
-.solicitudes-estado {
+.solicitudes-page .solicitudes-estado {
   padding: 0.3rem 0.8rem;
   border-radius: var(--radius-sm);
   font-size: 0.7rem;
@@ -220,58 +236,58 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-estado i {
+.solicitudes-page .solicitudes-estado i {
   font-size: 0.65rem;
 }
 
-.solicitudes-estado.pendiente {
+.solicitudes-page .solicitudes-estado.pendiente {
   background: #fff3cd;
   color: #856404;
 }
 
-.solicitudes-estado.en_revision {
+.solicitudes-page .solicitudes-estado.en_revision {
   background: #d1ecf1;
   color: #0c5460;
 }
 
-.solicitudes-estado.aprobada {
+.solicitudes-page .solicitudes-estado.aprobada {
   background: #d4edda;
   color: #155724;
 }
 
-.solicitudes-estado.rechazada {
+.solicitudes-page .solicitudes-estado.rechazada {
   background: #f8d7da;
   color: #721c24;
 }
 
-.solicitudes-estado.completada {
+.solicitudes-page .solicitudes-estado.completada {
   background: #cce5ff;
   color: #004085;
 }
 
 /* ===== DETALLE DESPLEGABLE ===== */
-.solicitudes-detalle {
+.solicitudes-page .solicitudes-detalle {
   display: none;
   background: var(--form-input-bg);
   padding: 1rem 1rem;
   border-top: 1px solid var(--color-border);
 }
 
-.solicitudes-detalle.abierto {
+.solicitudes-page .solicitudes-detalle.abierto {
   display: block;
 }
 
-.solicitudes-detalle-grid {
+.solicitudes-page .solicitudes-detalle-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.solicitudes-detalle-item {
+.solicitudes-page .solicitudes-detalle-item {
   margin-bottom: 0;
 }
 
-.solicitudes-detalle-item label {
+.solicitudes-page .solicitudes-detalle-item label {
   display: block;
   font-size: 0.65rem;
   font-weight: 600;
@@ -281,7 +297,7 @@
   margin-bottom: 0.25rem;
 }
 
-.solicitudes-detalle-item p {
+.solicitudes-page .solicitudes-detalle-item p {
   margin: 0;
   font-size: 0.85rem;
   color: var(--color-text);
@@ -289,7 +305,7 @@
   word-break: break-word;
 }
 
-.solicitudes-mensaje {
+.solicitudes-page .solicitudes-mensaje {
   background: var(--color-card-bg);
   padding: 0.5rem 0.8rem;
   border-radius: var(--radius-sm);
@@ -297,7 +313,7 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-rechazo {
+.solicitudes-page .solicitudes-rechazo {
   border-left-color: var(--color-danger);
   color: var(--color-danger);
   background: var(--color-card-bg);
@@ -306,7 +322,7 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-notas {
+.solicitudes-page .solicitudes-notas {
   border-left-color: var(--color-accent);
   color: var(--color-accent);
   background: var(--color-card-bg);
@@ -316,7 +332,7 @@
 }
 
 /* ===== PAGINACIÓN ===== */
-.solicitudes-pagination {
+.solicitudes-page .solicitudes-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -325,7 +341,7 @@
   flex-wrap: wrap;
 }
 
-.solicitudes-pagination-btn {
+.solicitudes-page .solicitudes-pagination-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -343,7 +359,7 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-pagination-btn:hover:not(:disabled) {
+.solicitudes-page .solicitudes-pagination-btn:hover:not(:disabled) {
   background: var(--color-primary);
   border-color: var(--color-primary);
   color: white;
@@ -351,24 +367,24 @@
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-pagination-btn.active {
+.solicitudes-page .solicitudes-pagination-btn.active {
   background: var(--gradient-primary);
   border-color: transparent;
   color: white;
 }
 
-.solicitudes-pagination-btn:disabled {
+.solicitudes-page .solicitudes-pagination-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.solicitudes-pagination-dots {
+.solicitudes-page .solicitudes-pagination-dots {
   padding: 0 0.3rem;
   color: var(--color-text-muted);
 }
 
 /* ===== ESTADOS VACÍO Y ERROR ===== */
-.solicitudes-vacio {
+.solicitudes-page .solicitudes-vacio {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--color-card-bg);
@@ -377,26 +393,26 @@
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-vacio i {
+.solicitudes-page .solicitudes-vacio i {
   font-size: 3.5rem;
   color: var(--color-primary);
   opacity: 0.6;
   margin-bottom: 1rem;
 }
 
-.solicitudes-vacio h2 {
+.solicitudes-page .solicitudes-vacio h2 {
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
   color: var(--color-text);
 }
 
-.solicitudes-vacio p {
+.solicitudes-page .solicitudes-vacio p {
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
   color: var(--color-text-muted);
 }
 
-.solicitudes-vacio-btn {
+.solicitudes-page .solicitudes-vacio-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -412,12 +428,12 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-vacio-btn:hover {
+.solicitudes-page .solicitudes-vacio-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-error {
+.solicitudes-page .solicitudes-error {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--color-card-bg);
@@ -428,34 +444,34 @@
   margin: 0 auto;
 }
 
-.solicitudes-error i {
+.solicitudes-page .solicitudes-error i {
   font-size: 3.5rem;
   color: var(--color-danger);
   margin-bottom: 1rem;
   opacity: 0.6;
 }
 
-.solicitudes-error h2 {
+.solicitudes-page .solicitudes-error h2 {
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
   color: var(--color-text);
 }
 
-.solicitudes-error p {
+.solicitudes-page .solicitudes-error p {
   font-size: 0.9rem;
   margin-bottom: 1.5rem;
   color: var(--color-text-muted);
 }
 
-.solicitudes-error-actions {
+.solicitudes-page .solicitudes-error-actions {
   display: flex;
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.solicitudes-retry-btn,
-.solicitudes-mascotas-btn {
+.solicitudes-page .solicitudes-retry-btn,
+.solicitudes-page .solicitudes-mascotas-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -470,166 +486,180 @@
   box-shadow: var(--shadow-hard-sm);
 }
 
-.solicitudes-retry-btn {
+.solicitudes-page .solicitudes-retry-btn {
   background: var(--gradient-primary);
   color: white;
   border: none;
 }
 
-.solicitudes-mascotas-btn {
+.solicitudes-page .solicitudes-mascotas-btn {
   background: transparent;
   color: var(--color-accent);
   border: 2px solid var(--color-accent);
 }
 
-.solicitudes-retry-btn:hover,
-.solicitudes-mascotas-btn:hover {
+.solicitudes-page .solicitudes-retry-btn:hover,
+.solicitudes-page .solicitudes-mascotas-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-.solicitudes-loading {
+.solicitudes-page .solicitudes-loading {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 400px;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 1024px) {
-  .solicitudes-table-header,
-  .solicitudes-row {
+  .solicitudes-page .solicitudes-wrapper {
+    padding: 0 16px;
+  }
+  
+  .solicitudes-page .solicitudes-table-header,
+  .solicitudes-page .solicitudes-row {
     grid-template-columns: 60px 1.5fr 0.8fr 120px 1fr;
     padding: 0.6rem 0.8rem;
   }
   
-  .solicitudes-mascota {
+  .solicitudes-page .solicitudes-mascota {
     font-size: 0.8rem;
   }
   
-  .solicitudes-fecha {
+  .solicitudes-page .solicitudes-fecha {
     font-size: 0.75rem;
   }
   
-  .solicitudes-detalle-btn,
-  .solicitudes-pdf-btn {
+  .solicitudes-page .solicitudes-detalle-btn,
+  .solicitudes-page .solicitudes-pdf-btn {
     padding: 0.3rem 0.6rem;
     font-size: 0.65rem;
   }
 }
 
 @media (max-width: 900px) {
-  .solicitudes-table-container {
+  .solicitudes-page .solicitudes-table-container {
     overflow-x: auto;
   }
   
-  .solicitudes-table-header,
-  .solicitudes-row {
+  .solicitudes-page .solicitudes-table-header,
+  .solicitudes-page .solicitudes-row {
     min-width: 700px;
   }
 }
 
 @media (max-width: 768px) {
-  .solicitudes-page {
-    padding: 0 16px;
+  .solicitudes-page .solicitudes-wrapper {
+    padding: 0 12px;
   }
   
-  .solicitudes-header {
-    padding: 40px 0 20px;
+  .solicitudes-page .solicitudes-banner-wrapper {
+    margin-bottom: 20px;
+  }
+  
+  .solicitudes-page .solicitudes-header {
+    padding: 30px 0 20px;
   }
 
-  .solicitudes-header h1 {
+  .solicitudes-page .solicitudes-header h1 {
     font-size: 1.8rem;
   }
 
-  .solicitudes-header p {
+  .solicitudes-page .solicitudes-header p {
     font-size: 0.9rem;
   }
   
-  .solicitudes-detalle-grid {
+  .solicitudes-page .solicitudes-detalle-grid {
     grid-template-columns: 1fr;
   }
   
-  .solicitudes-error-actions {
+  .solicitudes-page .solicitudes-error-actions {
     flex-direction: column;
   }
   
-  .solicitudes-retry-btn,
-  .solicitudes-mascotas-btn {
+  .solicitudes-page .solicitudes-retry-btn,
+  .solicitudes-page .solicitudes-mascotas-btn {
     width: 100%;
     justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .solicitudes-page {
-    padding: 0 12px;
+  .solicitudes-page .solicitudes-wrapper {
+    padding: 0 8px;
   }
   
-  .solicitudes-acciones {
+  .solicitudes-page .solicitudes-acciones {
     flex-direction: column;
     align-items: flex-start;
   }
 }
 
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .solicitudes-table {
+/* ============================================
+   MODO OSCURO
+   ============================================ */
+
+[data-theme="dark"] .solicitudes-page .solicitudes-table {
   background: #1e293b;
 }
 
-[data-theme="dark"] .solicitudes-table-header {
+[data-theme="dark"] .solicitudes-page .solicitudes-table-header {
   background: #0f172a;
 }
 
-[data-theme="dark"] .solicitudes-row:hover {
+[data-theme="dark"] .solicitudes-page .solicitudes-row:hover {
   background: rgba(255, 255, 255, 0.03);
 }
 
-[data-theme="dark"] .solicitudes-detalle {
+[data-theme="dark"] .solicitudes-page .solicitudes-detalle {
   background: #0f172a;
 }
 
-[data-theme="dark"] .solicitudes-mensaje,
-[data-theme="dark"] .solicitudes-rechazo,
-[data-theme="dark"] .solicitudes-notas {
+[data-theme="dark"] .solicitudes-page .solicitudes-mensaje,
+[data-theme="dark"] .solicitudes-page .solicitudes-rechazo,
+[data-theme="dark"] .solicitudes-page .solicitudes-notas {
   background: #1e293b;
 }
 
-[data-theme="dark"] .solicitudes-pdf-btn {
+[data-theme="dark"] .solicitudes-page .solicitudes-pdf-btn {
   background: var(--gradient-primary);
 }
 
-[data-theme="dark"] .solicitudes-vacio,
-[data-theme="dark"] .solicitudes-error {
+[data-theme="dark"] .solicitudes-page .solicitudes-vacio,
+[data-theme="dark"] .solicitudes-page .solicitudes-error {
   background: #1e293b;
   border-color: #334155;
 }
 
-[data-theme="dark"] .solicitudes-detalle-btn:hover {
+[data-theme="dark"] .solicitudes-page .solicitudes-detalle-btn:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme="dark"] .solicitudes-estado.pendiente {
+[data-theme="dark"] .solicitudes-page .solicitudes-estado.pendiente {
   background: rgba(133, 100, 4, 0.2);
   color: #ffd966;
 }
 
-[data-theme="dark"] .solicitudes-estado.en_revision {
+[data-theme="dark"] .solicitudes-page .solicitudes-estado.en_revision {
   background: rgba(12, 84, 96, 0.2);
   color: #5bc0de;
 }
 
-[data-theme="dark"] .solicitudes-estado.aprobada {
+[data-theme="dark"] .solicitudes-page .solicitudes-estado.aprobada {
   background: rgba(21, 87, 36, 0.2);
   color: #75b798;
 }
 
-[data-theme="dark"] .solicitudes-estado.rechazada {
+[data-theme="dark"] .solicitudes-page .solicitudes-estado.rechazada {
   background: rgba(114, 28, 36, 0.2);
   color: #ea868f;
 }
 
-[data-theme="dark"] .solicitudes-estado.completada {
+[data-theme="dark"] .solicitudes-page .solicitudes-estado.completada {
   background: rgba(0, 64, 133, 0.2);
   color: #6ea8fe;
 }

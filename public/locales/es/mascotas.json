@@ -241,5 +241,29 @@
   "apto_con_mascotas": "Apto con otras mascotas",
   "no_apto_con_mascotas": "No apto con otras mascotas",
   "actualizado": "Actualizado",
-  "nombre": "Nombre"
+  "nombre": "Nombre",
+  "estado_en_adopcion": "En adopción",
+  "estado_adoptado": "Adoptado",
+  "estado_rescatada": "Rescatada",
+  "estado_en_acogida": "En acogida",
+  "estado_pendiente": "Pendiente",
+  "estado_en_progreso": "En progreso",
+  "estado_completado": "Completado",
+  "estado_aprobada": "Aprobada",
+  "estado_rechazada": "Rechazada",
+  "estado_en_proceso": "En proceso",
+  
+  "tipo_seguimiento_virtual": "Virtual",
+  "tipo_seguimiento_domiciliario": "Domiciliario",
+  "tipo_seguimiento_telefonico": "Telefónico",
+  
+  "resultado_satisfactorio": "Satisfactorio",
+  "resultado_observaciones": "Con observaciones",
+  "resultado_incumplimiento": "Incumplimiento",
+  "resultado_reingreso": "Reingreso",
+  
+  "estado_mascota_excelente": "Excelente",
+  "estado_mascota_bueno": "Bueno",
+  "estado_mascota_regular": "Regular",
+  "estado_mascota_preocupante": "Preocupante"
 }

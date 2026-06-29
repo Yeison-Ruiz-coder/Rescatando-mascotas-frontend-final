@@ -2,7 +2,7 @@
   "titulo": "Pets for Adoption",
   "subtitulo": "Find your new best friend",
   "mensaje_bienvenida": "We have {{total}} pets waiting for a home",
-  
+
   "especie": "Species",
   "todas_especies": "All species",
   "perro": "Dog",
@@ -17,11 +17,11 @@
   "todos_generos": "All",
   "macho": "Male",
   "hembra": "Female",
-  
+
   "edad_min": "Min age",
   "edad_max": "Max age",
   "edad_años": "{{edad}} years",
-  
+
   "ordenar_por": "Sort by",
   "mas_recientes": "Most recent",
   "nombre_asc": "Name (A-Z)",
@@ -30,10 +30,10 @@
   "edad_menor": "Age (youngest first)",
   "edad_desc": "Age (oldest first)",
   "edad_mayor": "Age (oldest first)",
-  
+
   "aplicar_filtros": "Apply filters",
   "limpiar_filtros": "Clear",
-  
+
   "mostrando": "Showing",
   "de": "of",
   "mascotas": "pets",
@@ -52,14 +52,14 @@
   "tamano": "Size",
   "seleccionar_tamano": "Select size",
   "1_año": "1 year",
-  
+
   "sin_resultados": "No pets found",
   "sin_resultados_desc": "Try different filters or clear the search",
-  
+
   "cargando": "Loading pets...",
   "error_carga": "Error loading pets",
   "reintentar": "Retry",
-  
+
   "conocer_mas": "Learn more",
   "adoptar": "Adopt",
   "rescatado_por": "Rescued by",
@@ -241,5 +241,29 @@
   "apto_con_mascotas": "Good with other pets",
   "no_apto_con_mascotas": "Not good with other pets",
   "actualizado": "Updated",
-  "nombre": "Name"
+  "nombre": "Name",
+  "estado_en_adopcion": "For adoption",
+  "estado_adoptado": "Adopted",
+  "estado_rescatada": "Rescued",
+  "estado_en_acogida": "In foster care",
+  "estado_pendiente": "Pending",
+  "estado_en_progreso": "In progress",
+  "estado_completado": "Completed",
+  "estado_aprobada": "Approved",
+  "estado_rechazada": "Rejected",
+  "estado_en_proceso": "In process",
+
+  "tipo_seguimiento_virtual": "Virtual",
+  "tipo_seguimiento_domiciliario": "Home visit",
+  "tipo_seguimiento_telefonico": "Phone call",
+
+  "resultado_satisfactorio": "Satisfactory",
+  "resultado_observaciones": "With observations",
+  "resultado_incumplimiento": "Non-compliance",
+  "resultado_reingreso": "Re-entry",
+
+  "estado_mascota_excelente": "Excellent",
+  "estado_mascota_bueno": "Good",
+  "estado_mascota_regular": "Regular",
+  "estado_mascota_preocupante": "Concerning"
 }

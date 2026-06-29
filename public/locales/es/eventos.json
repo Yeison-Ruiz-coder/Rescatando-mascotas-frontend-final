@@ -227,7 +227,7 @@
   "likes_contador": "{{count}} likes",
   "asistentes_contador": "{{count}} asistentes",
   "evento_global_badge": "🌍 Evento Global",
-  "evento_fundacion_badge": " Evento de Fundación",
+  "evento_fundacion_badge": "🏠 Evento de Fundación",
   "eliminando": "Eliminando...",
   "mensaje_motivacional_titulo": "Participa y ayuda a cambiar vidas",
   "mensaje_motivacional_texto": "Los eventos son una gran oportunidad para conocer, aprender y contribuir al bienestar de los animales. ¡No te los pierdas!",
@@ -247,9 +247,29 @@
   "editando_evento": "Editando evento",
   "solo_numeros": "Solo números (ej: 15000)",
   "banner": {
-    "titulo": "{{count}} eventos gestionados"
+    "titulo": "{{count}} eventos gestionados",
+    "titulo_calendario": "Calendario de Eventos · {{count}} eventos este mes",
+    "titulo_show": "Evento: {{nombre}}"
   },
   "ver_detalle": "Ver detalle",
   "evento_eliminado": "Evento eliminado correctamente",
-  "error_delete": "Error al eliminar el evento"
+  "error_delete": "Error al eliminar el evento",
+
+  "stats": {
+    "total": "Total eventos",
+    "registrados": "Registrados",
+    "proximos": "Próximos",
+    "por_venir": "Por venir",
+    "pasados": "Pasados",
+    "finalizados": "Finalizados",
+    "este_mes": "Eventos este mes",
+    "activos": "Activos",
+    "dias_con_eventos": "Días con eventos",
+    "dias": "Días",
+    "total_asistentes": "Total asistentes",
+    "personas": "Personas"
+  },
+
+  "loading": "Cargando calendario...",
+  "error_title": "Error al cargar el calendario"
 }

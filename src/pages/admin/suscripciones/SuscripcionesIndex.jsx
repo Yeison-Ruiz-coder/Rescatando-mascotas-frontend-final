@@ -1,6 +1,7 @@
 // src/pages/admin/suscripciones/SuscripcionesIndex.jsx
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { suscripcionService } from '../../../services/suscripcionService';
 import { toast } from 'react-toastify';
 import './SuscripcionesIndex.css';
@@ -29,20 +30,30 @@ const AdminSuscripcionesIndex = () => {
       console.log('📊 Respuesta completa:', response);
       
       let suscripcionesData = [];
+      let paginationData = {
+        current_page: 1,
+        total: 0,
+        per_page: 15,
+        last_page: 1
+      };
       
-      if (response?.data && Array.isArray(response.data)) {
-        suscripcionesData = response.data;
+      if (response?.data?.data) {
+        suscripcionesData = response.data.data;
+        if (response.data.pagination) {
+          paginationData = response.data.pagination;
+        }
         console.log(`✅ ${suscripcionesData.length} suscripciones cargadas`);
+      } else if (response?.data) {
+        suscripcionesData = response.data;
+      } else if (Array.isArray(response)) {
+        suscripcionesData = response;
       } else {
         console.warn('⚠️ No se encontró un array en la respuesta');
         suscripcionesData = [];
       }
       
-      if (response?.pagination) {
-        setPagination(response.pagination);
-      }
-      
       setSuscripciones(suscripcionesData);
+      setPagination(paginationData);
       
     } catch (error) {
       console.error('❌ Error al cargar suscripciones:', error);
@@ -57,7 +68,6 @@ const AdminSuscripcionesIndex = () => {
     cargarSuscripciones();
   }, []);
 
-  // ✅ Función para CANCELAR suscripción (ADMIN)
   const handleCancelar = async (id) => {
     if (!window.confirm('¿Estás seguro de cancelar esta suscripción?')) {
       return;
@@ -68,12 +78,10 @@ const AdminSuscripcionesIndex = () => {
     try {
       console.log(`🗑️ Admin cancelando suscripción ${id}`);
       
-      // ✅ USAR EL MÉTODO DE ADMIN, NO EL DE USUARIO
       await suscripcionService.cancelarSuscripcionAdmin(id);
       
       toast.success('✅ Suscripción cancelada exitosamente');
       
-      // ✅ Recargar la lista
       await cargarSuscripciones();
       
     } catch (error) {
@@ -84,7 +92,6 @@ const AdminSuscripcionesIndex = () => {
     }
   };
 
-  // ✅ Función para REACTIVAR suscripción (ADMIN)
   const handleReactivar = async (id) => {
     if (!window.confirm('¿Estás seguro de reactivar esta suscripción?')) {
       return;
@@ -95,12 +102,10 @@ const AdminSuscripcionesIndex = () => {
     try {
       console.log(`🔄 Admin reactivando suscripción ${id}`);
       
-      // ✅ USAR EL MÉTODO DE ADMIN
       await suscripcionService.actualizarSuscripcionAdmin(id, { estado: 'activo' });
       
       toast.success('✅ Suscripción reactivada exitosamente');
       
-      // ✅ Recargar la lista
       await cargarSuscripciones();
       
     } catch (error) {
@@ -111,7 +116,6 @@ const AdminSuscripcionesIndex = () => {
     }
   };
 
-  // ✅ Función para PAUSAR suscripción (ADMIN)
   const handlePausar = async (id) => {
     if (!window.confirm('¿Estás seguro de pausar esta suscripción?')) {
       return;
@@ -122,17 +126,39 @@ const AdminSuscripcionesIndex = () => {
     try {
       console.log(`⏸️ Admin pausando suscripción ${id}`);
       
-      // ✅ USAR EL MÉTODO DE ADMIN
       await suscripcionService.actualizarSuscripcionAdmin(id, { estado: 'inactivo' });
       
       toast.success('✅ Suscripción pausada exitosamente');
       
-      // ✅ Recargar la lista
       await cargarSuscripciones();
       
     } catch (error) {
       console.error('❌ Error al pausar:', error);
       toast.error(error.message || 'Error al pausar la suscripción');
+    } finally {
+      setActualizando(null);
+    }
+  };
+
+  const handleReanudar = async (id) => {
+    if (!window.confirm('¿Estás seguro de reanudar esta suscripción?')) {
+      return;
+    }
+    
+    setActualizando(id);
+    
+    try {
+      console.log(`▶️ Admin reanudando suscripción ${id}`);
+      
+      await suscripcionService.actualizarSuscripcionAdmin(id, { estado: 'activo' });
+      
+      toast.success('✅ Suscripción reanudada exitosamente');
+      
+      await cargarSuscripciones();
+      
+    } catch (error) {
+      console.error('❌ Error al reanudar:', error);
+      toast.error(error.message || 'Error al reanudar la suscripción');
     } finally {
       setActualizando(null);
     }
@@ -159,7 +185,6 @@ const AdminSuscripcionesIndex = () => {
     );
   }
 
-  // ✅ Calcular estadísticas
   const suscripcionesActivas = Array.isArray(suscripciones) 
     ? suscripciones.filter(s => s.estado?.toLowerCase() === 'activo')
     : [];
@@ -248,6 +273,26 @@ const AdminSuscripcionesIndex = () => {
                         : 'N/A'}
                     </td>
                     <td>
+                      {/* ✅ BOTÓN VER DETALLE */}
+                      <Link
+                        to={`/admin/suscripciones/${suscripcion.id}`}
+                        className="btn-ver"
+                        style={{
+                          padding: '4px 10px',
+                          background: '#007bff',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          marginRight: '4px',
+                          textDecoration: 'none',
+                          display: 'inline-block'
+                        }}
+                      >
+                        👁️ Ver
+                      </Link>
+                      
                       {/* Botón Cancelar - Solo para activas y pendientes */}
                       {(estado === 'activo' || estado === 'pendiente') && (
                         <button
@@ -298,7 +343,7 @@ const AdminSuscripcionesIndex = () => {
                       {estado === 'inactivo' && (
                         <button
                           className="btn-reactivar"
-                          onClick={() => handleReactivar(suscripcion.id)}
+                          onClick={() => handleReanudar(suscripcion.id)}
                           disabled={estaActualizando}
                           style={{ marginLeft: '5px' }}
                         >

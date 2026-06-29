@@ -5,7 +5,7 @@ import { suscripcionService } from '../../../services/suscripcionService';
 import { toast } from 'react-toastify';
 import './SuscripcionesEstado.css';
 
-// ✅ Funciones de formato FUERA del componente
+// ✅ Funciones de formato
 const formatCurrency = (value) => {
   const num = typeof value === 'number' ? value : parseFloat(value) || 0;
   return new Intl.NumberFormat('es-CO', {
@@ -33,8 +33,14 @@ const SuscripcionesEstado = () => {
       
       console.log('📊 Cargando estadísticas completas...');
       
-      const stats = await suscripcionService.getEstadisticasCompletas();
-      console.log('📊 Estadísticas:', stats);
+      const response = await suscripcionService.getEstadisticasCompletas();
+      console.log('📊 Respuesta estadísticas:', response);
+      
+      // ✅ Extraer los datos correctamente
+      let stats = response;
+      if (response?.data) {
+        stats = response.data;
+      }
       
       setEstadisticas(stats);
       
@@ -108,9 +114,9 @@ const SuscripcionesEstado = () => {
           <div className="stat-icon">🟢</div>
           <div className="stat-content">
             <span className="stat-label">Activas</span>
-            <span className="stat-value">{formatNumber(por_estado.activas)}</span>
+            <span className="stat-value">{formatNumber(por_estado?.activas || 0)}</span>
             <span className="stat-percent">
-              {estadisticas.total > 0 ? Math.round((por_estado.activas / estadisticas.total) * 100) : 0}%
+              {estadisticas.total > 0 ? Math.round((por_estado?.activas || 0) / estadisticas.total * 100) : 0}%
             </span>
           </div>
         </div>
@@ -119,9 +125,9 @@ const SuscripcionesEstado = () => {
           <div className="stat-icon">⏳</div>
           <div className="stat-content">
             <span className="stat-label">Pendientes</span>
-            <span className="stat-value">{formatNumber(por_estado.pendientes)}</span>
+            <span className="stat-value">{formatNumber(por_estado?.pendientes || 0)}</span>
             <span className="stat-percent">
-              {estadisticas.total > 0 ? Math.round((por_estado.pendientes / estadisticas.total) * 100) : 0}%
+              {estadisticas.total > 0 ? Math.round((por_estado?.pendientes || 0) / estadisticas.total * 100) : 0}%
             </span>
           </div>
         </div>
@@ -130,9 +136,9 @@ const SuscripcionesEstado = () => {
           <div className="stat-icon">❌</div>
           <div className="stat-content">
             <span className="stat-label">Canceladas</span>
-            <span className="stat-value">{formatNumber(por_estado.canceladas)}</span>
+            <span className="stat-value">{formatNumber(por_estado?.canceladas || 0)}</span>
             <span className="stat-percent">
-              {estadisticas.total > 0 ? Math.round((por_estado.canceladas / estadisticas.total) * 100) : 0}%
+              {estadisticas.total > 0 ? Math.round((por_estado?.canceladas || 0) / estadisticas.total * 100) : 0}%
             </span>
           </div>
         </div>
@@ -189,8 +195,8 @@ const SuscripcionesEstado = () => {
       <div className="chart-container">
         <h2 className="section-title">📈 Distribución Mensual</h2>
         <div className="chart-bars">
-          {distribucion_mensual.map((item) => {
-            const maxValor = Math.max(...distribucion_mensual.map(d => d.valor));
+          {(distribucion_mensual || []).map((item) => {
+            const maxValor = Math.max(...(distribucion_mensual || []).map(d => d.valor));
             const altura = maxValor > 0 ? (item.valor / maxValor) * 100 : 0;
             
             return (
@@ -211,7 +217,7 @@ const SuscripcionesEstado = () => {
       </div>
 
       {/* Top mascotas */}
-      {top_mascotas.length > 0 && (
+      {(top_mascotas || []).length > 0 && (
         <div className="top-container">
           <h2 className="section-title">🐾 Top Mascotas</h2>
           <div className="table-container">
@@ -248,7 +254,7 @@ const SuscripcionesEstado = () => {
       )}
 
       {/* Top usuarios */}
-      {top_usuarios.length > 0 && (
+      {(top_usuarios || []).length > 0 && (
         <div className="top-container">
           <h2 className="section-title">👤 Top Usuarios</h2>
           <div className="table-container">

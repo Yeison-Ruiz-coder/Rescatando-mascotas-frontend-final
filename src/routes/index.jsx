@@ -15,146 +15,271 @@ import AdminRoute from "./AdminRoute";
 import VeterinariaRoute from "./VeterinariaRoute";
 import FundacionRoute from "./FundacionRoute";
 
-const ForgotPassword = lazy(() => import("../pages/public/ForgotPassword/ForgotPassword"));
-const ResetPassword = lazy(() => import("../pages/public/ResetPassword/ResetPassword"));
+const ForgotPassword = lazy(
+  () => import("../pages/public/ForgotPassword/ForgotPassword"),
+);
+const ResetPassword = lazy(
+  () => import("../pages/public/ResetPassword/ResetPassword"),
+);
 
 // =============================================================
 // PÁGINAS PÚBLICAS
 // =============================================================
 const Home = lazy(() => import("../pages/public/Home/Home"));
 const Login = lazy(() => import("../pages/public/Login/Login"));
-const MascotaDetalle = lazy(() => import("../pages/public/Mascotas/MascotaDetalle"));
+const MascotaDetalle = lazy(
+  () => import("../pages/public/Mascotas/MascotaDetalle"),
+);
 const Register = lazy(() => import("../pages/public/Register/Register"));
 const Mascotas = lazy(() => import("../pages/public/Mascotas/Mascotas"));
 const Donaciones = lazy(() => import("../pages/public/Donaciones/Donaciones"));
 const Tienda = lazy(() => import("../pages/public/Tienda/Tienda"));
-const SolicitarAdopcion = lazy(() => import("../pages/public/SolicitarAdopcion/SolicitarAdopcion"));
-const SolicitudExitosa = lazy(() => import("../pages/public/SolicitarAdopcion/SolicitudExitosa"));
-const Veterinarias = lazy(() => import("../pages/public/Veterinarias/Veterinarias"));
-const VeterinariaDetalle = lazy(() => import("../pages/public/Veterinarias/VeterinariaDetalle"));
-const ReportarRescate = lazy(() => import("../pages/public/ReportarRescate/ReportarRescate"));
-const FundacionesIndex = lazy(() => import("../pages/public/Fundaciones/FundacionesIndex"));
-const FundacionDetalle = lazy(() => import("../pages/public/Fundaciones/FundacionDetalle"));
-const PublicEventosIndex = lazy(() => import("../pages/public/Eventos/EventosPublicIndex"));
-const PublicEventosShow = lazy(() => import("../pages/public/Eventos/EventosPublicShow"));
-const SuscripcionesPublicIndex = lazy(() => import("../pages/public/Suscripciones/SuscripcionesPublicIndex"));
+const SolicitarAdopcion = lazy(
+  () => import("../pages/public/SolicitarAdopcion/SolicitarAdopcion"),
+);
+const SolicitudExitosa = lazy(
+  () => import("../pages/public/SolicitarAdopcion/SolicitudExitosa"),
+);
+const Veterinarias = lazy(
+  () => import("../pages/public/Veterinarias/Veterinarias"),
+);
+const VeterinariaDetalle = lazy(
+  () => import("../pages/public/Veterinarias/VeterinariaDetalle"),
+);
+const ReportarRescate = lazy(
+  () => import("../pages/public/ReportarRescate/ReportarRescate"),
+);
+const FundacionesIndex = lazy(
+  () => import("../pages/public/Fundaciones/FundacionesIndex"),
+);
+const FundacionDetalle = lazy(
+  () => import("../pages/public/Fundaciones/FundacionDetalle"),
+);
+const PublicEventosIndex = lazy(
+  () => import("../pages/public/Eventos/EventosPublicIndex"),
+);
+const PublicEventosShow = lazy(
+  () => import("../pages/public/Eventos/EventosPublicShow"),
+);
+const SuscripcionesPublicIndex = lazy(
+  () => import("../pages/public/Suscripciones/SuscripcionesPublicIndex"),
+);
 
 // =============================================================
 // PÁGINAS DE USUARIO
 // =============================================================
 const Solicitudes = lazy(() => import("../pages/user/Solicitudes/Solicitudes"));
 const UserProfile = lazy(() => import("../pages/user/perfil/UserProfile"));
-const UserSuscripciones = lazy(() => import("../pages/user/MisSuscripciones"));
-const UserDashboard = lazy(() => import("../pages/user/PanelUsuario/PanelUsuario"));
+const UserSuscripciones = lazy(
+  () => import("../pages/user/MisSuscripciones/MisSuscripciones"),
+);
+const UserDashboard = lazy(
+  () => import("../pages/user/PanelUsuario/PanelUsuario"),
+);
 
 // =============================================================
 // PÁGINAS ADMIN
 // =============================================================
 const Dashboard = lazy(() => import("../pages/admin/Dashboard/Dashboard"));
-const UsuariosPendientes = lazy(() => import("../pages/admin/Usuarios/UsuariosPendientes"));
+const UsuariosPendientes = lazy(
+  () => import("../pages/admin/Usuarios/UsuariosPendientes"),
+);
 const UsuariosList = lazy(() => import("../pages/admin/Usuarios/UsuariosList"));
-const UsuariosFundaciones = lazy(() => import("../pages/admin/Usuarios/UsuariosFundaciones"));
-const UsuariosVeterinarias = lazy(() => import("../pages/admin/Usuarios/UsuariosVeterinarias"));
+const UsuariosFundaciones = lazy(
+  () => import("../pages/admin/Usuarios/UsuariosFundaciones"),
+);
+const UsuariosVeterinarias = lazy(
+  () => import("../pages/admin/Usuarios/UsuariosVeterinarias"),
+);
 const UsuarioForm = lazy(() => import("../pages/admin/Usuarios/UsuarioForm"));
-const UsuarioDetail = lazy(() => import("../pages/admin/Usuarios/UsuarioDetail"));
+const UsuarioDetail = lazy(
+  () => import("../pages/admin/Usuarios/UsuarioDetail"),
+);
 const Contacto = lazy(() => import("../pages/public/Contacto/Contacto"));
-const AdminEventosIndex = lazy(() => import("../pages/admin/eventos/EventosIndex"));
-const AdminEventosCreate = lazy(() => import("../pages/admin/eventos/EventosCreate"));
-const AdminEventosEdit = lazy(() => import("../pages/admin/eventos/EventosEdit"));
-const AdminEventosShow = lazy(() => import("../pages/admin/eventos/EventosShow"));
-const AdminSuscripcionesIndex = lazy(() => import("../pages/admin/suscripciones/SuscripcionesIndex"));
-const AdminSuscripcionesCreate = lazy(() => import("../pages/admin/suscripciones/SuscripcionesCreate"));
-const AdminSuscripcionesEdit = lazy(() => import("../pages/admin/suscripciones/SuscripcionesEdit"));
-const AdminSuscripcionesShow = lazy(() => import("../pages/admin/suscripciones/SuscripcionesShow"));
-const AdminSuscripcionesEstado = lazy(() => import("../pages/admin/suscripciones/SuscripcionesEstado"));
-const AdminSuscripcionesReportes = lazy(() => import("../pages/admin/suscripciones/SuscripcionesReportes"));
-const AdminAdopciones = lazy(() => import("../pages/admin/adopciones/AdopcionesIndex"));
-const AdminAdopcionesSolicitudes = lazy(() => import("../pages/admin/adopciones/AdopcionesSolicitudes"));
-const AdminAdopcionesSeguimientos = lazy(() => import("../pages/admin/adopciones/AdopcionesSeguimientos"));
-const AdminDonaciones = lazy(() => import("../pages/admin/donaciones/AdminDonaciones"));
-const AdminRescatesIndex = lazy(() => import("../pages/admin/rescates/RescatesIndex"));
-const AdminRescatesPendientes = lazy(() => import("../pages/admin/rescates/RescatesPendientes"));
-const AdminRescatesMapa = lazy(() => import("../pages/admin/rescates/RescatesMapa"));
-const AdminRescatesShow = lazy(() => import("../pages/admin/rescates/RescatesShow"));
+const AdminEventosIndex = lazy(
+  () => import("../pages/admin/eventos/EventosIndex"),
+);
+const AdminEventosCreate = lazy(
+  () => import("../pages/admin/eventos/EventosCreate"),
+);
+const AdminEventosEdit = lazy(
+  () => import("../pages/admin/eventos/EventosEdit"),
+);
+const AdminEventosShow = lazy(
+  () => import("../pages/admin/eventos/EventosShow"),
+);
+const AdminEventosCalendario = lazy(
+  () => import("../pages/admin/eventos/AdminEventosCalendario"),
+);
+const AdminSuscripcionesIndex = lazy(
+  () => import("../pages/admin/suscripciones/SuscripcionesIndex"),
+);
+const AdminSuscripcionesShow = lazy(
+  () => import("../pages/admin/suscripciones/SuscripcionesShow"),
+);
+const AdminSuscripcionesEstado = lazy(
+  () => import("../pages/admin/suscripciones/SuscripcionesEstado"),
+);
+const AdminAdopciones = lazy(
+  () => import("../pages/admin/adopciones/AdopcionesIndex"),
+);
+const AdminAdopcionesSolicitudes = lazy(
+  () => import("../pages/admin/adopciones/AdopcionesSolicitudes"),
+);
+const AdminAdopcionesSeguimientos = lazy(
+  () => import("../pages/admin/adopciones/AdopcionesSeguimientos"),
+);
+const AdminAdopcionShow = lazy(
+  () => import("../pages/admin/adopciones/AdopcionShow"),
+);
+const AdminSeguimientoShow = lazy(
+  () => import("../pages/admin/adopciones/SeguimientoShow"),
+);
+const AdminDonaciones = lazy(
+  () => import("../pages/admin/donaciones/AdminDonaciones"),
+);
+const AdminRescatesIndex = lazy(
+  () => import("../pages/admin/rescates/RescatesIndex"),
+);
+const AdminRescatesPendientes = lazy(
+  () => import("../pages/admin/rescates/RescatesPendientes"),
+);
+const AdminRescatesMapa = lazy(
+  () => import("../pages/admin/rescates/RescatesMapa"),
+);
+const AdminRescatesShow = lazy(
+  () => import("../pages/admin/rescates/RescatesShow"),
+);
+const AdminMascotas = lazy(() => import("../pages/admin/mascotas/Mascotas"));
+const AdminMascotaDetalle = lazy(
+  () => import("../pages/admin/mascotas/MascotaDetalle"),
+);
+const AdminRazasIndex = lazy(
+  () => import("../pages/admin/catalogos/razas/RazasIndex"),
+);
+const AdminRazaForm = lazy(
+  () => import("../pages/admin/catalogos/razas/RazaForm"),
+);
+const AdminVacunasIndex = lazy(
+  () => import("../pages/admin/catalogos/vacunas/VacunasIndex"),
+);
+const AdminVacunaForm = lazy(
+  () => import("../pages/admin/catalogos/vacunas/VacunaForm"),
+);
 const AdminProfile = lazy(() => import("../pages/admin/perfil/AdminProfile"));
 
 // =============================================================
 // PÁGINAS DE FUNDACIÓN
 // =============================================================
-const FundDashboard = lazy(() => import("../pages/fundacion/dashboard/FundacionDashboard"));
+const FundDashboard = lazy(
+  () => import("../pages/fundacion/dashboard/FundacionDashboard"),
+);
 const FundMascotas = lazy(() => import("../pages/fundacion/mascotas/Mascotas"));
-const CrearMascota = lazy(() => import("../pages/fundacion/mascotas/CrearMascota"));
-const EditarMascota = lazy(() => import("../pages/fundacion/mascotas/EditarMascota"));
-const MascotaDetalleFundacion = lazy(() => import("../pages/fundacion/mascotas/MascotaDetalle"));
-const EventosIndex = lazy(() => import("../pages/fundacion/eventos/EventosIndex"));
-const EventosCreate = lazy(() => import("../pages/fundacion/eventos/EventosCreate"));
-const EventosShow = lazy(() => import("../pages/fundacion/eventos/EventosShowFundacion"));
-const EventosEdit = lazy(() => import("../pages/fundacion/eventos/EventosEdit"));
-const SuscripcionesIndex = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesIndex"));
-const SuscripcionesEdit = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesEdit"));
-const SuscripcionesShow = lazy(() => import("../pages/fundacion/suscripciones/SuscripcionesShow"));
-const RescatesDisponiblesFundacion = lazy(() => import("../pages/fundacion/rescates/RescatesDisponibles"));
-const MisRescatesFundacion = lazy(() => import("../pages/fundacion/rescates/MisRescates"));
-const RescateDetalleFundacion = lazy(() => import("../pages/fundacion/rescates/RescateDetalle"));
-const FundacionProfile = lazy(() => import("../pages/fundacion/perfil/FundacionProfile"));
+const CrearMascota = lazy(
+  () => import("../pages/fundacion/mascotas/CrearMascota"),
+);
+const EditarMascota = lazy(
+  () => import("../pages/fundacion/mascotas/EditarMascota"),
+);
+const MascotaDetalleFundacion = lazy(
+  () => import("../pages/fundacion/mascotas/MascotaDetalle"),
+);
+const EventosIndex = lazy(
+  () => import("../pages/fundacion/eventos/EventosIndex"),
+);
+const EventosCreate = lazy(
+  () => import("../pages/fundacion/eventos/EventosCreate"),
+);
+const EventosShow = lazy(
+  () => import("../pages/fundacion/eventos/EventosShowFundacion"),
+);
+const EventosEdit = lazy(
+  () => import("../pages/fundacion/eventos/EventosEdit"),
+);
+const SuscripcionesIndex = lazy(
+  () => import("../pages/fundacion/suscripciones/SuscripcionesIndex"),
+);
+const SuscripcionesShow = lazy(
+  () => import("../pages/fundacion/suscripciones/SuscripcionesShow"),
+);
+const RescatesDisponiblesFundacion = lazy(
+  () => import("../pages/fundacion/rescates/RescatesDisponibles"),
+);
+const MisRescatesFundacion = lazy(
+  () => import("../pages/fundacion/rescates/MisRescates"),
+);
+const RescateDetalleFundacion = lazy(
+  () => import("../pages/fundacion/rescates/RescateDetalle"),
+);
+const FundacionProfile = lazy(
+  () => import("../pages/fundacion/perfil/FundacionProfile"),
+);
 
-const FundAdopciones = lazy(() => import("../pages/fundacion/adopciones/Adopciones"));
-const FundSolicitudesRecibidas = lazy(() => import("../pages/fundacion/adopciones/Solicitudes"));
-const FundSeguimientos = lazy(() => import("../pages/fundacion/adopciones/Seguimientos"));
-const FundDetalleAdopcion = lazy(() => import("../pages/fundacion/adopciones/DetalleAdopcion"));
-const FundDetalleSeguimiento = lazy(() => import("../pages/fundacion/adopciones/DetalleSeguimiento"));
-const FundCrearSeguimiento = lazy(() => import("../pages/fundacion/adopciones/CrearSeguimiento"));
-const FundEditarSeguimiento = lazy(() => import("../pages/fundacion/adopciones/EditarSeguimiento"));
-const FundSeleccionarAdopcion = lazy(() => import("../pages/fundacion/adopciones/SeleccionarAdopcionParaSeguimiento"));
+const FundAdopciones = lazy(
+  () => import("../pages/fundacion/adopciones/Adopciones"),
+);
+const FundSolicitudesRecibidas = lazy(
+  () => import("../pages/fundacion/adopciones/Solicitudes"),
+);
+const FundSeguimientos = lazy(
+  () => import("../pages/fundacion/adopciones/Seguimientos"),
+);
+const FundDetalleAdopcion = lazy(
+  () => import("../pages/fundacion/adopciones/DetalleAdopcion"),
+);
+const FundDetalleSeguimiento = lazy(
+  () => import("../pages/fundacion/adopciones/DetalleSeguimiento"),
+);
+const FundCrearSeguimiento = lazy(
+  () => import("../pages/fundacion/adopciones/CrearSeguimiento"),
+);
+const FundEditarSeguimiento = lazy(
+  () => import("../pages/fundacion/adopciones/EditarSeguimiento"),
+);
+const FundSeleccionarAdopcion = lazy(
+  () =>
+    import("../pages/fundacion/adopciones/SeleccionarAdopcionParaSeguimiento"),
+);
 
 // =============================================================
 // PÁGINAS DE VETERINARIA
 // =============================================================
-const DashboardVeterinaria = lazy(() => import("../pages/veterinaria/dashboard/DashboardVeterinaria"));
+const DashboardVeterinaria = lazy(
+  () => import("../pages/veterinaria/dashboard/DashboardVeterinaria"),
+);
 const Citas = lazy(() => import("../pages/veterinaria/citas/Citas"));
 const CitaForm = lazy(() => import("../pages/veterinaria/citas/CitaForm"));
-const Pacientes = lazy(() => import("../pages/veterinaria/pacientes/Pacientes"));
-const PacienteForm = lazy(() => import("../pages/veterinaria/pacientes/PacienteForm"));
-const HistorialMedico = lazy(() => import("../pages/veterinaria/historial/HistorialMedico"));
-const VeterinariaSuscripcionesIndex = lazy(() => import("../pages/veterinaria/suscripciones/SuscripcionesIndex"));
-const VeterinariaSuscripcionesShow = lazy(() => import("../pages/veterinaria/suscripciones/SuscripcionesShow"));
-const RescatesDisponiblesVet = lazy(() => import("../pages/veterinaria/rescates/RescatesDisponibles"));
-const MisRescatesVet = lazy(() => import("../pages/veterinaria/rescates/MisRescates"));
-const RescateDetalleVet = lazy(() => import("../pages/veterinaria/rescates/RescateDetalle"));
-const VeterinariaProfile = lazy(() => import("../pages/veterinaria/perfil/VeterinariaProfile"));
+const Pacientes = lazy(
+  () => import("../pages/veterinaria/pacientes/Pacientes"),
+);
+const PacienteForm = lazy(
+  () => import("../pages/veterinaria/pacientes/PacienteForm"),
+);
+const HistorialMedico = lazy(
+  () => import("../pages/veterinaria/historial/HistorialMedico"),
+);
+const VeterinariaSuscripcionesIndex = lazy(
+  () => import("../pages/veterinaria/suscripciones/SuscripcionesIndex"),
+);
+const VeterinariaSuscripcionesShow = lazy(
+  () => import("../pages/veterinaria/suscripciones/SuscripcionesShow"),
+);
+const RescatesDisponiblesVet = lazy(
+  () => import("../pages/veterinaria/rescates/RescatesDisponibles"),
+);
+const MisRescatesVet = lazy(
+  () => import("../pages/veterinaria/rescates/MisRescates"),
+);
+const RescateDetalleVet = lazy(
+  () => import("../pages/veterinaria/rescates/RescateDetalle"),
+);
+const VeterinariaProfile = lazy(
+  () => import("../pages/veterinaria/perfil/VeterinariaProfile"),
+);
 
 // =============================================================
 // PLACEHOLDERS PARA PÁGINAS QUE NO TIENEN AÚN
 // =============================================================
-
-// Admin placeholders
-const AdminMascotas = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Gestión de Mascotas</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
-
-const AdminMascotasNueva = () => (
-  <div
-    style={{
-      color: "#333",
-      padding: "2rem",
-      background: "white",
-      borderRadius: "1rem",
-    }}
-  >
-    <h1>Registrar Nueva Mascota</h1>
-    <p>Próximamente - Página en construcción</p>
-  </div>
-);
 
 const PagePlaceholder = ({
   title,
@@ -330,7 +455,10 @@ const router = createBrowserRouter([
       {
         element: <PublicLayout />,
         children: [
-          { index: true, element: <Navigate to="/user/PanelUsuario" replace /> },
+          {
+            index: true,
+            element: <Navigate to="/user/PanelUsuario" replace />,
+          },
           { path: "PanelUsuario", element: <UserDashboard /> },
           { path: "perfil", element: <UserProfile /> },
           { path: "mis-solicitudes", element: <Solicitudes /> },
@@ -352,11 +480,23 @@ const router = createBrowserRouter([
       {
         element: <VeterinariaLayout />,
         children: [
-          { index: true, element: <Navigate to="/veterinaria/dashboard" replace /> },
+          {
+            index: true,
+            element: <Navigate to="/veterinaria/dashboard" replace />,
+          },
           { path: "dashboard", element: <DashboardVeterinaria /> },
-          { path: "rescates", element: <RescatesDisponiblesVet tipoUsuario="veterinaria" /> },
-          { path: "rescates/disponibles", element: <RescatesDisponiblesVet tipoUsuario="veterinaria" /> },
-          { path: "rescates/mis-rescates", element: <MisRescatesVet tipoUsuario="veterinaria" /> },
+          {
+            path: "rescates",
+            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
+          },
+          {
+            path: "rescates/disponibles",
+            element: <RescatesDisponiblesVet tipoUsuario="veterinaria" />,
+          },
+          {
+            path: "rescates/mis-rescates",
+            element: <MisRescatesVet tipoUsuario="veterinaria" />,
+          },
           { path: "rescates/:id", element: <RescateDetalleVet /> },
           { path: "atenciones", element: <VetAtenciones /> },
           { path: "historiales", element: <VetHistoriales /> },
@@ -373,7 +513,10 @@ const router = createBrowserRouter([
           { path: "reportes", element: <VetReportes /> },
           { path: "perfil", element: <VeterinariaProfile /> },
           { path: "suscripciones", element: <VeterinariaSuscripcionesIndex /> },
-          { path: "suscripciones/:id", element: <VeterinariaSuscripcionesShow /> },
+          {
+            path: "suscripciones/:id",
+            element: <VeterinariaSuscripcionesShow />,
+          },
         ],
       },
     ],
@@ -387,15 +530,27 @@ const router = createBrowserRouter([
       {
         element: <FundacionLayout />,
         children: [
-          { index: true, element: <Navigate to="/fundacion/dashboard" replace /> },
+          {
+            index: true,
+            element: <Navigate to="/fundacion/dashboard" replace />,
+          },
           { path: "dashboard", element: <FundDashboard /> },
           { path: "mascotas", element: <FundMascotas /> },
           { path: "mascotas/nueva", element: <CrearMascota /> },
           { path: "mascotas/:id", element: <MascotaDetalleFundacion /> },
           { path: "mascotas/editar/:id", element: <EditarMascota /> },
-          { path: "rescates", element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" /> },
-          { path: "rescates/disponibles", element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" /> },
-          { path: "rescates/mis-rescates", element: <MisRescatesFundacion tipoUsuario="fundacion" /> },
+          {
+            path: "rescates",
+            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
+          },
+          {
+            path: "rescates/disponibles",
+            element: <RescatesDisponiblesFundacion tipoUsuario="fundacion" />,
+          },
+          {
+            path: "rescates/mis-rescates",
+            element: <MisRescatesFundacion tipoUsuario="fundacion" />,
+          },
           { path: "rescates/:id", element: <RescateDetalleFundacion /> },
           { path: "eventos", element: <EventosIndex /> },
           { path: "eventos/crear", element: <EventosCreate /> },
@@ -403,7 +558,6 @@ const router = createBrowserRouter([
           { path: "eventos/:id/editar", element: <EventosEdit /> },
           { path: "suscripciones", element: <SuscripcionesIndex /> },
           { path: "suscripciones/:id", element: <SuscripcionesShow /> },
-          { path: "suscripciones/:id/editar", element: <SuscripcionesEdit /> },
           { path: "donaciones", element: <FundDonaciones /> },
           { path: "voluntarios", element: <FundVoluntarios /> },
           { path: "reportes", element: <FundReportes /> },
@@ -415,10 +569,19 @@ const router = createBrowserRouter([
               { path: "solicitudes", element: <FundSolicitudesRecibidas /> },
               { path: "seguimientos", element: <FundSeguimientos /> },
               { path: ":id", element: <FundDetalleAdopcion /> },
-              { path: "seguimientos/nuevo", element: <FundSeleccionarAdopcion /> },
+              {
+                path: "seguimientos/nuevo",
+                element: <FundSeleccionarAdopcion />,
+              },
               { path: "seguimientos/:id", element: <FundDetalleSeguimiento /> },
-              { path: "seguimientos/crear/:adopcionId", element: <FundCrearSeguimiento /> },
-              { path: "seguimientos/:id/editar", element: <FundEditarSeguimiento /> },
+              {
+                path: "seguimientos/crear/:adopcionId",
+                element: <FundCrearSeguimiento />,
+              },
+              {
+                path: "seguimientos/:id/editar",
+                element: <FundEditarSeguimiento />,
+              },
             ],
           },
         ],
@@ -449,28 +612,48 @@ const router = createBrowserRouter([
             ],
           },
           { path: "mascotas", element: <AdminMascotas /> },
-          { path: "mascotas/nueva", element: <AdminMascotasNueva /> },
+          { path: "mascotas/:id", element: <AdminMascotaDetalle /> },
+          { path: "catalogos/razas", element: <AdminRazasIndex /> },
+          { path: "catalogos/razas/nueva", element: <AdminRazaForm /> },
+          { path: "catalogos/razas/editar/:id", element: <AdminRazaForm /> },
+          { path: "catalogos/vacunas", element: <AdminVacunasIndex /> },
+          { path: "catalogos/vacunas/nueva", element: <AdminVacunaForm /> },
+          {
+            path: "catalogos/vacunas/editar/:id",
+            element: <AdminVacunaForm />,
+          },
           { path: "rescates", element: <AdminRescatesIndex /> },
           { path: "rescates/pendientes", element: <AdminRescatesPendientes /> },
           { path: "rescates/mapa", element: <AdminRescatesMapa /> },
-          { path: "rescates/show/:id", element: <AdminRescatesShow /> },
-          { path: "eventos", element: <AdminEventosIndex /> },
-          { path: "eventos/crear", element: <AdminEventosCreate /> },
-          { path: "eventos/calendario", element: <PagePlaceholder title="Calendario" /> },
-          { path: "eventos/:id", element: <AdminEventosShow /> },
-          { path: "eventos/:id/editar", element: <AdminEventosEdit /> },
+          { path: "rescates/:id", element: <AdminRescatesShow /> },
+          // ✅ CORRECTO - Dentro del grupo eventos
+          {
+            path: "eventos",
+            children: [
+              { index: true, element: <AdminEventosIndex /> },
+              { path: "crear", element: <AdminEventosCreate /> },
+              { path: "calendario", element: <AdminEventosCalendario /> },
+              { path: ":id", element: <AdminEventosShow /> },
+              { path: ":id/editar", element: <AdminEventosEdit /> },
+            ],
+          },
           { path: "suscripciones", element: <AdminSuscripcionesIndex /> },
-          { path: "suscripciones/crear", element: <AdminSuscripcionesCreate /> },
-          { path: "suscripciones/estado", element: <AdminSuscripcionesEstado /> },
-          { path: "suscripciones/reportes", element: <AdminSuscripcionesReportes /> },
+          {
+            path: "suscripciones/estado",
+            element: <AdminSuscripcionesEstado />,
+          },
           { path: "suscripciones/:id", element: <AdminSuscripcionesShow /> },
-          { path: "suscripciones/:id/editar", element: <AdminSuscripcionesEdit /> },
           {
             path: "adopciones",
             children: [
               { index: true, element: <AdminAdopciones /> },
               { path: "solicitudes", element: <AdminAdopcionesSolicitudes /> },
-              { path: "seguimientos", element: <AdminAdopcionesSeguimientos /> },
+              {
+                path: "seguimientos",
+                element: <AdminAdopcionesSeguimientos />,
+              },
+              { path: ":id", element: <AdminAdopcionShow /> },
+              { path: "seguimientos/:id", element: <AdminSeguimientoShow /> },
             ],
           },
           { path: "donaciones", element: <AdminDonaciones /> },

@@ -121,7 +121,7 @@ const MascotaCardFundacion = memo(({
           <span>{estadoConfig.label}</span>
         </div>
 
-        {/* Nombre */}
+        {/* Nombre - ahora sobre la imagen como en eventos */}
         <h3 className="mcf-titulo">{nombre_mascota || 'Sin nombre'}</h3>
       </div>
 
@@ -154,7 +154,7 @@ const MascotaCardFundacion = memo(({
           )}
         </div>
 
-        {/* ✅ Acciones - siempre visibles */}
+        {/* Acciones - igual que eventos */}
         {showActions && (
           <div className="mcf-actions">
             <Link 

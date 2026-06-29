@@ -1,0 +1,85 @@
+{
+  "razas": "Razas",
+  "vacunas": "Vacunas",
+  
+  "nueva_raza": "Nueva Raza",
+  "editar_raza": "Editar Raza",
+  "raza_creada": "Raza creada exitosamente",
+  "raza_actualizada": "Raza actualizada exitosamente",
+  "raza_eliminada": "Raza '{{nombre}}' eliminada exitosamente",
+  
+  "nueva_vacuna": "Nueva Vacuna",
+  "editar_vacuna": "Editar Vacuna",
+  "vacuna_creada": "Vacuna creada exitosamente",
+  "vacuna_actualizada": "Vacuna actualizada exitosamente",
+  "vacuna_eliminada": "Vacuna '{{nombre}}' eliminada exitosamente",
+  
+  "nombre_raza": "Nombre de la Raza",
+  "nombre_raza_placeholder": "Ej: Labrador Retriever, Siames, etc.",
+  "nombre_vacuna": "Nombre de la Vacuna",
+  "nombre_vacuna_placeholder": "Ej: Rabia, Parvovirus, Moquillo, etc.",
+  
+  "especie": "Especie",
+  "seleccionar_especie": "Seleccionar especie",
+  "todas_especies": "Todas las especies",
+  "sin_especie": "Sin especie",
+  "especie_hint": "Selecciona la especie a la que pertenece esta raza",
+  
+  "frecuencia": "Frecuencia",
+  "seleccionar_frecuencia": "Seleccionar frecuencia",
+  "mensual": "Mensual (30 días)",
+  "trimestral": "Trimestral (90 días)",
+  "semestral": "Semestral (180 días)",
+  "anual": "Anual (365 días)",
+  "frecuencia_hint": "Cada cuántos días se debe aplicar esta vacuna",
+  
+  "mascotas_asociadas": "Mascotas asociadas",
+  "fecha_creacion": "Fecha de creación",
+  "fecha_actualizacion": "Fecha de actualización",
+  
+  "buscar_raza": "Buscar raza...",
+  "buscar_vacuna": "Buscar vacuna...",
+  "sin_razas": "No hay razas registradas",
+  "sin_vacunas": "No hay vacunas registradas",
+  
+  "total": "Total",
+  "perros": "Perros",
+  "gatos": "Gatos",
+  "otros": "Otros",
+  
+  "confirmar_eliminar": "Confirmar eliminación",
+  "confirmar_eliminar_mensaje": "¿Estás seguro de que deseas eliminar la raza '{{nombre}}'?",
+  "confirmar_eliminar_mensaje_vacuna": "¿Estás seguro de que deseas eliminar la vacuna '{{nombre}}'?",
+  "raza_tiene_mascotas": "⚠️ Esta raza tiene {{count}} mascotas asociadas. No se puede eliminar.",
+  "vacuna_tiene_mascotas": "⚠️ Esta vacuna tiene {{count}} mascotas asociadas. No se puede eliminar.",
+  
+  "ver_detalle": "Ver detalle",
+  "ver": "Ver",
+  "editar": "Editar",
+  "eliminar": "Eliminar",
+  "cancelar": "Cancelar",
+  "guardar": "Guardar",
+  "guardando": "Guardando...",
+  "actualizar": "Actualizar",
+  "volver": "Volver",
+  "cerrar": "Cerrar",
+  "filtrar": "Filtrar",
+  "anterior": "Anterior",
+  "siguiente": "Siguiente",
+  "pagina": "Página",
+  "de": "de",
+  "cargando": "Cargando...",
+  "cargando_razas": "Cargando razas...",
+  "cargando_vacunas": "Cargando vacunas...",
+  
+  "confirmar_cancelar": "¿Estás seguro de que deseas cancelar? Los cambios no se guardarán.",
+  
+  "banner_razas_titulo": "Catálogo de Razas · {{count}} registradas",
+  "banner_vacunas_titulo": "Catálogo de Vacunas · {{count}} registradas",
+  
+  "error_carga": "Error al cargar los datos",
+  "error_guardar": "Error al guardar los datos",
+  "error_eliminar": "Error al eliminar el registro",
+  "error_carga_razas": "Error al cargar las razas",
+  "error_carga_vacunas": "Error al cargar las vacunas"
+}

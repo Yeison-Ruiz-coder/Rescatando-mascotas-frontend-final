@@ -9,22 +9,22 @@
       "morning": "Good morning",
       "afternoon": "Good afternoon",
       "evening": "Good evening",
-      "night": "Rest well"
+      "night": "Good night"
     },
     "stats": {
-      "solicitudes": "Requests",
+      "solicitudes": "Applications",
       "adopciones": "Adoptions",
       "eventos": "Events"
     }
   },
   
   "panel": {
-    "loading": "Loading your panel...",
+    "loading": "Loading your dashboard...",
     "defaultUser": "User",
-    "userTitle": "{{count}} requests managed · {{percent}}% success rate",
+    "userTitle": "{{count}} applications managed · {{percent}}% success rate",
     
     "stats": {
-      "total": "Total Requests",
+      "total": "Total Applications",
       "totalLabel": "Total",
       "aprobadas": "Approved",
       "aprobadasLabel": "Approval rate",
@@ -35,13 +35,13 @@
     },
     
     "solicitudes": {
-      "title": "Recent requests",
+      "title": "Recent Applications",
       "verTodas": "View all",
-      "empty": "You have no recent requests"
+      "empty": "You have no recent applications"
     },
     
     "suscripciones": {
-      "title": "Active subscriptions",
+      "title": "Active Subscriptions",
       "gestionar": "Manage",
       "empty": "You have no active subscriptions",
       "activo": "Active",
@@ -58,21 +58,21 @@
     },
     
     "eventos": {
-      "title": "Upcoming events",
+      "title": "Upcoming Events",
       "verTodos": "View all",
       "confirmado": "Confirmed"
     },
     
     "acciones": {
-      "titulo": "Quick actions",
+      "titulo": "Quick Actions",
       "mascotas": "View pets",
       "eventos": "View events",
-      "solicitudes": "My requests",
+      "solicitudes": "My applications",
       "perfil": "My profile"
     },
     
     "error": {
-      "title": "Error loading panel",
+      "title": "Error loading dashboard",
       "retry": "Retry"
     },
     
@@ -91,6 +91,36 @@
     "aprobada": "Approved",
     "rechazada": "Rejected",
     "completada": "Completed",
-    "desconocido": "Unknown"
+    "desconocido": "Unknown",
+    "activo": "Active",
+    "cancelado": "Canceled",
+    "inactivo": "Inactive",
+    "expirado": "Expired"
+  },
+
+  "charts": {
+    "estado_suscripciones": "Your Subscription Status",
+    "solicitudes_mensuales": "Monthly Applications",
+    "tasa_exito_adopciones": "Adoption Success Rate",
+    "distribucion_solicitudes": "Application Distribution",
+    "sin_suscripciones": "You have no active subscriptions",
+    "sin_solicitudes": "No applications registered",
+    "sin_datos_exito": "No success rate data available",
+    "sin_solicitudes_estado": "No applications",
+    "suscripciones": "Subscriptions",
+    "solicitudes": "Applications",
+    "aprobadas": "Approved",
+    "pendientes": "Pending",
+    "rechazadas": "Rejected",
+    "tasa_exito": "Success Rate",
+    "total": "total",
+    "periodo": "Period",
+    "3_meses": "3 months",
+    "6_meses": "6 months",
+    "12_meses": "12 months",
+    "24_meses": "24 months",
+    "exportar": "Export",
+    "exportar_datos": "Export data",
+    "refrescar": "Refresh"
   }
 }

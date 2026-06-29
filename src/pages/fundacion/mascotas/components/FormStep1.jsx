@@ -1,10 +1,18 @@
 // src/pages/fundacion/mascotas/components/FormStep1.jsx
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import CustomSelect from "../../../../components/common/CustomSelect/CustomSelect";
 import MultiSelect from "./MultiSelect";
 import "./FormStep1.css";
 
+// ===== CONSTANTES =====
+const GENERO_OPTIONS = [
+  { value: 'Macho', label: 'macho', icon: 'fa-mars', color: '#3b82f6' },
+  { value: 'Hembra', label: 'hembra', icon: 'fa-venus', color: '#ec4899' },
+  { value: 'Desconocido', label: 'desconocido', icon: 'fa-question-circle', color: '#94a3b8' },
+];
+
+// ===== COMPONENTE PRINCIPAL =====
 const FormStep1 = ({
   form,
   setForm,
@@ -16,37 +24,45 @@ const FormStep1 = ({
 }) => {
   const { t } = useTranslation("nuevaMascota");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  // ===== MEMOIZACIÓN =====
+  const especiesOptions = useMemo(() => 
+    especies.map(esp => ({ value: esp, label: esp })),
+    [especies]
+  );
 
-  const handleCustomChange = (name, value) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const razasArray = Array.isArray(razasList) ? razasList : [];
-  const razasFiltradas = razasArray.filter((r) => r.especie === form.especie);
-
-  const razasOptions = razasFiltradas.map((r) => ({
-    value: r.id,
-    label: r.nombre_raza,
-  }));
-
-  const especiesOptions = especies.map((esp) => ({
-    value: esp,
-    label: esp,
-  }));
-
-  const estadosOptions = [
+  const estadosOptions = useMemo(() => [
     { value: "En adopcion", label: t("estado_en_adopcion") },
     { value: "Adoptado", label: t("estado_adoptado") },
     { value: "Rescatada", label: t("estado_rescatada") },
     { value: "En acogida", label: t("estado_en_acogida") },
-  ];
+  ], [t]);
+
+  const razasFiltradas = useMemo(() => {
+    const razasArray = Array.isArray(razasList) ? razasList : [];
+    return razasArray.filter(r => r.especie === form.especie);
+  }, [razasList, form.especie]);
+
+  const razasOptions = useMemo(() => 
+    razasFiltradas.map(r => ({ value: r.id, label: r.nombre_raza })),
+    [razasFiltradas]
+  );
+
+  // ===== CALLBACKS =====
+  const handleChange = useCallback((e) => {
+    const { name, value, type, checked } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  }, [setForm]);
+
+  const handleCustomChange = useCallback((name, value) => {
+    setForm(prev => ({ ...prev, [name]: value }));
+  }, [setForm]);
+
+  const handleRazasChange = useCallback((values) => {
+    setForm(prev => ({ ...prev, razas: values }));
+  }, [setForm]);
 
   return (
     <div className="form-step">
@@ -62,7 +78,7 @@ const FormStep1 = ({
           <input
             type="text"
             name="nombre_mascota"
-            value={form.nombre_mascota}
+            value={form.nombre_mascota || ''}
             onChange={handleChange}
             className={errors.nombre_mascota ? "error" : ""}
             placeholder={t("nombre_mascota_placeholder")}
@@ -78,7 +94,7 @@ const FormStep1 = ({
           </label>
           <CustomSelect
             options={especiesOptions}
-            value={form.especie}
+            value={form.especie || ''}
             onChange={(e) => handleCustomChange("especie", e.target.value)}
             placeholder={t("seleccionar_especie")}
             error={errors.especie}
@@ -98,15 +114,13 @@ const FormStep1 = ({
             </div>
           ) : razasFiltradas.length === 0 ? (
             <div className="form-help warning">
-              No hay razas disponibles para {form.especie}
+              {t("no_razas_disponibles", { especie: form.especie })}
             </div>
           ) : (
             <MultiSelect
               options={razasOptions}
               selected={form.razas || []}
-              onChange={(values) => {
-                setForm((prev) => ({ ...prev, razas: values }));
-              }}
+              onChange={handleRazasChange}
               placeholder={t("seleccionar_razas")}
               disabled={!form.especie}
             />
@@ -121,7 +135,7 @@ const FormStep1 = ({
           <input
             type="number"
             name="edad_aprox"
-            value={form.edad_aprox}
+            value={form.edad_aprox || ''}
             onChange={handleChange}
             step="0.5"
             min="0"
@@ -138,42 +152,19 @@ const FormStep1 = ({
             {t("genero")} <span className="required">*</span>
           </label>
           <div className="radio-group">
-            <label className="radio-option">
-              <input
-                type="radio"
-                name="genero"
-                value="Macho"
-                checked={form.genero === "Macho"}
-                onChange={handleChange}
-              />
-              <i className="fas fa-mars" style={{ color: "#3b82f6" }}></i>
-              <span>{t("macho")}</span>
-            </label>
-            <label className="radio-option">
-              <input
-                type="radio"
-                name="genero"
-                value="Hembra"
-                checked={form.genero === "Hembra"}
-                onChange={handleChange}
-              />
-              <i className="fas fa-venus" style={{ color: "#ec4899" }}></i>
-              <span>{t("hembra")}</span>
-            </label>
-            <label className="radio-option">
-              <input
-                type="radio"
-                name="genero"
-                value="Desconocido"
-                checked={form.genero === "Desconocido"}
-                onChange={handleChange}
-              />
-              <i
-                className="fas fa-question-circle"
-                style={{ color: "#94a3b8" }}
-              ></i>
-              <span>{t("desconocido")}</span>
-            </label>
+            {GENERO_OPTIONS.map(({ value, label, icon, color }) => (
+              <label key={value} className="radio-option">
+                <input
+                  type="radio"
+                  name="genero"
+                  value={value}
+                  checked={form.genero === value}
+                  onChange={handleChange}
+                />
+                <i className={`fas ${icon}`} style={{ color }}></i>
+                <span>{t(label)}</span>
+              </label>
+            ))}
           </div>
           {errors.genero && <span className="error-msg">{errors.genero}</span>}
         </div>
@@ -184,11 +175,9 @@ const FormStep1 = ({
           </label>
           <CustomSelect
             options={estadosOptions}
-            value={form.estado || ""}
+            value={form.estado || ''}
             onChange={(e) => handleCustomChange("estado", e.target.value)}
-            placeholder={t("seleccionar_estado", {
-              defaultValue: "Selecciona un estado",
-            })}
+            placeholder={t("seleccionar_estado", { defaultValue: "Selecciona un estado" })}
             error={errors.estado}
           />
           {errors.estado && <span className="error-msg">{errors.estado}</span>}

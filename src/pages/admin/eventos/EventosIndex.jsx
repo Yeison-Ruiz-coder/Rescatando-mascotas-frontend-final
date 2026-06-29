@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../../contexts/AuthContext";
 import {
   Plus,
   Calendar,
@@ -16,45 +17,93 @@ import {
   Globe,
   Home,
   Image,
+  RefreshCw,
+  Search,
+  Filter,
+  ChevronUp,
+  ChevronDown,
+  AlertCircle,
+  Clock
 } from "lucide-react";
 import api from "../../../services/api";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
-import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
+import ProfileBanner from "../../../components/common/ProfileBanner/ProfileBanner";
+import StatCard from "../../../components/common/StatCard/StatCard";
 import "./EventosIndex.css";
+
+// ===== CONSTANTES =====
+const ITEMS_PER_PAGE = 10;
+
+const CATEGORIA_OPTIONS = [
+  { value: '', label: 'Todas las categorías' },
+  { value: 'Adopción', label: 'Adopción' },
+  { value: 'Educación', label: 'Educación' },
+  { value: 'Salud', label: 'Salud' },
+  { value: 'Recreación', label: 'Recreación' },
+  { value: 'Otro', label: 'Otro' }
+];
+
+const TIPO_OPTIONS = [
+  { value: '', label: 'Todos los tipos' },
+  { value: 'admin', label: 'Global' },
+  { value: 'fundacion', label: 'Fundación' }
+];
 
 const AdminEventosIndex = () => {
   const { t } = useTranslation("eventos");
+  const { user } = useAuth();
   const [eventos, setEventos] = useState([]);
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [estadisticas, setEstadisticas] = useState(null);
-  const [currentFilters, setCurrentFilters] = useState({});
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
+  const [currentFilters, setCurrentFilters] = useState({
+    search: '',
+    categoria: '',
+    tipo: ''
+  });
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    itemsPerPage: ITEMS_PER_PAGE
+  });
 
   const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 
-  // Aplicar filtros a los eventos
+  const adminName = user?.name || user?.nombre || t('admin', 'Administrador');
+  const adminAvatar = user?.avatar || null;
+
+  // ===== ESTADÍSTICAS =====
+  const stats = {
+    total: eventos.length,
+    proximos: eventos.filter(e => {
+      if (!e.fecha_evento) return false;
+      return new Date(e.fecha_evento) > new Date();
+    }).length,
+    pasados: eventos.filter(e => {
+      if (!e.fecha_evento) return false;
+      return new Date(e.fecha_evento) < new Date();
+    }).length,
+    esteMes: eventos.filter(e => {
+      if (!e.fecha_evento) return false;
+      const fecha = new Date(e.fecha_evento);
+      const ahora = new Date();
+      return fecha.getMonth() === ahora.getMonth() && fecha.getFullYear() === ahora.getFullYear();
+    }).length
+  };
+
+  // ===== APLICAR FILTROS =====
   const applyFilters = useCallback((filters, data) => {
-    if (!data.length) {
+    if (!data || !data.length) {
       setEventosFiltrados([]);
       return;
     }
     
     let resultado = [...data];
 
-    if (filters.buscar && filters.buscar.trim()) {
-      const busquedaLower = filters.buscar.toLowerCase().trim();
+    if (filters.search && filters.search.trim()) {
+      const busquedaLower = filters.search.toLowerCase().trim();
       resultado = resultado.filter(
         (e) =>
           e.nombre_evento?.toLowerCase().includes(busquedaLower) ||
@@ -70,14 +119,22 @@ const AdminEventosIndex = () => {
       );
     }
 
+    if (filters.tipo && filters.tipo.trim()) {
+      resultado = resultado.filter(
+        (e) => e.tipo === filters.tipo
+      );
+    }
+
     setEventosFiltrados(resultado);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
   }, []);
 
+  // ===== CARGAR EVENTOS =====
   const loadEventos = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get(`/admin/eventos?per_page=100`);
+      const response = await api.get(`/admin/eventos?per_page=9999`);
 
       let eventosData = [];
       let statsData = null;
@@ -109,6 +166,7 @@ const AdminEventosIndex = () => {
       setEventosFiltrados([]);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, [t, currentFilters, applyFilters]);
 
@@ -120,6 +178,11 @@ const AdminEventosIndex = () => {
   useEffect(() => {
     applyFilters(currentFilters, eventos);
   }, [currentFilters, eventos, applyFilters]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadEventos();
+  };
 
   const handleFilterChange = useCallback((filters) => {
     setCurrentFilters(filters);
@@ -140,11 +203,21 @@ const AdminEventosIndex = () => {
     }
   };
 
+  const handlePageChange = (page) => {
+    setPagination(prev => ({ ...prev, currentPage: page }));
+  };
+
+  // ===== PAGINACIÓN =====
+  const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+  const endIndex = startIndex + pagination.itemsPerPage;
+  const paginatedItems = eventosFiltrados.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(eventosFiltrados.length / pagination.itemsPerPage);
+
   if (loading) {
     return (
-      <div className="admin-eventos-page">
-        <div className="admin-eventos-loading">
-          <Loader size={40} className="spinner" />
+      <div className="ev-container">
+        <div className="ev-loading">
+          <div className="ev-spinner"></div>
           <p>{t("loading")}</p>
         </div>
       </div>
@@ -153,14 +226,13 @@ const AdminEventosIndex = () => {
 
   if (error) {
     return (
-      <div className="admin-eventos-page">
-        <div className="container">
-          <div className="admin-eventos-error">
-            <Calendar size={48} />
-            <h4>{t("error_title")}</h4>
+      <div className="ev-container">
+        <div className="bento-container">
+          <div className="ev-error">
+            <AlertCircle size={48} className="ev-error-icon" />
+            <h3>{t("error_title")}</h3>
             <p>{error}</p>
-            <button onClick={loadEventos} className="admin-btn-retry">
-              <Loader size={16} />
+            <button onClick={loadEventos} className="ev-btn-retry">
               {t("retry")}
             </button>
           </div>
@@ -170,205 +242,351 @@ const AdminEventosIndex = () => {
   }
 
   return (
-    <div className="admin-eventos-page">
-      <div className="admin-eventos-header">
-        <div className="container">
-          <h1>
-            <Calendar size={28} />
-            {t("event_management")}
-          </h1>
-          <p className="subtitle">{t("event_management_desc")}</p>
-          {eventos.length > 0 && (
-            <p className="info">
-              <Heart size={14} style={{ color: "var(--color-heart)" }} />{" "}
-              {t("total_events", { total: eventos.length })}
-            </p>
-          )}
-        </div>
+    <div className="ev-container">
+      {/* ===== BANNER ===== */}
+      <div className="ev-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: adminName,
+            avatar: adminAvatar,
+            titulo: t('banner.titulo', {
+              defaultValue: '{{count}} eventos · {{proximos}} próximos',
+              count: stats.total,
+              proximos: stats.proximos,
+            }),
+            solicitudes: stats.total,
+            adopciones: stats.proximos,
+            eventos: stats.esteMes,
+          }}
+        />
       </div>
 
-      {estadisticas && (
-        <div className="admin-eventos-stats">
-          <div className="container">
-            <div className="admin-stats-grid">
-              <div className="admin-stat-card">
-                <div className="admin-stat-value">
-                  {estadisticas.total || 0}
-                </div>
-                <div className="admin-stat-label">{t("total_events")}</div>
-              </div>
-              <div className="admin-stat-card">
-                <div className="admin-stat-value">
-                  {estadisticas.proximos || 0}
-                </div>
-                <div className="admin-stat-label">{t("upcoming")}</div>
-              </div>
-              <div className="admin-stat-card">
-                <div className="admin-stat-value">
-                  {estadisticas.pasados || 0}
-                </div>
-                <div className="admin-stat-label">{t("past")}</div>
-              </div>
-              <div className="admin-stat-card">
-                <div className="admin-stat-value">
-                  {estadisticas.este_mes || 0}
-                </div>
-                <div className="admin-stat-label">{t("this_month")}</div>
-              </div>
-            </div>
+      {/* ===== STATS ===== */}
+      <section className="ev-stats-section">
+        <div className="bento-container">
+          <div className="ev-stats-grid">
+            <StatCard
+              icon={<Calendar size={24} />}
+              label={t('stats.total', 'Total eventos')}
+              value={stats.total}
+              color="primary"
+              subtitle={t('stats.registrados', 'Registrados')}
+            />
+            <StatCard
+              icon={<Clock size={24} />}
+              label={t('stats.proximos', 'Próximos')}
+              value={stats.proximos}
+              color="success"
+              subtitle={t('stats.por_venir', 'Por venir')}
+            />
+            <StatCard
+              icon={<Calendar size={24} />}
+              label={t('stats.pasados', 'Pasados')}
+              value={stats.pasados}
+              color="muted"
+              subtitle={t('stats.finalizados', 'Finalizados')}
+            />
+            <StatCard
+              icon={<Heart size={24} />}
+              label={t('stats.este_mes', 'Este mes')}
+              value={stats.esteMes}
+              color="info"
+              subtitle={t('stats.activos', 'Activos')}
+            />
           </div>
         </div>
-      )}
+      </section>
 
-      <div className="admin-eventos-filtros-section">
-        <div className="container">
-          <FiltrosEventos 
+      {/* ===== LISTA ===== */}
+      <section className="ev-list-section">
+        <div className="bento-container">
+          <div className="ev-header">
+            <div className="ev-header-left">
+              <Calendar size={20} className="ev-header-icon" />
+              <h2>{t('event_management', 'Gestión de Eventos')}</h2>
+              <span className="ev-badge-count">{stats.total}</span>
+            </div>
+            <div className="ev-header-right">
+              <button onClick={handleRefresh} className="ev-btn-refresh" disabled={refreshing}>
+                <RefreshCw size={16} className={refreshing ? 'ev-spin' : ''} />
+                {t('sincronizar', 'Sincronizar')}
+              </button>
+              <Link to="/admin/eventos/crear" className="ev-btn-create">
+                <Plus size={16} />
+                {t('create_event', 'Crear evento')}
+              </Link>
+            </div>
+          </div>
+
+          {/* ===== FILTROS ===== */}
+          <FilterBar
+            filters={currentFilters}
             onFilterChange={handleFilterChange}
-            eventos={eventos}
-            isLoading={loading}
+            categoriaOptions={CATEGORIA_OPTIONS}
+            tipoOptions={TIPO_OPTIONS}
+            t={t}
           />
-        </div>
-      </div>
-
-      <div className="admin-eventos-resultados-section">
-        <div className="container">
-          <div className="admin-eventos-resultados-header">
-            <div className="admin-eventos-resultados-count">
-              {t("showing")} <strong>{eventosFiltrados.length}</strong> {t("of")}{" "}
-              <strong>{eventos.length}</strong> {t("events")}
-            </div>
-            <Link to="/admin/eventos/crear" className="admin-btn-crear">
-              <Plus size={18} />
-              {t("create_event")}
-            </Link>
-          </div>
 
           {eventosFiltrados.length === 0 ? (
-            <div className="admin-eventos-empty">
-              <Calendar size={64} />
+            <div className="ev-empty-state">
+              <Calendar size={48} className="ev-empty-icon" />
               <h3>{t("no_events")}</h3>
               <p>{t("no_events_desc")}</p>
             </div>
           ) : (
-            <div className="admin-tabla-contenedor">
-              <table className="admin-tabla">
-                <thead>
-                  <tr>
-                    <th>{t("image")}</th>
-                    <th>{t("event_name")}</th>
-                    <th>{t("foundation")}</th>
-                    <th>{t("type")}</th>
-                    <th>{t("location")}</th>
-                    <th>{t("date")}</th>
-                    <th>{t("attendees")}</th>
-                    <th>{t("likes")}</th>
-                    <th>{t("actions")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {eventosFiltrados.map((evento) => (
-                    <tr key={evento.id}>
-                      <td className="admin-col-imagen">
-                        {evento.imagen_url ? (
-                          <img
-                            src={getImageUrl(evento.imagen_url)}
-                            alt={evento.nombre_evento}
-                            onError={(e) => {
-                              e.target.src = "/placeholder-event.png";
-                            }}
-                          />
-                        ) : (
-                          <div className="admin-imagen-placeholder">
-                            <Image size={20} />
-                          </div>
-                        )}
-                      </td>
-                      <td className="admin-titulo-evento">
-                        <strong>{evento.nombre_evento}</strong>
-                        <span className="admin-descripcion-corta">
-                          {evento.descripcion?.substring(0, 50)}...
-                        </span>
-                      </td>
-                      <td>
-                        {evento.fundacion?.Nombre_1 ||
-                          evento.fundacion?.nombre ||
-                          "-"}
-                      </td>
-                      <td>
-                        <span
-                          className={`admin-badge ${evento.tipo === "admin" ? "admin-badge-admin" : "admin-badge-fundacion"}`}
-                        >
-                          {evento.tipo === "admin" ? (
-                            <Globe size={12} />
-                          ) : (
-                            <Home size={12} />
-                          )}
-                          <span>
-                            {evento.tipo === "admin" ? t("global") : t("foundation")}
-                          </span>
-                        </span>
-                      </td>
-                      <td>
-                        <div className="admin-cell-with-icon">
-                          <MapPin size={14} />
-                          <span>{evento.lugar_evento}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="admin-cell-with-icon">
-                          <CalendarDays size={14} />
-                          <span>
-                            {new Date(evento.fecha_evento).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className="admin-stat-asistentes">
-                          <Users size={12} />
-                          {evento.total_asistentes || 0}
-                        </span>
-                      </td>
-                      <td>
-                        <span className="admin-stat-likes">
-                          <Heart size={12} />
-                          {evento.likes || 0}
-                        </span>
-                      </td>
-                      <td className="admin-acciones">
-                        <Link
-                          to={`/admin/eventos/${evento.id}`}
-                          className="admin-btn-accion admin-btn-ver"
-                          title={t("view_details")}
-                        >
-                          <Eye size={16} />
-                        </Link>
-                        <Link
-                          to={`/admin/eventos/${evento.id}/editar`}
-                          className="admin-btn-accion admin-btn-editar"
-                          title={t("edit")}
-                        >
-                          <Edit size={16} />
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(evento.id)}
-                          className="admin-btn-accion admin-btn-eliminar"
-                          disabled={deletingId === evento.id}
-                          title={t("delete")}
-                        >
-                          {deletingId === evento.id ? (
-                            <div className="admin-spinner-small"></div>
-                          ) : (
-                            <Trash2 size={16} />
-                          )}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {/* ===== TABLA ===== */}
+              <EventosTable
+                items={paginatedItems}
+                onDelete={handleDelete}
+                deletingId={deletingId}
+                getImageUrl={getImageUrl}
+                t={t}
+              />
+
+              {/* ===== PAGINACIÓN ===== */}
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={totalPages}
+                  totalItems={eventosFiltrados.length}
+                  itemsPerPage={pagination.itemsPerPage}
+                  onPageChange={handlePageChange}
+                  t={t}
+                />
+              )}
+            </>
           )}
         </div>
+      </section>
+    </div>
+  );
+};
+
+// ===== FILTROS =====
+const FilterBar = ({ filters, onFilterChange, categoriaOptions, tipoOptions, t }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    onFilterChange(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="ev-filter-bar">
+      <div className="ev-filter-group">
+        <Search size={16} className="ev-filter-icon" />
+        <input
+          type="text"
+          name="search"
+          value={filters.search || ''}
+          onChange={handleChange}
+          placeholder={t('buscar_evento', 'Buscar evento...')}
+          className="ev-filter-input"
+        />
+      </div>
+
+      <div className="ev-filter-group">
+        <Filter size={16} className="ev-filter-icon" />
+        <select
+          name="categoria"
+          value={filters.categoria || ''}
+          onChange={handleChange}
+          className="ev-filter-select"
+        >
+          {categoriaOptions.map(opt => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="ev-filter-group">
+        <select
+          name="tipo"
+          value={filters.tipo || ''}
+          onChange={handleChange}
+          className="ev-filter-select"
+        >
+          {tipoOptions.map(opt => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+};
+
+// ===== TABLA =====
+const EventosTable = ({ items, onDelete, deletingId, getImageUrl, t }) => {
+  return (
+    <div className="ev-table-wrapper">
+      <table className="ev-table">
+        <thead>
+          <tr>
+            <th>{t('image', 'Imagen')}</th>
+            <th>{t('event_name', 'Evento')}</th>
+            <th>{t('foundation', 'Fundación')}</th>
+            <th>{t('type', 'Tipo')}</th>
+            <th>{t('location', 'Ubicación')}</th>
+            <th>{t('date', 'Fecha')}</th>
+            <th>{t('attendees', 'Asistentes')}</th>
+            <th>{t('likes', 'Likes')}</th>
+            <th>{t('actions', 'Acciones')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((evento) => (
+            <tr key={evento.id}>
+              <td>
+                <div className="ev-imagen-cell">
+                  {evento.imagen_url ? (
+                    <img
+                      src={getImageUrl(evento.imagen_url)}
+                      alt={evento.nombre_evento}
+                      className="ev-imagen"
+                      onError={(e) => {
+                        e.target.src = "/placeholder-event.png";
+                      }}
+                    />
+                  ) : (
+                    <div className="ev-imagen-placeholder">
+                      <Image size={20} />
+                    </div>
+                  )}
+                </div>
+              </td>
+              <td>
+                <div className="ev-evento-cell">
+                  <span className="ev-evento-titulo">{evento.nombre_evento}</span>
+                  <span className="ev-evento-desc">
+                    {evento.descripcion?.substring(0, 50)}...
+                  </span>
+                </div>
+              </td>
+              <td>
+                {evento.fundacion?.Nombre_1 ||
+                  evento.fundacion?.nombre ||
+                  "-"}
+              </td>
+              <td>
+                <span className={`ev-tipo-badge ${evento.tipo === "admin" ? "ev-tipo-global" : "ev-tipo-fundacion"}`}>
+                  {evento.tipo === "admin" ? (
+                    <><Globe size={12} /> {t('global', 'Global')}</>
+                  ) : (
+                    <><Home size={12} /> {t('foundation', 'Fundación')}</>
+                  )}
+                </span>
+              </td>
+              <td>
+                <div className="ev-location-cell">
+                  <MapPin size={14} />
+                  <span>{evento.lugar_evento}</span>
+                </div>
+              </td>
+              <td>
+                <div className="ev-date-cell">
+                  <CalendarDays size={14} />
+                  <span>
+                    {new Date(evento.fecha_evento).toLocaleDateString()}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <span className="ev-asistentes-badge">
+                  <Users size={12} />
+                  {evento.total_asistentes || 0}
+                </span>
+              </td>
+              <td>
+                <span className="ev-likes-badge">
+                  <Heart size={12} />
+                  {evento.likes || 0}
+                </span>
+              </td>
+              <td>
+                <div className="ev-actions-cell">
+                  <Link
+                    to={`/admin/eventos/${evento.id}`}
+                    className="ev-action-btn ev-btn-view"
+                    title={t("view_details")}
+                  >
+                    <Eye size={16} />
+                  </Link>
+                  <Link
+                    to={`/admin/eventos/${evento.id}/editar`}
+                    className="ev-action-btn ev-btn-edit"
+                    title={t("edit")}
+                  >
+                    <Edit size={16} />
+                  </Link>
+                  <button
+                    onClick={() => onDelete(evento.id)}
+                    className="ev-action-btn ev-btn-delete"
+                    disabled={deletingId === evento.id}
+                    title={t("delete")}
+                  >
+                    {deletingId === evento.id ? (
+                      <div className="ev-spinner-small"></div>
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+// ===== PAGINACIÓN =====
+const Pagination = ({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange, t }) => {
+  const pages = [];
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages, start + maxVisible - 1);
+  if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+
+  for (let i = start; i <= end; i++) pages.push(i);
+
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+  return (
+    <div className="ev-pagination">
+      <div className="ev-pagination-info">
+        {t('mostrando', 'Mostrando')} {startItem} - {endItem} {t('de', 'de')} {totalItems}
+      </div>
+      <div className="ev-pagination-controls">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="ev-pagination-btn"
+        >
+          ←
+        </button>
+
+        {pages.map(page => (
+          <button
+            key={page}
+            onClick={() => onPageChange(page)}
+            className={`ev-pagination-btn ${page === currentPage ? 'ev-active' : ''}`}
+          >
+            {page}
+          </button>
+        ))}
+
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="ev-pagination-btn"
+        >
+          →
+        </button>
       </div>
     </div>
   );

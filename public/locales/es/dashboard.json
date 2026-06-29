@@ -91,6 +91,36 @@
     "aprobada": "Aprobada",
     "rechazada": "Rechazada",
     "completada": "Completada",
-    "desconocido": "Desconocido"
+    "desconocido": "Desconocido",
+    "activo": "Activo",
+    "cancelado": "Cancelado",
+    "inactivo": "Inactivo",
+    "expirado": "Expirado"
+  },
+
+  "charts": {
+    "estado_suscripciones": "Estado de tus Suscripciones",
+    "solicitudes_mensuales": "Solicitudes por Mes",
+    "tasa_exito_adopciones": "Tasa de Éxito en Adopciones",
+    "distribucion_solicitudes": "Distribución de Solicitudes",
+    "sin_suscripciones": "No tienes suscripciones activas",
+    "sin_solicitudes": "No hay solicitudes registradas",
+    "sin_datos_exito": "No hay datos de tasa de éxito",
+    "sin_solicitudes_estado": "No hay solicitudes",
+    "suscripciones": "Suscripciones",
+    "solicitudes": "Solicitudes",
+    "aprobadas": "Aprobadas",
+    "pendientes": "Pendientes",
+    "rechazadas": "Rechazadas",
+    "tasa_exito": "Tasa de Éxito",
+    "total": "total",
+    "periodo": "Período",
+    "3_meses": "3 meses",
+    "6_meses": "6 meses",
+    "12_meses": "12 meses",
+    "24_meses": "24 meses",
+    "exportar": "Exportar",
+    "exportar_datos": "Exportar datos",
+    "refrescar": "Refrescar"
   }
 }

@@ -1,63 +1,64 @@
 /* src/pages/admin/Usuarios/UsuarioForm.css */
 /* ============================================
    USUARIO FORM - ESTILO BENTO
+   PREFIJO: uf- (UsuarioForm)
    ============================================ */
 
-.usuario-form-container {
+.uf-container {
   width: 100%;
   min-height: 100vh;
   background: transparent;
 }
 
 /* ===== BANNER WRAPPER ===== */
-.usuario-form-banner-wrapper {
+.uf-banner-wrapper {
   padding-top: 0;
   margin-bottom: 30px;
   width: 100%;
 }
 
-.usuario-form-banner-wrapper .bento-container {
+.uf-banner-wrapper .bento-container {
   padding: 0;
   max-width: 100%;
 }
 
 @media (max-width: 768px) {
-  .usuario-form-banner-wrapper .bento-container {
+  .uf-banner-wrapper .bento-container {
     padding: 0 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-form-banner-wrapper .bento-container {
+  .uf-banner-wrapper .bento-container {
     padding: 0 12px;
   }
 }
 
 /* ===== CONTENIDO ===== */
-.usuario-form-content {
+.uf-content {
   width: 100%;
 }
 
-.usuario-form-content .bento-container {
+.uf-content .bento-container {
   padding: 0 24px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-  .usuario-form-content .bento-container {
+  .uf-content .bento-container {
     padding: 0 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-form-content .bento-container {
+  .uf-content .bento-container {
     padding: 0 12px;
   }
 }
 
 /* ===== CARD ===== */
-.usuario-form-card {
+.uf-card {
   background: var(--color-card-bg);
   border-radius: 12px;
   border: 1px solid var(--color-border);
@@ -65,7 +66,7 @@
   overflow: hidden;
 }
 
-.usuario-form-header {
+.uf-header {
   padding: 1.5rem 2rem;
   border-bottom: 1px solid var(--color-border);
   display: flex;
@@ -75,13 +76,13 @@
   flex-wrap: wrap;
 }
 
-.usuario-form-header h1 {
+.uf-header h1 {
   margin: 0;
   font-size: clamp(1.4rem, 2vw, 2rem);
   color: var(--color-text);
 }
 
-.usuario-form-header p {
+.uf-header p {
   margin: 0.25rem 0 0;
   color: var(--color-text-muted);
   max-width: 720px;
@@ -89,35 +90,35 @@
 }
 
 /* ===== FORM ===== */
-.usuario-form {
+.uf-form {
   padding: 2rem;
 }
 
-.usuario-form-grid {
+.uf-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
 }
 
-.usuario-form-field {
+.uf-field {
   display: flex;
   flex-direction: column;
 }
 
-.usuario-form-field label {
+.uf-field label {
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--color-text);
 }
 
-.usuario-form-field label .required {
+.uf-field label .required {
   color: var(--color-danger);
   margin-left: 2px;
 }
 
-.usuario-form-field input,
-.usuario-form-field select {
+.uf-field input,
+.uf-field select {
   padding: 0.7rem 1rem;
   background: var(--form-input-bg);
   border: 1px solid var(--form-border);
@@ -129,23 +130,23 @@
   font-family: inherit;
 }
 
-.usuario-form-field input:focus,
-.usuario-form-field select:focus {
+.uf-field input:focus,
+.uf-field select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--form-focus-ring);
   transform: translateX(2px);
 }
 
-.usuario-form-field input::placeholder {
+.uf-field input::placeholder {
   color: var(--form-placeholder);
 }
 
-.usuario-form-full {
+.uf-full {
   grid-column: span 2;
 }
 
 /* ===== ACTIONS ===== */
-.usuario-form-actions {
+.uf-actions {
   margin-top: 1.75rem;
   display: flex;
   justify-content: flex-end;
@@ -155,8 +156,8 @@
   border-top: 1px solid var(--color-border);
 }
 
-.usuario-form-actions .btn-primary,
-.usuario-form-actions .btn-secondary {
+.uf-actions .btn-primary,
+.uf-actions .btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -169,92 +170,91 @@
   transition: all 0.3s ease;
 }
 
-.usuario-form-actions .btn-primary {
+.uf-actions .btn-primary {
   background: var(--gradient-primary);
   color: white;
   box-shadow: var(--shadow-hard-sm);
 }
 
-.usuario-form-actions .btn-primary:hover:not(:disabled) {
+.uf-actions .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-md);
 }
 
-.usuario-form-actions .btn-primary:disabled {
+.uf-actions .btn-primary:disabled {
   opacity: 0.65;
   cursor: not-allowed;
   transform: none !important;
 }
 
-.usuario-form-actions .btn-secondary {
-  background: var(--form-input-bg);
-  color: var(--color-text);
+.uf-actions .btn-secondary {
+  background: var(--color-danger);
+  color: white;
   border: 1px solid var(--color-border);
 }
 
-.usuario-form-actions .btn-secondary:hover {
-  background: var(--color-hover);
+.uf-actions .btn-secondary:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hard-sm);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .usuario-form-header {
+  .uf-header {
     padding: 1.25rem;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .usuario-form {
+  .uf-form {
     padding: 1.25rem;
   }
 
-  .usuario-form-grid {
+  .uf-grid {
     grid-template-columns: 1fr;
   }
 
-  .usuario-form-full {
+  .uf-full {
     grid-column: span 1;
   }
 
-  .usuario-form-actions {
+  .uf-actions {
     flex-direction: column;
   }
 
-  .usuario-form-actions .btn-primary,
-  .usuario-form-actions .btn-secondary {
+  .uf-actions .btn-primary,
+  .uf-actions .btn-secondary {
     width: 100%;
     justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .usuario-form-header {
+  .uf-header {
     padding: 1rem;
   }
 
-  .usuario-form {
+  .uf-form {
     padding: 1rem;
   }
 
-  .usuario-form-field input,
-  .usuario-form-field select {
+  .uf-field input,
+  .uf-field select {
     padding: 0.6rem 0.8rem;
     font-size: 0.85rem;
   }
 }
 
 /* ===== MODO OSCURO ===== */
-[data-theme="dark"] .usuario-form-field input,
-[data-theme="dark"] .usuario-form-field select {
+[data-theme="dark"] .uf-field input,
+[data-theme="dark"] .uf-field select {
   background: var(--form-input-bg);
   border-color: var(--form-border);
   color: var(--form-text);
 }
 
-[data-theme="dark"] .usuario-form-field input:focus,
-[data-theme="dark"] .usuario-form-field select:focus {
+[data-theme="dark"] .uf-field input:focus,
+[data-theme="dark"] .uf-field select:focus {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--form-focus-ring-dark);
 }

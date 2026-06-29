@@ -6,7 +6,7 @@
   background: transparent;
 }
 
-/* ===== BANNER WRAPPER ===== */
+/* ===== BANNER ===== */
 .ram-banner-wrapper {
   padding-top: 0;
   margin-bottom: 30px;
@@ -21,12 +21,6 @@
 @media (max-width: 768px) {
   .ram-banner-wrapper .bento-container {
     padding: 0 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .ram-banner-wrapper .bento-container {
-    padding: 0 12px;
   }
 }
 
@@ -47,12 +41,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  .ram-content .bento-container {
-    padding: 0 12px;
-  }
-}
-
+/* ===== HEADER ===== */
 .ram-map-header {
   display: flex;
   justify-content: space-between;
@@ -66,47 +55,88 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: transparent;
+  background: var(--gradient-primary);
+  color: white;
   border: none;
-  color: var(--color-text-muted);
+  padding: 8px 16px;
+  border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .ram-btn-back:hover {
-  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.ram-filter-bar {
+/* ===== FILTROS CON CUSTOM SELECT ===== */
+.ram-filter-group {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ram-filter-item {
   display: flex;
   align-items: center;
   gap: 10px;
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
-  padding: 6px 14px;
+  padding: 4px 12px 4px 16px;
   border-radius: 10px;
+  min-width: 200px;
 }
 
 .ram-filter-label {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--color-text-muted);
   font-weight: 700;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.ram-select-filter {
+/* 🔥 Estilos para CustomSelect dentro del filtro */
+.ram-filter-item .custom-select-container {
+  flex: 1;
+  min-width: 120px;
+}
+
+.ram-filter-item .custom-select-trigger {
   background: transparent;
   border: none;
-  color: var(--color-text);
+  padding: 6px 0;
   font-size: 0.85rem;
   font-weight: 600;
-  outline: none;
-  cursor: pointer;
+  color: var(--color-text);
+}
+
+.ram-filter-item .custom-select-trigger:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ram-filter-item .custom-select-options {
+  min-width: 180px;
+}
+
+/* ===== CONTADOR ===== */
+.ram-result-count {
+  padding: 8px 0 16px 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ram-result-count svg {
+  color: var(--color-primary);
 }
 
 /* ===== MAPA ===== */
@@ -126,8 +156,25 @@
   z-index: 1;
 }
 
+/* ===== MARCADORES PERSONALIZADOS ===== */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.custom-marker svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s ease;
+}
+
+.custom-marker:hover svg {
+  transform: scale(1.15);
+}
+
+/* ===== ESTADOS VACÍO ===== */
 .ram-loading,
-.ram-error {
+.ram-error,
+.ram-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,6 +186,37 @@
 
 .ram-error {
   color: var(--color-danger);
+}
+
+.ram-empty .empty-icon {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.ram-empty h3 {
+  color: var(--color-text);
+  margin: 0;
+}
+
+.ram-empty p {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.ram-clear-filters {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ram-clear-filters:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 /* ===== LEYENDA ===== */
@@ -153,6 +231,7 @@
   z-index: 1000;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   pointer-events: auto;
+  min-width: 150px;
 }
 
 .ram-legend-card h4 {
@@ -171,23 +250,37 @@
   gap: 10px;
   font-size: 0.8rem;
   color: var(--color-text);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .legend-item:last-child {
   margin-bottom: 0;
 }
 
+.legend-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 6px 0;
+}
+
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .dot.red { background: #ef4444; }
 .dot.orange { background: #f59e0b; }
 .dot.green { background: #10b981; }
+
+.dot-state {
+  width: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
 
 /* ===== POPUPS ===== */
 .ram-popup-custom .leaflet-popup-content-wrapper {
@@ -207,7 +300,21 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 200px;
+  max-width: 220px;
+}
+
+.ram-popup-multiple {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ram-popup-badge {
+  background: var(--color-primary);
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
 }
 
 .ram-popup-img {
@@ -236,10 +343,51 @@
 
 .ram-popup-meta {
   display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.7rem;
-  color: var(--color-text-muted);
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.65rem;
+}
+
+.ram-popup-prioridad {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.ram-popup-prioridad.alta {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.ram-popup-prioridad.media {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.ram-popup-prioridad.baja {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.ram-popup-estado {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.ram-popup-estado.pendiente {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.ram-popup-estado.en_progreso {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.ram-popup-estado.completado {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
 }
 
 .ram-popup-btn {
@@ -262,29 +410,60 @@
   opacity: 0.9;
 }
 
-/* ===== MODO OSCURO ===== */
-[data-theme="dark"] .ram-leaflet-container .leaflet-tile-layer {
-  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .ram-map-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
+  .ram-filter-group {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .ram-filter-item {
+    width: 100%;
+    min-width: unset;
+  }
+
   .ram-map-wrapper {
     min-height: 400px;
   }
-  
+
   .ram-leaflet-container {
     height: 400px;
   }
-  
+
   .ram-legend-card {
     bottom: 10px;
     left: 10px;
     padding: 10px 14px;
+    min-width: 120px;
   }
+}
+
+@media (max-width: 480px) {
+  .ram-legend-card {
+    display: none;
+  }
+}
+
+/* ===== MODO OSCURO ===== */
+[data-theme="dark"] .ram-leaflet-container .leaflet-tile-layer {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+[data-theme="dark"] .ram-filter-item,
+[data-theme="dark"] .ram-legend-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .ram-filter-item .custom-select-trigger {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .ram-btn-back {
+  background: var(--gradient-primary);
 }
