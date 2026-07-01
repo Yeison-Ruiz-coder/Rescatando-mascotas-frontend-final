@@ -1,6 +1,6 @@
 // src/pages/fundacion/mascotas/Mascotas.jsx
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -14,7 +14,10 @@ import "./Mascotas.css";
 const Mascotas = () => {
   const { t } = useTranslation(["fundacion", "mascotas"]);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
+
+  const basePath = location.pathname.startsWith("/veterinaria") ? "/veterinaria/mascotas" : "/fundacion/mascotas";
 
   const [mascotas, setMascotas] = useState([]);
   const [mascotasFiltradas, setMascotasFiltradas] = useState([]);
@@ -244,7 +247,7 @@ const Mascotas = () => {
               {t("mascotas:de")} <strong> {pagination.total}</strong> {t("mascotas:mascotas")}
             </div>
 
-            <Link to="/fundacion/mascotas/nueva" className="btn-primary">
+            <Link to={`${basePath}/nueva`} className="btn-primary">
               <i className="fas fa-plus"></i>
               {t("fundacion:agregar_mascota")}
             </Link>
@@ -272,8 +275,8 @@ const Mascotas = () => {
                     mascota={mascota}
                     onEstadoChange={handleCambiarEstado}
                     onEliminar={handleEliminar}
-                    onVerDetalle={(id) => navigate(`/fundacion/mascotas/${id}`)}
-                    onEditar={(id) => navigate(`/fundacion/mascotas/editar/${id}`)}
+                    onVerDetalle={(id) => navigate(`${basePath}/${id}`)}
+                    onEditar={(id) => navigate(`${basePath}/editar/${id}`)}
                   />
                 ))}
               </div>

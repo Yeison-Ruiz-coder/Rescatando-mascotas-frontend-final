@@ -193,15 +193,21 @@ const FundacionDashboard = () => {
         setAdopciones(cachedAdopciones);
       }
 
-      // ✅ SEGUNDO: Cargar datos esenciales (mascotas y adopciones)
-      const [mascotasRes, adopcionesRes] = await Promise.all([
+      const [
+        mascotasRes,
+        adopcionesRes,
+        solicitudesRes,
+        seguimientosRes,
+        eventosRes,
+        rescatesRes,
+        suscripcionesRes,
+      ] = await Promise.allSettled([
         api.get("/entity/mascotas", {
           params: {
             per_page: PER_PAGE,
             fields: 'id,nombre_mascota,especie,estado,created_at,foto_principal,edad_aprox',
           },
-        }).catch(() => ({ data: { data: [] } })),
-        
+        }),
         api.get("/entity/adopciones", {
           params: {
             per_page: PER_PAGE,
@@ -210,51 +216,7 @@ const FundacionDashboard = () => {
             sort: 'created_at',
             order: 'desc',
           },
-        }).catch(() => ({ data: { data: [] } })),
-      ]);
-
-      // ✅ Procesar mascotas
-      let mascotas = [];
-      if (mascotasRes?.data?.success && Array.isArray(mascotasRes.data.data)) {
-        mascotas = mascotasRes.data.data;
-        guardarEnCache('mascotas', mascotas);
-      }
-
-      // ✅ Procesar adopciones
-      let adopcionesList = [];
-      if (adopcionesRes?.data?.success && Array.isArray(adopcionesRes.data.data)) {
-        adopcionesList = adopcionesRes.data.data;
-        guardarEnCache('adopciones', adopcionesList);
-      }
-      setAdopciones(adopcionesList);
-
-      // ✅ Calcular estadísticas básicas
-      const enAdopcion = mascotas.filter(
-        (m) => m.estado === "En adopcion" || m.estado === "En adopción"
-      ).length;
-      const adoptadas = mascotas.filter((m) => m.estado === "Adoptado").length;
-
-      const recientes = [...mascotas]
-        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
-        .slice(0, 5);
-      setMascotasRecientes(recientes);
-
-      // ✅ Actualizar stats con datos disponibles
-      setStats(prev => ({
-        ...prev,
-        totalMascotas: mascotas.length,
-        enAdopcion,
-        adoptadas,
-      }));
-
-      // ✅ TERCERO: Cargar datos secundarios (no bloqueantes)
-      const [
-        solicitudesRes,
-        seguimientosRes,
-        eventosRes,
-        rescatesRes,
-        suscripcionesRes,
-      ] = await Promise.all([
+        }),
         api.get("/entity/solicitudes", {
           params: {
             per_page: 5,
@@ -264,8 +226,7 @@ const FundacionDashboard = () => {
             sort: 'created_at',
             order: 'desc',
           },
-        }).catch(() => ({ data: { data: [] } })),
-        
+        }),
         api.get("/entity/adopciones/seguimientos/mis-seguimientos", {
           params: {
             per_page: 5,
@@ -274,76 +235,98 @@ const FundacionDashboard = () => {
             sort: 'created_at',
             order: 'desc',
           },
-        }).catch(() => ({ data: { data: [] } })),
-        
-        api.get("/entity/eventos").catch(() => ({ data: { data: [] } })),
-        
-        rescateService.getMisRescates().catch(() => ({ data: { data: [] } })),
-        
-        suscripcionService.getSuscripcionesEntity().catch(() => []),
+        }),
+        api.get("/entity/eventos"),
+        rescateService.getMisRescates(),
+        suscripcionService.getSuscripcionesEntity(),
       ]);
 
-      // ✅ Procesar solicitudes
-      let solicitudesList = [];
-      if (solicitudesRes?.data?.success) {
-        const data = solicitudesRes.data;
-        solicitudesList = data.data?.data || data.data || [];
+      const safeResponse = (result, fallback = { data: { data: [] } }) =>
+        result.status === 'fulfilled' ? result.value : fallback;
+
+      const safeArray = (response) => {
+        if (!response) return [];
+        if (Array.isArray(response)) return response;
+        if (response.data?.success && Array.isArray(response.data.data)) return response.data.data;
+        if (Array.isArray(response.data?.data)) return response.data.data;
+        if (Array.isArray(response.data)) return response.data;
+        return [];
+      };
+
+      const safeObjectData = (response) =>
+        response?.data?.success ? response.data : response?.data || response || {};
+
+      // ✅ Procesar mascotas
+      const mascotasData = safeArray(safeResponse(mascotasRes));
+      if (mascotasData.length > 0) {
+        guardarEnCache('mascotas', mascotasData);
       }
-      setSolicitudesPendientes(solicitudesList.slice(0, 5));
+
+      // ✅ Procesar adopciones
+      const adopcionesData = safeArray(safeResponse(adopcionesRes));
+      if (adopcionesData.length > 0) {
+        guardarEnCache('adopciones', adopcionesData);
+      }
+      setAdopciones(adopcionesData);
+
+      const enAdopcion = mascotasData.filter(
+        (m) => m.estado === "En adopcion" || m.estado === "En adopción"
+      ).length;
+      const adoptadas = mascotasData.filter((m) => m.estado === "Adoptado").length;
+
+      const recientes = [...mascotasData]
+        .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+        .slice(0, 5);
+      setMascotasRecientes(recientes);
+
+      setStats(prev => ({
+        ...prev,
+        totalMascotas: mascotasData.length,
+        enAdopcion,
+        adoptadas,
+      }));
+
+      // ✅ Procesar solicitudes
+      const solicitudesData = safeArray(safeResponse(solicitudesRes));
+      setSolicitudesPendientes(solicitudesData.slice(0, 5));
 
       // ✅ Procesar seguimientos
-      let seguimientosList = [];
-      if (seguimientosRes?.data?.success) {
-        const data = seguimientosRes.data;
-        seguimientosList = data.data?.data || data.data || [];
-      }
-      setSeguimientosRecientes(seguimientosList.slice(0, 5));
+      const seguimientosData = safeArray(safeResponse(seguimientosRes));
+      setSeguimientosRecientes(seguimientosData.slice(0, 5));
 
       // ✅ Procesar eventos
-      let eventos = [];
-      if (eventosRes?.data?.success && Array.isArray(eventosRes.data.data)) {
-        eventos = eventosRes.data.data;
-      }
-
+      const eventosData = safeArray(safeResponse(eventosRes));
       const ahora = new Date();
-      const proximos = eventos
+      const proximos = eventosData
         .filter((e) => e.fecha_evento && new Date(e.fecha_evento) > ahora)
         .sort((a, b) => new Date(a.fecha_evento) - new Date(b.fecha_evento))
         .slice(0, 5);
       setEventosProximos(proximos);
 
       // ✅ Procesar rescates
-      let rescates = [];
-      let pendientes = [];
-      if (rescatesRes?.data?.success) {
-        const data = rescatesRes.data;
-        if (Array.isArray(data.data?.data)) {
-          rescates = data.data.data;
-        } else if (Array.isArray(data.data)) {
-          rescates = data.data;
-        }
-        pendientes = rescates
-          .filter((r) => r.estado === "pendiente" || r.estado === "en_proceso")
-          .slice(0, 5);
+      let rescatesData = [];
+      const rescatesResponse = safeResponse(rescatesRes, { data: [] });
+      if (Array.isArray(rescatesResponse)) {
+        rescatesData = rescatesResponse;
+      } else {
+        rescatesData = safeArray(rescatesResponse);
       }
+      const pendientes = rescatesData
+        .filter((r) => r.estado === "pendiente" || r.estado === "en_proceso")
+        .slice(0, 5);
       setRescatesPendientes(pendientes);
 
       // ✅ Procesar suscripciones
-      let suscripcionesData = [];
-      let montoTotal = 0;
-      if (Array.isArray(suscripcionesRes)) {
-        suscripcionesData = suscripcionesRes;
-      } else if (suscripcionesRes?.data && Array.isArray(suscripcionesRes.data)) {
-        suscripcionesData = suscripcionesRes.data;
-      }
+      const suscripcionesData = Array.isArray(suscripcionesRes)
+        ? suscripcionesRes
+        : safeArray(suscripcionesRes);
       setSuscripciones(suscripcionesData);
-      montoTotal = suscripcionesData
+      const montoTotal = suscripcionesData
         .filter((s) => s.estado === "activo")
         .reduce((sum, s) => sum + (parseFloat(s.monto_mensual) || 0), 0);
 
-      // ✅ Actividad reciente
       const actividades = [
-        ...mascotas.slice(0, 3).map((m) => ({
+        ...recientes.slice(0, 3).map((m) => ({
           id: m.id,
           tipo: "mascota",
           titulo: `${t("actividad_mascota_titulo", "Nueva mascota registrada")}: ${m.nombre_mascota}`,
@@ -351,7 +334,7 @@ const FundacionDashboard = () => {
           icono: "fa-paw",
           color: "var(--color-primary)",
         })),
-        ...eventos.slice(0, 2).map((e) => ({
+        ...eventosData.slice(0, 2).map((e) => ({
           id: e.id,
           tipo: "evento",
           titulo: `${t("actividad_evento_titulo", "Evento creado")}: ${e.nombre_evento}`,
@@ -364,18 +347,17 @@ const FundacionDashboard = () => {
         .slice(0, 5);
       setActividadReciente(actividades);
 
-      // ✅ Actualizar stats completos
       setStats({
-        totalMascotas: mascotas.length,
+        totalMascotas: mascotasData.length,
         enAdopcion,
         adoptadas,
-        totalEventos: eventos.length,
+        totalEventos: eventosData.length,
         eventosProximos: proximos.length,
         totalSuscripciones: suscripcionesData.length,
         montoMensual: montoTotal,
         rescatesPendientes: pendientes.length,
-        solicitudesPendientes: solicitudesList.length,
-        totalSeguimientos: seguimientosList.length,
+        solicitudesPendientes: solicitudesData.length,
+        totalSeguimientos: seguimientosData.length,
       });
 
     } catch (error) {
@@ -405,18 +387,6 @@ const FundacionDashboard = () => {
       : 0;
     return { fundacionName, fundacionAvatar, totalMascotas, tasaExito };
   }, [user, stats]);
-
-  // ✅ LOADING SIMPLIFICADO - Sin porcentaje
-  if (loading) {
-    return (
-      <div className="fd-dashboard-container">
-        <div className="panel-loading-modern">
-          <div className="spinner-modern"></div>
-          <p>{t("cargando_dashboard", "Cargando dashboard...")}</p>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -466,24 +436,28 @@ const FundacionDashboard = () => {
               label={t("total_mascotas", "Total Mascotas")}
               value={stats.totalMascotas}
               color="primary"
+              loading={loading}
             />
             <StatCardModern
               icon={<Heart size={24} />}
               label={t("en_adopcion", "En Adopción")}
               value={stats.enAdopcion}
               color="success"
+              loading={loading}
             />
             <StatCardModern
               icon={<CheckCircle size={24} />}
               label={t("adoptadas", "Adoptadas")}
               value={stats.adoptadas}
               color="gradient"
+              loading={loading}
             />
             <StatCardModern
               icon={<HandHeart size={24} />}
               label={t("suscripciones", "Suscripciones")}
               value={stats.totalSuscripciones}
               color="warning"
+              loading={loading}
             />
           </div>
         </div>
@@ -833,15 +807,19 @@ const FundacionDashboard = () => {
 };
 
 // ===== STAT CARD =====
-const StatCardModern = React.memo(({ icon, label, value, color }) => {
+const StatCardModern = React.memo(({ icon, label, value, color, loading }) => {
   return (
-    <div className={`stat-card-modern stat-${color}`}>
+    <div className={`stat-card-modern stat-${color} ${loading ? 'stat-loading' : ''}`}>
       <div className="stat-header-modern">
         <div className="stat-icon-modern">{icon}</div>
         <span className="stat-badge-modern">{label}</span>
       </div>
       <div className="stat-body-modern">
-        <span className="stat-value-modern">{value}</span>
+        {loading ? (
+          <div className="stat-skeleton skeleton" style={{ width: '70%', height: '48px' }} />
+        ) : (
+          <span className="stat-value-modern">{value}</span>
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,8 @@ const EventoCardFundacion = memo(({
   getImageUrl,
   onDelete,
   onEdit,
-  showActions = true
+  showActions = true,
+  basePath = "/fundacion/eventos"
 }) => {
   const { t } = useTranslation('eventos');
   const [imgError, setImgError] = useState(false);
@@ -165,7 +166,7 @@ const EventoCardFundacion = memo(({
         {showActions && (
           <div className="ecf-actions">
             <Link 
-              to={`/fundacion/eventos/${id}`} 
+              to={`${basePath}/${id}`} 
               className="ecf-btn ecf-btn-ver"
               title={t('ver_detalle')}
             >
@@ -173,7 +174,7 @@ const EventoCardFundacion = memo(({
               <span>{t('botones.ver')}</span>
             </Link>
             <Link 
-              to={`/fundacion/eventos/${id}/editar`} 
+              to={`${basePath}/${id}/editar`} 
               className="ecf-btn ecf-btn-editar"
               title={t('botones.editar')}
               onClick={(e) => {

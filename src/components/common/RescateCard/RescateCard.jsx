@@ -1,6 +1,7 @@
 // src/components/common/RescateCard/RescateCard.jsx
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { getImageUrl } from "../../../utils/imageUtils";
 import "./RescateCard.css";
 
 const RescateCard = ({
@@ -13,6 +14,35 @@ const RescateCard = ({
   loading = false,
 }) => {
   const { t } = useTranslation("rescate");
+
+  const getRescateImageUrl = () => {
+    if (!rescate) return null;
+
+    if (rescate.foto_principal) {
+      return getImageUrl(rescate.foto_principal);
+    }
+
+    if (rescate.galeria_fotos) {
+      try {
+        let galeria = rescate.galeria_fotos;
+        if (typeof galeria === "string") {
+          galeria = JSON.parse(galeria);
+        }
+        if (Array.isArray(galeria)) {
+          const primeraFoto = galeria.find((foto) => !!foto);
+          if (primeraFoto) {
+            return getImageUrl(primeraFoto);
+          }
+        }
+      } catch (error) {
+        console.error("RescateCard: error parsing galeria_fotos", error);
+      }
+    }
+
+    return null;
+  };
+
+  const primaryImage = getRescateImageUrl();
 
   const getPrioridadClass = () => {
     switch (rescate?.prioridad) {
@@ -74,10 +104,10 @@ const RescateCard = ({
   return (
     <div className="rescate-card">
       {/* Foto principal - nueva sección */}
-      {rescate?.foto_principal && (
+      {primaryImage && (
         <div className="rescate-card-imagen">
           <img 
-            src={rescate.foto_principal} 
+            src={primaryImage} 
             alt="Foto principal del rescate"
             className="rescate-imagen"
           />

@@ -166,6 +166,18 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+.stat-card-modern.stat-loading {
+  pointer-events: none;
+}
+
+.stat-card-modern.stat-loading .stat-badge-modern {
+  opacity: 0.6;
+}
+
+.stat-card-modern.stat-loading .stat-value-modern {
+  opacity: 0.4;
+}
+
 .stat-card-modern:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
