@@ -4,8 +4,7 @@
   width: 100%;
   position: relative;
   background: transparent;
-  padding: 0;
-}
+  padding: 0;  overflow: visible;}
 
 .ff-progress {
   position: fixed;

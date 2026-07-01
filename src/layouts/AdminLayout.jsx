@@ -5,6 +5,7 @@ import AdminNavbar from '../components/layout/Navbar/AdminNavbar';
 import AdminSidebar from '../components/layout/Sidebar/AdminSidebar';
 import { useSidebar } from '../contexts/SidebarContext';
 import ScrollToTop from '../components/common/ScrollToTop/ScrollToTop'; // 👈 Importar
+import Footer from '../components/layout/Footer/Footer';
 import './Layouts.css';
 import './AdminLayout.css';
 
@@ -20,6 +21,7 @@ const AdminLayout = () => {
       <main className={`admin-main-content ${isAdminSidebarOpen ? 'shifted' : ''}`}>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };

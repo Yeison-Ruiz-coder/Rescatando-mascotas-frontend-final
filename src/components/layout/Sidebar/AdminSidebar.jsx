@@ -6,6 +6,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
 import { getImageUrl } from '../../../utils/imageUtils';
+import api from '../../../services/api';
 import './Sidebar.css';
 
 const AdminSidebar = () => {
@@ -45,38 +46,46 @@ const AdminSidebar = () => {
     suscripciones: false
   });
 
-  const [pendingCount, setPendingCount] = useState(0);
+  const [badgeCounts, setBadgeCounts] = useState({
+    usuariosPendientes: 0,
+    adopcionesPendientes: 0,
+    rescatesPendientes: 0
+  });
 
-  // ✅ Fetch pendientes optimizado
+  // ✅ Fetch real badge counts desde el backend
   useEffect(() => {
     if (!user || user.tipo !== 'admin') return;
 
     let cancelled = false;
     const controller = new AbortController();
 
-    const fetchPendingCount = async () => {
-      const token = localStorage.getItem('auth_token');
-      if (!token) return;
-
+    const fetchBadgeCounts = async () => {
       try {
-        const response = await fetch('/api/admin/usuarios/pendientes/count', {
-          signal: controller.signal,
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+        const [usuariosRes, adopcionesRes, rescatesRes] = await Promise.all([
+          api.get('/admin/usuarios', { params: { estado: 'pendiente', per_page: 1 }, signal: controller.signal }),
+          api.get('/admin/adopciones', { params: { estado: 'pendiente', per_page: 1 }, signal: controller.signal }),
+          api.get('/admin/rescates', { params: { estado: 'pendiente', per_page: 1 }, signal: controller.signal })
+        ]);
+
+        if (cancelled) return;
+
+        const usuariosPendientes = usuariosRes.data?.data?.total ?? usuariosRes.data?.total ?? 0;
+        const adopcionesPendientes = adopcionesRes.data?.data?.total ?? adopcionesRes.data?.total ?? 0;
+        const rescatesPendientes = rescatesRes.data?.data?.total ?? rescatesRes.data?.total ?? 0;
+
+        setBadgeCounts({
+          usuariosPendientes,
+          adopcionesPendientes,
+          rescatesPendientes
         });
-        const data = await response.json();
-        if (!cancelled && data.success) {
-          setPendingCount(data.count || 0);
-        }
       } catch (error) {
         if (!cancelled && error.name !== 'AbortError') {
-          console.error('Error fetching pending count:', error);
+          console.error('Error fetching admin badge counts:', error);
         }
       }
     };
 
-    fetchPendingCount();
+    fetchBadgeCounts();
 
     return () => {
       cancelled = true;
@@ -85,10 +94,13 @@ const AdminSidebar = () => {
   }, [user]);
 
   const toggleSection = useCallback((section) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
+    setOpenSections(prev => {
+      const isOpening = !prev[section];
+      return Object.keys(prev).reduce((acc, key) => {
+        acc[key] = key === section ? isOpening : false;
+        return acc;
+      }, {});
+    });
   }, []);
 
   const isActive = useCallback((path) => location.pathname === path || location.pathname.startsWith(path + '/'), [location.pathname]);
@@ -164,7 +176,9 @@ const AdminSidebar = () => {
             </Link>
             <Link to="/admin/rescates/pendientes" className={`submenu-item ${isActive('/admin/rescates/pendientes') ? 'active' : ''}`} onClick={handleLinkClick}>
               <i className="fas fa-clock"></i> {t("pendientes")}
-              <span className="sidebar-badge urgent">!</span>
+              {badgeCounts.rescatesPendientes > 0 && (
+                <span className="sidebar-badge urgent">{badgeCounts.rescatesPendientes}</span>
+              )}
             </Link>
             <Link to="/admin/rescates/mapa" className={`submenu-item ${isActive('/admin/rescates/mapa') ? 'active' : ''}`} onClick={handleLinkClick}>
               <i className="fas fa-map-marker-alt"></i> {t("mapa_rescates")}
@@ -225,8 +239,8 @@ const AdminSidebar = () => {
             </Link>
             <Link to="/admin/usuarios/pendientes" className={`submenu-item ${isActive('/admin/usuarios/pendientes') ? 'active' : ''}`} onClick={handleLinkClick}>
               <i className="fas fa-clock"></i> {t("pendientes_aprobacion")}
-              {pendingCount > 0 && (
-                <span className="sidebar-badge urgent">{pendingCount}</span>
+              {badgeCounts.usuariosPendientes > 0 && (
+                <span className="sidebar-badge urgent">{badgeCounts.usuariosPendientes}</span>
               )}
             </Link>
             <Link to="/admin/usuarios/fundaciones" className={`submenu-item ${isActive('/admin/usuarios/fundaciones') ? 'active' : ''}`} onClick={handleLinkClick}>
@@ -253,7 +267,9 @@ const AdminSidebar = () => {
             </Link>
             <Link to="/admin/adopciones/solicitudes" className={`submenu-item ${isActive('/admin/adopciones/solicitudes') ? 'active' : ''}`} onClick={handleLinkClick}>
               <i className="fas fa-clipboard-list"></i> {t("solicitudes_pendientes")}
-              <span className="sidebar-badge">5</span>
+              {badgeCounts.adopcionesPendientes > 0 && (
+                <span className="sidebar-badge urgent">{badgeCounts.adopcionesPendientes}</span>
+              )}
             </Link>
             <Link to="/admin/adopciones/seguimientos" className={`submenu-item ${isActive('/admin/adopciones/seguimientos') ? 'active' : ''}`} onClick={handleLinkClick}>
               <i className="fas fa-chart-line"></i> {t("seguimientos")}

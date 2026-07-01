@@ -46,7 +46,7 @@
 }
 
 .fundaciones-page .fundaciones-header h1 {
-  font-size: clamp(3rem, 8vw, 12rem);
+  font-size: 8rem;
   font-weight: 800;
   margin-bottom: 1rem;
   margin-left: 0;
@@ -57,8 +57,9 @@
   color: transparent;
   font-family: "Space Grotesk", sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  line-height: 1.2;
-  word-break: break-word;
+  line-height: 1.1;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .fundaciones-page .fundaciones-header .info {

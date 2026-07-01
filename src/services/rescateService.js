@@ -83,6 +83,7 @@ rechazarRescate: async (id, data = {}) => {
   /**
    * Rechazar un rescate (entidad)
    */
+  rechazarRescate: (id) => api.put(`/entity/rescates/${id}/rechazar`),
   rechazarRescateEntity: (id) => api.put(`/entity/rescates/${id}/rechazar`),
   
   /**

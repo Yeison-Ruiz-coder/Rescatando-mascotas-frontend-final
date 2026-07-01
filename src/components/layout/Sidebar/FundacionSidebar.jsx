@@ -172,10 +172,13 @@ const FundacionSidebar = () => {
   }, []);
 
   const toggleSection = useCallback((section) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
+    setOpenSections(prev => {
+      const isOpening = !prev[section];
+      return Object.keys(prev).reduce((acc, key) => {
+        acc[key] = key === section ? isOpening : false;
+        return acc;
+      }, {});
+    });
   }, []);
 
   const isActive = useCallback((path) => {

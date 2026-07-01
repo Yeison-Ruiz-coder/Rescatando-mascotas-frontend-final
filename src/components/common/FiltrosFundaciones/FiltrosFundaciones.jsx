@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProgressBar from '../ProgressBar/ProgressBar';
+import { publicApi } from '../../../services/api';
+import { extractArrayFromResponse } from '../../../utils/responseUtils';
 import './FiltrosFundaciones.css';
 
 const FiltrosFundaciones = ({ 
@@ -19,8 +21,9 @@ const FiltrosFundaciones = ({
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
-  const fundacionesRef = useRef(fundaciones);
   const progressIntervalRef = useRef(null);
+  const currentQueryRef = useRef('');
+  const suggestionsAbortControllerRef = useRef(null);
 
   // Efecto para animar la barra de progreso
   useEffect(() => {
@@ -51,101 +54,35 @@ const FiltrosFundaciones = ({
     };
   }, [isLoading]);
 
-  // Mantener referencia actualizada
-  useEffect(() => {
-    fundacionesRef.current = fundaciones;
-  }, [fundaciones]);
+  const fetchSugerencias = useCallback(async (texto) => {
+    if (!texto.trim() || texto.length < 2) return;
 
-  // Función para obtener sugerencias
-  const obtenerSugerencias = useCallback((texto) => {
-    if (!texto.trim() || texto.length < 2) return [];
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+    }
 
-    const textoLower = texto.toLowerCase();
-    const palabrasUnicas = new Set();
-    const fundacionesActuales = fundacionesRef.current;
+    const controller = new AbortController();
+    suggestionsAbortControllerRef.current = controller;
+    currentQueryRef.current = texto;
 
-    fundacionesActuales.forEach(fundacion => {
-      if (fundacion.Nombre_1?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(fundacion.Nombre_1);
-      }
-      if (fundacion.Direccion?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(fundacion.Direccion);
-      }
-      if (fundacion.ciudad?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(fundacion.ciudad);
-      }
-      if (fundacion.Telefono?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(fundacion.Telefono);
-      }
-      if (fundacion.Email?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(fundacion.Email);
-      }
-      if (fundacion.registro_sanitario?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(`${t('registro_sanitario', 'Registro sanitario')}: ${fundacion.registro_sanitario}`);
-      }
-      if (fundacion.horario_atencion?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(`${t('horario', 'Horario')}: ${fundacion.horario_atencion}`);
-      }
-      
-      // Búsqueda por días de la semana
-      const diasSemana = ['lunes', 'martes', 'miércoles', 'miercoles', 'jueves', 'viernes', 'sábado', 'sabado', 'domingo'];
-      diasSemana.forEach(dia => {
-        if (textoLower.includes(dia) && fundacion.horario_atencion?.toLowerCase().includes(dia)) {
-          palabrasUnicas.add(t(`dia_${dia.replace('á', 'a')}`, dia.charAt(0).toUpperCase() + dia.slice(1)));
-        }
+    try {
+      const response = await publicApi.get('/fundaciones/obtener-sugerencias', {
+        params: { q: texto, limit: 10 },
+        signal: controller.signal,
       });
 
-      // Necesidades actuales
-      if (fundacion.necesidades_actuales) {
-        let necesidades = [];
-        try {
-          necesidades = typeof fundacion.necesidades_actuales === 'string' 
-            ? JSON.parse(fundacion.necesidades_actuales) 
-            : fundacion.necesidades_actuales;
-        } catch(e) { necesidades = []; }
-        
-        necesidades.forEach(necesidad => {
-          if (necesidad?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('necesita', 'Necesita')}: ${necesidad}`);
-          }
-        });
-      }
+      const nuevasSugerencias = extractArrayFromResponse(response).slice(0, 10);
 
-      // Voluntarios
-      if (textoLower.includes('voluntario') || textoLower.includes('voluntarios') || textoLower.includes('ayudar')) {
-        if (fundacion.recibe_voluntarios === true) {
-          palabrasUnicas.add(t('recibe_voluntarios', 'Recibe voluntarios'));
-        } else if (fundacion.recibe_voluntarios === false) {
-          palabrasUnicas.add(t('no_recibe_voluntarios', 'No recibe voluntarios'));
-        }
-      }
+      if (currentQueryRef.current !== texto) return;
 
-      // Verificado
-      if (textoLower.includes('verificado') || textoLower.includes('oficial') || textoLower.includes('confiable')) {
-        if (fundacion.verificado === true) {
-          palabrasUnicas.add(t('verificado', 'Verificado'));
-        }
-      }
+      setSugerencias(nuevasSugerencias);
+      setMostrarSugerencias(nuevasSugerencias.length > 0);
+    } catch (error) {
+      if (error.name === 'CanceledError' || error.name === 'AbortError') return;
+      console.error('Error obteniendo sugerencias:', error);
+    }
+  }, []);
 
-      // Fecha de fundación
-      if (fundacion.fecha_fundacion) {
-        const fecha = new Date(fundacion.fecha_fundacion);
-        const año = fecha.getFullYear().toString();
-        const mes = fecha.toLocaleString('es', { month: 'long' });
-        
-        if (año.includes(textoLower)) {
-          palabrasUnicas.add(`${t('fundada_en', 'Fundada en')} ${año}`);
-        }
-        if (mes?.toLowerCase().includes(textoLower)) {
-          palabrasUnicas.add(mes);
-        }
-      }
-    });
-
-    return Array.from(palabrasUnicas).slice(0, 10);
-  }, [t]);
-
-  // Efecto para manejar la búsqueda con debounce
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -153,13 +90,15 @@ const FiltrosFundaciones = ({
 
     if (buscar.length >= 2) {
       timeoutRef.current = setTimeout(() => {
-        const nuevasSugerencias = obtenerSugerencias(buscar);
-        setSugerencias(nuevasSugerencias);
-        setMostrarSugerencias(nuevasSugerencias.length > 0);
+        fetchSugerencias(buscar);
       }, 300);
     } else {
       setSugerencias([]);
       setMostrarSugerencias(false);
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+        suggestionsAbortControllerRef.current = null;
+      }
     }
 
     return () => {
@@ -167,7 +106,15 @@ const FiltrosFundaciones = ({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [buscar, obtenerSugerencias]);
+  }, [buscar, fetchSugerencias]);
+
+  useEffect(() => {
+    return () => {
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -218,7 +165,10 @@ const FiltrosFundaciones = ({
 
   const handleSearch = () => {
     const filtros = {};
-    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (buscar.trim()) {
+      filtros.buscar = buscar.trim();
+      filtros.reiniciar_filtros = true;
+    }
     onFilterChange(filtros);
     setMostrarSugerencias(false);
   };
@@ -236,6 +186,10 @@ const FiltrosFundaciones = ({
     setMostrarSugerencias(false);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+      suggestionsAbortControllerRef.current = null;
     }
   };
 

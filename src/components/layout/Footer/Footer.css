@@ -21,12 +21,9 @@
 }
 
 /* El footer se mueve junto al contenido cuando el sidebar está abierto */
-.main-content.shifted ~ .custom-footer {
-  transform: translate3d(240px, 0, 0);
-}
-
+.main-content.shifted ~ .custom-footer,
 .admin-main-content.shifted ~ .custom-footer {
-  transform: translate3d(280px, 0, 0);
+  transform: translate3d(240px, 0, 0);
 }
 
 /* ===== RESPONSIVE - En móvil NO se mueve ===== */
