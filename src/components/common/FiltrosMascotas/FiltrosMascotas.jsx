@@ -2,21 +2,17 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import CustomSelect from '../CustomSelect/CustomSelect';
+import { publicApi } from '../../../services/api';
+import { extractArrayFromResponse } from '../../../utils/responseUtils';
 import './FiltrosMascotas.css';
 
 const FiltrosMascotas = ({ 
   onFilterChange, 
-  mascotas = [],
   isLoading = false,
-  especies = []
 }) => {
   const { t } = useTranslation('mascotas');
   
   const [buscar, setBuscar] = useState('');
-  const [especie, setEspecie] = useState('');
-  const [genero, setGenero] = useState('');
-  const [tamano, setTamano] = useState('');
   const [progress, setProgress] = useState(0);
   
   const [sugerencias, setSugerencias] = useState([]);
@@ -26,8 +22,9 @@ const FiltrosMascotas = ({
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
-  const mascotasRef = useRef(mascotas);
   const progressIntervalRef = useRef(null);
+  const suggestionsAbortControllerRef = useRef(null);
+  const currentQueryRef = useRef('');
 
   // Efecto para animar la barra de progreso
   useEffect(() => {
@@ -58,38 +55,77 @@ const FiltrosMascotas = ({
     };
   }, [isLoading]);
 
-  const opcionesGenero = [
-    { value: '', label: t('todos', 'Todos') },
-    { value: 'Macho', label: t('macho', 'Macho') },
-    { value: 'Hembra', label: t('hembra', 'Hembra') }
-  ];
-  
-  const opcionesTamano = [
-    { value: '', label: t('todos', 'Todos') },
-    { value: 'pequeño', label: t('pequeño', 'Pequeño') },
-    { value: 'mediano', label: t('mediano', 'Mediano') },
-    { value: 'grande', label: t('grande', 'Grande') },
-    { value: 'muy_grande', label: t('muy_grande', 'Muy grande') }
-  ];
-
-  const opcionesEspecies = [
-    { value: '', label: t('todas', 'Todas') },
-    ...especies.map(esp => ({ value: esp, label: esp }))
-  ];
-
-  useEffect(() => {
-    mascotasRef.current = mascotas;
-  }, [mascotas]);
-
   const aplicarFiltros = useCallback(() => {
     const filtros = {};
-    if (buscar.trim()) filtros.buscar = buscar.trim();
-    if (especie) filtros.especie = especie;
-    if (genero) filtros.genero = genero;
-    if (tamano) filtros.tamano = tamano;
+    if (buscar.trim()) {
+      filtros.buscar = buscar.trim();
+      filtros.reiniciar_filtros = true;
+    }
     onFilterChange(filtros);
     setMostrarSugerencias(false);
-  }, [buscar, especie, genero, tamano, onFilterChange]);
+  }, [buscar, onFilterChange]);
+
+  const fetchSugerencias = useCallback(async (texto) => {
+    if (!texto.trim() || texto.length < 2) return;
+
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    suggestionsAbortControllerRef.current = controller;
+    currentQueryRef.current = texto;
+
+    try {
+      const response = await publicApi.get('/mascotas/obtener-sugerencias', {
+        params: { q: texto, limit: 10 },
+        signal: controller.signal,
+      });
+
+      const nuevasSugerencias = extractArrayFromResponse(response).slice(0, 10);
+
+      if (currentQueryRef.current !== texto) return;
+
+      setSugerencias(nuevasSugerencias);
+      setMostrarSugerencias(nuevasSugerencias.length > 0);
+    } catch (error) {
+      if (error.name === 'CanceledError' || error.name === 'AbortError') return;
+      console.error('Error obteniendo sugerencias:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    if (buscar.length >= 2) {
+      timeoutRef.current = setTimeout(() => {
+        fetchSugerencias(buscar);
+      }, 300);
+    } else {
+      setSugerencias([]);
+      setMostrarSugerencias(false);
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+        suggestionsAbortControllerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [buscar, fetchSugerencias]);
+
+  useEffect(() => {
+    return () => {
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   const handleBuscarChange = (e) => {
     setBuscar(e.target.value);
@@ -140,80 +176,20 @@ const FiltrosMascotas = ({
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
-    aplicarFiltros();
+    onFilterChange({ buscar: sugerencia.trim(), reiniciar_filtros: true });
   };
 
   const limpiarTodo = () => {
     setBuscar('');
-    setEspecie('');
-    setGenero('');
-    setTamano('');
     onFilterChange({});
     setSugerencias([]);
     setMostrarSugerencias(false);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-  };
-
-  const handleSelectChange = (tipo, valor) => {
-    if (tipo === 'especie') setEspecie(valor);
-    if (tipo === 'genero') setGenero(valor);
-    if (tipo === 'tamano') setTamano(valor);
-    
-    const nuevosFiltros = {};
-    if (buscar.trim()) nuevosFiltros.buscar = buscar.trim();
-    if (tipo === 'especie' && valor) nuevosFiltros.especie = valor;
-    else if (tipo !== 'especie' && especie) nuevosFiltros.especie = especie;
-    if (tipo === 'genero' && valor) nuevosFiltros.genero = valor;
-    else if (tipo !== 'genero' && genero) nuevosFiltros.genero = genero;
-    if (tipo === 'tamano' && valor) nuevosFiltros.tamano = valor;
-    else if (tipo !== 'tamano' && tamano) nuevosFiltros.tamano = tamano;
-    
-    onFilterChange(nuevosFiltros);
-  };
-
-  const obtenerSugerencias = useCallback((texto) => {
-    if (!texto.trim() || texto.length < 2) return [];
-
-    const textoLower = texto.toLowerCase();
-    const palabrasUnicas = new Set();
-    const mascotasActuales = mascotasRef.current;
-
-    mascotasActuales.forEach(mascota => {
-      if (mascota.nombre_mascota?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.nombre_mascota);
-      }
-      if (mascota.especie?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.especie);
-      }
-      if (mascota.color?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.color);
-      }
-      if (mascota.lugar_rescate?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.lugar_rescate);
-      }
-    });
-
-    return Array.from(palabrasUnicas).slice(0, 10);
-  }, []);
-
-  useEffect(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-    if (buscar.length >= 2) {
-      timeoutRef.current = setTimeout(() => {
-        const nuevasSugerencias = obtenerSugerencias(buscar);
-        setSugerencias(nuevasSugerencias);
-        setMostrarSugerencias(nuevasSugerencias.length > 0);
-      }, 300);
-    } else {
-      setSugerencias([]);
-      setMostrarSugerencias(false);
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+      suggestionsAbortControllerRef.current = null;
     }
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [buscar, obtenerSugerencias]);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -228,7 +204,7 @@ const FiltrosMascotas = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const hayFiltrosActivos = buscar || especie || genero || tamano;
+  const hayFiltrosActivos = buscar;
 
   return (
     <div className="fm-container reveal-up delay-100">
@@ -295,44 +271,6 @@ const FiltrosMascotas = ({
           )}
         </div>
 
-        {/* Selects con etiquetas */}
-        <div className="fm-selects-group">
-          <div className="fm-select-item">
-            <label className="fm-filter-label">
-              <i className="fas fa-paw"></i> {t("especie", "Especie")}
-            </label>
-            <CustomSelect
-              options={opcionesEspecies}
-              value={especie}
-              onChange={(e) => handleSelectChange('especie', e.target.value)}
-              placeholder={t('seleccionar_especie', 'Seleccionar especie')}
-            />
-          </div>
-          
-          <div className="fm-select-item">
-            <label className="fm-filter-label">
-              <i className="fas fa-venus-mars"></i> {t("genero", "Género")}
-            </label>
-            <CustomSelect
-              options={opcionesGenero}
-              value={genero}
-              onChange={(e) => handleSelectChange('genero', e.target.value)}
-              placeholder={t('seleccionar_genero', 'Seleccionar género')}
-            />
-          </div>
-          
-          <div className="fm-select-item">
-            <label className="fm-filter-label">
-              <i className="fas fa-ruler"></i> {t("tamano", "Tamaño")}
-            </label>
-            <CustomSelect
-              options={opcionesTamano}
-              value={tamano}
-              onChange={(e) => handleSelectChange('tamano', e.target.value)}
-              placeholder={t('seleccionar_tamano', 'Seleccionar tamaño')}
-            />
-          </div>
-        </div>
       </div>
 
       {/* Botón limpiar filtros */}

@@ -1,6 +1,7 @@
 // src/components/common/FiltrosMascotasFundacion/FiltrosMascotasFundacion.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { publicApi } from '../../../services/api';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import './FiltrosMascotasFundacion.css';
@@ -27,8 +28,9 @@ const FiltrosMascotasFundacion = ({
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
-  const mascotasRef = useRef(mascotas);
   const progressIntervalRef = useRef(null);
+  const suggestionsAbortControllerRef = useRef(null);
+  const currentQueryRef = useRef('');
 
   // Efecto para animar la barra de progreso
   useEffect(() => {
@@ -88,13 +90,12 @@ const FiltrosMascotasFundacion = ({
     ...especies.map(esp => ({ value: esp, label: esp }))
   ];
 
-  useEffect(() => {
-    mascotasRef.current = mascotas;
-  }, [mascotas]);
-
   const aplicarFiltros = useCallback(() => {
     const filtros = {};
-    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (buscar.trim()) {
+      filtros.buscar = buscar.trim();
+      filtros.reiniciar_filtros = true;
+    }
     if (especie) filtros.especie = especie;
     if (genero) filtros.genero = genero;
     if (tamano) filtros.tamano = tamano;
@@ -152,7 +153,7 @@ const FiltrosMascotasFundacion = ({
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
-    aplicarFiltros();
+    onFilterChange({ buscar: sugerencia.trim(), reiniciar_filtros: true, especie, genero, tamano, estado });
   };
 
   const limpiarTodo = () => {
@@ -165,6 +166,10 @@ const FiltrosMascotasFundacion = ({
     setSugerencias([]);
     setMostrarSugerencias(false);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+      suggestionsAbortControllerRef.current = null;
+    }
   };
 
   const handleSelectChange = (tipo, valor) => {
@@ -187,29 +192,33 @@ const FiltrosMascotasFundacion = ({
     onFilterChange(nuevosFiltros);
   };
 
-  const obtenerSugerencias = useCallback((texto) => {
-    if (!texto.trim() || texto.length < 2) return [];
+  const fetchSugerencias = useCallback(async (texto) => {
+    if (!texto.trim() || texto.length < 2) return;
 
-    const textoLower = texto.toLowerCase();
-    const palabrasUnicas = new Set();
-    const mascotasActuales = mascotasRef.current;
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+    }
 
-    mascotasActuales.forEach(mascota => {
-      if (mascota.nombre_mascota?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.nombre_mascota);
-      }
-      if (mascota.especie?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.especie);
-      }
-      if (mascota.color?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.color);
-      }
-      if (mascota.lugar_rescate?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(mascota.lugar_rescate);
-      }
-    });
+    const controller = new AbortController();
+    suggestionsAbortControllerRef.current = controller;
+    currentQueryRef.current = texto;
 
-    return Array.from(palabrasUnicas).slice(0, 10);
+    try {
+      const response = await publicApi.get('/mascotas/obtener-sugerencias', {
+        params: { q: texto, limit: 10 },
+        signal: controller.signal,
+      });
+
+      const nuevasSugerencias = extractArrayFromResponse(response).slice(0, 10);
+
+      if (currentQueryRef.current !== texto) return;
+
+      setSugerencias(nuevasSugerencias);
+      setMostrarSugerencias(nuevasSugerencias.length > 0);
+    } catch (error) {
+      if (error.name === 'CanceledError' || error.name === 'AbortError') return;
+      console.error('Error obteniendo sugerencias:', error);
+    }
   }, []);
 
   useEffect(() => {
@@ -217,19 +226,29 @@ const FiltrosMascotasFundacion = ({
 
     if (buscar.length >= 2) {
       timeoutRef.current = setTimeout(() => {
-        const nuevasSugerencias = obtenerSugerencias(buscar);
-        setSugerencias(nuevasSugerencias);
-        setMostrarSugerencias(nuevasSugerencias.length > 0);
+        fetchSugerencias(buscar);
       }, 300);
     } else {
       setSugerencias([]);
       setMostrarSugerencias(false);
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+        suggestionsAbortControllerRef.current = null;
+      }
     }
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [buscar, obtenerSugerencias]);
+  }, [buscar, fetchSugerencias]);
+
+  useEffect(() => {
+    return () => {
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

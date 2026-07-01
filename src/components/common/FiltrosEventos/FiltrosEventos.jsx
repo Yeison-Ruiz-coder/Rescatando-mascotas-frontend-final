@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProgressBar from '../ProgressBar/ProgressBar';
+import { publicApi } from '../../../services/api';
+import { extractArrayFromResponse } from '../../../utils/responseUtils';
 import './FiltrosEventos.css';
 
 const FiltrosEventos = ({ 
   onFilterChange, 
-  eventos = [],
   isLoading = false 
 }) => {
   const { t } = useTranslation('eventos');
@@ -20,8 +21,9 @@ const FiltrosEventos = ({
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
-  const eventosRef = useRef(eventos);
   const progressIntervalRef = useRef(null);
+  const suggestionsAbortControllerRef = useRef(null);
+  const currentQueryRef = useRef('');
 
   // Efecto para animar la barra de progreso cuando isLoading cambia
   useEffect(() => {
@@ -61,15 +63,41 @@ const FiltrosEventos = ({
   // Resto de tu código igual...
   // (todas las funciones: aplicarFiltros, handleBuscarClick, handleKeyDown, etc.)
   
-  // Actualizar referencia
-  useEffect(() => {
-    eventosRef.current = eventos;
-  }, [eventos]);
+  const fetchSugerencias = useCallback(async (texto) => {
+    if (!texto.trim() || texto.length < 2) return;
 
-  // Función para aplicar el filtro de búsqueda
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    suggestionsAbortControllerRef.current = controller;
+    currentQueryRef.current = texto;
+
+    try {
+      const response = await publicApi.get('/eventos/obtener-sugerencias', {
+        params: { q: texto, limit: 10 },
+        signal: controller.signal,
+      });
+
+      const nuevasSugerencias = extractArrayFromResponse(response).slice(0, 10);
+
+      if (currentQueryRef.current !== texto) return;
+
+      setSugerencias(nuevasSugerencias);
+      setMostrarSugerencias(nuevasSugerencias.length > 0);
+    } catch (error) {
+      if (error.name === 'CanceledError' || error.name === 'AbortError') return;
+      console.error('Error obteniendo sugerencias:', error);
+    }
+  }, []);
+
   const aplicarFiltros = useCallback(() => {
     const filtros = {};
-    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (buscar.trim()) {
+      filtros.buscar = buscar.trim();
+      filtros.reiniciar_filtros = true;
+    }
     onFilterChange(filtros);
     setMostrarSugerencias(false);
   }, [buscar, onFilterChange]);
@@ -122,7 +150,7 @@ const FiltrosEventos = ({
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
-    aplicarFiltros();
+    onFilterChange({ buscar: sugerencia.trim(), reiniciar_filtros: true });
   };
 
   // Limpiar búsqueda
@@ -132,30 +160,11 @@ const FiltrosEventos = ({
     setSugerencias([]);
     setMostrarSugerencias(false);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+      suggestionsAbortControllerRef.current = null;
+    }
   };
-
-  // Obtener sugerencias
-  const obtenerSugerencias = useCallback((texto) => {
-    if (!texto.trim() || texto.length < 2) return [];
-
-    const textoLower = texto.toLowerCase();
-    const palabrasUnicas = new Set();
-    const eventosActuales = eventosRef.current;
-
-    eventosActuales.forEach(evento => {
-      if (evento.nombre_evento?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(evento.nombre_evento);
-      }
-      if (evento.lugar_evento?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(evento.lugar_evento);
-      }
-      if (evento.categoria?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(evento.categoria);
-      }
-    });
-
-    return Array.from(palabrasUnicas).slice(0, 10);
-  }, []);
 
   // Efecto para sugerencias con debounce
   useEffect(() => {
@@ -163,19 +172,29 @@ const FiltrosEventos = ({
 
     if (buscar.length >= 2) {
       timeoutRef.current = setTimeout(() => {
-        const nuevasSugerencias = obtenerSugerencias(buscar);
-        setSugerencias(nuevasSugerencias);
-        setMostrarSugerencias(nuevasSugerencias.length > 0);
+        fetchSugerencias(buscar);
       }, 300);
     } else {
       setSugerencias([]);
       setMostrarSugerencias(false);
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+        suggestionsAbortControllerRef.current = null;
+      }
     }
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [buscar, obtenerSugerencias]);
+  }, [buscar, fetchSugerencias]);
+
+  useEffect(() => {
+    return () => {
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {

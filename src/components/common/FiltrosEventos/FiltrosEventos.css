@@ -5,6 +5,7 @@
   position: relative;
   background: transparent;
   padding: 0;
+  overflow: visible;
 }
 
 /* Progress Bar dentro del buscador - CORTA Y CENTRADA */
@@ -44,6 +45,7 @@
   max-width: 600px;
   margin: 0 auto;
   min-height: 56px;
+  overflow: visible;
 }
 
 .fe-search-box {

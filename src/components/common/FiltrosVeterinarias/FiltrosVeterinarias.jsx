@@ -2,11 +2,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProgressBar from '../ProgressBar/ProgressBar';
+import { publicApi } from '../../../services/api';
+import { extractArrayFromResponse } from '../../../utils/responseUtils';
 import './FiltrosVeterinarias.css';
 
 const FiltrosVeterinarias = ({ 
   onFilterChange, 
-  veterinarias = [],
   isLoading = false 
 }) => {
   const { t } = useTranslation('veterinarias');
@@ -19,8 +20,9 @@ const FiltrosVeterinarias = ({
   const inputRef = useRef(null);
   const sugerenciasRef = useRef(null);
   const timeoutRef = useRef(null);
-  const veterinariasRef = useRef(veterinarias);
   const progressIntervalRef = useRef(null);
+  const suggestionsAbortControllerRef = useRef(null);
+  const currentQueryRef = useRef('');
 
   // Efecto para animar la barra de progreso
   useEffect(() => {
@@ -51,96 +53,35 @@ const FiltrosVeterinarias = ({
     };
   }, [isLoading]);
 
-  // Mantener referencia actualizada
-  useEffect(() => {
-    veterinariasRef.current = veterinarias;
-  }, [veterinarias]);
+  const fetchSugerencias = useCallback(async (texto) => {
+    if (!texto.trim() || texto.length < 2) return;
 
-  // Función para obtener sugerencias
-  const obtenerSugerencias = useCallback((texto) => {
-    if (!texto.trim() || texto.length < 2) return [];
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+    }
 
-    const textoLower = texto.toLowerCase();
-    const palabrasUnicas = new Set();
-    const veterinariasActuales = veterinariasRef.current;
+    const controller = new AbortController();
+    suggestionsAbortControllerRef.current = controller;
+    currentQueryRef.current = texto;
 
-    veterinariasActuales.forEach(veterinaria => {
-      // Campos básicos
-      if (veterinaria.Nombre_vet?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.Nombre_vet);
-      }
-      if (veterinaria.Direccion?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.Direccion);
-      }
-      if (veterinaria.ciudad?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.ciudad);
-      }
-      if (veterinaria.departamento?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.departamento);
-      }
-      if (veterinaria.Telefono?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.Telefono);
-      }
-      if (veterinaria.Email?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(veterinaria.Email);
-      }
+    try {
+      const response = await publicApi.get('/veterinarias/obtener-sugerencias', {
+        params: { q: texto, limit: 10 },
+        signal: controller.signal,
+      });
 
-      // Servicios
-      if (veterinaria.servicios) {
-        let servicios = [];
-        try {
-          servicios = typeof veterinaria.servicios === 'string' 
-            ? JSON.parse(veterinaria.servicios) 
-            : veterinaria.servicios;
-        } catch(e) { servicios = []; }
-        
-        servicios.forEach(servicio => {
-          if (servicio?.toLowerCase().includes(textoLower)) {
-            palabrasUnicas.add(`${t('servicio', 'Servicio')}: ${servicio}`);
-          }
-        });
-      }
+      const nuevasSugerencias = extractArrayFromResponse(response).slice(0, 10);
 
-      // Horario
-      if (veterinaria.horario_atencion?.toLowerCase().includes(textoLower)) {
-        palabrasUnicas.add(`${t('horario', 'Horario')}: ${veterinaria.horario_atencion}`);
-      }
+      if (currentQueryRef.current !== texto) return;
 
-      // Urgencias 24h
-      if (textoLower.includes('urgencia') || textoLower.includes('emergencia') || textoLower.includes('24h')) {
-        if (veterinaria.urgencias_24h === true) {
-          palabrasUnicas.add(t('urgencias_24h', 'Urgencias 24 horas'));
-        }
-      }
+      setSugerencias(nuevasSugerencias);
+      setMostrarSugerencias(nuevasSugerencias.length > 0);
+    } catch (error) {
+      if (error.name === 'CanceledError' || error.name === 'AbortError') return;
+      console.error('Error obteniendo sugerencias:', error);
+    }
+  }, []);
 
-      // Verificado
-      if (textoLower.includes('verificado') || textoLower.includes('oficial')) {
-        if (veterinaria.verificado === true) {
-          palabrasUnicas.add(t('verificado', 'Verificado'));
-        }
-      }
-
-      // Años de experiencia
-      if (veterinaria.anios_experiencia) {
-        const expStr = veterinaria.anios_experiencia.toString();
-        if (expStr.includes(textoLower)) {
-          palabrasUnicas.add(`${veterinaria.anios_experiencia} ${t('años_experiencia', 'años de experiencia')}`);
-        }
-      }
-
-      // Precio consulta
-      if (veterinaria.precio_consulta) {
-        const precioStr = veterinaria.precio_consulta.toString();
-        if (precioStr.includes(textoLower)) {
-          palabrasUnicas.add(`${t('consulta', 'Consulta')}: $${veterinaria.precio_consulta}`);
-        }
-      }
-    });
-
-    return Array.from(palabrasUnicas).slice(0, 10);
-  }, [t]);
-
-  // Efecto para manejar la búsqueda con debounce
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -148,13 +89,15 @@ const FiltrosVeterinarias = ({
 
     if (buscar.length >= 2) {
       timeoutRef.current = setTimeout(() => {
-        const nuevasSugerencias = obtenerSugerencias(buscar);
-        setSugerencias(nuevasSugerencias);
-        setMostrarSugerencias(nuevasSugerencias.length > 0);
+        fetchSugerencias(buscar);
       }, 300);
     } else {
       setSugerencias([]);
       setMostrarSugerencias(false);
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+        suggestionsAbortControllerRef.current = null;
+      }
     }
 
     return () => {
@@ -162,7 +105,15 @@ const FiltrosVeterinarias = ({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [buscar, obtenerSugerencias]);
+  }, [buscar, fetchSugerencias]);
+
+  useEffect(() => {
+    return () => {
+      if (suggestionsAbortControllerRef.current) {
+        suggestionsAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -213,7 +164,10 @@ const FiltrosVeterinarias = ({
 
   const handleSearch = () => {
     const filtros = {};
-    if (buscar.trim()) filtros.buscar = buscar.trim();
+    if (buscar.trim()) {
+      filtros.buscar = buscar.trim();
+      filtros.reiniciar_filtros = true;
+    }
     onFilterChange(filtros);
     setMostrarSugerencias(false);
   };
@@ -221,7 +175,7 @@ const FiltrosVeterinarias = ({
   const seleccionarSugerencia = (sugerencia) => {
     setBuscar(sugerencia);
     setMostrarSugerencias(false);
-    onFilterChange({ buscar: sugerencia.trim() });
+    onFilterChange({ buscar: sugerencia.trim(), reiniciar_filtros: true });
   };
 
   const limpiarBusqueda = () => {
@@ -231,6 +185,10 @@ const FiltrosVeterinarias = ({
     setMostrarSugerencias(false);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+    if (suggestionsAbortControllerRef.current) {
+      suggestionsAbortControllerRef.current.abort();
+      suggestionsAbortControllerRef.current = null;
     }
   };
 

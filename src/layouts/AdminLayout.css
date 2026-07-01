@@ -3,8 +3,8 @@
 .admin-main-content {
   flex: 1;
   overflow-y: auto;
-  margin-top: 70px; /* Ajusta según la altura de tu navbar */
+  margin-top: 0;
   background: transparent;
-  transition: margin-left 0.3s ease;
+  transition: margin-left 0.25s ease-out;
   min-height: calc(100vh - 70px);
 }

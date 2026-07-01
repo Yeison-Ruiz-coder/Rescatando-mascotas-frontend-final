@@ -9,10 +9,11 @@
 }
 
 /* 🔥 MAIN CONTENT - Con padding-top para compensar el navbar fixed */
-.main-content {
+.main-content,
+.admin-main-content {
   flex: 1;
   background: transparent;
-  transition: margin-left 0.3s ease;
+  transition: margin-left 0.25s ease-out;
   overflow: visible;
   min-height: auto;
   height: auto;
@@ -24,7 +25,8 @@
   padding-top: 70px; /* Ajusta según la altura real de tu navbar */
 }
 
-.main-content.shifted {
+.main-content.shifted,
+.admin-main-content.shifted {
   margin-left: 240px;
 }
 
