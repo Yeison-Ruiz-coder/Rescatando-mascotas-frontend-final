@@ -250,7 +250,7 @@ const DashboardVeterinaria = lazy(
 const Citas = lazy(() => import("../pages/veterinaria/citas/Citas"));
 const CitaForm = lazy(() => import("../pages/veterinaria/citas/CitaForm"));
 const Pacientes = lazy(
-  () => import("../pages/veterinaria/pacientes/Pacientes"),
+  () => import("../pages/fundacion/mascotas/Mascotas"),
 );
 const PacienteForm = lazy(
   () => import("../pages/veterinaria/pacientes/PacienteForm"),
@@ -272,6 +272,18 @@ const MisRescatesVet = lazy(
 );
 const RescateDetalleVet = lazy(
   () => import("../pages/veterinaria/rescates/RescateDetalle"),
+);
+const EventosIndexVet = lazy(
+  () => import("../pages/veterinaria/eventos/EventosIndex"),
+);
+const EventosCreateVet = lazy(
+  () => import("../pages/veterinaria/eventos/EventosCreate"),
+);
+const EventosShowVet = lazy(
+  () => import("../pages/veterinaria/eventos/EventosShowFundacion"),
+);
+const EventosEditVet = lazy(
+  () => import("../pages/veterinaria/eventos/EventosEdit"),
 );
 const VeterinariaProfile = lazy(
   () => import("../pages/veterinaria/perfil/VeterinariaProfile"),
@@ -498,8 +510,11 @@ const router = createBrowserRouter([
             element: <MisRescatesVet tipoUsuario="veterinaria" />,
           },
           { path: "rescates/:id", element: <RescateDetalleVet /> },
+          { path: "eventos", element: <EventosIndexVet /> },
+          { path: "eventos/crear", element: <EventosCreateVet /> },
+          { path: "eventos/:id", element: <EventosShowVet /> },
+          { path: "eventos/:id/editar", element: <EventosEditVet /> },
           { path: "atenciones", element: <VetAtenciones /> },
-          { path: "historiales", element: <VetHistoriales /> },
           { path: "citas", element: <Citas /> },
           { path: "citas/nueva", element: <CitaForm /> },
           { path: "citas/editar/:id", element: <CitaForm /> },

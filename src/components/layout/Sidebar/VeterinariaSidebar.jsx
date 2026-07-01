@@ -36,6 +36,7 @@ const VeterinariaSidebar = () => {
 
   const [openSections, setOpenSections] = useState({
     rescates: true,
+    eventos: false,
     atenciones: false,
     mascotas: false
   });
@@ -166,26 +167,26 @@ const VeterinariaSidebar = () => {
 
         <div className="sidebar-section">
           <div
-            className={`sidebar-item has-submenu ${isActive('/veterinaria/atenciones') ? 'active' : ''}`}
-            onClick={() => toggleSection('atenciones')}
+            className={`sidebar-item has-submenu ${isActive('/veterinaria/eventos') ? 'active' : ''}`}
+            onClick={() => toggleSection('eventos')}
           >
-            <i className="fas fa-stethoscope"></i>
-            <span>{t("atenciones_medicas")}</span>
-            <i className={`fas fa-chevron-right arrow ${openSections.atenciones ? 'open' : ''}`}></i>
+            <i className="fas fa-calendar-alt"></i>
+            <span>{t("eventos")}</span>
+            <i className={`fas fa-chevron-right arrow ${openSections.eventos ? 'open' : ''}`}></i>
           </div>
-          <div className={`submenu ${openSections.atenciones ? 'open' : ''}`}>
+          <div className={`submenu ${openSections.eventos ? 'open' : ''}`}>
             <SubmenuItem
-              to="/veterinaria/atenciones"
+              to="/veterinaria/eventos"
               icon="fas fa-list"
-              label={t("historial_atenciones")}
-              isActive={isActive('/veterinaria/atenciones') && !isActive('/veterinaria/atenciones/nueva')}
+              label={t("mis_eventos")}
+              isActive={isActive('/veterinaria/eventos') && !isActive('/veterinaria/eventos/crear')}
               onClick={handleLinkClick}
             />
             <SubmenuItem
-              to="/veterinaria/atenciones/nueva"
+              to="/veterinaria/eventos/crear"
               icon="fas fa-plus-circle"
-              label={t("nueva_atencion")}
-              isActive={isActive('/veterinaria/atenciones/nueva')}
+              label={t("crear_evento")}
+              isActive={isActive('/veterinaria/eventos/crear')}
               onClick={handleLinkClick}
             />
           </div>

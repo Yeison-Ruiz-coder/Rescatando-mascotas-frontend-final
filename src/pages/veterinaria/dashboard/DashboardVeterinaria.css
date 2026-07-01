@@ -129,12 +129,41 @@
   line-height: 1.65;
 }
 
-@media (max-width: 768px) {
-  .vet-dashboard-page {
-    padding: 1rem;
+  .dashboard-error {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
   }
-  
-  .dashboard-header {
+
+  .dashboard-error h2 {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .dashboard-refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.3rem;
+    border-radius: 999px;
+    border: none;
+    background: var(--color-primary);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .dashboard-refresh-btn:hover {
+    transform: translateY(-1px);
+    background: var(--color-primary-dark);
+  }
+
     flex-direction: column;
     align-items: flex-start;
   }

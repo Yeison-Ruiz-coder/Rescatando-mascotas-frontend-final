@@ -20,8 +20,10 @@ const useRescate = () => {
     lng: null,
   });
 
-  const [fotosFiles, setFotosFiles] = useState([]);
-  const [fotosPreviews, setFotosPreviews] = useState([]);
+  const [fotoPrincipalFile, setFotoPrincipalFile] = useState(null);
+  const [fotoPrincipalPreview, setFotoPrincipalPreview] = useState(null);
+  const [galeriaFiles, setGaleriaFiles] = useState([]);
+  const [galeriaPreviews, setGaleriaPreviews] = useState([]);
   const [prioridad, setPrioridad] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -122,9 +124,21 @@ const useRescate = () => {
     );
   }, [t]);
 
+  const handleFotoPrincipalChange = useCallback((file, preview) => {
+    setFotoPrincipalFile(file || null);
+    setFotoPrincipalPreview(preview || null);
+    if (errors.foto_principal) setErrors(prev => ({ ...prev, foto_principal: "" }));
+  }, [errors]);
+
+  const handleGaleriaChange = useCallback((files, previews) => {
+    setGaleriaFiles(files || []);
+    setGaleriaPreviews(previews || []);
+    if (errors.fotos) setErrors(prev => ({ ...prev, fotos: "" }));
+  }, [errors]);
+
   const handleFotosChange = useCallback((files, previews) => {
-    setFotosFiles(files || []);
-    setFotosPreviews(previews || []);
+    setGaleriaFiles(files || []);
+    setGaleriaPreviews(previews || []);
     if (errors.fotos) setErrors(prev => ({ ...prev, fotos: "" }));
   }, [errors]);
 
@@ -174,21 +188,29 @@ const useRescate = () => {
       newErrors.telefono_reportante = "Ingresa un teléfono válido (mínimo 7 dígitos)";
     }
 
-    // Validación de fotos (opcional pero tamaño máximo)
-    if (fotosFiles.length > 0) {
+    // Validación de la foto principal y galería
+    if (fotoPrincipalFile) {
       const maxSize = 5 * 1024 * 1024;
-      const oversizedFiles = fotosFiles.filter(f => f && f.size > maxSize);
+      if (fotoPrincipalFile.size > maxSize) {
+        newErrors.foto_principal = `La foto principal no puede superar los 5MB`;
+      }
+    }
+
+    if (galeriaFiles.length > 0) {
+      const maxSize = 5 * 1024 * 1024;
+      const oversizedFiles = galeriaFiles.filter(f => f && f.size > maxSize);
       if (oversizedFiles.length > 0) {
         newErrors.fotos = `Las fotos no pueden superar los 5MB`;
       }
-      if (fotosFiles.length > 5) {
-        newErrors.fotos = `Máximo 5 fotos por rescate`;
+      const maxGallery = fotoPrincipalFile ? 4 : 5;
+      if (galeriaFiles.length > maxGallery) {
+        newErrors.fotos = `Máximo ${maxGallery} fotos de galería permitidas`;
       }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData, prioridad, fotosFiles]);
+  }, [formData, prioridad, galeriaFiles]);
 
   // Enviar formulario
   const handleSubmit = useCallback(async (e) => {
@@ -212,12 +234,22 @@ const useRescate = () => {
     if (formData.lat != null) formDataToSend.append("lat", formData.lat);
     if (formData.lng != null) formDataToSend.append("lng", formData.lng);
 
-    if (fotosFiles.length > 0) {
-      const validFiles = fotosFiles.filter(f => f instanceof File && f.size > 0);
-      validFiles.forEach((foto, index) => {
-        if (index === 0) formDataToSend.append("foto_principal", foto);
-        else formDataToSend.append("galeria_fotos[]", foto);
-      });
+    if (fotoPrincipalFile instanceof File && fotoPrincipalFile.size > 0) {
+      formDataToSend.append("foto_principal", fotoPrincipalFile);
+    }
+
+    if (galeriaFiles.length > 0) {
+      const validFiles = galeriaFiles.filter(f => f instanceof File && f.size > 0);
+      if (!fotoPrincipalFile && validFiles.length > 0) {
+        formDataToSend.append("foto_principal", validFiles[0]);
+        validFiles.slice(1).forEach((foto) => {
+          formDataToSend.append("galeria_fotos[]", foto);
+        });
+      } else {
+        validFiles.forEach((foto) => {
+          formDataToSend.append("galeria_fotos[]", foto);
+        });
+      }
     }
 
     setLoading(true);
@@ -239,7 +271,7 @@ const useRescate = () => {
     } finally {
       setLoading(false);
     }
-  }, [formData, prioridad, fotosFiles, validate, startAdminTimer]);
+  }, [formData, prioridad, galeriaFiles, fotoPrincipalFile, validate, startAdminTimer]);
 
   const formatTimeRemaining = useCallback((seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -258,8 +290,10 @@ const useRescate = () => {
       lat: null,
       lng: null,
     });
-    setFotosFiles([]);
-    setFotosPreviews([]);
+    setFotoPrincipalFile(null);
+    setFotoPrincipalPreview(null);
+    setGaleriaFiles([]);
+    setGaleriaPreviews([]);
     setErrors({});
     setPrioridad(null);
     setSubmitSuccess(false);
@@ -328,8 +362,6 @@ const useRescate = () => {
     rescateDisponibleParaAdmin,
     rescateId,
     prioridad,
-    fotosPreviews,
-    fotosFiles,
     gettingLocation,
     handleChange,
     handleLocationChange,
@@ -337,7 +369,13 @@ const useRescate = () => {
     setPrioridadManual,
     handleSubmit,
     resetForm,
+    handleFotoPrincipalChange,
+    handleGaleriaChange,
     handleFotosChange,
+    fotoPrincipalPreview,
+    galeriaPreviews,
+    fotoPrincipalFile,
+    galeriaFiles,
     prioridadConfig,
     prioridadTexto,
     botonesPrioridad,

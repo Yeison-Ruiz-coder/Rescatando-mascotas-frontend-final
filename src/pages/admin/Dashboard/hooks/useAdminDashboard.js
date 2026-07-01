@@ -105,77 +105,61 @@ export const useAdminDashboard = () => {
     try {
       console.log('📊 Cargando datos del dashboard...');
 
-      // 1. Usuarios - Obtener todos (no solo 5)
-      const usersRes = await api.get('/admin/usuarios', { params: { per_page: 100 } });
-      let usersData = extractData(usersRes.data);
-      const totalUsuarios = usersRes.data?.data?.total || usersRes.data?.total || usersData.length || 0;
-      
-      console.log(`👥 Usuarios: ${totalUsuarios}`);
+      const results = await Promise.allSettled([
+        api.get('/admin/usuarios', { params: { per_page: 100 } }),
+        api.get('/admin/mascotas', { params: { per_page: 100 } }),
+        api.get('/admin/adopciones', { params: { per_page: 100 } }),
+        api.get('/admin/rescates', { params: { per_page: 100 } }),
+        api.get('/admin/eventos', { params: { per_page: 100 } }),
+        api.get('/admin/suscripciones'),
+        api.get('/admin/usuarios', { params: { estado: 'pendiente', per_page: 1 } }),
+      ]);
 
-      // 2. Mascotas - Obtener todos
-      const petsRes = await api.get('/admin/mascotas', { params: { per_page: 100 } });
-      let petsData = extractData(petsRes.data);
-      const totalMascotas = petsRes.data?.data?.total || petsRes.data?.total || petsData.length || 0;
-      
-      console.log(`🐾 Mascotas: ${totalMascotas}`);
+      const [
+        usersRes,
+        petsRes,
+        adoptionsRes,
+        rescuesRes,
+        eventsRes,
+        subsRes,
+        pendingUsersRes,
+      ] = results.map((result) => (result.status === 'fulfilled' ? result.value : null));
 
-      // 3. Adopciones - Obtener todos
-      const adoptionsRes = await api.get('/admin/adopciones', { params: { per_page: 100 } });
-      let adoptionsData = extractData(adoptionsRes.data);
-      const totalAdopciones = adoptionsRes.data?.data?.total || adoptionsRes.data?.total || adoptionsData.length || 0;
-      
-      console.log(`📋 Adopciones: ${totalAdopciones}`);
+      if (results.some((result) => result.status === 'rejected')) {
+        console.warn('Algunos endpoints del dashboard fallaron:', results);
+      }
 
-      // 4. Rescates - Obtener todos
-      const rescuesRes = await api.get('/admin/rescates', { params: { per_page: 100 } });
-      let rescuesData = extractData(rescuesRes.data);
-      
-      console.log(`🆘 Rescates: ${rescuesData.length}`);
+      const usersData = extractData(usersRes?.data);
+      const totalUsuarios = usersRes?.data?.data?.total || usersRes?.data?.total || usersData.length || 0;
 
-      // 5. Eventos - Obtener todos
-      const eventsRes = await api.get('/admin/eventos', { params: { per_page: 100 } });
-      let eventsData = extractData(eventsRes.data);
-      
-      console.log(`📅 Eventos: ${eventsData.length}`);
+      const petsData = extractData(petsRes?.data);
+      const totalMascotas = petsRes?.data?.data?.total || petsRes?.data?.total || petsData.length || 0;
 
-      // 6. Suscripciones - Obtener todos
-      const subsRes = await api.get('/admin/suscripciones');
-      let subsData = extractData(subsRes.data);
-      
-      console.log(`💳 Suscripciones: ${subsData.length}`);
+      const adoptionsData = extractData(adoptionsRes?.data);
+      const totalAdopciones = adoptionsRes?.data?.data?.total || adoptionsRes?.data?.total || adoptionsData.length || 0;
 
-      // 7. Usuarios pendientes
-      const pendingUsersRes = await api.get('/admin/usuarios', { params: { estado: 'pendiente', per_page: 1 } });
-      const pendingUsersTotal = pendingUsersRes.data?.data?.total || pendingUsersRes.data?.total || 0;
+      const rescuesData = extractData(rescuesRes?.data);
+      const eventsData = extractData(eventsRes?.data);
+      const subsData = extractData(subsRes?.data);
+      const pendingUsersTotal = pendingUsersRes?.data?.data?.total || pendingUsersRes?.data?.total || 0;
 
-      // ===== ESTABLECER ESTADÍSTICAS =====
-      const adopcionesCompletadas = adoptionsData.filter(a => 
-        a.estado === 'completada' || a.estado === 'Completada'
-      ).length;
+      const adopcionesCompletadas = Array.isArray(adoptionsData)
+        ? adoptionsData.filter(a => a.estado === 'completada' || a.estado === 'Completada').length
+        : 0;
 
-      const eventosActivos = eventsData.filter(e => {
-        if (!e.fecha_evento) return false;
-        return new Date(e.fecha_evento) > new Date();
-      }).length;
+      const eventosActivos = Array.isArray(eventsData)
+        ? eventsData.filter(e => e.fecha_evento && new Date(e.fecha_evento) > new Date()).length
+        : 0;
 
-      const rescatesPendientes = rescuesData.filter(r => 
-        r.estado === 'pendiente' || r.estado === 'en_progreso'
-      ).length;
+      const rescatesPendientes = Array.isArray(rescuesData)
+        ? rescuesData.filter(r => r.estado === 'pendiente' || r.estado === 'en_progreso').length
+        : 0;
 
-      const suscripcionesActivas = subsData.filter(s => 
-        s.estado === 'activo' || s.estado === 'Activo'
-      ).length;
+      const suscripcionesActivas = Array.isArray(subsData)
+        ? subsData.filter(s => s.estado === 'activo' || s.estado === 'Activo').length
+        : 0;
 
       setStats({
-        totalUsuarios: totalUsuarios,
-        totalMascotas: totalMascotas,
-        adopcionesCompletadas: adopcionesCompletadas,
-        eventosActivos: eventosActivos,
-        rescatesPendientes: rescatesPendientes,
-        suscripcionesActivas: suscripcionesActivas,
-      });
-
-      console.log('📊 Estadísticas:', {
         totalUsuarios,
         totalMascotas,
         adopcionesCompletadas,
@@ -184,7 +168,6 @@ export const useAdminDashboard = () => {
         suscripcionesActivas,
       });
 
-      // ===== ESTABLECER ACTIVIDAD RECIENTE =====
       setRecentActivity({
         usuarios: Array.isArray(usersData) ? usersData.slice(0, 5) : [],
         mascotas: Array.isArray(petsData) ? petsData.slice(0, 5) : [],
@@ -193,19 +176,15 @@ export const useAdminDashboard = () => {
         eventos: Array.isArray(eventsData) ? eventsData.slice(0, 5) : [],
       });
 
-      // ===== ESTABLECER ALERTAS =====
       setAlerts({
         usuariosPendientes: pendingUsersTotal,
-        rescatesPendientes: rescatesPendientes,
+        rescatesPendientes,
         solicitudesPendientes: 0,
       });
 
-      // ===== GENERAR DATOS PARA GRÁFICOS =====
       generateChartData(usersData, petsData, adoptionsData, rescuesData, eventsData, subsData);
-
     } catch (err) {
       console.error('Error en fetchIndividualEndpoints:', err);
-      // No lanzar error para no romper la UI
     }
   }, [extractData]);
 

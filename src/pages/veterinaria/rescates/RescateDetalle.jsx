@@ -2,27 +2,80 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../contexts/AuthContext';
 import { rescateService } from '../../../services/rescateService';
-import LoadingSpinner from '../../../components/common/LoadingSpinner/LoadingSpinner';
-// Eliminar import del modal y del Button
+import ProfileBanner from '../../../components/common/ProfileBanner/ProfileBanner';
+import {
+  AlertCircle,
+  ArrowLeft,
+  CheckCircle,
+  Clock,
+  MapPin,
+  Calendar,
+  User,
+  Phone,
+  Mail,
+  Camera,
+  Images,
+  Flag,
+  Tag,
+  PawPrint,
+  ExternalLink,
+  Loader2,
+  XCircle,
+  FileText,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
+import { getImageUrl } from '../../../utils/imageUtils';
 import './RescateDetalle.css';
 
-const RescateDetalle = ({ tipoUsuario }) => {
+const RescateDetalle = ({ tipoUsuario = 'fundacion' }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('rescate');
+  const { user } = useAuth();
   const [rescate, setRescate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [accionLoading, setAccionLoading] = useState(false);
-  // Eliminar estado modalOpen
+  const [fotoPrincipal, setFotoPrincipal] = useState(null);
+  const [galeriaFotos, setGaleriaFotos] = useState([]);
+  const [fotoSeleccionada, setFotoSeleccionada] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // ===== BANNER DATA =====
+  const fundacionName = user?.name || user?.nombre || t('fundacion', 'Fundación');
+  const fundacionAvatar = user?.avatar || null;
 
   const fetchRescate = useCallback(async () => {
     try {
       setLoading(true);
       const response = await rescateService.getRescateById(id);
       if (response.data.success) {
-        setRescate(response.data.data);
+        const data = response.data.data;
+        setRescate(data);
+        
+        if (data.foto_principal) {
+          const url = getImageUrl(data.foto_principal);
+          setFotoPrincipal(url);
+          setFotoSeleccionada(url);
+        }
+        if (data.galeria_fotos) {
+          try {
+            const galeria = typeof data.galeria_fotos === 'string' 
+              ? JSON.parse(data.galeria_fotos) 
+              : data.galeria_fotos;
+            const urls = galeria.map(f => getImageUrl(f));
+            setGaleriaFotos(urls);
+            // Si no hay foto principal, usar la primera de la galería
+            if (!data.foto_principal && urls.length > 0) {
+              setFotoSeleccionada(urls[0]);
+            }
+          } catch (e) {
+            setGaleriaFotos([]);
+          }
+        }
       }
       setError(null);
     } catch (err) {
@@ -43,7 +96,6 @@ const RescateDetalle = ({ tipoUsuario }) => {
       const response = await rescateService.aceptarRescate(id);
       if (response.data.success) {
         fetchRescate();
-        alert(t('rescate_aceptado'));
       }
     } catch (err) {
       alert(err.response?.data?.message || t('errors.general'));
@@ -66,25 +118,70 @@ const RescateDetalle = ({ tipoUsuario }) => {
     }
   };
 
-  // Nueva función: Redirigir a registro de mascotas
   const handleRegistrarMascota = () => {
-    navigate(`/${tipoUsuario}/mascotas/nueva?rescate_id=${id}`);
+    const ruta = tipoUsuario ? `/${tipoUsuario}/mascotas/nueva` : '/fundacion/mascotas/nueva';
+    navigate(`${ruta}?rescate_id=${id}`);
+  };
+
+  const handleVolver = () => {
+    navigate(-1);
+  };
+
+  const handleSeleccionarFoto = (url) => {
+    setFotoSeleccionada(url);
+  };
+
+  const handleAbrirModal = (url) => {
+    setFotoSeleccionada(url);
+    setIsModalOpen(true);
+  };
+
+  const handleCerrarModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleNavegarModal = (direccion) => {
+    const todasLasFotos = fotoPrincipal ? [fotoPrincipal, ...galeriaFotos] : galeriaFotos;
+    const indexActual = todasLasFotos.indexOf(fotoSeleccionada);
+    let nuevoIndex = indexActual + direccion;
+    if (nuevoIndex < 0) nuevoIndex = todasLasFotos.length - 1;
+    if (nuevoIndex >= todasLasFotos.length) nuevoIndex = 0;
+    setFotoSeleccionada(todasLasFotos[nuevoIndex]);
   };
 
   const getPrioridadClass = () => {
     switch (rescate?.prioridad) {
-      case 'alta': return 'prioridad-alta';
-      case 'media': return 'prioridad-media';
-      default: return 'prioridad-baja';
+      case 'alta': return 'rd-detalle-prioridad-alta';
+      case 'media': return 'rd-detalle-prioridad-media';
+      default: return 'rd-detalle-prioridad-baja';
+    }
+  };
+
+  const getPrioridadIcon = () => {
+    switch (rescate?.prioridad) {
+      case 'alta': return <Flag size={16} />;
+      case 'media': return <Clock size={16} />;
+      default: return <CheckCircle size={16} />;
     }
   };
 
   const getEstadoClass = () => {
     switch (rescate?.estado) {
-      case 'pendiente': return 'estado-pendiente';
-      case 'en_proceso': return 'estado-proceso';
-      case 'completado': return 'estado-completado';
+      case 'pendiente': return 'rd-detalle-estado-pendiente';
+      case 'en_proceso': return 'rd-detalle-estado-proceso';
+      case 'completado': return 'rd-detalle-estado-completado';
+      case 'rechazado': return 'rd-detalle-estado-rechazado';
       default: return '';
+    }
+  };
+
+  const getEstadoIcon = () => {
+    switch (rescate?.estado) {
+      case 'pendiente': return <Clock size={16} />;
+      case 'en_proceso': return <Loader2 size={16} className="spin" />;
+      case 'completado': return <CheckCircle size={16} />;
+      case 'rechazado': return <XCircle size={16} />;
+      default: return null;
     }
   };
 
@@ -93,126 +190,286 @@ const RescateDetalle = ({ tipoUsuario }) => {
     return new Date(date).toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
+  // ===== OBTENER TODAS LAS FOTOS =====
+  const todasLasFotos = fotoPrincipal ? [fotoPrincipal, ...galeriaFotos] : galeriaFotos;
+
   if (loading) {
     return (
-      <div className="rescate-detalle-container">
-        <LoadingSpinner text={t('cargando_detalle')} />
+      <div className="rd-detalle-container">
+        <div className="panel-loading-modern">
+          <div className="spinner-modern"></div>
+          <p>{t('cargando_detalle', 'Cargando detalle del rescate...')}</p>
+        </div>
       </div>
     );
   }
 
   if (error || !rescate) {
     return (
-      <div className="rescate-detalle-container">
-        <div className="error-card">
-          <i className="fas fa-exclamation-triangle"></i>
-          <h3>{t('error_carga')}</h3>
-          <p>{error || t('rescate_no_encontrado')}</p>
-          <button onClick={() => navigate(-1)} className="btn-back">
-            <i className="fas fa-arrow-left"></i> {t('volver')}
-          </button>
+      <div className="rd-detalle-container">
+        <div className="bento-container">
+          <div className="panel-error-modern">
+            <AlertCircle size={48} className="error-icon-modern" />
+            <h3>{t('error_carga', 'Error al cargar el rescate')}</h3>
+            <p>{error || t('rescate_no_encontrado', 'Rescate no encontrado')}</p>
+            <button onClick={handleVolver} className="btn-retry-modern">
+              <ArrowLeft size={18} /> {t('volver', 'Volver')}
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rescate-detalle-container">
-      <div className="detalle-header">
-        <button onClick={() => navigate(-1)} className="btn-back">
-          <i className="fas fa-arrow-left"></i> {t('volver')}
-        </button>
-        <h1>{t('detalle_rescate')}</h1>
+    <div className="rd-detalle-container">
+      {/* ===== BANNER DE PERFIL ===== */}
+      <div className="rd-detalle-banner-wrapper">
+        <ProfileBanner
+          user={{
+            nombre: fundacionName,
+            avatar: fundacionAvatar,
+            titulo: t('banner.titulo', {
+              defaultValue: 'Detalle del rescate: {{lugar}}',
+              lugar: rescate.lugar_rescate || t('lugar_no_especificado', 'Lugar no especificado'),
+            }),
+            solicitudes: 1,
+            adopciones: rescate.estado === 'completado' ? 1 : 0,
+            eventos: 0,
+          }}
+        />
       </div>
 
-      <div className="detalle-card">
-        <div className="detalle-badges">
-          <span className={`detalle-prioridad ${getPrioridadClass()}`}>
-            <i className="fas fa-flag"></i> {t('prioridad_label')}: {t(`prioridad_${rescate.prioridad}`)}
-          </span>
-          <span className={`detalle-estado ${getEstadoClass()}`}>
-            <i className="fas fa-circle"></i> {t(`estado_${rescate.estado}`)}
-          </span>
-          <span className="detalle-tipo">
-            <i className="fas fa-tag"></i> {t(`btn_${rescate.tipo_emergencia || 'otro'}`)}
-          </span>
-        </div>
-
-        <div className="detalle-info">
-          <div className="info-group">
-            <label><i className="fas fa-map-marker-alt"></i> {t('lugar_label')}</label>
-            <p>{rescate.lugar_rescate}</p>
-          </div>
-
-          <div className="info-group">
-            <label><i className="fas fa-calendar-alt"></i> {t('fecha_label')}</label>
-            <p>{formatDate(rescate.fecha_rescate)}</p>
-          </div>
-
-          <div className="info-group">
-            <label><i className="fas fa-file-alt"></i> {t('descripcion_label')}</label>
-            <p>{rescate.descripcion_rescate}</p>
-          </div>
-
-          {rescate.nombre_reportante && (
-            <div className="info-group">
-              <label><i className="fas fa-user"></i> {t('reportado_por')}</label>
-              <p>
-                {rescate.nombre_reportante}
-                {rescate.telefono_reportante && <span> - 📞 {rescate.telefono_reportante}</span>}
-                {rescate.email_reportante && <span> - ✉️ {rescate.email_reportante}</span>}
-              </p>
-            </div>
-          )}
-
-          {rescate.lat && rescate.lng && (
-            <div className="info-group">
-              <label><i className="fas fa-location-dot"></i> {t('coordenadas')}</label>
-              <p>
-                {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
-                <a 
-                  href={`https://www.openstreetmap.org/?mlat=${rescate.lat}&mlon=${rescate.lng}#map=15/${rescate.lat}/${rescate.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="map-link"
-                >
-                  <i className="fas fa-external-link-alt"></i> {t('ver_mapa')}
-                </a>
-              </p>
-            </div>
-          )}
-        </div>
-
-        <div className="detalle-actions">
-          {rescate.estado === 'pendiente' && (
-            <>
-              <button onClick={handleAceptar} className="btn-primary" disabled={accionLoading}>
-                {accionLoading ? <i className="fas fa-spinner fa-spin"></i> : <i className="fas fa-check-circle"></i>}
-                {t('aceptar_rescate')}
-              </button>
-              <button onClick={handleRechazar} className="btn-danger" disabled={accionLoading}>
-                <i className="fas fa-times-circle"></i> {t('rechazar_rescate')}
-              </button>
-            </>
-          )}
-
-          {rescate.estado === 'en_proceso' && (
-            <button onClick={handleRegistrarMascota} className="btn-primary">
-              <i className="fas fa-paw"></i> {t('registrar_mascota')}
-            </button>
-          )}
-
-          <button onClick={() => navigate(-1)} className="btn-secondary">
-            <i className="fas fa-arrow-left"></i> {t('volver')}
+      {/* ===== CONTENIDO ===== */}
+      <div className="bento-container">
+        {/* Botón volver */}
+        <div className="rd-detalle-back">
+          <button onClick={handleVolver} className="rd-detalle-btn-back">
+            <ArrowLeft size={18} />
+            {t('volver', 'Volver')}
           </button>
         </div>
+
+        {/* Card principal */}
+        <div className="rd-detalle-card">
+          {/* Badges */}
+          <div className="rd-detalle-badges">
+            <span className={`rd-detalle-prioridad ${getPrioridadClass()}`}>
+              {getPrioridadIcon()}
+              {t('prioridad_label', 'Prioridad')}: {t(`prioridad_${rescate.prioridad}`)}
+            </span>
+            <span className={`rd-detalle-estado ${getEstadoClass()}`}>
+              {getEstadoIcon()}
+              {t(`estado_${rescate.estado}`)}
+            </span>
+            <span className="rd-detalle-tipo">
+              <Tag size={14} />
+              {t(`btn_${rescate.tipo_emergencia || 'otro'}`)}
+            </span>
+          </div>
+
+          {/* ===== GALERÍA CON SELECTOR ===== */}
+          {todasLasFotos.length > 0 && (
+            <div className="rd-detalle-galeria-section">
+              {/* FOTO GRANDE */}
+              <div 
+                className="rd-detalle-foto-grande"
+                onClick={() => handleAbrirModal(fotoSeleccionada)}
+              >
+                <img 
+                  src={fotoSeleccionada} 
+                  alt="Foto seleccionada"
+                  className="rd-detalle-foto-grande-img"
+                />
+                <div className="rd-detalle-foto-grande-overlay">
+                  <Camera size={20} />
+                  <span>{t('click_para_ampliar', 'Click para ampliar')}</span>
+                </div>
+              </div>
+
+              {/* MINIATURAS - SELECTOR */}
+              <div className="rd-detalle-miniaturas">
+                {todasLasFotos.map((url, index) => (
+                  <div
+                    key={index}
+                    className={`rd-detalle-miniatura ${fotoSeleccionada === url ? 'active' : ''}`}
+                    onClick={() => handleSeleccionarFoto(url)}
+                  >
+                    <img src={url} alt={`Miniatura ${index + 1}`} />
+                    {fotoSeleccionada === url && (
+                      <div className="rd-detalle-miniatura-check">
+                        <CheckCircle size={16} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* INFORMACIÓN */}
+          <div className="rd-detalle-info">
+            <div className="rd-detalle-info-group">
+              <div className="rd-detalle-info-label">
+                <MapPin size={16} />
+                {t('lugar_label', 'Lugar')}
+              </div>
+              <p className="rd-detalle-info-value">{rescate.lugar_rescate}</p>
+            </div>
+
+            <div className="rd-detalle-info-group">
+              <div className="rd-detalle-info-label">
+                <Calendar size={16} />
+                {t('fecha_label', 'Fecha')}
+              </div>
+              <p className="rd-detalle-info-value">{formatDate(rescate.fecha_rescate)}</p>
+            </div>
+
+            <div className="rd-detalle-info-group">
+              <div className="rd-detalle-info-label">
+                <FileText size={16} />
+                {t('descripcion_label', 'Descripción')}
+              </div>
+              <p className="rd-detalle-info-value">{rescate.descripcion_rescate}</p>
+            </div>
+
+            {/* Datos del reportante */}
+            {(rescate.nombre_reportante || rescate.telefono_reportante || rescate.email_reportante) && (
+              <div className="rd-detalle-info-group">
+                <div className="rd-detalle-info-label">
+                  <User size={16} />
+                  {t('reportado_por', 'Reportado por')}
+                </div>
+                <div className="rd-detalle-reportante">
+                  {rescate.nombre_reportante && (
+                    <span><User size={14} /> {rescate.nombre_reportante}</span>
+                  )}
+                  {rescate.telefono_reportante && (
+                    <span><Phone size={14} /> {rescate.telefono_reportante}</span>
+                  )}
+                  {rescate.email_reportante && (
+                    <span><Mail size={14} /> {rescate.email_reportante}</span>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Coordenadas */}
+            {rescate.lat && rescate.lng && (
+              <div className="rd-detalle-info-group">
+                <div className="rd-detalle-info-label">
+                  <MapPin size={16} />
+                  {t('coordenadas', 'Coordenadas')}
+                </div>
+                <div className="rd-detalle-coordenadas">
+                  <span>
+                    {parseFloat(rescate.lat).toFixed(6)}, {parseFloat(rescate.lng).toFixed(6)}
+                  </span>
+                  <a 
+                    href={`https://www.openstreetmap.org/?mlat=${rescate.lat}&mlon=${rescate.lng}#map=15/${rescate.lat}/${rescate.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rd-detalle-map-link"
+                  >
+                    <ExternalLink size={14} />
+                    {t('ver_mapa', 'Ver mapa')}
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ACCIONES */}
+          <div className="rd-detalle-actions">
+            {rescate.estado === 'pendiente' && (
+              <>
+                <button 
+                  onClick={handleAceptar} 
+                  className="rd-detalle-btn-primary" 
+                  disabled={accionLoading}
+                >
+                  {accionLoading ? (
+                    <Loader2 size={18} className="spin" />
+                  ) : (
+                    <CheckCircle size={18} />
+                  )}
+                  {t('aceptar_rescate', 'Aceptar rescate')}
+                </button>
+                <button 
+                  onClick={handleRechazar} 
+                  className="rd-detalle-btn-danger" 
+                  disabled={accionLoading}
+                >
+                  <XCircle size={18} />
+                  {t('rechazar_rescate', 'Rechazar rescate')}
+                </button>
+              </>
+            )}
+
+            {rescate.estado === 'en_proceso' && (
+              <button onClick={handleRegistrarMascota} className="rd-detalle-btn-primary">
+                <PawPrint size={18} />
+                {t('registrar_mascota', 'Registrar mascota')}
+              </button>
+            )}
+
+            {rescate.estado === 'completado' && (
+              <div className="rd-detalle-status-completado">
+                <CheckCircle size={20} />
+                {t('rescate_completado', 'Rescate completado')}
+              </div>
+            )}
+
+            {rescate.estado === 'rechazado' && (
+              <div className="rd-detalle-status-rechazado">
+                <XCircle size={20} />
+                {t('rescate_rechazado', 'Rescate rechazado')}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Eliminar el modal */}
+      {/* ===== MODAL PARA AMPLIAR FOTO ===== */}
+      {isModalOpen && fotoSeleccionada && (
+        <div className="rd-detalle-modal" onClick={handleCerrarModal}>
+          <div className="rd-detalle-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="rd-detalle-modal-close" onClick={handleCerrarModal}>
+              <XCircle size={28} />
+            </button>
+            
+            <button 
+              className="rd-detalle-modal-nav rd-detalle-modal-nav-left"
+              onClick={(e) => { e.stopPropagation(); handleNavegarModal(-1); }}
+            >
+              <ChevronLeft size={32} />
+            </button>
+
+            <img 
+              src={fotoSeleccionada} 
+              alt="Foto ampliada"
+              className="rd-detalle-modal-img"
+            />
+
+            <button 
+              className="rd-detalle-modal-nav rd-detalle-modal-nav-right"
+              onClick={(e) => { e.stopPropagation(); handleNavegarModal(1); }}
+            >
+              <ChevronRight size={32} />
+            </button>
+
+            <div className="rd-detalle-modal-counter">
+              {todasLasFotos.indexOf(fotoSeleccionada) + 1} / {todasLasFotos.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

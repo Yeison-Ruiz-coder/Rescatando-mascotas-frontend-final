@@ -26,15 +26,16 @@ const ReportarRescate = () => {
     timeUntilAdminAvailable,
     rescateDisponibleParaAdmin,
     prioridad,
-    fotosPreviews,
-    fotosFiles,
+    fotoPrincipalPreview,
+    galeriaPreviews,
     gettingLocation,
     handleChange,
     handleLocationChange,
     getCurrentLocation,
     setPrioridadManual,
     handleSubmit,
-    handleFotosChange,
+    handleFotoPrincipalChange,
+    handleGaleriaChange,
     prioridadConfig,
     prioridadTexto,
     botonesPrioridad,
@@ -409,23 +410,35 @@ const ReportarRescate = () => {
                   <h3>{t("fotos_section")}</h3>
                 </div>
 
-                <ImageUploader
-                  label={t("fotos_label")}
-                  name="fotos"
-                  onImageChange={handleFotosChange}
-                  multiple={true}
-                  maxFiles={5}
-                  currentImages={fotosPreviews}
-                  maxSize={5}
-                  required={false}
-                />
-                {allErrors.fotos && <small className="error-text">{allErrors.fotos}</small>}
+                <div className="form-grupo">
+                  <label>{t("foto_principal_label")}</label>
+                  <ImageUploader
+                    name="foto_principal"
+                    onImageChange={handleFotoPrincipalChange}
+                    multiple={false}
+                    currentImage={fotoPrincipalPreview}
+                    maxSize={5}
+                    required={false}
+                  />
+                  {allErrors.foto_principal && <small className="error-text">{allErrors.foto_principal}</small>}
+                </div>
+
+                <div className="form-grupo">
+                  <label>{t("galeria_label")}</label>
+                  <ImageUploader
+                    name="galeria_fotos"
+                    onImageChange={handleGaleriaChange}
+                    multiple={true}
+                    maxFiles={5}
+                    currentImages={galeriaPreviews}
+                    maxSize={5}
+                    required={false}
+                  />
+                  {allErrors.fotos && <small className="error-text">{allErrors.fotos}</small>}
+                </div>
 
                 <small className="form-hint">
                   <i className="fas fa-info-circle" /> {t("fotos_hint")}
-                  <br />
-                  <i className="fas fa-star" style={{ color: "#f59e0b" }} />{" "}
-                  {t("first_photo_main_hint")}
                 </small>
               </div>
 

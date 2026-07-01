@@ -20,14 +20,6 @@ const Dashboard = () => {
   const adminName = user?.name || user?.nombre || t('admin', 'Administrador');
   const adminAvatar = user?.avatar || null;
 
-  if (loading) {
-    return (
-      <div className="ad-dashboard-container">
-        <LoadingSpinner text={t('cargando_dashboard', 'Cargando dashboard...')} />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="ad-dashboard-container">
