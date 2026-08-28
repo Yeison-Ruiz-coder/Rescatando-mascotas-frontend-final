@@ -116,7 +116,7 @@ const api = axios.create({
   headers: {
     Accept: "application/json",
   },
-  withCredentials: true,
+  withCredentials: false,
 });
 
 api.interceptors.request.use(
