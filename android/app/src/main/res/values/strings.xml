@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Rescatando Mascotas</string>
-    <string name="title_activity_main">Rescatando Mascotas</string>
-    <string name="package_name">com.rescatandomascotas.app</string>
-    <string name="custom_url_scheme">com.rescatandomascotas.app</string>
-</resources>
