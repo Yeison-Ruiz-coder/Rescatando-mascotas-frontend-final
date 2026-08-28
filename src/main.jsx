@@ -5,6 +5,7 @@ import './i18n'
 import './globals.js';
 import 'flag-icons/css/flag-icons.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import './styles/index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
