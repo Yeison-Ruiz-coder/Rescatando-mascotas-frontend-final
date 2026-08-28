@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useSidebar } from '../../../contexts/SidebarContext';
 import useSidebarCloser from '../../../hooks/useSidebarCloser';
+import api from '../../../services/api';
 import './Sidebar.css';
 
 // ✅ Submenu component optimizado
@@ -88,17 +89,12 @@ const FundacionSidebar = () => {
     const fetchBadgeCounts = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!localStorage.getItem('auth_token')) return;
 
         // Obtener contador de solicitudes pendientes
-        const solicitudesRes = await fetch('/api/fundacion/adopciones/solicitudes/pendientes/count', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (solicitudesRes.ok) {
-          const data = await solicitudesRes.json();
+        const solicitudesRes = await api.get('/fundacion/adopciones/solicitudes/pendientes/count');
+        if (solicitudesRes.status >= 200 && solicitudesRes.status < 300) {
+          const data = solicitudesRes.data;
           setBadgeCounts(prev => ({
             ...prev,
             solicitudesPendientes: data.count || 0
@@ -106,13 +102,9 @@ const FundacionSidebar = () => {
         }
 
         // Obtener contador de mascotas activas
-        const mascotasRes = await fetch('/api/fundacion/mascotas/count', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (mascotasRes.ok) {
-          const data = await mascotasRes.json();
+        const mascotasRes = await api.get('/fundacion/mascotas/count');
+        if (mascotasRes.status >= 200 && mascotasRes.status < 300) {
+          const data = mascotasRes.data;
           setBadgeCounts(prev => ({
             ...prev,
             mascotasActivas: data.count || 0
@@ -120,13 +112,9 @@ const FundacionSidebar = () => {
         }
 
         // Obtener contador de rescates nuevos disponibles
-        const rescatesRes = await fetch('/api/fundacion/rescates/disponibles/count', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (rescatesRes.ok) {
-          const data = await rescatesRes.json();
+        const rescatesRes = await api.get('/fundacion/rescates/disponibles/count');
+        if (rescatesRes.status >= 200 && rescatesRes.status < 300) {
+          const data = rescatesRes.data;
           setBadgeCounts(prev => ({
             ...prev,
             rescatesNuevos: data.count || 0
@@ -134,13 +122,9 @@ const FundacionSidebar = () => {
         }
 
         // Obtener contador de seguimientos pendientes
-        const seguimientosRes = await fetch('/api/fundacion/adopciones/seguimientos/pendientes/count', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (seguimientosRes.ok) {
-          const data = await seguimientosRes.json();
+        const seguimientosRes = await api.get('/fundacion/adopciones/seguimientos/pendientes/count');
+        if (seguimientosRes.status >= 200 && seguimientosRes.status < 300) {
+          const data = seguimientosRes.data;
           setBadgeCounts(prev => ({
             ...prev,
             seguimientosPendientes: data.count || 0
@@ -148,13 +132,9 @@ const FundacionSidebar = () => {
         }
 
         // ✅ Obtener contador de suscripciones activas
-        const suscripcionesRes = await fetch('/api/fundacion/suscripciones/activas/count', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (suscripcionesRes.ok) {
-          const data = await suscripcionesRes.json();
+        const suscripcionesRes = await api.get('/fundacion/suscripciones/activas/count');
+        if (suscripcionesRes.status >= 200 && suscripcionesRes.status < 300) {
+          const data = suscripcionesRes.data;
           setBadgeCounts(prev => ({
             ...prev,
             suscripcionesActivas: data.count || 0
