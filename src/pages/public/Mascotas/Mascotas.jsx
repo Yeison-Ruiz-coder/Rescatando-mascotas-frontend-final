@@ -1,8 +1,10 @@
 // src/pages/public/Mascotas/Mascotas.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import api from "../../../services/api";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import { readPageState, writePageState, readScrollPosition, writeScrollPosition } from "../../../utils/pageStateCache";
 import MascotaCard from "../../../components/common/MascotaCard/MascotaCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import MascotaDetalle from "./MascotaDetalle";
@@ -13,6 +15,8 @@ import "./Mascotas.css";
 
 const Mascotas = () => {
   const { t } = useTranslation(['mascotas', 'common']);
+  const location = useLocation();
+  const scrollSavedRef = useRef(false);
   
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -65,7 +69,23 @@ const Mascotas = () => {
     }
   }, [t]);
 
-  const loadMascotas = useCallback(async (filters = {}, page = 1, sortOrder = "reciente") => {
+  const loadMascotas = useCallback(async (filters = {}, page = 1, sortOrder = "reciente", options = {}) => {
+    const { useCache = false } = options;
+    const cacheKey = `${JSON.stringify(filters)}|${page}|${sortOrder}`;
+
+    const cachedPageState = useCache ? readPageState(location.pathname) : null;
+    const cachedData = cachedPageState?.cacheKey === cacheKey ? cachedPageState.data : null;
+
+    if (cachedData && useCache) {
+      setMascotas(cachedData.mascotas || []);
+      setPagination(cachedData.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedData.filters || {});
+      setCurrentPage(cachedData.page || 1);
+      setOrden(cachedData.sortOrder || "reciente");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
     
@@ -108,8 +128,18 @@ const Mascotas = () => {
         mascotasData = response.data;
       }
       
+      const nextState = {
+        mascotas: mascotasData,
+        pagination: paginationData,
+        filters,
+        page,
+        sortOrder,
+        cacheKey,
+      };
+
       setMascotas(mascotasData);
       setPagination(paginationData);
+      writePageState(location.pathname, nextState);
       
     } catch (err) {
       console.error("❌ Error:", err);
@@ -123,25 +153,37 @@ const Mascotas = () => {
 
   useEffect(() => {
     loadEspecies();
-    loadMascotas({}, 1, "reciente");
-  }, [loadEspecies, loadMascotas]);
+
+    const cachedState = readPageState(location.pathname);
+    if (cachedState && cachedState.mascotas?.length) {
+      setMascotas(cachedState.mascotas);
+      setPagination(cachedState.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedState.filters || {});
+      setCurrentPage(cachedState.page || 1);
+      setOrden(cachedState.sortOrder || "reciente");
+      setLoading(false);
+      return;
+    }
+
+    loadMascotas({}, 1, "reciente", { useCache: true });
+  }, [location.pathname, loadEspecies, loadMascotas]);
 
   const handleFilterChange = useCallback((newFilters) => {
     setCurrentFilters(newFilters);
     setCurrentPage(1);
-    loadMascotas(newFilters, 1, orden);
+    loadMascotas(newFilters, 1, orden, { useCache: false });
   }, [loadMascotas, orden]);
 
   const handleOrdenChange = useCallback((newOrden) => {
     setOrden(newOrden);
     setCurrentPage(1);
-    loadMascotas(currentFilters, 1, newOrden);
+    loadMascotas(currentFilters, 1, newOrden, { useCache: false });
   }, [loadMascotas, currentFilters]);
 
   const handlePageChange = useCallback((newPage) => {
     if (newPage === currentPage) return;
     setCurrentPage(newPage);
-    loadMascotas(currentFilters, newPage, orden);
+    loadMascotas(currentFilters, newPage, orden, { useCache: false });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage, currentFilters, orden, loadMascotas]);
 
@@ -172,6 +214,25 @@ const Mascotas = () => {
       setCurrentMascotaId(null);
     }, 300);
   }, []);
+
+  useEffect(() => {
+    const pathKey = location.pathname;
+    const savedScroll = readScrollPosition(pathKey);
+
+    if (savedScroll > 0 && !scrollSavedRef.current) {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: savedScroll, behavior: 'auto' });
+      });
+      scrollSavedRef.current = true;
+    }
+
+    const onScroll = () => {
+      writeScrollPosition(pathKey, window.scrollY);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [location.pathname]);
 
   if ((loading || cargandoEspecies) && mascotas.length === 0) {
     return (
