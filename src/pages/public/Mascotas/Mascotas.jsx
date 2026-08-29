@@ -204,7 +204,7 @@ const Mascotas = () => {
     <div className="mascotas-page">
       <div className="mascotas-header reveal-up">
         <div className="mascotas-hero">
-          <img src="/img/hover/gato-negro.jpg" alt={t("titulo")} loading="eager" />
+          <img src="https://res.cloudinary.com/dixyebg5i/image/upload/v1787975433/gato-negro_cr268k.jpg" alt={t("titulo")} loading="eager" />
         </div>
         <div className="bento-container">
           <h1 className="reveal-up delay-200">{t("titulo")}</h1>

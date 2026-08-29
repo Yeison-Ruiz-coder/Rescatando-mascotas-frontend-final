@@ -297,7 +297,7 @@ const Veterinarias = () => {
 const HeaderSection = React.memo(({ t, pagination }) => (
   <div className="veterinarias-header reveal-up delay-100">
     <div className="veterinarias-hero">
-      <img src="/img/hover/perro-veterinaria.jpg" alt={t("titulo")} />
+      <img src="https://res.cloudinary.com/dixyebg5i/image/upload/v1787975435/perro-veterinaria_gjc2bz.png" alt={t("titulo")} />
     </div>
     <div className="bento-container">
       <h1 className="reveal-up delay-200">{t("titulo")}</h1>

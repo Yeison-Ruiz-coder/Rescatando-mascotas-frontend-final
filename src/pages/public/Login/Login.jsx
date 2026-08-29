@@ -29,11 +29,11 @@ const Login = () => {
   
   // Imágenes rotativas
   const backgroundImages = [
-    '/img/login/login1.jpg',
-    '/img/login/login2.jpg',
-    '/img/login/login3.jpg',
-    '/img/login/login4.jpg',
-    '/img/login/login5.jpg'
+    'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975229/login1_wcivpz.avif',
+    'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975229/login2_sciwoj.jpg',
+    'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975230/login3_wapvqp.jpg',
+    'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975230/login4_c0yun3.jpg',
+    'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975231/login5_e1i88r.jpg'
   ];
   
   const [currentBackground, setCurrentBackground] = useState(0);

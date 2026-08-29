@@ -75,12 +75,12 @@ const PawBackground = () => {
 
   const getPawImage = (type) => {
     switch(type) {
-      case 'pata1': return '/img/pata/pata1.png';
-      case 'pata2': return '/img/pata/pata2.png';
-      case 'pata3': return '/img/pata/pata3.png';
-      case 'pata4': return '/img/pata/pata4.png';
-      case 'pata5': return '/img/pata/pata5.png';
-      case 'pata6': return '/img/pata/pata6.png';
+      case 'pata1': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975692/pata1_mociph.png';
+      case 'pata2': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975692/pata2_ppxmiz.png';
+      case 'pata3': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975693/pata3_fitceg.png';
+      case 'pata4': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975694/pata4_lqayqz.png';
+      case 'pata5': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975695/pata5_pgqtox.png';
+      case 'pata6': return 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975695/pata6_z9t0t6.png';
       default: return '/img/pata/pata1.png';
     }
   };

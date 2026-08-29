@@ -14,7 +14,7 @@ const HeroCarousel = () => {
       title: t('hero.slide1_title') || 'Dales una segunda oportunidad',
       highlight: t('hero.slide1_highlight') || 'Ellos te esperan',
       description: t('hero.slide1_desc') || 'Cada animal merece un hogar lleno de amor. Adopta y cambia una vida.',
-      image: '/img/img3.jpg',
+      image: 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975093/img3_voaphp.jpg',
       ctaText: t('hero.btn_adoptar') || 'Adoptar',
       ctaLink: '/mascotas'
     },
@@ -23,7 +23,7 @@ const HeroCarousel = () => {
       title: t('hero.slide2_title') || 'Sé parte del cambio',
       highlight: t('hero.slide2_highlight') || 'Reporta un rescate',
       description: t('hero.slide2_desc') || 'Tu reporte puede salvar una vida. Actúa ahora y ayuda a un animal necesitado.',
-      image: '/img/img1.jpg',
+      image: 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975093/img1_kyzdnd.avif',
       ctaText: t('hero.btn_rescate') || 'Reportar Rescate',
       ctaLink: '/rescates/reportar'
     },
@@ -32,7 +32,7 @@ const HeroCarousel = () => {
       title: t('hero.slide3_title') || 'Haz una donación',
       highlight: t('hero.slide3_highlight') || 'Tu apoyo es vital',
       description: t('hero.slide3_desc') || 'Con tu ayuda podemos rescatar, rehabilitar y dar hogar a más animales.',
-      image: '/img/img4.jpg',
+      image: 'https://res.cloudinary.com/dixyebg5i/image/upload/v1787975093/img4_ybdrgl.avif',
       ctaText: t('hero.btn_donar') || 'Donar',
       ctaLink: '/suscripciones'
     }

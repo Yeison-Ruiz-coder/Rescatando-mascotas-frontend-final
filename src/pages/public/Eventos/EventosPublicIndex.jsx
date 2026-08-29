@@ -375,7 +375,7 @@ const EventosPublicIndex = () => {
     <div className="eventos-page">
       <div className="eventos-header reveal-up">
         <div className="eventos-hero">
-          <img src="/img/hover/eventos.jpg" alt={t("titulo")} />
+          <img src="https://res.cloudinary.com/dixyebg5i/image/upload/v1787975433/eventos_y9qgsn.jpg" alt={t("titulo")} />
         </div>
         <div className="bento-container">
           <h1 className="reveal-up delay-200">{t("titulo")}</h1>
