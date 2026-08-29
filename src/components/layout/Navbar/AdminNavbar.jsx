@@ -15,10 +15,8 @@ const AdminNavbar = () => {
   
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const languageMenuRef = useRef(null);
   const userMenuRef = useRef(null);
-  const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,30 +29,6 @@ const AdminNavbar = () => {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const threshold = 180;
-      const delta = currentScrollY - lastScrollY.current;
-
-      if (currentScrollY > threshold) {
-        if (delta > 10) {
-          setIsNavbarHidden(true);
-        } else if (delta < -10) {
-          setIsNavbarHidden(false);
-        }
-      } else {
-        setIsNavbarHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleLanguage = (lang) => {
@@ -91,7 +65,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <nav className={`admin-navbar ${isAdminSidebarOpen ? 'sidebar-open' : ''} ${isNavbarHidden ? 'hidden' : ''}`}>
+    <nav className={`admin-navbar ${isAdminSidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="admin-navbar-container">
         <button 
           className={`admin-hamburger-btn ${isAdminSidebarOpen ? 'open' : ''}`}

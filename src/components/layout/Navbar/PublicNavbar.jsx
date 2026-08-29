@@ -16,10 +16,8 @@ const PublicNavbar = () => {
   // 🔥 TODOS LOS HOOKS PRIMERO 🔥
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const languageMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
-  const lastScrollY = useRef(window.scrollY);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -34,29 +32,7 @@ const PublicNavbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const threshold = 180;
-      const delta = currentScrollY - lastScrollY.current;
-
-      if (currentScrollY > threshold) {
-        if (delta > 10) {
-          setIsNavbarHidden(true);
-        } else if (delta < -10) {
-          setIsNavbarHidden(false);
-        }
-      } else {
-        setIsNavbarHidden(false);
-      }
-
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // El navbar queda visible siempre durante el scroll.
 
   // 🔥 LUEGO LA CONDICIÓN PARA OCULTAR (después de todos los hooks) 🔥
   const authRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
@@ -157,7 +133,7 @@ const PublicNavbar = () => {
   };
 
   return (
-    <nav className={`public-navbar ${isPublicSidebarOpen ? 'sidebar-open' : ''} ${isNavbarHidden ? 'hidden' : ''}`}>
+    <nav className={`public-navbar ${isPublicSidebarOpen ? 'sidebar-open' : ''}`}>
       <div className="public-navbar-container">
         <button 
           className={`public-hamburger-btn ${isPublicSidebarOpen ? 'open' : ''}`}
