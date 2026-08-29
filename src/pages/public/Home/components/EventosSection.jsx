@@ -116,7 +116,22 @@ const EventosSection = memo(({ isAuthenticated = false }) => {
   }
 
   if (error || eventos.length === 0) {
-    return null;
+    return (
+      <section className="es-section">
+        <div className="es-container">
+          <h2 className="es-title">
+            {t('eventos.titulo') || 'Próximos eventos'}
+          </h2>
+          <div className="es-skeleton">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="es-skeleton-item">
+                <div className="es-skeleton-card"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

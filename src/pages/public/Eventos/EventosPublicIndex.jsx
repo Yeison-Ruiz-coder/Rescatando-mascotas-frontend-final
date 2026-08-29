@@ -1,6 +1,7 @@
 // src/pages/public/Eventos/EventosPublicIndex.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../services/api";
 import EventoCard from "../../../components/common/EventoCard/EventoCard";
@@ -8,12 +9,15 @@ import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import FiltrosEventos from "../../../components/common/FiltrosEventos/FiltrosEventos";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import { readPageState, writePageState, readScrollPosition, writeScrollPosition } from "../../../utils/pageStateCache";
 import EventosPublicShow from "./EventosPublicShow";
 import "./EventosPublicIndex.css";
 
 const EventosPublicIndex = () => {
   const { t } = useTranslation("eventos");
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  const scrollSavedRef = useRef(false);
 
   const [eventos, setEventos] = useState([]);
   const [eventosOrganizados, setEventosOrganizados] = useState([]);
@@ -136,7 +140,24 @@ const EventosPublicIndex = () => {
     return [...eventosFuturos, ...eventosFinalizados];
   }, [calcularNivelImportancia]);
 
-  const loadEventos = useCallback(async (filters = {}, page = 1) => {
+  const loadEventos = useCallback(async (filters = {}, page = 1, options = {}) => {
+    const { useCache = false } = options;
+    const cacheKey = `${JSON.stringify(filters)}|${page}`;
+
+    const cachedPageState = useCache ? readPageState(location.pathname) : null;
+    const cachedData = cachedPageState?.cacheKey === cacheKey ? cachedPageState.data : null;
+
+    if (cachedData && useCache) {
+      setEventos(cachedData.eventos || []);
+      setEventosOrganizados(cachedData.eventosOrganizados || []);
+      setPagination(cachedData.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedData.filters || {});
+      setCurrentPage(cachedData.page || 1);
+      setAsistenciaEvents(cachedData.asistenciaEvents || {});
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -189,19 +210,29 @@ const EventosPublicIndex = () => {
         };
       }
 
-      setEventos(eventosData);
-      setPagination(paginationData);
-
       const organizados = organizarEventosPorImportancia(eventosData);
-      setEventosOrganizados(organizados);
-
       const asistenciaMap = {};
       eventosData.forEach((evento) => {
         if (evento.usuario_confirmado) {
           asistenciaMap[evento.id] = true;
         }
       });
+
+      const nextState = {
+        eventos: eventosData,
+        eventosOrganizados: organizados,
+        pagination: paginationData,
+        filters,
+        page,
+        cacheKey,
+        asistenciaEvents: asistenciaMap,
+      };
+
+      setEventos(eventosData);
+      setPagination(paginationData);
+      setEventosOrganizados(organizados);
       setAsistenciaEvents(asistenciaMap);
+      writePageState(location.pathname, nextState);
     } catch (err) {
       console.error("❌ Error:", err);
       setError(
@@ -210,17 +241,29 @@ const EventosPublicIndex = () => {
     } finally {
       setLoading(false);
     }
-  }, [t, organizarEventosPorImportancia]);
+  }, [t, location.pathname, organizarEventosPorImportancia]);
 
   useEffect(() => {
-    loadEventos({}, 1);
-  }, []);
+    const cachedState = readPageState(location.pathname);
+    if (cachedState && cachedState.eventos?.length) {
+      setEventos(cachedState.eventos);
+      setEventosOrganizados(cachedState.eventosOrganizados || cachedState.eventos);
+      setPagination(cachedState.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedState.filters || {});
+      setCurrentPage(cachedState.page || 1);
+      setAsistenciaEvents(cachedState.asistenciaEvents || {});
+      setLoading(false);
+      return;
+    }
+
+    loadEventos({}, 1, { useCache: true });
+  }, [location.pathname, loadEventos]);
 
   const handleFilterChange = useCallback(
     (newFilters) => {
       setCurrentFilters(newFilters);
       setCurrentPage(1);
-      loadEventos(newFilters, 1);
+      loadEventos(newFilters, 1, { useCache: false });
     },
     [loadEventos],
   );
@@ -229,7 +272,7 @@ const EventosPublicIndex = () => {
     (newPage) => {
       if (newPage === currentPage) return;
       setCurrentPage(newPage);
-      loadEventos(currentFilters, newPage);
+      loadEventos(currentFilters, newPage, { useCache: false });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [currentPage, currentFilters, loadEventos],
@@ -336,6 +379,25 @@ const EventosPublicIndex = () => {
       setCurrentEventoId(null);
     }, 300);
   }, []);
+
+  useEffect(() => {
+    const pathKey = location.pathname;
+    const savedScroll = readScrollPosition(pathKey);
+
+    if (savedScroll > 0 && !scrollSavedRef.current) {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: savedScroll, behavior: "auto" });
+      });
+      scrollSavedRef.current = true;
+    }
+
+    const onScroll = () => {
+      writeScrollPosition(pathKey, window.scrollY);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [location.pathname]);
 
   const getImageUrl = useCallback((url) => buildImageUrl(url), []);
 

@@ -153,9 +153,40 @@ const AliadosSection = () => {
     );
   }
 
-  // Si hay error O ambas listas están vacías, no mostrar la sección
+  // Si hay error o no hay datos, mantener un placeholder para evitar huecos vacíos.
   if (error || (veterinarias.length === 0 && fundaciones.length === 0)) {
-    return null;
+    return (
+      <section className="al-section">
+        <div className="al-container">
+          <div className="al-header">
+            <div className="al-skeleton-title" style={{ width: '60%', height: '32px', margin: '0 auto 12px', background: 'linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%)', backgroundSize: '200% 100%', animation: 'al-skeleton-loading 1.5s infinite', borderRadius: '8px' }} />
+            <div className="al-skeleton-subtitle" style={{ width: '40%', height: '20px', margin: '0 auto', background: 'linear-gradient(90deg, var(--color-border) 25%, var(--color-hover) 50%, var(--color-border) 75%)', backgroundSize: '200% 100%', animation: 'al-skeleton-loading 1.5s infinite', borderRadius: '8px' }} />
+          </div>
+          <div className="al-skeleton">
+            {[1, 2].map((i) => (
+              <div key={i} className="al-skeleton-card">
+                <div className="al-skeleton-header">
+                  <div className="al-skeleton-icon"></div>
+                  <div>
+                    <div className="al-skeleton-title"></div>
+                    <div className="al-skeleton-sub"></div>
+                  </div>
+                </div>
+                {[1, 2, 3].map((j) => (
+                  <div key={j} className="al-skeleton-item">
+                    <div className="al-skeleton-avatar"></div>
+                    <div className="al-skeleton-text">
+                      <div className="al-skeleton-name"></div>
+                      <div className="al-skeleton-detail"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

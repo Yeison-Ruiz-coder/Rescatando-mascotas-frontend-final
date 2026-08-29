@@ -1,17 +1,21 @@
 // src/pages/public/Fundaciones/FundacionesIndex.jsx
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import api from "../../../services/api";
 import FundacionCard from "../../../components/common/FundacionCard/FundacionCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import FiltrosFundaciones from "../../../components/common/FiltrosFundaciones/FiltrosFundaciones";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import { readPageState, writePageState, readScrollPosition, writeScrollPosition } from "../../../utils/pageStateCache";
 import FundacionDetalle from "./FundacionDetalle";
 import "./FundacionesIndex.css";
 
 const FundacionesIndex = () => {
   const { t } = useTranslation("fundaciones");
+  const location = useLocation();
+  const scrollSavedRef = useRef(false);
 
   const [fundaciones, setFundaciones] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +33,23 @@ const FundacionesIndex = () => {
   const [currentFundacionId, setCurrentFundacionId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const loadFundaciones = useCallback(async (filters = {}, page = 1) => {
+  const loadFundaciones = useCallback(async (filters = {}, page = 1, options = {}) => {
+    const { useCache = false } = options;
+    const cacheKey = `${JSON.stringify(filters)}|${page}`;
+
+    const cachedPageState = useCache ? readPageState(location.pathname) : null;
+    const cachedData = cachedPageState?.cacheKey === cacheKey ? cachedPageState.data : null;
+
+    if (cachedData && useCache) {
+      setFundaciones(cachedData.fundaciones || []);
+      setPagination(cachedData.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedData.filters || {});
+      setCurrentPage(cachedData.page || 1);
+      setCiudades(cachedData.ciudades || []);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -60,13 +80,23 @@ const FundacionesIndex = () => {
         fundacionesData = response.data;
       }
 
-      setFundaciones(fundacionesData);
-      setPagination(paginationData);
-
       const uniqueCiudades = [
         ...new Set(fundacionesData.map((f) => f.ciudad).filter(Boolean)),
       ];
+
+      const nextState = {
+        fundaciones: fundacionesData,
+        pagination: paginationData,
+        filters,
+        page,
+        cacheKey,
+        ciudades: uniqueCiudades,
+      };
+
+      setFundaciones(fundacionesData);
+      setPagination(paginationData);
       setCiudades(uniqueCiudades);
+      writePageState(location.pathname, nextState);
     } catch (err) {
       console.error("❌ Error:", err);
       setError(
@@ -77,17 +107,28 @@ const FundacionesIndex = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
-    loadFundaciones({}, 1);
-  }, []);
+    const cachedState = readPageState(location.pathname);
+    if (cachedState && cachedState.fundaciones?.length) {
+      setFundaciones(cachedState.fundaciones);
+      setPagination(cachedState.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedState.filters || {});
+      setCurrentPage(cachedState.page || 1);
+      setCiudades(cachedState.ciudades || []);
+      setLoading(false);
+      return;
+    }
+
+    loadFundaciones({}, 1, { useCache: true });
+  }, [location.pathname, loadFundaciones]);
 
   const handleFilterChange = useCallback(
     (newFilters) => {
       setCurrentFilters(newFilters);
       setCurrentPage(1);
-      loadFundaciones(newFilters, 1);
+      loadFundaciones(newFilters, 1, { useCache: false });
     },
     [loadFundaciones],
   );
@@ -96,7 +137,7 @@ const FundacionesIndex = () => {
     (newPage) => {
       if (newPage === currentPage) return;
       setCurrentPage(newPage);
-      loadFundaciones(currentFilters, newPage);
+      loadFundaciones(currentFilters, newPage, { useCache: false });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [currentPage, currentFilters, loadFundaciones],
@@ -123,6 +164,25 @@ const FundacionesIndex = () => {
       setCurrentFundacionId(null);
     }, 300);
   }, []);
+
+  useEffect(() => {
+    const pathKey = location.pathname;
+    const savedScroll = readScrollPosition(pathKey);
+
+    if (savedScroll > 0 && !scrollSavedRef.current) {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: savedScroll, behavior: "auto" });
+      });
+      scrollSavedRef.current = true;
+    }
+
+    const onScroll = () => {
+      writeScrollPosition(pathKey, window.scrollY);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [location.pathname]);
 
   const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 

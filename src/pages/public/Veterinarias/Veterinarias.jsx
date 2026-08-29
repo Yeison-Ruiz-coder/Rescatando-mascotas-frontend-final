@@ -1,17 +1,21 @@
 // src/pages/public/Veterinarias/Veterinarias.jsx
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import api from "../../../services/api";
 import VeterinariaCard from "../../../components/common/VeterinariaCard/VeterinariaCard";
 import SlideUpPanel from "../../../components/common/SlideUpPanel/SlideUpPanel";
 import FiltrosVeterinarias from "../../../components/common/FiltrosVeterinarias/FiltrosVeterinarias";
 import LoadingSpinner from "../../../components/common/LoadingSpinner/LoadingSpinner";
 import { getImageUrl as buildImageUrl } from "../../../utils/imageUtils";
+import { readPageState, writePageState, readScrollPosition, writeScrollPosition } from "../../../utils/pageStateCache";
 import VeterinariaDetalle from "./VeterinariaDetalle";
 import "./Veterinarias.css";
 
 const Veterinarias = () => {
   const { t } = useTranslation("veterinarias");
+  const location = useLocation();
+  const scrollSavedRef = useRef(false);
 
   // ✅ Estado
   const [veterinarias, setVeterinarias] = useState([]);
@@ -37,7 +41,23 @@ const Veterinarias = () => {
   const getImageUrl = useCallback((path) => buildImageUrl(path), []);
 
   // ✅ Función loadVeterinarias optimizada
-  const loadVeterinarias = useCallback(async (filters = {}, page = 1) => {
+  const loadVeterinarias = useCallback(async (filters = {}, page = 1, options = {}) => {
+    const { useCache = false } = options;
+    const cacheKey = `${JSON.stringify(filters)}|${page}`;
+
+    const cachedPageState = useCache ? readPageState(location.pathname) : null;
+    const cachedData = cachedPageState?.cacheKey === cacheKey ? cachedPageState.data : null;
+
+    if (cachedData && useCache) {
+      setVeterinarias(cachedData.veterinarias || []);
+      setPagination(cachedData.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedData.filters || {});
+      setCurrentPage(cachedData.page || 1);
+      setCiudades(cachedData.ciudades || []);
+      setLoading(false);
+      return;
+    }
+
     // Evitar llamadas concurrentes
     if (loadingRef.current) return;
     
@@ -76,14 +96,23 @@ const Veterinarias = () => {
         veterinariasData = response.data;
       }
 
-      setVeterinarias(veterinariasData);
-      setPagination(paginationData);
-
-      // ✅ Extraer ciudades de forma eficiente
       const uniqueCiudades = [...new Set(
         veterinariasData.map((v) => v.ciudad).filter(Boolean)
       )];
+
+      const nextState = {
+        veterinarias: veterinariasData,
+        pagination: paginationData,
+        filters,
+        page,
+        cacheKey,
+        ciudades: uniqueCiudades,
+      };
+
+      setVeterinarias(veterinariasData);
+      setPagination(paginationData);
       setCiudades(uniqueCiudades);
+      writePageState(location.pathname, nextState);
       
     } catch (err) {
       console.error("❌ Error:", err);
@@ -100,24 +129,35 @@ const Veterinarias = () => {
         loadingRef.current = false;
       }
     }
-  }, []);
+  }, [location.pathname]);
 
   // ✅ Carga inicial
   useEffect(() => {
     isMounted.current = true;
-    loadVeterinarias({}, 1);
+    const cachedState = readPageState(location.pathname);
+    if (cachedState && cachedState.veterinarias?.length) {
+      setVeterinarias(cachedState.veterinarias);
+      setPagination(cachedState.pagination || { current_page: 1, last_page: 1, total: 0 });
+      setCurrentFilters(cachedState.filters || {});
+      setCurrentPage(cachedState.page || 1);
+      setCiudades(cachedState.ciudades || []);
+      setLoading(false);
+      return;
+    }
+
+    loadVeterinarias({}, 1, { useCache: true });
     
     return () => {
       isMounted.current = false;
     };
-  }, [loadVeterinarias]);
+  }, [location.pathname, loadVeterinarias]);
 
   // ✅ Handlers con useCallback
   const handleFilterChange = useCallback(
     (newFilters) => {
       setCurrentFilters(newFilters);
       setCurrentPage(1);
-      loadVeterinarias(newFilters, 1);
+      loadVeterinarias(newFilters, 1, { useCache: false });
     },
     [loadVeterinarias]
   );
@@ -126,7 +166,7 @@ const Veterinarias = () => {
     (newPage) => {
       if (newPage === currentPage || loading) return;
       setCurrentPage(newPage);
-      loadVeterinarias(currentFilters, newPage);
+      loadVeterinarias(currentFilters, newPage, { useCache: false });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [currentPage, currentFilters, loadVeterinarias, loading]
@@ -154,6 +194,25 @@ const Veterinarias = () => {
       setCurrentVeterinariaId(null);
     }, 300);
   }, []);
+
+  useEffect(() => {
+    const pathKey = location.pathname;
+    const savedScroll = readScrollPosition(pathKey);
+
+    if (savedScroll > 0 && !scrollSavedRef.current) {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: savedScroll, behavior: "auto" });
+      });
+      scrollSavedRef.current = true;
+    }
+
+    const onScroll = () => {
+      writeScrollPosition(pathKey, window.scrollY);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [location.pathname]);
 
   // ✅ Memoizar el título del panel
   const panelTitle = useMemo(() => {

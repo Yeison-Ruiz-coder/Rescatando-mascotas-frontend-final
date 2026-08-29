@@ -128,7 +128,26 @@ const FeaturedMascotas = memo(() => {
   }
 
   if (error || mascotas.length === 0) {
-    return null;
+    return (
+      <section className="fm-section">
+        <div className="fm-container">
+          <div className="fm-header reveal-up">
+            <h2 className="fm-title">
+              {t('mascotas_disponibles') || 'Mascotas disponibles para adopción'}
+            </h2>
+            <p className="fm-subtitle">
+              {t('mascotas_subtitle') || 'Ellos esperan un hogar lleno de amor'}
+            </p>
+          </div>
+          <div className="fm-featured-skeleton" />
+          <div className="fm-grid-skeleton">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="fm-card-skeleton" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   const featuredMascota = mascotas[0];
