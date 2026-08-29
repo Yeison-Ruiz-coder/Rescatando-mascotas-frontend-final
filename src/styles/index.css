@@ -31,3 +31,55 @@
 /* UTILITIES (siempre al final) */
 @import './utilities.css';
 @import './mobile-performance.css';
+
+.global-route-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  pointer-events: none;
+  padding: 10px 14px 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+}
+
+.global-route-loader-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(138, 148, 176, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.global-route-loader-fill {
+  display: block;
+  width: 34%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #667eea 0%, #8b5cf6 50%, #ff7b54 100%);
+  animation: globalRouteLoader 1.1s ease-in-out infinite alternate;
+  box-shadow: 0 0 18px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes globalRouteLoader {
+  0% {
+    transform: translateX(-12%) scaleX(0.7);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(220%) scaleX(1.2);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .global-route-loader {
+    padding-top: 8px;
+  }
+
+  .global-route-loader-track {
+    height: 3px;
+  }
+}

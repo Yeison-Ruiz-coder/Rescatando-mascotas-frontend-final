@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,9 +8,11 @@ import { SidebarProvider } from './contexts/SidebarContext';
 import ThemeToggle from './components/common/ThemeToggle/ThemeToggle';
 import router from './routes';
 import FloatingLanguageSelector from './components/common/FloatingButtons/FloatingLanguageSelector';
-import RouteChangeListener from './components/common/RouteChangeListener'; // ✅ Import correcto
+import RouteChangeListener from './components/common/RouteChangeListener';
 
 function App() {
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
+
   return (
     <AuthProvider>
       <SidebarProvider>
@@ -18,20 +20,17 @@ function App() {
           <FloatingLanguageSelector />
           <ThemeToggle />
         </div>
-        <Suspense
-          fallback={
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'fixed',
-                inset: 0,
-                background: 'transparent'
-              }}
-            />
-          }
-        >
-          {/* ✅ RouteChangeListener ANTES del RouterProvider */}
-          <RouteChangeListener router={router} />
+
+        {isRouteLoading && (
+          <div className="global-route-loader" aria-live="polite" aria-busy="true">
+            <div className="global-route-loader-track">
+              <span className="global-route-loader-fill" />
+            </div>
+          </div>
+        )}
+
+        <Suspense fallback={null}>
+          <RouteChangeListener router={router} onLoadingChange={setIsRouteLoading} />
           <RouterProvider router={router} />
         </Suspense>
         <ToastContainer position="top-right" autoClose={3000} />
